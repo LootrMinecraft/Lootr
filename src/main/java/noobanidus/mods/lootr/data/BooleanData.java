@@ -9,7 +9,6 @@ import it.unimi.dsi.fastutil.longs.LongArrayList;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.WorldSavedData;
@@ -97,7 +96,7 @@ public class BooleanData extends WorldSavedData {
     return compound;
   }
 
-  private static ServerWorld getServerWorld () {
+  private static ServerWorld getServerWorld() {
     return ServerLifecycleHooks.getCurrentServer().getWorld(DimensionType.OVERWORLD);
   }
 
@@ -111,13 +110,13 @@ public class BooleanData extends WorldSavedData {
     return getInstance().isLootChest(world.getDimension().getType(), pos);
   }
 
-  public static void markLootChest (IWorld world, BlockPos pos) {
+  public static void markLootChest(IWorld world, BlockPos pos) {
     BooleanData data = getInstance();
     data.markLootChest(world.getDimension().getType(), pos);
     getServerWorld().getSavedData().save();
   }
 
-  public static void deleteLootChest (IWorld world, BlockPos pos) {
+  public static void deleteLootChest(IWorld world, BlockPos pos) {
     BooleanData data = getInstance();
     data.deleteLootChest(world.getDimension().getType(), pos);
     getServerWorld().getSavedData().save();

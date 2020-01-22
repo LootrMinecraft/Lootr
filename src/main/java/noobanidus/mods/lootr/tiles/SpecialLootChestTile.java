@@ -15,7 +15,6 @@ import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
-import noobanidus.mods.lootr.data.BooleanData;
 import noobanidus.mods.lootr.init.ModTiles;
 
 import javax.annotation.Nullable;

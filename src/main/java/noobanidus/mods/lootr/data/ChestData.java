@@ -20,6 +20,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.WorldSavedData;
@@ -35,7 +36,7 @@ public class ChestData extends WorldSavedData {
   private Int2ObjectOpenHashMap<Long2ObjectOpenHashMap<SpecialChestInventory>> inventories = new Int2ObjectOpenHashMap<>();
 
   public static String ID(ServerPlayerEntity player) {
-    return "chests-" + player.getCachedUniqueIdString();
+    return "Lootr-chests-" + player.getCachedUniqueIdString();
   }
 
   public ChestData(ServerPlayerEntity player) {
@@ -43,9 +44,9 @@ public class ChestData extends WorldSavedData {
     this.playerId = player.getUniqueID();
   }
 
-  public ServerPlayerEntity getPlayer() {
+/*  public ServerPlayerEntity getPlayer() {
     return ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayerByUUID(playerId);
-  }
+  }*/
 
   private Long2ObjectOpenHashMap<SpecialChestInventory> getDimension(int dimension) {
     return inventories.computeIfAbsent(dimension, o -> {
@@ -53,6 +54,14 @@ public class ChestData extends WorldSavedData {
       map.defaultReturnValue(null);
       return map;
     });
+  }
+
+  private void setInventory (SpecialChestInventory inventory, IWorld world, BlockPos pos) {
+    inventory.filled();
+    Long2ObjectOpenHashMap<SpecialChestInventory> dimMap = getDimension(world.getDimension().getType().getId());
+    long position = pos.toLong();
+    dimMap.put(position, inventory);
+    markDirty();
   }
 
   @Nullable
@@ -80,7 +89,7 @@ public class ChestData extends WorldSavedData {
     inventories.clear();
     playerId = compound.getUniqueId("playerId");
     for (String key : compound.keySet()) {
-      if (key.equals("playerId")) {
+      if (key.equals("playerIdMost") || key.equals("playerIdLeast")) {
         continue;
       }
 
@@ -120,7 +129,7 @@ public class ChestData extends WorldSavedData {
   public class SpecialChestInventory implements IInventory, INamedContainerProvider {
     private final NonNullList<ItemStack> contents;
     private final ITextComponent name;
-    private final boolean wasNew;
+    private boolean wasNew;
 
     public SpecialChestInventory(NonNullList<ItemStack> contents, ITextComponent name, boolean wasNew) {
       this.contents = contents;
@@ -137,6 +146,11 @@ public class ChestData extends WorldSavedData {
 
     public boolean wasNew() {
       return wasNew;
+    }
+
+    public void filled () {
+      this.wasNew = false;
+      this.markDirty();
     }
 
     @Override
@@ -194,7 +208,6 @@ public class ChestData extends WorldSavedData {
     @Override
     public void markDirty() {
       ChestData.this.markDirty();
-      // TODO: Maybe save?
     }
 
     @Override
@@ -217,6 +230,15 @@ public class ChestData extends WorldSavedData {
     @Override
     public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
       return ChestContainer.createGeneric9X3(id, inventory, this);
+    }
+
+    @Override
+    public void closeInventory(PlayerEntity player) {
+      markDirty();
+      World world = player.world;
+      if (!world.isRemote) {
+        ((ServerWorld) world).getSavedData().save();
+      }
     }
 
     public CompoundNBT writeItems() {
@@ -252,7 +274,9 @@ public class ChestData extends WorldSavedData {
     }
     if (inventory.wasNew()) {
       tile.fillWithLoot(player, inventory);
+      data.setInventory(inventory, world, pos);
     }
+
     return inventory;
   }
 }
