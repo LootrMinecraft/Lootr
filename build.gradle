@@ -1,0 +1,161 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+        maven {
+            url = 'https://dist.creeper.host/Sponge/maven'
+        }
+    }
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.0.+', changing: true
+
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+    }
+}
+plugins {
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
+}
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'maven-publish'
+apply plugin: 'eclipse'
+apply plugin: 'org.spongepowered.mixin'
+
+version = "${minecraft_version}-${mod_version}"
+group = "noobanidus.mods.lootr"
+archivesBaseName = "lootr"
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+minecraft {
+    mappings channel: 'snapshot', version: "${mcp_mappings}"
+
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+
+    runs {
+        client {
+            taskName 'runClient'
+
+            workingDirectory project.file('run')
+
+            //property 'forge.logging.markers', 'CORE,REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                lootr {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        server {
+            taskName 'runServer'
+
+            workingDirectory project.file('run')
+
+            //property 'forge.logging.markers', 'CORE,REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                lootr {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        data {
+            taskName 'runData'
+
+            workingDirectory project.file('run')
+
+            environment 'target', 'fmluserdevdata'
+
+            //property 'forge.logging.markers', 'CORE,REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                lootr {
+                    source sourceSets.main
+                }
+            }
+
+            args '--mod', 'lootr', '--all', '--output', '"' + rootProject.file('src/generated/resources/') + '"',
+                    '--existing', '"' + rootProject.file('src/main/resources') + '"'
+//, '--existing', '"' + rootProject.file('src/generated/resources') + '"'
+
+        }
+    }
+}
+
+configurations {
+    shade
+}
+
+sourceSets.main.resources {
+    srcDir 'src/generated/resources'
+}
+
+repositories {
+    maven {
+        url = "http://maven.tterrag.com/"
+    }
+    maven { // JEI
+        url = "http://dvs1.progwml6.com/files/maven"
+    }
+    maven {
+        name = "Jared"
+        url = "https://maven.blamejared.com"
+    }
+    maven {
+        url = 'https://dist.creeper.host/Sponge/maven'
+    }
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+    compile 'org.spongepowered:mixin:0.8-SNAPSHOT'
+
+    def noobutil = "noobanidus.libs:noobutil:${minecraft_version}-${noobutil_version}"
+    implementation fg.deobf(noobutil)
+    shade noobutil
+}
+
+shadowJar {
+    configurations = [project.configurations.shade]
+    relocate 'noobanidus.libs.noobutil', 'noobanids.libs.repack_lootr.noobutil'
+    classifier ''
+}
+
+jar {
+    classifier = 'nodep'
+    manifest {
+        attributes([
+                "Specification-Title": "lootr",
+                "Specification-Vendor": "",
+                "Specification-Version": "1", // We are version 1 of ourselves
+                "Implementation-Title": project.name,
+                "Implementation-Version": "${version}",
+                "Implementation-Vendor" :"",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                "MixinConnector": "noobanidus.mods.lootr.MixinConnector"
+        ])
+    }
+}
+reobf {
+    shadowJar {}
+}
+
+build.dependsOn reobfShadowJar
+
+mixin {
+    add sourceSets.main, "main.refmap.json"
+}

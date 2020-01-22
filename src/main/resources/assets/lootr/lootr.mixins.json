@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "noobanidus.mods.lootr.mixins",
+  "compatabilityLevel": "JAVA_8",
+  "refmap": "main.refmap.json",
+  "mixins": [
+    "MixinLockableLootTileEntity",
+    "MixinChestBlock"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
