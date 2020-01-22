@@ -25,14 +25,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import javax.annotation.Nullable;
 
-@Mixin(value = ChestBlock.class, priority = 10000)
+@Mixin(value = ChestBlock.class)
 public abstract class MixinChestBlock {
-  private boolean isLootChest(IWorld world, BlockPos pos) {
+  private static boolean isLootChest(IWorld world, BlockPos pos) {
     return BooleanData.isLootChest(world, pos);
   }
 
   @Nullable
-  private INamedContainerProvider getLootContainer(IWorld world, BlockPos pos, ServerPlayerEntity player) {
+  private static INamedContainerProvider getLootContainer(IWorld world, BlockPos pos, ServerPlayerEntity player) {
     return ChestData.getInventory(world, pos, player);
   }
 
@@ -86,6 +86,18 @@ public abstract class MixinChestBlock {
         ci.setReturnValue(false);
       }
       ci.cancel();
+    }
+  }
+
+  @Inject(
+      method = "getChestInventory",
+      at = @At("HEAD"),
+      cancellable = true
+  )
+  private static <T> void getChestInventory(BlockState state, IWorld world, BlockPos pos, boolean allowBlocked, ChestBlock.InventoryFactory<T> factory, CallbackInfoReturnable<T> cir) {
+    if (isLootChest(world, pos)) {
+      cir.setReturnValue(null);
+      cir.cancel();
     }
   }
 }

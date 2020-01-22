@@ -37,7 +37,6 @@ targetCompatibility = '1.8'
 
 minecraft {
     mappings channel: 'snapshot', version: "${mcp_mappings}"
-
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     runs {
@@ -95,14 +94,6 @@ minecraft {
     }
 }
 
-configurations {
-    shade
-}
-
-sourceSets.main.resources {
-    srcDir 'src/generated/resources'
-}
-
 repositories {
     maven {
         url = "http://maven.tterrag.com/"
@@ -123,16 +114,6 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
     compile 'org.spongepowered:mixin:0.8-SNAPSHOT'
-
-    def noobutil = "noobanidus.libs:noobutil:${minecraft_version}-${noobutil_version}"
-    implementation fg.deobf(noobutil)
-    shade noobutil
-}
-
-shadowJar {
-    configurations = [project.configurations.shade]
-    relocate 'noobanidus.libs.noobutil', 'noobanids.libs.repack_lootr.noobutil'
-    classifier ''
 }
 
 jar {
@@ -149,13 +130,4 @@ jar {
                 "MixinConnector": "noobanidus.mods.lootr.MixinConnector"
         ])
     }
-}
-reobf {
-    shadowJar {}
-}
-
-build.dependsOn reobfShadowJar
-
-mixin {
-    add sourceSets.main, "main.refmap.json"
 }

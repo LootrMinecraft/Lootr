@@ -52,7 +52,7 @@ public class ChestData extends WorldSavedData {
     });
   }
 
-  private void setInventory (SpecialChestInventory inventory, IWorld world, BlockPos pos) {
+  private void setInventory(SpecialChestInventory inventory, IWorld world, BlockPos pos) {
     inventory.filled();
     Long2ObjectOpenHashMap<SpecialChestInventory> dimMap = getDimension(world.getDimension().getType().getId());
     long position = pos.toLong();
@@ -144,7 +144,7 @@ public class ChestData extends WorldSavedData {
       return wasNew;
     }
 
-    public void filled () {
+    public void filled() {
       this.wasNew = false;
       this.markDirty();
     }
