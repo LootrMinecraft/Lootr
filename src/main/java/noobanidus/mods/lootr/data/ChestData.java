@@ -44,10 +44,6 @@ public class ChestData extends WorldSavedData {
     this.playerId = player.getUniqueID();
   }
 
-/*  public ServerPlayerEntity getPlayer() {
-    return ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayerByUUID(playerId);
-  }*/
-
   private Long2ObjectOpenHashMap<SpecialChestInventory> getDimension(int dimension) {
     return inventories.computeIfAbsent(dimension, o -> {
       Long2ObjectOpenHashMap<SpecialChestInventory> map = new Long2ObjectOpenHashMap<>();
