@@ -28,7 +28,16 @@ import javax.annotation.Nullable;
 @Mixin(value = ChestBlock.class)
 public abstract class MixinChestBlock {
   private static boolean isLootChest(IWorld world, BlockPos pos) {
-    return BooleanData.isLootChest(world, pos);
+    if (!world.isRemote()) {
+      return BooleanData.isLootChest(world, pos);
+    } else {
+      TileEntity te = world.getTileEntity(pos);
+      if (te instanceof SpecialLootChestTile) {
+        return ((SpecialLootChestTile) te).isSpecialLootChest();
+      }
+
+      return false;
+    }
   }
 
   @Nullable
@@ -52,7 +61,7 @@ public abstract class MixinChestBlock {
       cancellable = true
   )
   private void getDirectionToAttach(BlockItemUseContext context, Direction direction, CallbackInfoReturnable<Direction> cir) {
-    if (isLootChest(context.getWorld(), context.getPos())) {
+    if (isLootChest(context.getWorld(), context.getPos()) || isLootChest(context.getWorld(), context.getPos().offset(direction))) {
       cir.setReturnValue(null);
       cir.cancel();
     }
@@ -61,11 +70,11 @@ public abstract class MixinChestBlock {
   @Inject(
       method = "updatePostPlacement",
       at = {@At(value = "RETURN", ordinal = 0),
-          @At(value = "RETURN", ordinal = 2)},
+            @At(value = "RETURN", ordinal = 2)},
       cancellable = true
   )
   private void updatePostPlacement1(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos, CallbackInfoReturnable<BlockState> cir) {
-    if (isLootChest(worldIn, currentPos)) {
+    if (isLootChest(worldIn, currentPos) || isLootChest(worldIn, currentPos.offset(facing))) {
       cir.setReturnValue(stateIn.with(ChestBlock.TYPE, ChestType.SINGLE));
       cir.cancel();
     }

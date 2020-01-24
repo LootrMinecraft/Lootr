@@ -7,12 +7,15 @@ import it.unimi.dsi.fastutil.longs.Long2BooleanMap;
 import it.unimi.dsi.fastutil.longs.Long2BooleanOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
+import noobanidus.mods.lootr.tiles.SpecialLootChestTile;
 
 public class BooleanData extends WorldSavedData {
   private Int2ObjectOpenHashMap<Long2BooleanOpenHashMap> lootMap = new Int2ObjectOpenHashMap<>();
@@ -107,19 +110,33 @@ public class BooleanData extends WorldSavedData {
   // Convenience methods
 
   public static boolean isLootChest(IWorld world, BlockPos pos) {
-    return getInstance().isLootChest(world.getDimension().getType(), pos);
+    if (world.isRemote()) {
+      TileEntity te = world.getTileEntity(pos);
+      if (te instanceof SpecialLootChestTile) {
+        return ((SpecialLootChestTile)te).isSpecialLootChest();
+      }
+
+      return false;
+    } else {
+      return getInstance().isLootChest(world.getDimension().getType(), pos);
+    }
   }
 
   public static void markLootChest(IWorld world, BlockPos pos) {
+    if (world.isRemote()) {
+      return;
+    }
     BooleanData data = getInstance();
     data.markLootChest(world.getDimension().getType(), pos);
     getServerWorld().getSavedData().save();
   }
 
   public static void deleteLootChest(IWorld world, BlockPos pos) {
+    if (world.isRemote()) {
+      return;
+    }
     BooleanData data = getInstance();
     data.deleteLootChest(world.getDimension().getType(), pos);
     getServerWorld().getSavedData().save();
   }
-
 }

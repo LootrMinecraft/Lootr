@@ -1,11 +1,15 @@
 package noobanidus.mods.lootr.tiles;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
@@ -15,6 +19,7 @@ import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
+import noobanidus.mods.lootr.data.BooleanData;
 import noobanidus.mods.lootr.init.ModTiles;
 
 import javax.annotation.Nullable;
@@ -22,6 +27,7 @@ import javax.annotation.Nullable;
 public class SpecialLootChestTile extends ChestTileEntity {
   private ResourceLocation lootTable = null;
   private long seed = -1;
+  private boolean synchronised = false;
 
   public SpecialLootChestTile() {
     super(ModTiles.SPECIAL_LOOT_CHEST);
@@ -32,9 +38,58 @@ public class SpecialLootChestTile extends ChestTileEntity {
     super.setLootTable(lootTableIn, seedIn);
     this.lootTable = lootTableIn;
     this.seed = seedIn;
+    markForSync();
   }
 
-  private boolean isSpecialLootChest() {
+  public void markForSync() {
+    this.synchronised = false;
+  }
+
+  @Override
+  public void tick() {
+    if (this.world != null && !synchronised) {
+      if (!this.world.isRemote()) {
+        this.synchronised = false;
+        BooleanData.markLootChest(world, getPos());
+        BlockState state = this.world.getBlockState(getPos());
+        this.world.notifyBlockUpdate(pos, state, state, 8);
+      }
+    }
+
+    int i = this.pos.getX();
+    int j = this.pos.getY();
+    int k = this.pos.getZ();
+    ++this.ticksSinceSync;
+    this.numPlayersUsing = calculatePlayersUsingSync(this.world, this, this.ticksSinceSync, i, j, k, this.numPlayersUsing);
+    this.prevLidAngle = this.lidAngle;
+    if (this.numPlayersUsing > 0 && this.lidAngle == 0.0F) {
+      this.playSound(SoundEvents.BLOCK_CHEST_OPEN);
+    }
+
+    if (this.numPlayersUsing == 0 && this.lidAngle > 0.0F || this.numPlayersUsing > 0 && this.lidAngle < 1.0F) {
+      float f1 = this.lidAngle;
+      if (this.numPlayersUsing > 0) {
+        this.lidAngle += 0.1F;
+      } else {
+        this.lidAngle -= 0.1F;
+      }
+
+      if (this.lidAngle > 1.0F) {
+        this.lidAngle = 1.0F;
+      }
+
+      if (this.lidAngle < 0.5F && f1 >= 0.5F) {
+        this.playSound(SoundEvents.BLOCK_CHEST_CLOSE);
+      }
+
+      if (this.lidAngle < 0.0F) {
+        this.lidAngle = 0.0F;
+      }
+    }
+
+  }
+
+  public boolean isSpecialLootChest() {
     return lootTable != null;
   }
 
@@ -85,11 +140,33 @@ public class SpecialLootChestTile extends ChestTileEntity {
   @Override
   public CompoundNBT write(CompoundNBT compound) {
     compound = super.write(compound);
-    if (isSpecialLootChest()) {
+    if (lootTable != null) {
       compound.putString("specialLootChest_table", lootTable.toString());
+    }
+    if (seed != -1) {
       compound.putLong("specialLootChest_seed", seed);
     }
     return compound;
+  }
+
+  @Override
+  public CompoundNBT getUpdateTag() {
+    return write(super.getUpdateTag());
+  }
+
+  @Nullable
+  @Override
+  public SUpdateTileEntityPacket getUpdatePacket() {
+    if (isSpecialLootChest()) {
+      return new SUpdateTileEntityPacket(this.pos, 9, getUpdateTag());
+    } else {
+      return null;
+    }
+  }
+
+  @Override
+  public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+    read(pkt.getNbtCompound());
   }
 
   // Specifically disabled to prevent weird interactions

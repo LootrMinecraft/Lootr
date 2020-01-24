@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -15,6 +16,7 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -29,6 +31,8 @@ import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.tiles.SpecialLootChestTile;
 
 import javax.annotation.Nullable;
+import java.lang.ref.WeakReference;
+import java.util.Objects;
 import java.util.UUID;
 
 public class ChestData extends WorldSavedData {
@@ -77,7 +81,7 @@ public class ChestData extends WorldSavedData {
     }
 
     NonNullList<ItemStack> items = NonNullList.withSize(tile.getSizeInventory(), ItemStack.EMPTY);
-    return new SpecialChestInventory(items, tile.getDisplayName(), true);
+    return new SpecialChestInventory(items, tile.getDisplayName(), true, position, tile);
   }
 
   @Override
@@ -97,7 +101,8 @@ public class ChestData extends WorldSavedData {
         long pos = thisTag.getLong("position");
         CompoundNBT items = thisTag.getCompound("chest");
         String name = thisTag.getString("name");
-        dimMap.put(pos, new SpecialChestInventory(items, name));
+        BlockPos position = BlockPos.fromLong(pos);
+        dimMap.put(pos, new SpecialChestInventory(items, name, position));
       }
     }
   }
@@ -113,6 +118,7 @@ public class ChestData extends WorldSavedData {
         thisTag.putLong("position", thisEntry.getLongKey());
         thisTag.put("chest", thisEntry.getValue().writeItems());
         thisTag.putString("name", thisEntry.getValue().writeName());
+        thisTag.putInt("dimension", dimension);
         compoundList.add(thisTag);
       }
       compound.put(String.valueOf(dimension), compoundList);
@@ -126,22 +132,39 @@ public class ChestData extends WorldSavedData {
     private final NonNullList<ItemStack> contents;
     private final ITextComponent name;
     private boolean wasNew;
+    private BlockPos pos;
 
-    public SpecialChestInventory(NonNullList<ItemStack> contents, ITextComponent name, boolean wasNew) {
+    public SpecialChestInventory(NonNullList<ItemStack> contents, ITextComponent name, boolean wasNew, BlockPos pos, SpecialLootChestTile tile) {
       this.contents = contents;
       this.name = name;
       this.wasNew = wasNew;
+      this.pos = pos;
     }
 
-    public SpecialChestInventory(CompoundNBT items, String componentAsJSON) {
+    public SpecialChestInventory(CompoundNBT items, String componentAsJSON, BlockPos pos) {
       this.name = ITextComponent.Serializer.fromJson(componentAsJSON);
       this.contents = NonNullList.withSize(27, ItemStack.EMPTY);
       ItemStackHelper.loadAllItems(items, this.contents);
       this.wasNew = false;
+      this.pos = pos;
     }
 
     public boolean wasNew() {
       return wasNew;
+    }
+
+    @Nullable
+    public SpecialLootChestTile getTile (World world) {
+      if (world == null || world.isRemote()) {
+        return null;
+      }
+
+      TileEntity te = world.getTileEntity(pos);
+      if (te instanceof SpecialLootChestTile) {
+        return (SpecialLootChestTile) te;
+      }
+
+      return null;
     }
 
     public void filled() {
@@ -229,10 +252,25 @@ public class ChestData extends WorldSavedData {
     }
 
     @Override
+    public void openInventory(PlayerEntity player) {
+      World world = player.world;
+      if (!world.isRemote()) {
+        SpecialLootChestTile tile = getTile(world);
+        if (tile != null) {
+          tile.openInventory(player);
+        }
+      }
+    }
+
+    @Override
     public void closeInventory(PlayerEntity player) {
       markDirty();
       World world = player.world;
       if (!world.isRemote) {
+        SpecialLootChestTile tile = getTile(world);
+        if (tile != null) {
+          tile.closeInventory(player);
+        }
         ((ServerWorld) world).getSavedData().save();
       }
     }
@@ -271,6 +309,7 @@ public class ChestData extends WorldSavedData {
     if (inventory.wasNew()) {
       tile.fillWithLoot(player, inventory);
       data.setInventory(inventory, world, pos);
+      tile.markForSync();
     }
 
     return inventory;

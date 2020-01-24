@@ -9,11 +9,16 @@ import noobanidus.mods.lootr.data.BooleanData;
 
 public class HandleBreak {
   public static void onBlockBreak(BlockEvent.BreakEvent event) {
-    if (event.getState().getBlock() == Blocks.CHEST) {
-      if (BooleanData.isLootChest(event.getWorld(), event.getPos())) {
-        if (!event.getPlayer().isSneaking()) {
-          event.setCanceled(true);
-          event.getPlayer().sendMessage(new TranslationTextComponent("lootr.message.should_sneak").setStyle(new Style().setColor(TextFormatting.AQUA)));
+    if (!event.getWorld().isRemote()) {
+      if (event.getState().getBlock() == Blocks.CHEST) {
+        if (BooleanData.isLootChest(event.getWorld(), event.getPos())) {
+          if (!event.getPlayer().isSneaking()) {
+            event.setCanceled(true);
+            event.getPlayer().sendMessage(new TranslationTextComponent("lootr.message.should_sneak").setStyle(new Style().setColor(TextFormatting.AQUA)));
+            event.getPlayer().sendMessage(new TranslationTextComponent("lootr.message.should_sneak2", new TranslationTextComponent("lootr.message.should_sneak3").setStyle(new Style().setBold(true))).setStyle(new Style().setColor(TextFormatting.AQUA)));
+          } else {
+            BooleanData.deleteLootChest(event.getWorld(), event.getPos());
+          }
         }
       }
     }
