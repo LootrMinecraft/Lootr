@@ -15,35 +15,17 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import noobanidus.mods.lootr.data.BooleanData;
-import noobanidus.mods.lootr.data.ChestData;
 import noobanidus.mods.lootr.tiles.SpecialLootChestTile;
+import noobanidus.mods.lootr.util.ChestUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import javax.annotation.Nullable;
+// TODO: Handle loot chest removal when block is actually replaced
 
 @Mixin(value = ChestBlock.class)
 public abstract class MixinChestBlock {
-  private static boolean isLootChest(IWorld world, BlockPos pos) {
-    if (!world.isRemote()) {
-      return BooleanData.isLootChest(world, pos);
-    } else {
-      TileEntity te = world.getTileEntity(pos);
-      if (te instanceof SpecialLootChestTile) {
-        return ((SpecialLootChestTile) te).isSpecialLootChest();
-      }
-
-      return false;
-    }
-  }
-
-  @Nullable
-  private static INamedContainerProvider getLootContainer(IWorld world, BlockPos pos, ServerPlayerEntity player) {
-    return ChestData.getInventory(world, pos, player);
-  }
 
   @Inject(
       method = "createNewTileEntity",
@@ -61,7 +43,7 @@ public abstract class MixinChestBlock {
       cancellable = true
   )
   private void getDirectionToAttach(BlockItemUseContext context, Direction direction, CallbackInfoReturnable<Direction> cir) {
-    if (isLootChest(context.getWorld(), context.getPos()) || isLootChest(context.getWorld(), context.getPos().offset(direction))) {
+    if (ChestUtil.isLootChest(context.getWorld(), context.getPos()) || ChestUtil.isLootChest(context.getWorld(), context.getPos().offset(direction))) {
       cir.setReturnValue(null);
       cir.cancel();
     }
@@ -74,7 +56,7 @@ public abstract class MixinChestBlock {
       cancellable = true
   )
   private void updatePostPlacement1(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos, CallbackInfoReturnable<BlockState> cir) {
-    if (isLootChest(worldIn, currentPos) || isLootChest(worldIn, currentPos.offset(facing))) {
+    if (ChestUtil.isLootChest(worldIn, currentPos) || ChestUtil.isLootChest(worldIn, currentPos.offset(facing))) {
       cir.setReturnValue(stateIn.with(ChestBlock.TYPE, ChestType.SINGLE));
       cir.cancel();
     }
@@ -86,8 +68,8 @@ public abstract class MixinChestBlock {
       cancellable = true
   )
   public void onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit, CallbackInfoReturnable<Boolean> ci) {
-    if (!worldIn.isRemote && isLootChest(worldIn, pos)) {
-      INamedContainerProvider inamedcontainerprovider = getLootContainer(worldIn, pos, (ServerPlayerEntity) player);
+    if (!worldIn.isRemote && ChestUtil.isLootChest(worldIn, pos)) {
+      INamedContainerProvider inamedcontainerprovider = ChestUtil.getLootContainer(worldIn, pos, (ServerPlayerEntity) player);
       if (inamedcontainerprovider != null) {
         player.openContainer(inamedcontainerprovider);
         ci.setReturnValue(true);
@@ -99,12 +81,12 @@ public abstract class MixinChestBlock {
   }
 
   @Inject(
-      method = "getChestInventory",
+      method = "getContainer",
       at = @At("HEAD"),
       cancellable = true
   )
-  private static <T> void getChestInventory(BlockState state, IWorld world, BlockPos pos, boolean allowBlocked, ChestBlock.InventoryFactory<T> factory, CallbackInfoReturnable<T> cir) {
-    if (isLootChest(world, pos)) {
+  public void getContainer(BlockState state, World world, BlockPos pos, CallbackInfoReturnable<INamedContainerProvider> cir) {
+    if (ChestUtil.isLootChest(world, pos)) {
       cir.setReturnValue(null);
       cir.cancel();
     }
