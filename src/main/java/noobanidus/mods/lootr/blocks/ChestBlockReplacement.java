@@ -11,11 +11,11 @@ import javax.annotation.Nullable;
 
 public class ChestBlockReplacement {
    @Nullable
-   public static IInventory getInventory(ChestBlock block, BlockState state, World world, BlockPos pos, boolean allowBlocked, ChestBlock.InventoryFactory<IInventory> factory) {
+   public static IInventory getInventory(BlockState state, World world, BlockPos pos, boolean allowBlocked) {
       if (ChestUtil.isLootChest(world, pos)) {
          return null;
       }
 
-      return ChestBlock.getChestInventory(state, world, pos, allowBlocked, factory);
+      return ChestBlock.getChestInventory(state, world, pos, allowBlocked, ChestBlock.field_220109_i);
    }
 }

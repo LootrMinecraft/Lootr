@@ -127,6 +127,9 @@ public class BooleanData extends WorldSavedData {
       return;
     }
     BooleanData data = getInstance();
+    if (data.isLootChest(world.getDimension().getType(), pos)) {
+      return;
+    }
     data.markLootChest(world.getDimension().getType(), pos);
     getServerWorld().getSavedData().save();
   }
@@ -136,6 +139,9 @@ public class BooleanData extends WorldSavedData {
       return;
     }
     BooleanData data = getInstance();
+    if (!data.isLootChest(world.getDimension().getType(), pos)) {
+      return;
+    }
     data.deleteLootChest(world.getDimension().getType(), pos);
     getServerWorld().getSavedData().save();
   }

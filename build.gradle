@@ -20,9 +20,6 @@ buildscript {
         classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
 }
-plugins {
-    id 'com.github.johnrengelman.shadow' version '5.2.0'
-}
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'maven-publish'
 apply plugin: 'eclipse'

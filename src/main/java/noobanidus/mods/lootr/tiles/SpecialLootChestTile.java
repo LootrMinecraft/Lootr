@@ -48,8 +48,8 @@ public class SpecialLootChestTile extends ChestTileEntity {
   @Override
   public void tick() {
     if (this.world != null && !synchronised) {
-      if (!this.world.isRemote()) {
-        this.synchronised = false;
+      if (!this.world.isRemote() && isSpecialLootChest()) {
+        this.synchronised = true;
         BooleanData.markLootChest(world, getPos());
         BlockState state = this.world.getBlockState(getPos());
         this.world.notifyBlockUpdate(pos, state, state, 8);

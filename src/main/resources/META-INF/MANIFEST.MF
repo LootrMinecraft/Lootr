@@ -1,1 +1,0 @@
-MixinConnector: noobanidus.mods.lootr.MixinConnector
