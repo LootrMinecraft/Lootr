@@ -7,9 +7,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ChestTileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
@@ -25,9 +23,10 @@ import noobanidus.mods.lootr.init.ModTiles;
 import javax.annotation.Nullable;
 
 public class SpecialLootChestTile extends ChestTileEntity {
-  private ResourceLocation lootTable = null;
+  private ResourceLocation savedLootTable = null;
   private long seed = -1;
   private boolean synchronised = false;
+  public int ticksSinceSync;
 
   public SpecialLootChestTile() {
     super(ModTiles.SPECIAL_LOOT_CHEST);
@@ -36,7 +35,7 @@ public class SpecialLootChestTile extends ChestTileEntity {
   @Override
   public void setLootTable(ResourceLocation lootTableIn, long seedIn) {
     super.setLootTable(lootTableIn, seedIn);
-    this.lootTable = lootTableIn;
+    this.savedLootTable = lootTableIn;
     this.seed = seedIn;
     markForSync();
   }
@@ -90,7 +89,11 @@ public class SpecialLootChestTile extends ChestTileEntity {
   }
 
   public boolean isSpecialLootChest() {
-    return lootTable != null;
+    return savedLootTable != null;
+  }
+
+  public void playSound(SoundEvent soundIn) {
+    this.world.playSound(null, getPos(), soundIn, SoundCategory.BLOCKS, 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
   }
 
   @Override
@@ -115,8 +118,8 @@ public class SpecialLootChestTile extends ChestTileEntity {
   }
 
   public void fillWithLoot(PlayerEntity player, IInventory inventory) {
-    if (this.world != null && this.lootTable != null && this.world.getServer() != null) {
-      LootTable loottable = this.world.getServer().getLootTableManager().getLootTableFromLocation(this.lootTable);
+    if (this.world != null && this.savedLootTable != null && this.world.getServer() != null) {
+      LootTable loottable = this.world.getServer().getLootTableManager().getLootTableFromLocation(this.savedLootTable);
       LootContext.Builder builder = (new LootContext.Builder((ServerWorld) this.world)).withParameter(LootParameters.POSITION, new BlockPos(this.pos)).withSeed(this.seed);
       if (player != null) {
         builder.withLuck(player.getLuck()).withParameter(LootParameters.THIS_ENTITY, player);
@@ -130,18 +133,25 @@ public class SpecialLootChestTile extends ChestTileEntity {
   public void read(CompoundNBT compound) {
     super.read(compound);
     if (compound.contains("specialLootChest_table", Constants.NBT.TAG_STRING)) {
-      lootTable = new ResourceLocation(compound.getString("specialLootChest_table"));
+      savedLootTable = new ResourceLocation(compound.getString("specialLootChest_table"));
     }
     if (compound.contains("specialLootChest_seed", Constants.NBT.TAG_LONG)) {
       seed = compound.getLong("specialLootChest_seed");
+    }
+    if (savedLootTable == null && compound.contains("LootTable", Constants.NBT.TAG_STRING)) {
+      savedLootTable = new ResourceLocation(compound.getString("LootTable"));
+      markForSync();
+    }
+    if (seed == 0L && compound.contains("LootTableSeed", Constants.NBT.TAG_LONG)) {
+      seed = compound.getLong("LootTableSeed");
     }
   }
 
   @Override
   public CompoundNBT write(CompoundNBT compound) {
     compound = super.write(compound);
-    if (lootTable != null) {
-      compound.putString("specialLootChest_table", lootTable.toString());
+    if (savedLootTable != null) {
+      compound.putString("specialLootChest_table", savedLootTable.toString());
     }
     if (seed != -1) {
       compound.putLong("specialLootChest_seed", seed);

@@ -143,6 +143,7 @@ public class BooleanData extends WorldSavedData {
       return;
     }
     data.deleteLootChest(world.getDimension().getType(), pos);
+    NewChestData.wipeInventory(world, pos);
     getServerWorld().getSavedData().save();
   }
 }

@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.mixins;
+/*package noobanidus.mods.lootr.mixins;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ChestBlock;
@@ -27,7 +27,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = ChestBlock.class)
 public abstract class MixinChestBlock {
 
-  @Inject(
+*//*  @Inject(
       method = "createNewTileEntity",
       at = @At("HEAD"),
       cancellable = true
@@ -35,21 +35,22 @@ public abstract class MixinChestBlock {
   private void createNewTileEntity(IBlockReader worldIn, CallbackInfoReturnable<TileEntity> cir) {
     cir.setReturnValue(new SpecialLootChestTile());
     cir.cancel();
-  }
+  }*//*
 
-  @Inject(
+*//*  @Inject(
       method = "getDirectionToAttach",
       at = @At("HEAD"),
       cancellable = true
   )
-  private void getDirectionToAttach(BlockItemUseContext context, Direction direction, CallbackInfoReturnable<Direction> cir) {
-    if (ChestUtil.isLootChest(context.getWorld(), context.getPos()) || ChestUtil.isLootChest(context.getWorld(), context.getPos().offset(direction))) {
-      cir.setReturnValue(null);
-      cir.cancel();
+  private Object getDirectionToAttach(BlockItemUseContext context, Direction direction, CallbackInfoReturnable<Direction> cir) {
+    if (ChestUtil.isLootChest(context, direction)) {
+      return null;
     }
-  }
 
-  @Inject(
+    return new Object();
+  }*//*
+
+*//*  @Inject(
       method = "updatePostPlacement",
       at = {@At(value = "RETURN", ordinal = 0),
             @At(value = "RETURN", ordinal = 2)},
@@ -60,9 +61,9 @@ public abstract class MixinChestBlock {
       cir.setReturnValue(stateIn.with(ChestBlock.TYPE, ChestType.SINGLE));
       cir.cancel();
     }
-  }
+  }*//*
 
-  @Inject(
+*//*  @Inject(
       method = "onBlockActivated",
       at = @At("HEAD"),
       cancellable = true
@@ -78,7 +79,7 @@ public abstract class MixinChestBlock {
       }
       ci.cancel();
     }
-  }
+  }*//*
 
   @Inject(
       method = "getContainer",
@@ -91,4 +92,4 @@ public abstract class MixinChestBlock {
       cir.cancel();
     }
   }
-}
+}*/

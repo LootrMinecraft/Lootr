@@ -5,6 +5,8 @@
 **/.gradle
 **/build
 
+/structures
+
 ## ForgeGradle
 /run
 /*/run

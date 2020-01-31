@@ -1,10 +1,9 @@
-package noobanidus.mods.lootr.data;
+/*package noobanidus.mods.lootr.data;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -16,7 +15,6 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -31,41 +29,39 @@ import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.tiles.SpecialLootChestTile;
 
 import javax.annotation.Nullable;
-import java.lang.ref.WeakReference;
-import java.util.Objects;
 import java.util.UUID;
 
-public class ChestData extends WorldSavedData {
+public class OldChestData extends WorldSavedData {
   private UUID playerId;
-  private Int2ObjectOpenHashMap<Long2ObjectOpenHashMap<SpecialChestInventory>> inventories = new Int2ObjectOpenHashMap<>();
+  private Int2ObjectOpenHashMap<Long2ObjectOpenHashMap<OldSpecialChestInventory>> inventories = new Int2ObjectOpenHashMap<>();
 
   public static String ID(ServerPlayerEntity player) {
     return "Lootr-chests-" + player.getCachedUniqueIdString();
   }
 
-  public ChestData(ServerPlayerEntity player) {
+  public OldChestData(ServerPlayerEntity player) {
     super(ID(player));
     this.playerId = player.getUniqueID();
   }
 
-  private Long2ObjectOpenHashMap<SpecialChestInventory> getDimension(int dimension) {
+  private Long2ObjectOpenHashMap<OldSpecialChestInventory> getDimension(int dimension) {
     return inventories.computeIfAbsent(dimension, o -> {
-      Long2ObjectOpenHashMap<SpecialChestInventory> map = new Long2ObjectOpenHashMap<>();
+      Long2ObjectOpenHashMap<OldSpecialChestInventory> map = new Long2ObjectOpenHashMap<>();
       map.defaultReturnValue(null);
       return map;
     });
   }
 
-  private void setInventory(SpecialChestInventory inventory, IWorld world, BlockPos pos) {
+  private void setInventory(OldSpecialChestInventory inventory, IWorld world, BlockPos pos) {
     inventory.filled();
-    Long2ObjectOpenHashMap<SpecialChestInventory> dimMap = getDimension(world.getDimension().getType().getId());
+    Long2ObjectOpenHashMap<OldSpecialChestInventory> dimMap = getDimension(world.getDimension().getType().getId());
     long position = pos.toLong();
     dimMap.put(position, inventory);
     markDirty();
   }
 
   @Nullable
-  private SpecialChestInventory getInventory(IWorld world, BlockPos position) {
+  private OldSpecialChestInventory getInventory(IWorld world, BlockPos position) {
     long pos = position.toLong();
     TileEntity te = world.getTileEntity(position);
     if (te == null) {
@@ -74,14 +70,14 @@ public class ChestData extends WorldSavedData {
 
     SpecialLootChestTile tile = (SpecialLootChestTile) te;
 
-    Long2ObjectOpenHashMap<SpecialChestInventory> dimMap = getDimension(world.getDimension().getType().getId());
-    SpecialChestInventory thisChest = dimMap.get(pos);
+    Long2ObjectOpenHashMap<OldSpecialChestInventory> dimMap = getDimension(world.getDimension().getType().getId());
+    OldSpecialChestInventory thisChest = dimMap.get(pos);
     if (thisChest != null) {
       return thisChest;
     }
 
     NonNullList<ItemStack> items = NonNullList.withSize(tile.getSizeInventory(), ItemStack.EMPTY);
-    return new SpecialChestInventory(items, tile.getDisplayName(), true, position, tile);
+    return new OldSpecialChestInventory(items, tile.getDisplayName(), true, position, tile);
   }
 
   @Override
@@ -95,14 +91,14 @@ public class ChestData extends WorldSavedData {
 
       int dim = Integer.parseInt(key);
       ListNBT dimensionList = compound.getList(key, Constants.NBT.TAG_COMPOUND);
-      Long2ObjectOpenHashMap<SpecialChestInventory> dimMap = getDimension(dim);
+      Long2ObjectOpenHashMap<OldSpecialChestInventory> dimMap = getDimension(dim);
       for (int i = 0; i < dimensionList.size(); i++) {
         CompoundNBT thisTag = dimensionList.getCompound(i);
         long pos = thisTag.getLong("position");
         CompoundNBT items = thisTag.getCompound("chest");
         String name = thisTag.getString("name");
         BlockPos position = BlockPos.fromLong(pos);
-        dimMap.put(pos, new SpecialChestInventory(items, name, position));
+        dimMap.put(pos, new OldSpecialChestInventory(items, name, position));
       }
     }
   }
@@ -110,10 +106,10 @@ public class ChestData extends WorldSavedData {
   @Override
   public CompoundNBT write(CompoundNBT compound) {
     compound.putUniqueId("playerId", playerId);
-    for (Int2ObjectMap.Entry<Long2ObjectOpenHashMap<SpecialChestInventory>> entry : inventories.int2ObjectEntrySet()) {
+    for (Int2ObjectMap.Entry<Long2ObjectOpenHashMap<OldSpecialChestInventory>> entry : inventories.int2ObjectEntrySet()) {
       int dimension = entry.getIntKey();
       ListNBT compoundList = new ListNBT();
-      for (Long2ObjectMap.Entry<SpecialChestInventory> thisEntry : entry.getValue().long2ObjectEntrySet()) {
+      for (Long2ObjectMap.Entry<OldSpecialChestInventory> thisEntry : entry.getValue().long2ObjectEntrySet()) {
         CompoundNBT thisTag = new CompoundNBT();
         thisTag.putLong("position", thisEntry.getLongKey());
         thisTag.put("chest", thisEntry.getValue().writeItems());
@@ -128,20 +124,20 @@ public class ChestData extends WorldSavedData {
   }
 
   @SuppressWarnings("NullableProblems")
-  public class SpecialChestInventory implements IInventory, INamedContainerProvider {
+  public class OldSpecialChestInventory implements IInventory, INamedContainerProvider {
     private final NonNullList<ItemStack> contents;
     private final ITextComponent name;
     private boolean wasNew;
     private BlockPos pos;
 
-    public SpecialChestInventory(NonNullList<ItemStack> contents, ITextComponent name, boolean wasNew, BlockPos pos, SpecialLootChestTile tile) {
+    public OldSpecialChestInventory(NonNullList<ItemStack> contents, ITextComponent name, boolean wasNew, BlockPos pos, SpecialLootChestTile tile) {
       this.contents = contents;
       this.name = name;
       this.wasNew = wasNew;
       this.pos = pos;
     }
 
-    public SpecialChestInventory(CompoundNBT items, String componentAsJSON, BlockPos pos) {
+    public OldSpecialChestInventory(CompoundNBT items, String componentAsJSON, BlockPos pos) {
       this.name = ITextComponent.Serializer.fromJson(componentAsJSON);
       this.contents = NonNullList.withSize(27, ItemStack.EMPTY);
       ItemStackHelper.loadAllItems(items, this.contents);
@@ -226,7 +222,7 @@ public class ChestData extends WorldSavedData {
 
     @Override
     public void markDirty() {
-      ChestData.this.markDirty();
+      OldChestData.this.markDirty();
     }
 
     @Override
@@ -289,20 +285,20 @@ public class ChestData extends WorldSavedData {
     return ServerLifecycleHooks.getCurrentServer().getWorld(DimensionType.OVERWORLD);
   }
 
-  private static ChestData getInstance(ServerPlayerEntity player) {
-    return getServerWorld().getSavedData().getOrCreate(() -> new ChestData(player), ID(player));
+  private static OldChestData getInstance(ServerPlayerEntity player) {
+    return getServerWorld().getSavedData().getOrCreate(() -> new OldChestData(player), ID(player));
   }
 
   @Nullable
-  public static SpecialChestInventory getInventory(IWorld world, BlockPos pos, ServerPlayerEntity player) {
+  public static OldSpecialChestInventory getInventory(IWorld world, BlockPos pos, ServerPlayerEntity player) {
     TileEntity te = world.getTileEntity(pos);
     if (!(te instanceof SpecialLootChestTile)) {
       return null;
     }
 
     SpecialLootChestTile tile = (SpecialLootChestTile) te;
-    ChestData data = getInstance(player);
-    SpecialChestInventory inventory = data.getInventory(world, pos);
+    OldChestData data = getInstance(player);
+    OldSpecialChestInventory inventory = data.getInventory(world, pos);
     if (inventory == null) {
       return null;
     }
@@ -314,4 +310,4 @@ public class ChestData extends WorldSavedData {
 
     return inventory;
   }
-}
+}*/

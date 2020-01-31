@@ -17,7 +17,7 @@ buildscript {
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.0.+', changing: true
 
-        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+/*        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'*/
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
@@ -90,11 +90,11 @@ minecraft {
     }
 }
 
-apply plugin: 'org.spongepowered.mixin'
+/*apply plugin: 'org.spongepowered.mixin'
 
 mixin {
     add sourceSets.main, "lootr.refmap.json"
-}
+}*/
 
 repositories {
     maven {
@@ -107,15 +107,15 @@ repositories {
         name = "Jared"
         url = "https://maven.blamejared.com"
     }
-    maven {
+/*    maven {
         url = 'https://dist.creeper.host/Sponge/maven'
-    }
+    }*/
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    compile 'org.spongepowered:mixin:0.8-SNAPSHOT'
+/*    compile 'org.spongepowered:mixin:0.8-SNAPSHOT'*/
 }
 
 jar {
@@ -127,8 +127,8 @@ jar {
                 "Implementation-Title": project.name,
                 "Implementation-Version": "${version}",
                 "Implementation-Vendor" :"",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                "MixinConfigs": "lootr.mixins.json"
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+/*                "MixinConfigs": "lootr.mixins.json"*/
         ])
     }
 }
