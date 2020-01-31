@@ -13,6 +13,7 @@ import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.events.HandleBreak;
 import noobanidus.mods.lootr.init.ModTiles;
 import noobanidus.mods.lootr.setup.ClientSetup;
+import noobanidus.mods.lootr.setup.CommonSetup;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,6 +30,8 @@ public class Lootr {
     DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
       modBus.addListener(ClientSetup::init);
     });
+
+    modBus.addListener(CommonSetup::init);
 
     modBus.addGenericListener(TileEntityType.class, ModTiles::registerTileEntityType);
   }

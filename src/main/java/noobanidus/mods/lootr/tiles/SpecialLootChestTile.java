@@ -7,6 +7,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ChestTileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
@@ -17,6 +18,7 @@ import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
+import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.data.BooleanData;
 import noobanidus.mods.lootr.init.ModTiles;
 
@@ -26,6 +28,7 @@ import java.util.Random;
 public class SpecialLootChestTile extends ChestTileEntity {
   private Random random = new Random();
   private ResourceLocation savedLootTable = null;
+  private long seed = -1;
   private boolean synchronised = false;
   public int ticksSinceSync;
 
@@ -33,10 +36,15 @@ public class SpecialLootChestTile extends ChestTileEntity {
     super(ModTiles.SPECIAL_LOOT_CHEST);
   }
 
-  @Override
+  public SpecialLootChestTile(TileEntityType<?> tile) {
+    super(tile);
+  }
+
+                           @Override
   public void setLootTable(ResourceLocation lootTableIn, long seedIn) {
     super.setLootTable(lootTableIn, seedIn);
     this.savedLootTable = lootTableIn;
+    this.seed = seedIn;
     markForSync();
   }
 
@@ -120,7 +128,7 @@ public class SpecialLootChestTile extends ChestTileEntity {
   public void fillWithLoot(PlayerEntity player, IInventory inventory) {
     if (this.world != null && this.savedLootTable != null && this.world.getServer() != null) {
       LootTable loottable = this.world.getServer().getLootTableManager().getLootTableFromLocation(this.savedLootTable);
-      LootContext.Builder builder = (new LootContext.Builder((ServerWorld) this.world)).withParameter(LootParameters.POSITION, new BlockPos(this.pos)).withSeed(random.nextLong());
+      LootContext.Builder builder = (new LootContext.Builder((ServerWorld) this.world)).withParameter(LootParameters.POSITION, new BlockPos(this.pos)).withSeed(ConfigManager.RANDOMISE_SEED.get() ? random.nextLong() : this.seed);
       if (player != null) {
         builder.withLuck(player.getLuck()).withParameter(LootParameters.THIS_ENTITY, player);
       }
@@ -135,16 +143,16 @@ public class SpecialLootChestTile extends ChestTileEntity {
     if (compound.contains("specialLootChest_table", Constants.NBT.TAG_STRING)) {
       savedLootTable = new ResourceLocation(compound.getString("specialLootChest_table"));
     }
-/*    if (compound.contains("specialLootChest_seed", Constants.NBT.TAG_LONG)) {
+    if (compound.contains("specialLootChest_seed", Constants.NBT.TAG_LONG)) {
       seed = compound.getLong("specialLootChest_seed");
-    }*/
+    }
     if (savedLootTable == null && compound.contains("LootTable", Constants.NBT.TAG_STRING)) {
       savedLootTable = new ResourceLocation(compound.getString("LootTable"));
       markForSync();
     }
-/*    if (seed == 0L && compound.contains("LootTableSeed", Constants.NBT.TAG_LONG)) {
+    if (seed == 0L && compound.contains("LootTableSeed", Constants.NBT.TAG_LONG)) {
       seed = compound.getLong("LootTableSeed");
-    }*/
+    }
   }
 
   @Override
@@ -153,9 +161,9 @@ public class SpecialLootChestTile extends ChestTileEntity {
     if (savedLootTable != null) {
       compound.putString("specialLootChest_table", savedLootTable.toString());
     }
-/*    if (seed != -1) {
+    if (seed != -1) {
       compound.putLong("specialLootChest_seed", seed);
-    }*/
+    }
     return compound;
   }
 
