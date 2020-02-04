@@ -17,6 +17,10 @@ import javax.annotation.Nullable;
 
 @SuppressWarnings("unused")
 public class ChestUtil {
+  public static void handleLootChestReplaced(World world, BlockPos pos) {
+    BooleanData.deleteLootChest(world, pos);
+  }
+
   public static boolean handleLootChest(World world, BlockPos pos, PlayerEntity player) {
     if (world.isRemote()) {
       return false;

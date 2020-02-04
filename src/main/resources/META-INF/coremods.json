@@ -6,5 +6,9 @@
   "post": "asm/chest/post.js",
   "container": "asm/chest/container.js",
   "minecart": "asm/minecart/minecart.js",
-  "trapped": "asm/trapped/tile.js"
+  "trapped": "asm/trapped/tile.js",
+  "destroy": "asm/chest/destroy.js",
+  "barrel_activate": "asm/barrel/activate.js",
+  "barrel_destroy": "asm/barrel/destroy.js",
+  "barrel_tile": "asm/barrel/tile.js"
 }
