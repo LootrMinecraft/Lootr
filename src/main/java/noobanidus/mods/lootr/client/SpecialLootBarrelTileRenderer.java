@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.client;
+/*package noobanidus.mods.lootr.client;
 
 import net.minecraft.block.BarrelBlock;
 import net.minecraft.block.BlockState;
@@ -53,10 +53,10 @@ public class SpecialLootBarrelTileRenderer<T extends SpecialLootBarrelTile> exte
       renderer.getBlockModelRenderer().renderModel(mc.world, bakedModel, model, pos, buffer, false, new Random(), state.getPositionRandom(pos), EmptyModelData.INSTANCE);
 
 
-/*      IBakedModel modelBaked = mc.getBlockRendererDispatcher().getBlockModelShapes().getModel(state);
-      IModelData data = modelBaked.getModelData(world, pos, state, ModelDataManager.getModelData(tile.getWorld(), pos));*/
-/*      mc.getBlockRendererDispatcher().getBlockModelRenderer().renderModel(world, modelBaked, state, pos, buffer, false, new Random(), 42, data);*/
-/*      mc.getBlockRendererDispatcher().renderBlock(model, pos, world, buffer, new Random(), EmptyModelData.INSTANCE);*/
+*//*      IBakedModel modelBaked = mc.getBlockRendererDispatcher().getBlockModelShapes().getModel(state);
+      IModelData data = modelBaked.getModelData(world, pos, state, ModelDataManager.getModelData(tile.getWorld(), pos));*//*
+*//*      mc.getBlockRendererDispatcher().getBlockModelRenderer().renderModel(world, modelBaked, state, pos, buffer, false, new Random(), 42, data);*//*
+*//*      mc.getBlockRendererDispatcher().renderBlock(model, pos, world, buffer, new Random(), EmptyModelData.INSTANCE);*//*
     }
   }
 
@@ -77,4 +77,4 @@ public class SpecialLootBarrelTileRenderer<T extends SpecialLootBarrelTile> exte
           baseLootr.with(BarrelBlock.PROPERTY_FACING, facing).with(BarrelBlock.PROPERTY_OPEN, false));
     }
   }
-}
+}*/

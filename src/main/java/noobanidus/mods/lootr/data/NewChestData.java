@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -24,6 +25,8 @@ import net.minecraft.world.storage.DimensionSavedDataManager;
 import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
+import noobanidus.mods.lootr.tiles.ILootTile;
+import noobanidus.mods.lootr.tiles.SpecialLootBarrelTile;
 import noobanidus.mods.lootr.tiles.SpecialLootChestTile;
 
 import javax.annotation.Nullable;
@@ -74,14 +77,16 @@ public class NewChestData extends WorldSavedData {
       world = player.world;
     }
     TileEntity te = world.getTileEntity(pos);
-    if (!(te instanceof SpecialLootChestTile)) {
+
+    LockableLootTileEntity tile;
+    if (te instanceof ILootTile) {
+      tile = (LockableLootTileEntity) te;
+    } else {
       return null;
     }
-
-    SpecialLootChestTile tile = (SpecialLootChestTile) te;
     NonNullList<ItemStack> items = NonNullList.withSize(tile.getSizeInventory(), ItemStack.EMPTY);
     // Saving this is handled elsewhere
-    return new SpecialChestInventory(items, tile.getDisplayName(), true, pos, tile);
+    return new SpecialChestInventory(items, tile.getDisplayName(), true, pos);
   }
 
   @Override
@@ -123,7 +128,7 @@ public class NewChestData extends WorldSavedData {
     private boolean wasNew;
     private BlockPos pos;
 
-    public SpecialChestInventory(NonNullList<ItemStack> contents, ITextComponent name, boolean wasNew, BlockPos pos, SpecialLootChestTile tile) {
+    public SpecialChestInventory(NonNullList<ItemStack> contents, ITextComponent name, boolean wasNew, BlockPos pos) {
       this.contents = contents;
       this.name = name;
       this.wasNew = wasNew;
@@ -143,14 +148,14 @@ public class NewChestData extends WorldSavedData {
     }
 
     @Nullable
-    public SpecialLootChestTile getTile(World world) {
+    public LockableLootTileEntity getTile(World world) {
       if (world == null || world.isRemote()) {
         return null;
       }
 
       TileEntity te = world.getTileEntity(pos);
-      if (te instanceof SpecialLootChestTile) {
-        return (SpecialLootChestTile) te;
+      if (te instanceof ILootTile) {
+        return (LockableLootTileEntity) te;
       }
 
       return null;
@@ -244,7 +249,7 @@ public class NewChestData extends WorldSavedData {
     public void openInventory(PlayerEntity player) {
       World world = player.world;
       if (!world.isRemote()) {
-        SpecialLootChestTile tile = getTile(world);
+        LockableLootTileEntity tile = getTile(world);
         if (tile != null) {
           tile.openInventory(player);
         }
@@ -256,7 +261,7 @@ public class NewChestData extends WorldSavedData {
       markDirty();
       World world = player.world;
       if (!world.isRemote) {
-        SpecialLootChestTile tile = getTile(world);
+        LockableLootTileEntity tile = getTile(world);
         if (tile != null) {
           tile.closeInventory(player);
         }
@@ -274,7 +279,7 @@ public class NewChestData extends WorldSavedData {
     }
   }
 
-  public void clear () {
+  public void clear() {
     inventories.clear();
   }
 
@@ -299,19 +304,17 @@ public class NewChestData extends WorldSavedData {
     }
 
     TileEntity te = world.getTileEntity(pos);
-    if (!(te instanceof SpecialLootChestTile)) {
-      return null;
+    if (te instanceof ILootTile) {
+      ILootTile tile = (ILootTile) te;
+      tile.fillWithLoot(player, inventory);
+      data.setInventory(player, inventory);
+      tile.markForSync();
     }
-
-    SpecialLootChestTile tile = (SpecialLootChestTile) te;
-    tile.fillWithLoot(player, inventory);
-    data.setInventory(player, inventory);
-    tile.markForSync();
 
     return inventory;
   }
 
-  public static void wipeInventory (IWorld world, BlockPos pos) {
+  public static void wipeInventory(IWorld world, BlockPos pos) {
     ServerWorld serverWorld = getServerWorld();
     int dimension = world.getDimension().getType().getId();
     DimensionSavedDataManager manager = serverWorld.getSavedData();

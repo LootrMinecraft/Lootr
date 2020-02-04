@@ -15,6 +15,7 @@ import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
+import noobanidus.mods.lootr.tiles.ILootTile;
 import noobanidus.mods.lootr.tiles.SpecialLootChestTile;
 
 public class BooleanData extends WorldSavedData {
@@ -112,8 +113,8 @@ public class BooleanData extends WorldSavedData {
   public static boolean isLootChest(IWorld world, BlockPos pos) {
     if (world.isRemote()) {
       TileEntity te = world.getTileEntity(pos);
-      if (te instanceof SpecialLootChestTile) {
-        return ((SpecialLootChestTile)te).isSpecialLootChest();
+      if (te instanceof ILootTile) {
+        return ((ILootTile)te).isSpecialLootChest();
       }
 
       return false;

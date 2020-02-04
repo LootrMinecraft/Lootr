@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 @SuppressWarnings("Duplicates")
-public class SpecialLootChestTile extends ChestTileEntity {
+public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
   private Random random = new Random();
   private ResourceLocation savedLootTable = null;
   private long seed = -1;
@@ -49,6 +49,7 @@ public class SpecialLootChestTile extends ChestTileEntity {
     markForSync();
   }
 
+  @Override
   public void markForSync() {
     this.synchronised = false;
   }
@@ -97,6 +98,7 @@ public class SpecialLootChestTile extends ChestTileEntity {
 
   }
 
+  @Override
   public boolean isSpecialLootChest() {
     return savedLootTable != null;
   }
@@ -126,6 +128,7 @@ public class SpecialLootChestTile extends ChestTileEntity {
     // TODO: Override
   }
 
+  @Override
   public void fillWithLoot(PlayerEntity player, IInventory inventory) {
     if (this.world != null && this.savedLootTable != null && this.world.getServer() != null) {
       LootTable loottable = this.world.getServer().getLootTableManager().getLootTableFromLocation(this.savedLootTable);

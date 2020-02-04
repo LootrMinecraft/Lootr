@@ -12,6 +12,7 @@ import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 import noobanidus.mods.lootr.commands.CommandBarrel;
+import noobanidus.mods.lootr.commands.CommandChest;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.events.HandleBreak;
 import noobanidus.mods.lootr.init.ModBlocks;
@@ -26,6 +27,7 @@ public class Lootr {
   public static final Logger LOG = LogManager.getLogger();
   public static final String MODID = "lootr";
   public CommandBarrel COMMAND_BARREL;
+  public CommandChest COMMAND_CHEST;
 
   public Lootr() {
     ConfigManager.loadConfig(ConfigManager.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve(Lootr.MODID + "-common.toml"));
@@ -46,5 +48,7 @@ public class Lootr {
   public void onServerStarting (FMLServerStartingEvent event) {
     COMMAND_BARREL = new CommandBarrel(event.getCommandDispatcher());
     COMMAND_BARREL.register();
+    COMMAND_CHEST = new CommandChest(event.getCommandDispatcher());
+    COMMAND_CHEST.register();
   }
 }
