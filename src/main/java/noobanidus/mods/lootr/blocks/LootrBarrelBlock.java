@@ -3,7 +3,6 @@ package noobanidus.mods.lootr.blocks;
 import net.minecraft.block.BarrelBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.BarrelTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -23,7 +22,7 @@ public class LootrBarrelBlock extends BarrelBlock {
 
   @Override
   public void onReplaced(BlockState oldState, World world, BlockPos pos, BlockState newState, boolean isMoving) {
-    ChestUtil.handleLootChestReplaced(world, pos);
+    ChestUtil.handleLootChestReplaced(world, pos, oldState, newState);
     super.onReplaced(oldState, world, pos, newState, isMoving);
   }
 
@@ -44,5 +43,12 @@ public class LootrBarrelBlock extends BarrelBlock {
     if (te instanceof SpecialLootBarrelTile) {
       ((SpecialLootBarrelTile) te).barrelTick();
     }
+  }
+
+  @Override
+  public boolean eventReceived(BlockState state, World world, BlockPos pos, int id, int param) {
+    super.eventReceived(state, world, pos, id, param);
+    TileEntity tile = world.getTileEntity(pos);
+    return tile == null ? false : tile.receiveClientEvent(id, param);
   }
 }

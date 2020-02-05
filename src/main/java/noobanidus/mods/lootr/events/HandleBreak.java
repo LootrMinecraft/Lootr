@@ -6,11 +6,12 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.event.world.BlockEvent;
 import noobanidus.mods.lootr.data.BooleanData;
+import noobanidus.mods.lootr.init.ModBlocks;
 
 public class HandleBreak {
   public static void onBlockBreak(BlockEvent.BreakEvent event) {
     if (!event.getWorld().isRemote()) {
-      if (event.getState().getBlock() == Blocks.CHEST || event.getState().getBlock() == Blocks.BARREL) {
+      if (event.getState().getBlock() == Blocks.CHEST || event.getState().getBlock() == ModBlocks.BARREL) {
         if (BooleanData.isLootChest(event.getWorld(), event.getPos())) {
           if (!event.getPlayer().isSneaking()) {
             event.setCanceled(true);

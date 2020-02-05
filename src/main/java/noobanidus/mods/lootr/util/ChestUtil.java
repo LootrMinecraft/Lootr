@@ -1,5 +1,7 @@
 package noobanidus.mods.lootr.util;
 
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
@@ -11,13 +13,20 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import noobanidus.mods.lootr.data.BooleanData;
 import noobanidus.mods.lootr.data.NewChestData;
+import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.tiles.SpecialLootChestTile;
 
 import javax.annotation.Nullable;
 
 @SuppressWarnings("unused")
 public class ChestUtil {
-  public static void handleLootChestReplaced(World world, BlockPos pos) {
+  public static void handleLootChestReplaced(World world, BlockPos pos, BlockState oldState, BlockState newState) {
+    if (oldState.getBlock() == newState.getBlock()) {
+      return;
+    }
+    if (oldState.getBlock() == Blocks.BARREL && newState.getBlock() == ModBlocks.BARREL) {
+      return;
+    }
     BooleanData.deleteLootChest(world, pos);
   }
 

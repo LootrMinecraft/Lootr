@@ -46,9 +46,9 @@ public class Lootr {
   }
 
   public void onServerStarting (FMLServerStartingEvent event) {
-    COMMAND_BARREL = new CommandBarrel(event.getCommandDispatcher());
+/*    COMMAND_BARREL = new CommandBarrel(event.getCommandDispatcher());
     COMMAND_BARREL.register();
     COMMAND_CHEST = new CommandChest(event.getCommandDispatcher());
-    COMMAND_CHEST.register();
+    COMMAND_CHEST.register();*/
   }
 }

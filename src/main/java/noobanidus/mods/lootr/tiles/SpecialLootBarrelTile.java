@@ -29,6 +29,8 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 public class SpecialLootBarrelTile extends BarrelTileEntity implements ITickableTileEntity, ILootTile {
+  private int numPlayersUsing;
+
   private Random random = new Random();
   private ResourceLocation savedLootTable = null;
   private long seed = -1;
@@ -186,37 +188,68 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ITickable
 
   @Override
   public void barrelTick() {
-    int lvt_1_1_ = this.pos.getX();
-    int lvt_2_1_ = this.pos.getY();
-    int lvt_3_1_ = this.pos.getZ();
-    this.numPlayersUsing = ChestTileEntity.calculatePlayersUsing(this.world, this, lvt_1_1_, lvt_2_1_, lvt_3_1_);
+    int x = this.pos.getX();
+    int y = this.pos.getY();
+    int z = this.pos.getZ();
+    this.numPlayersUsing = SpecialLootChestTile.calculatePlayersUsing(this.world, this, x, y, z);
     if (this.numPlayersUsing > 0) {
       this.scheduleTick();
     } else {
-      BlockState lvt_4_1_ = this.getBlockState();
-      if (lvt_4_1_.getBlock() != Blocks.BARREL) {
+      BlockState state = this.getBlockState();
+      if (state.getBlock() != ModBlocks.BARREL) {
         this.remove();
         return;
       }
 
-      boolean lvt_5_1_ = (Boolean)lvt_4_1_.get(BarrelBlock.PROPERTY_OPEN);
-      if (lvt_5_1_) {
-        this.playSound(lvt_4_1_, SoundEvents.BLOCK_BARREL_CLOSE);
-        this.setOpenProperty(lvt_4_1_, false);
+      boolean open = state.get(BarrelBlock.PROPERTY_OPEN);
+      if (open) {
+        this.playSound(state, SoundEvents.BLOCK_BARREL_CLOSE);
+        this.setOpenProperty(state, false);
       }
     }
 
   }
 
-  private void setOpenProperty(BlockState p_213963_1_, boolean p_213963_2_) {
-    this.world.setBlockState(this.getPos(), (BlockState)p_213963_1_.with(BarrelBlock.PROPERTY_OPEN, p_213963_2_), 3);
+  private void setOpenProperty(BlockState state, boolean open) {
+    this.world.setBlockState(this.getPos(), state.with(BarrelBlock.PROPERTY_OPEN, open), 3);
   }
 
-  private void playSound(BlockState p_213965_1_, SoundEvent p_213965_2_) {
-    Vec3i lvt_3_1_ = ((Direction)p_213965_1_.get(BarrelBlock.PROPERTY_FACING)).getDirectionVec();
-    double lvt_4_1_ = (double)this.pos.getX() + 0.5D + (double)lvt_3_1_.getX() / 2.0D;
-    double lvt_6_1_ = (double)this.pos.getY() + 0.5D + (double)lvt_3_1_.getY() / 2.0D;
-    double lvt_8_1_ = (double)this.pos.getZ() + 0.5D + (double)lvt_3_1_.getZ() / 2.0D;
-    this.world.playSound((PlayerEntity)null, lvt_4_1_, lvt_6_1_, lvt_8_1_, p_213965_2_, SoundCategory.BLOCKS, 0.5F, this.world.rand.nextFloat() * 0.1F + 0.9F);
+  private void playSound(BlockState state, SoundEvent sound) {
+    Vec3i dir = state.get(BarrelBlock.PROPERTY_FACING).getDirectionVec();
+    double x = (double)this.pos.getX() + 0.5D + (double) dir.getX() / 2.0D;
+    double y = (double)this.pos.getY() + 0.5D + (double) dir.getY() / 2.0D;
+    double z = (double)this.pos.getZ() + 0.5D + (double) dir.getZ() / 2.0D;
+    this.world.playSound(null, x, y, z, sound, SoundCategory.BLOCKS, 0.5F, this.world.rand.nextFloat() * 0.1F + 0.9F);
+  }
+
+  private void scheduleTick() {
+    this.world.getPendingBlockTicks().scheduleTick(this.getPos(), this.getBlockState().getBlock(), 5);
+  }
+
+  @Override
+  public void openInventory(PlayerEntity player) {
+    if (!player.isSpectator()) {
+      if (this.numPlayersUsing < 0) {
+        this.numPlayersUsing = 0;
+      }
+
+      ++this.numPlayersUsing;
+      BlockState state = this.getBlockState();
+      boolean open = state.get(BarrelBlock.PROPERTY_OPEN);
+      if (!open) {
+        this.playSound(state, SoundEvents.BLOCK_BARREL_OPEN);
+        this.setOpenProperty(state, true);
+      }
+
+      this.scheduleTick();
+    }
+
+  }
+
+  @Override
+  public void closeInventory(PlayerEntity player) {
+    if (!player.isSpectator()) {
+      --this.numPlayersUsing;
+    }
   }
 }

@@ -13,7 +13,6 @@ function initializeCoreMod() {
                 var ASMAPI = Java.type('net.minecraftforge.coremod.api.ASMAPI');
                 var Opcodes = Java.type('org.objectweb.asm.Opcodes');
                 var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
-                var JumpInsnNode = Java.type('org.objectweb.asm.tree.JumpInsnNode');
                 var InsnList = Java.type('org.objectweb.asm.tree.InsnList');
 
                 var instr = method.instructions;
@@ -36,7 +35,9 @@ function initializeCoreMod() {
 
                 insn.add(new VarInsnNode(Opcodes.ALOAD, 2));
                 insn.add(new VarInsnNode(Opcodes.ALOAD, 3));
-                insn.add(ASMAPI.buildMethodCall("noobanidus/mods/lootr/util/ChestUtil", "handleLootChestReplaced", "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;)V", ASMAPI.MethodType.STATIC));
+                insn.add(new VarInsnNode(Opcodes.ALOAD, 1));
+                insn.add(new VarInsnNode(Opcodes.ALOAD, 4));
+                insn.add(ASMAPI.buildMethodCall("noobanidus/mods/lootr/util/ChestUtil", "handleLootChestReplaced", "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Lnet/minecraft/block/BlockState;)V", ASMAPI.MethodType.STATIC));
                 instr.insertBefore(jumpNode, insn);
 
                 return method;

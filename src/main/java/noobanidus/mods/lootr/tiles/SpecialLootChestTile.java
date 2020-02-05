@@ -1,15 +1,21 @@
 package noobanidus.mods.lootr.tiles;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.ChestBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.ChestContainer;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ChestTileEntity;
+import net.minecraft.tileentity.LockableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.*;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootParameterSets;
@@ -20,6 +26,7 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.data.BooleanData;
+import noobanidus.mods.lootr.data.NewChestData;
 import noobanidus.mods.lootr.init.ModTiles;
 
 import javax.annotation.Nullable;
@@ -27,11 +34,12 @@ import java.util.Random;
 
 @SuppressWarnings("Duplicates")
 public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
+  private int ticksSinceSync;
+
   private Random random = new Random();
   private ResourceLocation savedLootTable = null;
   private long seed = -1;
   private boolean synchronised = false;
-  public int ticksSinceSync;
 
   public SpecialLootChestTile() {
     super(ModTiles.SPECIAL_LOOT_CHEST);
@@ -95,7 +103,6 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
         this.lidAngle = 0.0F;
       }
     }
-
   }
 
   @Override
@@ -199,5 +206,67 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
     }
 
     return LazyOptional.empty();
+  }
+
+  public static int calculatePlayersUsingSync(World world, LockableTileEntity tile, int ticksSinceSync, int x, int y, int z, int numPlayersUsing) {
+    if (!world.isRemote && numPlayersUsing != 0 && (ticksSinceSync + x + y + z) % 200 == 0) {
+      numPlayersUsing = calculatePlayersUsing(world, tile, x, y, z);
+    }
+
+    return numPlayersUsing;
+  }
+
+  public static int calculatePlayersUsing(World world, LockableTileEntity tile, int x, int y, int z) {
+    int i = 0;
+
+    for (PlayerEntity playerentity : world.getEntitiesWithinAABB(PlayerEntity.class, new AxisAlignedBB((double) ((float) x - 5.0F), (double) ((float) y - 5.0F), (double) ((float) z - 5.0F), (double) ((float) (x + 1) + 5.0F), (double) ((float) (y + 1) + 5.0F), (double) ((float) (z + 1) + 5.0F)))) {
+      if (playerentity.openContainer instanceof ChestContainer) {
+        IInventory inv = ((ChestContainer) playerentity.openContainer).getLowerChestInventory();
+        if (inv instanceof NewChestData.SpecialChestInventory && ((NewChestData.SpecialChestInventory) inv).getPos() == tile.getPos()) {
+          ++i;
+        }
+      }
+    }
+
+    return i;
+  }
+
+  @Override
+  public boolean receiveClientEvent(int id, int type) {
+    if (id == 1) {
+      this.numPlayersUsing = type;
+      return true;
+    } else {
+      return super.receiveClientEvent(id, type);
+    }
+  }
+
+  @Override
+  public void openInventory(PlayerEntity player) {
+    if (!player.isSpectator()) {
+      if (this.numPlayersUsing < 0) {
+        this.numPlayersUsing = 0;
+      }
+
+      ++this.numPlayersUsing;
+      this.onOpenOrClose();
+    }
+  }
+
+  @Override
+  public void closeInventory(PlayerEntity player) {
+    if (!player.isSpectator()) {
+      --this.numPlayersUsing;
+      this.onOpenOrClose();
+    }
+  }
+
+  @Override
+  protected void onOpenOrClose() {
+    Block block = this.getBlockState().getBlock();
+    if (block instanceof ChestBlock) {
+      this.world.addBlockEvent(this.pos, block, 1, this.numPlayersUsing);
+      this.world.notifyNeighborsOfStateChange(this.pos, block);
+    }
   }
 }

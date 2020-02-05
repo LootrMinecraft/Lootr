@@ -26,8 +26,6 @@ import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.tiles.ILootTile;
-import noobanidus.mods.lootr.tiles.SpecialLootBarrelTile;
-import noobanidus.mods.lootr.tiles.SpecialLootChestTile;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -248,11 +246,9 @@ public class NewChestData extends WorldSavedData {
     @Override
     public void openInventory(PlayerEntity player) {
       World world = player.world;
-      if (!world.isRemote()) {
-        LockableLootTileEntity tile = getTile(world);
-        if (tile != null) {
-          tile.openInventory(player);
-        }
+      LockableLootTileEntity tile = getTile(world);
+      if (tile != null) {
+        tile.openInventory(player);
       }
     }
 
@@ -260,13 +256,11 @@ public class NewChestData extends WorldSavedData {
     public void closeInventory(PlayerEntity player) {
       markDirty();
       World world = player.world;
-      if (!world.isRemote) {
-        LockableLootTileEntity tile = getTile(world);
-        if (tile != null) {
-          tile.closeInventory(player);
-        }
-        ((ServerWorld) world).getSavedData().save();
+      LockableLootTileEntity tile = getTile(world);
+      if (tile != null) {
+        tile.closeInventory(player);
       }
+      ((ServerWorld) world).getSavedData().save();
     }
 
     public CompoundNBT writeItems() {
@@ -276,6 +270,10 @@ public class NewChestData extends WorldSavedData {
 
     public String writeName() {
       return ITextComponent.Serializer.toJson(this.name);
+    }
+
+    public BlockPos getPos() {
+      return pos;
     }
   }
 
@@ -318,10 +316,11 @@ public class NewChestData extends WorldSavedData {
     ServerWorld serverWorld = getServerWorld();
     int dimension = world.getDimension().getType().getId();
     DimensionSavedDataManager manager = serverWorld.getSavedData();
-    NewChestData data = manager.get(() -> null, ID(dimension, pos));
-    if (data == null) {
+    String id = ID(dimension, pos);
+    if (!manager.savedDatum.containsKey(id)) {
       return;
     }
+    NewChestData data = manager.get(() -> null, id);
     data.clear();
     data.markDirty();
     // Saving is handled by the BooleanData.deleteLootChest
