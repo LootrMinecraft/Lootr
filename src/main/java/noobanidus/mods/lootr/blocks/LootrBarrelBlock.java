@@ -2,6 +2,7 @@ package noobanidus.mods.lootr.blocks;
 
 import net.minecraft.block.BarrelBlock;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
@@ -50,5 +51,10 @@ public class LootrBarrelBlock extends BarrelBlock {
     super.eventReceived(state, world, pos, id, param);
     TileEntity tile = world.getTileEntity(pos);
     return tile == null ? false : tile.receiveClientEvent(id, param);
+  }
+
+  @Override
+  public String getTranslationKey() {
+    return Blocks.BARREL.getTranslationKey();
   }
 }

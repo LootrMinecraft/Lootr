@@ -1,7 +1,6 @@
 package noobanidus.mods.lootr.util;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
@@ -14,7 +13,7 @@ import net.minecraft.world.World;
 import noobanidus.mods.lootr.data.BooleanData;
 import noobanidus.mods.lootr.data.NewChestData;
 import noobanidus.mods.lootr.init.ModBlocks;
-import noobanidus.mods.lootr.tiles.SpecialLootChestTile;
+import noobanidus.mods.lootr.tiles.ILootTile;
 
 import javax.annotation.Nullable;
 
@@ -34,9 +33,22 @@ public class ChestUtil {
     if (world.isRemote()) {
       return false;
     }
-    INamedContainerProvider inamedcontainerprovider = ChestUtil.getLootContainer(world, pos, (ServerPlayerEntity) player);
-    if (inamedcontainerprovider != null) {
-      player.openContainer(inamedcontainerprovider);
+    INamedContainerProvider provider;
+    if (isLootChest(world, pos)) {
+      provider = ChestUtil.getLootContainer(world, pos, (ServerPlayerEntity) player);
+    } else {
+      BlockState state = world.getBlockState(pos);
+      if (state.getBlock() == Blocks.CHEST) {
+        provider = ((ChestBlock) Blocks.CHEST).getContainer(state, world, pos);
+      } else if (state.getBlock() == Blocks.BARREL || state.getBlock() == ModBlocks.BARREL) {
+        provider = ((ContainerBlock) Blocks.BARREL).getContainer(state, world, pos);
+      } else {
+        provider = null;
+      }
+    }
+
+    if (provider != null) {
+      player.openContainer(provider);
     }
     return true;
   }
@@ -62,8 +74,8 @@ public class ChestUtil {
       return BooleanData.isLootChest(world, pos);
     } else {
       TileEntity te = world.getTileEntity(pos);
-      if (te instanceof SpecialLootChestTile) {
-        return ((SpecialLootChestTile) te).isSpecialLootChest();
+      if (te instanceof ILootTile) {
+        return ((ILootTile) te).isSpecialLootChest();
       }
 
       return false;

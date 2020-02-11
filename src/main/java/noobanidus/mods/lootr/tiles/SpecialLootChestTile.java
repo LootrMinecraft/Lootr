@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.DoubleSidedInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.ChestContainer;
 import net.minecraft.nbt.CompoundNBT;
@@ -24,6 +25,7 @@ import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
+import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.data.BooleanData;
 import noobanidus.mods.lootr.data.NewChestData;
@@ -35,7 +37,7 @@ import java.util.Random;
 @SuppressWarnings("Duplicates")
 public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
   private int ticksSinceSync;
-
+  private int specialNumPlayersUsingChest;
   private Random random = new Random();
   private ResourceLocation savedLootTable = null;
   private long seed = -1;
@@ -51,6 +53,7 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
 
   @Override
   public void setLootTable(ResourceLocation lootTableIn, long seedIn) {
+    Lootr.LOG.debug("Set chest tile entity at " + (getPos() == null ? "unknown location" : getPos().toString()) + " to loot table " + lootTableIn.toString());
     super.setLootTable(lootTableIn, seedIn);
     this.savedLootTable = lootTableIn;
     this.seed = seedIn;
@@ -59,6 +62,7 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
 
   @Override
   public void markForSync() {
+    Lootr.LOG.debug("Marked chest tile entity at " + getPos().toString() + " for synchronisation");
     this.synchronised = false;
   }
 
@@ -70,6 +74,7 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
         BooleanData.markLootChest(world, getPos());
         BlockState state = this.world.getBlockState(getPos());
         this.world.notifyBlockUpdate(pos, state, state, 8);
+        Lootr.LOG.debug("Synchronised chest block state at " + pos.toString());
       }
     }
 
@@ -77,15 +82,19 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
     int j = this.pos.getY();
     int k = this.pos.getZ();
     ++this.ticksSinceSync;
-    this.numPlayersUsing = calculatePlayersUsingSync(this.world, this, this.ticksSinceSync, i, j, k, this.numPlayersUsing);
+    int count = calculatePlayersUsingSync(this.world, this, this.ticksSinceSync, i, j, k, this.specialNumPlayersUsingChest);
+    if (count != specialNumPlayersUsingChest) {
+      Lootr.LOG.debug("Number of players using chest changed from " + specialNumPlayersUsingChest + " to " + count);
+    }
+    this.specialNumPlayersUsingChest = count;
     this.prevLidAngle = this.lidAngle;
-    if (this.numPlayersUsing > 0 && this.lidAngle == 0.0F) {
+    if (this.specialNumPlayersUsingChest > 0 && this.lidAngle == 0.0F) {
       this.playSound(SoundEvents.BLOCK_CHEST_OPEN);
     }
 
-    if (this.numPlayersUsing == 0 && this.lidAngle > 0.0F || this.numPlayersUsing > 0 && this.lidAngle < 1.0F) {
+    if (this.specialNumPlayersUsingChest == 0 && this.lidAngle > 0.0F || this.specialNumPlayersUsingChest > 0 && this.lidAngle < 1.0F) {
       float f1 = this.lidAngle;
-      if (this.numPlayersUsing > 0) {
+      if (this.specialNumPlayersUsingChest > 0) {
         this.lidAngle += 0.1F;
       } else {
         this.lidAngle -= 0.1F;
@@ -137,6 +146,7 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
 
   @Override
   public void fillWithLoot(PlayerEntity player, IInventory inventory) {
+    Lootr.LOG.debug("Filling chest tile entity at " + getPos().toString() + " with loot for " + (player == null ? "null player" : player.getScoreboardName()));
     if (this.world != null && this.savedLootTable != null && this.world.getServer() != null) {
       LootTable loottable = this.world.getServer().getLootTableManager().getLootTableFromLocation(this.savedLootTable);
       LootContext.Builder builder = (new LootContext.Builder((ServerWorld) this.world)).withParameter(LootParameters.POSITION, new BlockPos(this.pos)).withSeed(ConfigManager.RANDOMISE_SEED.get() ? random.nextLong() : this.seed);
@@ -222,7 +232,7 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
     for (PlayerEntity playerentity : world.getEntitiesWithinAABB(PlayerEntity.class, new AxisAlignedBB((double) ((float) x - 5.0F), (double) ((float) y - 5.0F), (double) ((float) z - 5.0F), (double) ((float) (x + 1) + 5.0F), (double) ((float) (y + 1) + 5.0F), (double) ((float) (z + 1) + 5.0F)))) {
       if (playerentity.openContainer instanceof ChestContainer) {
         IInventory inv = ((ChestContainer) playerentity.openContainer).getLowerChestInventory();
-        if (inv instanceof NewChestData.SpecialChestInventory && ((NewChestData.SpecialChestInventory) inv).getPos() == tile.getPos()) {
+        if ((inv instanceof NewChestData.SpecialChestInventory && ((NewChestData.SpecialChestInventory) inv).getPos().equals(tile.getPos())) || (inv == tile || inv instanceof DoubleSidedInventory && ((DoubleSidedInventory) inv).isPartOfLargeChest(tile))) {
           ++i;
         }
       }
@@ -234,7 +244,7 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
   @Override
   public boolean receiveClientEvent(int id, int type) {
     if (id == 1) {
-      this.numPlayersUsing = type;
+      this.specialNumPlayersUsingChest = type;
       return true;
     } else {
       return super.receiveClientEvent(id, type);
@@ -244,11 +254,13 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
   @Override
   public void openInventory(PlayerEntity player) {
     if (!player.isSpectator()) {
-      if (this.numPlayersUsing < 0) {
-        this.numPlayersUsing = 0;
+      Lootr.LOG.debug("Player " + player.getScoreboardName() + " opened loot chest at " + getPos().toString());
+      if (this.specialNumPlayersUsingChest < 0) {
+        this.specialNumPlayersUsingChest = 0;
       }
 
-      ++this.numPlayersUsing;
+      ++this.specialNumPlayersUsingChest;
+      Lootr.LOG.debug("Total number of players at " + getPos().toString() + " using chest is now: " + specialNumPlayersUsingChest);
       this.onOpenOrClose();
     }
   }
@@ -256,7 +268,8 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
   @Override
   public void closeInventory(PlayerEntity player) {
     if (!player.isSpectator()) {
-      --this.numPlayersUsing;
+      --this.specialNumPlayersUsingChest;
+      Lootr.LOG.debug("Player " + player.getScoreboardName() + " closed loot chest at " + getPos().toString() + ", total number of players now using is " + specialNumPlayersUsingChest);
       this.onOpenOrClose();
     }
   }
@@ -265,7 +278,7 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
   protected void onOpenOrClose() {
     Block block = this.getBlockState().getBlock();
     if (block instanceof ChestBlock) {
-      this.world.addBlockEvent(this.pos, block, 1, this.numPlayersUsing);
+      this.world.addBlockEvent(this.pos, block, 1, this.specialNumPlayersUsingChest);
       this.world.notifyNeighborsOfStateChange(this.pos, block);
     }
   }

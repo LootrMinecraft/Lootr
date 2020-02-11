@@ -20,6 +20,7 @@ import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
+import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.data.BooleanData;
 import noobanidus.mods.lootr.init.ModBlocks;
@@ -29,7 +30,7 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 public class SpecialLootBarrelTile extends BarrelTileEntity implements ITickableTileEntity, ILootTile {
-  private int numPlayersUsing;
+  private int specialNumPlayersUsingBarrel;
 
   private Random random = new Random();
   private ResourceLocation savedLootTable = null;
@@ -51,6 +52,7 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ITickable
   }
 
   public void setLootTable(ResourceLocation lootTableIn, long seedIn, boolean doSync) {
+    Lootr.LOG.debug("Set barrel tile entity at " + (getPos() == null ? "unknown location" : getPos().toString()) + " to loot table " + lootTableIn.toString());
     this.savedLootTable = lootTableIn;
     this.seed = seedIn;
     if (doSync) {
@@ -60,6 +62,7 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ITickable
 
   @Override
   public void markForSync() {
+    Lootr.LOG.debug("Marked barrel tile entity at " + getPos().toString() + " for synchronisation");
     this.synchronised = false;
   }
 
@@ -92,6 +95,7 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ITickable
   @Override
   @SuppressWarnings({"unused", "Duplicates"})
   public void fillWithLoot(PlayerEntity player, IInventory inventory) {
+    Lootr.LOG.debug("Filling barrel tile entity at " + getPos().toString() + " with loot for " + (player == null ? "null player" : player.getScoreboardName()));
     if (this.world != null && this.savedLootTable != null && this.world.getServer() != null) {
       LootTable loottable = this.world.getServer().getLootTableManager().getLootTableFromLocation(this.savedLootTable);
       LootContext.Builder builder = (new LootContext.Builder((ServerWorld) this.world)).withParameter(LootParameters.POSITION, new BlockPos(this.pos)).withSeed(ConfigManager.RANDOMISE_SEED.get() ? random.nextLong() : this.seed);
@@ -178,9 +182,12 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ITickable
           if (te instanceof SpecialLootBarrelTile && te != this) {
             ((SpecialLootBarrelTile) te).setLootTable(savedLootTable, seed, false);
             BooleanData.markLootChest(world, getPos());
+          } else if (te == this) {
+            Lootr.LOG.debug("Replaced barrel tile but was myself.");
           }
         } else {
           world.notifyBlockUpdate(pos, state, state, 8);
+          Lootr.LOG.debug("Synchronised barrel block state at " + pos.toString());
         }
       }
     }
@@ -191,13 +198,14 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ITickable
     int x = this.pos.getX();
     int y = this.pos.getY();
     int z = this.pos.getZ();
-    this.numPlayersUsing = SpecialLootChestTile.calculatePlayersUsing(this.world, this, x, y, z);
-    if (this.numPlayersUsing > 0) {
+    this.specialNumPlayersUsingBarrel = SpecialLootChestTile.calculatePlayersUsing(this.world, this, x, y, z);
+    if (this.specialNumPlayersUsingBarrel > 0) {
       this.scheduleTick();
     } else {
       BlockState state = this.getBlockState();
       if (state.getBlock() != ModBlocks.BARREL) {
         this.remove();
+        Lootr.LOG.debug("Removed tile entity at " + getPos().toString() + " as it was not a barrel");
         return;
       }
 
@@ -207,7 +215,6 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ITickable
         this.setOpenProperty(state, false);
       }
     }
-
   }
 
   private void setOpenProperty(BlockState state, boolean open) {
@@ -229,11 +236,13 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ITickable
   @Override
   public void openInventory(PlayerEntity player) {
     if (!player.isSpectator()) {
-      if (this.numPlayersUsing < 0) {
-        this.numPlayersUsing = 0;
+      Lootr.LOG.debug("Player " + player.getScoreboardName() + " opened loot barrel at " + getPos().toString());
+      if (this.specialNumPlayersUsingBarrel < 0) {
+        this.specialNumPlayersUsingBarrel = 0;
       }
 
-      ++this.numPlayersUsing;
+      ++this.specialNumPlayersUsingBarrel;
+      Lootr.LOG.debug("Total number of players at " + getPos().toString() + " using barrel is now: " + specialNumPlayersUsingBarrel);
       BlockState state = this.getBlockState();
       boolean open = state.get(BarrelBlock.PROPERTY_OPEN);
       if (!open) {
@@ -249,7 +258,8 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ITickable
   @Override
   public void closeInventory(PlayerEntity player) {
     if (!player.isSpectator()) {
-      --this.numPlayersUsing;
+      --this.specialNumPlayersUsingBarrel;
+      Lootr.LOG.debug("Player " + player.getScoreboardName() + " closed loot barrel at " + getPos().toString() + ", total number of players now using is " + specialNumPlayersUsingBarrel);
     }
   }
 }
