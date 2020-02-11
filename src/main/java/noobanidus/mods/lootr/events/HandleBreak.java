@@ -11,7 +11,7 @@ import noobanidus.mods.lootr.init.ModBlocks;
 public class HandleBreak {
   public static void onBlockBreak(BlockEvent.BreakEvent event) {
     if (!event.getWorld().isRemote()) {
-      if (event.getState().getBlock() == Blocks.CHEST || event.getState().getBlock() == ModBlocks.BARREL) {
+      if (event.getState().getBlock() == Blocks.CHEST || event.getState().getBlock() == ModBlocks.BARREL || event.getState().getBlock() == Blocks.TRAPPED_CHEST) {
         if (BooleanData.isLootChest(event.getWorld(), event.getPos())) {
           if (!event.getPlayer().isSneaking()) {
             event.setCanceled(true);

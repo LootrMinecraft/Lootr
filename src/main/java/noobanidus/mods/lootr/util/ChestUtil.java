@@ -62,7 +62,7 @@ public class ChestUtil {
       return true;
     }
 
-    return isLootChest(world, pos.offset(offset));
+    return isLootChest(world, pos.offset(offset.getOpposite()));
   }
 
   public static boolean isLootChest(BlockItemUseContext context, Direction direction) {
