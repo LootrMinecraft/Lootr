@@ -40,8 +40,12 @@ public class ChestUtil {
       BlockState state = world.getBlockState(pos);
       if (state.getBlock() == Blocks.CHEST) {
         provider = ((ChestBlock) Blocks.CHEST).getContainer(state, world, pos);
+      } else if (state.getBlock() == Blocks.TRAPPED_CHEST) {
+        provider = ((TrappedChestBlock) Blocks.TRAPPED_CHEST).getContainer(state, world, pos);
       } else if (state.getBlock() == Blocks.BARREL || state.getBlock() == ModBlocks.BARREL) {
         provider = ((ContainerBlock) Blocks.BARREL).getContainer(state, world, pos);
+      } else if (state.getBlock() instanceof ChestBlock) {
+        provider = ((ChestBlock) state.getBlock()).getContainer(state, world, pos);
       } else {
         provider = null;
       }

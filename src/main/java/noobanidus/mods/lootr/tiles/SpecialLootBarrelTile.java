@@ -203,7 +203,7 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ITickable
       this.scheduleTick();
     } else {
       BlockState state = this.getBlockState();
-      if (state.getBlock() != ModBlocks.BARREL) {
+      if (state.getBlock() != ModBlocks.BARREL && state.getBlock() != Blocks.BARREL) {
         this.remove();
         Lootr.LOG.debug("Removed tile entity at " + getPos().toString() + " as it was not a barrel");
         return;
