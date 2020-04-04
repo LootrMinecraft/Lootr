@@ -293,7 +293,7 @@ public class NewChestData extends WorldSavedData {
 
   @Nullable
   public static SpecialChestInventory getInventory(IWorld world, BlockPos pos, ServerPlayerEntity player) {
-    Lootr.LOG.debug("Trying to get inventory in dim: "+ world.getDimension().getType().toString() + ", pos: " + pos.toString());
+/*    Lootr.LOG.debug("Trying to get inventory in dim: "+ world.getDimension().getType().toString() + ", pos: " + pos.toString());*/
     NewChestData data = getInstance(world, pos);
     SpecialChestInventory inventory = data.getInventory(player);
     if (inventory == null) {
@@ -318,7 +318,7 @@ public class NewChestData extends WorldSavedData {
     ServerWorld serverWorld = getServerWorld();
     int dimension = world.getDimension().getType().getId();
     DimensionSavedDataManager manager = serverWorld.getSavedData();
-    Lootr.LOG.debug("Wiped inventory in dim: "+ dimension + ", pos: " + pos.toString());
+/*    Lootr.LOG.debug("Wiped inventory in dim: "+ dimension + ", pos: " + pos.toString());*/
     String id = ID(dimension, pos);
     if (!manager.savedDatum.containsKey(id)) {
       return;

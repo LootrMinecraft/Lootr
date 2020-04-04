@@ -186,7 +186,7 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
         BlockState state = this.world.getBlockState(getPos());
         boolean trapped = state.getBlock() == Blocks.TRAPPED_CHEST;
         if (state.getBlock() == Blocks.CHEST || state.getBlock() == Blocks.TRAPPED_CHEST) {
-          world.setBlockState(pos, (trapped ? ModBlocks.CHEST : ModBlocks.TRAPPED_CHEST).getDefaultState().with(ChestBlock.FACING, state.get(ChestBlock.FACING)).with(ChestBlock.TYPE, ChestType.SINGLE));
+          world.setBlockState(pos, (trapped ? ModBlocks.TRAPPED_CHEST : ModBlocks.CHEST).getDefaultState().with(ChestBlock.FACING, state.get(ChestBlock.FACING)).with(ChestBlock.TYPE, ChestType.SINGLE));
           TileEntity te = world.getTileEntity(pos);
           if (te instanceof SpecialLootChestTile && te != this) {
             ((SpecialLootChestTile) te).setLootTable(savedLootTable, seed, false);

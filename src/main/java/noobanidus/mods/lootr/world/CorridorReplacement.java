@@ -46,7 +46,7 @@ public class CorridorReplacement {
     TileEntity tileentity = reader.getTileEntity(pos);
     if (tileentity instanceof LockableLootTileEntity) {
       ((LockableLootTileEntity) tileentity).setLootTable(lootTableIn, rand.nextLong());
-      Lootr.LOG.debug("Set loot table for tile entity at " + pos.toString() + " with table " + lootTableIn.toString());
+/*      Lootr.LOG.debug("Set loot table for tile entity at " + pos.toString() + " with table " + lootTableIn.toString());*/
       if (reader instanceof IWorld && tileentity instanceof ILootTile) {
         IWorld world = (IWorld) reader;
         BooleanData.markLootChest(world, pos);
