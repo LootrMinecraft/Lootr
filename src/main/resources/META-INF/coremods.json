@@ -1,14 +1,7 @@
 {
   "chests": "asm/chest/chests.js",
   "tile": "asm/chest/tile.js",
-  "attach": "asm/chest/attach.js",
-  "activate": "asm/chest/activate.js",
-  "post": "asm/chest/post.js",
-  "container": "asm/chest/container.js",
   "minecart": "asm/minecart/minecart.js",
   "trapped": "asm/trapped/tile.js",
-  "destroy": "asm/chest/destroy.js",
-  "barrel_activate": "asm/barrel/activate.js",
-  "barrel_destroy": "asm/barrel/destroy.js",
   "barrel_tile": "asm/barrel/tile.js"
 }

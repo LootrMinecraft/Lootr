@@ -2,6 +2,7 @@ package noobanidus.mods.lootr.tiles;
 
 import noobanidus.mods.lootr.init.ModTiles;
 
+@SuppressWarnings("ConstantConditions")
 public class SpecialTrappedLootChestTile extends SpecialLootChestTile {
   public SpecialTrappedLootChestTile() {
     super(ModTiles.SPECIAL_TRAPPED_LOOT_CHEST);

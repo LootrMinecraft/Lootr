@@ -38,7 +38,7 @@ public class ChestUtil {
       provider = ChestUtil.getLootContainer(world, pos, (ServerPlayerEntity) player);
     } else {
       BlockState state = world.getBlockState(pos);
-      if (state.getBlock() == Blocks.CHEST) {
+      if (state.getBlock() == Blocks.CHEST || state.getBlock() == ModBlocks.CHEST) {
         provider = ((ChestBlock) Blocks.CHEST).getContainer(state, world, pos);
       } else if (state.getBlock() == Blocks.TRAPPED_CHEST) {
         provider = ((TrappedChestBlock) Blocks.TRAPPED_CHEST).getContainer(state, world, pos);

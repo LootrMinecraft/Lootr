@@ -9,7 +9,7 @@ import noobanidus.mods.lootr.tiles.SpecialLootChestTile;
 import noobanidus.mods.lootr.tiles.SpecialTrappedLootChestTile;
 
 public class ModTiles {
-  public static TileEntityType<SpecialLootChestTile> SPECIAL_LOOT_CHEST = TileEntityType.Builder.create(SpecialLootChestTile::new, Blocks.CHEST).build(null);
+  public static TileEntityType<SpecialLootChestTile> SPECIAL_LOOT_CHEST = TileEntityType.Builder.create(SpecialLootChestTile::new, Blocks.CHEST, ModBlocks.CHEST).build(null);
   public static TileEntityType<SpecialTrappedLootChestTile> SPECIAL_TRAPPED_LOOT_CHEST = TileEntityType.Builder.create(SpecialTrappedLootChestTile::new, Blocks.TRAPPED_CHEST).build(null);
   public static TileEntityType<SpecialLootBarrelTile> SPECIAL_LOOT_BARREL = TileEntityType.Builder.create(SpecialLootBarrelTile::new, Blocks.BARREL, ModBlocks.BARREL).build(null);
 

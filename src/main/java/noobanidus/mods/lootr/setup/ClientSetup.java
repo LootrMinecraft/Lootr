@@ -8,6 +8,5 @@ import noobanidus.mods.lootr.tiles.SpecialLootChestTile;
 public class ClientSetup {
   public static void init(FMLClientSetupEvent event) {
     ClientRegistry.bindTileEntitySpecialRenderer(SpecialLootChestTile.class, new SpecialLootChestTileRenderer<>());
-    /*    ClientRegistry.bindTileEntitySpecialRenderer(SpecialLootBarrelTile.class, new SpecialLootBarrelTileRenderer<>());*/
   }
 }

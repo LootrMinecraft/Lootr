@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.blocks;
+package noobanidus.mods.lootr.util;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ChestBlock;
