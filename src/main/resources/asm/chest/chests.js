@@ -22,7 +22,7 @@ function initializeCoreMod() {
                 insn.add(new VarInsnNode(Opcodes.ALOAD, 1));
                 insn.add(new VarInsnNode(Opcodes.ALOAD, 2));
                 insn.add(new VarInsnNode(Opcodes.ILOAD, 3));
-                insn.add(ASMAPI.buildMethodCall("noobanidus/mods/lootr/blocks/ChestBlockReplacement", "getInventory", "(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Z)Lnet/minecraft/inventory/IInventory;", ASMAPI.MethodType.STATIC));
+                insn.add(ASMAPI.buildMethodCall("noobanidus/mods/lootr/util/ChestBlockReplacement", "getInventory", "(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Z)Lnet/minecraft/inventory/IInventory;", ASMAPI.MethodType.STATIC));
                 insn.add(new InsnNode(Opcodes.ARETURN));
                 instr.insert(insn);
 
