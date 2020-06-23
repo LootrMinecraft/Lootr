@@ -32,7 +32,7 @@ sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 
 minecraft {
-    mappings channel: 'snapshot', version: "${mcp_mappings}"
+    mappings channel: 'stable', version: "${mcp_mappings}"
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     runs {
@@ -44,7 +44,7 @@ minecraft {
             //property 'forge.logging.markers', 'CORE,REGISTRIES'
             property 'forge.logging.console.level', 'debug'
 
-            mods {
+            modsh {
                 lootr {
                     source sourceSets.main
                 }
