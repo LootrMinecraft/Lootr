@@ -17,7 +17,6 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import noobanidus.mods.lootr.tiles.SpecialTrappedLootChestTile;
-import noobanidus.mods.lootr.util.ChestBlockReplacement;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;

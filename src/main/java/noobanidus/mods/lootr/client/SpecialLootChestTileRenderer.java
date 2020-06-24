@@ -12,10 +12,6 @@ public class SpecialLootChestTileRenderer<T extends SpecialLootChestTile> extend
 
   @Override
   public ChestModel getChestModel(T tile, int destroyStage, boolean doubleChest) {
-    if (doubleChest || destroyStage != -1 || !tile.isSpecialLootChest()) {
-      return super.getChestModel(tile, destroyStage, doubleChest);
-    }
-
     ChestModel model = super.getChestModel(tile, destroyStage, doubleChest);
     this.bindTexture(TEXTURE);
     return model;

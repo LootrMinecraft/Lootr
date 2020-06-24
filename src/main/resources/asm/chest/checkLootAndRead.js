@@ -3,12 +3,12 @@ function initializeCoreMod() {
         'getInventory': {
             'target': {
                 'type': 'METHOD',
-                'class': 'net.minecraft.block.ChestBlock',
-                'methodName': 'func_220105_a',
-                'methodDesc': '(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Z)Lnet/minecraft/inventory/IInventory;'
+                'class': ' net.minecraft.tileentity.LockableLootTileEntity',
+                'methodName': 'func_184283_b',
+                'methodDesc': '(Lnet/minecraft/nbt/CompoundNBT;)Z'
             },
             'transformer': function (method) {
-                print("[LootR] Patching static ChestBlock::getInventory");
+                print("[LootR] Patching LockableLootTileEntity::checkLootAndRead");
 
                 var ASMAPI = Java.type('net.minecraftforge.coremod.api.ASMAPI');
                 var Opcodes = Java.type('org.objectweb.asm.Opcodes');

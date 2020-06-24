@@ -293,7 +293,6 @@ public class NewChestData extends WorldSavedData {
 
   @Nullable
   public static SpecialChestInventory getInventory(IWorld world, BlockPos pos, ServerPlayerEntity player) {
-/*    Lootr.LOG.debug("Trying to get inventory in dim: "+ world.getDimension().getType().toString() + ", pos: " + pos.toString());*/
     NewChestData data = getInstance(world, pos);
     SpecialChestInventory inventory = data.getInventory(player);
     if (inventory == null) {
@@ -308,7 +307,6 @@ public class NewChestData extends WorldSavedData {
       ILootTile tile = (ILootTile) te;
       tile.fillWithLoot(player, inventory);
       data.setInventory(player, inventory);
-      tile.markForSync();
     }
 
     return inventory;
@@ -318,7 +316,6 @@ public class NewChestData extends WorldSavedData {
     ServerWorld serverWorld = getServerWorld();
     int dimension = world.getDimension().getType().getId();
     DimensionSavedDataManager manager = serverWorld.getSavedData();
-/*    Lootr.LOG.debug("Wiped inventory in dim: "+ dimension + ", pos: " + pos.toString());*/
     String id = ID(dimension, pos);
     if (!manager.savedDatum.containsKey(id)) {
       return;
@@ -328,7 +325,13 @@ public class NewChestData extends WorldSavedData {
       data.clear();
       data.markDirty();
     }
-    // Saving is handled by the BooleanData.deleteLootChest
-    //manager.save();
+  }
+
+   public static void deleteLootChest(IWorld world, BlockPos pos) {
+    if (world.isRemote()) {
+      return;
+    }
+    NewChestData.wipeInventory(world, pos);
+    getServerWorld().getSavedData().save();
   }
 }

@@ -20,7 +20,6 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import noobanidus.mods.lootr.tiles.SpecialLootChestTile;
-import noobanidus.mods.lootr.util.ChestBlockReplacement;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;
@@ -29,12 +28,6 @@ import javax.annotation.Nullable;
 public class LootrChestBlock extends ChestBlock {
   public LootrChestBlock(Properties properties) {
     super(properties);
-  }
-
-  @Override
-  public void onReplaced(BlockState oldState, World world, BlockPos pos, BlockState newState, boolean isMoving) {
-    ChestUtil.handleLootChestReplaced(world, pos, oldState, newState);
-    super.onReplaced(oldState, world, pos, newState, isMoving);
   }
 
   @Override
@@ -76,7 +69,7 @@ public class LootrChestBlock extends ChestBlock {
   @Override
   @Nullable
   public INamedContainerProvider getContainer(BlockState state, World worldIn, BlockPos pos) {
-    return ChestBlockReplacement.getContainer(state, worldIn, pos);
+    return ChestUtil.getContainer(state, worldIn, pos);
   }
 
   @Override

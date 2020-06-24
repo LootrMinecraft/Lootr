@@ -26,7 +26,7 @@ function initializeCoreMod() {
                 insn.add(new VarInsnNode(Opcodes.ILOAD, 5));
                 insn.add(new VarInsnNode(Opcodes.ILOAD, 6));
                 insn.add(new VarInsnNode(Opcodes.ALOAD, 7));
-                insn.add(ASMAPI.buildMethodCall("noobanidus/mods/lootr/world/CorridorReplacement", "generateChest", "(Lnet/minecraft/world/gen/feature/structure/MineshaftPieces$Corridor;Lnet/minecraft/world/IWorld;Lnet/minecraft/util/math/MutableBoundingBox;Ljava/util/Random;IIILnet/minecraft/util/ResourceLocation;)Z", ASMAPI.MethodType.STATIC));
+                insn.add(ASMAPI.buildMethodCall("noobanidus/mods/lootr/world/CorridorReplacement", "generateMineshaftChest", "(Lnet/minecraft/world/gen/feature/structure/MineshaftPieces$Corridor;Lnet/minecraft/world/IWorld;Lnet/minecraft/util/math/MutableBoundingBox;Ljava/util/Random;IIILnet/minecraft/util/ResourceLocation;)Z", ASMAPI.MethodType.STATIC));
                 insn.add(new InsnNode(Opcodes.IRETURN));
                 instr.insert(insn);
 
