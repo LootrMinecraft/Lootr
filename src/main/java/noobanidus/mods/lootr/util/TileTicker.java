@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.util;
 
+import com.google.common.base.Ticker;
 import net.minecraft.block.*;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.LockableLootTileEntity;
@@ -69,6 +70,10 @@ public class TileTicker {
     }
   }
 
+  public static void addTile (TileEntity tile) {
+
+  }
+
   public static class Ticker {
     private final WeakReference<TileEntity> ref;
     private int counter = 0;
@@ -76,7 +81,40 @@ public class TileTicker {
     private ResourceLocation table;
 
     public Ticker(TileEntity tile, ResourceLocation table, long seed) {
-      ref = new WeakReference<>(tile);
+      this.ref = new WeakReference<>(tile);
+      this.table = table;
+      this.seed = seed;
+    }
+
+    public Ticker(TileEntity tile) {
+      this.ref = new WeakReference<>(tile);
+      this.table = null;
+      this.seed = -15;
+    }
+
+    public boolean resolveTable () {
+      if (this.table != null) {
+        return true;
+      }
+
+      final TileEntity te = ref.get();
+      if (te == null) {
+        return false;
+      }
+
+      if (te.getWorld() == null) {
+        return false;
+      }
+
+      if (te.getWorld().isRemote()) {
+        return false;
+      }
+
+      if (te instanceof LockableLootTileEntity) {
+        LockableLootTileEntity tile = (LockableLootTileEntity) te;
+      }
+
+      return false;
     }
 
     public int getCounter() {
