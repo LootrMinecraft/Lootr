@@ -3,203 +3,114 @@ package noobanidus.mods.lootr.util;
 import com.google.common.base.Ticker;
 import net.minecraft.block.*;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.Lootr;
+import noobanidus.mods.lootr.events.HandleBreak;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.tiles.ILootTile;
 
 import javax.annotation.Nullable;
-import java.lang.ref.WeakReference;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.Set;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "WeakerAccess"})
 @Mod.EventBusSubscriber(modid = Lootr.MODID)
 public class TileTicker {
-  private static int MAX_COUNTER = 10 * 20;
-  private static final Object lock = new Object();
-
-  private static boolean ticking = false;
-  private static final LinkedList<Ticker> tickList = new LinkedList<>();
-  private static final LinkedList<Ticker> waitList = new LinkedList<>();
+  @SuppressWarnings("FieldCanBeLocal")
+  private static int MAX_COUNTER = 10 * 50;
+  private static int integrated = -1;
+  private static final Set<Ticker> tickList = Collections.synchronizedSet(new HashSet<>());
 
   @SubscribeEvent
   public static void tick(TickEvent event) {
-    ticking = true;
-    if (event.side == LogicalSide.CLIENT && event.phase == TickEvent.Phase.END) {
-      synchronized (lock) {
-        ticking = true;
+    if (event.side == LogicalSide.CLIENT && event.phase == TickEvent.Phase.END && event.type == TickEvent.Type.CLIENT) {
+      if (integrated == 0) {
         tickList.clear();
-        ticking = false;
       }
-    } else if (event.side == LogicalSide.SERVER && event.phase == TickEvent.Phase.END) {
-      synchronized (lock) {
-        ticking = true;
-        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+    } else if (event.side == LogicalSide.SERVER && event.phase == TickEvent.Phase.END && event.type == TickEvent.Type.SERVER) {
+      if (integrated == -1) {
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+          integrated = 1;
+        } else {
+          integrated = 0;
+        }
+      }
+      MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+      if (!tickList.isEmpty()) {
+        Lootr.LOG.info("Ticking the following tickers: " + tickList);
         Iterator<Ticker> iterator = tickList.iterator();
         while (iterator.hasNext()) {
           Ticker ticker = iterator.next();
-          if (ticker.run(server)) {
+          if (ticker.getCounter() > MAX_COUNTER) {
+            Lootr.LOG.info("Ticker expired: " + ticker);
             iterator.remove();
-          } else if (ticker.invalid(server)) {
+            continue;
+          }
+          if (ticker.run()) {
             iterator.remove();
-          } else if (ticker.getCounter() > MAX_COUNTER) {
+            continue;
+          }
+          if (ticker.invalid()) {
             iterator.remove();
           }
         }
-        tickList.addAll(waitList);
-        ticking = false;
-      }
-    }
-    waitList.clear();
-  }
-
-  public static void addTicker(Ticker ticker) {
-    synchronized (lock) {
-      if (ticking) {
-        waitList.add(ticker);
-      } else {
-        tickList.add(ticker);
       }
     }
   }
 
-  public static void addTicker (TileEntity tile) {
-    synchronized (lock) {
-      Ticker ticker = new Ticker(tile);
-      if (ticking) {
-        waitList.add(ticker);
-      } else {
-        tickList.add(ticker);
-      }
-    }
-  }
-
-  public static void addTicker (BlockPos pos, DimensionType type, ResourceLocation table, long seed) {
-    synchronized (lock) {
-      Ticker ticker = new Ticker(pos, type, table, seed);
-      if (ticking) {
-        waitList.add(ticker);
-      } else {
-        tickList.add(ticker);
-      }
-    }
+  public static void addTicker(TileEntity tile, BlockPos pos, DimensionType type, ResourceLocation table, long seed) {
+    tickList.add(new Ticker(tile, pos, type, table, seed));
   }
 
   public static class Ticker {
-    private final WeakReference<TileEntity> ref;
+    private final TileEntity ref;
     private int counter = 0;
     private long seed;
     private ResourceLocation table;
-    private BlockPos pos = null;
-    private DimensionType dim = null;
+    private BlockPos pos;
+    private DimensionType dim;
 
-    public Ticker(TileEntity tile, ResourceLocation table, long seed) {
-      this.ref = new WeakReference<>(tile);
-      this.table = table;
-      this.seed = seed;
-    }
-
-    public Ticker(TileEntity tile) {
-      this.ref = new WeakReference<>(tile);
-      this.table = null;
-      this.seed = -15;
-    }
-
-    public Ticker (BlockPos pos, DimensionType dimension, ResourceLocation table, long seed) {
-      this.ref = null;
+    public Ticker(TileEntity tile, BlockPos pos, @Nullable DimensionType dim, ResourceLocation table, long seed) {
+      this.ref = tile;
       this.table = table;
       this.seed = seed;
       this.pos = pos;
-      this.dim = dimension;
-    }
-
-    @Nullable
-    private TileEntity resolveTile (MinecraftServer server) {
-      World world = server.getWorld(dim);
-      return world.getTileEntity(pos);
-    }
-
-    public boolean resolveTable (MinecraftServer server) {
-      if (this.table != null) {
-        return true;
-      }
-
-      TileEntity te;
-
-      if (ref == null) {
-        te = resolveTile(server);
-      } else {
-        te = ref.get();
-      }
-
-      if (te == null) {
-        return false;
-      }
-
-      if (te.getWorld() == null) {
-        return false;
-      }
-
-      if (te.getWorld().isRemote()) {
-        return false;
-      }
-
-      if (te instanceof LockableLootTileEntity) {
-        LockableLootTileEntity tile = (LockableLootTileEntity) te;
-      }
-
-      return false;
+      this.dim = dim;
     }
 
     public int getCounter() {
       return counter;
     }
 
-    public boolean invalid(MinecraftServer server) {
-      TileEntity te;
-
-      if (ref == null) {
-        te = resolveTile(server);
-      } else {
-        te = ref.get();
-      }
-
-      if (te == null) {
-        return false;
-      }
+    public boolean invalid() {
+      TileEntity te = ref;
 
       if (te.getWorld() == null) {
         return false;
       }
 
-      return te.getWorld().isRemote();
+      if (te.getWorld().isRemote()) {
+        return true;
+      }
+
+      return !te.getWorld().isAreaLoaded(pos, 1);
     }
 
-    public boolean run(MinecraftServer server) {
-      TileEntity te;
-
-      if (ref == null) {
-        te = resolveTile(server);
-      } else {
-        te = ref.get();
-      }
-
-      if (te == null) {
-        return false;
-      }
+    public boolean run() {
+      TileEntity te = ref;
 
       if (te.getWorld() == null) {
         counter++;
@@ -211,30 +122,48 @@ public class TileTicker {
         return false; // invalid
       }
 
+      if (!world.isAreaLoaded(pos, 1)) {
+        return false;
+      }
+
       BlockPos pos = te.getPos();
 
       BlockState state = world.getBlockState(pos);
       Block block = state.getBlock();
-      BlockState replacementState;
-      if (block == Blocks.CHEST) {
-        replacementState = ModBlocks.CHEST.getDefaultState().with(ChestBlock.FACING, state.get(ChestBlock.FACING)).with(ChestBlock.WATERLOGGED, state.get(ChestBlock.WATERLOGGED));
-      } else if (block == Blocks.TRAPPED_CHEST) {
-        replacementState = ModBlocks.TRAPPED_CHEST.getDefaultState().with(ChestBlock.FACING, state.get(ChestBlock.FACING)).with(ChestBlock.WATERLOGGED, state.get(ChestBlock.WATERLOGGED));
-      } else if (block == Blocks.BARREL) {
-        replacementState = ModBlocks.BARREL.getDefaultState().with(BarrelBlock.PROPERTY_FACING, state.get(BarrelBlock.PROPERTY_FACING)).with(BarrelBlock.PROPERTY_OPEN, state.get(BarrelBlock.PROPERTY_OPEN));
-      } else {
-        replacementState = ModBlocks.CHEST.getDefaultState();
-        if (state.has(BlockStateProperties.WATERLOGGED)) {
-          replacementState = replacementState.with(BlockStateProperties.WATERLOGGED, state.get(BlockStateProperties.WATERLOGGED));
+
+      BlockState replacementState = null;
+
+      if (!HandleBreak.specialLootChests.contains(block)) {
+        if (block == Blocks.CHEST) {
+          replacementState = ModBlocks.CHEST.getDefaultState().with(ChestBlock.FACING, state.get(ChestBlock.FACING)).with(ChestBlock.WATERLOGGED, state.get(ChestBlock.WATERLOGGED));
+        } else if (block == Blocks.TRAPPED_CHEST) {
+          replacementState = ModBlocks.TRAPPED_CHEST.getDefaultState().with(ChestBlock.FACING, state.get(ChestBlock.FACING)).with(ChestBlock.WATERLOGGED, state.get(ChestBlock.WATERLOGGED));
+        } else if (block == Blocks.BARREL) {
+          replacementState = ModBlocks.BARREL.getDefaultState().with(BarrelBlock.PROPERTY_FACING, state.get(BarrelBlock.PROPERTY_FACING)).with(BarrelBlock.PROPERTY_OPEN, state.get(BarrelBlock.PROPERTY_OPEN));
         }
       }
 
-      world.setBlockState(pos, replacementState);
+      if (replacementState != null) {
+        world.setBlockState(pos, replacementState);
+      }
       te = world.getTileEntity(pos);
-      if (te instanceof LockableLootTileEntity && te instanceof ILootTile) {
-        ((LockableLootTileEntity) te).setLootTable(table, seed);
+      if (te instanceof ILootTile) {
+        ((ILootTile) te).setSeed(seed);
+        ((ILootTile) te).setTable(table);
       }
       return true;
+    }
+
+    @Override
+    public String toString() {
+      return "Ticker{" +
+          "ref=" + ref +
+          ", counter=" + counter +
+          ", seed=" + seed +
+          ", table=" + table +
+          ", pos=" + pos +
+          ", dim=" + dim +
+          '}';
     }
   }
 }

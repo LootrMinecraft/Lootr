@@ -6,17 +6,19 @@ import net.minecraft.block.RailBlock;
 import net.minecraft.entity.item.minecart.ChestMinecartEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.properties.RailShape;
-import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.feature.structure.MineshaftPieces;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
+import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlocks;
+import noobanidus.mods.lootr.tiles.ILootTile;
 import noobanidus.mods.lootr.util.TileTicker;
 
 import javax.annotation.Nullable;
@@ -29,7 +31,11 @@ public class CorridorReplacement {
       if (ConfigManager.CONVERT_MINESHAFTS.get()) {
         BlockState blockstate = ModBlocks.CHEST.getDefaultState();
         corridor.setBlockState(worldIn, blockstate, x, y, z, structurebb);
-        TileTicker.addTicker(blockpos, worldIn.getDimension().getType(), loot, randomIn.nextLong());
+        TileEntity te = worldIn.getTileEntity(blockpos);
+        if (te instanceof ILootTile) {
+          ((ILootTile) te).setSeed(randomIn.nextLong());
+          ((ILootTile) te).setTable(loot);
+        }
       } else {
         BlockState blockstate = Blocks.RAIL.getDefaultState().with(RailBlock.SHAPE, randomIn.nextBoolean() ? RailShape.NORTH_SOUTH : RailShape.EAST_WEST);
         corridor.setBlockState(worldIn, blockstate, x, y, z, structurebb);
@@ -43,14 +49,19 @@ public class CorridorReplacement {
     }
   }
 
-  public static boolean generateChest(IWorld worldIn, MutableBoundingBox boundsIn, Random rand, BlockPos posIn, ResourceLocation resourceLocationIn, @Nullable BlockState state) {
+  public static boolean generateChest(StructurePiece piece, IWorld worldIn, MutableBoundingBox boundsIn, Random rand, BlockPos posIn, ResourceLocation resourceLocationIn, @Nullable BlockState state) {
+    Lootr.LOG.info("trying to generate a chest at " + posIn);
     if (boundsIn.isVecInside(posIn) && worldIn.getBlockState(posIn).getBlock() != Blocks.CHEST) {
       if (state == null) {
         state = StructurePiece.func_197528_a(worldIn, posIn, ModBlocks.CHEST.getDefaultState());
       }
 
       worldIn.setBlockState(posIn, state, 2);
-      TileTicker.addTicker(posIn, worldIn.getDimension().getType(), resourceLocationIn, rand.nextLong());
+      TileEntity te = worldIn.getTileEntity(posIn);
+      if (te instanceof ILootTile) {
+        ((ILootTile) te).setSeed(rand.nextLong());
+        ((ILootTile) te).setTable(resourceLocationIn);
+      }
 
       return true;
     } else {
@@ -58,7 +69,22 @@ public class CorridorReplacement {
     }
   }
 
-  public static boolean checkLootAndRead (LockableLootTileEntity tile, CompoundNBT tag) {
+  public static boolean checkLootAndRead(LockableLootTileEntity tile, CompoundNBT tag) {
+    if (tile instanceof ILootTile) {
+      return true;
+    }
+
+    if (tag.contains("LootTable", 8)) {
+      ResourceLocation table = new ResourceLocation(tag.getString("LootTable"));
+      long seed = tag.getLong("LootTableSeed");
+      DimensionType dim = null;
+      if (tile.getWorld() != null) {
+        dim = tile.getWorld().getDimension().getType();
+      }
+      TileTicker.addTicker(tile, tile.getPos(), dim, table, seed);
+      return false;
+    }
+
     return false;
   }
 }

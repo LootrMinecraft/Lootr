@@ -8,7 +8,7 @@ function initializeCoreMod() {
                 'methodDesc': '(Lnet/minecraft/world/IWorld;Lnet/minecraft/util/math/MutableBoundingBox;Ljava/util/Random;IIILnet/minecraft/util/ResourceLocation;)Z'
             },
             'transformer': function (method) {
-                print("[LootR] Patching MineshaftPieces::generateChest");
+                print("[LootR] Conditionally patching MineshaftPieces::generateChest");
 
                 var ASMAPI = Java.type('net.minecraftforge.coremod.api.ASMAPI');
                 var Opcodes = Java.type('org.objectweb.asm.Opcodes');

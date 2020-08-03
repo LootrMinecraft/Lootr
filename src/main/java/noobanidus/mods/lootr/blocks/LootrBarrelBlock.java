@@ -10,6 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import noobanidus.mods.lootr.data.NewChestData;
 import noobanidus.mods.lootr.tiles.SpecialLootBarrelTile;
 import noobanidus.mods.lootr.util.ChestUtil;
 
@@ -23,7 +24,7 @@ public class LootrBarrelBlock extends BarrelBlock {
 
   @Override
   public void onReplaced(BlockState oldState, World world, BlockPos pos, BlockState newState, boolean isMoving) {
-    ChestUtil.handleLootChestReplaced(world, pos, oldState, newState);
+    NewChestData.deleteLootChest(world, pos);
     super.onReplaced(oldState, world, pos, newState, isMoving);
   }
 
@@ -50,7 +51,7 @@ public class LootrBarrelBlock extends BarrelBlock {
   public boolean eventReceived(BlockState state, World world, BlockPos pos, int id, int param) {
     super.eventReceived(state, world, pos, id, param);
     TileEntity tile = world.getTileEntity(pos);
-    return tile == null ? false : tile.receiveClientEvent(id, param);
+    return tile != null && tile.receiveClientEvent(id, param);
   }
 
   @Override

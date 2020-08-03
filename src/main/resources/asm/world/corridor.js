@@ -22,9 +22,9 @@ function initializeCoreMod() {
                 insn.add(new VarInsnNode(Opcodes.ALOAD, 1));
                 insn.add(new VarInsnNode(Opcodes.ALOAD, 2));
                 insn.add(new VarInsnNode(Opcodes.ALOAD, 3));
-                insn.add(new VarInsnNode(Opcodes.ILOAD, 4));
-                insn.add(new VarInsnNode(Opcodes.ILOAD, 5));
-                insn.add(new VarInsnNode(Opcodes.ILOAD, 6));
+                insn.add(new VarInsnNode(Opcodes.ALOAD, 4));
+                insn.add(new VarInsnNode(Opcodes.ALOAD, 5));
+                insn.add(new VarInsnNode(Opcodes.ALOAD, 6));
                 insn.add(ASMAPI.buildMethodCall("noobanidus/mods/lootr/world/CorridorReplacement", "generateChest", "(Lnet/minecraft/world/gen/feature/structure/StructurePiece;Lnet/minecraft/world/IWorld;Lnet/minecraft/util/math/MutableBoundingBox;Ljava/util/Random;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/block/BlockState;)Z", ASMAPI.MethodType.STATIC));
                 insn.add(new InsnNode(Opcodes.IRETURN));
                 instr.insert(insn);

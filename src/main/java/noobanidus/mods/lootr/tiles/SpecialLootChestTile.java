@@ -25,6 +25,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.data.NewChestData;
 import noobanidus.mods.lootr.init.ModTiles;
+import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -33,7 +34,6 @@ import java.util.Random;
 public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
   private int ticksSinceSync;
   private int specialNumPlayersUsingChest;
-  private Random random = new Random();
   private ResourceLocation savedLootTable = null;
   private long seed = -1;
 
@@ -60,7 +60,7 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
   public void fillWithLoot(PlayerEntity player, IInventory inventory) {
     if (this.world != null && this.savedLootTable != null && this.world.getServer() != null) {
       LootTable loottable = this.world.getServer().getLootTableManager().getLootTableFromLocation(this.savedLootTable);
-      LootContext.Builder builder = (new LootContext.Builder((ServerWorld) this.world)).withParameter(LootParameters.POSITION, new BlockPos(this.pos)).withSeed(ConfigManager.RANDOMISE_SEED.get() ? random.nextLong() : this.seed);
+      LootContext.Builder builder = (new LootContext.Builder((ServerWorld) this.world)).withParameter(LootParameters.POSITION, new BlockPos(this.pos)).withSeed(ConfigManager.RANDOMISE_SEED.get() ? ChestUtil.random.nextLong() : this.seed);
       if (player != null) {
         builder.withLuck(player.getLuck()).withParameter(LootParameters.THIS_ENTITY, player);
       }
@@ -136,6 +136,17 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
         this.lidAngle = 0.0F;
       }
     }
+  }
+
+
+  @Override
+  public void setTable(ResourceLocation table) {
+    this.savedLootTable = table;
+  }
+
+  @Override
+  public void setSeed(long seed) {
+    this.seed = seed;
   }
 
   private void playSound(SoundEvent soundIn) {

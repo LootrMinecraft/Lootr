@@ -19,6 +19,7 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import noobanidus.mods.lootr.data.NewChestData;
 import noobanidus.mods.lootr.tiles.SpecialLootChestTile;
 import noobanidus.mods.lootr.util.ChestUtil;
 
@@ -33,6 +34,12 @@ public class LootrChestBlock extends ChestBlock {
   @Override
   public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
     return ChestUtil.handleLootChest(world, pos, player);
+  }
+
+  @Override
+  public void onReplaced(BlockState oldState, World world, BlockPos pos, BlockState newState, boolean isMoving) {
+    NewChestData.deleteLootChest(world, pos);
+    super.onReplaced(oldState, world, pos, newState, isMoving);
   }
 
   @Override

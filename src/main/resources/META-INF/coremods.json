@@ -1,7 +1,6 @@
 {
-  "chests": "asm/chest/chests.js",
-  "tile": "asm/chest/tile.js",
-  "minecart": "asm/minecart/minecart.js",
-  "trapped": "asm/trapped/tile.js",
-  "barrel_tile": "asm/barrel/tile.js"
+  "checkLootAndRead": "asm/chest/checkLootAndRead.js",
+  "setLootTable": "asm/tile/setLootTable.js",
+  "corridor":  "asm/world/corridor.js",
+  "minecart":  "asm/world/minecart.js"
 }

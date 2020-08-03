@@ -63,6 +63,16 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ILootTile
     }
   }
 
+  @Override
+  public void setTable(ResourceLocation table) {
+    this.savedLootTable = table;
+  }
+
+  @Override
+  public void setSeed(long seed) {
+    this.seed = seed;
+  }
+
   @SuppressWarnings("Duplicates")
   @Override
   public void read(CompoundNBT compound) {

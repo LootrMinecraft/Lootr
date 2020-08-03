@@ -16,6 +16,7 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import noobanidus.mods.lootr.data.NewChestData;
 import noobanidus.mods.lootr.tiles.SpecialTrappedLootChestTile;
 import noobanidus.mods.lootr.util.ChestUtil;
 
@@ -34,7 +35,7 @@ public class LootrTrappedChestBlock extends TrappedChestBlock {
 
   @Override
   public void onReplaced(BlockState oldState, World world, BlockPos pos, BlockState newState, boolean isMoving) {
-    ChestUtil.handleLootChestReplaced(world, pos, oldState, newState);
+    NewChestData.deleteLootChest(world, pos);
     super.onReplaced(oldState, world, pos, newState, isMoving);
   }
 
@@ -65,7 +66,7 @@ public class LootrTrappedChestBlock extends TrappedChestBlock {
   @Override
   @Nullable
   public INamedContainerProvider getContainer(BlockState state, World worldIn, BlockPos pos) {
-    return ChestBlockReplacement.getContainer(state, worldIn, pos);
+    return ChestUtil.getContainer(state, worldIn, pos);
   }
 
   @Override
