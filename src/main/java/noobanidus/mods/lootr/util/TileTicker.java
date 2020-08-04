@@ -21,24 +21,30 @@ import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.tiles.ILootTile;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.LinkedHashSet;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
 @Mod.EventBusSubscriber(modid = Lootr.MODID)
 public class TileTicker {
   @SuppressWarnings("FieldCanBeLocal")
   private static int MAX_COUNTER = 10 * 50;
+  private static final Object lock = new Object();
+  private static boolean ticking = false;
+  private static final LinkedHashSet<Ticker> waitList = new LinkedHashSet<>();
+  private static final LinkedHashSet<Ticker> tickList = new LinkedHashSet<>();
   private static int integrated = -1;
-  private static final Set<Ticker> tickList = Collections.synchronizedSet(new HashSet<>());
 
   @SubscribeEvent
   public static void tick(TickEvent event) {
+    ticking = true;
     if (event.side == LogicalSide.CLIENT && event.phase == TickEvent.Phase.END && event.type == TickEvent.Type.CLIENT) {
       if (integrated == 0) {
-        tickList.clear();
+        synchronized (lock) {
+          ticking = true;
+          tickList.clear();
+          ticking = false;
+        }
       }
     } else if (event.side == LogicalSide.SERVER && event.phase == TickEvent.Phase.END && event.type == TickEvent.Type.SERVER) {
       if (integrated == -1) {
@@ -48,31 +54,44 @@ public class TileTicker {
           integrated = 0;
         }
       }
-      MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-      if (!tickList.isEmpty()) {
-        //Lootr.LOG.info("Ticking the following tickers: " + tickList);
-        Iterator<Ticker> iterator = tickList.iterator();
-        while (iterator.hasNext()) {
-          Ticker ticker = iterator.next();
-          if (ticker.getCounter() > MAX_COUNTER) {
-            //Lootr.LOG.info("Ticker expired: " + ticker);
-            iterator.remove();
-            continue;
-          }
-          if (ticker.run()) {
-            iterator.remove();
-            continue;
-          }
-          if (ticker.invalid()) {
-            iterator.remove();
+      synchronized (lock) {
+        ticking = true;
+        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+        if (!tickList.isEmpty()) {
+          //Lootr.LOG.info("Ticking the following tickers: " + tickList);
+          Iterator<Ticker> iterator = tickList.iterator();
+          while (iterator.hasNext()) {
+            Ticker ticker = iterator.next();
+            if (ticker.getCounter() > MAX_COUNTER) {
+              //Lootr.LOG.info("Ticker expired: " + ticker);
+              iterator.remove();
+              continue;
+            }
+            if (ticker.run()) {
+              iterator.remove();
+              continue;
+            }
+            if (ticker.invalid()) {
+              iterator.remove();
+            }
           }
         }
+        tickList.addAll(waitList);
+        ticking = false;
       }
     }
+    waitList.clear();
   }
 
   public static void addTicker(TileEntity tile, BlockPos pos, DimensionType type, ResourceLocation table, long seed) {
-    tickList.add(new Ticker(tile, pos, type, table, seed));
+    synchronized (lock) {
+      Ticker ticker = new Ticker(tile, pos, type, table, seed);
+      if (ticking) {
+        waitList.add(ticker);
+      } else {
+        tickList.add(ticker);
+      }
+    }
   }
 
   public static class Ticker {
