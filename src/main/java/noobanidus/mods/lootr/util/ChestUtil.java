@@ -1,7 +1,5 @@
 package noobanidus.mods.lootr.util;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ChestBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
@@ -50,7 +48,7 @@ public class ChestUtil {
       if (tile.getWorld() != null) {
         dim = tile.getWorld().getDimension().getType();
       }
-      TileTicker.addTicker(tile, tile.getPos(), dim, table, seed);
+      TickManager.addTicker(tile, tile.getPos(), dim, table, seed);
     } else {
       ILootTile te = (ILootTile) tile;
       te.setTable(table);

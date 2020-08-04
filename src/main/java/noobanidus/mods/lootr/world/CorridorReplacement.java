@@ -15,20 +15,19 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.feature.structure.MineshaftPieces;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
-import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.tiles.ILootTile;
-import noobanidus.mods.lootr.util.TileTicker;
+import noobanidus.mods.lootr.util.TickManager;
 
 import javax.annotation.Nullable;
 import java.util.Random;
 
 public class CorridorReplacement {
-  public static boolean generateMineshaftChest(MineshaftPieces.Corridor corridor, IWorld worldIn, MutableBoundingBox structurebb, Random randomIn, int x, int y, int z, ResourceLocation loot) {
+/*  public static boolean generateMineshaftChest(MineshaftPieces.Corridor corridor, IWorld worldIn, MutableBoundingBox structurebb, Random randomIn, int x, int y, int z, ResourceLocation loot) {
     BlockPos blockpos = new BlockPos(corridor.getXWithOffset(x, z), corridor.getYWithOffset(y), corridor.getZWithOffset(x, z));
     if (structurebb.isVecInside(blockpos) && worldIn.getBlockState(blockpos).isAir(worldIn, blockpos) && !worldIn.getBlockState(blockpos.down()).isAir(worldIn, blockpos.down())) {
-      if (ConfigManager.CONVERT_MINESHAFTS.get()) {
+*//*      if (ConfigManager.CONVERT_MINESHAFTS.get()) {
         BlockState blockstate = ModBlocks.CHEST.getDefaultState();
         corridor.setBlockState(worldIn, blockstate, x, y, z, structurebb);
         TileEntity te = worldIn.getTileEntity(blockpos);
@@ -36,18 +35,18 @@ public class CorridorReplacement {
           ((ILootTile) te).setSeed(randomIn.nextLong());
           ((ILootTile) te).setTable(loot);
         }
-      } else {
+      } else {*//*
         BlockState blockstate = Blocks.RAIL.getDefaultState().with(RailBlock.SHAPE, randomIn.nextBoolean() ? RailShape.NORTH_SOUTH : RailShape.EAST_WEST);
         corridor.setBlockState(worldIn, blockstate, x, y, z, structurebb);
         ChestMinecartEntity chestminecartentity = new ChestMinecartEntity(worldIn.getWorld(), (double) ((float) blockpos.getX() + 0.5F), (double) ((float) blockpos.getY() + 0.5F), (double) ((float) blockpos.getZ() + 0.5F));
         chestminecartentity.setLootTable(loot, randomIn.nextLong());
         worldIn.addEntity(chestminecartentity);
-      }
+*//*      }*//*
       return true;
     } else {
       return false;
     }
-  }
+  }*/
 
   public static boolean generateChest(StructurePiece piece, IWorld worldIn, MutableBoundingBox boundsIn, Random rand, BlockPos posIn, ResourceLocation resourceLocationIn, @Nullable BlockState state) {
     //Lootr.LOG.info("trying to generate a chest at " + posIn);
@@ -81,7 +80,7 @@ public class CorridorReplacement {
       if (tile.getWorld() != null) {
         dim = tile.getWorld().getDimension().getType();
       }
-      TileTicker.addTicker(tile, tile.getPos(), dim, table, seed);
+      TickManager.addTicker(tile, tile.getPos(), dim, table, seed);
       return false;
     }
 

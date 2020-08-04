@@ -1,7 +1,7 @@
 package noobanidus.mods.lootr.util;
 
-import com.google.common.base.Ticker;
 import net.minecraft.block.*;
+import net.minecraft.entity.item.minecart.ContainerMinecartEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -26,13 +26,13 @@ import java.util.LinkedHashSet;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
 @Mod.EventBusSubscriber(modid = Lootr.MODID)
-public class TileTicker {
+public class TickManager {
   @SuppressWarnings("FieldCanBeLocal")
   private static int MAX_COUNTER = 10 * 50;
   private static final Object lock = new Object();
   private static boolean ticking = false;
-  private static final LinkedHashSet<Ticker> waitList = new LinkedHashSet<>();
-  private static final LinkedHashSet<Ticker> tickList = new LinkedHashSet<>();
+  private static final LinkedHashSet<ITicker> waitList = new LinkedHashSet<>();
+  private static final LinkedHashSet<ITicker> tickList = new LinkedHashSet<>();
   private static int integrated = -1;
 
   @SubscribeEvent
@@ -59,9 +59,9 @@ public class TileTicker {
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
         if (!tickList.isEmpty()) {
           //Lootr.LOG.info("Ticking the following tickers: " + tickList);
-          Iterator<Ticker> iterator = tickList.iterator();
+          Iterator<ITicker> iterator = tickList.iterator();
           while (iterator.hasNext()) {
-            Ticker ticker = iterator.next();
+            ITicker ticker = iterator.next();
             if (ticker.getCounter() > MAX_COUNTER) {
               //Lootr.LOG.info("Ticker expired: " + ticker);
               iterator.remove();
@@ -85,9 +85,8 @@ public class TileTicker {
     }
   }
 
-  public static void addTicker(TileEntity tile, BlockPos pos, DimensionType type, ResourceLocation table, long seed) {
+  public static void addTicker(ITicker ticker) {
     synchronized (lock) {
-      Ticker ticker = new Ticker(tile, pos, type, table, seed);
       if (ticking) {
         waitList.add(ticker);
       } else {
@@ -96,7 +95,82 @@ public class TileTicker {
     }
   }
 
-  public static class Ticker {
+  public static void addTicker(TileEntity tile, BlockPos pos, DimensionType type, ResourceLocation table, long seed) {
+    addTicker(new TileTicker(tile, pos, type, table, seed));
+  }
+
+  public static void addTicker(ContainerMinecartEntity entity, long seed, ResourceLocation table, BlockPos pos, DimensionType dim) {
+    addTicker(new EntityTicker(entity, seed, table, pos, dim));
+  }
+
+  public interface ITicker {
+    int getCounter();
+
+    boolean invalid();
+
+    boolean run();
+  }
+
+  public static class EntityTicker implements ITicker {
+    private final ContainerMinecartEntity entity;
+    private int counter = 0;
+    private long seed;
+    private ResourceLocation table;
+    private BlockPos pos;
+    private DimensionType dim;
+
+    public EntityTicker(ContainerMinecartEntity entity, long seed, ResourceLocation table, BlockPos pos, DimensionType dim) {
+      this.entity = entity;
+      this.seed = seed;
+      this.table = table;
+      this.pos = pos;
+      this.dim = dim;
+    }
+
+    @Override
+    public int getCounter() {
+      return counter;
+    }
+
+    @Override
+    public boolean invalid() {
+      if (!entity.isAddedToWorld()) {
+        return false;
+      }
+
+      return !entity.isAlive();
+    }
+
+    @Override
+    public boolean run() {
+      if (entity.ticksExisted < 40) {
+        return false;
+      }
+
+      if (!entity.isAddedToWorld()) {
+        return false;
+      }
+
+      if (!entity.world.isAreaLoaded(pos, 1)) {
+        counter++;
+        return false;
+      }
+
+      entity.dropContentsWhenDead(false);
+      entity.remove();
+      World world = entity.world;
+      world.setBlockState(pos, ModBlocks.CHEST.getDefaultState());
+      TileEntity te = world.getTileEntity(pos);
+      if (te instanceof ILootTile) {
+        ((ILootTile) te).setTable(table);
+        ((ILootTile) te).setSeed(seed);
+      }
+
+      return true;
+    }
+  }
+
+  public static class TileTicker implements ITicker {
     private final TileEntity ref;
     private int counter = 0;
     private long seed;
@@ -104,7 +178,7 @@ public class TileTicker {
     private BlockPos pos;
     private DimensionType dim;
 
-    public Ticker(TileEntity tile, BlockPos pos, @Nullable DimensionType dim, ResourceLocation table, long seed) {
+    public TileTicker(TileEntity tile, BlockPos pos, @Nullable DimensionType dim, ResourceLocation table, long seed) {
       this.ref = tile;
       this.table = table;
       this.seed = seed;
