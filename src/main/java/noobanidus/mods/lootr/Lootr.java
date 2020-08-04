@@ -21,6 +21,7 @@ import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.init.ModTiles;
 import noobanidus.mods.lootr.setup.ClientSetup;
 import noobanidus.mods.lootr.setup.CommonSetup;
+import noobanidus.mods.lootr.setup.Setup;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -37,9 +38,10 @@ public class Lootr {
     IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
     MinecraftForge.EVENT_BUS.addListener(HandleBreak::onBlockBreak);
 
-    DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
+    DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> Setup::client);
+/*    DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
       modBus.addListener(ClientSetup::init);
-    });
+    });*/
 
     modBus.addListener(CommonSetup::init);
 

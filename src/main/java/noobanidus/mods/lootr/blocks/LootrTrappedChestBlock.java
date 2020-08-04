@@ -7,6 +7,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -40,8 +41,9 @@ public class LootrTrappedChestBlock extends TrappedChestBlock {
   }
 
   @Override
-  public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
-    return ChestUtil.handleLootChest(world, pos, player);
+  public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
+    ChestUtil.handleLootChest(world, pos, player);
+    return ActionResultType.SUCCESS;
   }
 
   @Override
@@ -66,7 +68,7 @@ public class LootrTrappedChestBlock extends TrappedChestBlock {
   @Override
   @Nullable
   public INamedContainerProvider getContainer(BlockState state, World worldIn, BlockPos pos) {
-    return ChestUtil.getContainer(state, worldIn, pos);
+    return null;
   }
 
   @Override

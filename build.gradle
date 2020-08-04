@@ -39,7 +39,7 @@ sourceSets.main.resources {
 }
 
 minecraft {
-    mappings channel: 'stable', version: "${mcp_mappings}"
+    mappings channel: 'snapshot', version: "${mcp_mappings}"
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 

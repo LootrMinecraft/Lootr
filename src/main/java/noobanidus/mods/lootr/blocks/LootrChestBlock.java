@@ -10,6 +10,7 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.properties.ChestType;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -20,6 +21,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import noobanidus.mods.lootr.data.NewChestData;
+import noobanidus.mods.lootr.init.ModTiles;
 import noobanidus.mods.lootr.tiles.SpecialLootChestTile;
 import noobanidus.mods.lootr.util.ChestUtil;
 
@@ -28,12 +30,13 @@ import javax.annotation.Nullable;
 @SuppressWarnings("NullableProblems")
 public class LootrChestBlock extends ChestBlock {
   public LootrChestBlock(Properties properties) {
-    super(properties);
+    super(properties, () -> ModTiles.SPECIAL_LOOT_CHEST);
   }
 
   @Override
-  public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
-    return ChestUtil.handleLootChest(world, pos, player);
+  public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
+    ChestUtil.handleLootChest(world, pos, player);
+    return ActionResultType.SUCCESS;
   }
 
   @Override
@@ -76,7 +79,7 @@ public class LootrChestBlock extends ChestBlock {
   @Override
   @Nullable
   public INamedContainerProvider getContainer(BlockState state, World worldIn, BlockPos pos) {
-    return ChestUtil.getContainer(state, worldIn, pos);
+    return null;
   }
 
   @Override

@@ -4,7 +4,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -14,7 +13,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import noobanidus.mods.lootr.data.NewChestData;
 import noobanidus.mods.lootr.tiles.ILootTile;
-import sun.reflect.generics.tree.ReturnType;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -23,13 +21,13 @@ import java.util.Random;
 public class ChestUtil {
   public static Random random = new Random();
 
-  public static IInventory getInventory(BlockState state, World world, BlockPos pos, boolean allowBlocked) {
-    return ChestBlock.getChestInventory(state, world, pos, allowBlocked, ChestBlock.field_220109_i);
-  }
+/*  public static IInventory getInventory(BlockState state, World world, BlockPos pos, boolean allowBlocked) {
+    return ChestBlock.func_226916_a_(state.getBlock(), state, world, pos, allowBlocked, ChestBlock.field_220109_i);
+  }*/
 
-  public static INamedContainerProvider getContainer(BlockState state, World world, BlockPos pos) {
+/*  public static INamedContainerProvider getContainer(BlockState state, World world, BlockPos pos) {
     return ChestBlock.getChestInventory(state, world, pos, false, ChestBlock.field_220110_j);
-  }
+  }*/
 
   @Nullable
   public static INamedContainerProvider getLootContainer(IWorld world, BlockPos pos, ServerPlayerEntity player) {
@@ -45,7 +43,7 @@ public class ChestUtil {
     return true;
   }
 
-  public static void setLootTable (LockableLootTileEntity tile, ResourceLocation table) {
+  public static void setLootTable(LockableLootTileEntity tile, ResourceLocation table) {
     long seed = random.nextLong();
     if (!(tile instanceof ILootTile)) {
       DimensionType dim = null;

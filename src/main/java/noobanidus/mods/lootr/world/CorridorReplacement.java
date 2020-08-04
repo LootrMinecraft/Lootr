@@ -50,10 +50,10 @@ public class CorridorReplacement {
   }
 
   public static boolean generateChest(StructurePiece piece, IWorld worldIn, MutableBoundingBox boundsIn, Random rand, BlockPos posIn, ResourceLocation resourceLocationIn, @Nullable BlockState state) {
-    Lootr.LOG.info("trying to generate a chest at " + posIn);
+    //Lootr.LOG.info("trying to generate a chest at " + posIn);
     if (boundsIn.isVecInside(posIn) && worldIn.getBlockState(posIn).getBlock() != Blocks.CHEST) {
       if (state == null) {
-        state = StructurePiece.func_197528_a(worldIn, posIn, ModBlocks.CHEST.getDefaultState());
+        state = StructurePiece.correctFacing(worldIn, posIn, ModBlocks.CHEST.getDefaultState());
       }
 
       worldIn.setBlockState(posIn, state, 2);

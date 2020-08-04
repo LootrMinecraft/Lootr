@@ -7,11 +7,14 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.LockableLootTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import noobanidus.mods.lootr.init.ModBlocks;
+import noobanidus.mods.lootr.tiles.ILootTile;
 
 public class CommandBarrel {
   public static ResourceLocation table = new ResourceLocation("minecraft", "chests/igloo_chest");
@@ -30,9 +33,11 @@ public class CommandBarrel {
     builder.executes(c -> {
       World world = c.getSource().getWorld();
       BlockPos pos = new BlockPos(c.getSource().getPos());
-      world.setBlockState(pos, Blocks.BARREL.getDefaultState(), 2);
-      if (world.getTileEntity(pos) instanceof LockableLootTileEntity) {
-        LockableLootTileEntity.setLootTable(world, world.getRandom(), pos, table);
+      world.setBlockState(pos, ModBlocks.BARREL.getDefaultState(), 2);
+      TileEntity te = world.getTileEntity(pos);
+      if (te instanceof ILootTile) {
+        ((ILootTile) te).setTable(table);
+        ((ILootTile) te).setSeed(world.getRandom().nextLong());
       }
       return 1;
     });

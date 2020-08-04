@@ -5,11 +5,13 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import noobanidus.mods.lootr.data.NewChestData;
 import noobanidus.mods.lootr.tiles.SpecialLootBarrelTile;
 import noobanidus.mods.lootr.util.ChestUtil;
@@ -29,8 +31,9 @@ public class LootrBarrelBlock extends BarrelBlock {
   }
 
   @Override
-  public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
-    return ChestUtil.handleLootChest(world, pos, player);
+  public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
+    ChestUtil.handleLootChest(world, pos, player);
+    return ActionResultType.SUCCESS;
   }
 
   @Nullable
@@ -40,7 +43,7 @@ public class LootrBarrelBlock extends BarrelBlock {
   }
 
   @Override
-  public void tick(BlockState state, World world, BlockPos pos, Random random) {
+  public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
     TileEntity te = world.getTileEntity(pos);
     if (te instanceof SpecialLootBarrelTile) {
       ((SpecialLootBarrelTile) te).barrelTick();

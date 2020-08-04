@@ -50,12 +50,12 @@ public class TileTicker {
       }
       MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
       if (!tickList.isEmpty()) {
-        Lootr.LOG.info("Ticking the following tickers: " + tickList);
+        //Lootr.LOG.info("Ticking the following tickers: " + tickList);
         Iterator<Ticker> iterator = tickList.iterator();
         while (iterator.hasNext()) {
           Ticker ticker = iterator.next();
           if (ticker.getCounter() > MAX_COUNTER) {
-            Lootr.LOG.info("Ticker expired: " + ticker);
+            //Lootr.LOG.info("Ticker expired: " + ticker);
             iterator.remove();
             continue;
           }
