@@ -17,6 +17,7 @@ import noobanidus.mods.lootr.commands.CommandBarrel;
 import noobanidus.mods.lootr.commands.CommandChest;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.events.HandleBreak;
+import noobanidus.mods.lootr.events.HandleMinecart;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.init.ModTiles;
 import noobanidus.mods.lootr.setup.ClientSetup;
@@ -48,6 +49,7 @@ public class Lootr {
     modBus.addGenericListener(TileEntityType.class, ModTiles::registerTileEntityType);
     modBus.addGenericListener(Block.class, ModBlocks::registerBlocks);
     MinecraftForge.EVENT_BUS.addListener(this::onServerStarting);
+    MinecraftForge.EVENT_BUS.addListener(HandleMinecart::onEntityJoin);
   }
 
   public void onServerStarting (FMLServerStartingEvent event) {

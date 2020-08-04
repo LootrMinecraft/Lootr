@@ -68,19 +68,21 @@ public class TileTicker {
               continue;
             }
             if (ticker.run()) {
+              //Lootr.LOG.info("Successfully executed ticker: " + ticker);
               iterator.remove();
               continue;
             }
             if (ticker.invalid()) {
+              //Lootr.LOG.info("Invalid ticker removed: " + ticker);
               iterator.remove();
             }
           }
         }
         tickList.addAll(waitList);
         ticking = false;
+        waitList.clear();
       }
     }
-    waitList.clear();
   }
 
   public static void addTicker(TileEntity tile, BlockPos pos, DimensionType type, ResourceLocation table, long seed) {
