@@ -15,6 +15,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.feature.structure.MineshaftPieces;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
+import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.tiles.ILootTile;
@@ -49,7 +50,7 @@ public class CorridorReplacement {
   }*/
 
   public static boolean generateChest(StructurePiece piece, IWorld worldIn, MutableBoundingBox boundsIn, Random rand, BlockPos posIn, ResourceLocation resourceLocationIn, @Nullable BlockState state) {
-    //Lootr.LOG.info("trying to generate a chest at " + posIn);
+    Lootr.LOG.info("Trying to generate a chest at " + posIn + " using the loot table: " + resourceLocationIn);
     if (boundsIn.isVecInside(posIn) && worldIn.getBlockState(posIn).getBlock() != Blocks.CHEST) {
       if (state == null) {
         state = StructurePiece.correctFacing(worldIn, posIn, ModBlocks.CHEST.getDefaultState());
@@ -58,6 +59,7 @@ public class CorridorReplacement {
       worldIn.setBlockState(posIn, state, 2);
       TileEntity te = worldIn.getTileEntity(posIn);
       if (te instanceof ILootTile) {
+        Lootr.LOG.info("Successfully set loot table of tile entity at " + posIn + " to " + resourceLocationIn);
         ((ILootTile) te).setSeed(rand.nextLong());
         ((ILootTile) te).setTable(resourceLocationIn);
       }
@@ -81,6 +83,7 @@ public class CorridorReplacement {
         dim = tile.getWorld().getDimension().getType();
       }
       TickManager.addTicker(tile, tile.getPos(), dim, table, seed);
+      Lootr.LOG.info("Added a ticker for: " + tile + " at " + tile.getPos() + " in " + (dim == null ? "null" : dim) + " with table " + table);
       return false;
     }
 

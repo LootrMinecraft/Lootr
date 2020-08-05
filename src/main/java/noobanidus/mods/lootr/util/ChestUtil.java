@@ -9,6 +9,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
+import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.data.NewChestData;
 import noobanidus.mods.lootr.tiles.ILootTile;
 
@@ -49,10 +50,12 @@ public class ChestUtil {
         dim = tile.getWorld().getDimension().getType();
       }
       TickManager.addTicker(tile, tile.getPos(), dim, table, seed);
+      Lootr.LOG.info("Added a ticker for: " + tile + " at " + tile.getPos() + " in " + (dim == null ? "null" : dim) + " with table " + table);
     } else {
       ILootTile te = (ILootTile) tile;
       te.setTable(table);
       te.setSeed(seed);
+      Lootr.LOG.info("Successfully set loot table of tile entity at " + tile.getPos() + " to " + table);
     }
   }
 }

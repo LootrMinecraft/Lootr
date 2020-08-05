@@ -63,17 +63,17 @@ public class TickManager {
           while (iterator.hasNext()) {
             ITicker ticker = iterator.next();
             if (ticker.getCounter() > MAX_COUNTER) {
-              //Lootr.LOG.info("Ticker expired: " + ticker);
+              Lootr.LOG.info("Ticker expired: " + ticker);
               iterator.remove();
               continue;
             }
             if (ticker.run()) {
-              //Lootr.LOG.info("Successfully executed ticker: " + ticker);
+              Lootr.LOG.info("Successfully executed ticker: " + ticker);
               iterator.remove();
               continue;
             }
             if (ticker.invalid()) {
-              //Lootr.LOG.info("Invalid ticker removed: " + ticker);
+              Lootr.LOG.info("Invalid ticker removed: " + ticker);
               iterator.remove();
             }
           }
@@ -88,8 +88,10 @@ public class TickManager {
   public static void addTicker(ITicker ticker) {
     synchronized (lock) {
       if (ticking) {
+        Lootr.LOG.info("Adding new ticker to the wait list: " + ticker);
         waitList.add(ticker);
       } else {
+        Lootr.LOG.info("Adding new ticker to the tick list: " + ticker);
         tickList.add(ticker);
       }
     }
@@ -159,6 +161,7 @@ public class TickManager {
       entity.dropContentsWhenDead(false);
       entity.remove();
       World world = entity.world;
+      Lootr.LOG.info("Calling setBlockState for entity ticker.");
       world.setBlockState(pos, ModBlocks.CHEST.getDefaultState());
       TileEntity te = world.getTileEntity(pos);
       if (te instanceof ILootTile) {
@@ -167,6 +170,18 @@ public class TickManager {
       }
 
       return true;
+    }
+
+    @Override
+    public String toString() {
+      return "EntityTicker{" +
+          "entity=" + entity +
+          ", counter=" + counter +
+          ", seed=" + seed +
+          ", table=" + table +
+          ", pos=" + pos +
+          ", dim=" + dim +
+          '}';
     }
   }
 
@@ -239,6 +254,7 @@ public class TickManager {
       }
 
       if (replacementState != null) {
+        Lootr.LOG.info("Calling setBlockState to replace ticker.");
         world.setBlockState(pos, replacementState);
       }
       te = world.getTileEntity(pos);
