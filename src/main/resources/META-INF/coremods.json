@@ -1,5 +1,6 @@
 {
   "checkLootAndRead": "asm/chest/checkLootAndRead.js",
   "setLootTable": "asm/tile/setLootTable.js",
+  "setLootTableStatic": "asm/tile/setLootTable_static.js",
   "corridor":  "asm/world/corridor.js"
 }

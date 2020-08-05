@@ -6,6 +6,7 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
@@ -50,12 +51,16 @@ public class ChestUtil {
         dim = tile.getWorld().getDimension().getType();
       }
       TickManager.addTicker(tile, tile.getPos(), dim, table, seed);
-      Lootr.LOG.info("Added a ticker for: " + tile + " at " + tile.getPos() + " in " + (dim == null ? "null" : dim) + " with table " + table);
+      Lootr.LOG.debug("Added a ticker for: " + tile + " at " + tile.getPos() + " in " + (dim == null ? "null" : dim) + " with table " + table);
     } else {
       ILootTile te = (ILootTile) tile;
       te.setTable(table);
       te.setSeed(seed);
-      Lootr.LOG.info("Successfully set loot table of tile entity at " + tile.getPos() + " to " + table);
+      Lootr.LOG.debug("Successfully set loot table of tile entity at " + tile.getPos() + " to " + table);
     }
+  }
+
+  public static void setLootTableStatic (IBlockReader reader, Random random, BlockPos pos, ResourceLocation location) {
+
   }
 }
