@@ -58,22 +58,22 @@ public class TickManager {
         ticking = true;
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
         if (!tickList.isEmpty()) {
-          //Lootr.LOG.debug("Ticking the following tickers: " + tickList);
+          //// Lootr.LOG.debug("Ticking the following tickers: " + tickList);
           Iterator<ITicker> iterator = tickList.iterator();
           while (iterator.hasNext()) {
             ITicker ticker = iterator.next();
             if (ticker.getCounter() > MAX_COUNTER) {
-              Lootr.LOG.debug("Ticker expired: " + ticker);
+              // Lootr.LOG.debug("Ticker expired: " + ticker);
               iterator.remove();
               continue;
             }
             if (ticker.run()) {
-              Lootr.LOG.debug("Successfully executed ticker: " + ticker);
+              // Lootr.LOG.debug("Successfully executed ticker: " + ticker);
               iterator.remove();
               continue;
             }
             if (ticker.invalid()) {
-              Lootr.LOG.debug("Invalid ticker removed: " + ticker);
+              // Lootr.LOG.debug("Invalid ticker removed: " + ticker);
               iterator.remove();
             }
           }
@@ -88,10 +88,10 @@ public class TickManager {
   public static void addTicker(ITicker ticker) {
     synchronized (lock) {
       if (ticking) {
-        Lootr.LOG.debug("Adding new ticker to the wait list: " + ticker);
+        // Lootr.LOG.debug("Adding new ticker to the wait list: " + ticker);
         waitList.add(ticker);
       } else {
-        Lootr.LOG.debug("Adding new ticker to the tick list: " + ticker);
+        // Lootr.LOG.debug("Adding new ticker to the tick list: " + ticker);
         tickList.add(ticker);
       }
     }
@@ -162,7 +162,7 @@ public class TickManager {
       entity.remove();
       World world = entity.world;
       world.removeTileEntity(pos);
-      Lootr.LOG.debug("Calling setBlockState for entity ticker.");
+      // Lootr.LOG.debug("Calling setBlockState for entity ticker.");
       world.setBlockState(pos, ModBlocks.CHEST.getDefaultState());
       TileEntity te = world.getTileEntity(pos);
       if (te instanceof ILootTile) {
@@ -198,6 +198,9 @@ public class TickManager {
     public TileTicker(TileEntity tile, BlockPos pos, @Nullable DimensionType dim, ResourceLocation table, long seed) {
       this.ref = tile;
       this.table = table;
+      if (table == null) {
+        this.table = null;
+      }
       this.seed = seed;
       this.pos = pos;
       this.dim = dim;
@@ -247,20 +250,10 @@ public class TickManager {
       BlockState state = world.getBlockState(pos);
       Block block = state.getBlock();
 
-      BlockState replacementState = null;
-
-      if (!HandleBreak.specialLootChests.contains(block)) {
-        if (block == Blocks.CHEST) {
-          replacementState = ModBlocks.CHEST.getDefaultState().with(ChestBlock.FACING, state.get(ChestBlock.FACING)).with(ChestBlock.WATERLOGGED, state.get(ChestBlock.WATERLOGGED));
-        } else if (block == Blocks.TRAPPED_CHEST) {
-          replacementState = ModBlocks.TRAPPED_CHEST.getDefaultState().with(ChestBlock.FACING, state.get(ChestBlock.FACING)).with(ChestBlock.WATERLOGGED, state.get(ChestBlock.WATERLOGGED));
-        } else if (block == Blocks.BARREL) {
-          replacementState = ModBlocks.BARREL.getDefaultState().with(BarrelBlock.PROPERTY_FACING, state.get(BarrelBlock.PROPERTY_FACING)).with(BarrelBlock.PROPERTY_OPEN, state.get(BarrelBlock.PROPERTY_OPEN));
-        }
-      }
+      BlockState replacementState = getReplacement(block, state);
 
       if (replacementState != null) {
-        Lootr.LOG.debug("Calling setBlockState to replace ticker.");
+        // Lootr.LOG.debug("Calling setBlockState to replace ticker.");
         world.setBlockState(pos, replacementState);
       }
       te = world.getTileEntity(pos);
@@ -283,4 +276,19 @@ public class TickManager {
           '}';
     }
   }
+
+  public static BlockState getReplacement(Block block, BlockState state) {
+    if (!HandleBreak.specialLootChests.contains(block)) {
+      if (block == Blocks.CHEST) {
+        return ModBlocks.CHEST.getDefaultState().with(ChestBlock.FACING, state.get(ChestBlock.FACING)).with(ChestBlock.WATERLOGGED, state.get(ChestBlock.WATERLOGGED));
+      } else if (block == Blocks.TRAPPED_CHEST) {
+        return ModBlocks.TRAPPED_CHEST.getDefaultState().with(ChestBlock.FACING, state.get(ChestBlock.FACING)).with(ChestBlock.WATERLOGGED, state.get(ChestBlock.WATERLOGGED));
+      } else if (block == Blocks.BARREL) {
+        return ModBlocks.BARREL.getDefaultState().with(BarrelBlock.PROPERTY_FACING, state.get(BarrelBlock.PROPERTY_FACING)).with(BarrelBlock.PROPERTY_OPEN, state.get(BarrelBlock.PROPERTY_OPEN));
+      }
+    }
+
+    return Blocks.AIR.getDefaultState();
+  }
 }
+
