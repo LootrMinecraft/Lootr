@@ -97,9 +97,11 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ILootTile
     compound = super.write(compound);
     if (savedLootTable != null) {
       compound.putString("specialLootBarrel_table", savedLootTable.toString());
+      compound.putString("LootTable", savedLootTable.toString());
     }
     if (seed != -1) {
       compound.putLong("specialLootBarrel_seed", seed);
+      compound.putLong("LootTableSeed", seed);
     }
     return compound;
   }

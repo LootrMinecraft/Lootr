@@ -91,9 +91,11 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
     compound = super.write(compound);
     if (savedLootTable != null) {
       compound.putString("specialLootChest_table", savedLootTable.toString());
+      compound.putString("LootTable", savedLootTable.toString());
     }
     if (seed != -1) {
       compound.putLong("specialLootChest_seed", seed);
+      compound.putLong("LootTableSeed", seed);
     }
     return compound;
   }
@@ -142,11 +144,13 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
   @Override
   public void setTable(ResourceLocation table) {
     this.savedLootTable = table;
+    this.lootTable = table;
   }
 
   @Override
   public void setSeed(long seed) {
     this.seed = seed;
+    this.lootTableSeed = seed;
   }
 
   private void playSound(SoundEvent soundIn) {
