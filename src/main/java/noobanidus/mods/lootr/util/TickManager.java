@@ -21,29 +21,29 @@ import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.tiles.ILootTile;
 
 import javax.annotation.Nullable;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
+import java.util.*;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
 @Mod.EventBusSubscriber(modid = Lootr.MODID)
 public class TickManager {
   @SuppressWarnings("FieldCanBeLocal")
   private static int MAX_COUNTER = 10 * 50;
-  private static final Object lock = new Object();
-  private static boolean ticking = false;
+  private static final Object writeLock = new Object();
+  private static final Object listLock = new Object();
+  private static boolean listTicking = false;
   private static final LinkedHashSet<ITicker> waitList = new LinkedHashSet<>();
   private static final LinkedHashSet<ITicker> tickList = new LinkedHashSet<>();
   private static int integrated = -1;
 
   @SubscribeEvent
   public static void tick(TickEvent event) {
-    ticking = true;
+    listTicking = true;
     if (event.side == LogicalSide.CLIENT && event.phase == TickEvent.Phase.END && event.type == TickEvent.Type.CLIENT) {
       if (integrated == 0) {
-        synchronized (lock) {
-          ticking = true;
+        synchronized (listLock) {
+          listTicking = true;
           tickList.clear();
-          ticking = false;
+          listTicking = false;
         }
       }
     } else if (event.side == LogicalSide.SERVER && event.phase == TickEvent.Phase.END && event.type == TickEvent.Type.SERVER) {
@@ -54,39 +54,48 @@ public class TickManager {
           integrated = 0;
         }
       }
-      synchronized (lock) {
-        ticking = true;
+      Set<ITicker> listCopy = new HashSet<>();
+      Set<ITicker> removed = new HashSet<>();
+      synchronized (listLock) {
+        listTicking = true;
+        listCopy.clear();
+        listCopy.addAll(tickList);
+        listTicking = false;
+      }
+      synchronized (writeLock) {
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-        if (!tickList.isEmpty()) {
-          Iterator<ITicker> iterator = tickList.iterator();
-          while (iterator.hasNext()) {
-            ITicker ticker = iterator.next();
+        if (!listCopy.isEmpty()) {
+          for (ITicker ticker : tickList) {
             if (ticker.getCounter() > MAX_COUNTER) {
+              removed.add(ticker);
               Lootr.LOG.debug("Ticker expired: " + ticker);
-              iterator.remove();
               continue;
             }
             if (ticker.run()) {
               Lootr.LOG.debug("Successfully executed ticker: " + ticker);
-              iterator.remove();
+              removed.add(ticker);
               continue;
             }
             if (ticker.invalid()) {
+              removed.add(ticker);
               Lootr.LOG.debug("Invalid ticker removed: " + ticker);
-              iterator.remove();
             }
           }
         }
+      }
+      synchronized (listLock) {
+        listTicking = true;
+        tickList.removeAll(removed); // addAll(waitList);
         tickList.addAll(waitList);
-        ticking = false;
+        listTicking = false;
         waitList.clear();
       }
     }
   }
 
   public static void addTicker(ITicker ticker) {
-    synchronized (lock) {
-      if (ticking) {
+    synchronized (listLock) {
+      if (listTicking) {
         Lootr.LOG.debug("Adding new ticker to the wait list: " + ticker);
         waitList.add(ticker);
       } else {
