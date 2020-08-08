@@ -253,6 +253,10 @@ public class TickManager {
         return false;
       }
 
+      if (!world.chunkExists(pos.getX() >> 4, pos.getZ() >> 4)) {
+        return false;
+      }
+
       BlockPos pos = te.getPos();
 
       BlockState state = world.getBlockState(pos);
@@ -262,6 +266,7 @@ public class TickManager {
 
       if (replacementState != null) {
         Lootr.LOG.debug("Calling setBlockState to replace ticker.");
+        world.removeTileEntity(pos);
         world.setBlockState(pos, replacementState);
       }
       te = world.getTileEntity(pos);
