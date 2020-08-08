@@ -47,7 +47,7 @@ public class ChestUtil {
     return true;
   }
 
-  private static void setLootTable(LockableLootTileEntity tile, ResourceLocation table) {
+  public static void setLootTable(LockableLootTileEntity tile, ResourceLocation table) {
     long seed = random.nextLong();
     if (table == null) {
       return;
