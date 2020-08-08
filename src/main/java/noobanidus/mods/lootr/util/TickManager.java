@@ -58,22 +58,21 @@ public class TickManager {
         ticking = true;
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
         if (!tickList.isEmpty()) {
-          //// Lootr.LOG.debug("Ticking the following tickers: " + tickList);
           Iterator<ITicker> iterator = tickList.iterator();
           while (iterator.hasNext()) {
             ITicker ticker = iterator.next();
             if (ticker.getCounter() > MAX_COUNTER) {
-              // Lootr.LOG.debug("Ticker expired: " + ticker);
+              Lootr.LOG.debug("Ticker expired: " + ticker);
               iterator.remove();
               continue;
             }
             if (ticker.run()) {
-              // Lootr.LOG.debug("Successfully executed ticker: " + ticker);
+              Lootr.LOG.debug("Successfully executed ticker: " + ticker);
               iterator.remove();
               continue;
             }
             if (ticker.invalid()) {
-              // Lootr.LOG.debug("Invalid ticker removed: " + ticker);
+              Lootr.LOG.debug("Invalid ticker removed: " + ticker);
               iterator.remove();
             }
           }
@@ -88,10 +87,10 @@ public class TickManager {
   public static void addTicker(ITicker ticker) {
     synchronized (lock) {
       if (ticking) {
-        // Lootr.LOG.debug("Adding new ticker to the wait list: " + ticker);
+        Lootr.LOG.debug("Adding new ticker to the wait list: " + ticker);
         waitList.add(ticker);
       } else {
-        // Lootr.LOG.debug("Adding new ticker to the tick list: " + ticker);
+        Lootr.LOG.debug("Adding new ticker to the tick list: " + ticker);
         tickList.add(ticker);
       }
     }
@@ -162,7 +161,7 @@ public class TickManager {
       entity.remove();
       World world = entity.world;
       world.removeTileEntity(pos);
-      // Lootr.LOG.debug("Calling setBlockState for entity ticker.");
+      Lootr.LOG.debug("Calling setBlockState for entity ticker.");
       world.setBlockState(pos, ModBlocks.CHEST.getDefaultState());
       TileEntity te = world.getTileEntity(pos);
       if (te instanceof ILootTile) {
@@ -253,7 +252,7 @@ public class TickManager {
       BlockState replacementState = getReplacement(block, state);
 
       if (replacementState != null) {
-        // Lootr.LOG.debug("Calling setBlockState to replace ticker.");
+        Lootr.LOG.debug("Calling setBlockState to replace ticker.");
         world.setBlockState(pos, replacementState);
       }
       te = world.getTileEntity(pos);

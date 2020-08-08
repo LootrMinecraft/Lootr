@@ -47,20 +47,26 @@ public class ChestUtil {
     return true;
   }
 
-  public static void setLootTable(LockableLootTileEntity tile, ResourceLocation table) {
+  private static void setLootTable(LockableLootTileEntity tile, ResourceLocation table) {
     long seed = random.nextLong();
+    if (table == null) {
+      return;
+    } else {
+      tile.lootTable = table;
+      tile.lootTableSeed = seed;
+    }
     if (!(tile instanceof ILootTile)) {
       DimensionType dim = null;
       if (tile.getWorld() != null) {
         dim = tile.getWorld().getDimension().getType();
       }
       TickManager.addTicker(tile, tile.getPos(), dim, table, seed);
-      // Lootr.LOG.debug("(setLootTable) Added a ticker for: " + tile + " at " + tile.getPos() + " in " + (dim == null ? "null" : dim) + " with table " + table);
+      Lootr.LOG.debug("(setLootTable) Added a ticker for: " + tile + " at " + tile.getPos() + " in " + (dim == null ? "null" : dim) + " with table " + table);
     } else {
       ILootTile te = (ILootTile) tile;
       te.setTable(table);
       te.setSeed(seed);
-      // Lootr.LOG.debug("Successfully set loot table of tile entity at " + tile.getPos() + " to " + table);
+      Lootr.LOG.debug("Successfully set loot table of tile entity at " + tile.getPos() + " to " + table);
     }
   }
 
