@@ -6,6 +6,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.GlobalPos;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
@@ -26,6 +27,8 @@ import java.util.*;
 @SuppressWarnings({"unused", "WeakerAccess"})
 @Mod.EventBusSubscriber(modid = Lootr.MODID)
 public class TickManager {
+  public static final Map<GlobalPos, ResourceLocation> lootMap = Collections.synchronizedMap(new HashMap<>());
+
   @SuppressWarnings("FieldCanBeLocal")
   private static int MAX_COUNTER = 10 * 50;
   private static final Object writeLock = new Object();
@@ -96,10 +99,10 @@ public class TickManager {
   public static void addTicker(ITicker ticker) {
     synchronized (listLock) {
       if (listTicking) {
-        Lootr.LOG.debug("Adding new ticker to the wait list: " + ticker);
+        //Lootr.LOG.debug("Adding new ticker to the wait list: " + ticker);
         waitList.add(ticker);
       } else {
-        Lootr.LOG.debug("Adding new ticker to the tick list: " + ticker);
+        //Lootr.LOG.debug("Adding new ticker to the tick list: " + ticker);
         tickList.add(ticker);
       }
     }
@@ -170,13 +173,17 @@ public class TickManager {
       entity.remove();
       World world = entity.world;
       world.removeTileEntity(pos);
-      Lootr.LOG.debug("Calling setBlockState for entity ticker.");
+      //Lootr.LOG.debug("Calling setBlockState for entity ticker.");
       world.setBlockState(pos, ModBlocks.CHEST.getDefaultState());
       TileEntity te = world.getTileEntity(pos);
       if (te instanceof ILootTile) {
         ((ILootTile) te).setTable(table);
         ((ILootTile) te).setSeed(seed);
+        synchronized (lootMap) {
+          lootMap.put(GlobalPos.of(world.getDimension().getType(), pos), table);
+        }
       }
+
 
       return true;
     }
@@ -265,7 +272,7 @@ public class TickManager {
       BlockState replacementState = getReplacement(block, state);
 
       if (replacementState != null) {
-        Lootr.LOG.debug("Calling setBlockState to replace ticker.");
+        //Lootr.LOG.debug("Calling setBlockState to replace ticker.");
         world.removeTileEntity(pos);
         world.setBlockState(pos, replacementState);
       }
@@ -273,6 +280,9 @@ public class TickManager {
       if (te instanceof ILootTile) {
         ((ILootTile) te).setSeed(seed);
         ((ILootTile) te).setTable(table);
+        synchronized (lootMap) {
+          lootMap.put(GlobalPos.of(world.getDimension().getType(), pos), table);
+        }
       }
       return true;
     }
@@ -301,7 +311,7 @@ public class TickManager {
       }
     }
 
-    return Blocks.AIR.getDefaultState();
+    return state;
   }
 }
 

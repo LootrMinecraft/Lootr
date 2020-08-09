@@ -1,3 +1,4 @@
+/*
 package noobanidus.mods.lootr.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
@@ -41,4 +42,5 @@ public class CommandChest {
     return builder;
   }
 }
+*/
 

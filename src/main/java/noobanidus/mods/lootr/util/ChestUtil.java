@@ -8,9 +8,9 @@ import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.GlobalPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.IWorldWriter;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.dimension.DimensionType;
@@ -61,16 +61,19 @@ public class ChestUtil {
         dim = tile.getWorld().getDimension().getType();
       }
       TickManager.addTicker(tile, tile.getPos(), dim, table, seed);
-      Lootr.LOG.debug("(setLootTable) Added a ticker for: " + tile + " at " + tile.getPos() + " in " + (dim == null ? "null" : dim) + " with table " + table);
+      //Lootr.LOG.debug("(setLootTable) Added a ticker for: " + tile + " at " + tile.getPos() + " in " + (dim == null ? "null" : dim) + " with table " + table);
     } else {
       ILootTile te = (ILootTile) tile;
       te.setTable(table);
       te.setSeed(seed);
-      Lootr.LOG.debug("Successfully set loot table of tile entity at " + tile.getPos() + " to " + table);
+      synchronized (TickManager.lootMap) {
+        TickManager.lootMap.put(GlobalPos.of(tile.getWorld().getDimension().getType(), tile.getPos()), table);
+      }
+      //Lootr.LOG.debug("Successfully set loot table of tile entity at " + tile.getPos() + " to " + table);
     }
   }
 
-  public static void setLootTableStatic (IBlockReader reader, Random random, BlockPos pos, ResourceLocation location) {
+  public static void setLootTableStatic(IBlockReader reader, Random random, BlockPos pos, ResourceLocation location) {
     if (reader instanceof IWorld) {
       IWorld writer = (IWorld) reader;
       BlockState stateAt = reader.getBlockState(pos);
@@ -82,6 +85,9 @@ public class ChestUtil {
       if (te instanceof ILootTile) {
         ((ILootTile) te).setTable(location);
         ((ILootTile) te).setSeed(random.nextLong());
+        synchronized (TickManager.lootMap) {
+          TickManager.lootMap.put(GlobalPos.of(writer.getDimension().getType(), pos), location);
+        }
       }
     } else {
       TileEntity te = reader.getTileEntity(pos);
