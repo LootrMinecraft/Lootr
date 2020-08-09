@@ -39,9 +39,7 @@ public class CorridorReplacement {
       if (te instanceof ILootTile) {
         ((ILootTile) te).setSeed(rand.nextLong());
         ((ILootTile) te).setTable(resourceLocationIn);
-        synchronized (TickManager.lootMap) {
-          TickManager.lootMap.put(GlobalPos.of(worldIn.getDimension().getType(), posIn), resourceLocationIn);
-        }
+        TickManager.trackTile(te, resourceLocationIn, worldIn.getDimension().getType());
       }
 
       return true;

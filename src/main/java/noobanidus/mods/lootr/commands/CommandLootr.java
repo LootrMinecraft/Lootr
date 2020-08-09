@@ -42,8 +42,8 @@ public class CommandLootr {
           BlockPos pos = entry.getKey().getPos();
           DimensionType dim = entry.getKey().getDimension();
           ResourceLocation rl = entry.getValue();
-          if (c.getSource().asPlayer().world.getDimension().getType() == dim) {
-            c.getSource().sendFeedback(new StringTextComponent("#" + i + " Loot Chest at ").appendSibling(TextComponentUtils.wrapInSquareBrackets(new StringTextComponent(format(pos.getX()) + ", " + format(pos.getZ()))).setStyle(new Style().setColor(TextFormatting.GREEN).setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/tp @s " + pos.getX() + " " + pos.getY() + " " + pos.getZ())).setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new StringTextComponent("Teleport to location"))))).appendSibling(new StringTextComponent(" using loot table: " + rl)), true);
+          if (c.getSource().asPlayer().world.getDimension().getType() == dim || dim == null) {
+            c.getSource().sendFeedback(new StringTextComponent("#" + i + " Loot Chest" + (dim == null ? " (no dimension)" : "") + " at ").appendSibling(TextComponentUtils.wrapInSquareBrackets(new StringTextComponent(format(pos.getX()) + ", " + format(pos.getZ()))).setStyle(new Style().setColor(TextFormatting.GREEN).setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/tp @s " + pos.getX() + " " + pos.getY() + " " + pos.getZ())).setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new StringTextComponent("Teleport to location"))))).appendSibling(new StringTextComponent(" using loot table: " + rl)), true);
           } else {
             c.getSource().sendFeedback(new StringTextComponent("#" + i + " Loot Chest in " + dim.toString() + "at " + format(pos.getX()) + ", " + format(pos.getZ())).setStyle(new Style().setColor(TextFormatting.GREEN)).appendSibling(new StringTextComponent(" using loot table: " + rl)), true);
           }

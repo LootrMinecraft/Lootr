@@ -116,6 +116,16 @@ public class TickManager {
     addTicker(new EntityTicker(entity, seed, table, pos, dim));
   }
 
+  public static void trackTile (TileEntity te, ResourceLocation table, @Nullable DimensionType type) {
+    synchronized (lootMap) {
+      lootMap.put(GlobalPos.of(type, te.getPos()), table);
+    }
+  }
+
+  public static void trackTile (TileEntity te, ResourceLocation table) {
+    trackTile(te, table, null);
+  }
+
   public interface ITicker {
     int getCounter();
 
@@ -179,9 +189,7 @@ public class TickManager {
       if (te instanceof ILootTile) {
         ((ILootTile) te).setTable(table);
         ((ILootTile) te).setSeed(seed);
-        synchronized (lootMap) {
-          lootMap.put(GlobalPos.of(world.getDimension().getType(), pos), table);
-        }
+        TickManager.trackTile(te, table, world.getDimension().getType());
       }
 
 
@@ -280,9 +288,7 @@ public class TickManager {
       if (te instanceof ILootTile) {
         ((ILootTile) te).setSeed(seed);
         ((ILootTile) te).setTable(table);
-        synchronized (lootMap) {
-          lootMap.put(GlobalPos.of(world.getDimension().getType(), pos), table);
-        }
+        TickManager.trackTile(te, table, world.getDimension().getType());
       }
       return true;
     }

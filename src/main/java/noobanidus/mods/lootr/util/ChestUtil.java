@@ -14,7 +14,6 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.dimension.DimensionType;
-import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.data.NewChestData;
 import noobanidus.mods.lootr.tiles.ILootTile;
 
@@ -66,9 +65,7 @@ public class ChestUtil {
       ILootTile te = (ILootTile) tile;
       te.setTable(table);
       te.setSeed(seed);
-      synchronized (TickManager.lootMap) {
-        TickManager.lootMap.put(GlobalPos.of(tile.getWorld().getDimension().getType(), tile.getPos()), table);
-      }
+      TickManager.trackTile(tile, table);
       //Lootr.LOG.debug("Successfully set loot table of tile entity at " + tile.getPos() + " to " + table);
     }
   }
@@ -85,9 +82,7 @@ public class ChestUtil {
       if (te instanceof ILootTile) {
         ((ILootTile) te).setTable(location);
         ((ILootTile) te).setSeed(random.nextLong());
-        synchronized (TickManager.lootMap) {
-          TickManager.lootMap.put(GlobalPos.of(writer.getDimension().getType(), pos), location);
-        }
+        TickManager.trackTile(te, location, writer.getDimension().getType());
       }
     } else {
       TileEntity te = reader.getTileEntity(pos);
