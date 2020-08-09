@@ -68,7 +68,7 @@ public class TickManager {
       synchronized (writeLock) {
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
         if (!listCopy.isEmpty()) {
-          for (ITicker ticker : tickList) {
+          for (ITicker ticker : listCopy) {
             if (ticker.getCounter() > MAX_COUNTER) {
               removed.add(ticker);
               Lootr.LOG.debug("Ticker expired: " + ticker);
