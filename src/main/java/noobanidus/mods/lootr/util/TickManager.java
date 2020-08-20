@@ -36,7 +36,7 @@ public class TickManager {
   private static boolean listTicking = false;
   private static final LinkedHashSet<ITicker> waitList = new LinkedHashSet<>();
   private static final LinkedHashSet<ITicker> tickList = new LinkedHashSet<>();
-  private static int integrated = -1;
+  private static int integrated = 0;
 
   @SubscribeEvent
   public static void tick(TickEvent event) {
