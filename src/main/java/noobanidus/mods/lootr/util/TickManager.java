@@ -40,7 +40,6 @@ public class TickManager {
 
   @SubscribeEvent
   public static void tick(TickEvent event) {
-    listTicking = true;
     if (event.side == LogicalSide.CLIENT && event.phase == TickEvent.Phase.END && event.type == TickEvent.Type.CLIENT) {
       if (integrated == 0) {
         synchronized (listLock) {
