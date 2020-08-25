@@ -108,6 +108,9 @@ repositories {
         name = "Jared"
         url = "https://maven.blamejared.com"
     }
+    flatDir {
+        dirs 'libs'
+    }
 }
 
 jar {

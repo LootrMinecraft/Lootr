@@ -20,7 +20,7 @@ function initializeCoreMod() {
                 var insn = new InsnList();
                 insn.add(new VarInsnNode(Opcodes.ALOAD, 0));
                 insn.add(new VarInsnNode(Opcodes.ALOAD, 1));
-                insn.add(ASMAPI.buildMethodCall("noobanidus/mods/lootr/world/CorridorReplacement", "checkLootAndRead", "(Lnet/minecraft/tileentity/LockableLootTileEntity;Lnet/minecraft/nbt/CompoundNBT;)Z", ASMAPI.MethodType.STATIC));
+                insn.add(ASMAPI.buildMethodCall("noobanidus/mods/lootr/util/ChestUtil", "checkLootAndRead", "(Lnet/minecraft/tileentity/LockableLootTileEntity;Lnet/minecraft/nbt/CompoundNBT;)Z", ASMAPI.MethodType.STATIC));
                 insn.add(new InsnNode(Opcodes.IRETURN));
                 instr.insert(insn);
 

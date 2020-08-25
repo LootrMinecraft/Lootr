@@ -1,9 +1,10 @@
 package noobanidus.mods.lootr.util;
 
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.minecart.ContainerMinecartEntity;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.GlobalPos;
@@ -17,7 +18,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.Lootr;
-import noobanidus.mods.lootr.events.HandleBreak;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.tiles.ILootTile;
 
@@ -87,7 +87,10 @@ public class TickManager {
       }
       synchronized (listLock) {
         listTicking = true;
-        tickList.removeAll(removed); // addAll(waitList);
+        if (removed.size() > 0) {
+          Lootr.LOG.debug("Removed " + removed.size() + " tickers: " + removed);
+        }
+        tickList.removeAll(removed);
         tickList.addAll(waitList);
         listTicking = false;
         waitList.clear();
@@ -115,13 +118,13 @@ public class TickManager {
     addTicker(new EntityTicker(entity, seed, table, pos, dim));
   }
 
-  public static void trackTile (TileEntity te, ResourceLocation table, @Nullable DimensionType type) {
+  public static void trackTile(TileEntity te, ResourceLocation table, @Nullable DimensionType type) {
     synchronized (lootMap) {
       lootMap.put(GlobalPos.of(type, te.getPos()), table);
     }
   }
 
-  public static void trackTile (TileEntity te, ResourceLocation table) {
+  public static void trackTile(TileEntity te, ResourceLocation table) {
     trackTile(te, table, null);
   }
 
@@ -235,6 +238,10 @@ public class TickManager {
     public boolean invalid() {
       TileEntity te = ref;
 
+      if (!ChestUtil.isTileClass(te)) {
+        return true;
+      }
+
       if (te.getWorld() == null) {
         return false;
       }
@@ -252,6 +259,10 @@ public class TickManager {
       }
 
       TileEntity te = ref;
+
+      if (!ChestUtil.isTileClass(te)) {
+        return false;
+      }
 
       if (te.getWorld() == null) {
         counter++;
@@ -276,18 +287,25 @@ public class TickManager {
       BlockState state = world.getBlockState(pos);
       Block block = state.getBlock();
 
-      BlockState replacementState = getReplacement(block, state);
+      if (ChestUtil.hasReplacement(block)) {
+        BlockState replacementState = ChestUtil.getReplacement(block, state);
 
-      if (replacementState != null) {
-        //Lootr.LOG.debug("Calling setBlockState to replace ticker.");
-        world.removeTileEntity(pos);
-        world.setBlockState(pos, replacementState);
+        if (replacementState != null) {
+          //Lootr.LOG.debug("Calling setBlockState to replace ticker.");
+          world.removeTileEntity(pos);
+          world.setBlockState(pos, replacementState);
+        }
+      } else {
+        Lootr.LOG.debug("No replacement state found for: " + state);
       }
       te = world.getTileEntity(pos);
       if (te instanceof ILootTile) {
         ((ILootTile) te).setSeed(seed);
         ((ILootTile) te).setTable(table);
         TickManager.trackTile(te, table, world.getDimension().getType());
+      } else if (te instanceof LockableLootTileEntity) {
+        ((LockableLootTileEntity) te).lootTable = table;
+        ((LockableLootTileEntity) te).lootTableSeed = seed;
       }
       return true;
     }
@@ -305,18 +323,5 @@ public class TickManager {
     }
   }
 
-  public static BlockState getReplacement(Block block, BlockState state) {
-    if (!HandleBreak.specialLootChests.contains(block)) {
-      if (block == Blocks.CHEST) {
-        return ModBlocks.CHEST.getDefaultState().with(ChestBlock.FACING, state.get(ChestBlock.FACING)).with(ChestBlock.WATERLOGGED, state.get(ChestBlock.WATERLOGGED));
-      } else if (block == Blocks.TRAPPED_CHEST) {
-        return ModBlocks.TRAPPED_CHEST.getDefaultState().with(ChestBlock.FACING, state.get(ChestBlock.FACING)).with(ChestBlock.WATERLOGGED, state.get(ChestBlock.WATERLOGGED));
-      } else if (block == Blocks.BARREL) {
-        return ModBlocks.BARREL.getDefaultState().with(BarrelBlock.PROPERTY_FACING, state.get(BarrelBlock.PROPERTY_FACING)).with(BarrelBlock.PROPERTY_OPEN, state.get(BarrelBlock.PROPERTY_OPEN));
-      }
-    }
-
-    return state;
-  }
 }
 

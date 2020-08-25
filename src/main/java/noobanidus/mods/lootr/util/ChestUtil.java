@@ -1,28 +1,35 @@
 package noobanidus.mods.lootr.util;
 
-import net.minecraft.block.BlockState;
+import com.google.common.collect.Sets;
+import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.tileentity.LockableLootTileEntity;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.tileentity.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.GlobalPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.common.util.Constants;
 import noobanidus.mods.lootr.data.NewChestData;
+import noobanidus.mods.lootr.events.HandleBreak;
+import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.tiles.ILootTile;
 
 import javax.annotation.Nullable;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 @SuppressWarnings("unused")
 public class ChestUtil {
   public static Random random = new Random();
+  static Set<Class<?>> tileClasses = new HashSet<>();
 
 /*  public static IInventory getInventory(BlockState state, World world, BlockPos pos, boolean allowBlocked) {
     return ChestBlock.func_226916_a_(state.getBlock(), state, world, pos, allowBlocked, ChestBlock.field_220109_i);
@@ -54,14 +61,10 @@ public class ChestUtil {
       tile.lootTable = table;
       tile.lootTableSeed = seed;
     }
-    if (!(tile instanceof ILootTile)) {
-      DimensionType dim = null;
-      if (tile.getWorld() != null) {
-        dim = tile.getWorld().getDimension().getType();
-      }
-      TickManager.addTicker(tile, tile.getPos(), dim, table, seed);
+    if (isTileClass(tile)) {
+      addNewTile(tile, table, seed);
       //Lootr.LOG.debug("(setLootTable) Added a ticker for: " + tile + " at " + tile.getPos() + " in " + (dim == null ? "null" : dim) + " with table " + table);
-    } else {
+    } else if (tile instanceof ILootTile) {
       ILootTile te = (ILootTile) tile;
       te.setTable(table);
       te.setSeed(seed);
@@ -71,24 +74,99 @@ public class ChestUtil {
   }
 
   public static void setLootTableStatic(IBlockReader reader, Random random, BlockPos pos, ResourceLocation location) {
-    if (reader instanceof IWorld) {
-      IWorld writer = (IWorld) reader;
-      BlockState stateAt = reader.getBlockState(pos);
-      BlockState state = TickManager.getReplacement(stateAt.getBlock(), stateAt);
-      IChunk chunk = writer.getChunk(pos);
-      chunk.removeTileEntity(pos);
-      writer.setBlockState(pos, state, 2);
-      TileEntity te = reader.getTileEntity(pos);
-      if (te instanceof ILootTile) {
-        ((ILootTile) te).setTable(location);
-        ((ILootTile) te).setSeed(random.nextLong());
-        TickManager.trackTile(te, location, writer.getDimension().getType());
+    TileEntity te = reader.getTileEntity(pos);
+    if (isTileClass(te)) {
+      if (reader instanceof IWorld) {
+        IWorld writer = (IWorld) reader;
+        BlockState stateAt = reader.getBlockState(pos);
+
+        if (hasReplacement(stateAt) && isTileClass(te)) {
+          BlockState state = getReplacement(stateAt.getBlock(), stateAt);
+          IChunk chunk = writer.getChunk(pos);
+          chunk.removeTileEntity(pos);
+          writer.setBlockState(pos, state, 2);
+          te = reader.getTileEntity(pos);
+          if (te instanceof ILootTile) {
+            ((ILootTile) te).setTable(location);
+            ((ILootTile) te).setSeed(random.nextLong());
+            TickManager.trackTile(te, location, writer.getDimension().getType());
+          }
+        }
       }
     } else {
-      TileEntity te = reader.getTileEntity(pos);
       if (te instanceof LockableLootTileEntity) {
-        setLootTable((LockableLootTileEntity) te, location);
+        ((LockableLootTileEntity) te).lootTable = location;
+        ((LockableLootTileEntity) te).lootTableSeed = random.nextLong();
       }
     }
+  }
+
+  public static boolean checkLootAndRead(LockableLootTileEntity tile, CompoundNBT tag) {
+    if (tile instanceof ILootTile) {
+      return false;
+    }
+
+    if (tag.contains("Items", Constants.NBT.TAG_LIST)) {
+      ListNBT items = tag.getList("Items", Constants.NBT.TAG_COMPOUND);
+      if (items.size() > 0) {
+        return false;
+      }
+    }
+
+    if (tag.contains("LootTable", Constants.NBT.TAG_STRING)) {
+      ResourceLocation table = new ResourceLocation(tag.getString("LootTable"));
+      long seed = tag.getLong("LootTableSeed");
+      tile.lootTableSeed = seed;
+      tile.lootTable = table;
+      if (isTileClass(tile)) {
+        addNewTile(tile, table, seed);
+      }
+      return true;
+      //Lootr.LOG.debug("(checkLootAndRead) Added a ticker for: " + tile + " at " + tile.getPos() + " in " + (dim == null ? "null" : dim) + " with table " + table);
+    }
+
+    return false;
+  }
+
+  private static void addNewTile(LockableLootTileEntity tile, ResourceLocation table, long seed) {
+    DimensionType dim = null;
+    if (tile.getWorld() != null) {
+      dim = tile.getWorld().getDimension().getType();
+    }
+    TickManager.addTicker(tile, tile.getPos(), dim, table, seed);
+  }
+
+  private static Set<Block> replacements = Sets.newHashSet(Blocks.CHEST, Blocks.TRAPPED_CHEST, Blocks.BARREL);
+
+  public static boolean hasReplacement(BlockState state) {
+    return hasReplacement(state.getBlock());
+  }
+
+  public static boolean hasReplacement(Block block) {
+    return replacements.contains(block);
+  }
+
+  public static BlockState getReplacement(Block block, BlockState state) {
+    if (!HandleBreak.specialLootChests.contains(block)) {
+      if (block == Blocks.CHEST) {
+        return ModBlocks.CHEST.getDefaultState().with(ChestBlock.FACING, state.get(ChestBlock.FACING)).with(ChestBlock.WATERLOGGED, state.get(ChestBlock.WATERLOGGED));
+      } else if (block == Blocks.TRAPPED_CHEST) {
+        return ModBlocks.TRAPPED_CHEST.getDefaultState().with(ChestBlock.FACING, state.get(ChestBlock.FACING)).with(ChestBlock.WATERLOGGED, state.get(ChestBlock.WATERLOGGED));
+      } else if (block == Blocks.BARREL) {
+        return ModBlocks.BARREL.getDefaultState().with(BarrelBlock.PROPERTY_FACING, state.get(BarrelBlock.PROPERTY_FACING)).with(BarrelBlock.PROPERTY_OPEN, state.get(BarrelBlock.PROPERTY_OPEN));
+      }
+    }
+
+    return state;
+  }
+
+  static {
+    ChestUtil.tileClasses.add(ChestTileEntity.class);
+    ChestUtil.tileClasses.add(BarrelTileEntity.class);
+    ChestUtil.tileClasses.add(TrappedChestTileEntity.class);
+  }
+
+  public static boolean isTileClass(TileEntity te) {
+    return tileClasses.contains(te.getClass());
   }
 }

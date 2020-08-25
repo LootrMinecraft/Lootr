@@ -48,22 +48,4 @@ public class CorridorReplacement {
     }
   }
 
-  public static boolean checkLootAndRead(LockableLootTileEntity tile, CompoundNBT tag) {
-    if (tile instanceof ILootTile) {
-      return false;
-    }
-
-    if (tag.contains("LootTable", 8)) {
-      ResourceLocation table = new ResourceLocation(tag.getString("LootTable"));
-      long seed = tag.getLong("LootTableSeed");
-      DimensionType dim = null;
-      if (tile.getWorld() != null) {
-        dim = tile.getWorld().getDimension().getType();
-      }
-      TickManager.addTicker(tile, tile.getPos(), dim, table, seed);
-      //Lootr.LOG.debug("(checkLootAndRead) Added a ticker for: " + tile + " at " + tile.getPos() + " in " + (dim == null ? "null" : dim) + " with table " + table);
-    }
-
-    return false;
-  }
 }
