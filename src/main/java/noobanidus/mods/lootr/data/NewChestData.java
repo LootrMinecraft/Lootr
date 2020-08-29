@@ -32,6 +32,7 @@ import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.BiFunction;
 
 public class NewChestData extends WorldSavedData {
   private BlockPos pos;
@@ -48,19 +49,12 @@ public class NewChestData extends WorldSavedData {
     this.dimension = dimension;
   }
 
-  private void setInventory(ServerPlayerEntity player, SpecialChestInventory inventory) {
-    inventory.filled();
-    inventories.put(player.getUniqueID(), inventory);
-    markDirty();
-  }
-
   @Nullable
   private SpecialChestInventory getInventory(ServerPlayerEntity player) {
-    SpecialChestInventory thisChest = inventories.get(player.getUniqueID());
-    if (thisChest != null) {
-      return thisChest;
-    }
+    return inventories.get(player.getUniqueID());
+  }
 
+  private SpecialChestInventory createInventory (ServerPlayerEntity player, ILootTile.LootFiller filler) {
     World world;
     if (player.world.getDimension().getType().getId() != dimension) {
       MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
@@ -85,7 +79,12 @@ public class NewChestData extends WorldSavedData {
     }
     NonNullList<ItemStack> items = NonNullList.withSize(tile.getSizeInventory(), ItemStack.EMPTY);
     // Saving this is handled elsewhere
-    return new SpecialChestInventory(items, tile.getDisplayName(), true, pos);
+    SpecialChestInventory result = new SpecialChestInventory(items, tile.getDisplayName(), pos);
+    filler.fillWithLoot(player, result);
+    inventories.put(player.getUniqueID(), result);
+    markDirty();
+    ((ServerWorld) world).getSavedData().save();
+    return result;
   }
 
   @Override
@@ -124,13 +123,11 @@ public class NewChestData extends WorldSavedData {
   public class SpecialChestInventory implements IInventory, INamedContainerProvider {
     private final NonNullList<ItemStack> contents;
     private final ITextComponent name;
-    private boolean wasNew;
     private BlockPos pos;
 
-    public SpecialChestInventory(NonNullList<ItemStack> contents, ITextComponent name, boolean wasNew, BlockPos pos) {
+    public SpecialChestInventory(NonNullList<ItemStack> contents, ITextComponent name, BlockPos pos) {
       this.contents = contents;
       this.name = name;
-      this.wasNew = wasNew;
       this.pos = pos;
     }
 
@@ -138,12 +135,7 @@ public class NewChestData extends WorldSavedData {
       this.name = ITextComponent.Serializer.fromJson(componentAsJSON);
       this.contents = NonNullList.withSize(27, ItemStack.EMPTY);
       ItemStackHelper.loadAllItems(items, this.contents);
-      this.wasNew = false;
       this.pos = pos;
-    }
-
-    public boolean wasNew() {
-      return wasNew;
     }
 
     @Nullable
@@ -158,11 +150,6 @@ public class NewChestData extends WorldSavedData {
       }
 
       return null;
-    }
-
-    public void filled() {
-      this.wasNew = false;
-      this.markDirty();
     }
 
     @Override
@@ -292,21 +279,15 @@ public class NewChestData extends WorldSavedData {
   }
 
   @Nullable
-  public static SpecialChestInventory getInventory(IWorld world, BlockPos pos, ServerPlayerEntity player) {
+  public static SpecialChestInventory getInventory(World world, BlockPos pos, ServerPlayerEntity player, ILootTile.LootFiller filler) {
+    if (world.isRemote) {
+      return null;
+    }
+
     NewChestData data = getInstance(world, pos);
     SpecialChestInventory inventory = data.getInventory(player);
     if (inventory == null) {
-      return null;
-    }
-    if (!inventory.wasNew()) {
-      return inventory;
-    }
-
-    TileEntity te = world.getTileEntity(pos);
-    if (te instanceof ILootTile) {
-      ILootTile tile = (ILootTile) te;
-      tile.fillWithLoot(player, inventory);
-      data.setInventory(player, inventory);
+      inventory = data.createInventory(player, filler);
     }
 
     return inventory;

@@ -29,33 +29,27 @@ import java.util.Set;
 @SuppressWarnings("unused")
 public class ChestUtil {
   public static Random random = new Random();
-  static Set<Class<?>> tileClasses = new HashSet<>();
-
-/*  public static IInventory getInventory(BlockState state, World world, BlockPos pos, boolean allowBlocked) {
-    return ChestBlock.func_226916_a_(state.getBlock(), state, world, pos, allowBlocked, ChestBlock.field_220109_i);
-  }*/
-
-/*  public static INamedContainerProvider getContainer(BlockState state, World world, BlockPos pos) {
-    return ChestBlock.getChestInventory(state, world, pos, false, ChestBlock.field_220110_j);
-  }*/
-
-  @Nullable
-  public static INamedContainerProvider getLootContainer(IWorld world, BlockPos pos, ServerPlayerEntity player) {
-    return NewChestData.getInventory(world, pos, player);
-  }
+  public static Set<Class<?>> tileClasses = new HashSet<>();
 
   public static boolean handleLootChest(World world, BlockPos pos, PlayerEntity player) {
     if (world.isRemote()) {
       return false;
     }
-    INamedContainerProvider provider = ChestUtil.getLootContainer(world, pos, (ServerPlayerEntity) player);
-    player.openContainer(provider);
-    return true;
+    TileEntity te = world.getTileEntity(pos);
+    if (te instanceof ILootTile) {
+      INamedContainerProvider provider = NewChestData.getInventory(world, pos, (ServerPlayerEntity) player, ((ILootTile)te)::fillWithLoot);
+      player.openContainer(provider);
+      return true;
+    } else {
+      return false;
+    }
   }
 
   public static void setLootTable(LockableLootTileEntity tile, ResourceLocation table) {
     long seed = random.nextLong();
     if (table == null) {
+      tile.lootTable = null;
+      tile.lootTableSeed = -1;
       return;
     } else {
       tile.lootTable = table;

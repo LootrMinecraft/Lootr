@@ -9,4 +9,9 @@ public interface ILootTile {
 
   void setTable (ResourceLocation table);
   void setSeed (long seed);
+
+  @FunctionalInterface
+  interface LootFiller {
+    void fillWithLoot(PlayerEntity player, IInventory inventory);
+  }
 }

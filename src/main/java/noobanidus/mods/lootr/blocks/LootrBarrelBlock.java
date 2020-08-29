@@ -26,7 +26,9 @@ public class LootrBarrelBlock extends BarrelBlock {
 
   @Override
   public void onReplaced(BlockState oldState, World world, BlockPos pos, BlockState newState, boolean isMoving) {
-    NewChestData.deleteLootChest(world, pos);
+    if (oldState.getBlock() != newState.getBlock()) {
+      NewChestData.deleteLootChest(world, pos);
+    }
     super.onReplaced(oldState, world, pos, newState, isMoving);
   }
 
@@ -51,6 +53,7 @@ public class LootrBarrelBlock extends BarrelBlock {
   }
 
   @Override
+  @SuppressWarnings("deprecation")
   public boolean eventReceived(BlockState state, World world, BlockPos pos, int id, int param) {
     super.eventReceived(state, world, pos, id, param);
     TileEntity tile = world.getTileEntity(pos);
