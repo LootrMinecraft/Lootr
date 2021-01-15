@@ -2,6 +2,8 @@ package noobanidus.mods.lootr.events;
 
 import com.google.common.collect.Sets;
 import net.minecraft.block.Block;
+import net.minecraft.util.Util;
+import net.minecraft.util.text.Color;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -18,8 +20,8 @@ public class HandleBreak {
       if (specialLootChests.contains(event.getState().getBlock())) {
         if (!event.getPlayer().isSneaking()) {
           event.setCanceled(true);
-          event.getPlayer().sendMessage(new TranslationTextComponent("lootr.message.should_sneak").setStyle(new Style().setColor(TextFormatting.AQUA)));
-          event.getPlayer().sendMessage(new TranslationTextComponent("lootr.message.should_sneak2", new TranslationTextComponent("lootr.message.should_sneak3").setStyle(new Style().setBold(true))).setStyle(new Style().setColor(TextFormatting.AQUA)));
+          event.getPlayer().sendMessage(new TranslationTextComponent("lootr.message.should_sneak").setStyle(Style.EMPTY.setColor(Color.fromTextFormatting(TextFormatting.AQUA))), Util.DUMMY_UUID);
+          event.getPlayer().sendMessage(new TranslationTextComponent("lootr.message.should_sneak2", new TranslationTextComponent("lootr.message.should_sneak3").setStyle(Style.EMPTY.setBold(true))).setStyle(Style.EMPTY.setColor(Color.fromTextFormatting(TextFormatting.AQUA))), Util.DUMMY_UUID);
         }
       }
     }

@@ -9,15 +9,12 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 import noobanidus.mods.lootr.commands.CommandBarrel;
 import noobanidus.mods.lootr.commands.CommandChest;
-import noobanidus.mods.lootr.commands.CommandLootr;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.events.HandleBreak;
-import noobanidus.mods.lootr.events.HandleMinecart;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.init.ModTiles;
 import noobanidus.mods.lootr.setup.CommonSetup;
@@ -29,7 +26,6 @@ import org.apache.logging.log4j.Logger;
 public class Lootr {
   public static final Logger LOG = LogManager.getLogger();
   public static final String MODID = "lootr";
-  public CommandLootr COMMAND_LOOTR;
   public CommandBarrel COMMAND_BARREL;
   public CommandChest COMMAND_CHEST;
 
@@ -45,16 +41,15 @@ public class Lootr {
 
     modBus.addGenericListener(TileEntityType.class, ModTiles::registerTileEntityType);
     modBus.addGenericListener(Block.class, ModBlocks::registerBlocks);
-    MinecraftForge.EVENT_BUS.addListener(this::onServerStarting);
-    MinecraftForge.EVENT_BUS.addListener(HandleMinecart::onEntityJoin);
+    /*    MinecraftForge.EVENT_BUS.addListener(this::onServerStarting);*/
   }
 
-  public void onServerStarting(FMLServerStartingEvent event) {
-    /*COMMAND_BARREL = new CommandBarrel(event.getCommandDispatcher());
+  /*  public void onServerStarting(FMLServerStartingEvent event) {
+   *//*COMMAND_BARREL = new CommandBarrel(event.getCommandDispatcher());
     COMMAND_BARREL.register();
     COMMAND_CHEST = new CommandChest(event.getCommandDispatcher());
-    COMMAND_CHEST.register();*/
+    COMMAND_CHEST.register();*//*
     COMMAND_LOOTR = new CommandLootr(event.getCommandDispatcher());
     COMMAND_LOOTR.register();
-  }
+  }*/
 }

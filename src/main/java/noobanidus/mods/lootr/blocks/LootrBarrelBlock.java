@@ -26,8 +26,8 @@ public class LootrBarrelBlock extends BarrelBlock {
 
   @Override
   public void onReplaced(BlockState oldState, World world, BlockPos pos, BlockState newState, boolean isMoving) {
-    if (oldState.getBlock() != newState.getBlock()) {
-      NewChestData.deleteLootChest(world, pos);
+    if (oldState.getBlock() != newState.getBlock() && world instanceof ServerWorld) {
+      NewChestData.deleteLootChest((ServerWorld) world, pos);
     }
     super.onReplaced(oldState, world, pos, newState, isMoving);
   }

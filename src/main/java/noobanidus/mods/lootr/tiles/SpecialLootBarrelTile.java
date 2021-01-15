@@ -1,20 +1,22 @@
 package noobanidus.mods.lootr.tiles;
 
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.BarrelBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootParameterSets;
+import net.minecraft.loot.LootParameters;
+import net.minecraft.loot.LootTable;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.BarrelTileEntity;
 import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootParameterSets;
-import net.minecraft.world.storage.loot.LootParameters;
-import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
@@ -24,12 +26,11 @@ import noobanidus.mods.lootr.init.ModTiles;
 
 import javax.annotation.Nullable;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 @SuppressWarnings({"ConstantConditions", "NullableProblems", "WeakerAccess"})
 public class SpecialLootBarrelTile extends BarrelTileEntity implements ILootTile {
   private int specialNumPlayersUsingBarrel;
-
-  private Random random = new Random();
   private ResourceLocation savedLootTable = null;
   private long seed = -1;
 
@@ -54,7 +55,10 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ILootTile
   public void fillWithLoot(PlayerEntity player, IInventory inventory) {
     if (this.world != null && this.savedLootTable != null && this.world.getServer() != null) {
       LootTable loottable = this.world.getServer().getLootTableManager().getLootTableFromLocation(this.savedLootTable);
-      LootContext.Builder builder = (new LootContext.Builder((ServerWorld) this.world)).withParameter(LootParameters.POSITION, new BlockPos(this.pos)).withSeed(ConfigManager.RANDOMISE_SEED.get() ? random.nextLong() : this.seed);
+      if (player instanceof ServerPlayerEntity) {
+        CriteriaTriggers.PLAYER_GENERATES_CONTAINER_LOOT.test((ServerPlayerEntity) player, this.lootTable);
+      }
+      LootContext.Builder builder = (new LootContext.Builder((ServerWorld) this.world)).withParameter(LootParameters.field_237457_g_, Vector3d.copyCentered(this.pos)).withSeed(ConfigManager.RANDOMISE_SEED.get() ? ThreadLocalRandom.current().nextLong() : this.seed);
       if (player != null) {
         builder.withLuck(player.getLuck()).withParameter(LootParameters.THIS_ENTITY, player);
       }
@@ -75,7 +79,7 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ILootTile
 
   @SuppressWarnings("Duplicates")
   @Override
-  public void read(CompoundNBT compound) {
+  public void read(BlockState state, CompoundNBT compound) {
     if (compound.contains("specialLootChest_table", Constants.NBT.TAG_STRING)) {
       savedLootTable = new ResourceLocation(compound.getString("specialLootChest_table"));
     }
@@ -89,7 +93,7 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ILootTile
       }
       setLootTable(savedLootTable, seed);
     }
-    super.read(compound);
+    super.read(state, compound);
   }
 
   @Override
@@ -139,7 +143,7 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ILootTile
   }
 
   private void playSound(BlockState state, SoundEvent sound) {
-    Vec3i dir = state.get(BarrelBlock.PROPERTY_FACING).getDirectionVec();
+    Vector3i dir = state.get(BarrelBlock.PROPERTY_FACING).getDirectionVec();
     double x = (double) this.pos.getX() + 0.5D + (double) dir.getX() / 2.0D;
     double y = (double) this.pos.getY() + 0.5D + (double) dir.getY() / 2.0D;
     double z = (double) this.pos.getZ() + 0.5D + (double) dir.getZ() / 2.0D;

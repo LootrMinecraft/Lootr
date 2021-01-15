@@ -4,8 +4,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.fluid.IFluidState;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.properties.ChestType;
@@ -20,9 +20,9 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import noobanidus.mods.lootr.data.NewChestData;
 import noobanidus.mods.lootr.init.ModTiles;
-import noobanidus.mods.lootr.tiles.ILootTile;
 import noobanidus.mods.lootr.tiles.SpecialLootChestTile;
 import noobanidus.mods.lootr.util.ChestUtil;
 
@@ -42,8 +42,8 @@ public class LootrChestBlock extends ChestBlock {
 
   @Override
   public void onReplaced(BlockState oldState, World world, BlockPos pos, BlockState newState, boolean isMoving) {
-    if (oldState.getBlock() != newState.getBlock()) {
-      NewChestData.deleteLootChest(world, pos);
+    if (oldState.getBlock() != newState.getBlock() && world instanceof ServerWorld) {
+      NewChestData.deleteLootChest((ServerWorld) world, pos);
     }
     super.onReplaced(oldState, world, pos, newState, isMoving);
   }
@@ -69,14 +69,19 @@ public class LootrChestBlock extends ChestBlock {
 
   @Override
   public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-    return field_196315_B;
+    return SHAPE_SINGLE;
   }
 
   @Override
   public BlockState getStateForPlacement(BlockItemUseContext context) {
     Direction direction = context.getPlacementHorizontalFacing().getOpposite();
-    IFluidState ifluidstate = context.getWorld().getFluidState(context.getPos());
-    return this.getDefaultState().with(FACING, direction).with(TYPE, ChestType.SINGLE).with(WATERLOGGED, ifluidstate.getFluid() == Fluids.WATER);
+    FluidState fluidstate = context.getWorld().getFluidState(context.getPos());
+    return this.getDefaultState().with(FACING, direction).with(TYPE, ChestType.SINGLE).with(WATERLOGGED, fluidstate.getFluid() == Fluids.WATER);
+  }
+
+  @Override
+  public FluidState getFluidState(BlockState state) {
+    return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
   }
 
   @Override
