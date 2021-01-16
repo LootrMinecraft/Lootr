@@ -1,6 +1,7 @@
 modLoader="javafml" 
 loaderVersion="[35,)"
-issueTrackerURL="https://github.com/noobanidus/Lootr/issues" 
+issueTrackerURL="https://github.com/noobanidus/Lootr/issues"
+license="https://github.com/noobanidus/Lootr/blob/1.15/LICENSE"
 [[mods]] 
 modId="lootr" 
 version="${file.jarVersion}" 

@@ -8,6 +8,7 @@ import net.minecraft.world.gen.feature.template.IStructureProcessorType;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import net.minecraft.world.gen.feature.template.StructureProcessor;
 import net.minecraft.world.gen.feature.template.Template;
+import net.minecraftforge.common.util.Constants;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.init.ModMisc;
 
@@ -38,7 +39,11 @@ public class LootrChestProcessor extends StructureProcessor {
 
     BlockState state = info2.state;
     Block replacement = replacements.get(state.getBlock());
-    if (replacement == null) {
+    if (replacement == null || info2.nbt == null) {
+      return info2;
+    }
+
+    if (!info2.nbt.contains("LootTable", Constants.NBT.TAG_STRING)) {
       return info2;
     }
 
