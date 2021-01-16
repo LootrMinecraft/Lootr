@@ -28,8 +28,7 @@ public class LootrChestProcessor extends StructureProcessor {
 
   private static Map<Block, Block> replacements = null;
 
-  @Nullable
-  public Template.BlockInfo process(IWorldReader world, BlockPos pos, BlockPos blockPos, Template.BlockInfo info1, Template.BlockInfo info2, PlacementSettings placement, @Nullable Template template) {
+  public static BlockState replacement (BlockState original) {
     if (replacements == null) {
       replacements = new HashMap<>();
       replacements.put(Blocks.CHEST, ModBlocks.CHEST);
@@ -37,22 +36,33 @@ public class LootrChestProcessor extends StructureProcessor {
       replacements.put(Blocks.TRAPPED_CHEST, ModBlocks.TRAPPED_CHEST);
     }
 
-    BlockState state = info2.state;
-    Block replacement = replacements.get(state.getBlock());
-    if (replacement == null || info2.nbt == null) {
-      return info2;
-    }
-
-    if (!info2.nbt.contains("LootTable", Constants.NBT.TAG_STRING)) {
-      return info2;
+    Block replacement = replacements.get(original.getBlock());
+    if (replacement == null) {
+      return null;
     }
 
     BlockState newState = replacement.getDefaultState();
     if (replacement == ModBlocks.CHEST || replacement == ModBlocks.TRAPPED_CHEST) {
-      newState = newState.with(ChestBlock.FACING, state.get(ChestBlock.FACING)).with(ChestBlock.WATERLOGGED, state.get(ChestBlock.WATERLOGGED));
+      newState = newState.with(ChestBlock.FACING, original.get(ChestBlock.FACING)).with(ChestBlock.WATERLOGGED, original.get(ChestBlock.WATERLOGGED));
     } else if (replacement == ModBlocks.BARREL) {
-      newState = newState.with(BarrelBlock.PROPERTY_OPEN, state.get(BarrelBlock.PROPERTY_OPEN)).with(BarrelBlock.PROPERTY_FACING, state.get(BarrelBlock.PROPERTY_FACING));
+      newState = newState.with(BarrelBlock.PROPERTY_OPEN, original.get(BarrelBlock.PROPERTY_OPEN)).with(BarrelBlock.PROPERTY_FACING, original.get(BarrelBlock.PROPERTY_FACING));
     }
-    return new Template.BlockInfo(info2.pos, newState, info2.nbt);
+    return newState;
+  }
+
+  @Nullable
+  public Template.BlockInfo process(IWorldReader world, BlockPos pos, BlockPos blockPos, Template.BlockInfo info1, Template.BlockInfo info2, PlacementSettings placement, @Nullable Template template) {
+
+    if (info2.nbt == null || !info2.nbt.contains("LootTable", Constants.NBT.TAG_STRING)) {
+      return info2;
+    }
+
+    BlockState state = info2.state;
+    BlockState replacement = replacement(state);
+    if (replacement == null) {
+      return info2;
+    }
+
+    return new Template.BlockInfo(info2.pos, replacement, info2.nbt);
   }
 }
