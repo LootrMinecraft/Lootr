@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -34,22 +35,19 @@ public class Lootr {
     ConfigManager.loadConfig(ConfigManager.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve(Lootr.MODID + "-common.toml"));
     IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
     MinecraftForge.EVENT_BUS.addListener(HandleBreak::onBlockBreak);
+    MinecraftForge.EVENT_BUS.addListener(this::onCommands);
 
     DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> Setup::client);
 
     modBus.addListener(CommonSetup::init);
-
     modBus.addGenericListener(TileEntityType.class, ModTiles::registerTileEntityType);
     modBus.addGenericListener(Block.class, ModBlocks::registerBlocks);
-    /*    MinecraftForge.EVENT_BUS.addListener(this::onServerStarting);*/
   }
 
-  /*  public void onServerStarting(FMLServerStartingEvent event) {
-   *//*COMMAND_BARREL = new CommandBarrel(event.getCommandDispatcher());
+  public void onCommands(RegisterCommandsEvent event) {
+    COMMAND_BARREL = new CommandBarrel(event.getDispatcher());
     COMMAND_BARREL.register();
-    COMMAND_CHEST = new CommandChest(event.getCommandDispatcher());
-    COMMAND_CHEST.register();*//*
-    COMMAND_LOOTR = new CommandLootr(event.getCommandDispatcher());
-    COMMAND_LOOTR.register();
-  }*/
+    COMMAND_CHEST = new CommandChest(event.getDispatcher());
+    COMMAND_CHEST.register();
+  }
 }

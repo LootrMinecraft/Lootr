@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.mixins;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.block.ChestBlock;
 import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -28,7 +29,7 @@ public class MixinLockableLootTileEntity {
         IServerWorld world = (IServerWorld) reader;
         IChunk chunk = world.getChunk(pos);
         chunk.removeTileEntity(pos);
-        world.setBlockState(pos, replacement, 2);
+        world.setBlockState(pos, replacement.with(ChestBlock.WATERLOGGED, state.get(ChestBlock.WATERLOGGED)), 2);
         TileEntity te = replacement.getBlock().createTileEntity(replacement, reader);
         if (te != null) {
           chunk.addTileEntity(pos, te);

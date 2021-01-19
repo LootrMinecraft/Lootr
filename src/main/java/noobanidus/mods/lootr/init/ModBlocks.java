@@ -28,6 +28,6 @@ public class ModBlocks {
   }
 
   public static void registerBlocks(RegistryEvent.Register<Block> event) {
-    event.getRegistry().registerAll(BARREL, CHEST);
+    event.getRegistry().registerAll(BARREL, CHEST, TRAPPED_CHEST);
   }
 }
