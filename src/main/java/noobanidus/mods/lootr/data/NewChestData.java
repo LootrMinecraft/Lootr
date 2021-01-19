@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.data;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -26,6 +27,7 @@ import net.minecraft.world.storage.DimensionSavedDataManager;
 import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
+import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.tiles.ILootTile;
 
 import javax.annotation.Nullable;
@@ -36,6 +38,7 @@ import java.util.UUID;
 public class NewChestData extends WorldSavedData {
   private BlockPos pos;
   private RegistryKey<World> dimension;
+  private UUID entityId;
   private Map<UUID, SpecialChestInventory> inventories = new HashMap<>();
 
   public static String ID(RegistryKey<World> dimension, BlockPos pos) {
@@ -46,6 +49,14 @@ public class NewChestData extends WorldSavedData {
     super(ID(dimension, pos));
     this.pos = pos;
     this.dimension = dimension;
+    this.entityId = null;
+  }
+
+  public NewChestData(UUID entityId) {
+    super(entityId.toString());
+    this.pos = null;
+    this.dimension = null;
+    this.entityId = entityId;
   }
 
   @Nullable
@@ -55,29 +66,41 @@ public class NewChestData extends WorldSavedData {
 
   private SpecialChestInventory createInventory(ServerPlayerEntity player, ILootTile.LootFiller filler) {
     ServerWorld world = (ServerWorld) player.world;
-    if (world.getDimensionKey() != dimension) {
-      MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-      if (server == null) {
+    SpecialChestInventory result;
+    if (entityId != null) {
+      Entity initial = world.getEntityByUuid(entityId);
+      if (!(initial instanceof LootrChestMinecartEntity)) {
         return null;
       }
-      world = server.getWorld(dimension);
-    }
-
-    if (world == null) {
-      return null;
-    }
-
-    TileEntity te = world.getTileEntity(pos);
-
-    LockableLootTileEntity tile;
-    if (te instanceof ILootTile) {
-      tile = (LockableLootTileEntity) te;
+      LootrChestMinecartEntity cart = (LootrChestMinecartEntity) initial;
+      NonNullList<ItemStack> items = NonNullList.withSize(cart.getSizeInventory(), ItemStack.EMPTY);
+      // Saving this is handled elsewhere
+      result = new SpecialChestInventory(items, cart.getDisplayName(), pos);
     } else {
-      return null;
+      if (world.getDimensionKey() != dimension) {
+        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+        if (server == null) {
+          return null;
+        }
+        world = server.getWorld(dimension);
+      }
+
+      if (world == null) {
+        return null;
+      }
+
+      TileEntity te = world.getTileEntity(pos);
+
+      LockableLootTileEntity tile;
+      if (te instanceof ILootTile) {
+        tile = (LockableLootTileEntity) te;
+      } else {
+        return null;
+      }
+      NonNullList<ItemStack> items = NonNullList.withSize(tile.getSizeInventory(), ItemStack.EMPTY);
+      // Saving this is handled elsewhere
+      result = new SpecialChestInventory(items, tile.getDisplayName(), pos);
     }
-    NonNullList<ItemStack> items = NonNullList.withSize(tile.getSizeInventory(), ItemStack.EMPTY);
-    // Saving this is handled elsewhere
-    SpecialChestInventory result = new SpecialChestInventory(items, tile.getDisplayName(), pos);
     filler.fillWithLoot(player, result);
     inventories.put(player.getUniqueID(), result);
     markDirty();
@@ -88,8 +111,18 @@ public class NewChestData extends WorldSavedData {
   @Override
   public void read(CompoundNBT compound) {
     inventories.clear();
-    pos = BlockPos.fromLong(compound.getLong("position"));
-    dimension = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(compound.getString("dimension")));
+    pos = null;
+    dimension = null;
+    entityId = null;
+    if (compound.contains("position")) {
+      pos = BlockPos.fromLong(compound.getLong("position"));
+    }
+    if (compound.contains("dimension")) {
+      dimension = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(compound.getString("dimension")));
+    }
+    if (compound.hasUniqueId("entityId")) {
+      entityId = compound.getUniqueId("entityId");
+    }
     ListNBT compounds = compound.getList("inventories", Constants.NBT.TAG_COMPOUND);
     for (int i = 0; i < compounds.size(); i++) {
       CompoundNBT thisTag = compounds.getCompound(i);
@@ -102,8 +135,15 @@ public class NewChestData extends WorldSavedData {
 
   @Override
   public CompoundNBT write(CompoundNBT compound) {
-    compound.putLong("position", pos.toLong());
-    compound.putString("dimension", dimension.getLocation().toString());
+    if (pos != null) {
+      compound.putLong("position", pos.toLong());
+    }
+    if (dimension != null) {
+      compound.putString("dimension", dimension.getLocation().toString());
+    }
+    if (entityId != null) {
+      compound.putUniqueId("entityId", entityId);
+    }
     ListNBT compounds = new ListNBT();
     for (Map.Entry<UUID, SpecialChestInventory> entry : inventories.entrySet()) {
       CompoundNBT thisTag = new CompoundNBT();
@@ -121,9 +161,10 @@ public class NewChestData extends WorldSavedData {
   public class SpecialChestInventory implements IInventory, INamedContainerProvider {
     private final NonNullList<ItemStack> contents;
     private final ITextComponent name;
+    @Nullable
     private BlockPos pos;
 
-    public SpecialChestInventory(NonNullList<ItemStack> contents, ITextComponent name, BlockPos pos) {
+    public SpecialChestInventory(NonNullList<ItemStack> contents, ITextComponent name, @Nullable BlockPos pos) {
       this.contents = contents;
       this.name = name;
       this.pos = pos;
@@ -138,7 +179,7 @@ public class NewChestData extends WorldSavedData {
 
     @Nullable
     public LockableLootTileEntity getTile(World world) {
-      if (world == null || world.isRemote()) {
+      if (world == null || world.isRemote() || pos == null) {
         return null;
       }
 
@@ -258,6 +299,7 @@ public class NewChestData extends WorldSavedData {
       return ITextComponent.Serializer.toJson(this.name);
     }
 
+    @Nullable
     public BlockPos getPos() {
       return pos;
     }
@@ -276,6 +318,11 @@ public class NewChestData extends WorldSavedData {
     return getServerWorld().getSavedData().getOrCreate(() -> new NewChestData(dimension, pos), ID(dimension, pos));
   }
 
+  private static NewChestData getInstance(ServerWorld world, UUID id) {
+    RegistryKey<World> dimension = world.getDimensionKey();
+    return getServerWorld().getSavedData().getOrCreate(() -> new NewChestData(id), id.toString());
+  }
+
   @Nullable
   public static SpecialChestInventory getInventory(World world, BlockPos pos, ServerPlayerEntity player, ILootTile.LootFiller filler) {
     if (world.isRemote || !(world instanceof ServerWorld)) {
@@ -283,6 +330,21 @@ public class NewChestData extends WorldSavedData {
     }
 
     NewChestData data = getInstance((ServerWorld) world, pos);
+    SpecialChestInventory inventory = data.getInventory(player);
+    if (inventory == null) {
+      inventory = data.createInventory(player, filler);
+    }
+
+    return inventory;
+  }
+
+  @Nullable
+  public static SpecialChestInventory getInventory(World world, LootrChestMinecartEntity cart, ServerPlayerEntity player, ILootTile.LootFiller filler) {
+    if (world.isRemote || !(world instanceof ServerWorld)) {
+      return null;
+    }
+
+    NewChestData data = getInstance((ServerWorld) world, cart.getUniqueID());
     SpecialChestInventory inventory = data.getInventory(player);
     if (inventory == null) {
       inventory = data.createInventory(player, filler);

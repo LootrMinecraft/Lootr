@@ -7,11 +7,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import noobanidus.mods.lootr.data.NewChestData;
+import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.tiles.ILootTile;
 
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
+import java.util.UUID;
 
 @SuppressWarnings("unused")
 public class ChestUtil {
@@ -29,6 +31,13 @@ public class ChestUtil {
       return true;
     } else {
       return false;
+    }
+  }
+
+  public static void handleLootCart(World world, LootrChestMinecartEntity cart, PlayerEntity player) {
+    if (!world.isRemote()) {
+      INamedContainerProvider provider = NewChestData.getInventory(world, cart, (ServerPlayerEntity) player, cart::addLoot);
+      player.openContainer(provider);
     }
   }
 }
