@@ -1,5 +1,8 @@
 {
-  "lootr.message.should_sneak": "Breaking the chest will delete your unique loot and items! In order to break, you must sneak while doing so..",
+  "lootr.message.should_sneak": "Breaking the chest will delete your unique loot and items! In order to break, you must sneak while doing so.",
   "lootr.message.should_sneak2": "As loot is %s, only break if really needed.",
-  "lootr.message.should_sneak3": "per-player per-chest"
+  "lootr.message.should_sneak3": "per-player per-chest",
+  "lootr.message.cart_should_sneak": "Breaking the cart will delete your unique loot and items! In order to break, you must sneak while attacking",
+  "lootr.message.cart_should_sneak3": "per-player per-cart",
+  "entity.lootr.lootr_minecart": "Minecart with Chest"
 }

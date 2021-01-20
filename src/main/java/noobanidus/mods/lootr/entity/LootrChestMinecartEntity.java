@@ -22,12 +22,17 @@ import net.minecraft.loot.LootTable;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.util.*;
+import net.minecraft.util.text.Color;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.NetworkHooks;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.init.ModEntities;
+import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;
 
@@ -38,6 +43,26 @@ public class LootrChestMinecartEntity extends ContainerMinecartEntity {
 
   public LootrChestMinecartEntity(World worldIn, double x, double y, double z) {
     super(ModEntities.LOOTR_MINECART_ENTITY, x, y, z, worldIn);
+  }
+
+  @Override
+  public boolean isInvulnerableTo(DamageSource source) {
+    if (this.isInvulnerable() || source == DamageSource.OUT_OF_WORLD || source.isCreativePlayer()) {
+      return false;
+    }
+
+    if (source.getTrueSource() instanceof PlayerEntity) {
+      if (source.getTrueSource().isSneaking()) {
+        return false;
+      } else {
+        source.getTrueSource().sendMessage(new TranslationTextComponent("lootr.message.cart_should_sneak").setStyle(Style.EMPTY.setColor(Color.fromTextFormatting(TextFormatting.AQUA))), Util.DUMMY_UUID);
+        source.getTrueSource().sendMessage(new TranslationTextComponent("lootr.message.should_sneak2", new TranslationTextComponent("lootr.message.cart_should_sneak3").setStyle(Style.EMPTY.setBold(true))).setStyle(Style.EMPTY.setColor(Color.fromTextFormatting(TextFormatting.AQUA))), Util.DUMMY_UUID);
+      }
+    } else {
+      return true;
+    }
+
+    return true;
   }
 
   @Override
@@ -101,9 +126,9 @@ public class LootrChestMinecartEntity extends ContainerMinecartEntity {
 
   @Override
   public ActionResultType processInitialInteract(PlayerEntity player, Hand hand) {
-    ActionResultType ret = super.processInitialInteract(player, hand);
+    ActionResultType ret = ActionResultType.PASS;
     if (ret.isSuccessOrConsume()) return ret;
-    player.openContainer(this);
+    ChestUtil.handleLootCart(player.world, this, player);
     if (!player.world.isRemote) {
       PiglinTasks.func_234478_a_(player, true);
       return ActionResultType.CONSUME;
