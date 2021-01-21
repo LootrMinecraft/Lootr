@@ -5,7 +5,7 @@
   "lootr.message.cart_should_sneak": "Breaking the cart will delete your unique loot and items! In order to break, you must sneak while attacking",
   "lootr.message.cart_should_sneak3": "per-player per-cart",
   "block.lootr.lootr_chest": "Loot Chest",
-  "block.lootr.lootr_trapped_chest": "Lootr Chest",
+  "block.lootr.lootr_trapped_chest": "Loot Chest",
   "block.lootr.lootr_barrel": "Loot Barrel",
   "entity.lootr.lootr_minecart": "Minecart with Chest"
 }
