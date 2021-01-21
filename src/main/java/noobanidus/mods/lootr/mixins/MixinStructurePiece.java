@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.mixins;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.block.ChestBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
@@ -23,6 +24,6 @@ public class MixinStructurePiece {
       at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/world/gen/feature/structure/StructurePiece;correctFacing(Lnet/minecraft/world/IBlockReader;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;)Lnet/minecraft/block/BlockState;")
   )
   private BlockState generateChest(BlockState original, IServerWorld worldIn, MutableBoundingBox boundsIn, Random rand, BlockPos posIn, ResourceLocation resourceLocationIn, @Nullable BlockState p_191080_6_) {
-    return StructurePiece.correctFacing(worldIn, posIn, ModBlocks.CHEST.getDefaultState());
+    return StructurePiece.correctFacing(worldIn, posIn, ModBlocks.CHEST.getDefaultState().with(ChestBlock.WATERLOGGED, original.get(ChestBlock.WATERLOGGED)));
   }
 }
