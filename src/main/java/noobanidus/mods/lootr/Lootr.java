@@ -55,9 +55,9 @@ public class Lootr {
   }
 
   public void onCommands(RegisterCommandsEvent event) {
-    COMMAND_BARREL = new CommandBarrel(event.getDispatcher());
+/*    COMMAND_BARREL = new CommandBarrel(event.getDispatcher());
     COMMAND_BARREL.register();
     COMMAND_CHEST = new CommandChest(event.getDispatcher());
-    COMMAND_CHEST.register();
+    COMMAND_CHEST.register();*/
   }
 }
