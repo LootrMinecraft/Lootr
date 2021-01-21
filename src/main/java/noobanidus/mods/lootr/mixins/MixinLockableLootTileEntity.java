@@ -29,7 +29,10 @@ public class MixinLockableLootTileEntity {
         IServerWorld world = (IServerWorld) reader;
         IChunk chunk = world.getChunk(pos);
         chunk.removeTileEntity(pos);
-        world.setBlockState(pos, replacement.with(ChestBlock.WATERLOGGED, state.get(ChestBlock.WATERLOGGED)), 2);
+        if (state.getProperties().contains(ChestBlock.WATERLOGGED)) {
+          replacement = replacement.with(ChestBlock.WATERLOGGED, state.get(ChestBlock.WATERLOGGED));
+        }
+        world.setBlockState(pos, replacement, 2);
         TileEntity te = replacement.getBlock().createTileEntity(replacement, reader);
         if (te != null) {
           chunk.addTileEntity(pos, te);
