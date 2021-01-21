@@ -59,9 +59,4 @@ public class LootrBarrelBlock extends BarrelBlock {
     TileEntity tile = world.getTileEntity(pos);
     return tile != null && tile.receiveClientEvent(id, param);
   }
-
-  @Override
-  public String getTranslationKey() {
-    return Blocks.BARREL.getTranslationKey();
-  }
 }

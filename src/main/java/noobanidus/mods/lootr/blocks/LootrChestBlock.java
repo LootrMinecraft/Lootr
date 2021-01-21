@@ -89,9 +89,4 @@ public class LootrChestBlock extends ChestBlock {
   public INamedContainerProvider getContainer(BlockState state, World worldIn, BlockPos pos) {
     return null;
   }
-
-  @Override
-  public String getTranslationKey() {
-    return Blocks.CHEST.getTranslationKey();
-  }
 }

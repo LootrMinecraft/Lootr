@@ -120,8 +120,11 @@ repositories {
     flatDir {
         dirs 'libs'
     }
+    maven {
+        name = "TehNut's Maven (HWYLA)"
+        url "https://maven.tehnut.info/"
+    }
     maven {url = 'https://repo.spongepowered.org/maven/'}
-
     maven {url = 'https://dist.creeper.host/Sponge/maven'}
     jcenter()
     mavenCentral()
@@ -145,7 +148,8 @@ jar {
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-
+    compile fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}")
+    compile fg.deobf("mcp.mobius.waila:Hwyla:${hwyla_version}")
     compile 'org.spongepowered:mixin:0.8'
     annotationProcessor 'org.spongepowered:mixin:0.8:processor'
 }

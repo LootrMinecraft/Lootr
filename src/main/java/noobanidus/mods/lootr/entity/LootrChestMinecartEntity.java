@@ -47,8 +47,8 @@ public class LootrChestMinecartEntity extends ContainerMinecartEntity {
 
   @Override
   public boolean isInvulnerableTo(DamageSource source) {
-    if (this.isInvulnerable() || source == DamageSource.OUT_OF_WORLD || source.isCreativePlayer()) {
-      return false;
+    if (this.isInvulnerable() && source != DamageSource.OUT_OF_WORLD && !source.isCreativePlayer()) {
+      return true;
     }
 
     if (source.getTrueSource() instanceof PlayerEntity) {

@@ -73,9 +73,4 @@ public class LootrTrappedChestBlock extends TrappedChestBlock {
   public INamedContainerProvider getContainer(BlockState state, World worldIn, BlockPos pos) {
     return null;
   }
-
-  @Override
-  public String getTranslationKey() {
-    return Blocks.TRAPPED_CHEST.getTranslationKey();
-  }
 }
