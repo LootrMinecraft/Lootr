@@ -23,6 +23,7 @@ public class ClientSetup {
   public static void stitch (TextureStitchEvent.Pre event) {
     if (event.getMap().getTextureLocation().equals(AtlasTexture.LOCATION_BLOCKS_TEXTURE)) {
       event.addSprite(SpecialLootChestTileRenderer.MATERIAL.getTextureLocation());
+      event.addSprite(SpecialLootChestTileRenderer.MATERIAL2.getTextureLocation());
     }
   }
 }

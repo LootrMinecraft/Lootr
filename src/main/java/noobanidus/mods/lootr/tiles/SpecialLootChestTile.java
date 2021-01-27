@@ -14,6 +14,11 @@ import net.minecraft.loot.LootParameterSets;
 import net.minecraft.loot.LootParameters;
 import net.minecraft.loot.LootTable;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.NBTUtil;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.tileentity.LockableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -27,13 +32,19 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.data.NewChestData;
+import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.init.ModTiles;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 @SuppressWarnings({"Duplicates", "ConstantConditions", "NullableProblems", "WeakerAccess"})
 public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
+  public List<UUID> openers = new ArrayList<>();
   private int ticksSinceSync;
   private int specialNumPlayersUsingChest;
   private ResourceLocation savedLootTable = null;
@@ -87,6 +98,13 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
         seed = compound.getLong("LootTableSeed");
       }
     }
+    if (compound.contains("LootrOpeners")) {
+      ListNBT openers = compound.getList("LootrOpeners", Constants.NBT.TAG_INT_ARRAY);
+      this.openers.clear();
+      for (INBT item : openers) {
+        this.openers.add(NBTUtil.readUniqueId(item));
+      }
+    }
     super.read(state, compound);
   }
 
@@ -101,6 +119,11 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
       compound.putLong("specialLootChest_seed", seed);
       compound.putLong("LootTableSeed", seed);
     }
+    ListNBT list = new ListNBT();
+    for (UUID opener : this.openers) {
+      list.add(NBTUtil.func_240626_a_(opener));
+    }
+    compound.put("LootrOpeners", list);
     return compound;
   }
 
@@ -157,6 +180,11 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
     this.lootTableSeed = seed;
   }
 
+  @Override
+  public List<UUID> getOpeners() {
+    return openers;
+  }
+
   private void playSound(SoundEvent soundIn) {
     this.world.playSound(null, getPos(), soundIn, SoundCategory.BLOCKS, 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
   }
@@ -201,6 +229,16 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
     if (!player.isSpectator()) {
       --this.specialNumPlayersUsingChest;
       this.onOpenOrClose();
+      openers.add(player.getUniqueID());
+      this.markDirty();
+      updatePacketViaState();
+    }
+  }
+
+  public void updatePacketViaState() {
+    if (world != null && !world.isRemote) {
+      BlockState state = world.getBlockState(getPos());
+      world.notifyBlockUpdate(getPos(), state, state, 8);
     }
   }
 
@@ -221,5 +259,22 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
     } else {
       return super.receiveClientEvent(id, type);
     }
+  }
+
+  @Override
+  @Nonnull
+  public CompoundNBT getUpdateTag() {
+    return write(new CompoundNBT());
+  }
+
+  @Override
+  @Nullable
+  public SUpdateTileEntityPacket getUpdatePacket() {
+    return new SUpdateTileEntityPacket(getPos(), 0, getUpdateTag());
+  }
+
+  @Override
+  public void onDataPacket(@Nonnull NetworkManager net, @Nonnull SUpdateTileEntityPacket pkt) {
+    read(ModBlocks.CHEST.getDefaultState(), pkt.getNbtCompound());
   }
 }

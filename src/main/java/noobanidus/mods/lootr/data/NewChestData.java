@@ -19,6 +19,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
@@ -100,6 +101,7 @@ public class NewChestData extends WorldSavedData {
       NonNullList<ItemStack> items = NonNullList.withSize(tile.getSizeInventory(), ItemStack.EMPTY);
       // Saving this is handled elsewhere
       result = new SpecialChestInventory(items, tile.getDisplayName(), pos);
+      ChunkPos chunk = new ChunkPos(pos);
     }
     filler.fillWithLoot(player, result);
     inventories.put(player.getUniqueID(), result);
@@ -319,7 +321,6 @@ public class NewChestData extends WorldSavedData {
   }
 
   private static NewChestData getInstance(ServerWorld world, UUID id) {
-    RegistryKey<World> dimension = world.getDimensionKey();
     return getServerWorld().getSavedData().getOrCreate(() -> new NewChestData(id), id.toString());
   }
 

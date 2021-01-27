@@ -12,6 +12,11 @@ import net.minecraft.loot.LootParameterSets;
 import net.minecraft.loot.LootParameters;
 import net.minecraft.loot.LootTable;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.NBTUtil;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.BarrelTileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.vector.Vector3d;
@@ -24,12 +29,16 @@ import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.init.ModTiles;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 @SuppressWarnings({"ConstantConditions", "NullableProblems", "WeakerAccess"})
 public class SpecialLootBarrelTile extends BarrelTileEntity implements ILootTile {
+  public List<UUID> openers = new ArrayList<>();
   private int specialNumPlayersUsingBarrel;
   private ResourceLocation savedLootTable = null;
   private long seed = -1;
@@ -77,6 +86,11 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ILootTile
     this.seed = seed;
   }
 
+  @Override
+  public List<UUID> getOpeners() {
+    return openers;
+  }
+
   @SuppressWarnings("Duplicates")
   @Override
   public void read(BlockState state, CompoundNBT compound) {
@@ -93,6 +107,13 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ILootTile
       }
       setLootTable(savedLootTable, seed);
     }
+    if (compound.contains("LootrOpeners")) {
+      ListNBT openers = compound.getList("LootrOpeners", Constants.NBT.TAG_INT_ARRAY);
+      this.openers.clear();
+      for (INBT item : openers) {
+        this.openers.add(NBTUtil.readUniqueId(item));
+      }
+    }
     super.read(state, compound);
   }
 
@@ -107,6 +128,11 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ILootTile
       compound.putLong("specialLootBarrel_seed", seed);
       compound.putLong("LootTableSeed", seed);
     }
+    ListNBT list = new ListNBT();
+    for (UUID opener : this.openers) {
+      list.add(NBTUtil.func_240626_a_(opener));
+    }
+    compound.put("LootrOpeners", list);
     return compound;
   }
 
@@ -177,6 +203,34 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ILootTile
   public void closeInventory(PlayerEntity player) {
     if (!player.isSpectator()) {
       --this.specialNumPlayersUsingBarrel;
+      openers.add(player.getUniqueID());
+      this.markDirty();
+      updatePacketViaState();
     }
+  }
+
+  public void updatePacketViaState() {
+    if (world != null && !world.isRemote) {
+      BlockState state = world.getBlockState(getPos());
+      world.notifyBlockUpdate(getPos(), state, state, 8);
+    }
+  }
+
+
+  @Override
+  @Nonnull
+  public CompoundNBT getUpdateTag() {
+    return write(new CompoundNBT());
+  }
+
+  @Override
+  @Nullable
+  public SUpdateTileEntityPacket getUpdatePacket() {
+    return new SUpdateTileEntityPacket(getPos(), 0, getUpdateTag());
+  }
+
+  @Override
+  public void onDataPacket(@Nonnull NetworkManager net, @Nonnull SUpdateTileEntityPacket pkt) {
+    read(ModBlocks.CHEST.getDefaultState(), pkt.getNbtCompound());
   }
 }

@@ -20,6 +20,9 @@ import net.minecraft.loot.LootParameterSets;
 import net.minecraft.loot.LootParameters;
 import net.minecraft.loot.LootTable;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.IPacket;
 import net.minecraft.util.*;
 import net.minecraft.util.text.Color;
@@ -29,14 +32,20 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.network.NetworkHooks;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.init.ModEntities;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class LootrChestMinecartEntity extends ContainerMinecartEntity {
+  public List<UUID> openers = new ArrayList<>();
+
   public LootrChestMinecartEntity(EntityType<LootrChestMinecartEntity> type, World world) {
     super(type, world);
   }
@@ -114,6 +123,11 @@ public class LootrChestMinecartEntity extends ContainerMinecartEntity {
   protected void writeAdditional(CompoundNBT compound) {
     compound.putString("LootTable", this.lootTable.toString());
     compound.putLong("LootTableSeed", this.lootTableSeed);
+    ListNBT list = new ListNBT();
+    for (UUID opener : this.openers) {
+      list.add(NBTUtil.func_240626_a_(opener));
+    }
+    compound.put("LootrOpeners", list);
     super.writeAdditional(compound);
   }
 
@@ -121,6 +135,13 @@ public class LootrChestMinecartEntity extends ContainerMinecartEntity {
   protected void readAdditional(CompoundNBT compound) {
     this.lootTable = new ResourceLocation(compound.getString("LootTable"));
     this.lootTableSeed = compound.getLong("LootTableSeed");
+    if (compound.contains("LootrOpeners", Constants.NBT.TAG_LIST)) {
+      ListNBT openers = compound.getList("LootrOpeners", Constants.NBT.TAG_INT_ARRAY);
+      this.openers.clear();
+      for (INBT item : openers) {
+        this.openers.add(NBTUtil.readUniqueId(item));
+      }
+    }
     super.readAdditional(compound);
   }
 
