@@ -14,6 +14,7 @@ public interface ILootTile {
   void setSeed (long seed);
 
   List<UUID> getOpeners ();
+  UUID getTileId ();
 
   @FunctionalInterface
   interface LootFiller {

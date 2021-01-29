@@ -49,9 +49,18 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
   private int specialNumPlayersUsingChest;
   private ResourceLocation savedLootTable = null;
   private long seed = -1;
+  private UUID tileId;
 
   public SpecialLootChestTile() {
     super(ModTiles.SPECIAL_LOOT_CHEST);
+  }
+
+  @Override
+  public UUID getTileId() {
+    if (this.tileId == null) {
+      this.tileId = UUID.randomUUID();
+    }
+    return this.tileId;
   }
 
   public SpecialLootChestTile(TileEntityType<?> tile) {
@@ -98,6 +107,11 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
         seed = compound.getLong("LootTableSeed");
       }
     }
+    if (compound.hasUniqueId("tileId")) {
+      this.tileId = compound.getUniqueId("tileId");
+    } else if (this.tileId == null) {
+      getTileId();
+    }
     if (compound.contains("LootrOpeners")) {
       ListNBT openers = compound.getList("LootrOpeners", Constants.NBT.TAG_INT_ARRAY);
       this.openers.clear();
@@ -119,6 +133,7 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
       compound.putLong("specialLootChest_seed", seed);
       compound.putLong("LootTableSeed", seed);
     }
+    compound.putUniqueId("tileId", getTileId());
     ListNBT list = new ListNBT();
     for (UUID opener : this.openers) {
       list.add(NBTUtil.func_240626_a_(opener));
