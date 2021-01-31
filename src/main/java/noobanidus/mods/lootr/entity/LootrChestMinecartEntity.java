@@ -2,6 +2,7 @@ package noobanidus.mods.lootr.entity;
 
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
@@ -79,13 +80,17 @@ public class LootrChestMinecartEntity extends ContainerMinecartEntity {
     this.remove();
     if (this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
       ItemStack itemstack = new ItemStack(Items.MINECART);
+      ItemStack itemstack2 = new ItemStack(Items.CHEST);
       if (this.hasCustomName()) {
         itemstack.setDisplayName(this.getCustomName());
+        itemstack2.setDisplayName(this.getCustomName());
       }
 
       this.entityDropItem(itemstack);
+      this.entityDropItem(itemstack2);
     }
   }
+
 
   @Override
   public int getSizeInventory() {
