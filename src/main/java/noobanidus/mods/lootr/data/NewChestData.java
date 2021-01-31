@@ -226,6 +226,25 @@ public class NewChestData extends WorldSavedData {
       return null;
     }
 
+    @Nullable
+    public LootrChestMinecartEntity getEntity (World world) {
+      if (world == null || world.isRemote() || entityId == null) {
+        return null;
+      }
+
+      if (!(world instanceof ServerWorld)) {
+        return null;
+      }
+
+      ServerWorld serverWorld = (ServerWorld) world;
+      Entity entity = serverWorld.getEntityByUuid(entityId);
+      if (entity instanceof LootrChestMinecartEntity) {
+        return (LootrChestMinecartEntity) entity;
+      }
+
+      return null;
+    }
+
     @Override
     public int getSizeInventory() {
       return 27;
@@ -318,11 +337,18 @@ public class NewChestData extends WorldSavedData {
     public void closeInventory(PlayerEntity player) {
       markDirty();
       World world = player.world;
-      LockableLootTileEntity tile = getTile(world);
-      if (tile != null) {
-        tile.closeInventory(player);
+      if (pos != null) {
+        LockableLootTileEntity tile = getTile(world);
+        if (tile != null) {
+          tile.closeInventory(player);
+        }
       }
-      ((ServerWorld) world).getSavedData().save();
+      if (entityId != null) {
+        LootrChestMinecartEntity entity = getEntity(world);
+        if (world != null) {
+
+        }
+      }
     }
 
     public CompoundNBT writeItems() {
@@ -359,7 +385,7 @@ public class NewChestData extends WorldSavedData {
   }
 
   private static NewChestData getInstance(ServerWorld world, UUID id) {
-    return getServerWorld().getSavedData().getOrCreate(() -> new NewChestData(id), id.toString());
+    return getServerWorld().getSavedData().getOrCreate(() -> new NewChestData(id), ENTITY(id));
   }
 
   @Nullable

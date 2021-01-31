@@ -15,6 +15,7 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 import noobanidus.mods.lootr.commands.CommandBarrel;
+import noobanidus.mods.lootr.commands.CommandCart;
 import noobanidus.mods.lootr.commands.CommandChest;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.events.HandleBreak;
@@ -35,6 +36,7 @@ public class Lootr {
   public static final String MODID = "lootr";
   public CommandBarrel COMMAND_BARREL;
   public CommandChest COMMAND_CHEST;
+  public CommandCart COMMAND_CART;
 
   public Lootr() {
     ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigManager.COMMON_CONFIG);
@@ -55,9 +57,11 @@ public class Lootr {
   }
 
   public void onCommands(RegisterCommandsEvent event) {
-/*    COMMAND_BARREL = new CommandBarrel(event.getDispatcher());
+    COMMAND_BARREL = new CommandBarrel(event.getDispatcher());
     COMMAND_BARREL.register();
     COMMAND_CHEST = new CommandChest(event.getDispatcher());
-    COMMAND_CHEST.register();*/
+    COMMAND_CHEST.register();
+    COMMAND_CART = new CommandCart(event.getDispatcher());
+    COMMAND_CART.register();
   }
 }
