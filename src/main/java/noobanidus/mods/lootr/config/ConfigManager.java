@@ -12,10 +12,12 @@ public class ConfigManager {
   public static ForgeConfigSpec COMMON_CONFIG;
   public static ForgeConfigSpec.BooleanValue RANDOMISE_SEED;
   public static ForgeConfigSpec.BooleanValue CONVERT_MINESHAFTS;
+  public static ForgeConfigSpec.BooleanValue REPORT_TABLES;
 
   static {
     RANDOMISE_SEED = COMMON_BUILDER.comment("determine whether or not loot generated is the same for all players using the provided seed, or randomised per player").define("randomise_seed", true);
     CONVERT_MINESHAFTS = COMMON_BUILDER.comment("whether or not mineshaft chest minecarts should be converted to standard loot chests").define("convert_mineshafts", true);
+    REPORT_TABLES = COMMON_BUILDER.comment("catches loot chest creation that this mod cannot convert, reporting the loot table, location and mod").define("report_tables", false);
     COMMON_CONFIG = COMMON_BUILDER.build();
   }
 

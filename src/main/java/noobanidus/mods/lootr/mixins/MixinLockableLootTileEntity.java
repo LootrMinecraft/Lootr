@@ -9,7 +9,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.chunk.IChunk;
+import noobanidus.mods.lootr.Lootr;
+import noobanidus.mods.lootr.config.ConfigManager;
+import noobanidus.mods.lootr.tiles.ILootTile;
 import noobanidus.mods.lootr.world.processor.LootrChestProcessor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -19,6 +24,8 @@ import java.util.Random;
 
 @Mixin(LockableLootTileEntity.class)
 public class MixinLockableLootTileEntity {
+  private Logger log = LogManager.getLogger(Lootr.MODID);
+
   @Inject(method = "Lnet/minecraft/tileentity/LockableLootTileEntity;setLootTable(Lnet/minecraft/world/IBlockReader;Ljava/util/Random;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/ResourceLocation;)V",
       at = @At("HEAD"))
   private static void setLootTable(IBlockReader reader, Random rand, BlockPos pos, ResourceLocation lootTableIn, CallbackInfo info) {
@@ -39,5 +46,23 @@ public class MixinLockableLootTileEntity {
         }
       }
     }
+  }
+
+  @Inject(method="Lnet/minecraft/tileentity/LockableLootTileEntity;setLootTable(Lnet/minecraft/util/ResourceLocation;J)V", at=@At("HEAD"))
+  private void setLootTable (ResourceLocation table, long seed, CallbackInfo info) {
+    if (this instanceof ILootTile || !ConfigManager.REPORT_TABLES.get()) {
+      return;
+    }
+
+    StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
+
+    log.error("\n=================================================" +
+            "\n  Lootr detected a loot chest creation that it " +
+            "\n  can't replace. Please consider reporting it!" +
+            "\n    Table: " + table.toString() +
+            "\n    Location: " + ((LockableLootTileEntity) (Object) (this)).getPos().toString() +
+            "\n    Stack: " + stacktrace[3].toString() +
+            "\n           " + stacktrace[4].toString() +
+            "\n           " + stacktrace[5].toString());
   }
 }

@@ -7,6 +7,7 @@ import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.data.NewChestData;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.tiles.ILootTile;
@@ -27,6 +28,7 @@ public class ChestUtil {
     }
     TileEntity te = world.getTileEntity(pos);
     if (te instanceof ILootTile) {
+      Lootr.CHEST_PREDICATE.trigger((ServerPlayerEntity) player, null);
       INamedContainerProvider provider = NewChestData.getInventory(world, ((ILootTile) te).getTileId(), pos, (ServerPlayerEntity) player, (LockableLootTileEntity) te, ((ILootTile) te)::fillWithLoot);
       player.openContainer(provider);
       return true;
@@ -37,6 +39,7 @@ public class ChestUtil {
 
   public static void handleLootCart(World world, LootrChestMinecartEntity cart, PlayerEntity player) {
     if (!world.isRemote()) {
+      Lootr.CHEST_PREDICATE.trigger((ServerPlayerEntity) player, null);
       INamedContainerProvider provider = NewChestData.getInventory(world, cart, (ServerPlayerEntity) player, cart::addLoot);
       player.openContainer(provider);
     }

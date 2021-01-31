@@ -7,5 +7,9 @@
   "block.lootr.lootr_chest": "Loot Chest",
   "block.lootr.lootr_trapped_chest": "Loot Chest",
   "block.lootr.lootr_barrel": "Loot Barrel",
-  "entity.lootr.lootr_minecart": "Minecart with Chest"
+  "entity.lootr.lootr_minecart": "Minecart with Chest",
+  "lootr.advancements.1chest.title": "Timeshare",
+  "lootr.advancements.1chest.description": "Open your first instanced, per-player Loot chest and collect your rewards!",
+  "lootr.advancements.root.title": "In a Museum",
+  "lootr.advancements.root.description": "Bring instanced, per-player Loot into your world."
 }
