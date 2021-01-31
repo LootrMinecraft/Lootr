@@ -59,7 +59,7 @@ public class MixinLockableLootTileEntity {
     log.error("\n=================================================" +
             "\n  Lootr detected a loot chest creation that it " +
             "\n  can't replace. Please consider reporting it!" +
-            "\n    Table: " + table.toString() +
+            "\n    Table: " + table +
             "\n    Location: " + ((LockableLootTileEntity) (Object) (this)).getPos().toString() +
             "\n    Stack: " + stacktrace[3].toString() +
             "\n           " + stacktrace[4].toString() +
