@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.util;
 
+import net.minecraft.entity.monster.piglin.PiglinTasks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
@@ -15,7 +16,6 @@ import noobanidus.mods.lootr.tiles.ILootTile;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
-import java.util.UUID;
 
 @SuppressWarnings("unused")
 public class ChestUtil {
@@ -31,6 +31,7 @@ public class ChestUtil {
       Lootr.CHEST_PREDICATE.trigger((ServerPlayerEntity) player, null);
       INamedContainerProvider provider = NewChestData.getInventory(world, ((ILootTile) te).getTileId(), pos, (ServerPlayerEntity) player, (LockableLootTileEntity) te, ((ILootTile) te)::fillWithLoot);
       player.openContainer(provider);
+      PiglinTasks.func_234478_a_(player, true);
       return true;
     } else {
       return false;
