@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.mixins;
 
+import com.google.common.collect.Sets;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.tileentity.LockableLootTileEntity;
@@ -21,6 +22,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Random;
+import java.util.Set;
 
 @Mixin(LockableLootTileEntity.class)
 public class MixinLockableLootTileEntity {
@@ -51,6 +53,11 @@ public class MixinLockableLootTileEntity {
   @Inject(method="Lnet/minecraft/tileentity/LockableLootTileEntity;setLootTable(Lnet/minecraft/util/ResourceLocation;J)V", at=@At("HEAD"))
   private void setLootTable (ResourceLocation table, long seed, CallbackInfo info) {
     if (this instanceof ILootTile || !ConfigManager.REPORT_TABLES.get()) {
+      return;
+    }
+
+    Set<String> modids = Sets.newHashSet("apotheosis", "artifacts");
+    if (table != null && modids.contains(table.getNamespace())) {
       return;
     }
 

@@ -9,7 +9,8 @@
     "MixinDungeonsFeature",
     "MixinLockableLootTileEntity",
     "MixinOceanRuinPieces$Piece",
-    "MixinIglooPieces$Piece"
+    "MixinIglooPieces$Piece",
+    "MixinCatSitOnBlockGoal"
   ],
   "client": [
   ],

@@ -21,10 +21,13 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.tileentity.LockableTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.capabilities.Capability;
@@ -291,5 +294,17 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
   @Override
   public void onDataPacket(@Nonnull NetworkManager net, @Nonnull SUpdateTileEntityPacket pkt) {
     read(ModBlocks.CHEST.getDefaultState(), pkt.getNbtCompound());
+  }
+
+  public static int getPlayersUsing(IBlockReader reader, BlockPos posIn) {
+    BlockState blockstate = reader.getBlockState(posIn);
+    if (blockstate.hasTileEntity()) {
+      TileEntity tileentity = reader.getTileEntity(posIn);
+      if (tileentity instanceof SpecialLootChestTile) {
+        return ((SpecialLootChestTile) tileentity).specialNumPlayersUsingChest;
+      }
+    }
+
+    return 0;
   }
 }
