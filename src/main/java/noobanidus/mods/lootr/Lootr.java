@@ -38,7 +38,11 @@ public class Lootr {
   public static final Logger LOG = LogManager.getLogger();
   public static final String MODID = "lootr";
   public static GenericTrigger<Void> CHEST_PREDICATE = null;
+  public static GenericTrigger<Void> BARREL_PREDICATE = null;
+  public static GenericTrigger<Void> CART_PREDICATE = null;
   public static final ResourceLocation CHEST_LOCATION = new ResourceLocation(MODID, "chest_opened");
+  public static final ResourceLocation BARREL_LOCATION = new ResourceLocation(MODID, "barrel_opened");
+  public static final ResourceLocation CART_LOCATION = new ResourceLocation(MODID, "cart_opened");
   public CommandBarrel COMMAND_BARREL;
   public CommandChest COMMAND_CHEST;
   public CommandCart COMMAND_CART;

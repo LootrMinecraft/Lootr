@@ -12,6 +12,8 @@ public class CommonSetup {
     event.enqueueWork(() -> {
       ModMisc.register();
       Lootr.CHEST_PREDICATE = CriteriaTriggers.register(new GenericTrigger<>(Lootr.CHEST_LOCATION, new ChestPredicate()));
+      Lootr.BARREL_PREDICATE = CriteriaTriggers.register(new GenericTrigger<>(Lootr.BARREL_LOCATION, new ChestPredicate()));
+      Lootr.CART_PREDICATE = CriteriaTriggers.register(new GenericTrigger<>(Lootr.CART_LOCATION, new ChestPredicate()));
     });
   }
 }
