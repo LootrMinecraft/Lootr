@@ -16,6 +16,7 @@ import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.data.NewChestData;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModBlocks;
+import noobanidus.mods.lootr.init.ModStats;
 import noobanidus.mods.lootr.tiles.ILootTile;
 
 import java.util.HashSet;
@@ -39,6 +40,9 @@ public class ChestUtil {
         Lootr.CHEST_PREDICATE.trigger((ServerPlayerEntity) player, null);
       }
       INamedContainerProvider provider = NewChestData.getInventory(world, ((ILootTile) te).getTileId(), pos, (ServerPlayerEntity) player, (LockableLootTileEntity) te, ((ILootTile) te)::fillWithLoot);
+      if (!((ILootTile)te).getOpeners().contains(player.getUniqueID())) {
+        player.addStat(ModStats.LOOTED_STAT);
+      }
       player.openContainer(provider);
       PiglinTasks.func_234478_a_(player, true);
       return true;
@@ -50,6 +54,10 @@ public class ChestUtil {
   public static void handleLootCart(World world, LootrChestMinecartEntity cart, PlayerEntity player) {
     if (!world.isRemote()) {
       Lootr.CART_PREDICATE.trigger((ServerPlayerEntity) player, null);
+      if (!cart.getOpeners().contains(player.getUniqueID())) {
+        cart.openers.add(player.getUniqueID());
+        player.addStat(ModStats.LOOTED_STAT);
+      }
       INamedContainerProvider provider = NewChestData.getInventory(world, cart, (ServerPlayerEntity) player, cart::addLoot);
       player.openContainer(provider);
     }

@@ -36,7 +36,9 @@ public class LootrChestBlock extends ChestBlock {
 
   @Override
   public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
-    ChestUtil.handleLootChest(this, world, pos, player);
+    if (!ChestBlock.isBlocked(world, pos)) {
+      ChestUtil.handleLootChest(this, world, pos, player);
+    }
     return ActionResultType.SUCCESS;
   }
 

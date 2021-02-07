@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.blocks;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.block.ChestBlock;
 import net.minecraft.block.TrappedChestBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluids;
@@ -47,7 +48,9 @@ public class LootrTrappedChestBlock extends TrappedChestBlock {
 
   @Override
   public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
-    ChestUtil.handleLootChest(this, world, pos, player);
+    if (!ChestBlock.isBlocked(world, pos)) {
+      ChestUtil.handleLootChest(this, world, pos, player);
+    }
     return ActionResultType.SUCCESS;
   }
 

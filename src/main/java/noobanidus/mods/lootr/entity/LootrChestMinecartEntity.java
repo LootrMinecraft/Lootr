@@ -55,6 +55,10 @@ public class LootrChestMinecartEntity extends ContainerMinecartEntity {
     super(ModEntities.LOOTR_MINECART_ENTITY, x, y, z, worldIn);
   }
 
+  public List<UUID> getOpeners() {
+    return openers;
+  }
+
   @Override
   public boolean isInvulnerableTo(DamageSource source) {
     if (this.isInvulnerable() && source != DamageSource.OUT_OF_WORLD && !source.isCreativePlayer()) {
