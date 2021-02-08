@@ -11,5 +11,9 @@
   "lootr.advancements.1chest.title": "Timeshare",
   "lootr.advancements.1chest.description": "Open your first instanced, per-player Loot chest and collect your rewards!",
   "lootr.advancements.root.title": "In a Museum",
-  "lootr.advancements.root.description": "Bring instanced, per-player Loot into your world."
+  "lootr.advancements.root.description": "Bring instanced, per-player Loot into your world.",
+  "lootr.commands.usage": "/lootr barrel | barrel <loot-table> | chest | chest <loot-table> | cart | cart <loot-table> | convert | custom <id>",
+  "lootr.commands.created": "Created a Lootr %s at %s using the loot table %s.",
+  "lootr.commands.summoned": "Summoned a Lootr Cart at %s using the loot table %s.",
+  "lootr.commands.blockpos": "%s,%s,%s"
 }

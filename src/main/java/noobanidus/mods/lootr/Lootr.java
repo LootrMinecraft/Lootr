@@ -3,7 +3,6 @@ package noobanidus.mods.lootr;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
-import net.minecraft.stats.StatType;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -16,15 +15,15 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
-import noobanidus.mods.lootr.advancement.ChestPredicate;
 import noobanidus.mods.lootr.advancement.GenericTrigger;
-import noobanidus.mods.lootr.commands.CommandBarrel;
-import noobanidus.mods.lootr.commands.CommandCart;
-import noobanidus.mods.lootr.commands.CommandChest;
+import noobanidus.mods.lootr.commands.CommandLootr;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.events.HandleBreak;
 import noobanidus.mods.lootr.events.HandleCart;
-import noobanidus.mods.lootr.init.*;
+import noobanidus.mods.lootr.init.ModBlocks;
+import noobanidus.mods.lootr.init.ModEntities;
+import noobanidus.mods.lootr.init.ModItems;
+import noobanidus.mods.lootr.init.ModTiles;
 import noobanidus.mods.lootr.setup.CommonSetup;
 import noobanidus.mods.lootr.setup.Setup;
 import noobanidus.mods.lootr.ticker.EntityTicker;
@@ -41,9 +40,7 @@ public class Lootr {
   public static final ResourceLocation CHEST_LOCATION = new ResourceLocation(MODID, "chest_opened");
   public static final ResourceLocation BARREL_LOCATION = new ResourceLocation(MODID, "barrel_opened");
   public static final ResourceLocation CART_LOCATION = new ResourceLocation(MODID, "cart_opened");
-  public CommandBarrel COMMAND_BARREL;
-  public CommandChest COMMAND_CHEST;
-  public CommandCart COMMAND_CART;
+  public CommandLootr COMMAND_LOOTR;
 
   public Lootr() {
     ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigManager.COMMON_CONFIG);
@@ -64,11 +61,7 @@ public class Lootr {
   }
 
   public void onCommands(RegisterCommandsEvent event) {
-    COMMAND_BARREL = new CommandBarrel(event.getDispatcher());
-    COMMAND_BARREL.register();
-    COMMAND_CHEST = new CommandChest(event.getDispatcher());
-    COMMAND_CHEST.register();
-    COMMAND_CART = new CommandCart(event.getDispatcher());
-    COMMAND_CART.register();
+    COMMAND_LOOTR = new CommandLootr(event.getDispatcher());
+    COMMAND_LOOTR.register();
   }
 }
