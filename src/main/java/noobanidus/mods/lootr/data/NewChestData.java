@@ -19,7 +19,6 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
@@ -46,7 +45,7 @@ public class NewChestData extends WorldSavedData {
   private NonNullList<ItemStack> reference;
   private boolean custom;
 
-  public static String REF_ID (RegistryKey<World> dimension, UUID id) {
+  public static String REF_ID(RegistryKey<World> dimension, UUID id) {
     return "Lootr-custom-" + dimension.getLocation().getPath() + "-" + id.toString();
   }
 
@@ -54,11 +53,11 @@ public class NewChestData extends WorldSavedData {
     return "Lootr-chests-" + dimension.getLocation().getPath() + "-" + pos.toLong();
   }
 
-  public static String ID (RegistryKey<World> dimension, UUID id) {
+  public static String ID(RegistryKey<World> dimension, UUID id) {
     return "Lootr-chests-" + dimension.getLocation().getPath() + "-" + id.toString();
   }
 
-  public static String ENTITY (UUID entityId) {
+  public static String ENTITY(UUID entityId) {
     return "Lootr-entity-" + entityId.toString();
   }
 
@@ -109,7 +108,7 @@ public class NewChestData extends WorldSavedData {
     this.customId = null;
   }
 
-  private ILootTile.LootFiller customInventory () {
+  private ILootTile.LootFiller customInventory() {
     return (player, inventory) -> {
       for (int i = 0; i < reference.size(); i++) {
         inventory.setInventorySlotContents(i, reference.get(i));
@@ -163,11 +162,7 @@ public class NewChestData extends WorldSavedData {
       // Saving this is handled elsewhere
       result = new SpecialChestInventory(items, tile.getDisplayName(), pos);
     }
-    if (this.custom) {
-      customInventory().fillWithLoot(player, result);
-    } else {
-      filler.fillWithLoot(player, result);
-    }
+    filler.fillWithLoot(player, result);
     inventories.put(player.getUniqueID(), result);
     markDirty();
     world.getSavedData().save();
@@ -269,7 +264,7 @@ public class NewChestData extends WorldSavedData {
       this.pos = pos;
     }
 
-    public void setBlockPos (BlockPos pos) {
+    public void setBlockPos(BlockPos pos) {
       this.pos = pos;
     }
 
@@ -288,7 +283,7 @@ public class NewChestData extends WorldSavedData {
     }
 
     @Nullable
-    public LootrChestMinecartEntity getEntity (World world) {
+    public LootrChestMinecartEntity getEntity(World world) {
       if (world == null || world.isRemote() || entityId == null) {
         return null;
       }
@@ -446,13 +441,18 @@ public class NewChestData extends WorldSavedData {
     return getServerWorld().getSavedData().get(() -> new NewChestData(dimension, pos), OLD_ID(dimension, pos));
   }
 
-  private static NewChestData getInstanceUuid (ServerWorld world, UUID id) {
+  private static NewChestData getInstanceUuid(ServerWorld world, UUID id) {
     RegistryKey<World> dimension = world.getDimensionKey();
     return getServerWorld().getSavedData().getOrCreate(() -> new NewChestData(dimension, id), ID(dimension, id));
   }
 
   private static NewChestData getInstance(ServerWorld world, UUID id) {
     return getServerWorld().getSavedData().getOrCreate(() -> new NewChestData(id), ENTITY(id));
+  }
+
+  private static NewChestData getInstanceInventory(ServerWorld world, UUID id, @Nullable UUID customId, @Nullable NonNullList<ItemStack> base) {
+    RegistryKey<World> dimension = world.getDimensionKey();
+    return getServerWorld().getSavedData().getOrCreate(() -> new NewChestData(dimension, id, customId, base), REF_ID(dimension, id));
   }
 
   @Nullable
@@ -474,6 +474,20 @@ public class NewChestData extends WorldSavedData {
     if (inventory == null) {
       inventory = data.createInventory(player, filler, tile);
       inventory.setBlockPos(pos);
+    }
+
+    return inventory;
+  }
+
+  @Nullable
+  public static SpecialChestInventory getInventory(World world, UUID uuid, UUID customId, NonNullList<ItemStack> base, ServerPlayerEntity player, BlockPos pos, LockableLootTileEntity tile) {
+    if (world.isRemote || !(world instanceof ServerWorld)) {
+      return null;
+    }
+    NewChestData data = getInstanceInventory((ServerWorld) world, uuid, customId, base);
+    SpecialChestInventory inventory = data.getInventory(player, pos);
+    if (inventory == null) {
+      inventory = data.createInventory(player, data.customInventory(), tile);
     }
 
     return inventory;

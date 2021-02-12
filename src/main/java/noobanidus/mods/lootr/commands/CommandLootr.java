@@ -4,6 +4,8 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.ISuggestionProvider;
@@ -92,13 +94,6 @@ public class CommandLootr {
       createBlock(c.getSource(), ModBlocks.CHEST, ResourceLocationArgument.getResourceLocation(c, "table"));
       return 1;
     })));
-    builder.then(Commands.literal("chest").executes(c -> {
-      createBlock(c.getSource(), ModBlocks.CHEST, null);
-      return 1;
-    }).then(suggestTables().executes(c -> {
-      createBlock(c.getSource(), ModBlocks.CHEST, ResourceLocationArgument.getResourceLocation(c, "table"));
-      return 1;
-    })));
     builder.then(Commands.literal("cart").executes(c -> {
       createBlock(c.getSource(), null, null);
       return 1;
@@ -106,6 +101,15 @@ public class CommandLootr {
       createBlock(c.getSource(), null, ResourceLocationArgument.getResourceLocation(c, "table"));
       return 1;
     })));
+    builder.then(Commands.literal("custom").executes(c -> {
+      BlockPos pos = new BlockPos(c.getSource().getPos()).down();
+      World world = c.getSource().getWorld();
+      BlockState state = world.getBlockState(pos);
+      if (!state.isIn(Blocks.CHEST)) {
+        c.getSource().sendFeedback(new StringTextComponent("Please stand on the chest you wish to convert."), false);
+      }
+      return 1;
+    }));
     return builder;
   }
 }
