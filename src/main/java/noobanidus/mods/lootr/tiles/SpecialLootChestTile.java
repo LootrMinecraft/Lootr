@@ -53,6 +53,7 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
   private ResourceLocation savedLootTable = null;
   private long seed = -1;
   private UUID tileId;
+  private boolean opened;
 
   public SpecialLootChestTile() {
     super(ModTiles.SPECIAL_LOOT_CHEST);
@@ -75,6 +76,14 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
     super.setLootTable(lootTableIn, seedIn);
     this.savedLootTable = lootTableIn;
     this.seed = seedIn;
+  }
+
+  public boolean isOpened() {
+    return opened;
+  }
+
+  public void setOpened(boolean opened) {
+    this.opened = opened;
   }
 
   @Override

@@ -20,10 +20,7 @@ import noobanidus.mods.lootr.commands.CommandLootr;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.events.HandleBreak;
 import noobanidus.mods.lootr.events.HandleCart;
-import noobanidus.mods.lootr.init.ModBlocks;
-import noobanidus.mods.lootr.init.ModEntities;
-import noobanidus.mods.lootr.init.ModItems;
-import noobanidus.mods.lootr.init.ModTiles;
+import noobanidus.mods.lootr.init.*;
 import noobanidus.mods.lootr.setup.CommonSetup;
 import noobanidus.mods.lootr.setup.Setup;
 import noobanidus.mods.lootr.ticker.EntityTicker;
@@ -48,6 +45,7 @@ public class Lootr {
     IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
     MinecraftForge.EVENT_BUS.addListener(HandleBreak::onBlockBreak);
     MinecraftForge.EVENT_BUS.addListener(HandleCart::onEntityJoin);
+    MinecraftForge.EVENT_BUS.addListener(HandleCart::onEntityTrack);
     MinecraftForge.EVENT_BUS.addListener(EntityTicker::onServerTick);
     MinecraftForge.EVENT_BUS.addListener(this::onCommands);
 

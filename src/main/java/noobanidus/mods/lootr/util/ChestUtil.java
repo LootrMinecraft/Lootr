@@ -55,7 +55,7 @@ public class ChestUtil {
     if (!world.isRemote()) {
       Lootr.CART_PREDICATE.trigger((ServerPlayerEntity) player, null);
       if (!cart.getOpeners().contains(player.getUniqueID())) {
-        cart.openers.add(player.getUniqueID());
+        cart.addOpener(player);
         player.addStat(ModStats.LOOTED_STAT);
       }
       INamedContainerProvider provider = NewChestData.getInventory(world, cart, (ServerPlayerEntity) player, cart::addLoot);

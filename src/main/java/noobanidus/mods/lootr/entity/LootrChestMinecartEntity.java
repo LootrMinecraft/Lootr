@@ -2,7 +2,6 @@ package noobanidus.mods.lootr.entity;
 
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
@@ -37,6 +36,8 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.network.NetworkHooks;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.init.ModEntities;
+import noobanidus.mods.lootr.networking.OpenCart;
+import noobanidus.mods.lootr.networking.PacketHandler;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;
@@ -45,7 +46,8 @@ import java.util.List;
 import java.util.UUID;
 
 public class LootrChestMinecartEntity extends ContainerMinecartEntity {
-  public List<UUID> openers = new ArrayList<>();
+  private List<UUID> openers = new ArrayList<>();
+  private boolean opened = false;
 
   public LootrChestMinecartEntity(EntityType<LootrChestMinecartEntity> type, World world) {
     super(type, world);
@@ -57,6 +59,18 @@ public class LootrChestMinecartEntity extends ContainerMinecartEntity {
 
   public List<UUID> getOpeners() {
     return openers;
+  }
+
+  public void addOpener(PlayerEntity player) {
+    openers.add(player.getUniqueID());
+  }
+
+  public boolean isOpened() {
+    return opened;
+  }
+
+  public void setOpened() {
+    this.opened = true;
   }
 
   @Override
@@ -106,9 +120,11 @@ public class LootrChestMinecartEntity extends ContainerMinecartEntity {
     return AbstractMinecartEntity.Type.CHEST;
   }
 
+  private static BlockState cartNormal = ModBlocks.CHEST.getDefaultState().with(ChestBlock.FACING, Direction.NORTH);
+
   @Override
   public BlockState getDefaultDisplayTile() {
-    return ModBlocks.CHEST.getDefaultState().with(ChestBlock.FACING, Direction.NORTH);
+    return cartNormal;
   }
 
   @Override
@@ -121,6 +137,7 @@ public class LootrChestMinecartEntity extends ContainerMinecartEntity {
     return ChestContainer.createGeneric9X3(id, playerInventoryIn, this);
   }
 
+  @SuppressWarnings("deprecation")
   @Override
   public void remove(boolean keepData) {
     this.removed = true;
@@ -130,7 +147,9 @@ public class LootrChestMinecartEntity extends ContainerMinecartEntity {
 
   @Override
   protected void writeAdditional(CompoundNBT compound) {
-    compound.putString("LootTable", this.lootTable.toString());
+    if (this.lootTable != null) {
+      compound.putString("LootTable", this.lootTable.toString());
+    }
     compound.putLong("LootTableSeed", this.lootTableSeed);
     ListNBT list = new ListNBT();
     for (UUID opener : this.openers) {
@@ -175,7 +194,6 @@ public class LootrChestMinecartEntity extends ContainerMinecartEntity {
       }
 
       LootContext.Builder lootcontext$builder = (new LootContext.Builder((ServerWorld) this.world)).withParameter(LootParameters.field_237457_g_, this.getPositionVec()).withSeed(this.lootTableSeed);
-      // Forge: add this entity to loot context, however, currently Vanilla uses 'this' for the player creating the chests. So we take over 'killer_entity' for this.
       lootcontext$builder.withParameter(LootParameters.KILLER_ENTITY, this);
       if (player != null) {
         lootcontext$builder.withLuck(player.getLuck()).withParameter(LootParameters.THIS_ENTITY, player);
@@ -188,5 +206,20 @@ public class LootrChestMinecartEntity extends ContainerMinecartEntity {
   @Override
   public IPacket<?> createSpawnPacket() {
     return NetworkHooks.getEntitySpawningPacket(this);
+  }
+
+  @Override
+  public void openInventory(PlayerEntity player) {
+    if (!player.isSpectator()) {
+      OpenCart cart = new OpenCart(this.getEntityId());
+      PacketHandler.sendToInternal(cart, (ServerPlayerEntity) player);
+    }
+  }
+
+  @Override
+  public void closeInventory(PlayerEntity player) {
+    if (!player.isSpectator()) {
+      addOpener(player);
+    }
   }
 }

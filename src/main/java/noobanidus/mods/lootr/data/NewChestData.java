@@ -41,7 +41,14 @@ public class NewChestData extends WorldSavedData {
   private RegistryKey<World> dimension;
   private UUID entityId;
   private UUID tileId;
+  private UUID customId;
   private Map<UUID, SpecialChestInventory> inventories = new HashMap<>();
+  private NonNullList<ItemStack> reference;
+  private boolean custom;
+
+  public static String REF_ID (RegistryKey<World> dimension, UUID id) {
+    return "Lootr-custom-" + dimension.getLocation().getPath() + "-" + id.toString();
+  }
 
   public static String OLD_ID(RegistryKey<World> dimension, BlockPos pos) {
     return "Lootr-chests-" + dimension.getLocation().getPath() + "-" + pos.toLong();
@@ -55,12 +62,29 @@ public class NewChestData extends WorldSavedData {
     return "Lootr-entity-" + entityId.toString();
   }
 
+  public NewChestData(RegistryKey<World> dimension, UUID id, @Nullable UUID customId, @Nullable NonNullList<ItemStack> base) {
+    super(REF_ID(dimension, id));
+    this.pos = null;
+    this.dimension = dimension;
+    this.entityId = null;
+    this.tileId = id;
+    this.reference = base;
+    this.custom = true;
+    this.customId = customId;
+    if (customId == null && base == null) {
+      throw new IllegalArgumentException("Both customId and inventory reference cannot be null.");
+    }
+  }
+
   public NewChestData(RegistryKey<World> dimension, UUID id) {
     super(ID(dimension, id));
     this.pos = null;
     this.dimension = dimension;
     this.entityId = null;
     this.tileId = id;
+    this.reference = null;
+    this.custom = false;
+    this.customId = null;
   }
 
   public NewChestData(RegistryKey<World> dimension, BlockPos pos) {
@@ -69,6 +93,9 @@ public class NewChestData extends WorldSavedData {
     this.dimension = dimension;
     this.entityId = null;
     this.tileId = null;
+    this.reference = null;
+    this.custom = false;
+    this.customId = null;
   }
 
   public NewChestData(UUID entityId) {
@@ -77,6 +104,17 @@ public class NewChestData extends WorldSavedData {
     this.dimension = null;
     this.tileId = null;
     this.entityId = entityId;
+    this.reference = null;
+    this.custom = false;
+    this.customId = null;
+  }
+
+  private ILootTile.LootFiller customInventory () {
+    return (player, inventory) -> {
+      for (int i = 0; i < reference.size(); i++) {
+        inventory.setInventorySlotContents(i, reference.get(i));
+      }
+    };
   }
 
   public Map<UUID, SpecialChestInventory> getInventories() {
@@ -117,7 +155,7 @@ public class NewChestData extends WorldSavedData {
         world = server.getWorld(dimension);
       }
 
-      if (world == null) {
+      if (world == null || tile == null) {
         return null;
       }
 
@@ -125,7 +163,11 @@ public class NewChestData extends WorldSavedData {
       // Saving this is handled elsewhere
       result = new SpecialChestInventory(items, tile.getDisplayName(), pos);
     }
-    filler.fillWithLoot(player, result);
+    if (this.custom) {
+      customInventory().fillWithLoot(player, result);
+    } else {
+      filler.fillWithLoot(player, result);
+    }
     inventories.put(player.getUniqueID(), result);
     markDirty();
     world.getSavedData().save();
@@ -151,6 +193,17 @@ public class NewChestData extends WorldSavedData {
     if (compound.hasUniqueId("tileId")) {
       tileId = compound.getUniqueId("tileId");
     }
+    if (compound.contains("custom")) {
+      custom = compound.getBoolean("custom");
+    }
+    if (compound.hasUniqueId("customId")) {
+      customId = compound.getUniqueId("customId");
+    }
+    if (compound.contains("reference") && compound.contains("referenceSize")) {
+      int size = compound.getInt("referenceSize");
+      reference = NonNullList.withSize(size, ItemStack.EMPTY);
+      ItemStackHelper.loadAllItems(compound.getCompound("reference"), reference);
+    }
     ListNBT compounds = compound.getList("inventories", Constants.NBT.TAG_COMPOUND);
     for (int i = 0; i < compounds.size(); i++) {
       CompoundNBT thisTag = compounds.getCompound(i);
@@ -174,6 +227,14 @@ public class NewChestData extends WorldSavedData {
     }
     if (tileId != null) {
       compound.putUniqueId("tileId", tileId);
+    }
+    if (customId != null) {
+      compound.putUniqueId("customId", customId);
+    }
+    compound.putBoolean("custom", custom);
+    if (reference != null) {
+      compound.putInt("referenceSize", reference.size());
+      compound.put("reference", ItemStackHelper.saveAllItems(new CompoundNBT(), reference, true));
     }
     ListNBT compounds = new ListNBT();
     for (Map.Entry<UUID, SpecialChestInventory> entry : inventories.entrySet()) {
@@ -331,6 +392,12 @@ public class NewChestData extends WorldSavedData {
       if (tile != null) {
         tile.openInventory(player);
       }
+      if (entityId != null) {
+        LootrChestMinecartEntity entity = getEntity(world);
+        if (entity != null) {
+          entity.openInventory(player);
+        }
+      }
     }
 
     @Override
@@ -345,8 +412,8 @@ public class NewChestData extends WorldSavedData {
       }
       if (entityId != null) {
         LootrChestMinecartEntity entity = getEntity(world);
-        if (world != null) {
-
+        if (entity != null) {
+          entity.closeInventory(player);
         }
       }
     }

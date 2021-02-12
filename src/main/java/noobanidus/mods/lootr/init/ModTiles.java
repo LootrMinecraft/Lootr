@@ -1,6 +1,5 @@
 package noobanidus.mods.lootr.init;
 
-import net.minecraft.block.Blocks;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.event.RegistryEvent;
 import noobanidus.mods.lootr.Lootr;
