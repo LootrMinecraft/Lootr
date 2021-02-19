@@ -2,7 +2,6 @@ package noobanidus.mods.lootr.util;
 
 import net.minecraft.block.BarrelBlock;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.entity.monster.piglin.PiglinTasks;
 import net.minecraft.entity.player.PlayerEntity;
@@ -15,7 +14,6 @@ import net.minecraft.world.World;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.data.NewChestData;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
-import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.init.ModStats;
 import noobanidus.mods.lootr.tiles.ILootTile;
 import noobanidus.mods.lootr.tiles.SpecialLootInventoryTile;
@@ -33,6 +31,10 @@ public class ChestUtil {
     if (world.isRemote()) {
       return false;
     }
+    if (player.isSpectator()) {
+      player.openContainer(null);
+      return false;
+    }
     TileEntity te = world.getTileEntity(pos);
     if (te instanceof ILootTile) {
       if (block instanceof BarrelBlock) {
@@ -41,7 +43,7 @@ public class ChestUtil {
         Lootr.CHEST_PREDICATE.trigger((ServerPlayerEntity) player, null);
       }
       INamedContainerProvider provider = NewChestData.getInventory(world, ((ILootTile) te).getTileId(), pos, (ServerPlayerEntity) player, (LockableLootTileEntity) te, ((ILootTile) te)::fillWithLoot);
-      if (!((ILootTile)te).getOpeners().contains(player.getUniqueID())) {
+      if (!((ILootTile) te).getOpeners().contains(player.getUniqueID())) {
         player.addStat(ModStats.LOOTED_STAT);
       }
       player.openContainer(provider);
@@ -54,6 +56,9 @@ public class ChestUtil {
 
   public static void handleLootCart(World world, LootrChestMinecartEntity cart, PlayerEntity player) {
     if (!world.isRemote()) {
+      if (player.isSpectator()) {
+        player.openContainer(null);
+      }
       Lootr.CART_PREDICATE.trigger((ServerPlayerEntity) player, null);
       if (!cart.getOpeners().contains(player.getUniqueID())) {
         cart.addOpener(player);
@@ -68,12 +73,16 @@ public class ChestUtil {
     if (world.isRemote()) {
       return false;
     }
+    if (player.isSpectator()) {
+      player.openContainer(null);
+      return false;
+    }
     TileEntity te = world.getTileEntity(pos);
     if (te instanceof SpecialLootInventoryTile) {
       Lootr.CHEST_PREDICATE.trigger((ServerPlayerEntity) player, null);
       SpecialLootInventoryTile tile = (SpecialLootInventoryTile) te;
       INamedContainerProvider provider = NewChestData.getInventory(world, tile.getTileId(), tile.getCustomInventory(), (ServerPlayerEntity) player, pos, tile);
-      if (!((ILootTile)te).getOpeners().contains(player.getUniqueID())) {
+      if (!((ILootTile) te).getOpeners().contains(player.getUniqueID())) {
         player.addStat(ModStats.LOOTED_STAT);
       }
       player.openContainer(provider);
