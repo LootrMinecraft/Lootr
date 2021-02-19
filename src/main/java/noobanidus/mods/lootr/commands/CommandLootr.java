@@ -6,22 +6,29 @@ import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.ChestBlock;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.ISuggestionProvider;
 import net.minecraft.command.arguments.ResourceLocationArgument;
+import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootTables;
+import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.tileentity.LockableLootTileEntity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModBlocks;
+import noobanidus.mods.lootr.tiles.SpecialLootInventoryTile;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class CommandLootr {
@@ -102,12 +109,30 @@ public class CommandLootr {
       return 1;
     })));
     builder.then(Commands.literal("custom").executes(c -> {
-      BlockPos pos = new BlockPos(c.getSource().getPos()).down();
+      BlockPos pos = new BlockPos(c.getSource().getPos());
       World world = c.getSource().getWorld();
       BlockState state = world.getBlockState(pos);
       if (!state.isIn(Blocks.CHEST)) {
-        c.getSource().sendFeedback(new StringTextComponent("Please stand on the chest you wish to convert."), false);
+        pos = pos.down();
+        state = world.getBlockState(pos);
       }
+      if (!state.isIn(Blocks.CHEST)) {
+        c.getSource().sendFeedback(new StringTextComponent("Please stand on the chest you wish to convert."), false);
+      } else {
+        NonNullList<ItemStack> contents = ((ChestTileEntity) Objects.requireNonNull(world.getTileEntity(pos))).chestContents;
+        world.removeTileEntity(pos);
+        world.setBlockState(pos, ModBlocks.INVENTORY.getDefaultState().with(ChestBlock.FACING, state.get(ChestBlock.FACING)).with(ChestBlock.WATERLOGGED, state.get(ChestBlock.WATERLOGGED)));
+        TileEntity te = world.getTileEntity(pos);
+        if (!(te instanceof SpecialLootInventoryTile)) {
+          c.getSource().sendFeedback(new StringTextComponent("Unable to convert chest, BlockState is not a Lootr Inventory block."), false);
+        } else {
+          SpecialLootInventoryTile inventory = (SpecialLootInventoryTile) te;
+          inventory.setCustomInventory(contents);
+          inventory.markDirty();
+        }
+      }
+
+
       return 1;
     }));
     return builder;

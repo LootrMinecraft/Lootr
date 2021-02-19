@@ -1,0 +1,5 @@
+{
+    "variants": {
+        "": { "model": "lootr:block/lootr_inventory" }
+    }
+}

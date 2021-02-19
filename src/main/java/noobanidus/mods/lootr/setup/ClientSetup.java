@@ -15,6 +15,7 @@ public class ClientSetup {
   public static void init(FMLClientSetupEvent event) {
     ClientRegistry.bindTileEntityRenderer(ModTiles.SPECIAL_LOOT_CHEST, SpecialLootChestTileRenderer::new);
     ClientRegistry.bindTileEntityRenderer(ModTiles.SPECIAL_TRAPPED_LOOT_CHEST, SpecialLootChestTileRenderer::new);
+    ClientRegistry.bindTileEntityRenderer(ModTiles.SPECIAL_LOOT_INVENTORY, SpecialLootChestTileRenderer::new);
     RenderingRegistry.registerEntityRenderingHandler(ModEntities.LOOTR_MINECART_ENTITY, LootrMinecartRenderer::new);
   }
 

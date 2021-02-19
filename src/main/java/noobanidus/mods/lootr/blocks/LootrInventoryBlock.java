@@ -8,7 +8,9 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.properties.ChestType;
+import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
@@ -28,13 +30,16 @@ import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 @SuppressWarnings("NullableProblems")
-public class LootrInventoryBlock extends LootrChestBlock {
-  private UUID inventoryId;
-
+public class LootrInventoryBlock extends ChestBlock {
   public LootrInventoryBlock(Properties properties) {
-    super(properties, () -> ModTiles.SPECIAL_LOOT_INVENTORY);
+    this(properties, () -> ModTiles.SPECIAL_LOOT_INVENTORY);
+  }
+
+  public LootrInventoryBlock(Properties builder, Supplier<TileEntityType<? extends ChestTileEntity>> tileEntityTypeIn) {
+    super(builder, tileEntityTypeIn);
   }
 
   @Override
@@ -60,6 +65,12 @@ public class LootrInventoryBlock extends LootrChestBlock {
 
   @Override
   public TileEntity createNewTileEntity(IBlockReader p_196283_1_) {
+    return new SpecialLootInventoryTile();
+  }
+
+  @Nullable
+  @Override
+  public TileEntity createTileEntity(BlockState state, IBlockReader world) {
     return new SpecialLootInventoryTile();
   }
 

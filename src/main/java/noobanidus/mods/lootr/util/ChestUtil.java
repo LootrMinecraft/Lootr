@@ -72,7 +72,7 @@ public class ChestUtil {
     if (te instanceof SpecialLootInventoryTile) {
       Lootr.CHEST_PREDICATE.trigger((ServerPlayerEntity) player, null);
       SpecialLootInventoryTile tile = (SpecialLootInventoryTile) te;
-      INamedContainerProvider provider = NewChestData.getInventory(world, tile.getTileId(), tile.getCustomId(), tile.getCustomInventory(), (ServerPlayerEntity) player, pos, tile);
+      INamedContainerProvider provider = NewChestData.getInventory(world, tile.getTileId(), tile.getCustomInventory(), (ServerPlayerEntity) player, pos, tile);
       if (!((ILootTile)te).getOpeners().contains(player.getUniqueID())) {
         player.addStat(ModStats.LOOTED_STAT);
       }

@@ -480,11 +480,11 @@ public class NewChestData extends WorldSavedData {
   }
 
   @Nullable
-  public static SpecialChestInventory getInventory(World world, UUID uuid, UUID customId, NonNullList<ItemStack> base, ServerPlayerEntity player, BlockPos pos, LockableLootTileEntity tile) {
+  public static SpecialChestInventory getInventory(World world, UUID uuid, NonNullList<ItemStack> base, ServerPlayerEntity player, BlockPos pos, LockableLootTileEntity tile) {
     if (world.isRemote || !(world instanceof ServerWorld)) {
       return null;
     }
-    NewChestData data = getInstanceInventory((ServerWorld) world, uuid, customId, base);
+    NewChestData data = getInstanceInventory((ServerWorld) world, uuid, null, base);
     SpecialChestInventory inventory = data.getInventory(player, pos);
     if (inventory == null) {
       inventory = data.createInventory(player, data.customInventory(), tile);
