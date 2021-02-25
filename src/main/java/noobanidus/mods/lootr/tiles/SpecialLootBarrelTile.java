@@ -22,12 +22,17 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
+import noobanidus.mods.lootr.blocks.LootrBarrelBlock;
+import noobanidus.mods.lootr.client.ClientGetter;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.init.ModTiles;
+import noobanidus.mods.lootr.util.Getter;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -46,6 +51,17 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ILootTile
 
   public SpecialLootBarrelTile() {
     super(ModTiles.SPECIAL_LOOT_BARREL);
+  }
+
+  @Nonnull
+  @Override
+  public IModelData getModelData() {
+    IModelData data = new ModelDataMap.Builder().withInitial(LootrBarrelBlock.OPENED, false).build();
+    PlayerEntity player = Getter.getPlayer();
+    if (player != null) {
+      data.setData(LootrBarrelBlock.OPENED, openers.contains(player.getUniqueID()));
+    }
+    return data;
   }
 
   @Override
@@ -128,6 +144,7 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ILootTile
         this.openers.add(NBTUtil.readUniqueId(item));
       }
     }
+    requestModelDataUpdate();
     super.read(state, compound);
   }
 

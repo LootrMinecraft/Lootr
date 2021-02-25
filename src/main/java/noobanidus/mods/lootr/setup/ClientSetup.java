@@ -2,10 +2,15 @@ package noobanidus.mods.lootr.setup;
 
 import net.minecraft.client.renderer.entity.MinecartRenderer;
 import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import noobanidus.mods.lootr.Lootr;
+import noobanidus.mods.lootr.client.BarrelModel;
 import noobanidus.mods.lootr.client.LootrMinecartRenderer;
 import noobanidus.mods.lootr.client.SpecialLootChestTileRenderer;
 import noobanidus.mods.lootr.init.ModEntities;
@@ -25,5 +30,9 @@ public class ClientSetup {
       event.addSprite(SpecialLootChestTileRenderer.MATERIAL.getTextureLocation());
       event.addSprite(SpecialLootChestTileRenderer.MATERIAL2.getTextureLocation());
     }
+  }
+
+  public static void modelRegister (ModelRegistryEvent event) {
+    ModelLoaderRegistry.registerLoader(new ResourceLocation(Lootr.MODID, "barrel"), BarrelModel.Loader.INSTANCE);
   }
 }

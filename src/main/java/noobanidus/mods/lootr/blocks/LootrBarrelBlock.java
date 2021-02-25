@@ -12,6 +12,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.client.model.data.ModelProperty;
 import noobanidus.mods.lootr.data.NewChestData;
 import noobanidus.mods.lootr.tiles.SpecialLootBarrelTile;
 import noobanidus.mods.lootr.util.ChestUtil;
@@ -20,6 +21,8 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 public class LootrBarrelBlock extends BarrelBlock {
+  public static final ModelProperty<Boolean> OPENED = new ModelProperty<>();
+
   public LootrBarrelBlock(Properties properties) {
     super(properties);
   }

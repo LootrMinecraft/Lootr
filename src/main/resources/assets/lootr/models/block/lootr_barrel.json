@@ -1,8 +1,6 @@
 {
-    "parent": "block/cube_bottom_top",
-    "textures": {
-        "top": "lootr:block/barrel_top",
-        "side": "lootr:block/barrel_side",
-        "bottom": "lootr:block/barrel_bottom"
-    }
+  "parent": "block/block",
+  "loader": "lootr:barrel",
+  "unopened": {"parent": "lootr:block/lootr_barrel_unopened"},
+  "opened": {"parent": "lootr:block/lootr_opened_barrel"}
 }

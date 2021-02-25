@@ -8,5 +8,6 @@ public class Setup {
     IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
     modBus.addListener(ClientSetup::init);
     modBus.addListener(ClientSetup::stitch);
+    modBus.addListener(ClientSetup::modelRegister);
   }
 }
