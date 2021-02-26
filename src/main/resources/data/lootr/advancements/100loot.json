@@ -1,0 +1,26 @@
+{
+  "parent": "lootr:50loot",
+  "display": {
+    "icon": {
+      "item": "minecraft:netherite_block"
+    },
+    "title": {
+      "translate": "lootr.advancements.50loot.title"
+    },
+    "description": {
+      "translate": "lootr.advancements.50loot.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "loot_stat": {
+      "trigger": "lootr:score",
+      "conditions": {
+        "score": 50
+      }
+    }
+  }
+}

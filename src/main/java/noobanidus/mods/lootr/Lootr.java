@@ -36,10 +36,12 @@ public class Lootr {
   public static GenericTrigger<Void> BARREL_PREDICATE = null;
   public static GenericTrigger<Void> CART_PREDICATE = null;
   public static GenericTrigger<ResourceLocation> ADVANCEMENT_PREDICATE = null;
+  public static GenericTrigger<Void> SCORE_PREDICATE = null;
   public static final ResourceLocation CHEST_LOCATION = new ResourceLocation(MODID, "chest_opened");
   public static final ResourceLocation BARREL_LOCATION = new ResourceLocation(MODID, "barrel_opened");
   public static final ResourceLocation CART_LOCATION = new ResourceLocation(MODID, "cart_opened");
-  public static final ResourceLocation ADVANCEMENT_LOCAITON = new ResourceLocation(MODID, "advancement");
+  public static final ResourceLocation ADVANCEMENT_LOCATION = new ResourceLocation(MODID, "advancement");
+  public static final ResourceLocation SCORE_LOCATION = new ResourceLocation(MODID, "score");
   public CommandLootr COMMAND_LOOTR;
 
   public Lootr() {

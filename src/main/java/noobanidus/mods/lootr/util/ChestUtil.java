@@ -45,6 +45,7 @@ public class ChestUtil {
       INamedContainerProvider provider = NewChestData.getInventory(world, ((ILootTile) te).getTileId(), pos, (ServerPlayerEntity) player, (LockableLootTileEntity) te, ((ILootTile) te)::fillWithLoot);
       if (!((ILootTile) te).getOpeners().contains(player.getUniqueID())) {
         player.addStat(ModStats.LOOTED_STAT);
+        Lootr.SCORE_PREDICATE.trigger((ServerPlayerEntity) player, null);
       }
       player.openContainer(provider);
       PiglinTasks.func_234478_a_(player, true);
@@ -63,6 +64,7 @@ public class ChestUtil {
       if (!cart.getOpeners().contains(player.getUniqueID())) {
         cart.addOpener(player);
         player.addStat(ModStats.LOOTED_STAT);
+        Lootr.SCORE_PREDICATE.trigger((ServerPlayerEntity) player, null);
       }
       INamedContainerProvider provider = NewChestData.getInventory(world, cart, (ServerPlayerEntity) player, cart::addLoot);
       player.openContainer(provider);
@@ -84,6 +86,7 @@ public class ChestUtil {
       INamedContainerProvider provider = NewChestData.getInventory(world, tile.getTileId(), tile.getCustomInventory(), (ServerPlayerEntity) player, pos, tile);
       if (!((ILootTile) te).getOpeners().contains(player.getUniqueID())) {
         player.addStat(ModStats.LOOTED_STAT);
+        Lootr.SCORE_PREDICATE.trigger((ServerPlayerEntity) player, null);
       }
       player.openContainer(provider);
       PiglinTasks.func_234478_a_(player, true);
