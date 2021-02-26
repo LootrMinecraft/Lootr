@@ -16,7 +16,7 @@
     "hidden": false
   },
   "criteria": {
-    "opened_chest": {
+    "opened_cart": {
       "trigger": "lootr:cart_opened",
       "conditions": {}
     }

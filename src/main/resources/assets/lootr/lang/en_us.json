@@ -9,12 +9,18 @@
   "block.lootr.lootr_barrel": "Loot Barrel",
   "block.lootr.lootr_inventory": "Loot Chest",
   "entity.lootr.lootr_minecart": "Minecart with Chest",
-  "lootr.advancements.1chest.title": "Timeshare",
-  "lootr.advancements.1chest.description": "Open your first instanced, per-player Loot chest and collect your rewards!",
-  "lootr.advancements.root.title": "In a Museum",
-  "lootr.advancements.root.description": "Bring instanced, per-player Loot into your world.",
   "lootr.commands.usage": "/lootr barrel | barrel <loot-table> | chest | chest <loot-table> | cart | cart <loot-table> | convert | custom <id>",
   "lootr.commands.created": "Created a Lootr %s at %s using the loot table %s.",
   "lootr.commands.summoned": "Summoned a Lootr Cart at %s using the loot table %s.",
-  "lootr.commands.blockpos": "%s,%s,%s"
+  "lootr.commands.blockpos": "%s,%s,%s",
+  "lootr.advancements.1chest.title": "'X' Marks the Spot",
+  "lootr.advancements.1chest.description": "Open your first instanced, per-player Loot chest and collect your rewards!",
+  "lootr.advancements.1barrel.title": "Barrel Booty",
+  "lootr.advancements.1barrel.description": "Open your first instanced, per-player Loot barrel and collect your rewards!",
+  "lootr.advancements.1cart.title": "Tunnel Treasures",
+  "lootr.advancements.1cart.description": "Open your first instanced, per-player Loot minecart and collect your rewards!",
+  "lootr.advancements.social.title": "Socialised Loot",
+  "lootr.advancements.social.description": "Open one of every type of instanced, per-player Loot container in the world!",
+  "lootr.advancements.root.title": "In a Museum",
+  "lootr.advancements.root.description": "Bring instanced, per-player Loot into your world."
 }

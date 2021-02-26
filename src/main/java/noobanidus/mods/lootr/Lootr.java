@@ -18,6 +18,7 @@ import net.minecraftforge.fml.loading.FMLPaths;
 import noobanidus.mods.lootr.advancement.GenericTrigger;
 import noobanidus.mods.lootr.commands.CommandLootr;
 import noobanidus.mods.lootr.config.ConfigManager;
+import noobanidus.mods.lootr.events.HandleAdvancement;
 import noobanidus.mods.lootr.events.HandleBreak;
 import noobanidus.mods.lootr.events.HandleCart;
 import noobanidus.mods.lootr.init.*;
@@ -34,9 +35,11 @@ public class Lootr {
   public static GenericTrigger<Void> CHEST_PREDICATE = null;
   public static GenericTrigger<Void> BARREL_PREDICATE = null;
   public static GenericTrigger<Void> CART_PREDICATE = null;
+  public static GenericTrigger<ResourceLocation> ADVANCEMENT_PREDICATE = null;
   public static final ResourceLocation CHEST_LOCATION = new ResourceLocation(MODID, "chest_opened");
   public static final ResourceLocation BARREL_LOCATION = new ResourceLocation(MODID, "barrel_opened");
   public static final ResourceLocation CART_LOCATION = new ResourceLocation(MODID, "cart_opened");
+  public static final ResourceLocation ADVANCEMENT_LOCAITON = new ResourceLocation(MODID, "advancement");
   public CommandLootr COMMAND_LOOTR;
 
   public Lootr() {
@@ -46,6 +49,7 @@ public class Lootr {
     MinecraftForge.EVENT_BUS.addListener(HandleBreak::onBlockBreak);
     MinecraftForge.EVENT_BUS.addListener(HandleCart::onEntityJoin);
     MinecraftForge.EVENT_BUS.addListener(HandleCart::onEntityTrack);
+    MinecraftForge.EVENT_BUS.addListener(HandleAdvancement::onAdvancement);
     MinecraftForge.EVENT_BUS.addListener(EntityTicker::onServerTick);
     MinecraftForge.EVENT_BUS.addListener(this::onCommands);
 

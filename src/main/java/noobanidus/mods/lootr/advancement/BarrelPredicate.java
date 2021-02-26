@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.advancement;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import net.minecraft.entity.player.ServerPlayerEntity;
 
 import javax.annotation.Nullable;
@@ -12,7 +13,7 @@ public class BarrelPredicate implements IGenericPredicate<Void> {
   }
 
   @Override
-  public IGenericPredicate<Void> deserialize(@Nullable JsonElement element) {
+  public IGenericPredicate<Void> deserialize(@Nullable JsonObject element) {
     return new BarrelPredicate();
   }
 }

@@ -1,0 +1,38 @@
+{
+  "parent": "lootr:root",
+  "display": {
+    "icon": {
+      "item": "lootr:lootr_chest"
+    },
+    "title": {
+      "translate": "lootr.advancements.social.title"
+    },
+    "description": {
+      "translate": "lootr.advancements.social.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "opened_chest": {
+      "trigger": "lootr:advancement",
+      "conditions": {
+        "advancement": "lootr:1chest"
+      }
+    },
+    "opened_barrel": {
+      "trigger": "lootr:advancement",
+      "conditions": {
+        "advancement": "lootr:1barrel"
+      }
+    },
+    "opened_cart": {
+      "trigger": "lootr:advancement",
+      "conditions": {
+        "advancement": "lootr:1cart"
+      }
+    }
+  }
+}
