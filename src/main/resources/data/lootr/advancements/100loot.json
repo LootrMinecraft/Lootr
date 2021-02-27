@@ -19,7 +19,7 @@
     "loot_stat": {
       "trigger": "lootr:score",
       "conditions": {
-        "score": 50
+        "score": 100
       }
     }
   }
