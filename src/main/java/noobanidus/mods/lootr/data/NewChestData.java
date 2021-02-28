@@ -488,6 +488,7 @@ public class NewChestData extends WorldSavedData {
     SpecialChestInventory inventory = data.getInventory(player, pos);
     if (inventory == null) {
       inventory = data.createInventory(player, data.customInventory(), tile);
+      inventory.setBlockPos(pos);
     }
 
     return inventory;
