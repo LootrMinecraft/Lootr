@@ -23,7 +23,9 @@ import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModBlocks;
+import noobanidus.mods.lootr.tiles.ILootTile;
 import noobanidus.mods.lootr.tiles.SpecialLootInventoryTile;
+import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -119,7 +121,8 @@ public class CommandLootr {
       if (!state.isIn(Blocks.CHEST)) {
         c.getSource().sendFeedback(new StringTextComponent("Please stand on the chest you wish to convert."), false);
       } else {
-        NonNullList<ItemStack> contents = ((ChestTileEntity) Objects.requireNonNull(world.getTileEntity(pos))).chestContents;
+        NonNullList<ItemStack> reference = ((ChestTileEntity) Objects.requireNonNull(world.getTileEntity(pos))).chestContents;
+        NonNullList<ItemStack> custom = ChestUtil.copyItemList(reference);
         world.removeTileEntity(pos);
         world.setBlockState(pos, ModBlocks.INVENTORY.getDefaultState().with(ChestBlock.FACING, state.get(ChestBlock.FACING)).with(ChestBlock.WATERLOGGED, state.get(ChestBlock.WATERLOGGED)));
         TileEntity te = world.getTileEntity(pos);
@@ -127,12 +130,25 @@ public class CommandLootr {
           c.getSource().sendFeedback(new StringTextComponent("Unable to convert chest, BlockState is not a Lootr Inventory block."), false);
         } else {
           SpecialLootInventoryTile inventory = (SpecialLootInventoryTile) te;
-          inventory.setCustomInventory(contents);
+          inventory.setCustomInventory(custom);
           inventory.markDirty();
         }
       }
-
-
+      return 1;
+    }));
+    builder.then(Commands.literal("id").executes(c -> {
+      BlockPos pos = new BlockPos(c.getSource().getPos());
+      World world = c.getSource().getWorld();
+      TileEntity te = world.getTileEntity(pos);
+      if (!(te instanceof ILootTile)) {
+        pos = pos.down();
+        te = world.getTileEntity(pos);
+      }
+      if (!(te instanceof ILootTile)) {
+        c.getSource().sendFeedback(new StringTextComponent("Please stand on a valid Lootr chest."), false);
+      } else {
+        c.getSource().sendFeedback(new StringTextComponent("The ID of this inventory is: " + ((ILootTile) te).getTileId().toString()), false);
+      }
       return 1;
     }));
     return builder;

@@ -7,8 +7,10 @@ import net.minecraft.entity.monster.piglin.PiglinTasks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import noobanidus.mods.lootr.Lootr;
@@ -83,7 +85,11 @@ public class ChestUtil {
     if (te instanceof SpecialLootInventoryTile) {
       Lootr.CHEST_PREDICATE.trigger((ServerPlayerEntity) player, null);
       SpecialLootInventoryTile tile = (SpecialLootInventoryTile) te;
-      INamedContainerProvider provider = NewChestData.getInventory(world, tile.getTileId(), tile.getCustomInventory(), (ServerPlayerEntity) player, pos, tile);
+      NonNullList<ItemStack> stacks = null;
+      if (tile.getCustomInventory() != null) {
+        stacks = copyItemList(tile.getCustomInventory());
+      }
+      INamedContainerProvider provider = NewChestData.getInventory(world, tile.getTileId(), stacks, (ServerPlayerEntity) player, pos, tile);
       if (!((ILootTile) te).getOpeners().contains(player.getUniqueID())) {
         player.addStat(ModStats.LOOTED_STAT);
         Lootr.SCORE_PREDICATE.trigger((ServerPlayerEntity) player, null);
@@ -94,5 +100,13 @@ public class ChestUtil {
     } else {
       return false;
     }
+  }
+
+  public static NonNullList<ItemStack> copyItemList(NonNullList<ItemStack> reference) {
+    NonNullList<ItemStack> contents = NonNullList.withSize(reference.size(), ItemStack.EMPTY);
+    for (int i = 0; i < reference.size(); i++) {
+      contents.set(i, reference.get(i).copy());
+    }
+    return contents;
   }
 }
