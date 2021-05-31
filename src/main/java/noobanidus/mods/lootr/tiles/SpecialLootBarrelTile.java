@@ -28,7 +28,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 import noobanidus.mods.lootr.blocks.LootrBarrelBlock;
-import noobanidus.mods.lootr.client.ClientGetter;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.init.ModTiles;
@@ -36,14 +35,12 @@ import noobanidus.mods.lootr.util.Getter;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 @SuppressWarnings({"ConstantConditions", "NullableProblems", "WeakerAccess"})
 public class SpecialLootBarrelTile extends BarrelTileEntity implements ILootTile {
-  public List<UUID> openers = new ArrayList<>();
+  public Set<UUID> openers = new HashSet<>();
   private int specialNumPlayersUsingBarrel;
   private ResourceLocation savedLootTable = null;
   private long seed = -1;
@@ -112,7 +109,7 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ILootTile
   }
 
   @Override
-  public List<UUID> getOpeners() {
+  public Set<UUID> getOpeners() {
     return openers;
   }
 

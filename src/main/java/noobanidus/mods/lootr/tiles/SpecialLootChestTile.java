@@ -40,14 +40,12 @@ import noobanidus.mods.lootr.init.ModTiles;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 @SuppressWarnings({"Duplicates", "ConstantConditions", "NullableProblems", "WeakerAccess"})
 public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
-  public List<UUID> openers = new ArrayList<>();
+  public Set<UUID> openers = new HashSet<>();
   private int ticksSinceSync;
   private int specialNumPlayersUsingChest;
   private ResourceLocation savedLootTable = null;
@@ -208,7 +206,7 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
   }
 
   @Override
-  public List<UUID> getOpeners() {
+  public Set<UUID> getOpeners() {
     return openers;
   }
 

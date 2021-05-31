@@ -21,19 +21,26 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.Dimension;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.DimensionSavedDataManager;
+import net.minecraft.world.storage.FolderName;
 import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
+import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.tiles.ILootTile;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class NewChestData extends WorldSavedData {
   private BlockPos pos;
@@ -122,6 +129,10 @@ public class NewChestData extends WorldSavedData {
 
   public void setInventories(Map<UUID, SpecialChestInventory> inventories) {
     this.inventories = inventories;
+  }
+
+  private boolean clearInventory (UUID uuid) {
+    return inventories.remove(uuid) != null;
   }
 
   @Nullable
@@ -492,6 +503,44 @@ public class NewChestData extends WorldSavedData {
     }
 
     return inventory;
+  }
+
+  public static boolean clearInventories (ServerPlayerEntity player) {
+    return clearInventories(player.getUniqueID());
+  }
+
+  public static boolean clearInventories (UUID uuid) {
+    ServerWorld world = getServerWorld();
+    DimensionSavedDataManager data = world.getSavedData();
+    Path dataPath = world.getServer().func_240776_a_(new FolderName("data"));
+
+    List<String> ids = new ArrayList<>();
+    try (Stream<Path> paths = Files.walk(dataPath)) {
+      paths.forEach(o -> {
+        if (Files.isRegularFile(o)) {
+          String name = o.getFileName().toString();
+          if (name.startsWith("Lootr-")) {
+            ids.add(name.replace(".dat", ""));
+          }
+        }
+      });
+    } catch (IOException e) {
+      return false;
+    }
+
+    int cleared = 0;
+    for (String id : ids) {
+      NewChestData chestData = data.get(() -> null, id);
+      if (chestData != null) {
+        if (chestData.clearInventory(uuid)) {
+          cleared++;
+          chestData.markDirty();
+        }
+      }
+    }
+    data.save();
+    Lootr.LOG.info("Cleared " + cleared + " inventories for play UUID " + uuid.toString());
+    return cleared != 0;
   }
 
   @Nullable

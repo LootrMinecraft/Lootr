@@ -1,6 +1,9 @@
 package noobanidus.mods.lootr.commands;
 
+import com.google.common.collect.Lists;
+import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import net.minecraft.block.Block;
@@ -21,6 +24,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.*;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
+import noobanidus.mods.lootr.data.NewChestData;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.tiles.ILootTile;
@@ -28,9 +33,7 @@ import noobanidus.mods.lootr.tiles.SpecialLootInventoryTile;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class CommandLootr {
@@ -47,6 +50,7 @@ public class CommandLootr {
 
   private static List<ResourceLocation> tables = null;
   private static List<String> tableNames = null;
+  private static Map<String, UUID> profileMap = new HashMap<>();
 
   private static List<ResourceLocation> getTables() {
     if (tables == null) {
@@ -54,6 +58,10 @@ public class CommandLootr {
       tableNames = tables.stream().map(ResourceLocation::toString).collect(Collectors.toList());
     }
     return tables;
+  }
+
+  private static List<String> getProfiles() {
+    return Lists.newArrayList(ServerLifecycleHooks.getCurrentServer().getPlayerProfileCache().usernameToProfileEntryMap.keySet());
   }
 
   private static List<String> getTableNames() {
@@ -84,6 +92,10 @@ public class CommandLootr {
         .suggests((c, build) -> ISuggestionProvider.suggest(getTableNames(), build));
   }
 
+  private RequiredArgumentBuilder<CommandSource, String> suggestProfiles() {
+    return Commands.argument("profile", StringArgumentType.string()).suggests((c, build) -> ISuggestionProvider.suggest(getProfiles(), build));
+  }
+
   public LiteralArgumentBuilder<CommandSource> builder(LiteralArgumentBuilder<CommandSource> builder) {
     builder.executes(c -> {
       c.getSource().sendFeedback(new TranslationTextComponent("lootr.commands.usage"), false);
@@ -101,6 +113,19 @@ public class CommandLootr {
       return 1;
     }).then(suggestTables().executes(c -> {
       createBlock(c.getSource(), ModBlocks.CHEST, ResourceLocationArgument.getResourceLocation(c, "table"));
+      return 1;
+    })));
+    builder.then(Commands.literal("clear").executes(c -> {
+      c.getSource().sendFeedback(new StringTextComponent("Must provide player name."), true);
+      return 1;
+    }).then(suggestProfiles().executes(c -> {
+      String playerName = StringArgumentType.getString(c, "profile");
+      GameProfile profile = c.getSource().getServer().getPlayerProfileCache().getGameProfileForUsername(playerName);
+      if (profile == null) {
+        c.getSource().sendErrorMessage(new StringTextComponent("Invalid player name: " + playerName + ", profile not found in the cache."));
+        return 0;
+      }
+      c.getSource().sendFeedback(new StringTextComponent(NewChestData.clearInventories(profile.getId()) ? "Cleared stored inventories for " + playerName : "No stored inventories for " + playerName + " to clear"), true);
       return 1;
     })));
     builder.then(Commands.literal("cart").executes(c -> {
