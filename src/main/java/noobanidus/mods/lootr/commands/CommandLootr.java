@@ -28,7 +28,7 @@ import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.data.NewChestData;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModBlocks;
-import noobanidus.mods.lootr.tiles.ILootTile;
+import noobanidus.mods.lootr.api.ILootTile;
 import noobanidus.mods.lootr.tiles.SpecialLootInventoryTile;
 import noobanidus.mods.lootr.util.ChestUtil;
 

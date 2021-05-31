@@ -27,6 +27,7 @@ import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
+import noobanidus.mods.lootr.api.ILootTile;
 import noobanidus.mods.lootr.blocks.LootrBarrelBlock;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlocks;
@@ -83,13 +84,13 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ILootTile
 
   @Override
   @SuppressWarnings({"unused", "Duplicates"})
-  public void fillWithLoot(PlayerEntity player, IInventory inventory) {
+  public void fillWithLoot(PlayerEntity player, IInventory inventory, @Nullable ResourceLocation overrideTable, long seed) {
     if (this.world != null && this.savedLootTable != null && this.world.getServer() != null) {
-      LootTable loottable = this.world.getServer().getLootTableManager().getLootTableFromLocation(this.savedLootTable);
+      LootTable loottable = this.world.getServer().getLootTableManager().getLootTableFromLocation(overrideTable != null ? overrideTable : this.savedLootTable);
       if (player instanceof ServerPlayerEntity) {
-        CriteriaTriggers.PLAYER_GENERATES_CONTAINER_LOOT.test((ServerPlayerEntity) player, this.lootTable);
+        CriteriaTriggers.PLAYER_GENERATES_CONTAINER_LOOT.test((ServerPlayerEntity) player, overrideTable != null ? overrideTable : this.lootTable);
       }
-      LootContext.Builder builder = (new LootContext.Builder((ServerWorld) this.world)).withParameter(LootParameters.field_237457_g_, Vector3d.copyCentered(this.pos)).withSeed(ConfigManager.RANDOMISE_SEED.get() ? ThreadLocalRandom.current().nextLong() : this.seed);
+      LootContext.Builder builder = (new LootContext.Builder((ServerWorld) this.world)).withParameter(LootParameters.field_237457_g_, Vector3d.copyCentered(this.pos)).withSeed(ConfigManager.RANDOMISE_SEED.get() ? ThreadLocalRandom.current().nextLong() : seed == Long.MIN_VALUE ? this.seed : seed);
       if (player != null) {
         builder.withLuck(player.getLuck()).withParameter(LootParameters.THIS_ENTITY, player);
       }
@@ -99,13 +100,13 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ILootTile
   }
 
   @Override
-  public void setTable(ResourceLocation table) {
-    this.savedLootTable = table;
+  public ResourceLocation getTable() {
+    return savedLootTable;
   }
 
   @Override
-  public void setSeed(long seed) {
-    this.seed = seed;
+  public long getSeed() {
+    return seed;
   }
 
   @Override

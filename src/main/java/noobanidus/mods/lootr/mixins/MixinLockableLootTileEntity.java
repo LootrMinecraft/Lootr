@@ -12,7 +12,7 @@ import net.minecraft.world.IServerWorld;
 import net.minecraft.world.chunk.IChunk;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.config.ConfigManager;
-import noobanidus.mods.lootr.tiles.ILootTile;
+import noobanidus.mods.lootr.api.ILootTile;
 import noobanidus.mods.lootr.world.processor.LootrChestProcessor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

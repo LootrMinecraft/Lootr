@@ -8,6 +8,8 @@ import noobanidus.mods.lootr.advancement.AdvancementPredicate;
 import noobanidus.mods.lootr.advancement.ChestPredicate;
 import noobanidus.mods.lootr.advancement.GenericTrigger;
 import noobanidus.mods.lootr.advancement.LootedStatPredicate;
+import noobanidus.mods.lootr.api.LootrHooks;
+import noobanidus.mods.lootr.impl.LootrHooksImpl;
 import noobanidus.mods.lootr.init.ModMisc;
 import noobanidus.mods.lootr.init.ModStats;
 import noobanidus.mods.lootr.networking.PacketHandler;
@@ -24,6 +26,7 @@ public class CommonSetup {
       ModStats.load();
       Lootr.SCORE_PREDICATE = CriteriaTriggers.register(new GenericTrigger<>(Lootr.SCORE_LOCATION, new LootedStatPredicate()));
       PacketHandler.registerMessages();
+      LootrHooks.INSTANCE = new LootrHooksImpl();
     });
   }
 }

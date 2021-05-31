@@ -25,6 +25,7 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.IPacket;
 import net.minecraft.util.*;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.Color;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
@@ -34,6 +35,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.network.NetworkHooks;
+import noobanidus.mods.lootr.api.ILootCart;
+import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.init.ModEntities;
 import noobanidus.mods.lootr.networking.OpenCart;
@@ -41,12 +44,13 @@ import noobanidus.mods.lootr.networking.PacketHandler;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
-public class LootrChestMinecartEntity extends ContainerMinecartEntity {
-  private List<UUID> openers = new ArrayList<>();
+public class LootrChestMinecartEntity extends ContainerMinecartEntity implements ILootCart {
+  private Set<UUID> openers = new HashSet<>();
   private boolean opened = false;
 
   public LootrChestMinecartEntity(EntityType<LootrChestMinecartEntity> type, World world) {
@@ -57,7 +61,7 @@ public class LootrChestMinecartEntity extends ContainerMinecartEntity {
     super(ModEntities.LOOTR_MINECART_ENTITY, x, y, z, worldIn);
   }
 
-  public List<UUID> getOpeners() {
+  public Set<UUID> getOpeners() {
     return openers;
   }
 
@@ -186,14 +190,13 @@ public class LootrChestMinecartEntity extends ContainerMinecartEntity {
     }
   }
 
-  public void addLoot(@Nullable PlayerEntity player, IInventory inventory) {
+  public void addLoot(@Nullable PlayerEntity player, IInventory inventory, @Nullable ResourceLocation overrideTable, long seed) {
     if (this.lootTable != null && this.world.getServer() != null) {
-      LootTable loottable = this.world.getServer().getLootTableManager().getLootTableFromLocation(this.lootTable);
+      LootTable loottable = this.world.getServer().getLootTableManager().getLootTableFromLocation(overrideTable != null ? overrideTable : this.lootTable);
       if (player instanceof ServerPlayerEntity) {
-        CriteriaTriggers.PLAYER_GENERATES_CONTAINER_LOOT.test((ServerPlayerEntity) player, this.lootTable);
+        CriteriaTriggers.PLAYER_GENERATES_CONTAINER_LOOT.test((ServerPlayerEntity) player, overrideTable != null ? overrideTable : this.lootTable);
       }
-
-      LootContext.Builder lootcontext$builder = (new LootContext.Builder((ServerWorld) this.world)).withParameter(LootParameters.field_237457_g_, this.getPositionVec()).withSeed(this.lootTableSeed);
+      LootContext.Builder lootcontext$builder = (new LootContext.Builder((ServerWorld) this.world)).withParameter(LootParameters.field_237457_g_, this.getPositionVec()).withSeed(ConfigManager.RANDOMISE_SEED.get() ? ThreadLocalRandom.current().nextLong() : seed == Long.MIN_VALUE ? this.lootTableSeed : seed);
       lootcontext$builder.withParameter(LootParameters.KILLER_ENTITY, this);
       if (player != null) {
         lootcontext$builder.withLuck(player.getLuck()).withParameter(LootParameters.THIS_ENTITY, player);

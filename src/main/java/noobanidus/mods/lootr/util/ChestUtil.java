@@ -17,7 +17,7 @@ import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.data.NewChestData;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModStats;
-import noobanidus.mods.lootr.tiles.ILootTile;
+import noobanidus.mods.lootr.api.ILootTile;
 import noobanidus.mods.lootr.tiles.SpecialLootInventoryTile;
 
 import java.util.HashSet;

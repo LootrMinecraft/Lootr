@@ -33,8 +33,9 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
+import noobanidus.mods.lootr.api.ILootTile;
 import noobanidus.mods.lootr.config.ConfigManager;
-import noobanidus.mods.lootr.data.NewChestData;
+import noobanidus.mods.lootr.data.SpecialChestInventory;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.init.ModTiles;
 
@@ -88,13 +89,13 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
   public void fillWithLoot(@Nullable PlayerEntity player) {
   }
 
-  public void fillWithLoot(PlayerEntity player, IInventory inventory) {
+  public void fillWithLoot(PlayerEntity player, IInventory inventory, @Nullable ResourceLocation overrideTable, long seed) {
     if (this.world != null && this.savedLootTable != null && this.world.getServer() != null) {
-      LootTable loottable = this.world.getServer().getLootTableManager().getLootTableFromLocation(this.savedLootTable);
+      LootTable loottable = this.world.getServer().getLootTableManager().getLootTableFromLocation(overrideTable != null ? overrideTable : this.savedLootTable);
       if (player instanceof ServerPlayerEntity) {
-        CriteriaTriggers.PLAYER_GENERATES_CONTAINER_LOOT.test((ServerPlayerEntity) player, this.lootTable);
+        CriteriaTriggers.PLAYER_GENERATES_CONTAINER_LOOT.test((ServerPlayerEntity) player, overrideTable != null ? overrideTable : this.lootTable);
       }
-      LootContext.Builder builder = (new LootContext.Builder((ServerWorld) this.world)).withParameter(LootParameters.field_237457_g_, Vector3d.copyCentered(this.pos)).withSeed(ConfigManager.RANDOMISE_SEED.get() ? ThreadLocalRandom.current().nextLong() : this.seed);
+      LootContext.Builder builder = (new LootContext.Builder((ServerWorld) this.world)).withParameter(LootParameters.field_237457_g_, Vector3d.copyCentered(this.pos)).withSeed(ConfigManager.RANDOMISE_SEED.get() ? ThreadLocalRandom.current().nextLong() : seed == Long.MIN_VALUE ? this.seed : seed);
       if (player != null) {
         builder.withLuck(player.getLuck()).withParameter(LootParameters.THIS_ENTITY, player);
       }
@@ -192,17 +193,14 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
     }
   }
 
-
   @Override
-  public void setTable(ResourceLocation table) {
-    this.savedLootTable = table;
-    this.lootTable = table;
+  public ResourceLocation getTable() {
+    return savedLootTable;
   }
 
   @Override
-  public void setSeed(long seed) {
-    this.seed = seed;
-    this.lootTableSeed = seed;
+  public long getSeed() {
+    return seed;
   }
 
   @Override
@@ -228,7 +226,7 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
     for (PlayerEntity playerentity : world.getEntitiesWithinAABB(PlayerEntity.class, new AxisAlignedBB((double) ((float) x - 5.0F), (double) ((float) y - 5.0F), (double) ((float) z - 5.0F), (double) ((float) (x + 1) + 5.0F), (double) ((float) (y + 1) + 5.0F), (double) ((float) (z + 1) + 5.0F)))) {
       if (playerentity.openContainer instanceof ChestContainer) {
         IInventory inv = ((ChestContainer) playerentity.openContainer).getLowerChestInventory();
-        if ((inv instanceof NewChestData.SpecialChestInventory && ((NewChestData.SpecialChestInventory) inv).getPos().equals(tile.getPos())) || (inv == tile || inv instanceof DoubleSidedInventory && ((DoubleSidedInventory) inv).isPartOfLargeChest(tile))) {
+        if ((inv instanceof SpecialChestInventory && ((SpecialChestInventory) inv).getPos().equals(tile.getPos())) || (inv == tile || inv instanceof DoubleSidedInventory && ((DoubleSidedInventory) inv).isPartOfLargeChest(tile))) {
           ++i;
         }
       }
