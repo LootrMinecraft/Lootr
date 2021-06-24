@@ -1,205 +1,44 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        mavenLocal()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
-        }
-        maven {
-            url = "https://repo.spongepowered.org/repository/maven-public/"
-        }
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
-        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
-    }
-}
 plugins {
     id 'com.github.johnrengelman.shadow' version '5.2.0'
 }
 
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'maven-publish'
+apply plugin: 'java'
 apply plugin: 'eclipse'
-apply plugin: 'org.spongepowered.mixin'
+apply from: 'gradle/property_helper.gradle'
+apply from: 'gradle/property_loader.gradle'
 
-version = "${minecraft_version}-${mod_version}"
-group = "noobanidus.mods.lootr"
-archivesBaseName = "lootr"
+// Load mod related properties
+ext.modName = getRequiredString('mod_name')
+ext.modAuthor = getRequiredString('mod_author')
+ext.modId = getRequiredString('mod_id')
+ext.modCredits = getDefaultString('mod_credits', ext.modAuthor)
+ext.modDescription = getOptionalString('mod_description')
+ext.modChangelog = getOptionalString('mod_changelog')
+ext.modHomepage = getOptionalString('mod_homepage')
+ext.modSource = getOptionalString('mod_source')
+ext.modIssues = getOptionalString('mod_issues')
+ext.modLicense = getOptionalString('mod_license')
 
-sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
+// Load Minecraft specific properties
+ext.mcVersion = getRequiredString('minecraft_version')
 
-configurations {
-    shade
-}
+// Load build-time modules
+apply from: 'gradle/build_number.gradle'
+apply from: 'gradle/git_changelog.gradle'
+apply from: 'gradle/patreon.gradle'
+apply from: 'gradle/common_manifest.gradle'
+apply from: 'gradle/common_artifacts.gradle'
+apply from: 'gradle/api.gradle'
+apply from: 'gradle/forge.gradle'
+apply from: 'gradle/shadow.gradle'
+apply from: 'gradle/patchouli.gradle'
+apply from: 'gradle/jei.gradle'
+apply from: 'gradle/dynamic_trees.gradle'
+apply from: 'gradle/mysticalworld.gradle'
+apply from: 'gradle/minify_jsons.gradle'
 
-sourceSets.main.resources {
-    srcDir 'src/generated/resources'
-}
-
-minecraft {
-    mappings channel: 'snapshot', version: "${mcp_mappings}"
-
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-
-    runs {
-        client {
-            taskName 'runClient'
-
-            workingDirectory project.file('run')
-
-            //property 'forge.logging.markers', 'CORE,REGISTRIES'
-            arg "-mixin.config=lootr.mixins.json"
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                lootr {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        server {
-            taskName 'runServer'
-
-            workingDirectory project.file('run')
-
-            //property 'forge.logging.markers', 'CORE,REGISTRIES'
-            arg "-mixin.config=lootr.mixins.json"
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                lootr {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        data {
-            taskName 'runData'
-
-            workingDirectory project.file('run')
-
-            environment 'target', 'fmluserdevdata'
-
-            //property 'forge.logging.markers', 'CORE,REGISTRIES'
-            arg "-mixin.config=lootr.mixins.json"
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                lootr {
-                    source sourceSets.main
-                }
-            }
-
-            args '--mod', 'lootr', '--all', '--output', '"' + rootProject.file('src/generated/resources/') + '"',
-                    '--existing', '"' + rootProject.file('src/main/resources') + '"'
-//, '--existing', '"' + rootProject.file('src/generated/resources') + '"'
-
-        }
-    }
-}
-
-repositories {
-    maven {
-        url "http://maven.tterrag.com/"
-    }
-    maven { // JEI
-        url "https://dvs1.progwml6.com/files/maven"
-    }
-    maven {
-        name = "Jared"
-        url = "https://maven.blamejared.com"
-    }
-    flatDir {
-        dirs 'libs'
-    }
-    maven {
-        name = "TehNut's Maven (HWYLA)"
-        url "https://maven.tehnut.info/"
-    }
-    maven { url = 'https://repo.spongepowered.org/maven/' }
-    maven { url = 'https://dist.creeper.host/Sponge/maven' }
-    jcenter()
-    mavenCentral()
-}
-
-jar {
-    manifest {
-        attributes([
-                "Specification-Title"     : "Lootr",
-                "Specification-Vendor"    : "Noobanidus",
-                "Specification-Version"   : "2",
-                "Implementation-Title"    : project.name,
-                "Implementation-Version"  : "${version}",
-                "Implementation-Vendor"   : "noobanidus",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                "MixinConfigs"            : "lootr.mixins.json"
-        ])
-    }
-}
-
-task apiJar(type: Jar) {
-    from(sourceSets.main.output)
-    include 'noobanidus/mods/lootr/api/**'
-
-    classifier = 'api'
-}
-
-task deobfJar(type: Jar) {
-    from sourceSets.main.output
-    classifier = 'deobf'
-}
-
-build.dependsOn apiJar
-build.dependsOn deobfJar
-
-dependencies {
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    compile fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}")
-    compile fg.deobf("mcp.mobius.waila:Hwyla:${hwyla_version}")
-    compile 'org.spongepowered:mixin:0.8'
-    annotationProcessor 'org.spongepowered:mixin:0.8:processor'
-}
-
-mixin {
-    add sourceSets.main, "lootr.refmap.json"
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            groupId project.group
-            artifactId project.archivesBaseName
-            version project.version
-            from components.java
-
-            artifact apiJar {
-            }
-
-            artifact shadowJar {
-            }
-
-            artifact deobfJar {
-            }
-
-            pom.withXml {
-                asNode().dependencies.dependency.each {
-                    dep -> dep.parent().remove(dep)
-                }
-            }
-        }
-    }
-    repositories {
-        maven {
-            url "file:///" + System.getenv("local_maven")
-
-        }
-    }
-}
+// Load publishing modules
+apply from: 'gradle/maven.gradle'
+apply from: 'gradle/signing.gradle'
+apply from: 'gradle/curseforge.gradle'
+apply from: 'gradle/version_checker.gradle'
