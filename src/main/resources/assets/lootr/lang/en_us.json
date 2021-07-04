@@ -8,6 +8,7 @@
   "block.lootr.lootr_trapped_chest": "Loot Chest",
   "block.lootr.lootr_barrel": "Loot Barrel",
   "block.lootr.lootr_inventory": "Loot Chest",
+  "block.lootr.trophy": "Centennial Trophy",
   "entity.lootr.lootr_minecart": "Minecart with Chest",
   "lootr.commands.usage": "/lootr barrel | barrel <loot-table> | chest | chest <loot-table> | cart | cart <loot-table> | convert | custom <id>",
   "lootr.commands.create": "Created a Lootr %s at %s using the loot table %s.",

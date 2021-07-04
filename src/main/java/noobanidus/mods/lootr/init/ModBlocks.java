@@ -1,17 +1,18 @@
 package noobanidus.mods.lootr.init;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.TrappedChestBlock;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.IBlockReader;
+import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.RegistryEvent;
 import noobanidus.mods.lootr.Lootr;
-import noobanidus.mods.lootr.blocks.LootrBarrelBlock;
-import noobanidus.mods.lootr.blocks.LootrChestBlock;
-import noobanidus.mods.lootr.blocks.LootrInventoryBlock;
-import noobanidus.mods.lootr.blocks.LootrTrappedChestBlock;
+import noobanidus.mods.lootr.blocks.*;
 import noobanidus.mods.lootr.tiles.SpecialLootChestTile;
 import noobanidus.mods.lootr.tiles.SpecialTrappedLootChestTile;
 
@@ -24,14 +25,17 @@ public class ModBlocks {
 
   public static LootrInventoryBlock INVENTORY = new LootrInventoryBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(2.5f).sound(SoundType.WOOD));
 
+  public static Block TROPHY = new TrophyBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(15f).sound(SoundType.METAL).harvestTool(ToolType.PICKAXE).harvestLevel(0).notSolid().setLightLevel((o) -> 15));
+
   static {
     BARREL.setRegistryName(Lootr.MODID, "lootr_barrel");
     CHEST.setRegistryName(Lootr.MODID, "lootr_chest");
     TRAPPED_CHEST.setRegistryName(Lootr.MODID, "lootr_trapped_chest");
     INVENTORY.setRegistryName(Lootr.MODID, "lootr_inventory");
+    TROPHY.setRegistryName(Lootr.MODID, "trophy");
   }
 
   public static void registerBlocks(RegistryEvent.Register<Block> event) {
-    event.getRegistry().registerAll(BARREL, CHEST, TRAPPED_CHEST, INVENTORY);
+    event.getRegistry().registerAll(BARREL, CHEST, TRAPPED_CHEST, INVENTORY, TROPHY);
   }
 }

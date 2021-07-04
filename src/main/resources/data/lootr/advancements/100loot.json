@@ -2,7 +2,7 @@
   "parent": "lootr:50loot",
   "display": {
     "icon": {
-      "item": "minecraft:netherite_block"
+      "item": "lootr:trophy"
     },
     "title": {
       "translate": "lootr.advancements.100loot.title"
@@ -22,5 +22,8 @@
         "score": 100
       }
     }
+  },
+  "rewards":  {
+    "loot": ["lootr:trophy"]
   }
 }

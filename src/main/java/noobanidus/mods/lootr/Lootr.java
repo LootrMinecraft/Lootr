@@ -3,9 +3,12 @@ package noobanidus.mods.lootr;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -43,6 +46,13 @@ public class Lootr {
   public static final ResourceLocation ADVANCEMENT_LOCATION = new ResourceLocation(MODID, "advancement");
   public static final ResourceLocation SCORE_LOCATION = new ResourceLocation(MODID, "score");
   public CommandLootr COMMAND_LOOTR;
+  public static ItemGroup TAB = new ItemGroup(MODID) {
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public ItemStack createIcon() {
+      return new ItemStack(ModBlocks.CHEST);
+    }
+  };
 
   public Lootr() {
     ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigManager.COMMON_CONFIG);
