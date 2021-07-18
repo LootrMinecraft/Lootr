@@ -10,6 +10,7 @@ import noobanidus.mods.lootr.advancement.GenericTrigger;
 import noobanidus.mods.lootr.advancement.LootedStatPredicate;
 import noobanidus.mods.lootr.api.LootrHooks;
 import noobanidus.mods.lootr.impl.LootrHooksImpl;
+import noobanidus.mods.lootr.init.ModLoot;
 import noobanidus.mods.lootr.init.ModMisc;
 import noobanidus.mods.lootr.init.ModStats;
 import noobanidus.mods.lootr.networking.PacketHandler;
@@ -18,6 +19,7 @@ public class CommonSetup {
   public static void init(FMLCommonSetupEvent event) {
     event.enqueueWork(() -> {
       ModMisc.register();
+      ModLoot.register();
       Lootr.CHEST_PREDICATE = CriteriaTriggers.register(new GenericTrigger<>(Lootr.CHEST_LOCATION, new ChestPredicate()));
       Lootr.BARREL_PREDICATE = CriteriaTriggers.register(new GenericTrigger<>(Lootr.BARREL_LOCATION, new ChestPredicate()));
       Lootr.CART_PREDICATE = CriteriaTriggers.register(new GenericTrigger<>(Lootr.CART_LOCATION, new ChestPredicate()));
