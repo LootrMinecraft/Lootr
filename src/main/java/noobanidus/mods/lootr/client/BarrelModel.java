@@ -130,6 +130,15 @@ public class BarrelModel implements IModelGeometry<BarrelModel> {
     }
 
     @Override
+    public TextureAtlasSprite getParticleTexture(@Nonnull IModelData data) {
+      if (data.getData(LootrBarrelBlock.OPENED) == Boolean.TRUE) {
+        return opened.getParticleTexture();
+      } else {
+        return unopened.getParticleTexture();
+      }
+    }
+
+    @Override
     public boolean doesHandlePerspectives() {
       return true;
     }
