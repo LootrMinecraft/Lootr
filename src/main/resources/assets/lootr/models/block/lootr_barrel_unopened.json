@@ -1,6 +1,7 @@
 {
     "parent": "block/cube_bottom_top",
     "textures": {
+        "particle": "lootr:block/barrel_top",
         "top": "lootr:block/barrel_top",
         "side": "lootr:block/barrel_side",
         "bottom": "lootr:block/barrel_bottom"
