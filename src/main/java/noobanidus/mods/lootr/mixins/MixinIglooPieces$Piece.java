@@ -3,10 +3,13 @@ package noobanidus.mods.lootr.mixins;
 import net.minecraft.block.Blocks;
 import net.minecraft.loot.LootTables;
 import net.minecraft.tileentity.LockableLootTileEntity;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IServerWorld;
+import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.structure.IglooPieces;
+import noobanidus.mods.lootr.config.ConfigManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -20,7 +23,14 @@ public class MixinIglooPieces$Piece {
       at = @At(value = "HEAD"),
       cancellable = true)
   protected void handleDataMarker(String function, BlockPos pos, IServerWorld worldIn, Random rand, MutableBoundingBox sbb, CallbackInfo info) {
+    if (ConfigManager.getLootBlacklist().contains(LootTables.CHESTS_IGLOO_CHEST)) {
+      return;
+    }
     if ("chest".equals(function)) {
+      RegistryKey<World> key = worldIn.getWorld().getDimensionKey();
+      if (!ConfigManager.getDimensionWhitelist().contains(key) || ConfigManager.getDimensionBlacklist().contains(key)) {
+        return;
+      }
       worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
       LockableLootTileEntity.setLootTable(worldIn, rand, pos.down(), LootTables.CHESTS_IGLOO_CHEST);
       info.cancel();

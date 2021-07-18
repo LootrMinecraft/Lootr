@@ -18,7 +18,7 @@ public class HandleCart {
   public static void onEntityJoin (EntityJoinWorldEvent event) {
     if (event.getEntity().getType() == EntityType.CHEST_MINECART) {
       ChestMinecartEntity chest = (ChestMinecartEntity) event.getEntity();
-      if (chest.lootTable != null && !chest.world.isRemote && ConfigManager.CONVERT_MINESHAFTS.get()) {
+      if (chest.lootTable != null && !chest.world.isRemote && ConfigManager.CONVERT_MINESHAFTS.get() && ConfigManager.getLootBlacklist().contains(chest.lootTable)) {
         LootrChestMinecartEntity lootr = new LootrChestMinecartEntity(chest.world, chest.getPosX(), chest.getPosY(), chest.getPosZ());
         lootr.setLootTable(chest.lootTable, chest.lootTableSeed);
         event.setCanceled(true);

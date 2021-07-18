@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+// TODO: Convert this to dimension whitelist/blacklist
 @Mixin(OceanRuinPieces.Piece.class)
 public class MixinOceanRuinPieces$Piece {
   @Redirect(

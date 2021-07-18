@@ -2,13 +2,19 @@ package noobanidus.mods.lootr.world.processor;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.block.*;
+import net.minecraft.util.RegistryKey;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IServerWorld;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
+import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.template.IStructureProcessorType;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import net.minecraft.world.gen.feature.template.StructureProcessor;
 import net.minecraft.world.gen.feature.template.Template;
 import net.minecraftforge.common.util.Constants;
+import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.init.ModMisc;
 
@@ -52,9 +58,22 @@ public class LootrChestProcessor extends StructureProcessor {
 
   @Nullable
   public Template.BlockInfo process(IWorldReader world, BlockPos pos, BlockPos blockPos, Template.BlockInfo info1, Template.BlockInfo info2, PlacementSettings placement, @Nullable Template template) {
-
     if (info2.nbt == null || !info2.nbt.contains("LootTable", Constants.NBT.TAG_STRING)) {
       return info2;
+    }
+
+    ResourceLocation table = new ResourceLocation(info2.nbt.getString("LootTable"));
+    if (ConfigManager.getLootBlacklist().contains(table)) {
+      return info2;
+    }
+
+    if (world instanceof IServerWorld) {
+      RegistryKey<World> key = ((IServerWorld)world).getWorld().getDimensionKey();
+      if (!ConfigManager.getDimensionWhitelist().contains(key) || ConfigManager.getDimensionBlacklist().contains(key)) {
+        return info2;
+      }
+    } else {
+      // TODO: Add a log note about being unable to process this for dimension blacklisting.
     }
 
     BlockState state = info2.state;
