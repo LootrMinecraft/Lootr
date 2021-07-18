@@ -25,12 +25,14 @@ public class ConfigManager {
   private static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
 
   public static ForgeConfigSpec COMMON_CONFIG;
-  public static ForgeConfigSpec.BooleanValue RANDOMISE_SEED;
-  public static ForgeConfigSpec.BooleanValue CONVERT_MINESHAFTS;
-  public static ForgeConfigSpec.BooleanValue REPORT_TABLES;
-  public static ForgeConfigSpec.ConfigValue<List<? extends String>> DIMENSION_WHITELIST;
-  public static ForgeConfigSpec.ConfigValue<List<? extends String>> DIMENSION_BLACKLIST;
-  public static ForgeConfigSpec.ConfigValue<List<? extends String>> LOOT_TABLE_BLACKLIST;
+  public static final ForgeConfigSpec.BooleanValue RANDOMISE_SEED;
+  public static final ForgeConfigSpec.BooleanValue CONVERT_MINESHAFTS;
+  public static final ForgeConfigSpec.BooleanValue CONVERT_WOODEN_CHESTS;
+  public static final ForgeConfigSpec.BooleanValue CONVERT_TRAPPED_CHESTS;
+  public static final ForgeConfigSpec.BooleanValue REPORT_TABLES;
+  public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DIMENSION_WHITELIST;
+  public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DIMENSION_BLACKLIST;
+  public static final ForgeConfigSpec.ConfigValue<List<? extends String>> LOOT_TABLE_BLACKLIST;
 
   private static Set<RegistryKey<World>> DIM_WHITELIST = null;
   private static Set<RegistryKey<World>> DIM_BLACKLIST = null;
@@ -39,6 +41,8 @@ public class ConfigManager {
   static {
     RANDOMISE_SEED = COMMON_BUILDER.comment("determine whether or not loot generated is the same for all players using the provided seed, or randomised per player").define("randomise_seed", true);
     CONVERT_MINESHAFTS = COMMON_BUILDER.comment("whether or not mineshaft chest minecarts should be converted to standard loot chests").define("convert_mineshafts", true);
+    CONVERT_WOODEN_CHESTS = COMMON_BUILDER.comment("whether or not the entire forge:chests/wooden tag should be added to the conversion list for structures (if they are backed by LockableLootTileEntity)").define("convert_wooden_chests", true);
+    CONVERT_TRAPPED_CHESTS = COMMON_BUILDER.comment("whether or not the entire forge:chests/trapped tag should be added to the conversion list for structures (if they are backed by LockableLootTileEntity").define("convert_trapped_chests", true);
     REPORT_TABLES = COMMON_BUILDER.comment("catches loot chest creation that this mod cannot convert, reporting the loot table, location and mod").define("report_tables", false);
     List<? extends String> empty = Collections.emptyList();
     Predicate<Object> validator = o -> o instanceof String && ((String)o).contains(":");
