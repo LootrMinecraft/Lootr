@@ -114,7 +114,7 @@ public class NewChestData extends WorldSavedData {
   private LootFiller customInventory() {
     return (player, inventory, table, seed) -> {
       for (int i = 0; i < reference.size(); i++) {
-        inventory.setInventorySlotContents(i, reference.get(i));
+        inventory.setInventorySlotContents(i, reference.get(i).copy());
       }
     };
   }
