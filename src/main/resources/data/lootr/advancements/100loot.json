@@ -2,7 +2,7 @@
   "parent": "lootr:50loot",
   "display": {
     "icon": {
-      "item": "lootr:trophy"
+      "item": "minecraft:netherite_block"
     },
     "title": {
       "translate": "lootr.advancements.100loot.title"
