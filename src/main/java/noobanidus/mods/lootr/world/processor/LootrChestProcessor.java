@@ -6,7 +6,6 @@ import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IServerWorld;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.template.IStructureProcessorType;
@@ -14,14 +13,15 @@ import net.minecraft.world.gen.feature.template.PlacementSettings;
 import net.minecraft.world.gen.feature.template.StructureProcessor;
 import net.minecraft.world.gen.feature.template.Template;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.registries.ForgeRegistries;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.init.ModMisc;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @SuppressWarnings("NullableProblems")
 public class LootrChestProcessor extends StructureProcessor {
@@ -35,12 +35,26 @@ public class LootrChestProcessor extends StructureProcessor {
 
   private static Map<Block, Block> replacements = null;
 
-  public static BlockState replacement (BlockState original) {
+  private static final List<ResourceLocation> QUARK_CHESTS = Arrays.asList(new ResourceLocation("quark", "oak_chest"), new ResourceLocation("quark", "spruce_chest"), new ResourceLocation("quark", "birch_chest"), new ResourceLocation("quark", "jungle_chest"), new ResourceLocation("quark", "acacia_chest"), new ResourceLocation("quark", "dark_oak_chest"), new ResourceLocation("quark", "warped_chest"), new ResourceLocation("quark", "crimson_chest")); // Quark normal chests
+  private static final List<ResourceLocation> QUARK_TRAPPED_CHESTS = Arrays.asList(new ResourceLocation("quark", "oak_trapped_chest"), new ResourceLocation("quark", "spruce_trapped_chest"), new ResourceLocation("quark", "birch_trapped_chest"), new ResourceLocation("quark", "jungle_trapped_chest"), new ResourceLocation("quark", "acacia_trapped_chest"), new ResourceLocation("quark", "dark_oak_trapped_chest"), new ResourceLocation("quark", "warped_trapped_chest"), new ResourceLocation("quark", "crimson_trapped_chest"));
+
+  private static void addReplacement (Map<Block, Block> replacementsMap, ResourceLocation location, Block replacement) {
+    Block block = ForgeRegistries.BLOCKS.getValue(location);
+    if (block != null) {
+      replacements.put(block, replacement);
+    }
+  }
+
+  public static BlockState replacement(BlockState original) {
     if (replacements == null) {
       replacements = new HashMap<>();
       replacements.put(Blocks.CHEST, ModBlocks.CHEST);
       replacements.put(Blocks.BARREL, ModBlocks.BARREL);
       replacements.put(Blocks.TRAPPED_CHEST, ModBlocks.TRAPPED_CHEST);
+      if (ModList.get().isLoaded("quark")) {
+        QUARK_CHESTS.forEach(o -> addReplacement(replacements, o, ModBlocks.CHEST));
+        QUARK_TRAPPED_CHESTS.forEach(o -> addReplacement(replacements, o, ModBlocks.TRAPPED_CHEST));
+      }
     }
 
     Block replacement = replacements.get(original.getBlock());
@@ -69,7 +83,7 @@ public class LootrChestProcessor extends StructureProcessor {
     }
 
     if (world instanceof IServerWorld) {
-      RegistryKey<World> key = ((IServerWorld)world).getWorld().getDimensionKey();
+      RegistryKey<World> key = ((IServerWorld) world).getWorld().getDimensionKey();
       if (!ConfigManager.getDimensionWhitelist().contains(key) || ConfigManager.getDimensionBlacklist().contains(key)) {
         return info2;
       }
