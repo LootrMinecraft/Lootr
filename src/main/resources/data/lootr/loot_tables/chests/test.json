@@ -6,16 +6,16 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minecraft:barrel",
-          "conditions": [
+          "name": "minecraft:barrel"
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "lootr:loot_count",
+          "operations": [
             {
-              "condition": "lootr:loot_count",
-              "operations": [
-                {
-                  "type": "less_than",
-                  "value": 3
-                }
-              ]
+              "type": "less_than",
+              "value": 3
             }
           ]
         }
