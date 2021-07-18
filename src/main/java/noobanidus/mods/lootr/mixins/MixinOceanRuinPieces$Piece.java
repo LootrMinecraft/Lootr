@@ -31,7 +31,7 @@ public class MixinOceanRuinPieces$Piece {
         return;
       }
       RegistryKey<World> key = worldIn.getWorld().getDimensionKey();
-      if (!ConfigManager.getDimensionWhitelist().contains(key) || ConfigManager.getDimensionBlacklist().contains(key)) {
+      if (ConfigManager.isDimensionBlocked(key)) {
         return;
       }
       worldIn.setBlockState(pos, ModBlocks.CHEST.getDefaultState().with(ChestBlock.WATERLOGGED, worldIn.getFluidState(pos).isTagged(FluidTags.WATER)), 2);

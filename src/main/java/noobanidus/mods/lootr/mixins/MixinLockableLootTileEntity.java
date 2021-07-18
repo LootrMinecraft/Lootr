@@ -42,7 +42,7 @@ public class MixinLockableLootTileEntity {
       if (replacement != null) {
         IServerWorld world = (IServerWorld) reader;
         RegistryKey<World> key = world.getWorld().getDimensionKey();
-        if (!ConfigManager.getDimensionWhitelist().contains(key) || ConfigManager.getDimensionBlacklist().contains(key)) {
+        if (ConfigManager.isDimensionBlocked(key)) {
           return;
         }
         IChunk chunk = world.getChunk(pos);

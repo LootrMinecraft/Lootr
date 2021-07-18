@@ -14,6 +14,7 @@ import net.minecraft.world.gen.feature.template.PlacementSettings;
 import net.minecraft.world.gen.feature.template.StructureProcessor;
 import net.minecraft.world.gen.feature.template.Template;
 import net.minecraftforge.common.util.Constants;
+import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.init.ModMisc;
@@ -73,7 +74,7 @@ public class LootrChestProcessor extends StructureProcessor {
         return info2;
       }
     } else {
-      // TODO: Add a log note about being unable to process this for dimension blacklisting.
+      Lootr.LOG.info("Unable to determine dimension while converting NBT template with loot table '" + table + "': dimension blacklist/whitelisting may not have been applied.");
     }
 
     BlockState state = info2.state;

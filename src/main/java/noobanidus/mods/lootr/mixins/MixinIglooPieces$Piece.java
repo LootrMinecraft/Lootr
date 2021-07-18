@@ -28,7 +28,7 @@ public class MixinIglooPieces$Piece {
     }
     if ("chest".equals(function)) {
       RegistryKey<World> key = worldIn.getWorld().getDimensionKey();
-      if (!ConfigManager.getDimensionWhitelist().contains(key) || ConfigManager.getDimensionBlacklist().contains(key)) {
+      if (ConfigManager.isDimensionBlocked(key)) {
         return;
       }
       worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);

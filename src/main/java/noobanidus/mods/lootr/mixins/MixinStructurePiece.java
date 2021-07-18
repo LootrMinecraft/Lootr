@@ -33,7 +33,7 @@ public class MixinStructurePiece {
       return original;
     }
     RegistryKey<World> key = worldIn.getWorld().getDimensionKey();
-    if (!ConfigManager.getDimensionWhitelist().contains(key) || ConfigManager.getDimensionBlacklist().contains(key)) {
+    if (ConfigManager.isDimensionBlocked(key)) {
       return StructurePiece.correctFacing(worldIn, posIn, original);
     }
     return StructurePiece.correctFacing(worldIn, posIn, ModBlocks.CHEST.getDefaultState().with(ChestBlock.WATERLOGGED, original.get(ChestBlock.WATERLOGGED)));
@@ -48,7 +48,7 @@ public class MixinStructurePiece {
       return original;
     }
     RegistryKey<World> key = worldIn.getWorld().getDimensionKey();
-    if (!ConfigManager.getDimensionWhitelist().contains(key) || ConfigManager.getDimensionBlacklist().contains(key)) {
+    if (ConfigManager.isDimensionBlocked(key)) {
       return original;
     }
     if (original != null) {
