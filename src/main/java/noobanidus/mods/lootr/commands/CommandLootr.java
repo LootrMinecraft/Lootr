@@ -14,6 +14,7 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.ISuggestionProvider;
 import net.minecraft.command.arguments.ResourceLocationArgument;
+import net.minecraft.command.arguments.Vec3Argument;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootTables;
 import net.minecraft.tileentity.ChestTileEntity;
@@ -25,10 +26,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
+import noobanidus.mods.lootr.api.ILootTile;
 import noobanidus.mods.lootr.data.NewChestData;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModBlocks;
-import noobanidus.mods.lootr.api.ILootTile;
 import noobanidus.mods.lootr.tiles.SpecialLootInventoryTile;
 import noobanidus.mods.lootr.util.ChestUtil;
 
@@ -176,6 +177,22 @@ public class CommandLootr {
       }
       return 1;
     }));
+    builder.then(Commands.literal("openers").then(Commands.argument("location", Vec3Argument.vec3()).executes(c -> {
+      BlockPos position = Vec3Argument.getLocation(c, "location").getBlockPos(c.getSource());
+      World world = c.getSource().getWorld();
+      TileEntity tile = world.getTileEntity(position);
+      if (tile instanceof ILootTile) {
+        Set<UUID> openers = ((ILootTile) tile).getOpeners();
+        c.getSource().sendFeedback(new StringTextComponent("Tile at location " + position + " has " + openers.size() + " openers. UUIDs as follows:"), true);
+        for (UUID uuid : openers) {
+          GameProfile profile = c.getSource().getServer().getPlayerProfileCache().getProfileByUUID(uuid);
+          c.getSource().sendFeedback(new StringTextComponent("UUID: " + uuid.toString() + ", user profile: " + (profile == null ? "null" : profile.getName())), true);
+        }
+      } else {
+        c.getSource().sendFeedback(new StringTextComponent("No Lootr tile exists at location: " + position), false);
+      }
+      return 1;
+    })));
     return builder;
   }
 }
