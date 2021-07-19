@@ -26,7 +26,7 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-@Mod.EventBusSubscriber(modid= Lootr.MODID, bus= Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = Lootr.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ConfigManager {
   private static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
   private static final List<ResourceLocation> QUARK_CHESTS = Arrays.asList(new ResourceLocation("quark", "oak_chest"), new ResourceLocation("quark", "spruce_chest"), new ResourceLocation("quark", "birch_chest"), new ResourceLocation("quark", "jungle_chest"), new ResourceLocation("quark", "acacia_chest"), new ResourceLocation("quark", "dark_oak_chest"), new ResourceLocation("quark", "warped_chest"), new ResourceLocation("quark", "crimson_chest")); // Quark normal chests
@@ -39,6 +39,8 @@ public class ConfigManager {
   public static final ForgeConfigSpec.BooleanValue CONVERT_WOODEN_CHESTS;
   public static final ForgeConfigSpec.BooleanValue CONVERT_TRAPPED_CHESTS;
   public static final ForgeConfigSpec.BooleanValue REPORT_TABLES;
+  public static final ForgeConfigSpec.ConfigValue<List<? extends String>> ADDITIONAL_CHESTS;
+  public static final ForgeConfigSpec.ConfigValue<List<? extends String>> ADDITIONAL_TRAPPED_CHESTS;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DIMENSION_WHITELIST;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DIMENSION_BLACKLIST;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> LOOT_TABLE_BLACKLIST;
@@ -46,6 +48,8 @@ public class ConfigManager {
   private static Set<RegistryKey<World>> DIM_WHITELIST = null;
   private static Set<RegistryKey<World>> DIM_BLACKLIST = null;
   private static Set<ResourceLocation> LOOT_BLACKLIST = null;
+  private static Set<ResourceLocation> ADD_CHESTS = null;
+  private static Set<ResourceLocation> ADD_TRAPPED_CHESTS = null;
   private static Map<Block, Block> replacements = null;
 
   static {
@@ -54,9 +58,11 @@ public class ConfigManager {
     CONVERT_QUARK = COMMON_BUILDER.comment("whether or not quark chests used in world generation for loot purposes should be replaced with Lootr chests").define("convert_quark", true);
     CONVERT_WOODEN_CHESTS = COMMON_BUILDER.comment("whether or not the entire forge:chests/wooden tag should be added to the conversion list for structures (if they are backed by LockableLootTileEntity)").define("convert_wooden_chests", true);
     CONVERT_TRAPPED_CHESTS = COMMON_BUILDER.comment("whether or not the entire forge:chests/trapped tag should be added to the conversion list for structures (if they are backed by LockableLootTileEntity").define("convert_trapped_chests", true);
-    REPORT_TABLES = COMMON_BUILDER.comment("catches loot chest creation that this mod cannot convert, reporting the loot table, location and mod").define("report_tables", false);
     List<? extends String> empty = Collections.emptyList();
-    Predicate<Object> validator = o -> o instanceof String && ((String)o).contains(":");
+    Predicate<Object> validator = o -> o instanceof String && ((String) o).contains(":");
+    REPORT_TABLES = COMMON_BUILDER.comment("catches loot chest creation that this mod cannot convert, reporting the loot table, location and mod").define("report_tables", false);
+    ADDITIONAL_CHESTS = COMMON_BUILDER.comment("a list of additional chests that should be converted [in the format of modid:name, must be a tile entity instance of LockableLootTileEntity]").defineList("additional_chests", empty, validator);
+    ADDITIONAL_TRAPPED_CHESTS = COMMON_BUILDER.comment("a list of additional trapped chests that should be converted [in the format of modid:name, must be a tile entity instanceof LockableLootTileEntity]").defineList("additional_trapped_chests", empty, validator);
     DIMENSION_WHITELIST = COMMON_BUILDER.comment("list of dimensions (to the exclusion of all others) that loot chest should be replaced in [default: blank, allowing all dimensions, e.g., minecraft:overworld]").defineList("dimension_whitelist", empty, validator);
     DIMENSION_BLACKLIST = COMMON_BUILDER.comment("list of dimensions that loot chests should not be replaced in [default: blank, allowing all dimensions, format e.g., minecraft:overworld]").defineList("dimension_blacklist", empty, validator);
     LOOT_TABLE_BLACKLIST = COMMON_BUILDER.comment("list of loot tables which shouldn't be converted [in the format of modid:loot_table]").defineList("loot_table_blacklist", empty, validator);
@@ -70,15 +76,17 @@ public class ConfigManager {
   }
 
   @SubscribeEvent
-  public static void reloadConfig (ModConfig.ModConfigEvent event) {
+  public static void reloadConfig(ModConfig.ModConfigEvent event) {
     COMMON_CONFIG.setConfig(event.getConfig().getConfigData());
     replacements = null;
     DIM_WHITELIST = null;
     DIM_BLACKLIST = null;
     LOOT_BLACKLIST = null;
+    ADD_CHESTS = null;
+    ADD_TRAPPED_CHESTS = null;
   }
 
-  public static Set<RegistryKey<World>> getDimensionWhitelist () {
+  public static Set<RegistryKey<World>> getDimensionWhitelist() {
     if (DIM_WHITELIST == null) {
       DIM_WHITELIST = DIMENSION_WHITELIST.get().stream().map(o -> RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(o))).collect(Collectors.toSet());
     }
@@ -92,21 +100,45 @@ public class ConfigManager {
     return DIM_BLACKLIST;
   }
 
-  public static Set<ResourceLocation> getLootBlacklist () {
+  public static Set<ResourceLocation> getLootBlacklist() {
     if (LOOT_BLACKLIST == null) {
       LOOT_BLACKLIST = LOOT_TABLE_BLACKLIST.get().stream().map(ResourceLocation::new).collect(Collectors.toSet());
     }
     return LOOT_BLACKLIST;
   }
 
-  public static boolean isDimensionBlocked (RegistryKey<World> key) {
+  public static Set<ResourceLocation> getAdditionalChests() {
+    if (ADD_CHESTS == null) {
+      ADD_CHESTS = ADDITIONAL_CHESTS.get().stream().map(ResourceLocation::new).collect(Collectors.toSet());
+    }
+    return ADD_CHESTS;
+  }
+
+  public static Set<ResourceLocation> getAdditionalTrappedChests() {
+    if (ADD_TRAPPED_CHESTS == null) {
+      ADD_TRAPPED_CHESTS = ADDITIONAL_TRAPPED_CHESTS.get().stream().map(ResourceLocation::new).collect(Collectors.toSet());
+    }
+    return ADD_TRAPPED_CHESTS;
+  }
+
+  public static boolean isDimensionBlocked(RegistryKey<World> key) {
     return (!getDimensionWhitelist().isEmpty() && !getDimensionWhitelist().contains(key)) || getDimensionBlacklist().contains(key);
   }
 
-  private static void addReplacement(ResourceLocation location, Block replacement) {
+  private static void addSafeReplacement(ResourceLocation location, Block replacement) {
     Block block = ForgeRegistries.BLOCKS.getValue(location);
     if (block != null) {
       replacements.put(block, replacement);
+    }
+  }
+
+  private static void addUnsafeReplacement(ResourceLocation location, Block replacement, ServerWorld world) {
+    Block block = ForgeRegistries.BLOCKS.getValue(location);
+    if (block != null) {
+      TileEntity tile = block.createTileEntity(block.getDefaultState(), world);
+      if (tile instanceof LockableLootTileEntity) {
+        replacements.put(block, replacement);
+      }
     }
   }
 
@@ -118,8 +150,8 @@ public class ConfigManager {
       replacements.put(Blocks.BARREL, ModBlocks.BARREL);
       replacements.put(Blocks.TRAPPED_CHEST, ModBlocks.TRAPPED_CHEST);
       if (CONVERT_QUARK.get() && ModList.get().isLoaded("quark")) {
-        QUARK_CHESTS.forEach(o -> addReplacement(o, ModBlocks.CHEST));
-        QUARK_TRAPPED_CHESTS.forEach(o -> addReplacement(o, ModBlocks.TRAPPED_CHEST));
+        QUARK_CHESTS.forEach(o -> addSafeReplacement(o, ModBlocks.CHEST));
+        QUARK_TRAPPED_CHESTS.forEach(o -> addSafeReplacement(o, ModBlocks.TRAPPED_CHEST));
       }
       if (CONVERT_WOODEN_CHESTS.get() || CONVERT_TRAPPED_CHESTS.get()) {
         final ServerWorld world = ServerLifecycleHooks.getCurrentServer().getWorld(World.OVERWORLD);
@@ -145,6 +177,11 @@ public class ConfigManager {
             }
           });
         }
+      }
+      if (!getAdditionalChests().isEmpty() || !getAdditionalTrappedChests().isEmpty()) {
+        final ServerWorld world = ServerLifecycleHooks.getCurrentServer().getWorld(World.OVERWORLD);
+        getAdditionalChests().forEach(o -> addUnsafeReplacement(o, ModBlocks.CHEST, world));
+        getAdditionalTrappedChests().forEach(o -> addUnsafeReplacement(o, ModBlocks.TRAPPED_CHEST, world));
       }
     }
 
