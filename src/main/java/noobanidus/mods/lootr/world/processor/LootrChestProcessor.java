@@ -46,7 +46,7 @@ public class LootrChestProcessor extends StructureProcessor {
   private static final List<ResourceLocation> QUARK_CHESTS = Arrays.asList(new ResourceLocation("quark", "oak_chest"), new ResourceLocation("quark", "spruce_chest"), new ResourceLocation("quark", "birch_chest"), new ResourceLocation("quark", "jungle_chest"), new ResourceLocation("quark", "acacia_chest"), new ResourceLocation("quark", "dark_oak_chest"), new ResourceLocation("quark", "warped_chest"), new ResourceLocation("quark", "crimson_chest")); // Quark normal chests
   private static final List<ResourceLocation> QUARK_TRAPPED_CHESTS = Arrays.asList(new ResourceLocation("quark", "oak_trapped_chest"), new ResourceLocation("quark", "spruce_trapped_chest"), new ResourceLocation("quark", "birch_trapped_chest"), new ResourceLocation("quark", "jungle_trapped_chest"), new ResourceLocation("quark", "acacia_trapped_chest"), new ResourceLocation("quark", "dark_oak_trapped_chest"), new ResourceLocation("quark", "warped_trapped_chest"), new ResourceLocation("quark", "crimson_trapped_chest"));
 
-  private static void addReplacement(Map<Block, Block> replacementsMap, ResourceLocation location, Block replacement) {
+  private static void addReplacement(ResourceLocation location, Block replacement) {
     Block block = ForgeRegistries.BLOCKS.getValue(location);
     if (block != null) {
       replacements.put(block, replacement);
@@ -61,8 +61,8 @@ public class LootrChestProcessor extends StructureProcessor {
       replacements.put(Blocks.BARREL, ModBlocks.BARREL);
       replacements.put(Blocks.TRAPPED_CHEST, ModBlocks.TRAPPED_CHEST);
       if (ConfigManager.CONVERT_QUARK.get() && ModList.get().isLoaded("quark")) {
-        QUARK_CHESTS.forEach(o -> addReplacement(replacements, o, ModBlocks.CHEST));
-        QUARK_TRAPPED_CHESTS.forEach(o -> addReplacement(replacements, o, ModBlocks.TRAPPED_CHEST));
+        QUARK_CHESTS.forEach(o -> addReplacement(o, ModBlocks.CHEST));
+        QUARK_TRAPPED_CHESTS.forEach(o -> addReplacement(o, ModBlocks.TRAPPED_CHEST));
       }
       if (ConfigManager.CONVERT_WOODEN_CHESTS.get() || ConfigManager.CONVERT_TRAPPED_CHESTS.get()) {
         final ServerWorld world = ServerLifecycleHooks.getCurrentServer().getWorld(World.OVERWORLD);
