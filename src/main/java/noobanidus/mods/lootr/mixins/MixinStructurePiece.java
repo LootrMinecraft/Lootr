@@ -6,18 +6,14 @@ import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlocks;
-import noobanidus.mods.lootr.world.processor.LootrChestProcessor;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -52,7 +48,7 @@ public class MixinStructurePiece {
       return original;
     }
     if (original != null) {
-      BlockState replacement = LootrChestProcessor.replacement(original);
+      BlockState replacement = ConfigManager.replacement(original);
       if (replacement != null) {
         return replacement;
       }

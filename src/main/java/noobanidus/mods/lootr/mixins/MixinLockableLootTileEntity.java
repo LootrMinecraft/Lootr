@@ -15,7 +15,6 @@ import net.minecraft.world.chunk.IChunk;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.api.ILootTile;
-import noobanidus.mods.lootr.world.processor.LootrChestProcessor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
@@ -38,7 +37,7 @@ public class MixinLockableLootTileEntity {
     }
     if (reader instanceof IServerWorld) {
       BlockState state = reader.getBlockState(pos);
-      BlockState replacement = LootrChestProcessor.replacement(state);
+      BlockState replacement = ConfigManager.replacement(state);
       if (replacement != null) {
         IServerWorld world = (IServerWorld) reader;
         RegistryKey<World> key = world.getWorld().getDimensionKey();
