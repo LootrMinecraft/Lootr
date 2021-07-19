@@ -59,7 +59,7 @@ public class LootrChestProcessor extends StructureProcessor {
       replacements.put(Blocks.CHEST, ModBlocks.CHEST);
       replacements.put(Blocks.BARREL, ModBlocks.BARREL);
       replacements.put(Blocks.TRAPPED_CHEST, ModBlocks.TRAPPED_CHEST);
-      if (ModList.get().isLoaded("quark")) {
+      if (ConfigManager.CONVERT_QUARK.get() && ModList.get().isLoaded("quark")) {
         QUARK_CHESTS.forEach(o -> addReplacement(replacements, o, ModBlocks.CHEST));
         QUARK_TRAPPED_CHESTS.forEach(o -> addReplacement(replacements, o, ModBlocks.TRAPPED_CHEST));
       }
