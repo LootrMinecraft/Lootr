@@ -53,6 +53,7 @@ public class LootrChestProcessor extends StructureProcessor {
     }
   }
 
+  // TODO: Move this to the config module?
   public static BlockState replacement(BlockState original) {
     if (replacements == null) {
       replacements = new HashMap<>();
