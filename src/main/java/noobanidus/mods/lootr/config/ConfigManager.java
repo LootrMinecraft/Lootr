@@ -192,10 +192,18 @@ public class ConfigManager {
 
     BlockState newState = replacement.getDefaultState();
     if (replacement == ModBlocks.CHEST || replacement == ModBlocks.TRAPPED_CHEST) {
-      newState = newState.with(ChestBlock.FACING, original.get(ChestBlock.FACING)).with(ChestBlock.WATERLOGGED, original.get(ChestBlock.WATERLOGGED));
+      newState = newState.with(ChestBlock.FACING, original.get(ChestBlock.FACING));
     } else if (replacement == ModBlocks.BARREL) {
       newState = newState.with(BarrelBlock.PROPERTY_OPEN, original.get(BarrelBlock.PROPERTY_OPEN)).with(BarrelBlock.PROPERTY_FACING, original.get(BarrelBlock.PROPERTY_FACING));
     }
+    newState = waterlogged(newState, original);
     return newState;
+  }
+
+  private static BlockState waterlogged (BlockState state, BlockState original) {
+    if (original.hasProperty(ChestBlock.WATERLOGGED) && state.hasProperty(ChestBlock.WATERLOGGED)) {
+      return state.with(ChestBlock.WATERLOGGED, original.get(ChestBlock.WATERLOGGED));
+    }
+    return state;
   }
 }
