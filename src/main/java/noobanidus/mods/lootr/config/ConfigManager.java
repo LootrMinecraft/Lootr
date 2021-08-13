@@ -3,6 +3,7 @@ package noobanidus.mods.lootr.config;
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
 import net.minecraft.block.*;
+import net.minecraft.state.Property;
 import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.RegistryKey;
@@ -190,19 +191,21 @@ public class ConfigManager {
       return null;
     }
 
-    BlockState newState = replacement.getDefaultState();
-    if (replacement == ModBlocks.CHEST || replacement == ModBlocks.TRAPPED_CHEST) {
-      newState = newState.with(ChestBlock.FACING, original.get(ChestBlock.FACING));
-    } else if (replacement == ModBlocks.BARREL) {
-      newState = newState.with(BarrelBlock.PROPERTY_OPEN, original.get(BarrelBlock.PROPERTY_OPEN)).with(BarrelBlock.PROPERTY_FACING, original.get(BarrelBlock.PROPERTY_FACING));
-    }
-    newState = waterlogged(newState, original);
-    return newState;
+    return copyProperties(replacement.getDefaultState(), original);
   }
 
-  private static BlockState waterlogged (BlockState state, BlockState original) {
-    if (original.hasProperty(ChestBlock.WATERLOGGED) && state.hasProperty(ChestBlock.WATERLOGGED)) {
-      return state.with(ChestBlock.WATERLOGGED, original.get(ChestBlock.WATERLOGGED));
+  private static BlockState copyProperties (BlockState state, BlockState original) {
+    for (Property<?> prop : original.getProperties()) {
+      if (state.hasProperty(prop)) {
+        state = safeReplace(state, original, prop);
+      }
+    }
+    return state;
+  }
+
+  private static <V extends Comparable<V>> BlockState safeReplace (BlockState state, BlockState original, Property<V> property) {
+    if (original.hasProperty(property) && state.hasProperty(property)) {
+      return state.with(property, original.get(property));
     }
     return state;
   }
