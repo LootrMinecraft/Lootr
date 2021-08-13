@@ -42,7 +42,7 @@ public class LootrChestProcessor extends StructureProcessor {
 
     if (world instanceof IServerWorld) {
       RegistryKey<World> key = ((IServerWorld) world).getWorld().getDimensionKey();
-      if (!ConfigManager.getDimensionWhitelist().contains(key) || ConfigManager.getDimensionBlacklist().contains(key)) {
+      if (ConfigManager.isDimensionBlocked(key)) {
         return info2;
       }
     } else {
