@@ -36,6 +36,7 @@ public class MixinOceanRuinPieces$Piece {
       }
       worldIn.setBlockState(pos, ModBlocks.CHEST.getDefaultState().with(ChestBlock.WATERLOGGED, worldIn.getFluidState(pos).isTagged(FluidTags.WATER)), 2);
       LockableLootTileEntity.setLootTable(worldIn, rand, pos, large ? LootTables.CHESTS_UNDERWATER_RUIN_BIG : LootTables.CHESTS_UNDERWATER_RUIN_SMALL);
+      info.cancel();
     }
   }
 }
