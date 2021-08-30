@@ -6,7 +6,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.DoubleSidedInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.ChestContainer;
 import net.minecraft.loot.LootContext;
@@ -41,7 +40,9 @@ import noobanidus.mods.lootr.init.ModTiles;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 @SuppressWarnings({"Duplicates", "ConstantConditions", "NullableProblems", "WeakerAccess"})
@@ -221,12 +222,15 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
   }
 
   public static int calculatePlayersUsing(World world, LockableTileEntity tile, int x, int y, int z) {
+    if (tile == null) {
+      return 0;
+    }
     int i = 0;
 
-    for (PlayerEntity playerentity : world.getEntitiesWithinAABB(PlayerEntity.class, new AxisAlignedBB((double) ((float) x - 5.0F), (double) ((float) y - 5.0F), (double) ((float) z - 5.0F), (double) ((float) (x + 1) + 5.0F), (double) ((float) (y + 1) + 5.0F), (double) ((float) (z + 1) + 5.0F)))) {
+    for (PlayerEntity playerentity : world.getEntitiesWithinAABB(PlayerEntity.class, new AxisAlignedBB(x - 5.0, y - 5.0, z - 5.0, (x + 1) + 5.0, (y + 1) + 5.0, (z + 1) + 5.0))) {
       if (playerentity.openContainer instanceof ChestContainer) {
         IInventory inv = ((ChestContainer) playerentity.openContainer).getLowerChestInventory();
-        if ((inv instanceof SpecialChestInventory && ((SpecialChestInventory) inv).getPos().equals(tile.getPos())) || (inv == tile || inv instanceof DoubleSidedInventory && ((DoubleSidedInventory) inv).isPartOfLargeChest(tile))) {
+        if (inv == tile || (inv instanceof SpecialChestInventory && ((SpecialChestInventory) inv).getPos().equals(tile.getPos()))) {
           ++i;
         }
       }
