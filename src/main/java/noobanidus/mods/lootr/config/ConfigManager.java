@@ -4,6 +4,7 @@ import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
 import net.minecraft.block.*;
 import net.minecraft.state.Property;
+import net.minecraft.state.properties.ChestType;
 import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.RegistryKey;
@@ -204,6 +205,10 @@ public class ConfigManager {
   }
 
   private static <V extends Comparable<V>> BlockState safeReplace (BlockState state, BlockState original, Property<V> property) {
+    // TODO: Bit of a dirty hack
+    if (property == ChestBlock.TYPE && state.hasProperty(property)) {
+      return state.with(ChestBlock.TYPE, ChestType.SINGLE);
+    }
     if (original.hasProperty(property) && state.hasProperty(property)) {
       return state.with(property, original.get(property));
     }
