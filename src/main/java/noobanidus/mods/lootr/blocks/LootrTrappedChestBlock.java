@@ -49,7 +49,9 @@ public class LootrTrappedChestBlock extends TrappedChestBlock {
 
   @Override
   public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
-    if (!ChestBlock.isBlocked(world, pos)) {
+    if (player.isSneaking()) {
+      ChestUtil.handleLootSneak(this, world, pos, player);
+    } else if (!ChestBlock.isBlocked(world, pos)) {
       ChestUtil.handleLootChest(this, world, pos, player);
     }
     return ActionResultType.SUCCESS;

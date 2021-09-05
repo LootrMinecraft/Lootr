@@ -239,6 +239,7 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ILootTile
     }
   }
 
+  @Override
   public void updatePacketViaState() {
     if (world != null && !world.isRemote) {
       BlockState state = world.getBlockState(getPos());

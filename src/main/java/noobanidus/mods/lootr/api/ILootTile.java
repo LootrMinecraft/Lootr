@@ -16,4 +16,5 @@ public interface ILootTile {
   Set<UUID> getOpeners ();
   UUID getTileId ();
 
+  void updatePacketViaState();
 }

@@ -23,11 +23,31 @@ import noobanidus.mods.lootr.tiles.SpecialLootInventoryTile;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
+import java.util.UUID;
 
 @SuppressWarnings("unused")
 public class ChestUtil {
   public static Random random = new Random();
   public static Set<Class<?>> tileClasses = new HashSet<>();
+
+  public static boolean handleLootSneak (Block block, World world, BlockPos pos, PlayerEntity player) {
+    if (world.isRemote()) {
+      return false;
+    }
+    if (player.isSpectator()) {
+      return false;
+    }
+
+    TileEntity te = world.getTileEntity(pos);
+    if (te instanceof ILootTile) {
+      Set<UUID> openers = ((ILootTile)te).getOpeners();
+      openers.remove(player.getUniqueID());
+      ((ILootTile)te).updatePacketViaState();
+      return true;
+    }
+
+    return false;
+  }
 
   public static boolean handleLootChest(Block block, World world, BlockPos pos, PlayerEntity player) {
     if (world.isRemote()) {
