@@ -1,5 +1,7 @@
 {
-    "variants": {
-        "": { "model": "lootr:block/lootr_chest" }
+  "variants": {
+    "": {
+      "model": "lootr:block/lootr_chest"
     }
+  }
 }

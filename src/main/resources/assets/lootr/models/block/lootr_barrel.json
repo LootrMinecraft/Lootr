@@ -1,9 +1,13 @@
 {
   "parent": "block/block",
   "loader": "lootr:barrel",
-  "textures":  {
+  "textures": {
     "particle": "lootr:block/barrel_side"
   },
-  "unopened": {"parent": "lootr:block/lootr_barrel_unopened" },
-  "opened": {"parent": "lootr:block/lootr_opened_barrel" }
+  "unopened": {
+    "parent": "lootr:block/lootr_barrel_unopened"
+  },
+  "opened": {
+    "parent": "lootr:block/lootr_opened_barrel"
+  }
 }

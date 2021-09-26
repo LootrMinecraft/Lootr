@@ -21,11 +21,11 @@ public class PacketHandler {
   private static short index = 0;
 
   public static final SimpleChannel HANDLER = NetworkRegistry.ChannelBuilder
-        .named(new ResourceLocation(Lootr.MODID, "main_network_channel"))
-        .clientAcceptedVersions(PROTOCOL_VERSION::equals)
-        .serverAcceptedVersions(PROTOCOL_VERSION::equals)
-        .networkProtocolVersion(() -> PROTOCOL_VERSION)
-        .simpleChannel();
+      .named(new ResourceLocation(Lootr.MODID, "main_network_channel"))
+      .clientAcceptedVersions(PROTOCOL_VERSION::equals)
+      .serverAcceptedVersions(PROTOCOL_VERSION::equals)
+      .networkProtocolVersion(() -> PROTOCOL_VERSION)
+      .simpleChannel();
 
   public static void registerMessages() {
     registerMessage(OpenCart.class, OpenCart::encode, OpenCart::new, OpenCart::handle);

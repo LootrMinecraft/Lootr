@@ -1,6 +1,5 @@
 package noobanidus.mods.lootr.advancement;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.entity.player.ServerPlayerEntity;
 

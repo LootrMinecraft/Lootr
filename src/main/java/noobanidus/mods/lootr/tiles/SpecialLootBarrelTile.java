@@ -36,7 +36,9 @@ import noobanidus.mods.lootr.util.Getter;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 @SuppressWarnings({"ConstantConditions", "NullableProblems", "WeakerAccess"})

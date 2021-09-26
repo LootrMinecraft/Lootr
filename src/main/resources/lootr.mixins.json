@@ -4,13 +4,13 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "lootr.refmap.json",
   "mixins": [
-    "MixinTemplate",
-    "MixinStructurePiece",
+    "MixinCatSitOnBlockGoal",
     "MixinDungeonsFeature",
+    "MixinIglooPieces$Piece",
     "MixinLockableLootTileEntity",
     "MixinOceanRuinPieces$Piece",
-    "MixinIglooPieces$Piece",
-    "MixinCatSitOnBlockGoal"
+    "MixinStructurePiece",
+    "MixinTemplate"
   ],
   "client": [
   ],

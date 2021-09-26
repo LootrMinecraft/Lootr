@@ -6,8 +6,6 @@ import net.minecraft.block.TrappedChestBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.network.play.server.SEntityEquipmentPacket;
-import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
@@ -27,8 +25,6 @@ import noobanidus.mods.lootr.tiles.SpecialTrappedLootChestTile;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;
-
-import net.minecraft.block.AbstractBlock.Properties;
 
 @SuppressWarnings({"NullableProblems"})
 public class LootrTrappedChestBlock extends TrappedChestBlock {

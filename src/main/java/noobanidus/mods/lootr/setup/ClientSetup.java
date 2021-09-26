@@ -1,6 +1,5 @@
 package noobanidus.mods.lootr.setup;
 
-import net.minecraft.client.renderer.entity.MinecartRenderer;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -32,7 +31,7 @@ public class ClientSetup {
     }
   }
 
-  public static void modelRegister (ModelRegistryEvent event) {
+  public static void modelRegister(ModelRegistryEvent event) {
     ModelLoaderRegistry.registerLoader(new ResourceLocation(Lootr.MODID, "barrel"), BarrelModel.Loader.INSTANCE);
   }
 }

@@ -10,11 +10,13 @@ import java.util.UUID;
 public interface ILootTile {
   void fillWithLoot(PlayerEntity player, IInventory inventory, ResourceLocation table, long seed);
 
-  ResourceLocation getTable ();
-  long getSeed ();
+  ResourceLocation getTable();
 
-  Set<UUID> getOpeners ();
-  UUID getTileId ();
+  long getSeed();
+
+  Set<UUID> getOpeners();
+
+  UUID getTileId();
 
   void updatePacketViaState();
 }

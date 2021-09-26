@@ -2,7 +2,10 @@ package noobanidus.mods.lootr.config;
 
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.ChestBlock;
 import net.minecraft.state.Property;
 import net.minecraft.state.properties.ChestType;
 import net.minecraft.tileentity.LockableLootTileEntity;
@@ -195,7 +198,7 @@ public class ConfigManager {
     return copyProperties(replacement.defaultBlockState(), original);
   }
 
-  private static BlockState copyProperties (BlockState state, BlockState original) {
+  private static BlockState copyProperties(BlockState state, BlockState original) {
     for (Property<?> prop : original.getProperties()) {
       if (state.hasProperty(prop)) {
         state = safeReplace(state, original, prop);
@@ -204,7 +207,7 @@ public class ConfigManager {
     return state;
   }
 
-  private static <V extends Comparable<V>> BlockState safeReplace (BlockState state, BlockState original, Property<V> property) {
+  private static <V extends Comparable<V>> BlockState safeReplace(BlockState state, BlockState original, Property<V> property) {
     // TODO: Bit of a dirty hack
     if (property == ChestBlock.TYPE && state.hasProperty(property)) {
       return state.setValue(ChestBlock.TYPE, ChestType.SINGLE);

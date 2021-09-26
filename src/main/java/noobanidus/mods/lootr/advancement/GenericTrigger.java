@@ -17,8 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.minecraft.advancements.ICriterionTrigger.Listener;
-
 public class GenericTrigger<T> implements ICriterionTrigger<GenericTrigger.Instance<T>> {
   private final ResourceLocation id;
   private final Map<PlayerAdvancements, Listeners<T>> listeners = Maps.newHashMap();

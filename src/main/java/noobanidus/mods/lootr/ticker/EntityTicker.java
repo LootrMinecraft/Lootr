@@ -15,7 +15,7 @@ import java.util.List;
 public class EntityTicker {
   private static final List<LootrChestMinecartEntity> entities = new ArrayList<>();
 
-  public static void onServerTick (TickEvent.ServerTickEvent event) {
+  public static void onServerTick(TickEvent.ServerTickEvent event) {
     if (event.phase == TickEvent.Phase.END) {
       entities.removeIf(Entity::isAddedToWorld);
       for (LootrChestMinecartEntity entity : entities) {
@@ -29,7 +29,7 @@ public class EntityTicker {
     }
   }
 
-  public static void addEntity (LootrChestMinecartEntity entity) {
+  public static void addEntity(LootrChestMinecartEntity entity) {
     entities.add(entity);
   }
 }

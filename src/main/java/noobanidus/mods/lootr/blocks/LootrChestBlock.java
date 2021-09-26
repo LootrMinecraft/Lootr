@@ -1,7 +1,6 @@
 package noobanidus.mods.lootr.blocks;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
@@ -26,13 +25,10 @@ import net.minecraft.world.server.ServerWorld;
 import noobanidus.mods.lootr.data.NewChestData;
 import noobanidus.mods.lootr.init.ModTiles;
 import noobanidus.mods.lootr.tiles.SpecialLootChestTile;
-import noobanidus.mods.lootr.tiles.SpecialLootInventoryTile;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
-
-import net.minecraft.block.AbstractBlock.Properties;
 
 @SuppressWarnings("NullableProblems")
 public class LootrChestBlock extends ChestBlock {

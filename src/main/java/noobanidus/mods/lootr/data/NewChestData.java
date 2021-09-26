@@ -22,7 +22,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.Lootr;
-import noobanidus.mods.lootr.api.ILootTile;
 import noobanidus.mods.lootr.api.LootFiller;
 import noobanidus.mods.lootr.api.LootrLootingEvent;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;

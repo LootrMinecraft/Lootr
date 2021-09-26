@@ -23,7 +23,9 @@
       }
     }
   },
-  "rewards":  {
-    "loot": ["lootr:trophy"]
+  "rewards": {
+    "loot": [
+      "lootr:trophy"
+    ]
   }
 }

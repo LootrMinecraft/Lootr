@@ -11,8 +11,6 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 
-import net.minecraft.block.AbstractBlock.Properties;
-
 public class TrophyBlock extends Block {
   public TrophyBlock(Properties properties) {
     super(properties);

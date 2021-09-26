@@ -2,7 +2,6 @@ package noobanidus.mods.lootr.blocks;
 
 import net.minecraft.block.BarrelBlock;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
@@ -19,8 +18,6 @@ import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;
 import java.util.Random;
-
-import net.minecraft.block.AbstractBlock.Properties;
 
 public class LootrBarrelBlock extends BarrelBlock {
   public static final ModelProperty<Boolean> OPENED = new ModelProperty<>();

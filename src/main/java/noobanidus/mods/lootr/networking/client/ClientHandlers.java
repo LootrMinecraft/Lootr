@@ -11,7 +11,7 @@ import noobanidus.mods.lootr.networking.OpenCart;
 import java.util.function.Supplier;
 
 public class ClientHandlers {
-  public static void handleOpenCart (OpenCart message, Supplier<NetworkEvent.Context> context) {
+  public static void handleOpenCart(OpenCart message, Supplier<NetworkEvent.Context> context) {
     World world = Minecraft.getInstance().level;
     if (world == null) {
       Lootr.LOG.info("Unable to mark entity with id '" + message.entityId + "' as opened as world is null.");

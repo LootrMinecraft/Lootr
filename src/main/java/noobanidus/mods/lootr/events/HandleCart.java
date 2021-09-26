@@ -15,7 +15,7 @@ import noobanidus.mods.lootr.networking.PacketHandler;
 import noobanidus.mods.lootr.ticker.EntityTicker;
 
 public class HandleCart {
-  public static void onEntityJoin (EntityJoinWorldEvent event) {
+  public static void onEntityJoin(EntityJoinWorldEvent event) {
     if (event.getEntity().getType() == EntityType.CHEST_MINECART) {
       ChestMinecartEntity chest = (ChestMinecartEntity) event.getEntity();
       if (!chest.level.isClientSide && chest.lootTable != null && ConfigManager.CONVERT_MINESHAFTS.get() && !ConfigManager.getLootBlacklist().contains(chest.lootTable)) {
@@ -27,7 +27,7 @@ public class HandleCart {
     }
   }
 
-  public static void onEntityTrack (PlayerEvent.StartTracking event) {
+  public static void onEntityTrack(PlayerEvent.StartTracking event) {
     Entity target = event.getTarget();
     if (target.getType() == ModEntities.LOOTR_MINECART_ENTITY) {
       PlayerEntity player = event.getPlayer();

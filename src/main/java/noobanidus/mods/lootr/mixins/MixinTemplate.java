@@ -1,6 +1,5 @@
 package noobanidus.mods.lootr.mixins;
 
-import net.minecraft.item.SpawnEggItem;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.feature.template.PlacementSettings;

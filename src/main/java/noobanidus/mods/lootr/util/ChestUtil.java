@@ -14,10 +14,10 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import noobanidus.mods.lootr.Lootr;
+import noobanidus.mods.lootr.api.ILootTile;
 import noobanidus.mods.lootr.data.NewChestData;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModStats;
-import noobanidus.mods.lootr.api.ILootTile;
 import noobanidus.mods.lootr.tiles.SpecialLootInventoryTile;
 
 import java.util.HashSet;
@@ -30,7 +30,7 @@ public class ChestUtil {
   public static Random random = new Random();
   public static Set<Class<?>> tileClasses = new HashSet<>();
 
-  public static boolean handleLootSneak (Block block, World world, BlockPos pos, PlayerEntity player) {
+  public static boolean handleLootSneak(Block block, World world, BlockPos pos, PlayerEntity player) {
     if (world.isClientSide()) {
       return false;
     }
@@ -40,9 +40,9 @@ public class ChestUtil {
 
     TileEntity te = world.getBlockEntity(pos);
     if (te instanceof ILootTile) {
-      Set<UUID> openers = ((ILootTile)te).getOpeners();
+      Set<UUID> openers = ((ILootTile) te).getOpeners();
       openers.remove(player.getUUID());
-      ((ILootTile)te).updatePacketViaState();
+      ((ILootTile) te).updatePacketViaState();
       return true;
     }
 

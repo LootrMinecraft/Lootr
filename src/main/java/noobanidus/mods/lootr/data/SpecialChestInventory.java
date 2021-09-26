@@ -15,9 +15,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import noobanidus.mods.lootr.api.ILootTile;
 import noobanidus.mods.lootr.api.ILootrInventory;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
-import noobanidus.mods.lootr.api.ILootTile;
 
 import javax.annotation.Nullable;
 

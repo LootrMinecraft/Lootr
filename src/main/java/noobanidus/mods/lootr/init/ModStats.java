@@ -9,7 +9,7 @@ public class ModStats {
   public static ResourceLocation LOOTED_LOCATION = new ResourceLocation(Lootr.MODID, "looted_stat");
   public static Stat<ResourceLocation> LOOTED_STAT;
 
-  public static void load () {
+  public static void load() {
     LOOTED_STAT = Stats.CUSTOM.get(LOOTED_LOCATION);
   }
 }

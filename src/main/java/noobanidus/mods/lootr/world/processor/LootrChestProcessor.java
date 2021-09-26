@@ -1,7 +1,7 @@
 package noobanidus.mods.lootr.world.processor;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.block.*;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;

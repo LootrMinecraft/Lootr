@@ -13,8 +13,8 @@ import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunk;
 import noobanidus.mods.lootr.Lootr;
-import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.api.ILootTile;
+import noobanidus.mods.lootr.config.ConfigManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
@@ -60,8 +60,8 @@ public class MixinLockableLootTileEntity {
 
   private static final ResourceLocation REPURPOSED_END_SHULKER = new ResourceLocation("repurposed_structures", "chests/dungeon/end");
 
-  @Inject(method= "setLootTable(Lnet/minecraft/util/ResourceLocation;J)V", at=@At("HEAD"))
-  private void setLootTable (ResourceLocation table, long seed, CallbackInfo info) {
+  @Inject(method = "setLootTable(Lnet/minecraft/util/ResourceLocation;J)V", at = @At("HEAD"))
+  private void setLootTable(ResourceLocation table, long seed, CallbackInfo info) {
     if (this instanceof ILootTile || !ConfigManager.REPORT_TABLES.get()) {
       return;
     }
@@ -75,13 +75,13 @@ public class MixinLockableLootTileEntity {
     StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
 
     log.error("\n=================================================" +
-            "\n  Lootr detected a loot chest creation that it " +
-            "\n  can't replace. Please consider reporting it!" +
-            "\n    Tile: " + this +
-            "\n    Table: " + table +
-            "\n    Location: " + ((LockableLootTileEntity) (Object) (this)).getBlockPos().toString() +
-            "\n    Stack: " + stacktrace[3].toString() +
-            "\n           " + stacktrace[4].toString() +
-            "\n           " + stacktrace[5].toString());
+        "\n  Lootr detected a loot chest creation that it " +
+        "\n  can't replace. Please consider reporting it!" +
+        "\n    Tile: " + this +
+        "\n    Table: " + table +
+        "\n    Location: " + ((LockableLootTileEntity) (Object) (this)).getBlockPos().toString() +
+        "\n    Stack: " + stacktrace[3].toString() +
+        "\n           " + stacktrace[4].toString() +
+        "\n           " + stacktrace[5].toString());
   }
 }

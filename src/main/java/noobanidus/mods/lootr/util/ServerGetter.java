@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 
 public class ServerGetter {
   @Nullable
-  public static PlayerEntity getPlayer () {
+  public static PlayerEntity getPlayer() {
     return null;
   }
 }
