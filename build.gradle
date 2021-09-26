@@ -6,6 +6,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply from: 'gradle/property_helper.gradle'
 apply from: 'gradle/property_loader.gradle'
+apply from: 'https://raw.githubusercontent.com/SizableShrimp/Forge-Class-Remapper/main/classremapper.gradle'
 
 // Load mod related properties
 ext.modName = getRequiredString('mod_name')
