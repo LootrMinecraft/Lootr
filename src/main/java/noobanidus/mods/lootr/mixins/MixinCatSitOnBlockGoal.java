@@ -15,13 +15,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(CatSitOnBlockGoal.class)
 public class MixinCatSitOnBlockGoal {
-  @Redirect(method = "Lnet/minecraft/entity/ai/goal/CatSitOnBlockGoal;shouldMoveTo(Lnet/minecraft/world/IWorldReader;Lnet/minecraft/util/math/BlockPos;)Z",
-      at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;isIn(Lnet/minecraft/block/Block;)Z"))
+  @Redirect(method = "isValidTarget",
+      at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;is(Lnet/minecraft/block/Block;)Z"))
   protected boolean isIn(BlockState state, Block block) {
     return state.is(block) || state.is(ModBlocks.CHEST);
   }
 
-  @Inject(method = "Lnet/minecraft/entity/ai/goal/CatSitOnBlockGoal;shouldMoveTo(Lnet/minecraft/world/IWorldReader;Lnet/minecraft/util/math/BlockPos;)Z", at = @At(target = "Lnet/minecraft/tileentity/ChestTileEntity;getPlayersUsing(Lnet/minecraft/world/IBlockReader;Lnet/minecraft/util/math/BlockPos;)I", value = "INVOKE"), cancellable = true)
+  @Inject(method = "isValidTarget", at = @At(target = "Lnet/minecraft/tileentity/ChestTileEntity;getOpenCount(Lnet/minecraft/world/IBlockReader;Lnet/minecraft/util/math/BlockPos;)I", value = "INVOKE"), cancellable = true)
   protected void playersUsing(IWorldReader reader, BlockPos pos, CallbackInfoReturnable<Boolean> info) {
     if (SpecialLootChestTile.getPlayersUsing(reader, pos) < 1) {
       info.setReturnValue(true);

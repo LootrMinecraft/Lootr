@@ -27,9 +27,9 @@ import java.util.Set;
 
 @Mixin(LockableLootTileEntity.class)
 public class MixinLockableLootTileEntity {
-  private Logger log = LogManager.getLogger(Lootr.MODID);
+  private final Logger log = LogManager.getLogger(Lootr.MODID);
 
-  @Inject(method = "Lnet/minecraft/tileentity/LockableLootTileEntity;setLootTable(Lnet/minecraft/world/IBlockReader;Ljava/util/Random;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/ResourceLocation;)V",
+  @Inject(method = "setLootTable(Lnet/minecraft/world/IBlockReader;Ljava/util/Random;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/ResourceLocation;)V",
       at = @At("HEAD"))
   private static void setLootTable(IBlockReader reader, Random rand, BlockPos pos, ResourceLocation lootTableIn, CallbackInfo info) {
     if (ConfigManager.getLootBlacklist().contains(lootTableIn)) {
@@ -60,7 +60,7 @@ public class MixinLockableLootTileEntity {
 
   private static final ResourceLocation REPURPOSED_END_SHULKER = new ResourceLocation("repurposed_structures", "chests/dungeon/end");
 
-  @Inject(method="Lnet/minecraft/tileentity/LockableLootTileEntity;setLootTable(Lnet/minecraft/util/ResourceLocation;J)V", at=@At("HEAD"))
+  @Inject(method= "setLootTable(Lnet/minecraft/util/ResourceLocation;J)V", at=@At("HEAD"))
   private void setLootTable (ResourceLocation table, long seed, CallbackInfo info) {
     if (this instanceof ILootTile || !ConfigManager.REPORT_TABLES.get()) {
       return;

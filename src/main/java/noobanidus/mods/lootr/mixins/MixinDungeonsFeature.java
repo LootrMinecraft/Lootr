@@ -18,8 +18,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(DungeonsFeature.class)
 public class MixinDungeonsFeature {
   @Redirect(
-      method = "Lnet/minecraft/world/gen/feature/DungeonsFeature;generate(Lnet/minecraft/world/ISeedReader;Lnet/minecraft/world/gen/ChunkGenerator;Ljava/util/Random;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/gen/feature/NoFeatureConfig;)Z",
-      at = @At(value = "INVOKE", target = "Lnet/minecraft/world/gen/feature/structure/StructurePiece;correctFacing(Lnet/minecraft/world/IBlockReader;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;)Lnet/minecraft/block/BlockState;")
+      method = "place",
+      at = @At(value = "INVOKE", target = "Lnet/minecraft/world/gen/feature/structure/StructurePiece;reorient(Lnet/minecraft/world/IBlockReader;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;)Lnet/minecraft/block/BlockState;")
   )
   private BlockState correctFacing(IBlockReader worldIn, BlockPos posIn, BlockState blockStateIn) {
     RegistryKey<World> key = ((ISeedReader) worldIn).getLevel().dimension();

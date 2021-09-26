@@ -18,8 +18,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Random;
 
 @Mixin(IglooPieces.Piece.class)
-public class Piece {
-  @Inject(method = "Lnet/minecraft/world/gen/feature/structure/IglooPieces$Piece;handleDataMarker(Ljava/lang/String;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/IServerWorld;Ljava/util/Random;Lnet/minecraft/util/math/MutableBoundingBox;)V",
+public class MixinIglooPieces$Piece {
+  @Inject(method = "handleDataMarker",
       at = @At(value = "HEAD"),
       cancellable = true)
   protected void handleDataMarker(String function, BlockPos pos, IServerWorld worldIn, Random rand, MutableBoundingBox sbb, CallbackInfo info) {
