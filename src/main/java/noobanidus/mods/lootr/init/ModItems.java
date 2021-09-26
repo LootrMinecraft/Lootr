@@ -13,7 +13,7 @@ public class ModItems {
   public static BlockItem BARREL = new BlockItem(ModBlocks.BARREL, new BlockItem.Properties());
   public static BlockItem INVENTORY = new BlockItem(ModBlocks.INVENTORY, new BlockItem.Properties().setISTER(() -> SpecialLootChestItemRenderer::new));
 
-  public static BlockItem TROPHY = new BlockItem(ModBlocks.TROPHY, new Item.Properties().rarity(Rarity.EPIC).group(Lootr.TAB));
+  public static BlockItem TROPHY = new BlockItem(ModBlocks.TROPHY, new Item.Properties().rarity(Rarity.EPIC).tab(Lootr.TAB));
 
   static {
     CHEST.setRegistryName(Lootr.MODID, "lootr_chest");

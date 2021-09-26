@@ -17,15 +17,15 @@ import noobanidus.mods.lootr.tiles.SpecialLootChestTile;
 import noobanidus.mods.lootr.tiles.SpecialTrappedLootChestTile;
 
 public class ModBlocks {
-  public static LootrBarrelBlock BARREL = new LootrBarrelBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(2.5F).sound(SoundType.WOOD));
+  public static LootrBarrelBlock BARREL = new LootrBarrelBlock(Block.Properties.of(Material.WOOD).strength(2.5F).sound(SoundType.WOOD));
 
-  public static LootrChestBlock CHEST = new LootrChestBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(2.5F).sound(SoundType.WOOD));
+  public static LootrChestBlock CHEST = new LootrChestBlock(Block.Properties.of(Material.WOOD).strength(2.5F).sound(SoundType.WOOD));
 
-  public static LootrTrappedChestBlock TRAPPED_CHEST = new LootrTrappedChestBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(2.5F).sound(SoundType.WOOD));
+  public static LootrTrappedChestBlock TRAPPED_CHEST = new LootrTrappedChestBlock(Block.Properties.of(Material.WOOD).strength(2.5F).sound(SoundType.WOOD));
 
-  public static LootrInventoryBlock INVENTORY = new LootrInventoryBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(2.5f).sound(SoundType.WOOD));
+  public static LootrInventoryBlock INVENTORY = new LootrInventoryBlock(Block.Properties.of(Material.WOOD).strength(2.5f).sound(SoundType.WOOD));
 
-  public static Block TROPHY = new TrophyBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(15f).sound(SoundType.METAL).harvestTool(ToolType.PICKAXE).harvestLevel(0).notSolid().setLightLevel((o) -> 15));
+  public static Block TROPHY = new TrophyBlock(Block.Properties.of(Material.METAL).strength(15f).sound(SoundType.METAL).harvestTool(ToolType.PICKAXE).harvestLevel(0).noOcclusion().lightLevel((o) -> 15));
 
   static {
     BARREL.setRegistryName(Lootr.MODID, "lootr_barrel");

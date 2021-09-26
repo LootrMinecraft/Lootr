@@ -20,22 +20,22 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Random;
 
 @Mixin(OceanRuinPieces.Piece.class)
-public class MixinOceanRuinPieces$Piece {
+public class Piece {
   @Inject(method = "Lnet/minecraft/world/gen/feature/structure/OceanRuinPieces$Piece;handleDataMarker(Ljava/lang/String;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/IServerWorld;Ljava/util/Random;Lnet/minecraft/util/math/MutableBoundingBox;)V",
       at = @At(value = "HEAD"),
       cancellable = true)
   protected void handleDataMarker(String function, BlockPos pos, IServerWorld worldIn, Random rand, MutableBoundingBox sbb, CallbackInfo info) {
     if ("chest".equals(function)) {
       boolean large = ((OceanRuinPieces.Piece) (Object) this).isLarge;
-      if (ConfigManager.getLootBlacklist().contains(large ? LootTables.CHESTS_UNDERWATER_RUIN_BIG : LootTables.CHESTS_UNDERWATER_RUIN_SMALL)) {
+      if (ConfigManager.getLootBlacklist().contains(large ? LootTables.UNDERWATER_RUIN_BIG : LootTables.UNDERWATER_RUIN_SMALL)) {
         return;
       }
-      RegistryKey<World> key = worldIn.getWorld().getDimensionKey();
+      RegistryKey<World> key = worldIn.getLevel().dimension();
       if (ConfigManager.isDimensionBlocked(key)) {
         return;
       }
-      worldIn.setBlockState(pos, ModBlocks.CHEST.getDefaultState().with(ChestBlock.WATERLOGGED, worldIn.getFluidState(pos).isTagged(FluidTags.WATER)), 2);
-      LockableLootTileEntity.setLootTable(worldIn, rand, pos, large ? LootTables.CHESTS_UNDERWATER_RUIN_BIG : LootTables.CHESTS_UNDERWATER_RUIN_SMALL);
+      worldIn.setBlock(pos, ModBlocks.CHEST.defaultBlockState().setValue(ChestBlock.WATERLOGGED, worldIn.getFluidState(pos).is(FluidTags.WATER)), 2);
+      LockableLootTileEntity.setLootTable(worldIn, rand, pos, large ? LootTables.UNDERWATER_RUIN_BIG : LootTables.UNDERWATER_RUIN_SMALL);
       info.cancel();
     }
   }

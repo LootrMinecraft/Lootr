@@ -12,7 +12,7 @@ import noobanidus.mods.lootr.tiles.SpecialLootChestTile;
 import noobanidus.mods.lootr.tiles.SpecialTrappedLootChestTile;
 
 public class ModEntities {
-  public static EntityType<LootrChestMinecartEntity> LOOTR_MINECART_ENTITY = EntityType.Builder.<LootrChestMinecartEntity>create(LootrChestMinecartEntity::new, EntityClassification.MISC).size(0.98F, 0.7F).trackingRange(8).setCustomClientFactory((entity, world) -> new LootrChestMinecartEntity(ModEntities.LOOTR_MINECART_ENTITY, world)).build("lootr_minecart");
+  public static EntityType<LootrChestMinecartEntity> LOOTR_MINECART_ENTITY = EntityType.Builder.<LootrChestMinecartEntity>of(LootrChestMinecartEntity::new, EntityClassification.MISC).sized(0.98F, 0.7F).clientTrackingRange(8).setCustomClientFactory((entity, world) -> new LootrChestMinecartEntity(ModEntities.LOOTR_MINECART_ENTITY, world)).build("lootr_minecart");
 
   static {
     LOOTR_MINECART_ENTITY.setRegistryName(Lootr.MODID, "lootr_minecart");

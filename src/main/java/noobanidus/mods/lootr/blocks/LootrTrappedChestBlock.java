@@ -28,6 +28,8 @@ import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 @SuppressWarnings({"NullableProblems"})
 public class LootrTrappedChestBlock extends TrappedChestBlock {
   public LootrTrappedChestBlock(Properties properties) {
@@ -35,23 +37,23 @@ public class LootrTrappedChestBlock extends TrappedChestBlock {
   }
 
   @Override
-  public TileEntity createNewTileEntity(IBlockReader p_196283_1_) {
+  public TileEntity newBlockEntity(IBlockReader p_196283_1_) {
     return new SpecialTrappedLootChestTile();
   }
 
   @Override
-  public void onReplaced(BlockState oldState, World world, BlockPos pos, BlockState newState, boolean isMoving) {
+  public void onRemove(BlockState oldState, World world, BlockPos pos, BlockState newState, boolean isMoving) {
     if (oldState.getBlock() != newState.getBlock() && world instanceof ServerWorld) {
       NewChestData.deleteLootChest((ServerWorld) world, pos);
     }
-    super.onReplaced(oldState, world, pos, newState, isMoving);
+    super.onRemove(oldState, world, pos, newState, isMoving);
   }
 
   @Override
-  public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
-    if (player.isSneaking()) {
+  public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
+    if (player.isShiftKeyDown()) {
       ChestUtil.handleLootSneak(this, world, pos, player);
-    } else if (!ChestBlock.isBlocked(world, pos)) {
+    } else if (!ChestBlock.isChestBlockedAt(world, pos)) {
       ChestUtil.handleLootChest(this, world, pos, player);
     }
     return ActionResultType.SUCCESS;
@@ -63,9 +65,9 @@ public class LootrTrappedChestBlock extends TrappedChestBlock {
   }
 
   @Override
-  public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
-    if (stateIn.get(WATERLOGGED)) {
-      worldIn.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(worldIn));
+  public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+    if (stateIn.getValue(WATERLOGGED)) {
+      worldIn.getLiquidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
     }
 
     return stateIn;
@@ -73,18 +75,18 @@ public class LootrTrappedChestBlock extends TrappedChestBlock {
 
   @Override
   public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-    return SHAPE_SINGLE;
+    return AABB;
   }
 
   @Override
   @Nullable
-  public INamedContainerProvider getContainer(BlockState state, World worldIn, BlockPos pos) {
+  public INamedContainerProvider getMenuProvider(BlockState state, World worldIn, BlockPos pos) {
     return null;
   }
 
   @SuppressWarnings("deprecation")
   @Override
-  public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
+  public int getSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
     return MathHelper.clamp(SpecialLootChestTile.getPlayersUsing(blockAccess, pos), 0, 15);
   }
 }

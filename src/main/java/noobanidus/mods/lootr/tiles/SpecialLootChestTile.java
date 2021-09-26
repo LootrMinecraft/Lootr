@@ -87,26 +87,26 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
   }
 
   @Override
-  public void fillWithLoot(@Nullable PlayerEntity player) {
+  public void unpackLootTable(@Nullable PlayerEntity player) {
   }
 
   public void fillWithLoot(PlayerEntity player, IInventory inventory, @Nullable ResourceLocation overrideTable, long seed) {
-    if (this.world != null && this.savedLootTable != null && this.world.getServer() != null) {
-      LootTable loottable = this.world.getServer().getLootTableManager().getLootTableFromLocation(overrideTable != null ? overrideTable : this.savedLootTable);
+    if (this.level != null && this.savedLootTable != null && this.level.getServer() != null) {
+      LootTable loottable = this.level.getServer().getLootTables().get(overrideTable != null ? overrideTable : this.savedLootTable);
       if (player instanceof ServerPlayerEntity) {
-        CriteriaTriggers.PLAYER_GENERATES_CONTAINER_LOOT.test((ServerPlayerEntity) player, overrideTable != null ? overrideTable : this.lootTable);
+        CriteriaTriggers.GENERATE_LOOT.trigger((ServerPlayerEntity) player, overrideTable != null ? overrideTable : this.lootTable);
       }
-      LootContext.Builder builder = (new LootContext.Builder((ServerWorld) this.world)).withParameter(LootParameters.field_237457_g_, Vector3d.copyCentered(this.pos)).withSeed(ConfigManager.RANDOMISE_SEED.get() ? ThreadLocalRandom.current().nextLong() : seed == Long.MIN_VALUE ? this.seed : seed);
+      LootContext.Builder builder = (new LootContext.Builder((ServerWorld) this.level)).withParameter(LootParameters.ORIGIN, Vector3d.atCenterOf(this.worldPosition)).withOptionalRandomSeed(ConfigManager.RANDOMISE_SEED.get() ? ThreadLocalRandom.current().nextLong() : seed == Long.MIN_VALUE ? this.seed : seed);
       if (player != null) {
         builder.withLuck(player.getLuck()).withParameter(LootParameters.THIS_ENTITY, player);
       }
 
-      loottable.fillInventory(inventory, builder.build(LootParameterSets.CHEST));
+      loottable.fill(inventory, builder.create(LootParameterSets.CHEST));
     }
   }
 
   @Override
-  public void read(BlockState state, CompoundNBT compound) {
+  public void load(BlockState state, CompoundNBT compound) {
     if (compound.contains("specialLootChest_table", Constants.NBT.TAG_STRING)) {
       savedLootTable = new ResourceLocation(compound.getString("specialLootChest_table"));
     }
@@ -119,8 +119,8 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
         seed = compound.getLong("LootTableSeed");
       }
     }
-    if (compound.hasUniqueId("tileId")) {
-      this.tileId = compound.getUniqueId("tileId");
+    if (compound.hasUUID("tileId")) {
+      this.tileId = compound.getUUID("tileId");
     } else if (this.tileId == null) {
       getTileId();
     }
@@ -128,15 +128,15 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
       ListNBT openers = compound.getList("LootrOpeners", Constants.NBT.TAG_INT_ARRAY);
       this.openers.clear();
       for (INBT item : openers) {
-        this.openers.add(NBTUtil.readUniqueId(item));
+        this.openers.add(NBTUtil.loadUUID(item));
       }
     }
-    super.read(state, compound);
+    super.load(state, compound);
   }
 
   @Override
-  public CompoundNBT write(CompoundNBT compound) {
-    compound = super.write(compound);
+  public CompoundNBT save(CompoundNBT compound) {
+    compound = super.save(compound);
     if (savedLootTable != null) {
       compound.putString("specialLootChest_table", savedLootTable.toString());
       compound.putString("LootTable", savedLootTable.toString());
@@ -145,10 +145,10 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
       compound.putLong("specialLootChest_seed", seed);
       compound.putLong("LootTableSeed", seed);
     }
-    compound.putUniqueId("tileId", getTileId());
+    compound.putUUID("tileId", getTileId());
     ListNBT list = new ListNBT();
     for (UUID opener : this.openers) {
-      list.add(NBTUtil.func_240626_a_(opener));
+      list.add(NBTUtil.createUUID(opener));
     }
     compound.put("LootrOpeners", list);
     return compound;
@@ -161,35 +161,35 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
 
   @Override
   public void tick() {
-    int i = this.pos.getX();
-    int j = this.pos.getY();
-    int k = this.pos.getZ();
+    int i = this.worldPosition.getX();
+    int j = this.worldPosition.getY();
+    int k = this.worldPosition.getZ();
     ++this.ticksSinceSync;
 
-    this.specialNumPlayersUsingChest = calculatePlayersUsingSync(this.world, this, this.ticksSinceSync, i, j, k, this.specialNumPlayersUsingChest);
-    this.prevLidAngle = this.lidAngle;
-    if (this.specialNumPlayersUsingChest > 0 && this.lidAngle == 0.0F) {
-      this.playSound(SoundEvents.BLOCK_CHEST_OPEN);
+    this.specialNumPlayersUsingChest = calculatePlayersUsingSync(this.level, this, this.ticksSinceSync, i, j, k, this.specialNumPlayersUsingChest);
+    this.oOpenness = this.openness;
+    if (this.specialNumPlayersUsingChest > 0 && this.openness == 0.0F) {
+      this.playSound(SoundEvents.CHEST_OPEN);
     }
 
-    if (this.specialNumPlayersUsingChest == 0 && this.lidAngle > 0.0F || this.specialNumPlayersUsingChest > 0 && this.lidAngle < 1.0F) {
-      float f1 = this.lidAngle;
+    if (this.specialNumPlayersUsingChest == 0 && this.openness > 0.0F || this.specialNumPlayersUsingChest > 0 && this.openness < 1.0F) {
+      float f1 = this.openness;
       if (this.specialNumPlayersUsingChest > 0) {
-        this.lidAngle += 0.1F;
+        this.openness += 0.1F;
       } else {
-        this.lidAngle -= 0.1F;
+        this.openness -= 0.1F;
       }
 
-      if (this.lidAngle > 1.0F) {
-        this.lidAngle = 1.0F;
+      if (this.openness > 1.0F) {
+        this.openness = 1.0F;
       }
 
-      if (this.lidAngle < 0.5F && f1 >= 0.5F) {
-        this.playSound(SoundEvents.BLOCK_CHEST_CLOSE);
+      if (this.openness < 0.5F && f1 >= 0.5F) {
+        this.playSound(SoundEvents.CHEST_CLOSE);
       }
 
-      if (this.lidAngle < 0.0F) {
-        this.lidAngle = 0.0F;
+      if (this.openness < 0.0F) {
+        this.openness = 0.0F;
       }
     }
   }
@@ -210,11 +210,11 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
   }
 
   private void playSound(SoundEvent soundIn) {
-    this.world.playSound(null, getPos(), soundIn, SoundCategory.BLOCKS, 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
+    this.level.playSound(null, getBlockPos(), soundIn, SoundCategory.BLOCKS, 0.5F, level.random.nextFloat() * 0.1F + 0.9F);
   }
 
   public static int calculatePlayersUsingSync(World world, LockableTileEntity tile, int ticksSinceSync, int x, int y, int z, int numPlayersUsing) {
-    if (!world.isRemote && numPlayersUsing != 0 && (ticksSinceSync + x + y + z) % 200 == 0) {
+    if (!world.isClientSide && numPlayersUsing != 0 && (ticksSinceSync + x + y + z) % 200 == 0) {
       numPlayersUsing = calculatePlayersUsing(world, tile, x, y, z);
     }
 
@@ -227,10 +227,10 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
     }
     int i = 0;
 
-    for (PlayerEntity playerentity : world.getEntitiesWithinAABB(PlayerEntity.class, new AxisAlignedBB(x - 5.0, y - 5.0, z - 5.0, (x + 1) + 5.0, (y + 1) + 5.0, (z + 1) + 5.0))) {
-      if (playerentity.openContainer instanceof ChestContainer) {
-        IInventory inv = ((ChestContainer) playerentity.openContainer).getLowerChestInventory();
-        if (inv == tile || (inv instanceof SpecialChestInventory && ((SpecialChestInventory) inv).getPos().equals(tile.getPos()))) {
+    for (PlayerEntity playerentity : world.getEntitiesOfClass(PlayerEntity.class, new AxisAlignedBB(x - 5.0, y - 5.0, z - 5.0, (x + 1) + 5.0, (y + 1) + 5.0, (z + 1) + 5.0))) {
+      if (playerentity.containerMenu instanceof ChestContainer) {
+        IInventory inv = ((ChestContainer) playerentity.containerMenu).getContainer();
+        if (inv == tile || (inv instanceof SpecialChestInventory && ((SpecialChestInventory) inv).getPos().equals(tile.getBlockPos()))) {
           ++i;
         }
       }
@@ -240,75 +240,75 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
   }
 
   @Override
-  public void openInventory(PlayerEntity player) {
+  public void startOpen(PlayerEntity player) {
     if (!player.isSpectator()) {
       if (this.specialNumPlayersUsingChest < 0) {
         this.specialNumPlayersUsingChest = 0;
       }
 
       ++this.specialNumPlayersUsingChest;
-      this.onOpenOrClose();
+      this.signalOpenCount();
     }
   }
 
   @Override
-  public void closeInventory(PlayerEntity player) {
+  public void stopOpen(PlayerEntity player) {
     if (!player.isSpectator()) {
       --this.specialNumPlayersUsingChest;
-      this.onOpenOrClose();
-      openers.add(player.getUniqueID());
-      this.markDirty();
+      this.signalOpenCount();
+      openers.add(player.getUUID());
+      this.setChanged();
       updatePacketViaState();
     }
   }
 
   public void updatePacketViaState() {
-    if (world != null && !world.isRemote) {
-      BlockState state = world.getBlockState(getPos());
-      world.notifyBlockUpdate(getPos(), state, state, 8);
+    if (level != null && !level.isClientSide) {
+      BlockState state = level.getBlockState(getBlockPos());
+      level.sendBlockUpdated(getBlockPos(), state, state, 8);
     }
   }
 
   @Override
-  protected void onOpenOrClose() {
+  protected void signalOpenCount() {
     Block block = this.getBlockState().getBlock();
     if (block instanceof ChestBlock) {
-      this.world.addBlockEvent(this.pos, block, 1, this.specialNumPlayersUsingChest);
-      this.world.notifyNeighborsOfStateChange(this.pos, block);
+      this.level.blockEvent(this.worldPosition, block, 1, this.specialNumPlayersUsingChest);
+      this.level.updateNeighborsAt(this.worldPosition, block);
     }
   }
 
   @Override
-  public boolean receiveClientEvent(int id, int type) {
+  public boolean triggerEvent(int id, int type) {
     if (id == 1) {
       this.specialNumPlayersUsingChest = type;
       return true;
     } else {
-      return super.receiveClientEvent(id, type);
+      return super.triggerEvent(id, type);
     }
   }
 
   @Override
   @Nonnull
   public CompoundNBT getUpdateTag() {
-    return write(new CompoundNBT());
+    return save(new CompoundNBT());
   }
 
   @Override
   @Nullable
   public SUpdateTileEntityPacket getUpdatePacket() {
-    return new SUpdateTileEntityPacket(getPos(), 0, getUpdateTag());
+    return new SUpdateTileEntityPacket(getBlockPos(), 0, getUpdateTag());
   }
 
   @Override
   public void onDataPacket(@Nonnull NetworkManager net, @Nonnull SUpdateTileEntityPacket pkt) {
-    read(ModBlocks.CHEST.getDefaultState(), pkt.getNbtCompound());
+    load(ModBlocks.CHEST.defaultBlockState(), pkt.getTag());
   }
 
   public static int getPlayersUsing(IBlockReader reader, BlockPos posIn) {
     BlockState blockstate = reader.getBlockState(posIn);
     if (blockstate.hasTileEntity()) {
-      TileEntity tileentity = reader.getTileEntity(posIn);
+      TileEntity tileentity = reader.getBlockEntity(posIn);
       if (tileentity instanceof SpecialLootChestTile) {
         return ((SpecialLootChestTile) tileentity).specialNumPlayersUsingChest;
       }

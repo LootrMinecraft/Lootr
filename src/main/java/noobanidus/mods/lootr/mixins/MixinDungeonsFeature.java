@@ -22,10 +22,10 @@ public class MixinDungeonsFeature {
       at = @At(value = "INVOKE", target = "Lnet/minecraft/world/gen/feature/structure/StructurePiece;correctFacing(Lnet/minecraft/world/IBlockReader;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;)Lnet/minecraft/block/BlockState;")
   )
   private BlockState correctFacing(IBlockReader worldIn, BlockPos posIn, BlockState blockStateIn) {
-    RegistryKey<World> key = ((ISeedReader) worldIn).getWorld().getDimensionKey();
+    RegistryKey<World> key = ((ISeedReader) worldIn).getLevel().dimension();
     if (ConfigManager.isDimensionBlocked(key)) {
-      return StructurePiece.correctFacing(worldIn, posIn, blockStateIn);
+      return StructurePiece.reorient(worldIn, posIn, blockStateIn);
     }
-    return StructurePiece.correctFacing(worldIn, posIn, ModBlocks.CHEST.getDefaultState().with(ChestBlock.WATERLOGGED, blockStateIn.get(ChestBlock.WATERLOGGED)));
+    return StructurePiece.reorient(worldIn, posIn, ModBlocks.CHEST.defaultBlockState().setValue(ChestBlock.WATERLOGGED, blockStateIn.getValue(ChestBlock.WATERLOGGED)));
   }
 }

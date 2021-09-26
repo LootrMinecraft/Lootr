@@ -41,7 +41,7 @@ public class LootrLootingEvent extends PlayerEvent {
       return ((ILootTile) this.tile).getTileId();
     }
     if (cartEntity != null) {
-      return cartEntity.getUniqueID();
+      return cartEntity.getUUID();
     }
     return null;
   }

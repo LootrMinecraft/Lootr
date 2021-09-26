@@ -18,21 +18,21 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Random;
 
 @Mixin(IglooPieces.Piece.class)
-public class MixinIglooPieces$Piece {
+public class Piece {
   @Inject(method = "Lnet/minecraft/world/gen/feature/structure/IglooPieces$Piece;handleDataMarker(Ljava/lang/String;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/IServerWorld;Ljava/util/Random;Lnet/minecraft/util/math/MutableBoundingBox;)V",
       at = @At(value = "HEAD"),
       cancellable = true)
   protected void handleDataMarker(String function, BlockPos pos, IServerWorld worldIn, Random rand, MutableBoundingBox sbb, CallbackInfo info) {
-    if (ConfigManager.getLootBlacklist().contains(LootTables.CHESTS_IGLOO_CHEST)) {
+    if (ConfigManager.getLootBlacklist().contains(LootTables.IGLOO_CHEST)) {
       return;
     }
     if ("chest".equals(function)) {
-      RegistryKey<World> key = worldIn.getWorld().getDimensionKey();
+      RegistryKey<World> key = worldIn.getLevel().dimension();
       if (ConfigManager.isDimensionBlocked(key)) {
         return;
       }
-      worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
-      LockableLootTileEntity.setLootTable(worldIn, rand, pos.down(), LootTables.CHESTS_IGLOO_CHEST);
+      worldIn.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+      LockableLootTileEntity.setLootTable(worldIn, rand, pos.below(), LootTables.IGLOO_CHEST);
       info.cancel();
     }
   }

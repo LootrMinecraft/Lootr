@@ -41,7 +41,7 @@ public class LootrChestProcessor extends StructureProcessor {
     }
 
     if (world instanceof IServerWorld) {
-      RegistryKey<World> key = ((IServerWorld) world).getWorld().getDimensionKey();
+      RegistryKey<World> key = ((IServerWorld) world).getLevel().dimension();
       if (ConfigManager.isDimensionBlocked(key)) {
         return info2;
       }

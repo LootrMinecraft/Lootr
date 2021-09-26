@@ -66,7 +66,7 @@ public class LootrChestMinecartEntity extends ContainerMinecartEntity implements
   }
 
   public void addOpener(PlayerEntity player) {
-    openers.add(player.getUniqueID());
+    openers.add(player.getUUID());
   }
 
   public boolean isOpened() {
@@ -83,12 +83,12 @@ public class LootrChestMinecartEntity extends ContainerMinecartEntity implements
       return true;
     }
 
-    if (source.getTrueSource() instanceof PlayerEntity) {
-      if (source.getTrueSource().isSneaking()) {
+    if (source.getEntity() instanceof PlayerEntity) {
+      if (source.getEntity().isShiftKeyDown()) {
         return false;
       } else {
-        source.getTrueSource().sendMessage(new TranslationTextComponent("lootr.message.cart_should_sneak").setStyle(Style.EMPTY.setColor(Color.fromTextFormatting(TextFormatting.AQUA))), Util.DUMMY_UUID);
-        source.getTrueSource().sendMessage(new TranslationTextComponent("lootr.message.should_sneak2", new TranslationTextComponent("lootr.message.cart_should_sneak3").setStyle(Style.EMPTY.setBold(true))).setStyle(Style.EMPTY.setColor(Color.fromTextFormatting(TextFormatting.AQUA))), Util.DUMMY_UUID);
+        source.getEntity().sendMessage(new TranslationTextComponent("lootr.message.cart_should_sneak").setStyle(Style.EMPTY.withColor(Color.fromLegacyFormat(TextFormatting.AQUA))), Util.NIL_UUID);
+        source.getEntity().sendMessage(new TranslationTextComponent("lootr.message.should_sneak2", new TranslationTextComponent("lootr.message.cart_should_sneak3").setStyle(Style.EMPTY.withBold(true))).setStyle(Style.EMPTY.withColor(Color.fromLegacyFormat(TextFormatting.AQUA))), Util.NIL_UUID);
       }
     } else {
       return true;
@@ -98,24 +98,24 @@ public class LootrChestMinecartEntity extends ContainerMinecartEntity implements
   }
 
   @Override
-  public void killMinecart(DamageSource source) {
+  public void destroy(DamageSource source) {
     this.remove();
-    if (this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
+    if (this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
       ItemStack itemstack = new ItemStack(Items.MINECART);
       ItemStack itemstack2 = new ItemStack(Items.CHEST);
       if (this.hasCustomName()) {
-        itemstack.setDisplayName(this.getCustomName());
-        itemstack2.setDisplayName(this.getCustomName());
+        itemstack.setHoverName(this.getCustomName());
+        itemstack2.setHoverName(this.getCustomName());
       }
 
-      this.entityDropItem(itemstack);
-      this.entityDropItem(itemstack2);
+      this.spawnAtLocation(itemstack);
+      this.spawnAtLocation(itemstack2);
     }
   }
 
 
   @Override
-  public int getSizeInventory() {
+  public int getContainerSize() {
     return 27;
   }
 
@@ -124,21 +124,21 @@ public class LootrChestMinecartEntity extends ContainerMinecartEntity implements
     return AbstractMinecartEntity.Type.CHEST;
   }
 
-  private static BlockState cartNormal = ModBlocks.CHEST.getDefaultState().with(ChestBlock.FACING, Direction.NORTH);
+  private static BlockState cartNormal = ModBlocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
 
   @Override
-  public BlockState getDefaultDisplayTile() {
+  public BlockState getDefaultDisplayBlockState() {
     return cartNormal;
   }
 
   @Override
-  public int getDefaultDisplayTileOffset() {
+  public int getDefaultDisplayOffset() {
     return 8;
   }
 
   @Override
-  public Container createContainer(int id, PlayerInventory playerInventoryIn) {
-    return ChestContainer.createGeneric9X3(id, playerInventoryIn, this);
+  public Container createMenu(int id, PlayerInventory playerInventoryIn) {
+    return ChestContainer.threeRows(id, playerInventoryIn, this);
   }
 
   @SuppressWarnings("deprecation")
@@ -150,40 +150,40 @@ public class LootrChestMinecartEntity extends ContainerMinecartEntity implements
   }
 
   @Override
-  protected void writeAdditional(CompoundNBT compound) {
+  protected void addAdditionalSaveData(CompoundNBT compound) {
     if (this.lootTable != null) {
       compound.putString("LootTable", this.lootTable.toString());
     }
     compound.putLong("LootTableSeed", this.lootTableSeed);
     ListNBT list = new ListNBT();
     for (UUID opener : this.openers) {
-      list.add(NBTUtil.func_240626_a_(opener));
+      list.add(NBTUtil.createUUID(opener));
     }
     compound.put("LootrOpeners", list);
-    super.writeAdditional(compound);
+    super.addAdditionalSaveData(compound);
   }
 
   @Override
-  protected void readAdditional(CompoundNBT compound) {
+  protected void readAdditionalSaveData(CompoundNBT compound) {
     this.lootTable = new ResourceLocation(compound.getString("LootTable"));
     this.lootTableSeed = compound.getLong("LootTableSeed");
     if (compound.contains("LootrOpeners", Constants.NBT.TAG_LIST)) {
       ListNBT openers = compound.getList("LootrOpeners", Constants.NBT.TAG_INT_ARRAY);
       this.openers.clear();
       for (INBT item : openers) {
-        this.openers.add(NBTUtil.readUniqueId(item));
+        this.openers.add(NBTUtil.loadUUID(item));
       }
     }
-    super.readAdditional(compound);
+    super.readAdditionalSaveData(compound);
   }
 
   @Override
-  public ActionResultType processInitialInteract(PlayerEntity player, Hand hand) {
+  public ActionResultType interact(PlayerEntity player, Hand hand) {
     ActionResultType ret = ActionResultType.PASS;
-    if (ret.isSuccessOrConsume()) return ret;
-    ChestUtil.handleLootCart(player.world, this, player);
-    if (!player.world.isRemote) {
-      PiglinTasks.func_234478_a_(player, true);
+    if (ret.consumesAction()) return ret;
+    ChestUtil.handleLootCart(player.level, this, player);
+    if (!player.level.isClientSide) {
+      PiglinTasks.angerNearbyPiglins(player, true);
       return ActionResultType.CONSUME;
     } else {
       return ActionResultType.SUCCESS;
@@ -191,36 +191,36 @@ public class LootrChestMinecartEntity extends ContainerMinecartEntity implements
   }
 
   public void addLoot(@Nullable PlayerEntity player, IInventory inventory, @Nullable ResourceLocation overrideTable, long seed) {
-    if (this.lootTable != null && this.world.getServer() != null) {
-      LootTable loottable = this.world.getServer().getLootTableManager().getLootTableFromLocation(overrideTable != null ? overrideTable : this.lootTable);
+    if (this.lootTable != null && this.level.getServer() != null) {
+      LootTable loottable = this.level.getServer().getLootTables().get(overrideTable != null ? overrideTable : this.lootTable);
       if (player instanceof ServerPlayerEntity) {
-        CriteriaTriggers.PLAYER_GENERATES_CONTAINER_LOOT.test((ServerPlayerEntity) player, overrideTable != null ? overrideTable : this.lootTable);
+        CriteriaTriggers.GENERATE_LOOT.trigger((ServerPlayerEntity) player, overrideTable != null ? overrideTable : this.lootTable);
       }
-      LootContext.Builder lootcontext$builder = (new LootContext.Builder((ServerWorld) this.world)).withParameter(LootParameters.field_237457_g_, this.getPositionVec()).withSeed(ConfigManager.RANDOMISE_SEED.get() ? ThreadLocalRandom.current().nextLong() : seed == Long.MIN_VALUE ? this.lootTableSeed : seed);
+      LootContext.Builder lootcontext$builder = (new LootContext.Builder((ServerWorld) this.level)).withParameter(LootParameters.ORIGIN, this.position()).withOptionalRandomSeed(ConfigManager.RANDOMISE_SEED.get() ? ThreadLocalRandom.current().nextLong() : seed == Long.MIN_VALUE ? this.lootTableSeed : seed);
       lootcontext$builder.withParameter(LootParameters.KILLER_ENTITY, this);
       if (player != null) {
         lootcontext$builder.withLuck(player.getLuck()).withParameter(LootParameters.THIS_ENTITY, player);
       }
 
-      loottable.fillInventory(inventory, lootcontext$builder.build(LootParameterSets.CHEST));
+      loottable.fill(inventory, lootcontext$builder.create(LootParameterSets.CHEST));
     }
   }
 
   @Override
-  public IPacket<?> createSpawnPacket() {
+  public IPacket<?> getAddEntityPacket() {
     return NetworkHooks.getEntitySpawningPacket(this);
   }
 
   @Override
-  public void openInventory(PlayerEntity player) {
+  public void startOpen(PlayerEntity player) {
     if (!player.isSpectator()) {
-      OpenCart cart = new OpenCart(this.getEntityId());
+      OpenCart cart = new OpenCart(this.getId());
       PacketHandler.sendToInternal(cart, (ServerPlayerEntity) player);
     }
   }
 
   @Override
-  public void closeInventory(PlayerEntity player) {
+  public void stopOpen(PlayerEntity player) {
     if (!player.isSpectator()) {
       addOpener(player);
     }

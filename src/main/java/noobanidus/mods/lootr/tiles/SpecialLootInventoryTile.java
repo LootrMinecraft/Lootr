@@ -22,8 +22,8 @@ public class SpecialLootInventoryTile extends SpecialLootChestTile {
   }
 
   @Override
-  public void read(BlockState state, CompoundNBT compound) {
-    super.read(state, compound);
+  public void load(BlockState state, CompoundNBT compound) {
+    super.load(state, compound);
     if (compound.contains("customInventory") && compound.contains("customSize")) {
       int size = compound.getInt("customSize");
       this.customInventory = NonNullList.withSize(size, ItemStack.EMPTY);
@@ -32,8 +32,8 @@ public class SpecialLootInventoryTile extends SpecialLootChestTile {
   }
 
   @Override
-  public CompoundNBT write(CompoundNBT compound) {
-    compound = super.write(compound);
+  public CompoundNBT save(CompoundNBT compound) {
+    compound = super.save(compound);
     if (this.customInventory != null) {
       compound.putInt("customSize", this.customInventory.size());
       compound.put("customInventory", ItemStackHelper.saveAllItems(new CompoundNBT(), this.customInventory));
@@ -52,6 +52,6 @@ public class SpecialLootInventoryTile extends SpecialLootChestTile {
 
   @Override
   public void onDataPacket(@Nonnull NetworkManager net, @Nonnull SUpdateTileEntityPacket pkt) {
-    read(ModBlocks.INVENTORY.getDefaultState(), pkt.getNbtCompound());
+    load(ModBlocks.INVENTORY.defaultBlockState(), pkt.getTag());
   }
 }

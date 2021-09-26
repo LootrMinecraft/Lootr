@@ -9,7 +9,7 @@ public class LootrHooks implements ILootrHooks {
 
   @Override
   public boolean clearPlayerLoot(ServerPlayerEntity entity) {
-    return INSTANCE.clearPlayerLoot(entity.getUniqueID());
+    return INSTANCE.clearPlayerLoot(entity.getUUID());
   }
 
   @Override

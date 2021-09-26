@@ -20,6 +20,8 @@ import noobanidus.mods.lootr.util.ChestUtil;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class LootrBarrelBlock extends BarrelBlock {
   public static final ModelProperty<Boolean> OPENED = new ModelProperty<>();
 
@@ -28,16 +30,16 @@ public class LootrBarrelBlock extends BarrelBlock {
   }
 
   @Override
-  public void onReplaced(BlockState oldState, World world, BlockPos pos, BlockState newState, boolean isMoving) {
+  public void onRemove(BlockState oldState, World world, BlockPos pos, BlockState newState, boolean isMoving) {
     if (oldState.getBlock() != newState.getBlock() && world instanceof ServerWorld) {
       NewChestData.deleteLootChest((ServerWorld) world, pos);
     }
-    super.onReplaced(oldState, world, pos, newState, isMoving);
+    super.onRemove(oldState, world, pos, newState, isMoving);
   }
 
   @Override
-  public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
-    if (player.isSneaking()) {
+  public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
+    if (player.isShiftKeyDown()) {
       ChestUtil.handleLootSneak(this, world, pos, player);
     } else {
       ChestUtil.handleLootChest(this, world, pos, player);
@@ -47,23 +49,23 @@ public class LootrBarrelBlock extends BarrelBlock {
 
   @Nullable
   @Override
-  public TileEntity createNewTileEntity(IBlockReader p_196283_1_) {
+  public TileEntity newBlockEntity(IBlockReader p_196283_1_) {
     return new SpecialLootBarrelTile();
   }
 
   @Override
   public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-    TileEntity te = world.getTileEntity(pos);
+    TileEntity te = world.getBlockEntity(pos);
     if (te instanceof SpecialLootBarrelTile) {
-      ((SpecialLootBarrelTile) te).barrelTick();
+      ((SpecialLootBarrelTile) te).recheckOpen();
     }
   }
 
   @Override
   @SuppressWarnings("deprecation")
-  public boolean eventReceived(BlockState state, World world, BlockPos pos, int id, int param) {
-    super.eventReceived(state, world, pos, id, param);
-    TileEntity tile = world.getTileEntity(pos);
-    return tile != null && tile.receiveClientEvent(id, param);
+  public boolean triggerEvent(BlockState state, World world, BlockPos pos, int id, int param) {
+    super.triggerEvent(state, world, pos, id, param);
+    TileEntity tile = world.getBlockEntity(pos);
+    return tile != null && tile.triggerEvent(id, param);
   }
 }

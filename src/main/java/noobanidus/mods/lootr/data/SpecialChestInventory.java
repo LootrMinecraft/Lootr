@@ -39,7 +39,7 @@ public class SpecialChestInventory implements ILootrInventory {
 
   public SpecialChestInventory(NewChestData newChestData, CompoundNBT items, String componentAsJSON, BlockPos pos) {
     this.newChestData = newChestData;
-    this.name = ITextComponent.Serializer.getComponentFromJson(componentAsJSON);
+    this.name = ITextComponent.Serializer.fromJson(componentAsJSON);
     this.contents = NonNullList.withSize(27, ItemStack.EMPTY);
     ItemStackHelper.loadAllItems(items, this.contents);
     this.pos = pos;
@@ -52,11 +52,11 @@ public class SpecialChestInventory implements ILootrInventory {
   @Override
   @Nullable
   public LockableLootTileEntity getTile(World world) {
-    if (world == null || world.isRemote() || pos == null) {
+    if (world == null || world.isClientSide() || pos == null) {
       return null;
     }
 
-    TileEntity te = world.getTileEntity(pos);
+    TileEntity te = world.getBlockEntity(pos);
     if (te instanceof ILootTile) {
       return (LockableLootTileEntity) te;
     }
@@ -67,7 +67,7 @@ public class SpecialChestInventory implements ILootrInventory {
   @Override
   @Nullable
   public LootrChestMinecartEntity getEntity(World world) {
-    if (world == null || world.isRemote() || newChestData.getEntityId() == null) {
+    if (world == null || world.isClientSide() || newChestData.getEntityId() == null) {
       return null;
     }
 
@@ -76,7 +76,7 @@ public class SpecialChestInventory implements ILootrInventory {
     }
 
     ServerWorld serverWorld = (ServerWorld) world;
-    Entity entity = serverWorld.getEntityByUuid(newChestData.getEntityId());
+    Entity entity = serverWorld.getEntity(newChestData.getEntityId());
     if (entity instanceof LootrChestMinecartEntity) {
       return (LootrChestMinecartEntity) entity;
     }
@@ -85,7 +85,7 @@ public class SpecialChestInventory implements ILootrInventory {
   }
 
   @Override
-  public int getSizeInventory() {
+  public int getContainerSize() {
     return 27;
   }
 
@@ -101,15 +101,15 @@ public class SpecialChestInventory implements ILootrInventory {
   }
 
   @Override
-  public ItemStack getStackInSlot(int index) {
+  public ItemStack getItem(int index) {
     return contents.get(index);
   }
 
   @Override
-  public ItemStack decrStackSize(int index, int count) {
-    ItemStack itemstack = ItemStackHelper.getAndSplit(this.contents, index, count);
+  public ItemStack removeItem(int index, int count) {
+    ItemStack itemstack = ItemStackHelper.removeItem(this.contents, index, count);
     if (!itemstack.isEmpty()) {
-      this.markDirty();
+      this.setChanged();
       // TODO: Trigger save?
     }
 
@@ -117,39 +117,39 @@ public class SpecialChestInventory implements ILootrInventory {
   }
 
   @Override
-  public ItemStack removeStackFromSlot(int index) {
-    ItemStack result = ItemStackHelper.getAndRemove(contents, index);
+  public ItemStack removeItemNoUpdate(int index) {
+    ItemStack result = ItemStackHelper.takeItem(contents, index);
     if (!result.isEmpty()) {
-      this.markDirty();
+      this.setChanged();
     }
 
     return result;
   }
 
   @Override
-  public void setInventorySlotContents(int index, ItemStack stack) {
+  public void setItem(int index, ItemStack stack) {
     this.contents.set(index, stack);
-    if (stack.getCount() > this.getInventoryStackLimit()) {
-      stack.setCount(this.getInventoryStackLimit());
+    if (stack.getCount() > this.getMaxStackSize()) {
+      stack.setCount(this.getMaxStackSize());
     }
 
-    this.markDirty();
+    this.setChanged();
   }
 
   @Override
-  public void markDirty() {
-    newChestData.markDirty();
+  public void setChanged() {
+    newChestData.setDirty();
   }
 
   @Override
-  public boolean isUsableByPlayer(PlayerEntity player) {
+  public boolean stillValid(PlayerEntity player) {
     return true;
   }
 
   @Override
-  public void clear() {
+  public void clearContent() {
     contents.clear();
-    markDirty();
+    setChanged();
   }
 
   @Override
@@ -160,38 +160,38 @@ public class SpecialChestInventory implements ILootrInventory {
   @Nullable
   @Override
   public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
-    return ChestContainer.createGeneric9X3(id, inventory, this);
+    return ChestContainer.threeRows(id, inventory, this);
   }
 
   @Override
-  public void openInventory(PlayerEntity player) {
-    World world = player.world;
+  public void startOpen(PlayerEntity player) {
+    World world = player.level;
     LockableLootTileEntity tile = getTile(world);
     if (tile != null) {
-      tile.openInventory(player);
+      tile.startOpen(player);
     }
     if (newChestData.getEntityId() != null) {
       LootrChestMinecartEntity entity = getEntity(world);
       if (entity != null) {
-        entity.openInventory(player);
+        entity.startOpen(player);
       }
     }
   }
 
   @Override
-  public void closeInventory(PlayerEntity player) {
-    markDirty();
-    World world = player.world;
+  public void stopOpen(PlayerEntity player) {
+    setChanged();
+    World world = player.level;
     if (pos != null) {
       LockableLootTileEntity tile = getTile(world);
       if (tile != null) {
-        tile.closeInventory(player);
+        tile.stopOpen(player);
       }
     }
     if (newChestData.getEntityId() != null) {
       LootrChestMinecartEntity entity = getEntity(world);
       if (entity != null) {
-        entity.closeInventory(player);
+        entity.stopOpen(player);
       }
     }
   }

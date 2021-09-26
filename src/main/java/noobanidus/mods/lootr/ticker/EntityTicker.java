@@ -19,11 +19,11 @@ public class EntityTicker {
     if (event.phase == TickEvent.Phase.END) {
       entities.removeIf(Entity::isAddedToWorld);
       for (LootrChestMinecartEntity entity : entities) {
-        ServerWorld world = (ServerWorld) entity.world;
-        ServerChunkProvider provider = world.getChunkProvider();
-        IChunk ichunk = provider.getChunk(MathHelper.floor(entity.getPosX() / 16.0D), MathHelper.floor(entity.getPosZ() / 16.0D), ChunkStatus.FULL, false);
+        ServerWorld world = (ServerWorld) entity.level;
+        ServerChunkProvider provider = world.getChunkSource();
+        IChunk ichunk = provider.getChunk(MathHelper.floor(entity.getX() / 16.0D), MathHelper.floor(entity.getZ() / 16.0D), ChunkStatus.FULL, false);
         if (ichunk != null) {
-          world.addEntity(entity);
+          world.addFreshEntity(entity);
         }
       }
     }

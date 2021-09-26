@@ -40,19 +40,19 @@ public class MixinLockableLootTileEntity {
       BlockState replacement = ConfigManager.replacement(state);
       if (replacement != null) {
         IServerWorld world = (IServerWorld) reader;
-        RegistryKey<World> key = world.getWorld().getDimensionKey();
+        RegistryKey<World> key = world.getLevel().dimension();
         if (ConfigManager.isDimensionBlocked(key)) {
           return;
         }
         IChunk chunk = world.getChunk(pos);
-        chunk.removeTileEntity(pos);
+        chunk.removeBlockEntity(pos);
         if (state.getProperties().contains(ChestBlock.WATERLOGGED)) {
-          replacement = replacement.with(ChestBlock.WATERLOGGED, state.get(ChestBlock.WATERLOGGED));
+          replacement = replacement.setValue(ChestBlock.WATERLOGGED, state.getValue(ChestBlock.WATERLOGGED));
         }
-        world.setBlockState(pos, replacement, 2);
+        world.setBlock(pos, replacement, 2);
         TileEntity te = replacement.getBlock().createTileEntity(replacement, reader);
         if (te != null) {
-          chunk.addTileEntity(pos, te);
+          chunk.setBlockEntity(pos, te);
         }
       }
     }
@@ -79,7 +79,7 @@ public class MixinLockableLootTileEntity {
             "\n  can't replace. Please consider reporting it!" +
             "\n    Tile: " + this +
             "\n    Table: " + table +
-            "\n    Location: " + ((LockableLootTileEntity) (Object) (this)).getPos().toString() +
+            "\n    Location: " + ((LockableLootTileEntity) (Object) (this)).getBlockPos().toString() +
             "\n    Stack: " + stacktrace[3].toString() +
             "\n           " + stacktrace[4].toString() +
             "\n           " + stacktrace[5].toString());

@@ -16,12 +16,12 @@ public class HandleBreak {
   public static Set<Block> specialLootChests = Sets.newHashSet(ModBlocks.CHEST, ModBlocks.BARREL, ModBlocks.TRAPPED_CHEST);
 
   public static void onBlockBreak(BlockEvent.BreakEvent event) {
-    if (!event.getWorld().isRemote()) {
+    if (!event.getWorld().isClientSide()) {
       if (specialLootChests.contains(event.getState().getBlock())) {
-        if (!event.getPlayer().isSneaking()) {
+        if (!event.getPlayer().isShiftKeyDown()) {
           event.setCanceled(true);
-          event.getPlayer().sendMessage(new TranslationTextComponent("lootr.message.should_sneak").setStyle(Style.EMPTY.setColor(Color.fromTextFormatting(TextFormatting.AQUA))), Util.DUMMY_UUID);
-          event.getPlayer().sendMessage(new TranslationTextComponent("lootr.message.should_sneak2", new TranslationTextComponent("lootr.message.should_sneak3").setStyle(Style.EMPTY.setBold(true))).setStyle(Style.EMPTY.setColor(Color.fromTextFormatting(TextFormatting.AQUA))), Util.DUMMY_UUID);
+          event.getPlayer().sendMessage(new TranslationTextComponent("lootr.message.should_sneak").setStyle(Style.EMPTY.withColor(Color.fromLegacyFormat(TextFormatting.AQUA))), Util.NIL_UUID);
+          event.getPlayer().sendMessage(new TranslationTextComponent("lootr.message.should_sneak2", new TranslationTextComponent("lootr.message.should_sneak3").setStyle(Style.EMPTY.withBold(true))).setStyle(Style.EMPTY.withColor(Color.fromLegacyFormat(TextFormatting.AQUA))), Util.NIL_UUID);
         }
       }
     }

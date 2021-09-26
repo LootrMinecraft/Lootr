@@ -11,6 +11,8 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class TrophyBlock extends Block {
   public TrophyBlock(Properties properties) {
     super(properties);
@@ -18,22 +20,22 @@ public class TrophyBlock extends Block {
 
   @Override
   public BlockState getStateForPlacement(BlockItemUseContext context) {
-    return this.getDefaultState().with(HorizontalBlock.HORIZONTAL_FACING, context.getPlacementHorizontalFacing().getOpposite());
+    return this.defaultBlockState().setValue(HorizontalBlock.FACING, context.getHorizontalDirection().getOpposite());
   }
 
   @Override
-  protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-    super.fillStateContainer(builder);
-    builder.add(HorizontalBlock.HORIZONTAL_FACING);
+  protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+    super.createBlockStateDefinition(builder);
+    builder.add(HorizontalBlock.FACING);
   }
 
-  private static final VoxelShape EAST_WEST = Block.makeCuboidShape(1.5, 0, 4, 14.5, 14.5, 12);
-  private static final VoxelShape NORTH_SOUTH = Block.makeCuboidShape(4, 0, 1.5, 12, 14.5, 14.5);
+  private static final VoxelShape EAST_WEST = Block.box(1.5, 0, 4, 14.5, 14.5, 12);
+  private static final VoxelShape NORTH_SOUTH = Block.box(4, 0, 1.5, 12, 14.5, 14.5);
 
   @Override
   @SuppressWarnings("deprecation")
   public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-    Direction facing = state.get(HorizontalBlock.HORIZONTAL_FACING);
+    Direction facing = state.getValue(HorizontalBlock.FACING);
     if (facing == Direction.EAST || facing == Direction.WEST) {
       return EAST_WEST;
     } else {

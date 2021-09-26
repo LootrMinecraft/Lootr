@@ -49,15 +49,15 @@ public class NewChestData extends WorldSavedData {
   }
 
   public static String REF_ID(RegistryKey<World> dimension, UUID id) {
-    return "Lootr-custom-" + dimension.getLocation().getPath() + "-" + id.toString();
+    return "Lootr-custom-" + dimension.location().getPath() + "-" + id.toString();
   }
 
   public static String OLD_ID(RegistryKey<World> dimension, BlockPos pos) {
-    return "Lootr-chests-" + dimension.getLocation().getPath() + "-" + pos.toLong();
+    return "Lootr-chests-" + dimension.location().getPath() + "-" + pos.asLong();
   }
 
   public static String ID(RegistryKey<World> dimension, UUID id) {
-    return "Lootr-chests-" + dimension.getLocation().getPath() + "-" + id.toString();
+    return "Lootr-chests-" + dimension.location().getPath() + "-" + id.toString();
   }
 
   public static String ENTITY(UUID entityId) {
@@ -114,7 +114,7 @@ public class NewChestData extends WorldSavedData {
   private LootFiller customInventory() {
     return (player, inventory, table, seed) -> {
       for (int i = 0; i < reference.size(); i++) {
-        inventory.setInventorySlotContents(i, reference.get(i).copy());
+        inventory.setItem(i, reference.get(i).copy());
       }
     };
   }
@@ -133,7 +133,7 @@ public class NewChestData extends WorldSavedData {
 
   @Nullable
   private SpecialChestInventory getInventory(ServerPlayerEntity player, BlockPos pos) {
-    SpecialChestInventory result = inventories.get(player.getUniqueID());
+    SpecialChestInventory result = inventories.get(player.getUUID());
     if (result != null) {
       result.setBlockPos(pos);
     }
@@ -141,33 +141,33 @@ public class NewChestData extends WorldSavedData {
   }
 
   private SpecialChestInventory createInventory(ServerPlayerEntity player, LootFiller filler, @Nullable LockableLootTileEntity tile) {
-    ServerWorld world = (ServerWorld) player.world;
+    ServerWorld world = (ServerWorld) player.level;
     SpecialChestInventory result;
     LootrChestMinecartEntity cart = null;
     long seed = -1;
     if (entityId != null) {
-      Entity initial = world.getEntityByUuid(entityId);
+      Entity initial = world.getEntity(entityId);
       if (!(initial instanceof LootrChestMinecartEntity)) {
         return null;
       }
       cart = (LootrChestMinecartEntity) initial;
-      NonNullList<ItemStack> items = NonNullList.withSize(cart.getSizeInventory(), ItemStack.EMPTY);
+      NonNullList<ItemStack> items = NonNullList.withSize(cart.getContainerSize(), ItemStack.EMPTY);
       // Saving this is handled elsewhere
       result = new SpecialChestInventory(this, items, cart.getDisplayName(), pos);
     } else {
-      if (world.getDimensionKey() != dimension) {
+      if (world.dimension() != dimension) {
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
         if (server == null) {
           return null;
         }
-        world = server.getWorld(dimension);
+        world = server.getLevel(dimension);
       }
 
       if (world == null || tile == null) {
         return null;
       }
 
-      NonNullList<ItemStack> items = NonNullList.withSize(tile.getSizeInventory(), ItemStack.EMPTY);
+      NonNullList<ItemStack> items = NonNullList.withSize(tile.getContainerSize(), ItemStack.EMPTY);
       // Saving this is handled elsewhere
       result = new SpecialChestInventory(this, items, tile.getDisplayName(), pos);
     }
@@ -177,36 +177,36 @@ public class NewChestData extends WorldSavedData {
       LootrLootingEvent.Post postEvent = new LootrLootingEvent.Post(player, world, dimension, result, tile, cart);
       MinecraftForge.EVENT_BUS.post(postEvent);
     }
-    inventories.put(player.getUniqueID(), result);
-    markDirty();
-    world.getSavedData().save();
+    inventories.put(player.getUUID(), result);
+    setDirty();
+    world.getDataStorage().save();
     return result;
   }
 
   @Override
-  public void read(CompoundNBT compound) {
+  public void load(CompoundNBT compound) {
     inventories.clear();
     pos = null;
     dimension = null;
     entityId = null;
     tileId = null;
     if (compound.contains("position")) {
-      pos = BlockPos.fromLong(compound.getLong("position"));
+      pos = BlockPos.of(compound.getLong("position"));
     }
     if (compound.contains("dimension")) {
-      dimension = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(compound.getString("dimension")));
+      dimension = RegistryKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(compound.getString("dimension")));
     }
-    if (compound.hasUniqueId("entityId")) {
-      entityId = compound.getUniqueId("entityId");
+    if (compound.hasUUID("entityId")) {
+      entityId = compound.getUUID("entityId");
     }
-    if (compound.hasUniqueId("tileId")) {
-      tileId = compound.getUniqueId("tileId");
+    if (compound.hasUUID("tileId")) {
+      tileId = compound.getUUID("tileId");
     }
     if (compound.contains("custom")) {
       custom = compound.getBoolean("custom");
     }
-    if (compound.hasUniqueId("customId")) {
-      customId = compound.getUniqueId("customId");
+    if (compound.hasUUID("customId")) {
+      customId = compound.getUUID("customId");
     }
     if (compound.contains("reference") && compound.contains("referenceSize")) {
       int size = compound.getInt("referenceSize");
@@ -218,27 +218,27 @@ public class NewChestData extends WorldSavedData {
       CompoundNBT thisTag = compounds.getCompound(i);
       CompoundNBT items = thisTag.getCompound("chest");
       String name = thisTag.getString("name");
-      UUID uuid = thisTag.getUniqueId("uuid");
+      UUID uuid = thisTag.getUUID("uuid");
       inventories.put(uuid, new SpecialChestInventory(this, items, name, pos));
     }
   }
 
   @Override
-  public CompoundNBT write(CompoundNBT compound) {
+  public CompoundNBT save(CompoundNBT compound) {
     if (pos != null) {
-      compound.putLong("position", pos.toLong());
+      compound.putLong("position", pos.asLong());
     }
     if (dimension != null) {
-      compound.putString("dimension", dimension.getLocation().toString());
+      compound.putString("dimension", dimension.location().toString());
     }
     if (entityId != null) {
-      compound.putUniqueId("entityId", entityId);
+      compound.putUUID("entityId", entityId);
     }
     if (tileId != null) {
-      compound.putUniqueId("tileId", tileId);
+      compound.putUUID("tileId", tileId);
     }
     if (customId != null) {
-      compound.putUniqueId("customId", customId);
+      compound.putUUID("customId", customId);
     }
     compound.putBoolean("custom", custom);
     if (reference != null) {
@@ -248,7 +248,7 @@ public class NewChestData extends WorldSavedData {
     ListNBT compounds = new ListNBT();
     for (Map.Entry<UUID, SpecialChestInventory> entry : inventories.entrySet()) {
       CompoundNBT thisTag = new CompoundNBT();
-      thisTag.putUniqueId("uuid", entry.getKey());
+      thisTag.putUUID("uuid", entry.getKey());
       thisTag.put("chest", entry.getValue().writeItems());
       thisTag.putString("name", entry.getValue().writeName());
       compounds.add(thisTag);
@@ -263,31 +263,31 @@ public class NewChestData extends WorldSavedData {
   }
 
   private static ServerWorld getServerWorld() {
-    return ServerLifecycleHooks.getCurrentServer().getWorld(World.OVERWORLD);
+    return ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD);
   }
 
   private static NewChestData getInstancePos(ServerWorld world, BlockPos pos) {
-    RegistryKey<World> dimension = world.getDimensionKey();
-    return getServerWorld().getSavedData().get(() -> new NewChestData(dimension, pos), OLD_ID(dimension, pos));
+    RegistryKey<World> dimension = world.dimension();
+    return getServerWorld().getDataStorage().get(() -> new NewChestData(dimension, pos), OLD_ID(dimension, pos));
   }
 
   private static NewChestData getInstanceUuid(ServerWorld world, UUID id) {
-    RegistryKey<World> dimension = world.getDimensionKey();
-    return getServerWorld().getSavedData().getOrCreate(() -> new NewChestData(dimension, id), ID(dimension, id));
+    RegistryKey<World> dimension = world.dimension();
+    return getServerWorld().getDataStorage().computeIfAbsent(() -> new NewChestData(dimension, id), ID(dimension, id));
   }
 
   private static NewChestData getInstance(ServerWorld world, UUID id) {
-    return getServerWorld().getSavedData().getOrCreate(() -> new NewChestData(id), ENTITY(id));
+    return getServerWorld().getDataStorage().computeIfAbsent(() -> new NewChestData(id), ENTITY(id));
   }
 
   private static NewChestData getInstanceInventory(ServerWorld world, UUID id, @Nullable UUID customId, @Nullable NonNullList<ItemStack> base) {
-    RegistryKey<World> dimension = world.getDimensionKey();
-    return getServerWorld().getSavedData().getOrCreate(() -> new NewChestData(dimension, id, customId, base), REF_ID(dimension, id));
+    RegistryKey<World> dimension = world.dimension();
+    return getServerWorld().getDataStorage().computeIfAbsent(() -> new NewChestData(dimension, id, customId, base), REF_ID(dimension, id));
   }
 
   @Nullable
   public static SpecialChestInventory getInventory(World world, UUID uuid, BlockPos pos, ServerPlayerEntity player, LockableLootTileEntity tile, LootFiller filler) {
-    if (world.isRemote || !(world instanceof ServerWorld)) {
+    if (world.isClientSide || !(world instanceof ServerWorld)) {
       return null;
     }
 
@@ -298,7 +298,7 @@ public class NewChestData extends WorldSavedData {
       inventories.putAll(oldData.getInventories());
       data.setInventories(inventories);
       oldData.clear();
-      oldData.markDirty();
+      oldData.setDirty();
     }
     SpecialChestInventory inventory = data.getInventory(player, pos);
     if (inventory == null) {
@@ -311,7 +311,7 @@ public class NewChestData extends WorldSavedData {
 
   @Nullable
   public static SpecialChestInventory getInventory(World world, UUID uuid, NonNullList<ItemStack> base, ServerPlayerEntity player, BlockPos pos, LockableLootTileEntity tile) {
-    if (world.isRemote || !(world instanceof ServerWorld)) {
+    if (world.isClientSide || !(world instanceof ServerWorld)) {
       return null;
     }
     NewChestData data = getInstanceInventory((ServerWorld) world, uuid, null, base);
@@ -325,13 +325,13 @@ public class NewChestData extends WorldSavedData {
   }
 
   public static boolean clearInventories(ServerPlayerEntity player) {
-    return clearInventories(player.getUniqueID());
+    return clearInventories(player.getUUID());
   }
 
   public static boolean clearInventories(UUID uuid) {
     ServerWorld world = getServerWorld();
-    DimensionSavedDataManager data = world.getSavedData();
-    Path dataPath = world.getServer().func_240776_a_(new FolderName("data"));
+    DimensionSavedDataManager data = world.getDataStorage();
+    Path dataPath = world.getServer().getWorldPath(new FolderName("data"));
 
     List<String> ids = new ArrayList<>();
     try (Stream<Path> paths = Files.walk(dataPath)) {
@@ -353,7 +353,7 @@ public class NewChestData extends WorldSavedData {
       if (chestData != null) {
         if (chestData.clearInventory(uuid)) {
           cleared++;
-          chestData.markDirty();
+          chestData.setDirty();
         }
       }
     }
@@ -364,11 +364,11 @@ public class NewChestData extends WorldSavedData {
 
   @Nullable
   public static SpecialChestInventory getInventory(World world, LootrChestMinecartEntity cart, ServerPlayerEntity player, LootFiller filler) {
-    if (world.isRemote || !(world instanceof ServerWorld)) {
+    if (world.isClientSide || !(world instanceof ServerWorld)) {
       return null;
     }
 
-    NewChestData data = getInstance((ServerWorld) world, cart.getUniqueID());
+    NewChestData data = getInstance((ServerWorld) world, cart.getUUID());
     SpecialChestInventory inventory = data.getInventory(player, null);
     if (inventory == null) {
       inventory = data.createInventory(player, filler, null);
@@ -379,24 +379,24 @@ public class NewChestData extends WorldSavedData {
 
   public static void wipeInventory(ServerWorld world, BlockPos pos) {
     ServerWorld serverWorld = getServerWorld();
-    RegistryKey<World> dimension = world.getDimensionKey();
-    DimensionSavedDataManager manager = serverWorld.getSavedData();
+    RegistryKey<World> dimension = world.dimension();
+    DimensionSavedDataManager manager = serverWorld.getDataStorage();
     String id = OLD_ID(dimension, pos);
-    if (!manager.savedDatum.containsKey(id)) {
+    if (!manager.cache.containsKey(id)) {
       return;
     }
     NewChestData data = manager.get(() -> null, id);
     if (data != null) {
       data.clear();
-      data.markDirty();
+      data.setDirty();
     }
   }
 
   public static void deleteLootChest(ServerWorld world, BlockPos pos) {
-    if (world.isRemote()) {
+    if (world.isClientSide()) {
       return;
     }
     NewChestData.wipeInventory(world, pos);
-    getServerWorld().getSavedData().save();
+    getServerWorld().getDataStorage().save();
   }
 }

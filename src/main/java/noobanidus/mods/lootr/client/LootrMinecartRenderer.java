@@ -28,21 +28,21 @@ public class LootrMinecartRenderer extends MinecartRenderer<LootrChestMinecartEn
 
   public void render(LootrChestMinecartEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
     super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
-    matrixStackIn.push();
-    long i = (long) entityIn.getEntityId() * 493286711L;
+    matrixStackIn.pushPose();
+    long i = (long) entityIn.getId() * 493286711L;
     i = i * i * 4392167121L + i * 98761L;
     float f = (((float) (i >> 16 & 7L) + 0.5F) / 8.0F - 0.5F) * 0.004F;
     float f1 = (((float) (i >> 20 & 7L) + 0.5F) / 8.0F - 0.5F) * 0.004F;
     float f2 = (((float) (i >> 24 & 7L) + 0.5F) / 8.0F - 0.5F) * 0.004F;
     matrixStackIn.translate((double) f, (double) f1, (double) f2);
-    double d0 = MathHelper.lerp((double) partialTicks, entityIn.lastTickPosX, entityIn.getPosX());
-    double d1 = MathHelper.lerp((double) partialTicks, entityIn.lastTickPosY, entityIn.getPosY());
-    double d2 = MathHelper.lerp((double) partialTicks, entityIn.lastTickPosZ, entityIn.getPosZ());
+    double d0 = MathHelper.lerp((double) partialTicks, entityIn.xOld, entityIn.getX());
+    double d1 = MathHelper.lerp((double) partialTicks, entityIn.yOld, entityIn.getY());
+    double d2 = MathHelper.lerp((double) partialTicks, entityIn.zOld, entityIn.getZ());
     Vector3d vector3d = entityIn.getPos(d0, d1, d2);
-    float f3 = MathHelper.lerp(partialTicks, entityIn.prevRotationPitch, entityIn.rotationPitch);
+    float f3 = MathHelper.lerp(partialTicks, entityIn.xRotO, entityIn.xRot);
     if (vector3d != null) {
-      Vector3d vector3d1 = entityIn.getPosOffset(d0, d1, d2, (double) 0.3F);
-      Vector3d vector3d2 = entityIn.getPosOffset(d0, d1, d2, (double) -0.3F);
+      Vector3d vector3d1 = entityIn.getPosOffs(d0, d1, d2, (double) 0.3F);
+      Vector3d vector3d2 = entityIn.getPosOffs(d0, d1, d2, (double) -0.3F);
       if (vector3d1 == null) {
         vector3d1 = vector3d;
       }
@@ -61,35 +61,35 @@ public class LootrMinecartRenderer extends MinecartRenderer<LootrChestMinecartEn
     }
 
     matrixStackIn.translate(0.0D, 0.375D, 0.0D);
-    matrixStackIn.rotate(Vector3f.YP.rotationDegrees(180.0F - entityYaw));
-    matrixStackIn.rotate(Vector3f.ZP.rotationDegrees(-f3));
-    float f5 = (float) entityIn.getRollingAmplitude() - partialTicks;
+    matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(180.0F - entityYaw));
+    matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(-f3));
+    float f5 = (float) entityIn.getHurtTime() - partialTicks;
     float f6 = entityIn.getDamage() - partialTicks;
     if (f6 < 0.0F) {
       f6 = 0.0F;
     }
 
     if (f5 > 0.0F) {
-      matrixStackIn.rotate(Vector3f.XP.rotationDegrees(MathHelper.sin(f5) * f5 * f6 / 10.0F * (float) entityIn.getRollingDirection()));
+      matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(MathHelper.sin(f5) * f5 * f6 / 10.0F * (float) entityIn.getHurtDir()));
     }
 
-    int j = entityIn.getDisplayTileOffset();
-    matrixStackIn.push();
+    int j = entityIn.getDisplayOffset();
+    matrixStackIn.pushPose();
     matrixStackIn.scale(0.75F, 0.75F, 0.75F);
     matrixStackIn.translate(-0.5D, (double) ((float) (j - 8) / 16.0F), 0.5D);
-    matrixStackIn.rotate(Vector3f.YP.rotationDegrees(90.0F));
+    matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(90.0F));
     if (entityIn.isOpened()) {
       tile.setOpened(true);
     } else {
       tile.setOpened(false);
     }
     TileEntityRendererDispatcher.instance.renderItem(tile, matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY);
-    matrixStackIn.pop();
+    matrixStackIn.popPose();
 
     matrixStackIn.scale(-1.0F, -1.0F, 1.0F);
-    this.modelMinecart.setRotationAngles(entityIn, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F);
-    IVertexBuilder ivertexbuilder = bufferIn.getBuffer(this.modelMinecart.getRenderType(this.getEntityTexture(entityIn)));
-    this.modelMinecart.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-    matrixStackIn.pop();
+    this.model.setupAnim(entityIn, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F);
+    IVertexBuilder ivertexbuilder = bufferIn.getBuffer(this.model.renderType(this.getTextureLocation(entityIn)));
+    this.model.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+    matrixStackIn.popPose();
   }
 }

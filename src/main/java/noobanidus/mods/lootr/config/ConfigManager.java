@@ -90,14 +90,14 @@ public class ConfigManager {
 
   public static Set<RegistryKey<World>> getDimensionWhitelist() {
     if (DIM_WHITELIST == null) {
-      DIM_WHITELIST = DIMENSION_WHITELIST.get().stream().map(o -> RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(o))).collect(Collectors.toSet());
+      DIM_WHITELIST = DIMENSION_WHITELIST.get().stream().map(o -> RegistryKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(o))).collect(Collectors.toSet());
     }
     return DIM_WHITELIST;
   }
 
   public static Set<RegistryKey<World>> getDimensionBlacklist() {
     if (DIM_BLACKLIST == null) {
-      DIM_BLACKLIST = DIMENSION_BLACKLIST.get().stream().map(o -> RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(o))).collect(Collectors.toSet());
+      DIM_BLACKLIST = DIMENSION_BLACKLIST.get().stream().map(o -> RegistryKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(o))).collect(Collectors.toSet());
     }
     return DIM_BLACKLIST;
   }
@@ -137,7 +137,7 @@ public class ConfigManager {
   private static void addUnsafeReplacement(ResourceLocation location, Block replacement, ServerWorld world) {
     Block block = ForgeRegistries.BLOCKS.getValue(location);
     if (block != null) {
-      TileEntity tile = block.createTileEntity(block.getDefaultState(), world);
+      TileEntity tile = block.createTileEntity(block.defaultBlockState(), world);
       if (tile instanceof LockableLootTileEntity) {
         replacements.put(block, replacement);
       }
@@ -156,24 +156,24 @@ public class ConfigManager {
         QUARK_TRAPPED_CHESTS.forEach(o -> addSafeReplacement(o, ModBlocks.TRAPPED_CHEST));
       }
       if (CONVERT_WOODEN_CHESTS.get() || CONVERT_TRAPPED_CHESTS.get()) {
-        final ServerWorld world = ServerLifecycleHooks.getCurrentServer().getWorld(World.OVERWORLD);
+        final ServerWorld world = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD);
         if (CONVERT_WOODEN_CHESTS.get()) {
-          Tags.Blocks.CHESTS_WOODEN.getAllElements().forEach(o -> {
+          Tags.Blocks.CHESTS_WOODEN.getValues().forEach(o -> {
             if (replacements.containsKey(o)) {
               return;
             }
-            TileEntity tile = o.createTileEntity(o.getDefaultState(), world);
+            TileEntity tile = o.createTileEntity(o.defaultBlockState(), world);
             if (tile instanceof LockableLootTileEntity) {
               replacements.put(o, ModBlocks.CHEST);
             }
           });
         }
         if (CONVERT_TRAPPED_CHESTS.get()) {
-          Tags.Blocks.CHESTS_TRAPPED.getAllElements().forEach(o -> {
+          Tags.Blocks.CHESTS_TRAPPED.getValues().forEach(o -> {
             if (replacements.containsKey(o)) {
               return;
             }
-            TileEntity tile = o.createTileEntity(o.getDefaultState(), world);
+            TileEntity tile = o.createTileEntity(o.defaultBlockState(), world);
             if (tile instanceof LockableLootTileEntity) {
               replacements.put(o, ModBlocks.CHEST);
             }
@@ -181,7 +181,7 @@ public class ConfigManager {
         }
       }
       if (!getAdditionalChests().isEmpty() || !getAdditionalTrappedChests().isEmpty()) {
-        final ServerWorld world = ServerLifecycleHooks.getCurrentServer().getWorld(World.OVERWORLD);
+        final ServerWorld world = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD);
         getAdditionalChests().forEach(o -> addUnsafeReplacement(o, ModBlocks.CHEST, world));
         getAdditionalTrappedChests().forEach(o -> addUnsafeReplacement(o, ModBlocks.TRAPPED_CHEST, world));
       }
@@ -192,7 +192,7 @@ public class ConfigManager {
       return null;
     }
 
-    return copyProperties(replacement.getDefaultState(), original);
+    return copyProperties(replacement.defaultBlockState(), original);
   }
 
   private static BlockState copyProperties (BlockState state, BlockState original) {
@@ -207,10 +207,10 @@ public class ConfigManager {
   private static <V extends Comparable<V>> BlockState safeReplace (BlockState state, BlockState original, Property<V> property) {
     // TODO: Bit of a dirty hack
     if (property == ChestBlock.TYPE && state.hasProperty(property)) {
-      return state.with(ChestBlock.TYPE, ChestType.SINGLE);
+      return state.setValue(ChestBlock.TYPE, ChestType.SINGLE);
     }
     if (original.hasProperty(property) && state.hasProperty(property)) {
-      return state.with(property, original.get(property));
+      return state.setValue(property, original.getValue(property));
     }
     return state;
   }

@@ -1,3 +1,4 @@
 [submodule "gradle"]
 	path = gradle
-	url = https://github.com/noobanidus/gradlehax
+    url = https://github.com/noobanidus/gradlehax
+    branch = 1.16.5

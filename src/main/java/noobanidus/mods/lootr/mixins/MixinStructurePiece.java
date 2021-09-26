@@ -24,26 +24,26 @@ public class MixinStructurePiece {
       method = "Lnet/minecraft/world/gen/feature/structure/StructurePiece;generateChest(Lnet/minecraft/world/IServerWorld;Lnet/minecraft/util/math/MutableBoundingBox;Ljava/util/Random;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/block/BlockState;)Z",
       at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/world/gen/feature/structure/StructurePiece;correctFacing(Lnet/minecraft/world/IBlockReader;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;)Lnet/minecraft/block/BlockState;")
   )
-  private BlockState correctFacingGenerateChest(BlockState original, IServerWorld worldIn, MutableBoundingBox boundsIn, Random rand, BlockPos posIn, ResourceLocation resourceLocationIn, @Nullable BlockState p_191080_6_) {
+  private BlockState correctFacingGenerateChest(BlockState original, IServerWorld worldIn, MutableBoundingBox boundsIn, Random rand, BlockPos posIn, ResourceLocation resourceLocationIn, @Nullable BlockState pState) {
     if (ConfigManager.getLootBlacklist().contains(resourceLocationIn)) {
       return original;
     }
-    RegistryKey<World> key = worldIn.getWorld().getDimensionKey();
+    RegistryKey<World> key = worldIn.getLevel().dimension();
     if (ConfigManager.isDimensionBlocked(key)) {
-      return StructurePiece.correctFacing(worldIn, posIn, original);
+      return StructurePiece.reorient(worldIn, posIn, original);
     }
-    return StructurePiece.correctFacing(worldIn, posIn, ModBlocks.CHEST.getDefaultState().with(ChestBlock.WATERLOGGED, original.get(ChestBlock.WATERLOGGED)));
+    return StructurePiece.reorient(worldIn, posIn, ModBlocks.CHEST.defaultBlockState().setValue(ChestBlock.WATERLOGGED, original.getValue(ChestBlock.WATERLOGGED)));
   }
 
   @ModifyVariable(
       method = "Lnet/minecraft/world/gen/feature/structure/StructurePiece;generateChest(Lnet/minecraft/world/IServerWorld;Lnet/minecraft/util/math/MutableBoundingBox;Ljava/util/Random;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/block/BlockState;)Z",
       at = @At("HEAD")
   )
-  private BlockState replaceChest (BlockState original, IServerWorld worldIn, MutableBoundingBox boundsIn, Random rand, BlockPos posIn, ResourceLocation resourceLocationIn, @Nullable BlockState p_191080_6_) {
+  private BlockState replaceChest (BlockState original, IServerWorld worldIn, MutableBoundingBox boundsIn, Random rand, BlockPos posIn, ResourceLocation resourceLocationIn, @Nullable BlockState pState) {
     if (ConfigManager.getLootBlacklist().contains(resourceLocationIn)) {
       return original;
     }
-    RegistryKey<World> key = worldIn.getWorld().getDimensionKey();
+    RegistryKey<World> key = worldIn.getLevel().dimension();
     if (ConfigManager.isDimensionBlocked(key)) {
       return original;
     }

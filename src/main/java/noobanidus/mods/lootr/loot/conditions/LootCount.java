@@ -23,18 +23,18 @@ public class LootCount implements ILootCondition {
   }
 
   @Override
-  public LootConditionType func_230419_b_() {
+  public LootConditionType getType() {
     return ModLoot.LOOT_COUNT;
   }
 
   @Override
   public boolean test(LootContext lootContext) {
-    Vector3d pos = lootContext.get(LootParameters.field_237457_g_);
+    Vector3d pos = lootContext.getParamOrNull(LootParameters.ORIGIN);
     if (pos == null) {
       return false; // THIS SHOULD NEVER HAPPEN
     }
     BlockPos position = new BlockPos(pos);
-    TileEntity tileentity = lootContext.getWorld().getTileEntity(position);
+    TileEntity tileentity = lootContext.getLevel().getBlockEntity(position);
     if (tileentity instanceof ILootTile) {
       int count = ((ILootTile) tileentity).getOpeners().size() + 1; // Additional opener to include the current opener
       for (Operation op : operations) {
@@ -47,8 +47,8 @@ public class LootCount implements ILootCondition {
   }
 
   @Override
-  public Set<LootParameter<?>> getRequiredParameters() {
-    return ImmutableSet.of(LootParameters.field_237457_g_);
+  public Set<LootParameter<?>> getReferencedContextParams() {
+    return ImmutableSet.of(LootParameters.ORIGIN);
   }
 
   public static class Serializer implements ILootSerializer<LootCount> {

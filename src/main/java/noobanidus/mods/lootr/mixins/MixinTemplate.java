@@ -17,9 +17,9 @@ import java.util.List;
 @Mixin(Template.class)
 public class MixinTemplate {
   @Inject(method = "Lnet/minecraft/world/gen/feature/template/Template;processBlockInfos(Lnet/minecraft/world/IWorld;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/gen/feature/template/PlacementSettings;Ljava/util/List;Lnet/minecraft/world/gen/feature/template/Template;)Ljava/util/List;", at = @At("HEAD"), remap = false)
-  private static void processBlockInfos(IWorld p_237145_0_, BlockPos p_237145_1_, BlockPos p_237145_2_, PlacementSettings p_237145_3_, List<Template.BlockInfo> p_237145_4_, @Nullable Template template, CallbackInfoReturnable<List<Template.BlockInfo>> info) {
-    if (!p_237145_3_.getProcessors().contains(LootrChestProcessor.INSTANCE)) {
-      p_237145_3_.addProcessor(LootrChestProcessor.INSTANCE);
+  private static void processBlockInfos(IWorld pLevel, BlockPos p_237145_1_, BlockPos p_237145_2_, PlacementSettings pSettings, List<Template.BlockInfo> pBlockInfoList, @Nullable Template template, CallbackInfoReturnable<List<Template.BlockInfo>> info) {
+    if (!pSettings.getProcessors().contains(LootrChestProcessor.INSTANCE)) {
+      pSettings.addProcessor(LootrChestProcessor.INSTANCE);
     }
   }
 }

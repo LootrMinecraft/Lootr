@@ -45,13 +45,13 @@ public class BarrelModel implements IModelGeometry<BarrelModel> {
   public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
     Set<RenderMaterial> materials = Sets.newHashSet();
     materials.add(owner.resolveTexture("particle"));
-    materials.addAll(unopened.getTextures(modelGetter, missingTextureErrors));
-    materials.addAll(opened.getTextures(modelGetter, missingTextureErrors));
+    materials.addAll(unopened.getMaterials(modelGetter, missingTextureErrors));
+    materials.addAll(opened.getMaterials(modelGetter, missingTextureErrors));
     return materials;
   }
 
   private static IBakedModel buildModel(IUnbakedModel entry, IModelTransform modelTransform, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter, ResourceLocation modelLocation) {
-    return entry.bakeModel(bakery, spriteGetter, modelTransform, modelLocation);
+    return entry.bake(bakery, spriteGetter, modelTransform, modelLocation);
   }
 
   @Override
@@ -100,7 +100,7 @@ public class BarrelModel implements IModelGeometry<BarrelModel> {
     }
 
     @Override
-    public boolean isAmbientOcclusion() {
+    public boolean useAmbientOcclusion() {
       return ambientOcclusion;
     }
 
@@ -115,26 +115,26 @@ public class BarrelModel implements IModelGeometry<BarrelModel> {
     }
 
     @Override
-    public boolean isSideLit() {
+    public boolean usesBlockLight() {
       return isSideLit;
     }
 
     @Override
-    public boolean isBuiltInRenderer() {
+    public boolean isCustomRenderer() {
       return false;
     }
 
     @Override
-    public TextureAtlasSprite getParticleTexture() {
+    public TextureAtlasSprite getParticleIcon() {
       return particle;
     }
 
     @Override
     public TextureAtlasSprite getParticleTexture(@Nonnull IModelData data) {
       if (data.getData(LootrBarrelBlock.OPENED) == Boolean.TRUE) {
-        return opened.getParticleTexture();
+        return opened.getParticleIcon();
       } else {
-        return unopened.getParticleTexture();
+        return unopened.getParticleIcon();
       }
     }
 
@@ -172,8 +172,8 @@ public class BarrelModel implements IModelGeometry<BarrelModel> {
 
     @Override
     public BarrelModel read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
-      IUnbakedModel unopened = deserializationContext.deserialize(JSONUtils.getJsonObject(modelContents, "unopened"), BlockModel.class);
-      IUnbakedModel opened = deserializationContext.deserialize(JSONUtils.getJsonObject(modelContents, "opened"), BlockModel.class);
+      IUnbakedModel unopened = deserializationContext.deserialize(JSONUtils.getAsJsonObject(modelContents, "unopened"), BlockModel.class);
+      IUnbakedModel opened = deserializationContext.deserialize(JSONUtils.getAsJsonObject(modelContents, "opened"), BlockModel.class);
       return new BarrelModel(opened, unopened);
     }
   }

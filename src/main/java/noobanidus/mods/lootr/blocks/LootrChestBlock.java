@@ -32,6 +32,8 @@ import noobanidus.mods.lootr.util.ChestUtil;
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 @SuppressWarnings("NullableProblems")
 public class LootrChestBlock extends ChestBlock {
   public LootrChestBlock(Properties properties) {
@@ -43,21 +45,21 @@ public class LootrChestBlock extends ChestBlock {
   }
 
   @Override
-  public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
-    if (player.isSneaking()) {
+  public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
+    if (player.isShiftKeyDown()) {
       ChestUtil.handleLootSneak(this, world, pos, player);
-    } else if (!ChestBlock.isBlocked(world, pos)) {
+    } else if (!ChestBlock.isChestBlockedAt(world, pos)) {
       ChestUtil.handleLootChest(this, world, pos, player);
     }
     return ActionResultType.SUCCESS;
   }
 
   @Override
-  public void onReplaced(BlockState oldState, World world, BlockPos pos, BlockState newState, boolean isMoving) {
+  public void onRemove(BlockState oldState, World world, BlockPos pos, BlockState newState, boolean isMoving) {
     if (oldState.getBlock() != newState.getBlock() && world instanceof ServerWorld) {
       NewChestData.deleteLootChest((ServerWorld) world, pos);
     }
-    super.onReplaced(oldState, world, pos, newState, isMoving);
+    super.onRemove(oldState, world, pos, newState, isMoving);
   }
 
   @Override
@@ -66,7 +68,7 @@ public class LootrChestBlock extends ChestBlock {
   }
 
   @Override
-  public TileEntity createNewTileEntity(IBlockReader p_196283_1_) {
+  public TileEntity newBlockEntity(IBlockReader p_196283_1_) {
     return new SpecialLootChestTile();
   }
 
@@ -77,9 +79,9 @@ public class LootrChestBlock extends ChestBlock {
   }
 
   @Override
-  public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
-    if (stateIn.get(WATERLOGGED)) {
-      worldIn.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(worldIn));
+  public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+    if (stateIn.getValue(WATERLOGGED)) {
+      worldIn.getLiquidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
     }
 
     return stateIn;
@@ -87,24 +89,24 @@ public class LootrChestBlock extends ChestBlock {
 
   @Override
   public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-    return SHAPE_SINGLE;
+    return AABB;
   }
 
   @Override
   public BlockState getStateForPlacement(BlockItemUseContext context) {
-    Direction direction = context.getPlacementHorizontalFacing().getOpposite();
-    FluidState fluidstate = context.getWorld().getFluidState(context.getPos());
-    return this.getDefaultState().with(FACING, direction).with(TYPE, ChestType.SINGLE).with(WATERLOGGED, fluidstate.getFluid() == Fluids.WATER);
+    Direction direction = context.getHorizontalDirection().getOpposite();
+    FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
+    return this.defaultBlockState().setValue(FACING, direction).setValue(TYPE, ChestType.SINGLE).setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
   }
 
   @Override
   public FluidState getFluidState(BlockState state) {
-    return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
+    return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
   }
 
   @Override
   @Nullable
-  public INamedContainerProvider getContainer(BlockState state, World worldIn, BlockPos pos) {
+  public INamedContainerProvider getMenuProvider(BlockState state, World worldIn, BlockPos pos) {
     return null;
   }
 }

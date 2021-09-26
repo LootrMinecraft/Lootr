@@ -16,8 +16,8 @@ import java.util.UUID;
 @SuppressWarnings({"NullableProblems", "deprecation"})
 public class SpecialLootChestTileRenderer<T extends SpecialLootChestTile & ILootTile> extends ChestTileEntityRenderer<T> {
   private UUID playerId = null;
-  public static final RenderMaterial MATERIAL = new RenderMaterial(AtlasTexture.LOCATION_BLOCKS_TEXTURE, new ResourceLocation(Lootr.MODID, "chest"));
-  public static final RenderMaterial MATERIAL2 = new RenderMaterial(AtlasTexture.LOCATION_BLOCKS_TEXTURE, new ResourceLocation(Lootr.MODID, "chest_opened"));
+  public static final RenderMaterial MATERIAL = new RenderMaterial(AtlasTexture.LOCATION_BLOCKS, new ResourceLocation(Lootr.MODID, "chest"));
+  public static final RenderMaterial MATERIAL2 = new RenderMaterial(AtlasTexture.LOCATION_BLOCKS, new ResourceLocation(Lootr.MODID, "chest_opened"));
 
   public SpecialLootChestTileRenderer(TileEntityRendererDispatcher tile) {
     super(tile);
@@ -26,7 +26,7 @@ public class SpecialLootChestTileRenderer<T extends SpecialLootChestTile & ILoot
   @Override
   protected RenderMaterial getMaterial(T tile, ChestType type) {
     if (playerId == null) {
-      playerId = Minecraft.getInstance().player.getUniqueID();
+      playerId = Minecraft.getInstance().player.getUUID();
     }
     if (tile.isOpened()) {
       return MATERIAL2;

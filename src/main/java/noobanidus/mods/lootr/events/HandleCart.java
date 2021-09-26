@@ -18,8 +18,8 @@ public class HandleCart {
   public static void onEntityJoin (EntityJoinWorldEvent event) {
     if (event.getEntity().getType() == EntityType.CHEST_MINECART) {
       ChestMinecartEntity chest = (ChestMinecartEntity) event.getEntity();
-      if (!chest.world.isRemote && chest.lootTable != null && ConfigManager.CONVERT_MINESHAFTS.get() && !ConfigManager.getLootBlacklist().contains(chest.lootTable)) {
-        LootrChestMinecartEntity lootr = new LootrChestMinecartEntity(chest.world, chest.getPosX(), chest.getPosY(), chest.getPosZ());
+      if (!chest.level.isClientSide && chest.lootTable != null && ConfigManager.CONVERT_MINESHAFTS.get() && !ConfigManager.getLootBlacklist().contains(chest.lootTable)) {
+        LootrChestMinecartEntity lootr = new LootrChestMinecartEntity(chest.level, chest.getX(), chest.getY(), chest.getZ());
         lootr.setLootTable(chest.lootTable, chest.lootTableSeed);
         event.setCanceled(true);
         EntityTicker.addEntity(lootr);
@@ -31,8 +31,8 @@ public class HandleCart {
     Entity target = event.getTarget();
     if (target.getType() == ModEntities.LOOTR_MINECART_ENTITY) {
       PlayerEntity player = event.getPlayer();
-      if (((LootrChestMinecartEntity) event.getTarget()).getOpeners().contains(player.getUniqueID())) {
-        OpenCart cart = new OpenCart(event.getTarget().getEntityId());
+      if (((LootrChestMinecartEntity) event.getTarget()).getOpeners().contains(player.getUUID())) {
+        OpenCart cart = new OpenCart(event.getTarget().getId());
         PacketHandler.sendToInternal(cart, (ServerPlayerEntity) player);
       }
     }

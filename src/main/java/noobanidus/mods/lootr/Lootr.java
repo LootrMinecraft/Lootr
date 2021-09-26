@@ -49,7 +49,7 @@ public class Lootr {
   public static ItemGroup TAB = new ItemGroup(MODID) {
     @Override
     @OnlyIn(Dist.CLIENT)
-    public ItemStack createIcon() {
+    public ItemStack makeIcon() {
       return new ItemStack(ModBlocks.CHEST);
     }
   };

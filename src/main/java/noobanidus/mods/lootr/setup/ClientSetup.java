@@ -26,9 +26,9 @@ public class ClientSetup {
 
   @SuppressWarnings("deprecation")
   public static void stitch(TextureStitchEvent.Pre event) {
-    if (event.getMap().getTextureLocation().equals(AtlasTexture.LOCATION_BLOCKS_TEXTURE)) {
-      event.addSprite(SpecialLootChestTileRenderer.MATERIAL.getTextureLocation());
-      event.addSprite(SpecialLootChestTileRenderer.MATERIAL2.getTextureLocation());
+    if (event.getMap().location().equals(AtlasTexture.LOCATION_BLOCKS)) {
+      event.addSprite(SpecialLootChestTileRenderer.MATERIAL.texture());
+      event.addSprite(SpecialLootChestTileRenderer.MATERIAL2.texture());
     }
   }
 
