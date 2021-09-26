@@ -13,11 +13,14 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.PacketDistributor;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.ILootTile;
 import noobanidus.mods.lootr.data.NewChestData;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModStats;
+import noobanidus.mods.lootr.networking.OpenCart;
+import noobanidus.mods.lootr.networking.PacketHandler;
 import noobanidus.mods.lootr.tiles.SpecialLootInventoryTile;
 
 import java.util.HashSet;
@@ -47,6 +50,21 @@ public class ChestUtil {
     }
 
     return false;
+  }
+
+  public static void handleLootCartSneak(World world, LootrChestMinecartEntity cart, PlayerEntity player) {
+    if (world.isClientSide()) {
+      return;
+    }
+
+    if (player.isSpectator()) {
+      return;
+    }
+
+    cart.getOpeners().remove(player.getUUID());
+    // TODO: CloseCart packet
+    OpenCart open = new OpenCart(cart.getId());
+    PacketHandler.sendInternal(PacketDistributor.TRACKING_ENTITY.with(() -> cart), open);
   }
 
   public static boolean handleLootChest(Block block, World world, BlockPos pos, PlayerEntity player) {
@@ -81,15 +99,16 @@ public class ChestUtil {
     if (!world.isClientSide()) {
       if (player.isSpectator()) {
         player.openMenu(null);
+      } else {
+        Lootr.CART_PREDICATE.trigger((ServerPlayerEntity) player, null);
+        if (!cart.getOpeners().contains(player.getUUID())) {
+          cart.addOpener(player);
+          player.awardStat(ModStats.LOOTED_STAT);
+          Lootr.SCORE_PREDICATE.trigger((ServerPlayerEntity) player, null);
+        }
+        INamedContainerProvider provider = NewChestData.getInventory(world, cart, (ServerPlayerEntity) player, cart::addLoot);
+        player.openMenu(provider);
       }
-      Lootr.CART_PREDICATE.trigger((ServerPlayerEntity) player, null);
-      if (!cart.getOpeners().contains(player.getUUID())) {
-        cart.addOpener(player);
-        player.awardStat(ModStats.LOOTED_STAT);
-        Lootr.SCORE_PREDICATE.trigger((ServerPlayerEntity) player, null);
-      }
-      INamedContainerProvider provider = NewChestData.getInventory(world, cart, (ServerPlayerEntity) player, cart::addLoot);
-      player.openMenu(provider);
     }
   }
 

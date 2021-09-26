@@ -180,12 +180,21 @@ public class LootrChestMinecartEntity extends ContainerMinecartEntity implements
   public ActionResultType interact(PlayerEntity player, Hand hand) {
     ActionResultType ret = ActionResultType.PASS;
     if (ret.consumesAction()) return ret;
-    ChestUtil.handleLootCart(player.level, this, player);
-    if (!player.level.isClientSide) {
-      PiglinTasks.angerNearbyPiglins(player, true);
-      return ActionResultType.CONSUME;
+    if (player.isShiftKeyDown()) {
+      ChestUtil.handleLootCartSneak(player.level, this, player);
+      if (!player.level.isClientSide) {
+        return ActionResultType.CONSUME;
+      } else {
+        return ActionResultType.SUCCESS;
+      }
     } else {
-      return ActionResultType.SUCCESS;
+      ChestUtil.handleLootCart(player.level, this, player);
+      if (!player.level.isClientSide) {
+        PiglinTasks.angerNearbyPiglins(player, true);
+        return ActionResultType.CONSUME;
+      } else {
+        return ActionResultType.SUCCESS;
+      }
     }
   }
 
