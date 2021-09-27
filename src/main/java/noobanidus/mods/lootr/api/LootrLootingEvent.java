@@ -1,14 +1,14 @@
 package noobanidus.mods.lootr.api;
 
-import net.minecraft.entity.item.minecart.ContainerMinecartEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.LockableLootTileEntity;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.vehicle.AbstractMinecartContainer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.Cancelable;
 
@@ -18,13 +18,13 @@ import java.util.Set;
 import java.util.UUID;
 
 public class LootrLootingEvent extends PlayerEvent {
-  protected final World world;
-  protected final RegistryKey<World> dimension;
+  protected final Level world;
+  protected final ResourceKey<Level> dimension;
   protected final ILootrInventory inventory;
-  protected final LockableLootTileEntity tile;
-  protected final ContainerMinecartEntity cartEntity;
+  protected final RandomizableContainerBlockEntity tile;
+  protected final AbstractMinecartContainer cartEntity;
 
-  public LootrLootingEvent(PlayerEntity player, World world, RegistryKey<World> dimension, ILootrInventory inventory, LockableLootTileEntity tile, ContainerMinecartEntity cartEntity) {
+  public LootrLootingEvent(Player player, Level world, ResourceKey<Level> dimension, ILootrInventory inventory, RandomizableContainerBlockEntity tile, AbstractMinecartContainer cartEntity) {
     super(player);
     this.world = world;
     this.dimension = dimension;
@@ -74,12 +74,12 @@ public class LootrLootingEvent extends PlayerEvent {
 
   // Contains the actual world that reflects the dimension
   // contained within getDimension.
-  public World getWorld() {
+  public Level getWorld() {
     return world;
   }
 
   // Contains the dimension that this chest is being opened in.
-  public RegistryKey<World> getDimension() {
+  public ResourceKey<Level> getDimension() {
     return dimension;
   }
 
@@ -111,13 +111,13 @@ public class LootrLootingEvent extends PlayerEvent {
   // If this event is associated with any tile entity this
   // will return that tile entity.
   @Nullable
-  public LockableLootTileEntity getTile() {
+  public RandomizableContainerBlockEntity getTile() {
     return tile;
   }
 
   // If this event is associated with a minecart entity
   // this will return that Minecart entity.
-  public ContainerMinecartEntity getMinecart() {
+  public AbstractMinecartContainer getMinecart() {
     return cartEntity;
   }
 
@@ -137,7 +137,7 @@ public class LootrLootingEvent extends PlayerEvent {
     private ResourceLocation newTable = null;
     private long newSeed = Long.MIN_VALUE;
 
-    public Pre(PlayerEntity player, World world, RegistryKey<World> dimension, ILootrInventory inventory, LockableLootTileEntity tile, ContainerMinecartEntity cartEntity) {
+    public Pre(Player player, Level world, ResourceKey<Level> dimension, ILootrInventory inventory, RandomizableContainerBlockEntity tile, AbstractMinecartContainer cartEntity) {
       super(player, world, dimension, inventory, tile, cartEntity);
     }
 
@@ -178,7 +178,7 @@ public class LootrLootingEvent extends PlayerEvent {
   // This event is fired after the chest has been filled
   // allowing for loot to be altered.
   public static class Post extends LootrLootingEvent {
-    public Post(PlayerEntity player, World world, RegistryKey<World> dimension, ILootrInventory inventory, LockableLootTileEntity tile, ContainerMinecartEntity cartEntity) {
+    public Post(Player player, Level world, ResourceKey<Level> dimension, ILootrInventory inventory, RandomizableContainerBlockEntity tile, AbstractMinecartContainer cartEntity) {
       super(player, world, dimension, inventory, tile, cartEntity);
     }
 

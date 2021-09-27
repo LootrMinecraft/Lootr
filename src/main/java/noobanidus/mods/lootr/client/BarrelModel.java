@@ -5,16 +5,16 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.Direction;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.TransformationMatrix;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.core.Direction;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
+import com.mojang.math.Transformation;
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.minecraftforge.client.model.IModelLoader;
 import net.minecraftforge.client.model.ModelTransformComposition;
@@ -32,30 +32,40 @@ import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
 
-public class BarrelModel implements IModelGeometry<BarrelModel> {
-  private final IUnbakedModel opened;
-  private final IUnbakedModel unopened;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.BlockModel;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.client.resources.model.ModelState;
+import net.minecraft.client.resources.model.UnbakedModel;
 
-  public BarrelModel(IUnbakedModel opened, IUnbakedModel unopened) {
+public class BarrelModel implements IModelGeometry<BarrelModel> {
+  private final UnbakedModel opened;
+  private final UnbakedModel unopened;
+
+  public BarrelModel(UnbakedModel opened, UnbakedModel unopened) {
     this.opened = opened;
     this.unopened = unopened;
   }
 
   @Override
-  public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
-    Set<RenderMaterial> materials = Sets.newHashSet();
+  public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
+    Set<Material> materials = Sets.newHashSet();
     materials.add(owner.resolveTexture("particle"));
     materials.addAll(unopened.getMaterials(modelGetter, missingTextureErrors));
     materials.addAll(opened.getMaterials(modelGetter, missingTextureErrors));
     return materials;
   }
 
-  private static IBakedModel buildModel(IUnbakedModel entry, IModelTransform modelTransform, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter, ResourceLocation modelLocation) {
+  private static BakedModel buildModel(UnbakedModel entry, ModelState modelTransform, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ResourceLocation modelLocation) {
     return entry.bake(bakery, spriteGetter, modelTransform, modelLocation);
   }
 
   @Override
-  public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter, IModelTransform modelTransform, ItemOverrideList overrides, ResourceLocation modelLocation) {
+  public BakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides, ResourceLocation modelLocation) {
     return new BarrelBakedModel(owner.useSmoothLighting(), owner.isShadedInGui(), owner.isSideLit(),
         spriteGetter.apply(owner.resolveTexture("particle")), overrides,
         buildModel(opened, modelTransform, bakery, spriteGetter, modelLocation),
@@ -65,16 +75,16 @@ public class BarrelModel implements IModelGeometry<BarrelModel> {
   }
 
   private static final class BarrelBakedModel implements IDynamicBakedModel {
-    private final IBakedModel opened;
-    private final IBakedModel unopened;
-    private final ImmutableMap<ItemCameraTransforms.TransformType, TransformationMatrix> cameraTransforms;
+    private final BakedModel opened;
+    private final BakedModel unopened;
+    private final ImmutableMap<ItemTransforms.TransformType, Transformation> cameraTransforms;
     protected final boolean ambientOcclusion;
     protected final boolean gui3d;
     protected final boolean isSideLit;
     protected final TextureAtlasSprite particle;
-    protected final ItemOverrideList overrides;
+    protected final ItemOverrides overrides;
 
-    public BarrelBakedModel(boolean ambientOcclusion, boolean isGui3d, boolean isSideLit, TextureAtlasSprite particle, ItemOverrideList overrides, IBakedModel opened, IBakedModel unopened, ImmutableMap<ItemCameraTransforms.TransformType, TransformationMatrix> cameraTransforms) {
+    public BarrelBakedModel(boolean ambientOcclusion, boolean isGui3d, boolean isSideLit, TextureAtlasSprite particle, ItemOverrides overrides, BakedModel opened, BakedModel unopened, ImmutableMap<ItemTransforms.TransformType, Transformation> cameraTransforms) {
       this.isSideLit = isSideLit;
       this.cameraTransforms = cameraTransforms;
       this.ambientOcclusion = ambientOcclusion;
@@ -88,7 +98,7 @@ public class BarrelModel implements IModelGeometry<BarrelModel> {
     @Nonnull
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
-      IBakedModel model;
+      BakedModel model;
       if (extraData.getData(LootrBarrelBlock.OPENED) == Boolean.TRUE) {
         model = opened;
       } else {
@@ -144,13 +154,13 @@ public class BarrelModel implements IModelGeometry<BarrelModel> {
     }
 
     @Override
-    public IBakedModel handlePerspective(ItemCameraTransforms.TransformType cameraTransformType, MatrixStack mat) {
+    public BakedModel handlePerspective(ItemTransforms.TransformType cameraTransformType, PoseStack mat) {
       return PerspectiveMapWrapper.handlePerspective(this, cameraTransforms, cameraTransformType, mat);
     }
 
     @Override
-    public ItemOverrideList getOverrides() {
-      return ItemOverrideList.EMPTY;
+    public ItemOverrides getOverrides() {
+      return ItemOverrides.EMPTY;
     }
 
     @Override
@@ -166,14 +176,14 @@ public class BarrelModel implements IModelGeometry<BarrelModel> {
     }
 
     @Override
-    public void onResourceManagerReload(IResourceManager resourceManager) {
+    public void onResourceManagerReload(ResourceManager resourceManager) {
 
     }
 
     @Override
     public BarrelModel read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
-      IUnbakedModel unopened = deserializationContext.deserialize(JSONUtils.getAsJsonObject(modelContents, "unopened"), BlockModel.class);
-      IUnbakedModel opened = deserializationContext.deserialize(JSONUtils.getAsJsonObject(modelContents, "opened"), BlockModel.class);
+      UnbakedModel unopened = deserializationContext.deserialize(GsonHelper.getAsJsonObject(modelContents, "unopened"), BlockModel.class);
+      UnbakedModel opened = deserializationContext.deserialize(GsonHelper.getAsJsonObject(modelContents, "opened"), BlockModel.class);
       return new BarrelModel(opened, unopened);
     }
   }

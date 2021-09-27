@@ -4,20 +4,22 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonObject;
-import net.minecraft.advancements.ICriterionTrigger;
-import net.minecraft.advancements.PlayerAdvancements;
-import net.minecraft.advancements.criterion.CriterionInstance;
-import net.minecraft.advancements.criterion.EntityPredicate;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.loot.ConditionArrayParser;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.advancements.CriterionTrigger;
+import net.minecraft.server.PlayerAdvancements;
+import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.advancements.critereon.DeserializationContext;
+import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class GenericTrigger<T> implements ICriterionTrigger<GenericTrigger.Instance<T>> {
+import net.minecraft.advancements.CriterionTrigger.Listener;
+
+public class GenericTrigger<T> implements CriterionTrigger<GenericTrigger.Instance<T>> {
   private final ResourceLocation id;
   private final Map<PlayerAdvancements, Listeners<T>> listeners = Maps.newHashMap();
   private final IGenericPredicate<T> predicate;
@@ -68,11 +70,11 @@ public class GenericTrigger<T> implements ICriterionTrigger<GenericTrigger.Insta
   }
 
   @Override
-  public Instance<T> createInstance(JsonObject jsonObject, ConditionArrayParser conditionArrayParser) {
+  public Instance<T> createInstance(JsonObject jsonObject, DeserializationContext conditionArrayParser) {
     return new Instance<>(getId(), predicate.deserialize(jsonObject));
   }
 
-  public void trigger(ServerPlayerEntity player, T condition) {
+  public void trigger(ServerPlayer player, T condition) {
     Listeners<T> list = listeners.get(player.getAdvancements());
 
     if (list != null) {
@@ -80,16 +82,16 @@ public class GenericTrigger<T> implements ICriterionTrigger<GenericTrigger.Insta
     }
   }
 
-  public static class Instance<T> extends CriterionInstance {
+  public static class Instance<T> extends AbstractCriterionTriggerInstance {
     IGenericPredicate<T> predicate;
 
     Instance(ResourceLocation location, IGenericPredicate<T> predicate) {
-      super(location, EntityPredicate.AndPredicate.ANY);
+      super(location, EntityPredicate.Composite.ANY);
 
       this.predicate = predicate;
     }
 
-    public boolean test(ServerPlayerEntity player, T event) {
+    public boolean test(ServerPlayer player, T event) {
       return predicate.test(player, event);
     }
   }
@@ -114,7 +116,7 @@ public class GenericTrigger<T> implements ICriterionTrigger<GenericTrigger.Insta
       listeners.remove(listener);
     }
 
-    void trigger(ServerPlayerEntity player, T condition) {
+    void trigger(ServerPlayer player, T condition) {
       List<Listener<Instance<T>>> list = Lists.newArrayList();
 
       for (Listener<Instance<T>> listener : listeners) {

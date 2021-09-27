@@ -1,7 +1,7 @@
 package noobanidus.mods.lootr.setup;
 
-import net.minecraft.client.renderer.texture.AtlasTexture;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
@@ -25,7 +25,7 @@ public class ClientSetup {
 
   @SuppressWarnings("deprecation")
   public static void stitch(TextureStitchEvent.Pre event) {
-    if (event.getMap().location().equals(AtlasTexture.LOCATION_BLOCKS)) {
+    if (event.getMap().location().equals(TextureAtlas.LOCATION_BLOCKS)) {
       event.addSprite(SpecialLootChestTileRenderer.MATERIAL.texture());
       event.addSprite(SpecialLootChestTileRenderer.MATERIAL2.texture());
     }

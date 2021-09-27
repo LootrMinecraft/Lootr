@@ -1,14 +1,14 @@
 package noobanidus.mods.lootr.mixins;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.loot.LootTables;
-import net.minecraft.tileentity.LockableLootTileEntity;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.structure.IglooPieces;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.levelgen.structure.IglooPieces;
 import noobanidus.mods.lootr.config.ConfigManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,22 +17,22 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Random;
 
-@Mixin(IglooPieces.Piece.class)
-public class MixinIglooPieces$Piece {
+@Mixin(IglooPieces.IglooPiece.class)
+public class Piece {
   @Inject(method = "handleDataMarker",
       at = @At(value = "HEAD"),
       cancellable = true)
-  protected void handleDataMarker(String function, BlockPos pos, IServerWorld worldIn, Random rand, MutableBoundingBox sbb, CallbackInfo info) {
-    if (ConfigManager.getLootBlacklist().contains(LootTables.IGLOO_CHEST)) {
+  protected void handleDataMarker(String function, BlockPos pos, ServerLevelAccessor worldIn, Random rand, BoundingBox sbb, CallbackInfo info) {
+    if (ConfigManager.getLootBlacklist().contains(BuiltInLootTables.IGLOO_CHEST)) {
       return;
     }
     if ("chest".equals(function)) {
-      RegistryKey<World> key = worldIn.getLevel().dimension();
+      ResourceKey<Level> key = worldIn.getLevel().dimension();
       if (ConfigManager.isDimensionBlocked(key)) {
         return;
       }
       worldIn.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
-      LockableLootTileEntity.setLootTable(worldIn, rand, pos.below(), LootTables.IGLOO_CHEST);
+      RandomizableContainerBlockEntity.setLootTable(worldIn, rand, pos.below(), BuiltInLootTables.IGLOO_CHEST);
       info.cancel();
     }
   }

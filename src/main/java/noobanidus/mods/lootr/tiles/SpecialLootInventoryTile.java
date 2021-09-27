@@ -1,12 +1,12 @@
 package noobanidus.mods.lootr.tiles;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.core.NonNullList;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.init.ModTiles;
 
@@ -22,21 +22,21 @@ public class SpecialLootInventoryTile extends SpecialLootChestTile {
   }
 
   @Override
-  public void load(BlockState state, CompoundNBT compound) {
+  public void load(BlockState state, CompoundTag compound) {
     super.load(state, compound);
     if (compound.contains("customInventory") && compound.contains("customSize")) {
       int size = compound.getInt("customSize");
       this.customInventory = NonNullList.withSize(size, ItemStack.EMPTY);
-      ItemStackHelper.loadAllItems(compound.getCompound("customInventory"), this.customInventory);
+      ContainerHelper.loadAllItems(compound.getCompound("customInventory"), this.customInventory);
     }
   }
 
   @Override
-  public CompoundNBT save(CompoundNBT compound) {
+  public CompoundTag save(CompoundTag compound) {
     compound = super.save(compound);
     if (this.customInventory != null) {
       compound.putInt("customSize", this.customInventory.size());
-      compound.put("customInventory", ItemStackHelper.saveAllItems(new CompoundNBT(), this.customInventory));
+      compound.put("customInventory", ContainerHelper.saveAllItems(new CompoundTag(), this.customInventory));
     }
     return compound;
   }
@@ -51,7 +51,7 @@ public class SpecialLootInventoryTile extends SpecialLootChestTile {
   }
 
   @Override
-  public void onDataPacket(@Nonnull NetworkManager net, @Nonnull SUpdateTileEntityPacket pkt) {
+  public void onDataPacket(@Nonnull Connection net, @Nonnull ClientboundBlockEntityDataPacket pkt) {
     load(ModBlocks.INVENTORY.defaultBlockState(), pkt.getTag());
   }
 }

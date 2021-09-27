@@ -1,10 +1,10 @@
 package noobanidus.mods.lootr.client;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 
 public class ClientGetter {
-  public static PlayerEntity getPlayer() {
+  public static Player getPlayer() {
     return Minecraft.getInstance().player;
   }
 }

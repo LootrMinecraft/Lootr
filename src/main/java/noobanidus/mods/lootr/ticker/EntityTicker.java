@@ -1,11 +1,11 @@
 package noobanidus.mods.lootr.ticker;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.chunk.ChunkStatus;
-import net.minecraft.world.chunk.IChunk;
-import net.minecraft.world.server.ServerChunkProvider;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.chunk.ChunkStatus;
+import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.server.level.ServerChunkCache;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.event.TickEvent;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
@@ -19,9 +19,9 @@ public class EntityTicker {
     if (event.phase == TickEvent.Phase.END) {
       entities.removeIf(Entity::isAddedToWorld);
       for (LootrChestMinecartEntity entity : entities) {
-        ServerWorld world = (ServerWorld) entity.level;
-        ServerChunkProvider provider = world.getChunkSource();
-        IChunk ichunk = provider.getChunk(MathHelper.floor(entity.getX() / 16.0D), MathHelper.floor(entity.getZ() / 16.0D), ChunkStatus.FULL, false);
+        ServerLevel world = (ServerLevel) entity.level;
+        ServerChunkCache provider = world.getChunkSource();
+        ChunkAccess ichunk = provider.getChunk(Mth.floor(entity.getX() / 16.0D), Mth.floor(entity.getZ() / 16.0D), ChunkStatus.FULL, false);
         if (ichunk != null) {
           world.addFreshEntity(entity);
         }

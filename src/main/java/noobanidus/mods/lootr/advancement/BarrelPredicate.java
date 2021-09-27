@@ -1,13 +1,13 @@
 package noobanidus.mods.lootr.advancement;
 
 import com.google.gson.JsonObject;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 
 import javax.annotation.Nullable;
 
 public class BarrelPredicate implements IGenericPredicate<Void> {
   @Override
-  public boolean test(ServerPlayerEntity player, Void condition) {
+  public boolean test(ServerPlayer player, Void condition) {
     return true;
   }
 

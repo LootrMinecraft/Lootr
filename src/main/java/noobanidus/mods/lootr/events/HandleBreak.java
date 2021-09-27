@@ -1,12 +1,12 @@
 package noobanidus.mods.lootr.events;
 
 import com.google.common.collect.Sets;
-import net.minecraft.block.Block;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.Color;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.Util;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.network.chat.Style;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.event.world.BlockEvent;
 import noobanidus.mods.lootr.init.ModBlocks;
 
@@ -20,8 +20,8 @@ public class HandleBreak {
       if (specialLootChests.contains(event.getState().getBlock())) {
         if (!event.getPlayer().isShiftKeyDown()) {
           event.setCanceled(true);
-          event.getPlayer().sendMessage(new TranslationTextComponent("lootr.message.should_sneak").setStyle(Style.EMPTY.withColor(Color.fromLegacyFormat(TextFormatting.AQUA))), Util.NIL_UUID);
-          event.getPlayer().sendMessage(new TranslationTextComponent("lootr.message.should_sneak2", new TranslationTextComponent("lootr.message.should_sneak3").setStyle(Style.EMPTY.withBold(true))).setStyle(Style.EMPTY.withColor(Color.fromLegacyFormat(TextFormatting.AQUA))), Util.NIL_UUID);
+          event.getPlayer().sendMessage(new TranslatableComponent("lootr.message.should_sneak").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))), Util.NIL_UUID);
+          event.getPlayer().sendMessage(new TranslatableComponent("lootr.message.should_sneak2", new TranslatableComponent("lootr.message.should_sneak3").setStyle(Style.EMPTY.withBold(true))).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))), Util.NIL_UUID);
         }
       }
     }

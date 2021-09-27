@@ -1,14 +1,14 @@
 package noobanidus.mods.lootr.api;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.Container;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.Set;
 import java.util.UUID;
 
 public interface ILootTile {
-  void fillWithLoot(PlayerEntity player, IInventory inventory, ResourceLocation table, long seed);
+  void fillWithLoot(Player player, Container inventory, ResourceLocation table, long seed);
 
   ResourceLocation getTable();
 

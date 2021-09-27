@@ -1,15 +1,17 @@
 package noobanidus.mods.lootr.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.HorizontalBlock;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.StateContainer;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.level.BlockGetter;
+
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class TrophyBlock extends Block {
   public TrophyBlock(Properties properties) {
@@ -17,14 +19,14 @@ public class TrophyBlock extends Block {
   }
 
   @Override
-  public BlockState getStateForPlacement(BlockItemUseContext context) {
-    return this.defaultBlockState().setValue(HorizontalBlock.FACING, context.getHorizontalDirection().getOpposite());
+  public BlockState getStateForPlacement(BlockPlaceContext context) {
+    return this.defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, context.getHorizontalDirection().getOpposite());
   }
 
   @Override
-  protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+  protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
     super.createBlockStateDefinition(builder);
-    builder.add(HorizontalBlock.FACING);
+    builder.add(HorizontalDirectionalBlock.FACING);
   }
 
   private static final VoxelShape EAST_WEST = Block.box(1.5, 0, 4, 14.5, 14.5, 12);
@@ -32,8 +34,8 @@ public class TrophyBlock extends Block {
 
   @Override
   @SuppressWarnings("deprecation")
-  public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-    Direction facing = state.getValue(HorizontalBlock.FACING);
+  public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+    Direction facing = state.getValue(HorizontalDirectionalBlock.FACING);
     if (facing == Direction.EAST || facing == Direction.WEST) {
       return EAST_WEST;
     } else {

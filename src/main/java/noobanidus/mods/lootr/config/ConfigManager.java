@@ -2,19 +2,19 @@ package noobanidus.mods.lootr.config;
 
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.ChestBlock;
-import net.minecraft.state.Property;
-import net.minecraft.state.properties.ChestType;
-import net.minecraft.tileentity.LockableLootTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.block.state.properties.ChestType;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Registry;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -50,8 +50,8 @@ public class ConfigManager {
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DIMENSION_BLACKLIST;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> LOOT_TABLE_BLACKLIST;
 
-  private static Set<RegistryKey<World>> DIM_WHITELIST = null;
-  private static Set<RegistryKey<World>> DIM_BLACKLIST = null;
+  private static Set<ResourceKey<Level>> DIM_WHITELIST = null;
+  private static Set<ResourceKey<Level>> DIM_BLACKLIST = null;
   private static Set<ResourceLocation> LOOT_BLACKLIST = null;
   private static Set<ResourceLocation> ADD_CHESTS = null;
   private static Set<ResourceLocation> ADD_TRAPPED_CHESTS = null;
@@ -91,16 +91,16 @@ public class ConfigManager {
     ADD_TRAPPED_CHESTS = null;
   }
 
-  public static Set<RegistryKey<World>> getDimensionWhitelist() {
+  public static Set<ResourceKey<Level>> getDimensionWhitelist() {
     if (DIM_WHITELIST == null) {
-      DIM_WHITELIST = DIMENSION_WHITELIST.get().stream().map(o -> RegistryKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(o))).collect(Collectors.toSet());
+      DIM_WHITELIST = DIMENSION_WHITELIST.get().stream().map(o -> ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(o))).collect(Collectors.toSet());
     }
     return DIM_WHITELIST;
   }
 
-  public static Set<RegistryKey<World>> getDimensionBlacklist() {
+  public static Set<ResourceKey<Level>> getDimensionBlacklist() {
     if (DIM_BLACKLIST == null) {
-      DIM_BLACKLIST = DIMENSION_BLACKLIST.get().stream().map(o -> RegistryKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(o))).collect(Collectors.toSet());
+      DIM_BLACKLIST = DIMENSION_BLACKLIST.get().stream().map(o -> ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(o))).collect(Collectors.toSet());
     }
     return DIM_BLACKLIST;
   }
@@ -126,7 +126,7 @@ public class ConfigManager {
     return ADD_TRAPPED_CHESTS;
   }
 
-  public static boolean isDimensionBlocked(RegistryKey<World> key) {
+  public static boolean isDimensionBlocked(ResourceKey<Level> key) {
     return (!getDimensionWhitelist().isEmpty() && !getDimensionWhitelist().contains(key)) || getDimensionBlacklist().contains(key);
   }
 
@@ -137,11 +137,11 @@ public class ConfigManager {
     }
   }
 
-  private static void addUnsafeReplacement(ResourceLocation location, Block replacement, ServerWorld world) {
+  private static void addUnsafeReplacement(ResourceLocation location, Block replacement, ServerLevel world) {
     Block block = ForgeRegistries.BLOCKS.getValue(location);
     if (block != null) {
-      TileEntity tile = block.createTileEntity(block.defaultBlockState(), world);
-      if (tile instanceof LockableLootTileEntity) {
+      BlockEntity tile = block.createTileEntity(block.defaultBlockState(), world);
+      if (tile instanceof RandomizableContainerBlockEntity) {
         replacements.put(block, replacement);
       }
     }
@@ -159,14 +159,14 @@ public class ConfigManager {
         QUARK_TRAPPED_CHESTS.forEach(o -> addSafeReplacement(o, ModBlocks.TRAPPED_CHEST));
       }
       if (CONVERT_WOODEN_CHESTS.get() || CONVERT_TRAPPED_CHESTS.get()) {
-        final ServerWorld world = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD);
+        final ServerLevel world = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD);
         if (CONVERT_WOODEN_CHESTS.get()) {
           Tags.Blocks.CHESTS_WOODEN.getValues().forEach(o -> {
             if (replacements.containsKey(o)) {
               return;
             }
-            TileEntity tile = o.createTileEntity(o.defaultBlockState(), world);
-            if (tile instanceof LockableLootTileEntity) {
+            BlockEntity tile = o.createTileEntity(o.defaultBlockState(), world);
+            if (tile instanceof RandomizableContainerBlockEntity) {
               replacements.put(o, ModBlocks.CHEST);
             }
           });
@@ -176,15 +176,15 @@ public class ConfigManager {
             if (replacements.containsKey(o)) {
               return;
             }
-            TileEntity tile = o.createTileEntity(o.defaultBlockState(), world);
-            if (tile instanceof LockableLootTileEntity) {
+            BlockEntity tile = o.createTileEntity(o.defaultBlockState(), world);
+            if (tile instanceof RandomizableContainerBlockEntity) {
               replacements.put(o, ModBlocks.CHEST);
             }
           });
         }
       }
       if (!getAdditionalChests().isEmpty() || !getAdditionalTrappedChests().isEmpty()) {
-        final ServerWorld world = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD);
+        final ServerLevel world = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD);
         getAdditionalChests().forEach(o -> addUnsafeReplacement(o, ModBlocks.CHEST, world));
         getAdditionalTrappedChests().forEach(o -> addUnsafeReplacement(o, ModBlocks.TRAPPED_CHEST, world));
       }

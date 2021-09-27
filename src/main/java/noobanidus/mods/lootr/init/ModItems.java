@@ -1,8 +1,8 @@
 package noobanidus.mods.lootr.init;
 
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.Rarity;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.minecraftforge.event.RegistryEvent;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.client.SpecialLootChestItemRenderer;

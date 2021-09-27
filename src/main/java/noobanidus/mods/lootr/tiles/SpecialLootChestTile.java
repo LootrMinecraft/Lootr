@@ -1,34 +1,34 @@
 package noobanidus.mods.lootr.tiles;
 
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ChestBlock;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.ChestContainer;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameterSets;
-import net.minecraft.loot.LootParameters;
-import net.minecraft.loot.LootTable;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ChestTileEntity;
-import net.minecraft.tileentity.LockableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.ChestMenu;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.util.*;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
@@ -45,8 +45,14 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+
 @SuppressWarnings({"Duplicates", "ConstantConditions", "NullableProblems", "WeakerAccess"})
-public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
+public class SpecialLootChestTile extends ChestBlockEntity implements ILootTile {
   public Set<UUID> openers = new HashSet<>();
   private int ticksSinceSync;
   private int specialNumPlayersUsingChest;
@@ -67,7 +73,7 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
     return this.tileId;
   }
 
-  public SpecialLootChestTile(TileEntityType<?> tile) {
+  public SpecialLootChestTile(BlockEntityType<?> tile) {
     super(tile);
   }
 
@@ -87,26 +93,26 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
   }
 
   @Override
-  public void unpackLootTable(@Nullable PlayerEntity player) {
+  public void unpackLootTable(@Nullable Player player) {
   }
 
-  public void fillWithLoot(PlayerEntity player, IInventory inventory, @Nullable ResourceLocation overrideTable, long seed) {
+  public void fillWithLoot(Player player, Container inventory, @Nullable ResourceLocation overrideTable, long seed) {
     if (this.level != null && this.savedLootTable != null && this.level.getServer() != null) {
       LootTable loottable = this.level.getServer().getLootTables().get(overrideTable != null ? overrideTable : this.savedLootTable);
-      if (player instanceof ServerPlayerEntity) {
-        CriteriaTriggers.GENERATE_LOOT.trigger((ServerPlayerEntity) player, overrideTable != null ? overrideTable : this.lootTable);
+      if (player instanceof ServerPlayer) {
+        CriteriaTriggers.GENERATE_LOOT.trigger((ServerPlayer) player, overrideTable != null ? overrideTable : this.lootTable);
       }
-      LootContext.Builder builder = (new LootContext.Builder((ServerWorld) this.level)).withParameter(LootParameters.ORIGIN, Vector3d.atCenterOf(this.worldPosition)).withOptionalRandomSeed(ConfigManager.RANDOMISE_SEED.get() ? ThreadLocalRandom.current().nextLong() : seed == Long.MIN_VALUE ? this.seed : seed);
+      LootContext.Builder builder = (new LootContext.Builder((ServerLevel) this.level)).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(this.worldPosition)).withOptionalRandomSeed(ConfigManager.RANDOMISE_SEED.get() ? ThreadLocalRandom.current().nextLong() : seed == Long.MIN_VALUE ? this.seed : seed);
       if (player != null) {
-        builder.withLuck(player.getLuck()).withParameter(LootParameters.THIS_ENTITY, player);
+        builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
       }
 
-      loottable.fill(inventory, builder.create(LootParameterSets.CHEST));
+      loottable.fill(inventory, builder.create(LootContextParamSets.CHEST));
     }
   }
 
   @Override
-  public void load(BlockState state, CompoundNBT compound) {
+  public void load(BlockState state, CompoundTag compound) {
     if (compound.contains("specialLootChest_table", Constants.NBT.TAG_STRING)) {
       savedLootTable = new ResourceLocation(compound.getString("specialLootChest_table"));
     }
@@ -125,17 +131,17 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
       getTileId();
     }
     if (compound.contains("LootrOpeners")) {
-      ListNBT openers = compound.getList("LootrOpeners", Constants.NBT.TAG_INT_ARRAY);
+      ListTag openers = compound.getList("LootrOpeners", Constants.NBT.TAG_INT_ARRAY);
       this.openers.clear();
-      for (INBT item : openers) {
-        this.openers.add(NBTUtil.loadUUID(item));
+      for (Tag item : openers) {
+        this.openers.add(NbtUtils.loadUUID(item));
       }
     }
     super.load(state, compound);
   }
 
   @Override
-  public CompoundNBT save(CompoundNBT compound) {
+  public CompoundTag save(CompoundTag compound) {
     compound = super.save(compound);
     if (savedLootTable != null) {
       compound.putString("specialLootChest_table", savedLootTable.toString());
@@ -146,9 +152,9 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
       compound.putLong("LootTableSeed", seed);
     }
     compound.putUUID("tileId", getTileId());
-    ListNBT list = new ListNBT();
+    ListTag list = new ListTag();
     for (UUID opener : this.openers) {
-      list.add(NBTUtil.createUUID(opener));
+      list.add(NbtUtils.createUUID(opener));
     }
     compound.put("LootrOpeners", list);
     return compound;
@@ -210,10 +216,10 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
   }
 
   private void playSound(SoundEvent soundIn) {
-    this.level.playSound(null, getBlockPos(), soundIn, SoundCategory.BLOCKS, 0.5F, level.random.nextFloat() * 0.1F + 0.9F);
+    this.level.playSound(null, getBlockPos(), soundIn, SoundSource.BLOCKS, 0.5F, level.random.nextFloat() * 0.1F + 0.9F);
   }
 
-  public static int calculatePlayersUsingSync(World world, LockableTileEntity tile, int ticksSinceSync, int x, int y, int z, int numPlayersUsing) {
+  public static int calculatePlayersUsingSync(Level world, BaseContainerBlockEntity tile, int ticksSinceSync, int x, int y, int z, int numPlayersUsing) {
     if (!world.isClientSide && numPlayersUsing != 0 && (ticksSinceSync + x + y + z) % 200 == 0) {
       numPlayersUsing = calculatePlayersUsing(world, tile, x, y, z);
     }
@@ -221,15 +227,15 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
     return numPlayersUsing;
   }
 
-  public static int calculatePlayersUsing(World world, LockableTileEntity tile, int x, int y, int z) {
+  public static int calculatePlayersUsing(Level world, BaseContainerBlockEntity tile, int x, int y, int z) {
     if (tile == null) {
       return 0;
     }
     int i = 0;
 
-    for (PlayerEntity playerentity : world.getEntitiesOfClass(PlayerEntity.class, new AxisAlignedBB(x - 5.0, y - 5.0, z - 5.0, (x + 1) + 5.0, (y + 1) + 5.0, (z + 1) + 5.0))) {
-      if (playerentity.containerMenu instanceof ChestContainer) {
-        IInventory inv = ((ChestContainer) playerentity.containerMenu).getContainer();
+    for (Player playerentity : world.getEntitiesOfClass(Player.class, new AABB(x - 5.0, y - 5.0, z - 5.0, (x + 1) + 5.0, (y + 1) + 5.0, (z + 1) + 5.0))) {
+      if (playerentity.containerMenu instanceof ChestMenu) {
+        Container inv = ((ChestMenu) playerentity.containerMenu).getContainer();
         if (inv == tile || (inv instanceof SpecialChestInventory && ((SpecialChestInventory) inv).getPos().equals(tile.getBlockPos()))) {
           ++i;
         }
@@ -240,7 +246,7 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
   }
 
   @Override
-  public void startOpen(PlayerEntity player) {
+  public void startOpen(Player player) {
     if (!player.isSpectator()) {
       if (this.specialNumPlayersUsingChest < 0) {
         this.specialNumPlayersUsingChest = 0;
@@ -252,7 +258,7 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
   }
 
   @Override
-  public void stopOpen(PlayerEntity player) {
+  public void stopOpen(Player player) {
     if (!player.isSpectator()) {
       --this.specialNumPlayersUsingChest;
       this.signalOpenCount();
@@ -290,25 +296,25 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
 
   @Override
   @Nonnull
-  public CompoundNBT getUpdateTag() {
-    return save(new CompoundNBT());
+  public CompoundTag getUpdateTag() {
+    return save(new CompoundTag());
   }
 
   @Override
   @Nullable
-  public SUpdateTileEntityPacket getUpdatePacket() {
-    return new SUpdateTileEntityPacket(getBlockPos(), 0, getUpdateTag());
+  public ClientboundBlockEntityDataPacket getUpdatePacket() {
+    return new ClientboundBlockEntityDataPacket(getBlockPos(), 0, getUpdateTag());
   }
 
   @Override
-  public void onDataPacket(@Nonnull NetworkManager net, @Nonnull SUpdateTileEntityPacket pkt) {
+  public void onDataPacket(@Nonnull Connection net, @Nonnull ClientboundBlockEntityDataPacket pkt) {
     load(ModBlocks.CHEST.defaultBlockState(), pkt.getTag());
   }
 
-  public static int getPlayersUsing(IBlockReader reader, BlockPos posIn) {
+  public static int getPlayersUsing(BlockGetter reader, BlockPos posIn) {
     BlockState blockstate = reader.getBlockState(posIn);
     if (blockstate.hasTileEntity()) {
-      TileEntity tileentity = reader.getBlockEntity(posIn);
+      BlockEntity tileentity = reader.getBlockEntity(posIn);
       if (tileentity instanceof SpecialLootChestTile) {
         return ((SpecialLootChestTile) tileentity).specialNumPlayersUsingChest;
       }

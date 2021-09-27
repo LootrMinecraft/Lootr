@@ -1,8 +1,8 @@
 package noobanidus.mods.lootr.networking.client;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.network.NetworkEvent;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
@@ -13,7 +13,7 @@ import java.util.function.Supplier;
 
 public class ClientHandlers {
   public static void handleOpenCart(OpenCart message, Supplier<NetworkEvent.Context> context) {
-    World world = Minecraft.getInstance().level;
+    Level world = Minecraft.getInstance().level;
     if (world == null) {
       Lootr.LOG.info("Unable to mark entity with id '" + message.entityId + "' as opened as world is null.");
       context.get().setPacketHandled(true);
@@ -36,7 +36,7 @@ public class ClientHandlers {
   }
 
   public static void handleCloseCart (CloseCart message, Supplier<NetworkEvent.Context> context) {
-    World world = Minecraft.getInstance().level;
+    Level world = Minecraft.getInstance().level;
     if (world == null) {
       Lootr.LOG.info("Unable to mark entity with id '" + message.entityId + "' as closed as world is null.");
       context.get().setPacketHandled(true);

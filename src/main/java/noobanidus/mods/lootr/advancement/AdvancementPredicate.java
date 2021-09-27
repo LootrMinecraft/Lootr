@@ -1,8 +1,8 @@
 package noobanidus.mods.lootr.advancement;
 
 import com.google.gson.JsonObject;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nullable;
 
@@ -17,7 +17,7 @@ public class AdvancementPredicate implements IGenericPredicate<ResourceLocation>
   }
 
   @Override
-  public boolean test(ServerPlayerEntity player, ResourceLocation location) {
+  public boolean test(ServerPlayer player, ResourceLocation location) {
     return advancementId != null && advancementId.equals(location);
   }
 

@@ -1,15 +1,15 @@
 package noobanidus.mods.lootr.client;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.MinecartRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
+import com.mojang.math.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
@@ -19,11 +19,11 @@ import noobanidus.mods.lootr.tiles.SpecialLootChestTile;
 public class LootrMinecartRenderer extends MinecartRenderer<LootrChestMinecartEntity> {
   private final SpecialLootChestTile tile = new SpecialLootChestTile();
 
-  public LootrMinecartRenderer(EntityRendererManager renderManagerIn) {
+  public LootrMinecartRenderer(EntityRenderDispatcher renderManagerIn) {
     super(renderManagerIn);
   }
 
-  public void render(LootrChestMinecartEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+  public void render(LootrChestMinecartEntity entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
     super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     matrixStackIn.pushPose();
     long i = (long) entityIn.getId() * 493286711L;
@@ -32,14 +32,14 @@ public class LootrMinecartRenderer extends MinecartRenderer<LootrChestMinecartEn
     float f1 = (((float) (i >> 20 & 7L) + 0.5F) / 8.0F - 0.5F) * 0.004F;
     float f2 = (((float) (i >> 24 & 7L) + 0.5F) / 8.0F - 0.5F) * 0.004F;
     matrixStackIn.translate((double) f, (double) f1, (double) f2);
-    double d0 = MathHelper.lerp((double) partialTicks, entityIn.xOld, entityIn.getX());
-    double d1 = MathHelper.lerp((double) partialTicks, entityIn.yOld, entityIn.getY());
-    double d2 = MathHelper.lerp((double) partialTicks, entityIn.zOld, entityIn.getZ());
-    Vector3d vector3d = entityIn.getPos(d0, d1, d2);
-    float f3 = MathHelper.lerp(partialTicks, entityIn.xRotO, entityIn.xRot);
+    double d0 = Mth.lerp((double) partialTicks, entityIn.xOld, entityIn.getX());
+    double d1 = Mth.lerp((double) partialTicks, entityIn.yOld, entityIn.getY());
+    double d2 = Mth.lerp((double) partialTicks, entityIn.zOld, entityIn.getZ());
+    Vec3 vector3d = entityIn.getPos(d0, d1, d2);
+    float f3 = Mth.lerp(partialTicks, entityIn.xRotO, entityIn.xRot);
     if (vector3d != null) {
-      Vector3d vector3d1 = entityIn.getPosOffs(d0, d1, d2, (double) 0.3F);
-      Vector3d vector3d2 = entityIn.getPosOffs(d0, d1, d2, (double) -0.3F);
+      Vec3 vector3d1 = entityIn.getPosOffs(d0, d1, d2, (double) 0.3F);
+      Vec3 vector3d2 = entityIn.getPosOffs(d0, d1, d2, (double) -0.3F);
       if (vector3d1 == null) {
         vector3d1 = vector3d;
       }
@@ -49,7 +49,7 @@ public class LootrMinecartRenderer extends MinecartRenderer<LootrChestMinecartEn
       }
 
       matrixStackIn.translate(vector3d.x - d0, (vector3d1.y + vector3d2.y) / 2.0D - d1, vector3d.z - d2);
-      Vector3d vector3d3 = vector3d2.add(-vector3d1.x, -vector3d1.y, -vector3d1.z);
+      Vec3 vector3d3 = vector3d2.add(-vector3d1.x, -vector3d1.y, -vector3d1.z);
       if (vector3d3.length() != 0.0D) {
         vector3d3 = vector3d3.normalize();
         entityYaw = (float) (Math.atan2(vector3d3.z, vector3d3.x) * 180.0D / Math.PI);
@@ -67,7 +67,7 @@ public class LootrMinecartRenderer extends MinecartRenderer<LootrChestMinecartEn
     }
 
     if (f5 > 0.0F) {
-      matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(MathHelper.sin(f5) * f5 * f6 / 10.0F * (float) entityIn.getHurtDir()));
+      matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(Mth.sin(f5) * f5 * f6 / 10.0F * (float) entityIn.getHurtDir()));
     }
 
     int j = entityIn.getDisplayOffset();
@@ -80,12 +80,12 @@ public class LootrMinecartRenderer extends MinecartRenderer<LootrChestMinecartEn
     } else {
       tile.setOpened(false);
     }
-    TileEntityRendererDispatcher.instance.renderItem(tile, matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY);
+    BlockEntityRenderDispatcher.instance.renderItem(tile, matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY);
     matrixStackIn.popPose();
 
     matrixStackIn.scale(-1.0F, -1.0F, 1.0F);
     this.model.setupAnim(entityIn, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F);
-    IVertexBuilder ivertexbuilder = bufferIn.getBuffer(this.model.renderType(this.getTextureLocation(entityIn)));
+    VertexConsumer ivertexbuilder = bufferIn.getBuffer(this.model.renderType(this.getTextureLocation(entityIn)));
     this.model.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
     matrixStackIn.popPose();
   }

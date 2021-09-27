@@ -1,7 +1,7 @@
 package noobanidus.mods.lootr.setup;
 
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.core.Registry;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.advancement.AdvancementPredicate;

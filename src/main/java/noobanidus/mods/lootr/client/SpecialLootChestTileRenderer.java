@@ -1,12 +1,12 @@
 package noobanidus.mods.lootr.client;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.model.RenderMaterial;
-import net.minecraft.client.renderer.texture.AtlasTexture;
-import net.minecraft.client.renderer.tileentity.ChestTileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.state.properties.ChestType;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.renderer.blockentity.ChestRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
+import net.minecraft.world.level.block.state.properties.ChestType;
+import net.minecraft.resources.ResourceLocation;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.ILootTile;
 import noobanidus.mods.lootr.tiles.SpecialLootChestTile;
@@ -14,17 +14,17 @@ import noobanidus.mods.lootr.tiles.SpecialLootChestTile;
 import java.util.UUID;
 
 @SuppressWarnings({"NullableProblems", "deprecation"})
-public class SpecialLootChestTileRenderer<T extends SpecialLootChestTile & ILootTile> extends ChestTileEntityRenderer<T> {
+public class SpecialLootChestTileRenderer<T extends SpecialLootChestTile & ILootTile> extends ChestRenderer<T> {
   private UUID playerId = null;
-  public static final RenderMaterial MATERIAL = new RenderMaterial(AtlasTexture.LOCATION_BLOCKS, new ResourceLocation(Lootr.MODID, "chest"));
-  public static final RenderMaterial MATERIAL2 = new RenderMaterial(AtlasTexture.LOCATION_BLOCKS, new ResourceLocation(Lootr.MODID, "chest_opened"));
+  public static final Material MATERIAL = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(Lootr.MODID, "chest"));
+  public static final Material MATERIAL2 = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(Lootr.MODID, "chest_opened"));
 
-  public SpecialLootChestTileRenderer(TileEntityRendererDispatcher tile) {
+  public SpecialLootChestTileRenderer(BlockEntityRenderDispatcher tile) {
     super(tile);
   }
 
   @Override
-  protected RenderMaterial getMaterial(T tile, ChestType type) {
+  protected Material getMaterial(T tile, ChestType type) {
     if (playerId == null) {
       playerId = Minecraft.getInstance().player.getUUID();
     }

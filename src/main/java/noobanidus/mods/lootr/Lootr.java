@@ -1,12 +1,12 @@
 package noobanidus.mods.lootr;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -49,7 +49,7 @@ public class Lootr {
   public static final ResourceLocation ADVANCEMENT_LOCATION = new ResourceLocation(MODID, "advancement");
   public static final ResourceLocation SCORE_LOCATION = new ResourceLocation(MODID, "score");
   public CommandLootr COMMAND_LOOTR;
-  public static ItemGroup TAB = new ItemGroup(MODID) {
+  public static CreativeModeTab TAB = new CreativeModeTab(MODID) {
     @Override
     @OnlyIn(Dist.CLIENT)
     public ItemStack makeIcon() {
@@ -71,7 +71,7 @@ public class Lootr {
     DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> Setup::client);
 
     modBus.addListener(CommonSetup::init);
-    modBus.addGenericListener(TileEntityType.class, ModTiles::registerTileEntityType);
+    modBus.addGenericListener(BlockEntityType.class, ModTiles::registerTileEntityType);
     modBus.addGenericListener(Block.class, ModBlocks::registerBlocks);
     modBus.addGenericListener(EntityType.class, ModEntities::registerEntityType);
     modBus.addGenericListener(Item.class, ModItems::registerItems);

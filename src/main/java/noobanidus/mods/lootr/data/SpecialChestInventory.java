@@ -1,20 +1,20 @@
 package noobanidus.mods.lootr.data;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.inventory.container.ChestContainer;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.LockableLootTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.inventory.ChestMenu;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import noobanidus.mods.lootr.api.ILootTile;
 import noobanidus.mods.lootr.api.ILootrInventory;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
@@ -25,23 +25,23 @@ import javax.annotation.Nullable;
 public class SpecialChestInventory implements ILootrInventory {
   private NewChestData newChestData;
   private final NonNullList<ItemStack> contents;
-  private final ITextComponent name;
+  private final Component name;
 
   @Nullable
   private BlockPos pos;
 
-  public SpecialChestInventory(NewChestData newChestData, NonNullList<ItemStack> contents, ITextComponent name, @Nullable BlockPos pos) {
+  public SpecialChestInventory(NewChestData newChestData, NonNullList<ItemStack> contents, Component name, @Nullable BlockPos pos) {
     this.newChestData = newChestData;
     this.contents = contents;
     this.name = name;
     this.pos = pos;
   }
 
-  public SpecialChestInventory(NewChestData newChestData, CompoundNBT items, String componentAsJSON, BlockPos pos) {
+  public SpecialChestInventory(NewChestData newChestData, CompoundTag items, String componentAsJSON, BlockPos pos) {
     this.newChestData = newChestData;
-    this.name = ITextComponent.Serializer.fromJson(componentAsJSON);
+    this.name = Component.Serializer.fromJson(componentAsJSON);
     this.contents = NonNullList.withSize(27, ItemStack.EMPTY);
-    ItemStackHelper.loadAllItems(items, this.contents);
+    ContainerHelper.loadAllItems(items, this.contents);
     this.pos = pos;
   }
 
@@ -51,14 +51,14 @@ public class SpecialChestInventory implements ILootrInventory {
 
   @Override
   @Nullable
-  public LockableLootTileEntity getTile(World world) {
+  public RandomizableContainerBlockEntity getTile(Level world) {
     if (world == null || world.isClientSide() || pos == null) {
       return null;
     }
 
-    TileEntity te = world.getBlockEntity(pos);
+    BlockEntity te = world.getBlockEntity(pos);
     if (te instanceof ILootTile) {
-      return (LockableLootTileEntity) te;
+      return (RandomizableContainerBlockEntity) te;
     }
 
     return null;
@@ -66,16 +66,16 @@ public class SpecialChestInventory implements ILootrInventory {
 
   @Override
   @Nullable
-  public LootrChestMinecartEntity getEntity(World world) {
+  public LootrChestMinecartEntity getEntity(Level world) {
     if (world == null || world.isClientSide() || newChestData.getEntityId() == null) {
       return null;
     }
 
-    if (!(world instanceof ServerWorld)) {
+    if (!(world instanceof ServerLevel)) {
       return null;
     }
 
-    ServerWorld serverWorld = (ServerWorld) world;
+    ServerLevel serverWorld = (ServerLevel) world;
     Entity entity = serverWorld.getEntity(newChestData.getEntityId());
     if (entity instanceof LootrChestMinecartEntity) {
       return (LootrChestMinecartEntity) entity;
@@ -107,7 +107,7 @@ public class SpecialChestInventory implements ILootrInventory {
 
   @Override
   public ItemStack removeItem(int index, int count) {
-    ItemStack itemstack = ItemStackHelper.removeItem(this.contents, index, count);
+    ItemStack itemstack = ContainerHelper.removeItem(this.contents, index, count);
     if (!itemstack.isEmpty()) {
       this.setChanged();
       // TODO: Trigger save?
@@ -118,7 +118,7 @@ public class SpecialChestInventory implements ILootrInventory {
 
   @Override
   public ItemStack removeItemNoUpdate(int index) {
-    ItemStack result = ItemStackHelper.takeItem(contents, index);
+    ItemStack result = ContainerHelper.takeItem(contents, index);
     if (!result.isEmpty()) {
       this.setChanged();
     }
@@ -142,7 +142,7 @@ public class SpecialChestInventory implements ILootrInventory {
   }
 
   @Override
-  public boolean stillValid(PlayerEntity player) {
+  public boolean stillValid(Player player) {
     return true;
   }
 
@@ -153,20 +153,20 @@ public class SpecialChestInventory implements ILootrInventory {
   }
 
   @Override
-  public ITextComponent getDisplayName() {
+  public Component getDisplayName() {
     return name;
   }
 
   @Nullable
   @Override
-  public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
-    return ChestContainer.threeRows(id, inventory, this);
+  public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
+    return ChestMenu.threeRows(id, inventory, this);
   }
 
   @Override
-  public void startOpen(PlayerEntity player) {
-    World world = player.level;
-    LockableLootTileEntity tile = getTile(world);
+  public void startOpen(Player player) {
+    Level world = player.level;
+    RandomizableContainerBlockEntity tile = getTile(world);
     if (tile != null) {
       tile.startOpen(player);
     }
@@ -179,11 +179,11 @@ public class SpecialChestInventory implements ILootrInventory {
   }
 
   @Override
-  public void stopOpen(PlayerEntity player) {
+  public void stopOpen(Player player) {
     setChanged();
-    World world = player.level;
+    Level world = player.level;
     if (pos != null) {
-      LockableLootTileEntity tile = getTile(world);
+      RandomizableContainerBlockEntity tile = getTile(world);
       if (tile != null) {
         tile.stopOpen(player);
       }
@@ -196,13 +196,13 @@ public class SpecialChestInventory implements ILootrInventory {
     }
   }
 
-  public CompoundNBT writeItems() {
-    CompoundNBT result = new CompoundNBT();
-    return ItemStackHelper.saveAllItems(result, this.contents);
+  public CompoundTag writeItems() {
+    CompoundTag result = new CompoundTag();
+    return ContainerHelper.saveAllItems(result, this.contents);
   }
 
   public String writeName() {
-    return ITextComponent.Serializer.toJson(this.name);
+    return Component.Serializer.toJson(this.name);
   }
 
   @Override

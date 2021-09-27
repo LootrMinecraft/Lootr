@@ -1,7 +1,7 @@
 package noobanidus.mods.lootr.advancement;
 
 import com.google.gson.JsonObject;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 import noobanidus.mods.lootr.init.ModStats;
 
 import javax.annotation.Nullable;
@@ -17,7 +17,7 @@ public class LootedStatPredicate implements IGenericPredicate<Void> {
   }
 
   @Override
-  public boolean test(ServerPlayerEntity player, Void condition) {
+  public boolean test(ServerPlayer player, Void condition) {
     return player.getStats().getValue(ModStats.LOOTED_STAT) >= score;
   }
 

@@ -1,27 +1,27 @@
 package noobanidus.mods.lootr.tiles;
 
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.block.BarrelBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameterSets;
-import net.minecraft.loot.LootParameters;
-import net.minecraft.loot.LootTable;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.BarrelTileEntity;
+import net.minecraft.world.level.block.BarrelBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.block.entity.BarrelBlockEntity;
 import net.minecraft.util.*;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3i;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.core.Vec3i;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.common.capabilities.Capability;
@@ -41,8 +41,14 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+
 @SuppressWarnings({"ConstantConditions", "NullableProblems", "WeakerAccess"})
-public class SpecialLootBarrelTile extends BarrelTileEntity implements ILootTile {
+public class SpecialLootBarrelTile extends BarrelBlockEntity implements ILootTile {
   public Set<UUID> openers = new HashSet<>();
   private int specialNumPlayersUsingBarrel;
   private ResourceLocation savedLootTable = null;
@@ -57,7 +63,7 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ILootTile
   @Override
   public IModelData getModelData() {
     IModelData data = new ModelDataMap.Builder().withInitial(LootrBarrelBlock.OPENED, false).build();
-    PlayerEntity player = Getter.getPlayer();
+    Player player = Getter.getPlayer();
     if (player != null) {
       data.setData(LootrBarrelBlock.OPENED, openers.contains(player.getUUID()));
     }
@@ -80,24 +86,24 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ILootTile
   }
 
   @Override
-  public void unpackLootTable(@Nullable PlayerEntity player) {
+  public void unpackLootTable(@Nullable Player player) {
     // TODO: Override
   }
 
   @Override
   @SuppressWarnings({"unused", "Duplicates"})
-  public void fillWithLoot(PlayerEntity player, IInventory inventory, @Nullable ResourceLocation overrideTable, long seed) {
+  public void fillWithLoot(Player player, Container inventory, @Nullable ResourceLocation overrideTable, long seed) {
     if (this.level != null && this.savedLootTable != null && this.level.getServer() != null) {
       LootTable loottable = this.level.getServer().getLootTables().get(overrideTable != null ? overrideTable : this.savedLootTable);
-      if (player instanceof ServerPlayerEntity) {
-        CriteriaTriggers.GENERATE_LOOT.trigger((ServerPlayerEntity) player, overrideTable != null ? overrideTable : this.lootTable);
+      if (player instanceof ServerPlayer) {
+        CriteriaTriggers.GENERATE_LOOT.trigger((ServerPlayer) player, overrideTable != null ? overrideTable : this.lootTable);
       }
-      LootContext.Builder builder = (new LootContext.Builder((ServerWorld) this.level)).withParameter(LootParameters.ORIGIN, Vector3d.atCenterOf(this.worldPosition)).withOptionalRandomSeed(ConfigManager.RANDOMISE_SEED.get() ? ThreadLocalRandom.current().nextLong() : seed == Long.MIN_VALUE ? this.seed : seed);
+      LootContext.Builder builder = (new LootContext.Builder((ServerLevel) this.level)).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(this.worldPosition)).withOptionalRandomSeed(ConfigManager.RANDOMISE_SEED.get() ? ThreadLocalRandom.current().nextLong() : seed == Long.MIN_VALUE ? this.seed : seed);
       if (player != null) {
-        builder.withLuck(player.getLuck()).withParameter(LootParameters.THIS_ENTITY, player);
+        builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
       }
 
-      loottable.fill(inventory, builder.create(LootParameterSets.CHEST));
+      loottable.fill(inventory, builder.create(LootContextParamSets.CHEST));
     }
   }
 
@@ -118,7 +124,7 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ILootTile
 
   @SuppressWarnings("Duplicates")
   @Override
-  public void load(BlockState state, CompoundNBT compound) {
+  public void load(BlockState state, CompoundTag compound) {
     if (compound.contains("specialLootChest_table", Constants.NBT.TAG_STRING)) {
       savedLootTable = new ResourceLocation(compound.getString("specialLootChest_table"));
     }
@@ -138,10 +144,10 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ILootTile
       getTileId();
     }
     if (compound.contains("LootrOpeners")) {
-      ListNBT openers = compound.getList("LootrOpeners", Constants.NBT.TAG_INT_ARRAY);
+      ListTag openers = compound.getList("LootrOpeners", Constants.NBT.TAG_INT_ARRAY);
       this.openers.clear();
-      for (INBT item : openers) {
-        this.openers.add(NBTUtil.loadUUID(item));
+      for (Tag item : openers) {
+        this.openers.add(NbtUtils.loadUUID(item));
       }
     }
     requestModelDataUpdate();
@@ -149,7 +155,7 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ILootTile
   }
 
   @Override
-  public CompoundNBT save(CompoundNBT compound) {
+  public CompoundTag save(CompoundTag compound) {
     compound = super.save(compound);
     if (savedLootTable != null) {
       compound.putString("specialLootBarrel_table", savedLootTable.toString());
@@ -160,9 +166,9 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ILootTile
       compound.putLong("LootTableSeed", seed);
     }
     compound.putUUID("tileId", getTileId());
-    ListNBT list = new ListNBT();
+    ListTag list = new ListTag();
     for (UUID opener : this.openers) {
-      list.add(NBTUtil.createUUID(opener));
+      list.add(NbtUtils.createUUID(opener));
     }
     compound.put("LootrOpeners", list);
     return compound;
@@ -201,11 +207,11 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ILootTile
   }
 
   private void playSound(BlockState state, SoundEvent sound) {
-    Vector3i dir = state.getValue(BarrelBlock.FACING).getNormal();
+    Vec3i dir = state.getValue(BarrelBlock.FACING).getNormal();
     double x = (double) this.worldPosition.getX() + 0.5D + (double) dir.getX() / 2.0D;
     double y = (double) this.worldPosition.getY() + 0.5D + (double) dir.getY() / 2.0D;
     double z = (double) this.worldPosition.getZ() + 0.5D + (double) dir.getZ() / 2.0D;
-    this.level.playSound(null, x, y, z, sound, SoundCategory.BLOCKS, 0.5F, this.level.random.nextFloat() * 0.1F + 0.9F);
+    this.level.playSound(null, x, y, z, sound, SoundSource.BLOCKS, 0.5F, this.level.random.nextFloat() * 0.1F + 0.9F);
   }
 
   private void scheduleTick() {
@@ -213,7 +219,7 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ILootTile
   }
 
   @Override
-  public void startOpen(PlayerEntity player) {
+  public void startOpen(Player player) {
     if (!player.isSpectator()) {
       if (this.specialNumPlayersUsingBarrel < 0) {
         this.specialNumPlayersUsingBarrel = 0;
@@ -232,7 +238,7 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ILootTile
   }
 
   @Override
-  public void stopOpen(PlayerEntity player) {
+  public void stopOpen(Player player) {
     if (!player.isSpectator()) {
       --this.specialNumPlayersUsingBarrel;
       openers.add(player.getUUID());
@@ -252,18 +258,18 @@ public class SpecialLootBarrelTile extends BarrelTileEntity implements ILootTile
 
   @Override
   @Nonnull
-  public CompoundNBT getUpdateTag() {
-    return save(new CompoundNBT());
+  public CompoundTag getUpdateTag() {
+    return save(new CompoundTag());
   }
 
   @Override
   @Nullable
-  public SUpdateTileEntityPacket getUpdatePacket() {
-    return new SUpdateTileEntityPacket(getBlockPos(), 0, getUpdateTag());
+  public ClientboundBlockEntityDataPacket getUpdatePacket() {
+    return new ClientboundBlockEntityDataPacket(getBlockPos(), 0, getUpdateTag());
   }
 
   @Override
-  public void onDataPacket(@Nonnull NetworkManager net, @Nonnull SUpdateTileEntityPacket pkt) {
+  public void onDataPacket(@Nonnull Connection net, @Nonnull ClientboundBlockEntityDataPacket pkt) {
     load(ModBlocks.CHEST.defaultBlockState(), pkt.getTag());
   }
 }

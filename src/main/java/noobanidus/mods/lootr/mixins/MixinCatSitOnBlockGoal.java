@@ -1,10 +1,10 @@
 package noobanidus.mods.lootr.mixins;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.ai.goal.CatSitOnBlockGoal;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.ai.goal.CatSitOnBlockGoal;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelReader;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.tiles.SpecialLootChestTile;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,7 +22,7 @@ public class MixinCatSitOnBlockGoal {
   }
 
   @Inject(method = "isValidTarget", at = @At(target = "Lnet/minecraft/tileentity/ChestTileEntity;getOpenCount(Lnet/minecraft/world/IBlockReader;Lnet/minecraft/util/math/BlockPos;)I", value = "INVOKE"), cancellable = true)
-  protected void playersUsing(IWorldReader reader, BlockPos pos, CallbackInfoReturnable<Boolean> info) {
+  protected void playersUsing(LevelReader reader, BlockPos pos, CallbackInfoReturnable<Boolean> info) {
     if (SpecialLootChestTile.getPlayersUsing(reader, pos) < 1) {
       info.setReturnValue(true);
       info.cancel();

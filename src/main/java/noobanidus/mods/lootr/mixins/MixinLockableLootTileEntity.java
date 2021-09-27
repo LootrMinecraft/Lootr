@@ -1,17 +1,17 @@
 package noobanidus.mods.lootr.mixins;
 
 import com.google.common.collect.Sets;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ChestBlock;
-import net.minecraft.tileentity.LockableLootTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunk;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.chunk.ChunkAccess;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.ILootTile;
 import noobanidus.mods.lootr.config.ConfigManager;
@@ -25,32 +25,32 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Random;
 import java.util.Set;
 
-@Mixin(LockableLootTileEntity.class)
+@Mixin(RandomizableContainerBlockEntity.class)
 public class MixinLockableLootTileEntity {
   private final Logger log = LogManager.getLogger(Lootr.MODID);
 
   @Inject(method = "setLootTable(Lnet/minecraft/world/IBlockReader;Ljava/util/Random;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/ResourceLocation;)V",
       at = @At("HEAD"))
-  private static void setLootTable(IBlockReader reader, Random rand, BlockPos pos, ResourceLocation lootTableIn, CallbackInfo info) {
+  private static void setLootTable(BlockGetter reader, Random rand, BlockPos pos, ResourceLocation lootTableIn, CallbackInfo info) {
     if (ConfigManager.getLootBlacklist().contains(lootTableIn)) {
       return;
     }
-    if (reader instanceof IServerWorld) {
+    if (reader instanceof ServerLevelAccessor) {
       BlockState state = reader.getBlockState(pos);
       BlockState replacement = ConfigManager.replacement(state);
       if (replacement != null) {
-        IServerWorld world = (IServerWorld) reader;
-        RegistryKey<World> key = world.getLevel().dimension();
+        ServerLevelAccessor world = (ServerLevelAccessor) reader;
+        ResourceKey<Level> key = world.getLevel().dimension();
         if (ConfigManager.isDimensionBlocked(key)) {
           return;
         }
-        IChunk chunk = world.getChunk(pos);
+        ChunkAccess chunk = world.getChunk(pos);
         chunk.removeBlockEntity(pos);
         if (state.getProperties().contains(ChestBlock.WATERLOGGED)) {
           replacement = replacement.setValue(ChestBlock.WATERLOGGED, state.getValue(ChestBlock.WATERLOGGED));
         }
         world.setBlock(pos, replacement, 2);
-        TileEntity te = replacement.getBlock().createTileEntity(replacement, reader);
+        BlockEntity te = replacement.getBlock().createTileEntity(replacement, reader);
         if (te != null) {
           chunk.setBlockEntity(pos, te);
         }
@@ -79,7 +79,7 @@ public class MixinLockableLootTileEntity {
         "\n  can't replace. Please consider reporting it!" +
         "\n    Tile: " + this +
         "\n    Table: " + table +
-        "\n    Location: " + ((LockableLootTileEntity) (Object) (this)).getBlockPos().toString() +
+        "\n    Location: " + ((RandomizableContainerBlockEntity) (Object) (this)).getBlockPos().toString() +
         "\n    Stack: " + stacktrace[3].toString() +
         "\n           " + stacktrace[4].toString() +
         "\n           " + stacktrace[5].toString());

@@ -1,7 +1,7 @@
 package noobanidus.mods.lootr.networking;
 
 
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 public class CloseCart {
   public int entityId;
 
-  public CloseCart(PacketBuffer buffer) {
+  public CloseCart(FriendlyByteBuf buffer) {
     this.entityId = buffer.readInt();
   }
 
@@ -20,7 +20,7 @@ public class CloseCart {
     this.entityId = entityId;
   }
 
-  public void encode(PacketBuffer buf) {
+  public void encode(FriendlyByteBuf buf) {
     buf.writeInt(this.entityId);
   }
 

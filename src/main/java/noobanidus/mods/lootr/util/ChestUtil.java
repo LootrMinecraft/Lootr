@@ -1,18 +1,18 @@
 package noobanidus.mods.lootr.util;
 
-import net.minecraft.block.BarrelBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.ChestBlock;
-import net.minecraft.entity.monster.piglin.PiglinTasks;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.LockableLootTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.BarrelBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.entity.monster.piglin.PiglinAi;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.network.PacketDistributor;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.ILootTile;
@@ -34,7 +34,7 @@ public class ChestUtil {
   public static Random random = new Random();
   public static Set<Class<?>> tileClasses = new HashSet<>();
 
-  public static boolean handleLootSneak(Block block, World world, BlockPos pos, PlayerEntity player) {
+  public static boolean handleLootSneak(Block block, Level world, BlockPos pos, Player player) {
     if (world.isClientSide()) {
       return false;
     }
@@ -42,7 +42,7 @@ public class ChestUtil {
       return false;
     }
 
-    TileEntity te = world.getBlockEntity(pos);
+    BlockEntity te = world.getBlockEntity(pos);
     if (te instanceof ILootTile) {
       Set<UUID> openers = ((ILootTile) te).getOpeners();
       openers.remove(player.getUUID());
@@ -53,7 +53,7 @@ public class ChestUtil {
     return false;
   }
 
-  public static void handleLootCartSneak(World world, LootrChestMinecartEntity cart, PlayerEntity player) {
+  public static void handleLootCartSneak(Level world, LootrChestMinecartEntity cart, Player player) {
     if (world.isClientSide()) {
       return;
     }
@@ -67,7 +67,7 @@ public class ChestUtil {
     PacketHandler.sendInternal(PacketDistributor.TRACKING_ENTITY.with(() -> cart), open);
   }
 
-  public static boolean handleLootChest(Block block, World world, BlockPos pos, PlayerEntity player) {
+  public static boolean handleLootChest(Block block, Level world, BlockPos pos, Player player) {
     if (world.isClientSide()) {
       return false;
     }
@@ -75,44 +75,44 @@ public class ChestUtil {
       player.openMenu(null);
       return false;
     }
-    TileEntity te = world.getBlockEntity(pos);
+    BlockEntity te = world.getBlockEntity(pos);
     if (te instanceof ILootTile) {
       if (block instanceof BarrelBlock) {
-        Lootr.BARREL_PREDICATE.trigger((ServerPlayerEntity) player, null);
+        Lootr.BARREL_PREDICATE.trigger((ServerPlayer) player, null);
       } else if (block instanceof ChestBlock) {
-        Lootr.CHEST_PREDICATE.trigger((ServerPlayerEntity) player, null);
+        Lootr.CHEST_PREDICATE.trigger((ServerPlayer) player, null);
       }
-      INamedContainerProvider provider = NewChestData.getInventory(world, ((ILootTile) te).getTileId(), pos, (ServerPlayerEntity) player, (LockableLootTileEntity) te, ((ILootTile) te)::fillWithLoot);
+      MenuProvider provider = NewChestData.getInventory(world, ((ILootTile) te).getTileId(), pos, (ServerPlayer) player, (RandomizableContainerBlockEntity) te, ((ILootTile) te)::fillWithLoot);
       if (!((ILootTile) te).getOpeners().contains(player.getUUID())) {
         player.awardStat(ModStats.LOOTED_STAT);
-        Lootr.SCORE_PREDICATE.trigger((ServerPlayerEntity) player, null);
+        Lootr.SCORE_PREDICATE.trigger((ServerPlayer) player, null);
       }
       player.openMenu(provider);
-      PiglinTasks.angerNearbyPiglins(player, true);
+      PiglinAi.angerNearbyPiglins(player, true);
       return true;
     } else {
       return false;
     }
   }
 
-  public static void handleLootCart(World world, LootrChestMinecartEntity cart, PlayerEntity player) {
+  public static void handleLootCart(Level world, LootrChestMinecartEntity cart, Player player) {
     if (!world.isClientSide()) {
       if (player.isSpectator()) {
         player.openMenu(null);
       } else {
-        Lootr.CART_PREDICATE.trigger((ServerPlayerEntity) player, null);
+        Lootr.CART_PREDICATE.trigger((ServerPlayer) player, null);
         if (!cart.getOpeners().contains(player.getUUID())) {
           cart.addOpener(player);
           player.awardStat(ModStats.LOOTED_STAT);
-          Lootr.SCORE_PREDICATE.trigger((ServerPlayerEntity) player, null);
+          Lootr.SCORE_PREDICATE.trigger((ServerPlayer) player, null);
         }
-        INamedContainerProvider provider = NewChestData.getInventory(world, cart, (ServerPlayerEntity) player, cart::addLoot);
+        MenuProvider provider = NewChestData.getInventory(world, cart, (ServerPlayer) player, cart::addLoot);
         player.openMenu(provider);
       }
     }
   }
 
-  public static boolean handleLootInventory(Block block, World world, BlockPos pos, PlayerEntity player) {
+  public static boolean handleLootInventory(Block block, Level world, BlockPos pos, Player player) {
     if (world.isClientSide()) {
       return false;
     }
@@ -120,21 +120,21 @@ public class ChestUtil {
       player.openMenu(null);
       return false;
     }
-    TileEntity te = world.getBlockEntity(pos);
+    BlockEntity te = world.getBlockEntity(pos);
     if (te instanceof SpecialLootInventoryTile) {
-      Lootr.CHEST_PREDICATE.trigger((ServerPlayerEntity) player, null);
+      Lootr.CHEST_PREDICATE.trigger((ServerPlayer) player, null);
       SpecialLootInventoryTile tile = (SpecialLootInventoryTile) te;
       NonNullList<ItemStack> stacks = null;
       if (tile.getCustomInventory() != null) {
         stacks = copyItemList(tile.getCustomInventory());
       }
-      INamedContainerProvider provider = NewChestData.getInventory(world, tile.getTileId(), stacks, (ServerPlayerEntity) player, pos, tile);
+      MenuProvider provider = NewChestData.getInventory(world, tile.getTileId(), stacks, (ServerPlayer) player, pos, tile);
       if (!((ILootTile) te).getOpeners().contains(player.getUUID())) {
         player.awardStat(ModStats.LOOTED_STAT);
-        Lootr.SCORE_PREDICATE.trigger((ServerPlayerEntity) player, null);
+        Lootr.SCORE_PREDICATE.trigger((ServerPlayer) player, null);
       }
       player.openMenu(provider);
-      PiglinTasks.angerNearbyPiglins(player, true);
+      PiglinAi.angerNearbyPiglins(player, true);
       return true;
     } else {
       return false;

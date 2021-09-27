@@ -1,12 +1,12 @@
 package noobanidus.mods.lootr.util;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 
 import javax.annotation.Nullable;
 
 public class ServerGetter {
   @Nullable
-  public static PlayerEntity getPlayer() {
+  public static Player getPlayer() {
     return null;
   }
 }

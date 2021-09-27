@@ -3,10 +3,10 @@ package noobanidus.mods.lootr.loot.conditions;
 import com.google.common.collect.ImmutableSet;
 import com.google.gson.*;
 import net.minecraft.loot.*;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.api.ILootTile;
 import noobanidus.mods.lootr.init.ModLoot;
 
@@ -15,7 +15,13 @@ import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
-public class LootCount implements ILootCondition {
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.Serializer;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
+
+public class LootCount implements LootItemCondition {
   private final List<Operation> operations;
 
   public LootCount(List<Operation> operations) {
@@ -23,18 +29,18 @@ public class LootCount implements ILootCondition {
   }
 
   @Override
-  public LootConditionType getType() {
+  public LootItemConditionType getType() {
     return ModLoot.LOOT_COUNT;
   }
 
   @Override
   public boolean test(LootContext lootContext) {
-    Vector3d pos = lootContext.getParamOrNull(LootParameters.ORIGIN);
+    Vec3 pos = lootContext.getParamOrNull(LootContextParams.ORIGIN);
     if (pos == null) {
       return false; // THIS SHOULD NEVER HAPPEN
     }
     BlockPos position = new BlockPos(pos);
-    TileEntity tileentity = lootContext.getLevel().getBlockEntity(position);
+    BlockEntity tileentity = lootContext.getLevel().getBlockEntity(position);
     if (tileentity instanceof ILootTile) {
       int count = ((ILootTile) tileentity).getOpeners().size() + 1; // Additional opener to include the current opener
       for (Operation op : operations) {
@@ -47,11 +53,11 @@ public class LootCount implements ILootCondition {
   }
 
   @Override
-  public Set<LootParameter<?>> getReferencedContextParams() {
-    return ImmutableSet.of(LootParameters.ORIGIN);
+  public Set<LootContextParam<?>> getReferencedContextParams() {
+    return ImmutableSet.of(LootContextParams.ORIGIN);
   }
 
-  public static class Serializer implements ILootSerializer<LootCount> {
+  public static class Serializer implements Serializer<LootCount> {
     @Override
     public void serialize(JsonObject object, LootCount count, JsonSerializationContext context) {
       JsonArray operations = new JsonArray();

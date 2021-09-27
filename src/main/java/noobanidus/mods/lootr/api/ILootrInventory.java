@@ -1,22 +1,22 @@
 package noobanidus.mods.lootr.api;
 
-import net.minecraft.entity.item.minecart.ContainerMinecartEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.LockableLootTileEntity;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.vehicle.AbstractMinecartContainer;
+import net.minecraft.world.Container;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 
-public interface ILootrInventory extends IInventory, INamedContainerProvider {
+public interface ILootrInventory extends Container, MenuProvider {
   @Nullable
-  LockableLootTileEntity getTile(World world);
+  RandomizableContainerBlockEntity getTile(Level world);
 
   @Nullable
-  ContainerMinecartEntity getEntity(World world);
+  AbstractMinecartContainer getEntity(Level world);
 
   @Nullable
   BlockPos getPos();
