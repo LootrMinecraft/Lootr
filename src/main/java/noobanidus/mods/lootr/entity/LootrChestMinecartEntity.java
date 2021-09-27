@@ -76,6 +76,10 @@ public class LootrChestMinecartEntity extends ContainerMinecartEntity implements
     this.opened = true;
   }
 
+  public void setClosed () {
+    this.opened = false;
+  }
+
   @Override
   public boolean isInvulnerableTo(DamageSource source) {
     if (this.isInvulnerable() && source != DamageSource.OUT_OF_WORLD && !source.isCreativePlayer()) {

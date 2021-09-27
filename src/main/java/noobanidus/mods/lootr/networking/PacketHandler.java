@@ -29,6 +29,7 @@ public class PacketHandler {
 
   public static void registerMessages() {
     registerMessage(OpenCart.class, OpenCart::encode, OpenCart::new, OpenCart::handle);
+    registerMessage(CloseCart.class, CloseCart::encode, CloseCart::new, CloseCart::handle);
   }
 
   public static void sendToInternal(Object msg, ServerPlayerEntity player) {

@@ -19,6 +19,7 @@ import noobanidus.mods.lootr.api.ILootTile;
 import noobanidus.mods.lootr.data.NewChestData;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModStats;
+import noobanidus.mods.lootr.networking.CloseCart;
 import noobanidus.mods.lootr.networking.OpenCart;
 import noobanidus.mods.lootr.networking.PacketHandler;
 import noobanidus.mods.lootr.tiles.SpecialLootInventoryTile;
@@ -62,8 +63,7 @@ public class ChestUtil {
     }
 
     cart.getOpeners().remove(player.getUUID());
-    // TODO: CloseCart packet
-    OpenCart open = new OpenCart(cart.getId());
+    CloseCart open = new CloseCart(cart.getId());
     PacketHandler.sendInternal(PacketDistributor.TRACKING_ENTITY.with(() -> cart), open);
   }
 
