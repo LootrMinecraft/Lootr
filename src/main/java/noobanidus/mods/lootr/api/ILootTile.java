@@ -8,7 +8,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public interface ILootTile {
-  void fillWithLoot(Player player, Container inventory, ResourceLocation table, long seed);
+  void unpackLootTable(Player player, Container inventory, ResourceLocation table, long seed);
 
   ResourceLocation getTable();
 
@@ -19,4 +19,6 @@ public interface ILootTile {
   UUID getTileId();
 
   void updatePacketViaState();
+
+  void setOpened (boolean opened);
 }

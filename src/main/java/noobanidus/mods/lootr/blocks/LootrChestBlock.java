@@ -1,79 +1,59 @@
 package noobanidus.mods.lootr.blocks;
 
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.block.state.properties.ChestType;
-import net.minecraft.world.level.block.entity.ChestBlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.Level;
-import net.minecraft.server.level.ServerLevel;
+import noobanidus.mods.lootr.blocks.entities.LootrChestBlockEntity;
 import noobanidus.mods.lootr.data.NewChestData;
-import noobanidus.mods.lootr.init.ModTiles;
-import noobanidus.mods.lootr.tiles.SpecialLootChestTile;
+import noobanidus.mods.lootr.init.ModBlockEntities;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 import java.util.function.Supplier;
 
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
-
-@SuppressWarnings("NullableProblems")
 public class LootrChestBlock extends ChestBlock {
   public LootrChestBlock(Properties properties) {
-    this(properties, () -> ModTiles.SPECIAL_LOOT_CHEST);
+    super(properties, () -> ModBlockEntities.SPECIAL_LOOT_CHEST);
   }
 
-  public LootrChestBlock(Properties builder, Supplier<BlockEntityType<? extends ChestBlockEntity>> tileEntityTypeIn) {
-    super(builder, tileEntityTypeIn);
+  public LootrChestBlock(Properties properties, Supplier<BlockEntityType<? extends ChestBlockEntity>> type) {
+    super(properties, type);
   }
 
   @Override
   public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult trace) {
-    if (player.isShiftKeyDown()) {
-      ChestUtil.handleLootSneak(this, world, pos, player);
-    } else if (!ChestBlock.isChestBlockedAt(world, pos)) {
+/*    if (player.isCrouching()) {
+      ChestUtil.handleLootSneak(this, world, pos, player); */
+    if (!ChestBlock.isChestBlockedAt(world, pos)) {
       ChestUtil.handleLootChest(this, world, pos, player);
     }
     return InteractionResult.SUCCESS;
   }
 
   @Override
-  public void onRemove(BlockState oldState, Level world, BlockPos pos, BlockState newState, boolean isMoving) {
-    if (oldState.getBlock() != newState.getBlock() && world instanceof ServerLevel) {
-      NewChestData.deleteLootChest((ServerLevel) world, pos);
-    }
-    super.onRemove(oldState, world, pos, newState, isMoving);
-  }
-
-  @Override
-  public boolean hasTileEntity(BlockState state) {
-    return true;
-  }
-
-  @Override
-  public BlockEntity newBlockEntity(BlockGetter p_196283_1_) {
-    return new SpecialLootChestTile();
-  }
-
-  @Nullable
-  @Override
-  public BlockEntity createTileEntity(BlockState state, BlockGetter world) {
-    return new SpecialLootChestTile();
+  public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    return new LootrChestBlockEntity(pos, state);
   }
 
   @Override
@@ -106,5 +86,29 @@ public class LootrChestBlock extends ChestBlock {
   @Nullable
   public MenuProvider getMenuProvider(BlockState state, Level worldIn, BlockPos pos) {
     return null;
+  }
+
+  @Override
+  public boolean hasAnalogOutputSignal(BlockState pState) {
+    return false;
+  }
+
+  @Override
+  public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos) {
+    return 0;
+  }
+
+  @Nullable
+  public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+    return pLevel.isClientSide ? LootrChestBlockEntity::lootrLidAnimateTick : null;
+  }
+
+  @Override
+  public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, Random pRandom) {
+    BlockEntity blockentity = pLevel.getBlockEntity(pPos);
+    if (blockentity instanceof LootrChestBlockEntity) {
+      ((LootrChestBlockEntity) blockentity).recheckOpen();
+    }
+
   }
 }

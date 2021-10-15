@@ -20,8 +20,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Random;
 
 @Mixin(OceanRuinPieces.OceanRuinPiece.class)
-public class Piece {
-  @Inject(method = "handleDataMarker(Ljava/lang/String;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/IServerWorld;Ljava/util/Random;Lnet/minecraft/util/math/MutableBoundingBox;)V",
+public class MixinOceanRuinPieces$Piece {
+  @Inject(method = "handleDataMarker",
       at = @At(value = "HEAD"),
       cancellable = true)
   protected void handleDataMarker(String function, BlockPos pos, ServerLevelAccessor worldIn, Random rand, BoundingBox sbb, CallbackInfo info) {

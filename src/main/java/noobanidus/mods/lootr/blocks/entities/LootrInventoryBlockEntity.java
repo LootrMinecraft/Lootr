@@ -1,29 +1,32 @@
-package noobanidus.mods.lootr.tiles;
+package noobanidus.mods.lootr.blocks.entities;
 
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.ContainerHelper;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.core.NonNullList;
-import noobanidus.mods.lootr.init.ModBlocks;
-import noobanidus.mods.lootr.init.ModTiles;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-@SuppressWarnings({"Duplicates", "ConstantConditions", "NullableProblems", "WeakerAccess"})
-public class SpecialLootInventoryTile extends SpecialLootChestTile {
+public class LootrInventoryBlockEntity extends LootrChestBlockEntity {
   private NonNullList<ItemStack> customInventory;
 
-  public SpecialLootInventoryTile() {
-    super(ModTiles.SPECIAL_LOOT_INVENTORY);
+  protected LootrInventoryBlockEntity(BlockEntityType<?> p_155327_, BlockPos p_155328_, BlockState p_155329_) {
+    super(p_155327_, p_155328_, p_155329_);
+  }
+
+  public LootrInventoryBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
+    super(pWorldPosition, pBlockState);
   }
 
   @Override
-  public void load(BlockState state, CompoundTag compound) {
-    super.load(state, compound);
+  public void load(CompoundTag compound) {
+    super.load(compound);
     if (compound.contains("customInventory") && compound.contains("customSize")) {
       int size = compound.getInt("customSize");
       this.customInventory = NonNullList.withSize(size, ItemStack.EMPTY);
@@ -52,6 +55,6 @@ public class SpecialLootInventoryTile extends SpecialLootChestTile {
 
   @Override
   public void onDataPacket(@Nonnull Connection net, @Nonnull ClientboundBlockEntityDataPacket pkt) {
-    load(ModBlocks.INVENTORY.defaultBlockState(), pkt.getTag());
+    load(pkt.getTag());
   }
 }

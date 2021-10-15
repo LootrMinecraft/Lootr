@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Random;
 
 @Mixin(IglooPieces.IglooPiece.class)
-public class Piece {
+public class MixinIglooPieces$Piece {
   @Inject(method = "handleDataMarker",
       at = @At(value = "HEAD"),
       cancellable = true)

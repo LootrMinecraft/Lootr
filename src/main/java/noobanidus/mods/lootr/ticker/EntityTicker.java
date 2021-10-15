@@ -1,11 +1,9 @@
 package noobanidus.mods.lootr.ticker;
 
-import net.minecraft.world.entity.Entity;
-import net.minecraft.util.Mth;
-import net.minecraft.world.level.chunk.ChunkStatus;
-import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraftforge.event.TickEvent;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
@@ -17,15 +15,19 @@ public class EntityTicker {
 
   public static void onServerTick(TickEvent.ServerTickEvent event) {
     if (event.phase == TickEvent.Phase.END) {
-      entities.removeIf(Entity::isAddedToWorld);
+      List<LootrChestMinecartEntity> completed = new ArrayList<>();
       for (LootrChestMinecartEntity entity : entities) {
+        if (entity.isAddedToWorld()) {
+          continue;
+        }
         ServerLevel world = (ServerLevel) entity.level;
         ServerChunkCache provider = world.getChunkSource();
-        ChunkAccess ichunk = provider.getChunk(Mth.floor(entity.getX() / 16.0D), Mth.floor(entity.getZ() / 16.0D), ChunkStatus.FULL, false);
-        if (ichunk != null) {
+        if (provider.getChunkFuture(Mth.floor(entity.getX() / 16.0D), Mth.floor(entity.getZ() / 16.0D), ChunkStatus.FULL, false).isDone()) {
           world.addFreshEntity(entity);
+          completed.add(entity);
         }
       }
+      entities.removeAll(completed);
     }
   }
 

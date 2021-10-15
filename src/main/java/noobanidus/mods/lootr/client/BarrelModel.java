@@ -7,17 +7,21 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.client.renderer.model.*;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.core.Direction;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.resources.ResourceLocation;
 import com.mojang.math.Transformation;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.BlockModel;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.*;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.client.model.CompositeModelState;
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.minecraftforge.client.model.IModelLoader;
-import net.minecraftforge.client.model.ModelTransformComposition;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.client.model.data.IDynamicBakedModel;
 import net.minecraftforge.client.model.data.IModelData;
@@ -31,16 +35,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
-
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockModel;
-import net.minecraft.client.renderer.block.model.ItemOverrides;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.Material;
-import net.minecraft.client.resources.model.ModelBakery;
-import net.minecraft.client.resources.model.ModelState;
-import net.minecraft.client.resources.model.UnbakedModel;
 
 public class BarrelModel implements IModelGeometry<BarrelModel> {
   private final UnbakedModel opened;
@@ -70,7 +64,7 @@ public class BarrelModel implements IModelGeometry<BarrelModel> {
         spriteGetter.apply(owner.resolveTexture("particle")), overrides,
         buildModel(opened, modelTransform, bakery, spriteGetter, modelLocation),
         buildModel(unopened, modelTransform, bakery, spriteGetter, modelLocation),
-        PerspectiveMapWrapper.getTransforms(new ModelTransformComposition(owner.getCombinedTransform(), modelTransform))
+        PerspectiveMapWrapper.getTransforms(new CompositeModelState(owner.getCombinedTransform(), modelTransform))
     );
   }
 
@@ -99,8 +93,12 @@ public class BarrelModel implements IModelGeometry<BarrelModel> {
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
       BakedModel model;
-      if (extraData.getData(LootrBarrelBlock.OPENED) == Boolean.TRUE) {
-        model = opened;
+      if (extraData.hasProperty(LootrBarrelBlock.OPENED)) {
+        if (extraData.getData(LootrBarrelBlock.OPENED) == Boolean.TRUE) {
+          model = opened;
+        } else {
+          model = unopened;
+        }
       } else {
         model = unopened;
       }
@@ -140,7 +138,7 @@ public class BarrelModel implements IModelGeometry<BarrelModel> {
     }
 
     @Override
-    public TextureAtlasSprite getParticleTexture(@Nonnull IModelData data) {
+    public TextureAtlasSprite getParticleIcon(@Nonnull IModelData data) {
       if (data.getData(LootrBarrelBlock.OPENED) == Boolean.TRUE) {
         return opened.getParticleIcon();
       } else {

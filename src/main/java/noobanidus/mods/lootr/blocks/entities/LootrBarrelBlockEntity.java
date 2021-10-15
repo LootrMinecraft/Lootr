@@ -1,27 +1,41 @@
-package noobanidus.mods.lootr.tiles;
+package noobanidus.mods.lootr.blocks.entities;
 
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.world.level.block.BarrelBlock;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.Container;
-import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.Connection;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.world.level.block.entity.BarrelBlockEntity;
-import net.minecraft.util.*;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.core.Vec3i;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ChestMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BarrelBlock;
+import net.minecraft.world.level.block.entity.BarrelBlockEntity;
+import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.common.capabilities.Capability;
@@ -30,8 +44,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import noobanidus.mods.lootr.api.ILootTile;
 import noobanidus.mods.lootr.blocks.LootrBarrelBlock;
 import noobanidus.mods.lootr.config.ConfigManager;
-import noobanidus.mods.lootr.init.ModBlocks;
-import noobanidus.mods.lootr.init.ModTiles;
+import noobanidus.mods.lootr.init.ModBlockEntities;
 import noobanidus.mods.lootr.util.Getter;
 
 import javax.annotation.Nonnull;
@@ -41,33 +54,58 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
-import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-
-@SuppressWarnings({"ConstantConditions", "NullableProblems", "WeakerAccess"})
-public class SpecialLootBarrelTile extends BarrelBlockEntity implements ILootTile {
+public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity implements ILootTile {
   public Set<UUID> openers = new HashSet<>();
-  private int specialNumPlayersUsingBarrel;
-  private ResourceLocation savedLootTable = null;
-  private long seed = -1;
-  private UUID tileId = null;
+  protected ResourceLocation savedLootTable = null;
+  protected long seed = -1;
+  protected UUID tileId = null;
+  protected boolean opened = false;
+  private ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
+    @Override
+    protected void onOpen(Level leve, BlockPos pos, BlockState state) {
+      LootrBarrelBlockEntity.this.playSound(state, SoundEvents.BARREL_OPEN);
+      LootrBarrelBlockEntity.this.updateBlockState(state, true);
+    }
 
-  public SpecialLootBarrelTile() {
-    super(ModTiles.SPECIAL_LOOT_BARREL);
+    @Override
+    protected void onClose(Level level, BlockPos pos, BlockState state) {
+      LootrBarrelBlockEntity.this.playSound(state, SoundEvents.BARREL_CLOSE);
+      LootrBarrelBlockEntity.this.updateBlockState(state, false);
+    }
+
+    @Override
+    protected void openerCountChanged(Level level, BlockPos pos, BlockState state, int p_155069_, int p_155070_) {
+    }
+
+    @Override
+    protected boolean isOwnContainer(Player player) {
+      if (player.containerMenu instanceof ChestMenu) {
+        Container container = ((ChestMenu) player.containerMenu).getContainer();
+        return container == LootrBarrelBlockEntity.this;
+      } else {
+        return false;
+      }
+    }
+  };
+
+  // TODO
+  public LootrBarrelBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
+    super(ModBlockEntities.SPECIAL_LOOT_BARREL, pWorldPosition, pBlockState);
   }
+
+  private IModelData modelData = null;
 
   @Nonnull
   @Override
   public IModelData getModelData() {
-    IModelData data = new ModelDataMap.Builder().withInitial(LootrBarrelBlock.OPENED, false).build();
+    if (modelData == null) {
+      modelData = new ModelDataMap.Builder().withInitial(LootrBarrelBlock.OPENED, false).build();
+    }
     Player player = Getter.getPlayer();
     if (player != null) {
-      data.setData(LootrBarrelBlock.OPENED, openers.contains(player.getUUID()));
+      modelData.setData(LootrBarrelBlock.OPENED, openers.contains(player.getUUID()));
     }
-    return data;
+    return modelData;
   }
 
   @Override
@@ -86,13 +124,22 @@ public class SpecialLootBarrelTile extends BarrelBlockEntity implements ILootTil
   }
 
   @Override
+  protected NonNullList<ItemStack> getItems() {
+    return null;
+  }
+
+  @Override
+  protected void setItems(NonNullList<ItemStack> pItems) {
+  }
+
+  @Override
   public void unpackLootTable(@Nullable Player player) {
     // TODO: Override
   }
 
   @Override
   @SuppressWarnings({"unused", "Duplicates"})
-  public void fillWithLoot(Player player, Container inventory, @Nullable ResourceLocation overrideTable, long seed) {
+  public void unpackLootTable(Player player, Container inventory, @Nullable ResourceLocation overrideTable, long seed) {
     if (this.level != null && this.savedLootTable != null && this.level.getServer() != null) {
       LootTable loottable = this.level.getServer().getLootTables().get(overrideTable != null ? overrideTable : this.savedLootTable);
       if (player instanceof ServerPlayer) {
@@ -124,7 +171,7 @@ public class SpecialLootBarrelTile extends BarrelBlockEntity implements ILootTil
 
   @SuppressWarnings("Duplicates")
   @Override
-  public void load(BlockState state, CompoundTag compound) {
+  public void load(CompoundTag compound) {
     if (compound.contains("specialLootChest_table", Constants.NBT.TAG_STRING)) {
       savedLootTable = new ResourceLocation(compound.getString("specialLootChest_table"));
     }
@@ -151,7 +198,7 @@ public class SpecialLootBarrelTile extends BarrelBlockEntity implements ILootTil
       }
     }
     requestModelDataUpdate();
-    super.load(state, compound);
+    super.load(compound);
   }
 
   @Override
@@ -175,76 +222,58 @@ public class SpecialLootBarrelTile extends BarrelBlockEntity implements ILootTil
   }
 
   @Override
+  protected Component getDefaultName() {
+    return new TranslatableComponent("container.barrel");
+  }
+
+  @Override
+  protected AbstractContainerMenu createMenu(int pContainerId, Inventory pInventory) {
+    return null;
+  }
+
+  @Override
   public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
     return LazyOptional.empty();
   }
 
   @Override
+  public int getContainerSize() {
+    return 27;
+  }
+
+  @Override
+  public void startOpen(Player pPlayer) {
+    if (!this.remove && !pPlayer.isSpectator()) {
+      this.openersCounter.incrementOpeners(pPlayer, this.getLevel(), this.getBlockPos(), this.getBlockState());
+    }
+
+  }
+
+  @Override
+  public void stopOpen(Player pPlayer) {
+    if (!this.remove && !pPlayer.isSpectator()) {
+      this.openersCounter.decrementOpeners(pPlayer, this.getLevel(), this.getBlockPos(), this.getBlockState());
+    }
+
+  }
+
   public void recheckOpen() {
-    int x = this.worldPosition.getX();
-    int y = this.worldPosition.getY();
-    int z = this.worldPosition.getZ();
-    this.specialNumPlayersUsingBarrel = SpecialLootChestTile.calculatePlayersUsing(this.level, this, x, y, z);
-    if (this.specialNumPlayersUsingBarrel > 0) {
-      this.scheduleTick();
-    } else {
-      BlockState state = this.getBlockState();
-      if (state.getBlock() != ModBlocks.BARREL && state.getBlock() != Blocks.BARREL) {
-        this.setRemoved();
-        return;
-      }
-
-      boolean open = state.getValue(BarrelBlock.OPEN);
-      if (open) {
-        this.playSound(state, SoundEvents.BARREL_CLOSE);
-        this.setOpenProperty(state, false);
-      }
+    if (!this.remove) {
+      this.openersCounter.recheckOpeners(this.getLevel(), this.getBlockPos(), this.getBlockState());
     }
+
   }
 
-  private void setOpenProperty(BlockState state, boolean open) {
-    this.level.setBlock(this.getBlockPos(), state.setValue(BarrelBlock.OPEN, open), 3);
+  protected void updateBlockState(BlockState pState, boolean pOpen) {
+    this.level.setBlock(this.getBlockPos(), pState.setValue(BarrelBlock.OPEN, pOpen), 3);
   }
 
-  private void playSound(BlockState state, SoundEvent sound) {
-    Vec3i dir = state.getValue(BarrelBlock.FACING).getNormal();
-    double x = (double) this.worldPosition.getX() + 0.5D + (double) dir.getX() / 2.0D;
-    double y = (double) this.worldPosition.getY() + 0.5D + (double) dir.getY() / 2.0D;
-    double z = (double) this.worldPosition.getZ() + 0.5D + (double) dir.getZ() / 2.0D;
-    this.level.playSound(null, x, y, z, sound, SoundSource.BLOCKS, 0.5F, this.level.random.nextFloat() * 0.1F + 0.9F);
-  }
-
-  private void scheduleTick() {
-    this.level.getBlockTicks().scheduleTick(this.getBlockPos(), this.getBlockState().getBlock(), 5);
-  }
-
-  @Override
-  public void startOpen(Player player) {
-    if (!player.isSpectator()) {
-      if (this.specialNumPlayersUsingBarrel < 0) {
-        this.specialNumPlayersUsingBarrel = 0;
-      }
-
-      ++this.specialNumPlayersUsingBarrel;
-      BlockState state = this.getBlockState();
-      boolean open = state.getValue(BarrelBlock.OPEN);
-      if (!open) {
-        this.playSound(state, SoundEvents.BARREL_OPEN);
-        this.setOpenProperty(state, true);
-      }
-
-      this.scheduleTick();
-    }
-  }
-
-  @Override
-  public void stopOpen(Player player) {
-    if (!player.isSpectator()) {
-      --this.specialNumPlayersUsingBarrel;
-      openers.add(player.getUUID());
-      this.setChanged();
-      updatePacketViaState();
-    }
+  protected void playSound(BlockState pState, SoundEvent pSound) {
+    Vec3i vec3i = pState.getValue(BarrelBlock.FACING).getNormal();
+    double d0 = (double) this.worldPosition.getX() + 0.5D + (double) vec3i.getX() / 2.0D;
+    double d1 = (double) this.worldPosition.getY() + 0.5D + (double) vec3i.getY() / 2.0D;
+    double d2 = (double) this.worldPosition.getZ() + 0.5D + (double) vec3i.getZ() / 2.0D;
+    this.level.playSound(null, d0, d1, d2, pSound, SoundSource.BLOCKS, 0.5F, this.level.random.nextFloat() * 0.1F + 0.9F);
   }
 
   @Override
@@ -253,6 +282,11 @@ public class SpecialLootBarrelTile extends BarrelBlockEntity implements ILootTil
       BlockState state = level.getBlockState(getBlockPos());
       level.sendBlockUpdated(getBlockPos(), state, state, 8);
     }
+  }
+
+  @Override
+  public void setOpened(boolean opened) {
+    this.opened = opened;
   }
 
 
@@ -270,6 +304,6 @@ public class SpecialLootBarrelTile extends BarrelBlockEntity implements ILootTil
 
   @Override
   public void onDataPacket(@Nonnull Connection net, @Nonnull ClientboundBlockEntityDataPacket pkt) {
-    load(ModBlocks.CHEST.defaultBlockState(), pkt.getTag());
+    load(pkt.getTag());
   }
 }

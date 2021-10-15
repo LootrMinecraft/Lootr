@@ -2,6 +2,8 @@ package noobanidus.mods.lootr.setup;
 
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.Registry;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.advancement.AdvancementPredicate;
@@ -15,7 +17,9 @@ import noobanidus.mods.lootr.init.ModMisc;
 import noobanidus.mods.lootr.init.ModStats;
 import noobanidus.mods.lootr.networking.PacketHandler;
 
+@Mod.EventBusSubscriber(modid=Lootr.MODID, bus= Mod.EventBusSubscriber.Bus.MOD)
 public class CommonSetup {
+  @SubscribeEvent
   public static void init(FMLCommonSetupEvent event) {
     event.enqueueWork(() -> {
       ModMisc.register();

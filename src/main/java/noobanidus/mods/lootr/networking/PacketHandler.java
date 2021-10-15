@@ -1,14 +1,14 @@
 package noobanidus.mods.lootr.networking;
 
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.PacketDistributor;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraftforge.fmllegacy.network.NetworkDirection;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkRegistry;
+import net.minecraftforge.fmllegacy.network.PacketDistributor;
+import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
 import noobanidus.mods.lootr.Lootr;
 
 import java.util.function.BiConsumer;
@@ -30,11 +30,13 @@ public class PacketHandler {
   public static void registerMessages() {
     registerMessage(OpenCart.class, OpenCart::encode, OpenCart::new, OpenCart::handle);
     registerMessage(CloseCart.class, CloseCart::encode, CloseCart::new, CloseCart::handle);
+    registerMessage(UpdateModelData.class, UpdateModelData::encode, UpdateModelData::new, UpdateModelData::handle);
   }
 
   public static void sendToInternal(Object msg, ServerPlayer player) {
-    if (!(player instanceof FakePlayer))
+    if (!(player instanceof FakePlayer)) {
       HANDLER.sendTo(msg, player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+    }
   }
 
   public static void sendToServerInternal(Object msg) {

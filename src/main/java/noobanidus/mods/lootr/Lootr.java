@@ -27,7 +27,7 @@ import noobanidus.mods.lootr.events.HandleCart;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.init.ModEntities;
 import noobanidus.mods.lootr.init.ModItems;
-import noobanidus.mods.lootr.init.ModTiles;
+import noobanidus.mods.lootr.init.ModBlockEntities;
 import noobanidus.mods.lootr.setup.CommonSetup;
 import noobanidus.mods.lootr.setup.Setup;
 import noobanidus.mods.lootr.ticker.EntityTicker;
@@ -60,7 +60,6 @@ public class Lootr {
   public Lootr() {
     ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigManager.COMMON_CONFIG);
     ConfigManager.loadConfig(ConfigManager.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve(Lootr.MODID + "-common.toml"));
-    IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
     MinecraftForge.EVENT_BUS.addListener(HandleBreak::onBlockBreak);
     MinecraftForge.EVENT_BUS.addListener(HandleCart::onEntityJoin);
     MinecraftForge.EVENT_BUS.addListener(HandleCart::onEntityTrack);
@@ -69,12 +68,6 @@ public class Lootr {
     MinecraftForge.EVENT_BUS.addListener(this::onCommands);
 
     DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> Setup::client);
-
-    modBus.addListener(CommonSetup::init);
-    modBus.addGenericListener(BlockEntityType.class, ModTiles::registerTileEntityType);
-    modBus.addGenericListener(Block.class, ModBlocks::registerBlocks);
-    modBus.addGenericListener(EntityType.class, ModEntities::registerEntityType);
-    modBus.addGenericListener(Item.class, ModItems::registerItems);
   }
 
   public void onCommands(RegisterCommandsEvent event) {

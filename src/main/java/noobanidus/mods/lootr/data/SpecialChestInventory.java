@@ -32,7 +32,11 @@ public class SpecialChestInventory implements ILootrInventory {
 
   public SpecialChestInventory(NewChestData newChestData, NonNullList<ItemStack> contents, Component name, @Nullable BlockPos pos) {
     this.newChestData = newChestData;
-    this.contents = contents;
+    if (!contents.isEmpty()) {
+      this.contents = contents;
+    } else {
+      this.contents = NonNullList.withSize(27, ItemStack.EMPTY);
+    }
     this.name = name;
     this.pos = pos;
   }

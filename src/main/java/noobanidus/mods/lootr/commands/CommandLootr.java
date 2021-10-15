@@ -23,14 +23,13 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.text.*;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fml.server.ServerLifecycleHooks;
+import net.minecraftforge.fmllegacy.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.api.ILootTile;
+import noobanidus.mods.lootr.blocks.entities.LootrInventoryBlockEntity;
 import noobanidus.mods.lootr.data.NewChestData;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModBlocks;
-import noobanidus.mods.lootr.tiles.SpecialLootInventoryTile;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;
@@ -128,11 +127,12 @@ public class CommandLootr {
       return 1;
     }).then(suggestProfiles().executes(c -> {
       String playerName = StringArgumentType.getString(c, "profile");
-      GameProfile profile = c.getSource().getServer().getProfileCache().get(playerName);
-      if (profile == null) {
+      Optional<GameProfile> opt_profile = c.getSource().getServer().getProfileCache().get(playerName);
+      if (opt_profile.isEmpty()) {
         c.getSource().sendFailure(new TextComponent("Invalid player name: " + playerName + ", profile not found in the cache."));
         return 0;
       }
+      GameProfile profile = opt_profile.get();
       c.getSource().sendSuccess(new TextComponent(NewChestData.clearInventories(profile.getId()) ? "Cleared stored inventories for " + playerName : "No stored inventories for " + playerName + " to clear"), true);
       return 1;
     })));
@@ -159,10 +159,10 @@ public class CommandLootr {
         world.removeBlockEntity(pos);
         world.setBlockAndUpdate(pos, ModBlocks.INVENTORY.defaultBlockState().setValue(ChestBlock.FACING, state.getValue(ChestBlock.FACING)).setValue(ChestBlock.WATERLOGGED, state.getValue(ChestBlock.WATERLOGGED)));
         BlockEntity te = world.getBlockEntity(pos);
-        if (!(te instanceof SpecialLootInventoryTile)) {
+        if (!(te instanceof LootrInventoryBlockEntity)) {
           c.getSource().sendSuccess(new TextComponent("Unable to convert chest, BlockState is not a Lootr Inventory block."), false);
         } else {
-          SpecialLootInventoryTile inventory = (SpecialLootInventoryTile) te;
+          LootrInventoryBlockEntity inventory = (LootrInventoryBlockEntity) te;
           inventory.setCustomInventory(custom);
           inventory.setChanged();
         }
@@ -192,8 +192,8 @@ public class CommandLootr {
         Set<UUID> openers = ((ILootTile) tile).getOpeners();
         c.getSource().sendSuccess(new TextComponent("Tile at location " + position + " has " + openers.size() + " openers. UUIDs as follows:"), true);
         for (UUID uuid : openers) {
-          GameProfile profile = c.getSource().getServer().getProfileCache().get(uuid);
-          c.getSource().sendSuccess(new TextComponent("UUID: " + uuid.toString() + ", user profile: " + (profile == null ? "null" : profile.getName())), true);
+          Optional<GameProfile> prof = c.getSource().getServer().getProfileCache().get(uuid);
+          c.getSource().sendSuccess(new TextComponent("UUID: " + uuid.toString() + ", user profile: " + (prof.isPresent() ? prof.get().getName() : "null")), true);
         }
       } else {
         c.getSource().sendSuccess(new TextComponent("No Lootr tile exists at location: " + position), false);

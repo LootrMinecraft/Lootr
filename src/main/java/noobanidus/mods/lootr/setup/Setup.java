@@ -9,5 +9,6 @@ public class Setup {
     modBus.addListener(ClientSetup::init);
     modBus.addListener(ClientSetup::stitch);
     modBus.addListener(ClientSetup::modelRegister);
+    modBus.addListener(ClientSetup::registerRenderers);
   }
 }

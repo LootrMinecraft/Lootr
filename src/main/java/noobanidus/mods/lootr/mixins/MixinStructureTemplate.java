@@ -14,8 +14,8 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 @Mixin(StructureTemplate.class)
-public class MixinTemplate {
-  @Inject(method = "processBlockInfos(Lnet/minecraft/world/IWorld;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/gen/feature/template/PlacementSettings;Ljava/util/List;Lnet/minecraft/world/gen/feature/template/Template;)Ljava/util/List;", at = @At("HEAD"), remap = false)
+public class MixinStructureTemplate {
+  @Inject(method = "processBlockInfos(Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/levelgen/structure/templatesystem/StructurePlaceSettings;Ljava/util/List;Lnet/minecraft/world/level/levelgen/structure/templatesystem/StructureTemplate;)Ljava/util/List;", at = @At("HEAD"), remap = false)
   private static void processBlockInfos(LevelAccessor pLevel, BlockPos p_237145_1_, BlockPos p_237145_2_, StructurePlaceSettings pSettings, List<StructureTemplate.StructureBlockInfo> pBlockInfoList, @Nullable StructureTemplate template, CallbackInfoReturnable<List<StructureTemplate.StructureBlockInfo>> info) {
     if (!pSettings.getProcessors().contains(LootrChestProcessor.INSTANCE)) {
       pSettings.addProcessor(LootrChestProcessor.INSTANCE);

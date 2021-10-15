@@ -16,10 +16,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(MonsterRoomFeature.class)
-public class MixinDungeonsFeature {
+public class MixinMonsterRoomFeature {
   @Redirect(
       method = "place",
-      at = @At(value = "INVOKE", target = "Lnet/minecraft/world/gen/feature/structure/StructurePiece;reorient(Lnet/minecraft/world/IBlockReader;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;)Lnet/minecraft/block/BlockState;")
+      at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/levelgen/structure/StructurePiece;reorient(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)Lnet/minecraft/world/level/block/state/BlockState;")
   )
   private BlockState correctFacing(BlockGetter worldIn, BlockPos posIn, BlockState blockStateIn) {
     ResourceKey<Level> key = ((WorldGenLevel) worldIn).getLevel().dimension();

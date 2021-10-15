@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.mixins;
 
 import com.google.common.collect.Sets;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
@@ -26,10 +27,10 @@ import java.util.Random;
 import java.util.Set;
 
 @Mixin(RandomizableContainerBlockEntity.class)
-public class MixinLockableLootTileEntity {
+public class MixinRandomizableContainerBlockEntity {
   private final Logger log = LogManager.getLogger(Lootr.MODID);
 
-  @Inject(method = "setLootTable(Lnet/minecraft/world/IBlockReader;Ljava/util/Random;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/ResourceLocation;)V",
+  @Inject(method = "setLootTable(Lnet/minecraft/world/level/BlockGetter;Ljava/util/Random;Lnet/minecraft/core/BlockPos;Lnet/minecraft/resources/ResourceLocation;)V",
       at = @At("HEAD"))
   private static void setLootTable(BlockGetter reader, Random rand, BlockPos pos, ResourceLocation lootTableIn, CallbackInfo info) {
     if (ConfigManager.getLootBlacklist().contains(lootTableIn)) {
@@ -50,9 +51,9 @@ public class MixinLockableLootTileEntity {
           replacement = replacement.setValue(ChestBlock.WATERLOGGED, state.getValue(ChestBlock.WATERLOGGED));
         }
         world.setBlock(pos, replacement, 2);
-        BlockEntity te = replacement.getBlock().createTileEntity(replacement, reader);
+        BlockEntity te = ((EntityBlock)replacement.getBlock()).newBlockEntity(pos, replacement);
         if (te != null) {
-          chunk.setBlockEntity(pos, te);
+          chunk.setBlockEntity(te);
         }
       }
     }
@@ -60,7 +61,7 @@ public class MixinLockableLootTileEntity {
 
   private static final ResourceLocation REPURPOSED_END_SHULKER = new ResourceLocation("repurposed_structures", "chests/dungeon/end");
 
-  @Inject(method = "setLootTable(Lnet/minecraft/util/ResourceLocation;J)V", at = @At("HEAD"))
+  @Inject(method = "setLootTable(Lnet/minecraft/resources/ResourceLocation;J)V", at = @At("HEAD"))
   private void setLootTable(ResourceLocation table, long seed, CallbackInfo info) {
     if (this instanceof ILootTile || !ConfigManager.REPORT_TABLES.get()) {
       return;

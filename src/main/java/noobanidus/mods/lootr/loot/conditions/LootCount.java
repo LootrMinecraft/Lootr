@@ -2,10 +2,14 @@ package noobanidus.mods.lootr.loot.conditions;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.gson.*;
-import net.minecraft.loot.*;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.Serializer;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.api.ILootTile;
 import noobanidus.mods.lootr.init.ModLoot;
@@ -14,12 +18,6 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
-
-import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.Serializer;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 
 public class LootCount implements LootItemCondition {
   private final List<Operation> operations;
@@ -57,7 +55,7 @@ public class LootCount implements LootItemCondition {
     return ImmutableSet.of(LootContextParams.ORIGIN);
   }
 
-  public static class Serializer implements Serializer<LootCount> {
+  public static class Serializer implements net.minecraft.world.level.storage.loot.Serializer<LootCount> {
     @Override
     public void serialize(JsonObject object, LootCount count, JsonSerializationContext context) {
       JsonArray operations = new JsonArray();

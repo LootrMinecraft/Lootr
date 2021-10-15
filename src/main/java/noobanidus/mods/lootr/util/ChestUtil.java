@@ -1,28 +1,28 @@
 package noobanidus.mods.lootr.util;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.monster.piglin.PiglinAi;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ChestBlock;
-import net.minecraft.world.entity.monster.piglin.PiglinAi;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.core.NonNullList;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.Level;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import net.minecraftforge.fmllegacy.network.PacketDistributor;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.ILootTile;
+import noobanidus.mods.lootr.blocks.entities.LootrInventoryBlockEntity;
 import noobanidus.mods.lootr.data.NewChestData;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModStats;
 import noobanidus.mods.lootr.networking.CloseCart;
-import noobanidus.mods.lootr.networking.OpenCart;
 import noobanidus.mods.lootr.networking.PacketHandler;
-import noobanidus.mods.lootr.tiles.SpecialLootInventoryTile;
+import noobanidus.mods.lootr.networking.UpdateModelData;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -43,10 +43,12 @@ public class ChestUtil {
     }
 
     BlockEntity te = world.getBlockEntity(pos);
-    if (te instanceof ILootTile) {
-      Set<UUID> openers = ((ILootTile) te).getOpeners();
-      openers.remove(player.getUUID());
-      ((ILootTile) te).updatePacketViaState();
+    if (te instanceof ILootTile tile) {
+      if (tile.getOpeners().remove(player.getUUID())) {
+        tile.updatePacketViaState();
+        UpdateModelData message = new UpdateModelData(te.getBlockPos());
+        PacketHandler.sendToInternal(message, (ServerPlayer) player);
+      }
       return true;
     }
 
@@ -76,16 +78,17 @@ public class ChestUtil {
       return false;
     }
     BlockEntity te = world.getBlockEntity(pos);
-    if (te instanceof ILootTile) {
+    if (te instanceof ILootTile tile) {
       if (block instanceof BarrelBlock) {
         Lootr.BARREL_PREDICATE.trigger((ServerPlayer) player, null);
       } else if (block instanceof ChestBlock) {
         Lootr.CHEST_PREDICATE.trigger((ServerPlayer) player, null);
       }
-      MenuProvider provider = NewChestData.getInventory(world, ((ILootTile) te).getTileId(), pos, (ServerPlayer) player, (RandomizableContainerBlockEntity) te, ((ILootTile) te)::fillWithLoot);
-      if (!((ILootTile) te).getOpeners().contains(player.getUUID())) {
+      MenuProvider provider = NewChestData.getInventory(world, ((ILootTile) te).getTileId(), pos, (ServerPlayer) player, (RandomizableContainerBlockEntity) te, ((ILootTile) te)::unpackLootTable);
+      if (tile.getOpeners().add(player.getUUID())) {
         player.awardStat(ModStats.LOOTED_STAT);
         Lootr.SCORE_PREDICATE.trigger((ServerPlayer) player, null);
+        tile.updatePacketViaState();
       }
       player.openMenu(provider);
       PiglinAi.angerNearbyPiglins(player, true);
@@ -121,9 +124,9 @@ public class ChestUtil {
       return false;
     }
     BlockEntity te = world.getBlockEntity(pos);
-    if (te instanceof SpecialLootInventoryTile) {
+    if (te instanceof LootrInventoryBlockEntity) {
       Lootr.CHEST_PREDICATE.trigger((ServerPlayer) player, null);
-      SpecialLootInventoryTile tile = (SpecialLootInventoryTile) te;
+      LootrInventoryBlockEntity tile = (LootrInventoryBlockEntity) te;
       NonNullList<ItemStack> stacks = null;
       if (tile.getCustomInventory() != null) {
         stacks = copyItemList(tile.getCustomInventory());

@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.entity;
 
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.entity.EntityType;
@@ -15,6 +16,7 @@ import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -24,7 +26,6 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.util.*;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.Style;
 import net.minecraft.ChatFormatting;
@@ -33,7 +34,7 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 import noobanidus.mods.lootr.api.ILootCart;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlocks;
@@ -109,7 +110,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
 
   @Override
   public void destroy(DamageSource source) {
-    this.remove();
+    this.remove(Entity.RemovalReason.KILLED);
     if (this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
       ItemStack itemstack = new ItemStack(Items.MINECART);
       ItemStack itemstack2 = new ItemStack(Items.CHEST);
@@ -151,12 +152,13 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     return ChestMenu.threeRows(id, playerInventoryIn, this);
   }
 
-  @SuppressWarnings("deprecation")
   @Override
-  public void remove(boolean keepData) {
-    this.removed = true;
-    if (!keepData)
-      this.invalidateCaps();
+  public void remove(RemovalReason reason) {
+    this.setRemoved(reason);
+    if (reason == Entity.RemovalReason.KILLED) {
+      this.gameEvent(GameEvent.ENTITY_KILLED);
+    }
+    this.invalidateCaps();
   }
 
   @Override

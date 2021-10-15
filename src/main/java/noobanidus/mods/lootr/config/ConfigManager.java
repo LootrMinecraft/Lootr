@@ -2,7 +2,9 @@ package noobanidus.mods.lootr.config;
 
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
@@ -21,7 +23,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.server.ServerLifecycleHooks;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
+import net.minecraftforge.fmllegacy.server.ServerLifecycleHooks;
 import net.minecraftforge.registries.ForgeRegistries;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.init.ModBlocks;
@@ -81,7 +84,7 @@ public class ConfigManager {
   }
 
   @SubscribeEvent
-  public static void reloadConfig(ModConfig.ModConfigEvent event) {
+  public static void reloadConfig(ModConfigEvent event) {
     COMMON_CONFIG.setConfig(event.getConfig().getConfigData());
     replacements = null;
     DIM_WHITELIST = null;
@@ -139,8 +142,8 @@ public class ConfigManager {
 
   private static void addUnsafeReplacement(ResourceLocation location, Block replacement, ServerLevel world) {
     Block block = ForgeRegistries.BLOCKS.getValue(location);
-    if (block != null) {
-      BlockEntity tile = block.createTileEntity(block.defaultBlockState(), world);
+    if (block instanceof EntityBlock) {
+      BlockEntity tile = ((EntityBlock)block).newBlockEntity(BlockPos.ZERO, block.defaultBlockState());
       if (tile instanceof RandomizableContainerBlockEntity) {
         replacements.put(block, replacement);
       }
@@ -165,9 +168,11 @@ public class ConfigManager {
             if (replacements.containsKey(o)) {
               return;
             }
-            BlockEntity tile = o.createTileEntity(o.defaultBlockState(), world);
-            if (tile instanceof RandomizableContainerBlockEntity) {
-              replacements.put(o, ModBlocks.CHEST);
+            if (o instanceof EntityBlock) {
+              BlockEntity tile = ((EntityBlock)o).newBlockEntity(BlockPos.ZERO, o.defaultBlockState());
+              if (tile instanceof RandomizableContainerBlockEntity) {
+                replacements.put(o, ModBlocks.CHEST);
+              }
             }
           });
         }
@@ -176,9 +181,11 @@ public class ConfigManager {
             if (replacements.containsKey(o)) {
               return;
             }
-            BlockEntity tile = o.createTileEntity(o.defaultBlockState(), world);
-            if (tile instanceof RandomizableContainerBlockEntity) {
-              replacements.put(o, ModBlocks.CHEST);
+            if (o instanceof EntityBlock) {
+              BlockEntity tile = ((EntityBlock)o).newBlockEntity(BlockPos.ZERO, o.defaultBlockState());
+              if (tile instanceof RandomizableContainerBlockEntity) {
+                replacements.put(o, ModBlocks.CHEST);
+              }
             }
           });
         }
