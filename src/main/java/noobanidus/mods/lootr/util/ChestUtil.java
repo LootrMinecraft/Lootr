@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.network.PacketDistributor;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.ILootTile;
+import noobanidus.mods.lootr.blocks.LootrShulkerBlock;
 import noobanidus.mods.lootr.data.NewChestData;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModStats;
@@ -81,6 +82,8 @@ public class ChestUtil {
         Lootr.BARREL_PREDICATE.trigger((ServerPlayerEntity) player, null);
       } else if (block instanceof ChestBlock) {
         Lootr.CHEST_PREDICATE.trigger((ServerPlayerEntity) player, null);
+      } else if (block instanceof LootrShulkerBlock) {
+        Lootr.SHULKER_PREDICATE.trigger((ServerPlayerEntity) player, null);
       }
       INamedContainerProvider provider = NewChestData.getInventory(world, ((ILootTile) te).getTileId(), pos, (ServerPlayerEntity) player, (LockableLootTileEntity) te, ((ILootTile) te)::fillWithLoot);
       if (!((ILootTile) te).getOpeners().contains(player.getUUID())) {

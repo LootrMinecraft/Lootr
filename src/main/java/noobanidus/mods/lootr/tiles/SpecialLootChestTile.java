@@ -90,6 +90,7 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
   public void unpackLootTable(@Nullable PlayerEntity player) {
   }
 
+  @Override
   public void fillWithLoot(PlayerEntity player, IInventory inventory, @Nullable ResourceLocation overrideTable, long seed) {
     if (this.level != null && this.savedLootTable != null && this.level.getServer() != null) {
       LootTable loottable = this.level.getServer().getLootTables().get(overrideTable != null ? overrideTable : this.savedLootTable);
@@ -262,6 +263,7 @@ public class SpecialLootChestTile extends ChestTileEntity implements ILootTile {
     }
   }
 
+  @Override
   public void updatePacketViaState() {
     if (level != null && !level.isClientSide) {
       BlockState state = level.getBlockState(getBlockPos());

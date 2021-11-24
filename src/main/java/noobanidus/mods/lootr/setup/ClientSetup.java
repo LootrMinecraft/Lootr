@@ -12,6 +12,7 @@ import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.client.BarrelModel;
 import noobanidus.mods.lootr.client.LootrMinecartRenderer;
 import noobanidus.mods.lootr.client.SpecialLootChestTileRenderer;
+import noobanidus.mods.lootr.client.SpecialLootShulkerTileRenderer;
 import noobanidus.mods.lootr.init.ModEntities;
 import noobanidus.mods.lootr.init.ModTiles;
 
@@ -20,6 +21,7 @@ public class ClientSetup {
     ClientRegistry.bindTileEntityRenderer(ModTiles.SPECIAL_LOOT_CHEST, SpecialLootChestTileRenderer::new);
     ClientRegistry.bindTileEntityRenderer(ModTiles.SPECIAL_TRAPPED_LOOT_CHEST, SpecialLootChestTileRenderer::new);
     ClientRegistry.bindTileEntityRenderer(ModTiles.SPECIAL_LOOT_INVENTORY, SpecialLootChestTileRenderer::new);
+    ClientRegistry.bindTileEntityRenderer(ModTiles.SPECIAL_LOOT_SHULKER, SpecialLootShulkerTileRenderer::new);
     RenderingRegistry.registerEntityRenderingHandler(ModEntities.LOOTR_MINECART_ENTITY, LootrMinecartRenderer::new);
   }
 
@@ -28,6 +30,8 @@ public class ClientSetup {
     if (event.getMap().location().equals(AtlasTexture.LOCATION_BLOCKS)) {
       event.addSprite(SpecialLootChestTileRenderer.MATERIAL.texture());
       event.addSprite(SpecialLootChestTileRenderer.MATERIAL2.texture());
+      event.addSprite(SpecialLootShulkerTileRenderer.MATERIAL.texture());
+      event.addSprite(SpecialLootShulkerTileRenderer.MATERIAL2.texture());
     }
   }
 

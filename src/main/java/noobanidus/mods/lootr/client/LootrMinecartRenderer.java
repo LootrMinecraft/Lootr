@@ -23,6 +23,7 @@ public class LootrMinecartRenderer extends MinecartRenderer<LootrChestMinecartEn
     super(renderManagerIn);
   }
 
+  @Override
   public void render(LootrChestMinecartEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
     super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     matrixStackIn.pushPose();
@@ -31,15 +32,15 @@ public class LootrMinecartRenderer extends MinecartRenderer<LootrChestMinecartEn
     float f = (((float) (i >> 16 & 7L) + 0.5F) / 8.0F - 0.5F) * 0.004F;
     float f1 = (((float) (i >> 20 & 7L) + 0.5F) / 8.0F - 0.5F) * 0.004F;
     float f2 = (((float) (i >> 24 & 7L) + 0.5F) / 8.0F - 0.5F) * 0.004F;
-    matrixStackIn.translate((double) f, (double) f1, (double) f2);
-    double d0 = MathHelper.lerp((double) partialTicks, entityIn.xOld, entityIn.getX());
-    double d1 = MathHelper.lerp((double) partialTicks, entityIn.yOld, entityIn.getY());
-    double d2 = MathHelper.lerp((double) partialTicks, entityIn.zOld, entityIn.getZ());
+    matrixStackIn.translate(f, f1, f2);
+    double d0 = MathHelper.lerp(partialTicks, entityIn.xOld, entityIn.getX());
+    double d1 = MathHelper.lerp(partialTicks, entityIn.yOld, entityIn.getY());
+    double d2 = MathHelper.lerp(partialTicks, entityIn.zOld, entityIn.getZ());
     Vector3d vector3d = entityIn.getPos(d0, d1, d2);
     float f3 = MathHelper.lerp(partialTicks, entityIn.xRotO, entityIn.xRot);
     if (vector3d != null) {
-      Vector3d vector3d1 = entityIn.getPosOffs(d0, d1, d2, (double) 0.3F);
-      Vector3d vector3d2 = entityIn.getPosOffs(d0, d1, d2, (double) -0.3F);
+      Vector3d vector3d1 = entityIn.getPosOffs(d0, d1, d2, 0.3F);
+      Vector3d vector3d2 = entityIn.getPosOffs(d0, d1, d2, -0.3F);
       if (vector3d1 == null) {
         vector3d1 = vector3d;
       }
@@ -73,7 +74,7 @@ public class LootrMinecartRenderer extends MinecartRenderer<LootrChestMinecartEn
     int j = entityIn.getDisplayOffset();
     matrixStackIn.pushPose();
     matrixStackIn.scale(0.75F, 0.75F, 0.75F);
-    matrixStackIn.translate(-0.5D, (double) ((float) (j - 8) / 16.0F), 0.5D);
+    matrixStackIn.translate(-0.5D, (float) (j - 8) / 16.0F, 0.5D);
     matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(90.0F));
     if (entityIn.isOpened()) {
       tile.setOpened(true);
