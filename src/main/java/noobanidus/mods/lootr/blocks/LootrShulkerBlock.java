@@ -1,15 +1,16 @@
 package noobanidus.mods.lootr.blocks;
 
-import net.minecraft.block.*;
-import net.minecraft.block.material.PushReaction;
+import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.monster.piglin.PiglinTasks;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.*;
+import net.minecraft.item.DyeColor;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.loot.*;
-import net.minecraft.state.StateContainer;
-import net.minecraft.stats.Stats;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tileentity.ShulkerBoxTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -19,7 +20,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.util.text.*;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -47,11 +48,6 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
   }
 
   @Override
-  public BlockRenderType getRenderShape(BlockState pState) {
-    return BlockRenderType.ENTITYBLOCK_ANIMATED;
-  }
-
-  @Override
   public ActionResultType use(BlockState pState, World pLevel, BlockPos pPos, PlayerEntity pPlayer, Hand pHand, BlockRayTraceResult pHit) {
     if (pLevel.isClientSide) {
       return ActionResultType.SUCCESS;
@@ -60,7 +56,7 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
     } else {
       TileEntity tileentity = pLevel.getBlockEntity(pPos);
       if (tileentity instanceof SpecialLootShulkerTile) {
-        SpecialLootShulkerTile shulkerboxtileentity = (SpecialLootShulkerTile)tileentity;
+        SpecialLootShulkerTile shulkerboxtileentity = (SpecialLootShulkerTile) tileentity;
         boolean flag;
         if (shulkerboxtileentity.getAnimationStatus() == ShulkerBoxTileEntity.AnimationStatus.CLOSED) {
           Direction direction = pState.getValue(FACING);
@@ -85,21 +81,11 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
   }
 
   @Override
-  public BlockState getStateForPlacement(BlockItemUseContext pContext) {
-    return this.defaultBlockState().setValue(FACING, pContext.getClickedFace());
-  }
-
-  @Override
-  protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> pBuilder) {
-    pBuilder.add(FACING);
-  }
-
-  @Override
   public void playerWillDestroy(World pLevel, BlockPos pPos, BlockState pState, PlayerEntity pPlayer) {
     TileEntity tileentity = pLevel.getBlockEntity(pPos);
     if (tileentity instanceof SpecialLootShulkerTile) {
       if (!pLevel.isClientSide) {
-      ItemEntity itementity = new ItemEntity(pLevel, pPos.getX() + 0.5, pPos.getY() + 0.5, pPos.getZ() + 0.5, new ItemStack(Items.SHULKER_BOX));
+        ItemEntity itementity = new ItemEntity(pLevel, pPos.getX() + 0.5, pPos.getY() + 0.5, pPos.getZ() + 0.5, new ItemStack(Items.SHULKER_BOX));
         itementity.setDefaultPickUpDelay();
         pLevel.addFreshEntity(itementity);
       }
@@ -148,14 +134,9 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
   }
 
   @Override
-  public PushReaction getPistonPushReaction(BlockState pState) {
-    return PushReaction.DESTROY;
-  }
-
-  @Override
   public VoxelShape getShape(BlockState pState, IBlockReader pLevel, BlockPos pPos, ISelectionContext pContext) {
     TileEntity tileentity = pLevel.getBlockEntity(pPos);
-    return tileentity instanceof SpecialLootShulkerTile ? VoxelShapes.create(((SpecialLootShulkerTile)tileentity).getBoundingBox(pState)) : VoxelShapes.block();
+    return tileentity instanceof SpecialLootShulkerTile ? VoxelShapes.create(((SpecialLootShulkerTile) tileentity).getBoundingBox(pState)) : VoxelShapes.block();
   }
 
   @Override
@@ -177,19 +158,5 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
   @Nullable
   public DyeColor getColor() {
     return DyeColor.YELLOW;
-  }
-
-  public static ItemStack getColoredItemStack(@Nullable DyeColor pColor) {
-    return new ItemStack(ModItems.SHULKER);
-  }
-
-  @Override
-  public BlockState rotate(BlockState pState, Rotation pRotation) {
-    return pState.setValue(FACING, pRotation.rotate(pState.getValue(FACING)));
-  }
-
-  @Override
-  public BlockState mirror(BlockState pState, Mirror pMirror) {
-    return pState.rotate(pMirror.getRotation(pState.getValue(FACING)));
   }
 }
