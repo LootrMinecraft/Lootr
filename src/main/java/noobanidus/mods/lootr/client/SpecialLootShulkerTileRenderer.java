@@ -32,7 +32,12 @@ public class SpecialLootShulkerTileRenderer extends TileEntityRenderer<SpecialLo
 
   protected RenderMaterial getMaterial(SpecialLootShulkerTile tile) {
     if (playerId == null) {
-      playerId = Minecraft.getInstance().player.getUUID();
+      Minecraft mc = Minecraft.getInstance();
+      if (mc.player == null) {
+        return MATERIAL;
+      } else {
+        playerId = mc.player.getUUID();
+      }
     }
     if (tile.isOpened()) {
       return MATERIAL2;
