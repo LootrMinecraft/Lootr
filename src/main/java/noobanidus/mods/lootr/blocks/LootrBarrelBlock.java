@@ -41,11 +41,11 @@ public class LootrBarrelBlock extends BarrelBlock {
 
   @Override
   public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult trace) {
-/*    if (player.isShiftKeyDown()) {
+    if (player.isShiftKeyDown()) {
       ChestUtil.handleLootSneak(this, world, pos, player);
-    } else {*/
+    } else {
       ChestUtil.handleLootChest(this, world, pos, player);
-/*    }*/
+    }
     return InteractionResult.SUCCESS;
   }
 
