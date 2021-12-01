@@ -2,16 +2,13 @@ package noobanidus.mods.lootr.init;
 
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.tileentity.ShulkerBoxTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.RegistryEvent;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.blocks.*;
-import noobanidus.mods.lootr.client.SpecialLootShulkerTileRenderer;
 import noobanidus.mods.lootr.tiles.SpecialLootShulkerTile;
 
 public class ModBlocks {
@@ -23,8 +20,8 @@ public class ModBlocks {
 
   public static LootrInventoryBlock INVENTORY = new LootrInventoryBlock(Block.Properties.of(Material.WOOD).strength(2.5f).sound(SoundType.WOOD));
 
-  private static AbstractBlock.IPositionPredicate posPredicate = (p_235444_0_, p_235444_1_, p_235444_2_) -> {
-    TileEntity tileentity = p_235444_1_.getBlockEntity(p_235444_2_);
+  private static final AbstractBlock.IPositionPredicate posPredicate = (state, level, pos) -> {
+    TileEntity tileentity = level.getBlockEntity(pos);
     if (!(tileentity instanceof SpecialLootShulkerTile)) {
       return true;
     } else {

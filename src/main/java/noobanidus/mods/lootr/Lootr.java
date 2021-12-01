@@ -34,14 +34,16 @@ import noobanidus.mods.lootr.ticker.EntityTicker;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.UUID;
+
 @Mod("lootr")
 public class Lootr {
   public static final Logger LOG = LogManager.getLogger();
   public static final String MODID = "lootr";
-  public static GenericTrigger<Void> CHEST_PREDICATE = null;
-  public static GenericTrigger<Void> BARREL_PREDICATE = null;
-  public static GenericTrigger<Void> CART_PREDICATE = null;
-  public static GenericTrigger<Void> SHULKER_PREDICATE = null;
+  public static GenericTrigger<UUID> CHEST_PREDICATE = null;
+  public static GenericTrigger<UUID> BARREL_PREDICATE = null;
+  public static GenericTrigger<UUID> CART_PREDICATE = null;
+  public static GenericTrigger<UUID> SHULKER_PREDICATE = null;
   public static GenericTrigger<Void> SCORE_PREDICATE = null;
   public static GenericTrigger<ResourceLocation> ADVANCEMENT_PREDICATE = null;
   public static final ResourceLocation CHEST_LOCATION = new ResourceLocation(MODID, "chest_opened");
