@@ -122,6 +122,13 @@ public class CommandLootr {
       createBlock(c.getSource(), ModBlocks.CHEST, ResourceLocationArgument.getId(c, "table"));
       return 1;
     })));
+    builder.then(Commands.literal("shulker").executes(c -> {
+      createBlock(c.getSource(), ModBlocks.SHULKER, null);
+      return 1;
+    }).then(suggestTables().executes(c -> {
+      createBlock(c.getSource(), ModBlocks.SHULKER, ResourceLocationArgument.getId(c, "table"));
+      return 1;
+    })));
     builder.then(Commands.literal("clear").executes(c -> {
       c.getSource().sendSuccess(new TextComponent("Must provide player name."), true);
       return 1;

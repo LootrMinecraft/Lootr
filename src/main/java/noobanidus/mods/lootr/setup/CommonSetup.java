@@ -27,6 +27,7 @@ public class CommonSetup {
       Lootr.CHEST_PREDICATE = CriteriaTriggers.register(new GenericTrigger<>(Lootr.CHEST_LOCATION, new ChestPredicate()));
       Lootr.BARREL_PREDICATE = CriteriaTriggers.register(new GenericTrigger<>(Lootr.BARREL_LOCATION, new ChestPredicate()));
       Lootr.CART_PREDICATE = CriteriaTriggers.register(new GenericTrigger<>(Lootr.CART_LOCATION, new ChestPredicate()));
+      Lootr.SHULKER_PREDICATE = CriteriaTriggers.register(new GenericTrigger<>(Lootr.SHULKER_LOCATION, new ChestPredicate()));
       Lootr.ADVANCEMENT_PREDICATE = CriteriaTriggers.register(new GenericTrigger<>(Lootr.ADVANCEMENT_LOCATION, new AdvancementPredicate()));
       Registry.register(Registry.CUSTOM_STAT, ModStats.LOOTED_LOCATION, ModStats.LOOTED_LOCATION);
       ModStats.load();

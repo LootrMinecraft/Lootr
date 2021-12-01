@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraftforge.fmllegacy.network.PacketDistributor;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.ILootTile;
+import noobanidus.mods.lootr.blocks.LootrShulkerBlock;
 import noobanidus.mods.lootr.blocks.entities.LootrInventoryBlockEntity;
 import noobanidus.mods.lootr.data.NewChestData;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
@@ -83,6 +84,8 @@ public class ChestUtil {
         Lootr.BARREL_PREDICATE.trigger((ServerPlayer) player, null);
       } else if (block instanceof ChestBlock) {
         Lootr.CHEST_PREDICATE.trigger((ServerPlayer) player, null);
+      } else if (block instanceof LootrShulkerBlock) {
+        Lootr.SHULKER_PREDICATE.trigger((ServerPlayer) player, null);
       }
       MenuProvider provider = NewChestData.getInventory(world, ((ILootTile) te).getTileId(), pos, (ServerPlayer) player, (RandomizableContainerBlockEntity) te, ((ILootTile) te)::unpackLootTable);
       if (tile.getOpeners().add(player.getUUID())) {

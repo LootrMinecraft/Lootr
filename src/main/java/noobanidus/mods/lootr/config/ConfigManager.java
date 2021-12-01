@@ -157,12 +157,12 @@ public class ConfigManager {
       replacements.put(Blocks.CHEST, ModBlocks.CHEST);
       replacements.put(Blocks.BARREL, ModBlocks.BARREL);
       replacements.put(Blocks.TRAPPED_CHEST, ModBlocks.TRAPPED_CHEST);
+      replacements.put(Blocks.SHULKER_BOX, ModBlocks.SHULKER);
       if (CONVERT_QUARK.get() && ModList.get().isLoaded("quark")) {
         QUARK_CHESTS.forEach(o -> addSafeReplacement(o, ModBlocks.CHEST));
         QUARK_TRAPPED_CHESTS.forEach(o -> addSafeReplacement(o, ModBlocks.TRAPPED_CHEST));
       }
       if (CONVERT_WOODEN_CHESTS.get() || CONVERT_TRAPPED_CHESTS.get()) {
-        final ServerLevel world = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD);
         if (CONVERT_WOODEN_CHESTS.get()) {
           Tags.Blocks.CHESTS_WOODEN.getValues().forEach(o -> {
             if (replacements.containsKey(o)) {

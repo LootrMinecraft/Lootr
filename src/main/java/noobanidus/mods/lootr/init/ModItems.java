@@ -8,6 +8,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.items.LootrChestBlockItem;
+import noobanidus.mods.lootr.items.LootrShulkerBlockItem;
 
 @Mod.EventBusSubscriber(modid=Lootr.MODID, bus= Mod.EventBusSubscriber.Bus.MOD)
 public class ModItems {
@@ -15,6 +16,7 @@ public class ModItems {
   public static BlockItem TRAPPED_CHEST = new LootrChestBlockItem(ModBlocks.TRAPPED_CHEST, new BlockItem.Properties());
   public static BlockItem BARREL = new BlockItem(ModBlocks.BARREL, new BlockItem.Properties());
   public static BlockItem INVENTORY = new LootrChestBlockItem(ModBlocks.INVENTORY, new BlockItem.Properties());
+  public static BlockItem SHULKER = new LootrShulkerBlockItem(ModBlocks.SHULKER, new BlockItem.Properties());
 
   public static BlockItem TROPHY = new BlockItem(ModBlocks.TROPHY, new Item.Properties().rarity(Rarity.EPIC).tab(Lootr.TAB));
 
@@ -23,11 +25,12 @@ public class ModItems {
     TRAPPED_CHEST.setRegistryName(Lootr.MODID, "lootr_trapped_chest");
     BARREL.setRegistryName(Lootr.MODID, "lootr_barrel");
     INVENTORY.setRegistryName(Lootr.MODID, "lootr_inventory");
+    SHULKER.setRegistryName(Lootr.MODID, "lootr_shulker");
     TROPHY.setRegistryName(Lootr.MODID, "trophy");
   }
 
   @SubscribeEvent
   public static void registerItems(RegistryEvent.Register<Item> event) {
-    event.getRegistry().registerAll(CHEST, TRAPPED_CHEST, BARREL, INVENTORY, TROPHY);
+    event.getRegistry().registerAll(CHEST, TRAPPED_CHEST, BARREL, INVENTORY, SHULKER, TROPHY);
   }
 }
