@@ -81,18 +81,20 @@ public class ChestUtil {
     BlockEntity te = world.getBlockEntity(pos);
     if (te instanceof ILootTile tile) {
       if (block instanceof BarrelBlock) {
-        Lootr.BARREL_PREDICATE.trigger((ServerPlayer) player, null);
+        Lootr.BARREL_PREDICATE.trigger((ServerPlayer) player, ((ILootTile)te).getTileId());
       } else if (block instanceof ChestBlock) {
-        Lootr.CHEST_PREDICATE.trigger((ServerPlayer) player, null);
+        Lootr.CHEST_PREDICATE.trigger((ServerPlayer) player, ((ILootTile)te).getTileId());
       } else if (block instanceof LootrShulkerBlock) {
-        Lootr.SHULKER_PREDICATE.trigger((ServerPlayer) player, null);
+        Lootr.SHULKER_PREDICATE.trigger((ServerPlayer) player, ((ILootTile)te).getTileId());
       }
       MenuProvider provider = NewChestData.getInventory(world, ((ILootTile) te).getTileId(), pos, (ServerPlayer) player, (RandomizableContainerBlockEntity) te, ((ILootTile) te)::unpackLootTable);
-      tile.getOpeners().add(player.getUUID());
       if (!DataStorage.isScored(player.getUUID(), ((ILootTile)te).getTileId())) {
         player.awardStat(ModStats.LOOTED_STAT);
         Lootr.SCORE_PREDICATE.trigger((ServerPlayer) player, null);
         DataStorage.score(player.getUUID(), ((ILootTile)te).getTileId());
+      }
+      if (tile.getOpeners().add(player.getUUID())) {
+        tile.updatePacketViaState();
       }
       player.openMenu(provider);
       PiglinAi.angerNearbyPiglins(player, true);
@@ -132,7 +134,7 @@ public class ChestUtil {
     }
     BlockEntity te = world.getBlockEntity(pos);
     if (te instanceof LootrInventoryBlockEntity tile) {
-      Lootr.CHEST_PREDICATE.trigger((ServerPlayer) player, null);
+      Lootr.CHEST_PREDICATE.trigger((ServerPlayer) player, tile.getTileId());
       NonNullList<ItemStack> stacks = null;
       if (tile.getCustomInventory() != null) {
         stacks = copyItemList(tile.getCustomInventory());
