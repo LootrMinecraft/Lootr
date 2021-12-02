@@ -18,6 +18,7 @@ import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.ILootTile;
 import noobanidus.mods.lootr.blocks.LootrShulkerBlock;
 import noobanidus.mods.lootr.blocks.entities.LootrInventoryBlockEntity;
+import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.data.NewChestData;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModStats;
@@ -28,7 +29,6 @@ import noobanidus.mods.lootr.networking.UpdateModelData;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
-import java.util.UUID;
 
 @SuppressWarnings("unused")
 public class ChestUtil {
@@ -88,10 +88,11 @@ public class ChestUtil {
         Lootr.SHULKER_PREDICATE.trigger((ServerPlayer) player, null);
       }
       MenuProvider provider = NewChestData.getInventory(world, ((ILootTile) te).getTileId(), pos, (ServerPlayer) player, (RandomizableContainerBlockEntity) te, ((ILootTile) te)::unpackLootTable);
-      if (tile.getOpeners().add(player.getUUID())) {
+      tile.getOpeners().add(player.getUUID());
+      if (!DataStorage.isScored(player.getUUID(), ((ILootTile)te).getTileId())) {
         player.awardStat(ModStats.LOOTED_STAT);
         Lootr.SCORE_PREDICATE.trigger((ServerPlayer) player, null);
-        tile.updatePacketViaState();
+        DataStorage.score(player.getUUID(), ((ILootTile)te).getTileId());
       }
       player.openMenu(provider);
       PiglinAi.angerNearbyPiglins(player, true);
@@ -106,11 +107,14 @@ public class ChestUtil {
       if (player.isSpectator()) {
         player.openMenu(null);
       } else {
-        Lootr.CART_PREDICATE.trigger((ServerPlayer) player, null);
+        Lootr.CART_PREDICATE.trigger((ServerPlayer) player, cart.getUUID());
         if (!cart.getOpeners().contains(player.getUUID())) {
           cart.addOpener(player);
+        }
+        if (!DataStorage.isScored(player.getUUID(), cart.getUUID())) {
           player.awardStat(ModStats.LOOTED_STAT);
           Lootr.SCORE_PREDICATE.trigger((ServerPlayer) player, null);
+          DataStorage.score(player.getUUID(), cart.getUUID());
         }
         MenuProvider provider = NewChestData.getInventory(world, cart, (ServerPlayer) player, cart::addLoot);
         player.openMenu(provider);
@@ -127,17 +131,17 @@ public class ChestUtil {
       return false;
     }
     BlockEntity te = world.getBlockEntity(pos);
-    if (te instanceof LootrInventoryBlockEntity) {
+    if (te instanceof LootrInventoryBlockEntity tile) {
       Lootr.CHEST_PREDICATE.trigger((ServerPlayer) player, null);
-      LootrInventoryBlockEntity tile = (LootrInventoryBlockEntity) te;
       NonNullList<ItemStack> stacks = null;
       if (tile.getCustomInventory() != null) {
         stacks = copyItemList(tile.getCustomInventory());
       }
       MenuProvider provider = NewChestData.getInventory(world, tile.getTileId(), stacks, (ServerPlayer) player, pos, tile);
-      if (!((ILootTile) te).getOpeners().contains(player.getUUID())) {
+      if (!DataStorage.isScored(player.getUUID(), ((ILootTile)te).getTileId())) {
         player.awardStat(ModStats.LOOTED_STAT);
         Lootr.SCORE_PREDICATE.trigger((ServerPlayer) player, null);
+        DataStorage.score(player.getUUID(), ((ILootTile)te).getTileId());
       }
       player.openMenu(provider);
       PiglinAi.angerNearbyPiglins(player, true);

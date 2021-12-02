@@ -1,22 +1,16 @@
 package noobanidus.mods.lootr;
 
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.Item;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 import noobanidus.mods.lootr.advancement.GenericTrigger;
 import noobanidus.mods.lootr.commands.CommandLootr;
@@ -25,25 +19,23 @@ import noobanidus.mods.lootr.events.HandleAdvancement;
 import noobanidus.mods.lootr.events.HandleBreak;
 import noobanidus.mods.lootr.events.HandleCart;
 import noobanidus.mods.lootr.init.ModBlocks;
-import noobanidus.mods.lootr.init.ModEntities;
-import noobanidus.mods.lootr.init.ModItems;
-import noobanidus.mods.lootr.init.ModBlockEntities;
-import noobanidus.mods.lootr.setup.CommonSetup;
 import noobanidus.mods.lootr.setup.Setup;
 import noobanidus.mods.lootr.ticker.EntityTicker;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.UUID;
+
 @Mod("lootr")
 public class Lootr {
   public static final Logger LOG = LogManager.getLogger();
   public static final String MODID = "lootr";
-  public static GenericTrigger<Void> CHEST_PREDICATE = null;
-  public static GenericTrigger<Void> BARREL_PREDICATE = null;
-  public static GenericTrigger<Void> CART_PREDICATE = null;
-  public static GenericTrigger<Void> SHULKER_PREDICATE = null;
-  public static GenericTrigger<ResourceLocation> ADVANCEMENT_PREDICATE = null;
+  public static GenericTrigger<UUID> CHEST_PREDICATE = null;
+  public static GenericTrigger<UUID> BARREL_PREDICATE = null;
+  public static GenericTrigger<UUID> CART_PREDICATE = null;
+  public static GenericTrigger<UUID> SHULKER_PREDICATE = null;
   public static GenericTrigger<Void> SCORE_PREDICATE = null;
+  public static GenericTrigger<ResourceLocation> ADVANCEMENT_PREDICATE = null;
   public static final ResourceLocation CHEST_LOCATION = new ResourceLocation(MODID, "chest_opened");
   public static final ResourceLocation BARREL_LOCATION = new ResourceLocation(MODID, "barrel_opened");
   public static final ResourceLocation CART_LOCATION = new ResourceLocation(MODID, "cart_opened");

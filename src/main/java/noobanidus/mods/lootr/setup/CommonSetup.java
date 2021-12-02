@@ -7,7 +7,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.advancement.AdvancementPredicate;
-import noobanidus.mods.lootr.advancement.ChestPredicate;
+import noobanidus.mods.lootr.advancement.ContainerPredicate;
 import noobanidus.mods.lootr.advancement.GenericTrigger;
 import noobanidus.mods.lootr.advancement.LootedStatPredicate;
 import noobanidus.mods.lootr.api.LootrHooks;
@@ -24,10 +24,10 @@ public class CommonSetup {
     event.enqueueWork(() -> {
       ModMisc.register();
       ModLoot.register();
-      Lootr.CHEST_PREDICATE = CriteriaTriggers.register(new GenericTrigger<>(Lootr.CHEST_LOCATION, new ChestPredicate()));
-      Lootr.BARREL_PREDICATE = CriteriaTriggers.register(new GenericTrigger<>(Lootr.BARREL_LOCATION, new ChestPredicate()));
-      Lootr.CART_PREDICATE = CriteriaTriggers.register(new GenericTrigger<>(Lootr.CART_LOCATION, new ChestPredicate()));
-      Lootr.SHULKER_PREDICATE = CriteriaTriggers.register(new GenericTrigger<>(Lootr.SHULKER_LOCATION, new ChestPredicate()));
+      Lootr.CHEST_PREDICATE = CriteriaTriggers.register(new GenericTrigger<>(Lootr.CHEST_LOCATION, new ContainerPredicate()));
+      Lootr.BARREL_PREDICATE = CriteriaTriggers.register(new GenericTrigger<>(Lootr.BARREL_LOCATION, new ContainerPredicate()));
+      Lootr.CART_PREDICATE = CriteriaTriggers.register(new GenericTrigger<>(Lootr.CART_LOCATION, new ContainerPredicate()));
+      Lootr.SHULKER_PREDICATE = CriteriaTriggers.register(new GenericTrigger<>(Lootr.SHULKER_LOCATION, new ContainerPredicate()));
       Lootr.ADVANCEMENT_PREDICATE = CriteriaTriggers.register(new GenericTrigger<>(Lootr.ADVANCEMENT_LOCATION, new AdvancementPredicate()));
       Registry.register(Registry.CUSTOM_STAT, ModStats.LOOTED_LOCATION, ModStats.LOOTED_LOCATION);
       ModStats.load();
