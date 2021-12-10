@@ -23,7 +23,7 @@ public class ClientSetup {
   @SuppressWarnings("deprecation")
   public static void stitch(TextureStitchEvent.Pre event) {
     // TODO ?
-    if (event.getMap().location().equals(TextureAtlas.LOCATION_BLOCKS)) {
+    if (event.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS)) {
       event.addSprite(LootrChestBlockRenderer.MATERIAL.texture());
       event.addSprite(LootrChestBlockRenderer.MATERIAL2.texture());
       event.addSprite(LootrShulkerBlockRenderer.MATERIAL.texture());

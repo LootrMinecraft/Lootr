@@ -5,6 +5,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -14,16 +15,13 @@ import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraft.world.level.storage.LevelResource;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fmllegacy.server.ServerLifecycleHooks;
+import net.minecraftforge.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.Lootr;
-import noobanidus.mods.lootr.api.ILootTile;
 import noobanidus.mods.lootr.api.LootFiller;
 import noobanidus.mods.lootr.api.LootrLootingEvent;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
@@ -218,7 +216,7 @@ public class NewChestData extends SavedData {
       data.reference = NonNullList.withSize(size, ItemStack.EMPTY);
       ContainerHelper.loadAllItems(compound.getCompound("reference"), data.reference);
     }
-    ListTag compounds = compound.getList("inventories", Constants.NBT.TAG_COMPOUND);
+    ListTag compounds = compound.getList("inventories", Tag.TAG_COMPOUND);
     for (int i = 0; i < compounds.size(); i++) {
       CompoundTag thisTag = compounds.getCompound(i);
       CompoundTag items = thisTag.getCompound("chest");

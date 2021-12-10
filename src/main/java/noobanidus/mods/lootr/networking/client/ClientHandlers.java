@@ -6,7 +6,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.client.model.ModelDataManager;
-import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.ILootTile;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
@@ -17,7 +17,7 @@ import noobanidus.mods.lootr.networking.UpdateModelData;
 import java.util.function.Supplier;
 
 public class ClientHandlers {
-  public static void handleUpdateModel (UpdateModelData message, Supplier<NetworkEvent.Context> context) {
+  public static void handleUpdateModel(UpdateModelData message, Supplier<NetworkEvent.Context> context) {
     Level level = Minecraft.getInstance().level;
     if (level == null) {
       Lootr.LOG.info("Unable to update model data for location '" + message.pos + "' as level is null.");
@@ -59,7 +59,7 @@ public class ClientHandlers {
     ((LootrChestMinecartEntity) cart).setOpened();
   }
 
-  public static void handleCloseCart (CloseCart message, Supplier<NetworkEvent.Context> context) {
+  public static void handleCloseCart(CloseCart message, Supplier<NetworkEvent.Context> context) {
     Level level = Minecraft.getInstance().level;
     if (level == null) {
       Lootr.LOG.info("Unable to mark entity with id '" + message.entityId + "' as closed as level is null.");

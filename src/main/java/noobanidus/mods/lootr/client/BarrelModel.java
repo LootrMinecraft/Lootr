@@ -113,11 +113,6 @@ public class BarrelModel implements IModelGeometry<BarrelModel> {
     }
 
     @Override
-    public boolean isAmbientOcclusion(BlockState state) {
-      return ambientOcclusion;
-    }
-
-    @Override
     public boolean isGui3d() {
       return gui3d;
     }

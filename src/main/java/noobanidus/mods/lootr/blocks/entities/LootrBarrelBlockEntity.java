@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.blocks.entities;
 
+import com.mojang.math.Constants;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -28,6 +29,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.entity.BarrelBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -39,7 +41,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 import noobanidus.mods.lootr.api.ILootTile;
 import noobanidus.mods.lootr.blocks.LootrBarrelBlock;
@@ -172,15 +173,15 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   @SuppressWarnings("Duplicates")
   @Override
   public void load(CompoundTag compound) {
-    if (compound.contains("specialLootChest_table", Constants.NBT.TAG_STRING)) {
+    if (compound.contains("specialLootChest_table", Tag.TAG_STRING)) {
       savedLootTable = new ResourceLocation(compound.getString("specialLootChest_table"));
     }
-    if (compound.contains("specialLootChest_seed", Constants.NBT.TAG_LONG)) {
+    if (compound.contains("specialLootChest_seed", Tag.TAG_LONG)) {
       seed = compound.getLong("specialLootChest_seed");
     }
-    if (savedLootTable == null && compound.contains("LootTable", Constants.NBT.TAG_STRING)) {
+    if (savedLootTable == null && compound.contains("LootTable", Tag.TAG_STRING)) {
       savedLootTable = new ResourceLocation(compound.getString("LootTable"));
-      if (compound.contains("LootTableSeed", Constants.NBT.TAG_LONG)) {
+      if (compound.contains("LootTableSeed", Tag.TAG_LONG)) {
         seed = compound.getLong("LootTableSeed");
       }
       setLootTable(savedLootTable, seed);
@@ -191,7 +192,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
       getTileId();
     }
     if (compound.contains("LootrOpeners")) {
-      ListTag openers = compound.getList("LootrOpeners", Constants.NBT.TAG_INT_ARRAY);
+      ListTag openers = compound.getList("LootrOpeners", Tag.TAG_INT_ARRAY);
       this.openers.clear();
       for (Tag item : openers) {
         this.openers.add(NbtUtils.loadUUID(item));
@@ -299,11 +300,13 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   @Override
   @Nullable
   public ClientboundBlockEntityDataPacket getUpdatePacket() {
-    return new ClientboundBlockEntityDataPacket(getBlockPos(), 0, getUpdateTag());
+    return ClientboundBlockEntityDataPacket.create(this, BlockEntity::getUpdateTag);
   }
 
   @Override
   public void onDataPacket(@Nonnull Connection net, @Nonnull ClientboundBlockEntityDataPacket pkt) {
-    load(pkt.getTag());
+    if (pkt.getTag() != null) {
+      load(pkt.getTag());
+    }
   }
 }

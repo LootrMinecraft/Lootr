@@ -2,8 +2,8 @@ package noobanidus.mods.lootr.data;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.saveddata.SavedData;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
 
 import javax.annotation.Nonnull;
@@ -17,26 +17,26 @@ public class AdvancementData extends SavedData {
   public AdvancementData() {
   }
 
-  public boolean contains (UUID first, UUID second) {
+  public boolean contains(UUID first, UUID second) {
     return contains(new UUIDPair(first, second));
   }
 
-  public boolean contains (UUIDPair pair) {
+  public boolean contains(UUIDPair pair) {
     return data.contains(pair);
   }
 
-  public void add (UUID first, UUID second) {
+  public void add(UUID first, UUID second) {
     add(new UUIDPair(first, second));
   }
 
-  public void add (UUIDPair pair) {
+  public void add(UUIDPair pair) {
     data.add(pair);
   }
 
   public static AdvancementData load(CompoundTag compound) {
     AdvancementData data = new AdvancementData();
     data.data.clear();
-    ListTag incoming = compound.getList("data", Constants.NBT.TAG_COMPOUND);
+    ListTag incoming = compound.getList("data", Tag.TAG_COMPOUND);
     for (int i = 0; i < incoming.size(); i++) {
       data.data.add(UUIDPair.fromNBT(incoming.getCompound(i)));
     }
@@ -59,13 +59,14 @@ public class AdvancementData extends SavedData {
     @Nonnull
     private UUID second;
 
-    protected UUIDPair () {
+    protected UUIDPair() {
     }
 
     public UUIDPair(@Nonnull UUID first, @Nonnull UUID second) {
       this.first = first;
       this.second = second;
     }
+
     @Nonnull
     public UUID getFirst() {
       return first;
@@ -108,7 +109,7 @@ public class AdvancementData extends SavedData {
       this.second = nbt.getUUID("second");
     }
 
-    public static UUIDPair fromNBT (CompoundTag tag) {
+    public static UUIDPair fromNBT(CompoundTag tag) {
       UUIDPair pair = new UUIDPair();
       pair.deserializeNBT(tag);
       return pair;

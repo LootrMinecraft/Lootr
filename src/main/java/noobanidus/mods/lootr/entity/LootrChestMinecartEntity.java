@@ -33,8 +33,7 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fmllegacy.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 import noobanidus.mods.lootr.api.ILootCart;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlocks;
@@ -179,8 +178,8 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   protected void readAdditionalSaveData(CompoundTag compound) {
     this.lootTable = new ResourceLocation(compound.getString("LootTable"));
     this.lootTableSeed = compound.getLong("LootTableSeed");
-    if (compound.contains("LootrOpeners", Constants.NBT.TAG_LIST)) {
-      ListTag openers = compound.getList("LootrOpeners", Constants.NBT.TAG_INT_ARRAY);
+    if (compound.contains("LootrOpeners", Tag.TAG_LIST)) {
+      ListTag openers = compound.getList("LootrOpeners", Tag.TAG_INT_ARRAY);
       this.openers.clear();
       for (Tag item : openers) {
         this.openers.add(NbtUtils.loadUUID(item));

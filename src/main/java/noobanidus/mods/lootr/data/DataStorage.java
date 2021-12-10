@@ -2,7 +2,7 @@ package noobanidus.mods.lootr.data;
 
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.DimensionDataStorage;
-import net.minecraftforge.fmllegacy.server.ServerLifecycleHooks;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.UUID;
 

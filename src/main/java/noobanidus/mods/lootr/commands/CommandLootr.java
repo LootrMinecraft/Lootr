@@ -24,7 +24,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fmllegacy.server.ServerLifecycleHooks;
+import net.minecraftforge.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.api.ILootTile;
 import noobanidus.mods.lootr.blocks.entities.LootrInventoryBlockEntity;
 import noobanidus.mods.lootr.data.NewChestData;
@@ -135,7 +135,7 @@ public class CommandLootr {
     }).then(suggestProfiles().executes(c -> {
       String playerName = StringArgumentType.getString(c, "profile");
       Optional<GameProfile> opt_profile = c.getSource().getServer().getProfileCache().get(playerName);
-      if (opt_profile.isEmpty()) {
+      if (!opt_profile.isPresent()) {
         c.getSource().sendFailure(new TextComponent("Invalid player name: " + playerName + ", profile not found in the cache."));
         return 0;
       }
