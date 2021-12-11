@@ -6,18 +6,21 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.loading.FMLPaths;
+import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 import noobanidus.mods.lootr.advancement.GenericTrigger;
 import noobanidus.mods.lootr.commands.CommandLootr;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.events.HandleAdvancement;
 import noobanidus.mods.lootr.events.HandleBreak;
 import noobanidus.mods.lootr.events.HandleCart;
+import noobanidus.mods.lootr.gen.LootrBlockTagGenerator;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.setup.Setup;
 import noobanidus.mods.lootr.ticker.EntityTicker;
@@ -60,6 +63,7 @@ public class Lootr {
     MinecraftForge.EVENT_BUS.addListener(HandleAdvancement::onAdvancement);
     MinecraftForge.EVENT_BUS.addListener(EntityTicker::onServerTick);
     MinecraftForge.EVENT_BUS.addListener(this::onCommands);
+
 
     DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> Setup::client);
   }
