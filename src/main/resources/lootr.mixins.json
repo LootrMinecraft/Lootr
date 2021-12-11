@@ -1,14 +1,14 @@
 {
   "required": true,
   "package": "noobanidus.mods.lootr.mixins",
-  "compatibilityLevel": "JAVA_16",
+  "compatibilityLevel": "JAVA_17",
   "refmap": "lootr.refmap.json",
   "mixins": [
     "MixinCatSitOnBlockGoal",
     "MixinMonsterRoomFeature",
-    "MixinIglooPiece",
+    "MixinIglooPieces$IglooPiece",
     "MixinRandomizableContainerBlockEntity",
-    "MixinOceanRuinPiece",
+    "MixinOceanRuinPieces$OceanRuinPiece",
     "MixinStructurePiece",
     "MixinStructureTemplate"
   ],
