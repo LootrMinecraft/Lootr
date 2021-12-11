@@ -6,9 +6,9 @@
   "mixins": [
     "MixinCatSitOnBlockGoal",
     "MixinMonsterRoomFeature",
-    "MixinIglooPieces$Piece",
+    "MixinIglooPiece",
     "MixinRandomizableContainerBlockEntity",
-    "MixinOceanRuinPieces$Piece",
+    "MixinOceanRuinPiece",
     "MixinStructurePiece",
     "MixinStructureTemplate"
   ],
