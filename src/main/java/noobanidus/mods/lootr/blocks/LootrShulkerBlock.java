@@ -88,13 +88,13 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
   @Override
   public void playerWillDestroy(Level pLevel, BlockPos pPos, BlockState pState, Player pPlayer) {
     BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-    if (blockentity instanceof LootrShulkerBlockEntity) {
+/*    if (blockentity instanceof LootrShulkerBlockEntity) {
       if (!pLevel.isClientSide) {
         ItemEntity itementity = new ItemEntity(pLevel, pPos.getX() + 0.5, pPos.getY() + 0.5, pPos.getZ() + 0.5, new ItemStack(Items.SHULKER_BOX));
         itementity.setDefaultPickUpDelay();
         pLevel.addFreshEntity(itementity);
       }
-    }
+    }*/
 
     if (pState.is(BlockTags.GUARDED_BY_PIGLINS)) {
       PiglinAi.angerNearbyPiglins(pPlayer, false);
