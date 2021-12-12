@@ -1,6 +1,5 @@
 package noobanidus.mods.lootr.blocks.entities;
 
-import com.mojang.math.Constants;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -28,7 +27,6 @@ import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BarrelBlock;
-import net.minecraft.world.level.block.entity.BarrelBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
@@ -203,8 +201,8 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   }
 
   @Override
-  public CompoundTag save(CompoundTag compound) {
-    compound = super.save(compound);
+  protected void saveAdditional(CompoundTag compound) {
+    super.saveAdditional(compound);
     if (savedLootTable != null) {
       compound.putString("specialLootBarrel_table", savedLootTable.toString());
       compound.putString("LootTable", savedLootTable.toString());
@@ -219,7 +217,6 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
       list.add(NbtUtils.createUUID(opener));
     }
     compound.put("LootrOpeners", list);
-    return compound;
   }
 
   @Override
@@ -294,7 +291,9 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   @Override
   @Nonnull
   public CompoundTag getUpdateTag() {
-    return save(new CompoundTag());
+    CompoundTag result = super.getUpdateTag();
+    saveAdditional(result);
+    return result;
   }
 
   @Override

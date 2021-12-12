@@ -35,13 +35,12 @@ public class LootrInventoryBlockEntity extends LootrChestBlockEntity {
   }
 
   @Override
-  public CompoundTag save(CompoundTag compound) {
-    compound = super.save(compound);
+  protected void saveAdditional (CompoundTag compound) {
+    super.saveAdditional(compound);
     if (this.customInventory != null) {
       compound.putInt("customSize", this.customInventory.size());
       compound.put("customInventory", ContainerHelper.saveAllItems(new CompoundTag(), this.customInventory));
     }
-    return compound;
   }
 
   @Nullable

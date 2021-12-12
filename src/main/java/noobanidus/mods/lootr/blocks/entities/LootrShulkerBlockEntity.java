@@ -240,8 +240,8 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   @Override
-  public CompoundTag save(CompoundTag compound) {
-    compound = super.save(compound);
+  protected void saveAdditional(CompoundTag compound) {
+    super.saveAdditional(compound);
     if (savedLootTable != null) {
       compound.putString("specialLootChest_table", savedLootTable.toString());
       compound.putString("LootTable", savedLootTable.toString());
@@ -256,7 +256,6 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
       list.add(NbtUtils.createUUID(opener));
     }
     compound.put("LootrOpeners", list);
-    return compound;
   }
 
   @Override
@@ -321,7 +320,9 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   @Override
   @Nonnull
   public CompoundTag getUpdateTag() {
-    return save(new CompoundTag());
+    CompoundTag result = super.getUpdateTag();
+    saveAdditional(result);
+    return result;
   }
 
   @Override
