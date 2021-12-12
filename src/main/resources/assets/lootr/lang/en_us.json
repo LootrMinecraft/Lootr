@@ -35,5 +35,6 @@
   "lootr.advancements.social.title": "Socialised Loot",
   "lootr.advancements.social.description": "Open one of every type of instanced, per-player Loot container in the world!",
   "lootr.advancements.root.title": "Belongs in a Museum",
-  "lootr.advancements.root.description": "Bring instanced, per-player Loot into your world."
+  "lootr.advancements.root.description": "Bring instanced, per-player Loot into your world.",
+  "itemGroup.lootr": "Lootr"
 }
