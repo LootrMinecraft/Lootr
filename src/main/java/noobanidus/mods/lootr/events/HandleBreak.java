@@ -13,7 +13,7 @@ import noobanidus.mods.lootr.init.ModBlocks;
 import java.util.Set;
 
 public class HandleBreak {
-  public static Set<Block> specialLootChests = Sets.newHashSet(ModBlocks.CHEST, ModBlocks.BARREL, ModBlocks.TRAPPED_CHEST, ModBlocks.SHULKER);
+  public static Set<Block> specialLootChests = Sets.newHashSet(ModBlocks.CHEST, ModBlocks.BARREL, ModBlocks.TRAPPED_CHEST, ModBlocks.SHULKER, ModBlocks.INVENTORY);
 
   public static void onBlockBreak(BlockEvent.BreakEvent event) {
     if (!event.getWorld().isClientSide()) {
