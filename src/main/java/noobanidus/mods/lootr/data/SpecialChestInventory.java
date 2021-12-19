@@ -20,6 +20,7 @@ import noobanidus.mods.lootr.api.ILootrInventory;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
 import javax.annotation.Nullable;
+import java.util.UUID;
 
 @SuppressWarnings("NullableProblems")
 public class SpecialChestInventory implements ILootrInventory {
@@ -198,6 +199,14 @@ public class SpecialChestInventory implements ILootrInventory {
         entity.stopOpen(player);
       }
     }
+  }
+
+  @Nullable
+  public UUID getTileId () {
+    if (newChestData == null) {
+      return null;
+    }
+    return newChestData.getTileId();
   }
 
   public CompoundTag writeItems() {

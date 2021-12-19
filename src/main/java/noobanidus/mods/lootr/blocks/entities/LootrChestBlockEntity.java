@@ -34,6 +34,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import noobanidus.mods.lootr.api.ILootTile;
 import noobanidus.mods.lootr.config.ConfigManager;
+import noobanidus.mods.lootr.data.SpecialChestInventory;
 import noobanidus.mods.lootr.init.ModBlockEntities;
 
 import javax.annotation.Nonnull;
@@ -72,7 +73,10 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootTile
         return false;
       } else {
         Container container = ((ChestMenu) player.containerMenu).getContainer();
-        return container == LootrChestBlockEntity.this || container instanceof CompoundContainer && ((CompoundContainer) container).contains(LootrChestBlockEntity.this);
+        if (container instanceof SpecialChestInventory chest) {
+          return LootrChestBlockEntity.this.getTileId().equals(chest.getTileId());
+        }
+        return false;
       }
     }
   };
@@ -186,7 +190,13 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootTile
     if (!this.remove && !pPlayer.isSpectator()) {
       this.openersCounter.decrementOpeners(pPlayer, this.getLevel(), this.getBlockPos(), this.getBlockState());
     }
+  }
 
+  @Override
+  public void recheckOpen() {
+    if (!this.remove) {
+      this.openersCounter.recheckOpeners(this.getLevel(), this.getBlockPos(), this.getBlockState());
+    }
   }
 
   @Override

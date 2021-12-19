@@ -53,6 +53,20 @@ public class NewChestData extends SavedData {
     return entityId;
   }
 
+  @Nullable
+  public UUID getTileId () {
+    if (entityId != null) {
+      return entityId;
+    }
+    if (tileId != null) {
+      return tileId;
+    }
+    if (customId != null) {
+      return customId;
+    }
+    return null;
+  }
+
   public static String REF_ID(ResourceKey<Level> dimension, UUID id) {
     return "Lootr-custom-" + dimension.location().getPath() + "-" + id.toString();
   }
