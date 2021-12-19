@@ -110,6 +110,5 @@ public class LootrInventoryBlock extends ChestBlock {
     if (blockentity instanceof LootrInventoryBlockEntity) {
       ((LootrInventoryBlockEntity) blockentity).recheckOpen();
     }
-
   }
 }
