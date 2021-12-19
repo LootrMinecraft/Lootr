@@ -173,6 +173,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootTile
     }
   }
 
+  @Override
   public void startOpen(Player pPlayer) {
     if (!this.remove && !pPlayer.isSpectator()) {
       this.openersCounter.incrementOpeners(pPlayer, this.getLevel(), this.getBlockPos(), this.getBlockState());
@@ -180,6 +181,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootTile
 
   }
 
+  @Override
   public void stopOpen(Player pPlayer) {
     if (!this.remove && !pPlayer.isSpectator()) {
       this.openersCounter.decrementOpeners(pPlayer, this.getLevel(), this.getBlockPos(), this.getBlockState());
@@ -187,6 +189,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootTile
 
   }
 
+  @Override
   public float getOpenNess(float pPartialTicks) {
     return this.chestLidController.getOpenness(pPartialTicks);
   }
@@ -284,6 +287,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootTile
     return opened;
   }
 
+  @Override
   public void setOpened(boolean opened) {
     this.opened = opened;
   }

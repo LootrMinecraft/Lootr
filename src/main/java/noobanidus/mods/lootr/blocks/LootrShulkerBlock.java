@@ -103,6 +103,7 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
     pLevel.gameEvent(pPlayer, GameEvent.BLOCK_DESTROY, pPos);
   }
 
+  @Override
   @Deprecated
   public List<ItemStack> getDrops(BlockState pState, LootContext.Builder pBuilder) {
     ResourceLocation resourcelocation = this.getLootTable();
@@ -166,6 +167,7 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
     return new LootrShulkerBlockEntity(ModBlockEntities.SPECIAL_LOOT_SHULKER, pPos, pState);
   }
 
+  @Override
   @Nullable
   public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
     return createTickerHelper(pBlockEntityType, ModBlockEntities.SPECIAL_LOOT_SHULKER, LootrShulkerBlockEntity::tick);

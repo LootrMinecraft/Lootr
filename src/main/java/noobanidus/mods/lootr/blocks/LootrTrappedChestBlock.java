@@ -85,6 +85,7 @@ public class LootrTrappedChestBlock extends ChestBlock {
     return null;
   }
 
+  @Override
   @Nullable
   public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
     return pLevel.isClientSide ? LootrChestBlockEntity::lootrLidAnimateTick : null;

@@ -67,6 +67,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     super(ModEntities.LOOTR_MINECART_ENTITY, x, y, z, worldIn);
   }
 
+  @Override
   public Set<UUID> getOpeners() {
     return openers;
   }

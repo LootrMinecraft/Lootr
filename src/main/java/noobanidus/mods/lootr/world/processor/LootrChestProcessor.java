@@ -29,6 +29,7 @@ public class LootrChestProcessor extends StructureProcessor {
     return ModMisc.LOOTR_PROCESSOR;
   }
 
+  @Override
   @Nullable
   public StructureTemplate.StructureBlockInfo process(LevelReader world, BlockPos pos, BlockPos blockPos, StructureTemplate.StructureBlockInfo info1, StructureTemplate.StructureBlockInfo info2, StructurePlaceSettings placement, @Nullable StructureTemplate template) {
     if (info2.nbt == null || !info2.nbt.contains("LootTable", Tag.TAG_STRING)) {
