@@ -145,6 +145,9 @@ public class ChestUtil {
         Lootr.SCORE_PREDICATE.trigger((ServerPlayer) player, null);
         DataStorage.score(player.getUUID(), ((ILootTile) te).getTileId());
       }
+      if (tile.getOpeners().add(player.getUUID())) {
+        tile.updatePacketViaState();
+      }
       player.openMenu(provider);
       PiglinAi.angerNearbyPiglins(player, true);
       return true;
