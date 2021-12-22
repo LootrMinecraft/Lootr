@@ -4,6 +4,8 @@
   "lootr.message.should_sneak3": "per-player per-chest",
   "lootr.message.cart_should_sneak": "Breaking the cart will delete your unique loot and items! In order to break, you must sneak while attacking",
   "lootr.message.cart_should_sneak3": "per-player per-cart",
+  "lootr.message.cannot_break": "Loot containers and carts cannot be broken.",
+  "lootr.message.cannot_break_sneak": "Loot containers and carts can only be broken while sneaking in creative mode.",
   "block.lootr.lootr_chest": "Loot Chest",
   "block.lootr.lootr_trapped_chest": "Loot Chest",
   "block.lootr.lootr_barrel": "Loot Barrel",
