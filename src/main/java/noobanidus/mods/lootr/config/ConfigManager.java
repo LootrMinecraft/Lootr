@@ -47,6 +47,7 @@ public class ConfigManager {
   public static final ForgeConfigSpec.BooleanValue CONVERT_WOODEN_CHESTS;
   public static final ForgeConfigSpec.BooleanValue CONVERT_TRAPPED_CHESTS;
   public static final ForgeConfigSpec.BooleanValue REPORT_TABLES;
+  public static final ForgeConfigSpec.BooleanValue DISABLE_BREAK;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> ADDITIONAL_CHESTS;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> ADDITIONAL_TRAPPED_CHESTS;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DIMENSION_WHITELIST;
@@ -74,6 +75,7 @@ public class ConfigManager {
     DIMENSION_WHITELIST = COMMON_BUILDER.comment("list of dimensions (to the exclusion of all others) that loot chest should be replaced in [default: blank, allowing all dimensions, e.g., minecraft:overworld]").defineList("dimension_whitelist", empty, validator);
     DIMENSION_BLACKLIST = COMMON_BUILDER.comment("list of dimensions that loot chests should not be replaced in [default: blank, allowing all dimensions, format e.g., minecraft:overworld]").defineList("dimension_blacklist", empty, validator);
     LOOT_TABLE_BLACKLIST = COMMON_BUILDER.comment("list of loot tables which shouldn't be converted [in the format of modid:loot_table]").defineList("loot_table_blacklist", empty, validator);
+    DISABLE_BREAK = COMMON_BUILDER.comment("prevent the destruction of Lootr chests except while sneaking in creative mode").define("disable_break", false);
     COMMON_CONFIG = COMMON_BUILDER.build();
   }
 
