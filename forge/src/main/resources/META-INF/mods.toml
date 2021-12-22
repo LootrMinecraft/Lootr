@@ -1,35 +1,25 @@
-modLoader = "javafml"
-loaderVersion = "[36,)"
-#issueTrackerURL = ""
-license = "Insert License Here"
-
-[[mods]]
-modId = "examplemod"
-version = "${version}"
-displayName = "Example Mod"
-authors = "Me!"
-description = '''
-This is an example description! Tell everyone what your mod is about!
+modLoader="javafml" 
+loaderVersion="[36,)"
+issueTrackerURL="https://github.com/noobanidus/Lootr/issues"
+license="https://github.com/noobanidus/Lootr/blob/1.16/LICENSE"
+[[mods]] 
+modId="lootr" 
+version="${version}"
+displayName="Lootr" 
+displayURL="https://minecraft.curseforge.com/projects/lootr" 
+authors="Noobanidus"
+description='''
+Makes loot chest loot per-user.
 '''
-#logoFile = ""
-
-[[dependencies.examplemod]]
-modId = "forge"
-mandatory = true
-versionRange = "[36,)"
-ordering = "NONE"
-side = "BOTH"
-
-[[dependencies.examplemod]]
-modId = "minecraft"
-mandatory = true
-versionRange = "[1.16.5,)"
-ordering = "NONE"
-side = "BOTH"
-
-[[dependencies.examplemod]]
-modId = "architectury"
-mandatory = true
-versionRange = "[1.26.37,)"
-ordering = "AFTER"
-side = "BOTH"
+[[dependencies.Lootr]] 
+    modId="forge" 
+    mandatory=true 
+    versionRange="[36,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.Lootr]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.16.5,)"
+    ordering="NONE"
+    side="BOTH"

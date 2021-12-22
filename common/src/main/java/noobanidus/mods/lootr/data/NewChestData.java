@@ -18,12 +18,9 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraft.world.level.storage.LevelResource;
 import net.minecraft.world.level.saveddata.SavedData;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.LootFiller;
-import noobanidus.mods.lootr.api.LootrLootingEvent;
+import noobanidus.mods.lootr.api.ServerAccess;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
 import javax.annotation.Nullable;
@@ -155,7 +152,7 @@ public class NewChestData extends SavedData {
       result = new SpecialChestInventory(this, items, cart.getDisplayName(), pos);
     } else {
       if (world.dimension() != dimension) {
-        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+        MinecraftServer server = ServerAccess.getServer();
         if (server == null) {
           return null;
         }
@@ -170,12 +167,7 @@ public class NewChestData extends SavedData {
       // Saving this is handled elsewhere
       result = new SpecialChestInventory(this, items, tile.getDisplayName(), pos);
     }
-    LootrLootingEvent.Pre preEvent = new LootrLootingEvent.Pre(player, world, dimension, result, tile, cart);
-    if (!MinecraftForge.EVENT_BUS.post(preEvent)) {
-      filler.fillWithLoot(player, result, preEvent.getNewTable(), preEvent.getNewSeed());
-      LootrLootingEvent.Post postEvent = new LootrLootingEvent.Post(player, world, dimension, result, tile, cart);
-      MinecraftForge.EVENT_BUS.post(postEvent);
-    }
+    filler.fillWithLoot(player, result, preEvent.getNewTable(), preEvent.getNewSeed());
     inventories.put(player.getUUID(), result);
     setDirty();
     world.getDataStorage().save();

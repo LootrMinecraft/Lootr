@@ -161,11 +161,6 @@ public class SpecialLootChestTile extends ChestBlockEntity implements ILootTile 
   }
 
   @Override
-  public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-    return LazyOptional.empty();
-  }
-
-  @Override
   public void tick() {
     int i = this.worldPosition.getX();
     int j = this.worldPosition.getY();

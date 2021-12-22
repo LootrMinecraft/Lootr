@@ -23,10 +23,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.text.*;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.api.ILootTile;
+import noobanidus.mods.lootr.api.ServerAccess;
 import noobanidus.mods.lootr.data.NewChestData;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModBlocks;
@@ -69,7 +68,7 @@ public class CommandLootr {
   }
 
   private static List<String> getProfiles() {
-    return Lists.newArrayList(ServerLifecycleHooks.getCurrentServer().getProfileCache().profilesByName.keySet());
+    return Lists.newArrayList(ServerAccess.getServer().getProfileCache().profilesByName.keySet());
   }
 
   private static List<String> getTableNames() {
