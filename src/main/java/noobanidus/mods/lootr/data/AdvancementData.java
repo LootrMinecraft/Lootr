@@ -56,7 +56,6 @@ public class AdvancementData extends SavedData {
   public static class UUIDPair implements INBTSerializable<CompoundTag> {
     @Nonnull
     private UUID first;
-    @Nonnull
     private UUID second;
 
     protected UUIDPair () {
