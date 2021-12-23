@@ -54,9 +54,7 @@ public class AdvancementData extends WorldSavedData {
   }
 
   public static class UUIDPair implements INBTSerializable<CompoundNBT> {
-    @Nonnull
     private UUID first;
-    @Nonnull
     private UUID second;
 
     protected UUIDPair () {
