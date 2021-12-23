@@ -15,11 +15,15 @@ import net.minecraft.command.Commands;
 import net.minecraft.command.ISuggestionProvider;
 import net.minecraft.command.arguments.ResourceLocationArgument;
 import net.minecraft.command.arguments.Vec3Argument;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootTables;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.EnumProperty;
 import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -27,6 +31,9 @@ import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.api.ILootTile;
+import noobanidus.mods.lootr.blocks.LootrBarrelBlock;
+import noobanidus.mods.lootr.blocks.LootrChestBlock;
+import noobanidus.mods.lootr.blocks.LootrShulkerBlock;
 import noobanidus.mods.lootr.data.NewChestData;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModBlocks;
@@ -78,11 +85,32 @@ public class CommandLootr {
     }
     if (block == null) {
       LootrChestMinecartEntity cart = new LootrChestMinecartEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+      Entity e = c.getEntity();
+      if (e != null) {
+        cart.yRot = e.yRot;
+      }
       cart.setLootTable(table, world.getRandom().nextLong());
       world.addFreshEntity(cart);
       c.sendSuccess(new TranslationTextComponent("lootr.commands.summon", TextComponentUtils.wrapInSquareBrackets(new TranslationTextComponent("lootr.commands.blockpos", pos.getX(), pos.getY(), pos.getZ()).setStyle(Style.EMPTY.withColor(Color.fromLegacyFormat(TextFormatting.GREEN)).withBold(true))), table.toString()), false);
     } else {
-      world.setBlock(pos, block.defaultBlockState(), 2);
+      BlockState placementState = block.defaultBlockState();
+      Entity e = c.getEntity();
+      if (e != null) {
+        EnumProperty<Direction> prop = null;
+        Direction dir = Direction.orderedByNearest(e)[0].getOpposite();
+        if (placementState.hasProperty(LootrBarrelBlock.FACING)) {
+          prop = LootrBarrelBlock.FACING;
+        } else if (placementState.hasProperty(LootrChestBlock.FACING)) {
+          prop = LootrChestBlock.FACING;
+          dir = e.getDirection().getOpposite();
+        } else if (placementState.hasProperty(LootrShulkerBlock.FACING)) {
+          prop = LootrShulkerBlock.FACING;
+        }
+        if (prop != null) {
+          placementState = placementState.setValue(prop, dir);
+        }
+      }
+      world.setBlock(pos, placementState, 2);
       LockableLootTileEntity.setLootTable(world, world.getRandom(), pos, table);
       c.sendSuccess(new TranslationTextComponent("lootr.commands.create", new TranslationTextComponent(block.getDescriptionId()), TextComponentUtils.wrapInSquareBrackets(new TranslationTextComponent("lootr.commands.blockpos", pos.getX(), pos.getY(), pos.getZ()).setStyle(Style.EMPTY.withColor(Color.fromLegacyFormat(TextFormatting.GREEN)).withBold(true))), table.toString()), false);
     }
