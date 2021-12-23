@@ -15,7 +15,7 @@
   "entity.lootr.lootr_minecart": "Minecart with Chest",
   "lootr.commands.usage": "/lootr barrel | barrel <loot-table> | chest | chest <loot-table> | cart | cart <loot-table> | shulker | shulker <loot-table> | convert | custom <id>",
   "lootr.commands.create": "Created a Lootr %s at %s using the loot table %s.",
-  "lootr.commands.summoned": "Summoned a Lootr Cart at %s using the loot table %s.",
+  "lootr.commands.summon": "Summoned a Lootr Cart at %s using the loot table %s.",
   "lootr.commands.blockpos": "%s,%s,%s",
   "stat.lootr.looted_stat": "Chests Looted",
   "lootr.advancements.100loot.title": "Centennial",

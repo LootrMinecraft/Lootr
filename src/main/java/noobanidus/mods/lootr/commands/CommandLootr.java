@@ -6,26 +6,34 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.commands.arguments.coordinates.Vec3Argument;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.*;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraftforge.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.api.ILootTile;
+import noobanidus.mods.lootr.blocks.LootrBarrelBlock;
+import noobanidus.mods.lootr.blocks.LootrChestBlock;
+import noobanidus.mods.lootr.blocks.LootrShulkerBlock;
 import noobanidus.mods.lootr.blocks.entities.LootrInventoryBlockEntity;
 import noobanidus.mods.lootr.data.NewChestData;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
@@ -35,13 +43,6 @@ import noobanidus.mods.lootr.util.ChestUtil;
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.ComponentUtils;
-import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextColor;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 
 public class CommandLootr {
   private final CommandDispatcher<CommandSourceStack> dispatcher;
@@ -84,11 +85,32 @@ public class CommandLootr {
     }
     if (block == null) {
       LootrChestMinecartEntity cart = new LootrChestMinecartEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+      Entity e = c.getEntity();
+      if (e != null) {
+        cart.setYRot(e.getYRot());
+      }
       cart.setLootTable(table, world.getRandom().nextLong());
       world.addFreshEntity(cart);
       c.sendSuccess(new TranslatableComponent("lootr.commands.summon", ComponentUtils.wrapInSquareBrackets(new TranslatableComponent("lootr.commands.blockpos", pos.getX(), pos.getY(), pos.getZ()).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.GREEN)).withBold(true))), table.toString()), false);
     } else {
-      world.setBlock(pos, block.defaultBlockState(), 2);
+      BlockState placementState = block.defaultBlockState();
+      Entity e = c.getEntity();
+      if (e != null) {
+        EnumProperty<Direction> prop = null;
+        Direction dir = Direction.orderedByNearest(e)[0].getOpposite();
+        if (placementState.hasProperty(LootrBarrelBlock.FACING)) {
+          prop = LootrBarrelBlock.FACING;
+        } else if (placementState.hasProperty(LootrChestBlock.FACING)) {
+          prop = LootrChestBlock.FACING;
+          dir = e.getDirection().getOpposite();
+        } else if (placementState.hasProperty(LootrShulkerBlock.FACING)) {
+          prop = LootrShulkerBlock.FACING;
+        }
+        if (prop != null) {
+          placementState = placementState.setValue(prop, dir);
+        }
+      }
+      world.setBlock(pos, placementState, 2);
       RandomizableContainerBlockEntity.setLootTable(world, world.getRandom(), pos, table);
       c.sendSuccess(new TranslatableComponent("lootr.commands.create", new TranslatableComponent(block.getDescriptionId()), ComponentUtils.wrapInSquareBrackets(new TranslatableComponent("lootr.commands.blockpos", pos.getX(), pos.getY(), pos.getZ()).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.GREEN)).withBold(true))), table.toString()), false);
     }
