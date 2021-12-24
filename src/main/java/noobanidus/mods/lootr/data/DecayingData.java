@@ -17,23 +17,23 @@ public class DecayingData extends SavedData {
     decayMap.defaultReturnValue(-1);
   }
 
-  public boolean hasDecayed(UUID id) {
+  public boolean isDecayed(UUID id) {
     return decayMap.getInt(id) == 0;
   }
 
-  public int decay(UUID id) {
+  public int getDecay(UUID id) {
     return decayMap.getInt(id);
   }
 
-  public boolean decay(UUID id, int decayAmount) {
+  public boolean setDecay(UUID id, int decayAmount) {
     return decayMap.put(id, decayAmount) == -1;
   }
 
-  public int decayed (UUID id) {
+  public int removeDecayed(UUID id) {
     return decayMap.removeInt(id);
   }
 
-  public boolean doDecay(TickEvent.ServerTickEvent event) {
+  public boolean tickDecay(TickEvent.ServerTickEvent event) {
     if (decayMap.isEmpty()) {
       return false;
     }

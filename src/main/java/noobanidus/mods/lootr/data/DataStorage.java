@@ -59,30 +59,34 @@ public class DataStorage {
     manager.save();
   }
 
-  public static int decayed (UUID id) {
+  public static int getDecayValue (UUID id) {
     DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
     DecayingData data = manager.computeIfAbsent(DecayingData::load, DecayingData::new, DECAY);
-    return data.decay(id);
+    return data.getDecay(id);
   }
 
-  public static boolean hasDecayed (UUID id) {
+  public static boolean isDecayed(UUID id) {
     DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
     DecayingData data = manager.computeIfAbsent(DecayingData::load, DecayingData::new, DECAY);
-    return data.hasDecayed(id);
+    return data.isDecayed(id);
+  }
+
+  public static boolean isDecaying (UUID id) {
+    return getDecayValue(id) > 0;
   }
 
   public static void setDecaying (UUID id, int decay) {
     DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
     DecayingData data = manager.computeIfAbsent(DecayingData::load, DecayingData::new, DECAY);
-    data.decay(id, decay);
+    data.setDecay(id, decay);
     data.setDirty();
     manager.save();
   }
 
-  public static void decay (UUID id) {
+  public static void removeDecayed (UUID id) {
     DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
     DecayingData data = manager.computeIfAbsent(DecayingData::load, DecayingData::new, DECAY);
-    if (data.decayed(id) != -1) {
+    if (data.removeDecayed(id) != -1) {
       data.setDirty();
       manager.save();
     }
@@ -91,7 +95,7 @@ public class DataStorage {
   public static void doDecay (TickEvent.ServerTickEvent event) {
     DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
     DecayingData data = manager.computeIfAbsent(DecayingData::load, DecayingData::new, DECAY);
-    if (data.doDecay(event)) {
+    if (data.tickDecay(event)) {
       data.setDirty();
       manager.save();
     }
