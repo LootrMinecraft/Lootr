@@ -1,9 +1,15 @@
 package noobanidus.mods.lootr.util;
 
+import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -18,6 +24,7 @@ import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.ILootTile;
 import noobanidus.mods.lootr.blocks.LootrShulkerBlock;
 import noobanidus.mods.lootr.blocks.entities.LootrInventoryBlockEntity;
+import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModStats;
@@ -28,6 +35,7 @@ import noobanidus.mods.lootr.networking.UpdateModelData;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
+import java.util.UUID;
 
 @SuppressWarnings("unused")
 public class ChestUtil {
@@ -79,6 +87,22 @@ public class ChestUtil {
     }
     BlockEntity te = world.getBlockEntity(pos);
     if (te instanceof ILootTile tile) {
+      UUID tileId = tile.getTileId();
+      if (DataStorage.isDecayed(tileId)) {
+        world.destroyBlock(pos, true);
+        player.sendMessage(new TranslatableComponent("lootr.message.decayed").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), Util.NIL_UUID);
+        return false;
+      } else {
+        int decayValue = DataStorage.getDecayValue(tileId);
+        if (decayValue > 0) {
+          player.sendMessage(new TranslatableComponent("lootr.message.decay_in", decayValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), Util.NIL_UUID);
+        } else if (decayValue == -1) {
+          if (ConfigManager.isDecaying(world, (ILootTile)te)) {
+            DataStorage.setDecaying(tileId, ConfigManager.DECAY_VALUE.get());
+            player.sendMessage(new TranslatableComponent("lootr.message.decay_start", ConfigManager.DECAY_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), Util.NIL_UUID);
+          }
+        }
+      }
       if (block instanceof BarrelBlock) {
         Lootr.BARREL_PREDICATE.trigger((ServerPlayer) player, ((ILootTile)te).getTileId());
       } else if (block instanceof ChestBlock) {
@@ -109,6 +133,22 @@ public class ChestUtil {
         player.openMenu(null);
       } else {
         Lootr.CART_PREDICATE.trigger((ServerPlayer) player, cart.getUUID());
+        UUID tileId = cart.getUUID();
+        if (DataStorage.isDecayed(tileId)) {
+          cart.destroy(DamageSource.OUT_OF_WORLD);
+          player.sendMessage(new TranslatableComponent("lootr.message.decayed").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), Util.NIL_UUID);
+          return;
+        } else {
+          int decayValue = DataStorage.getDecayValue(tileId);
+          if (decayValue > 0) {
+            player.sendMessage(new TranslatableComponent("lootr.message.decay_in", decayValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), Util.NIL_UUID);
+          } else if (decayValue == -1) {
+            if (ConfigManager.isDecaying(world, cart)) {
+              DataStorage.setDecaying(tileId, ConfigManager.DECAY_VALUE.get());
+              player.sendMessage(new TranslatableComponent("lootr.message.decay_start", ConfigManager.DECAY_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), Util.NIL_UUID);
+            }
+          }
+        }
         if (!cart.getOpeners().contains(player.getUUID())) {
           cart.addOpener(player);
         }
