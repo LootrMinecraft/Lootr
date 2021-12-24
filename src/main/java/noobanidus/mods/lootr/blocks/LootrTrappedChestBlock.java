@@ -44,7 +44,6 @@ public class LootrTrappedChestBlock extends ChestBlock {
     return true;
   }
 
-
   @Override
   public int getSignal(BlockState pBlockState, BlockGetter pBlockAccess, BlockPos pPos, Direction pSide) {
     return Mth.clamp(ChestBlockEntity.getOpenCount(pBlockAccess, pPos), 0, 15);

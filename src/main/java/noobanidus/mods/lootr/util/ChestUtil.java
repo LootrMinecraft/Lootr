@@ -19,7 +19,6 @@ import noobanidus.mods.lootr.api.ILootTile;
 import noobanidus.mods.lootr.blocks.LootrShulkerBlock;
 import noobanidus.mods.lootr.blocks.entities.LootrInventoryBlockEntity;
 import noobanidus.mods.lootr.data.DataStorage;
-import noobanidus.mods.lootr.data.NewChestData;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModStats;
 import noobanidus.mods.lootr.networking.CloseCart;
@@ -87,8 +86,8 @@ public class ChestUtil {
       } else if (block instanceof LootrShulkerBlock) {
         Lootr.SHULKER_PREDICATE.trigger((ServerPlayer) player, ((ILootTile) te).getTileId());
       }
-      MenuProvider provider = NewChestData.getInventory(world, ((ILootTile) te).getTileId(), pos, (ServerPlayer) player, (RandomizableContainerBlockEntity) te, ((ILootTile) te)::unpackLootTable);
-      if (!DataStorage.isScored(player.getUUID(), ((ILootTile) te).getTileId())) {
+      MenuProvider provider = DataStorage.getInventory(world, ((ILootTile) te).getTileId(), pos, (ServerPlayer) player, (RandomizableContainerBlockEntity) te, ((ILootTile) te)::unpackLootTable);
+      if (!DataStorage.isScored(player.getUUID(), ((ILootTile)te).getTileId())) {
         player.awardStat(ModStats.LOOTED_STAT);
         Lootr.SCORE_PREDICATE.trigger((ServerPlayer) player, null);
         DataStorage.score(player.getUUID(), ((ILootTile) te).getTileId());
@@ -118,7 +117,7 @@ public class ChestUtil {
           Lootr.SCORE_PREDICATE.trigger((ServerPlayer) player, null);
           DataStorage.score(player.getUUID(), cart.getUUID());
         }
-        MenuProvider provider = NewChestData.getInventory(world, cart, (ServerPlayer) player, cart::addLoot);
+        MenuProvider provider = DataStorage.getInventory(world, cart, (ServerPlayer) player, cart::addLoot);
         player.openMenu(provider);
       }
     }
@@ -139,8 +138,8 @@ public class ChestUtil {
       if (tile.getCustomInventory() != null) {
         stacks = copyItemList(tile.getCustomInventory());
       }
-      MenuProvider provider = NewChestData.getInventory(world, tile.getTileId(), stacks, (ServerPlayer) player, pos, tile);
-      if (!DataStorage.isScored(player.getUUID(), ((ILootTile) te).getTileId())) {
+      MenuProvider provider = DataStorage.getInventory(world, tile.getTileId(), stacks, (ServerPlayer) player, pos, tile);
+      if (!DataStorage.isScored(player.getUUID(), ((ILootTile)te).getTileId())) {
         player.awardStat(ModStats.LOOTED_STAT);
         Lootr.SCORE_PREDICATE.trigger((ServerPlayer) player, null);
         DataStorage.score(player.getUUID(), ((ILootTile) te).getTileId());
