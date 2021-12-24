@@ -18,12 +18,11 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.DimensionSavedDataManager;
 import net.minecraft.world.storage.FolderName;
 import net.minecraft.world.storage.WorldSavedData;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.Lootr;
+import noobanidus.mods.lootr.api.ILootTile;
 import noobanidus.mods.lootr.api.LootFiller;
-import noobanidus.mods.lootr.api.LootrLootingEvent;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
 import javax.annotation.Nullable;
@@ -144,6 +143,7 @@ public class NewChestData extends WorldSavedData {
     SpecialChestInventory result;
     LootrChestMinecartEntity cart = null;
     long seed = -1;
+    ResourceLocation lootTable = null;
     if (entityId != null) {
       Entity initial = world.getEntity(entityId);
       if (!(initial instanceof LootrChestMinecartEntity)) {
@@ -153,6 +153,7 @@ public class NewChestData extends WorldSavedData {
       NonNullList<ItemStack> items = NonNullList.withSize(cart.getContainerSize(), ItemStack.EMPTY);
       // Saving this is handled elsewhere
       result = new SpecialChestInventory(this, items, cart.getDisplayName(), pos);
+      lootTable = cart.lootTable;
     } else {
       if (world.dimension() != dimension) {
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
@@ -166,16 +167,13 @@ public class NewChestData extends WorldSavedData {
         return null;
       }
 
+      lootTable = ((ILootTile) tile).getTable();
+
       NonNullList<ItemStack> items = NonNullList.withSize(tile.getContainerSize(), ItemStack.EMPTY);
       // Saving this is handled elsewhere
       result = new SpecialChestInventory(this, items, tile.getDisplayName(), pos);
     }
-    LootrLootingEvent.Pre preEvent = new LootrLootingEvent.Pre(player, world, dimension, result, tile, cart);
-    if (!MinecraftForge.EVENT_BUS.post(preEvent)) {
-      filler.fillWithLoot(player, result, preEvent.getNewTable(), preEvent.getNewSeed());
-      LootrLootingEvent.Post postEvent = new LootrLootingEvent.Post(player, world, dimension, result, tile, cart);
-      MinecraftForge.EVENT_BUS.post(postEvent);
-    }
+    filler.fillWithLoot(player, result, lootTable, seed);
     inventories.put(player.getUUID(), result);
     setDirty();
     world.getDataStorage().save();
