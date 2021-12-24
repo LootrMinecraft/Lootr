@@ -7,6 +7,7 @@ import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.server.ServerChunkProvider;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.TickEvent;
+import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class EntityTicker {
           world.addFreshEntity(entity);
         }
       }
+      DataStorage.doDecay(event);
     }
   }
 

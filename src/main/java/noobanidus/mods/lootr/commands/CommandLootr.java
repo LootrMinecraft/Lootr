@@ -18,7 +18,6 @@ import net.minecraft.command.arguments.Vec3Argument;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootTables;
-import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.tileentity.LockableLootTileEntity;
@@ -34,7 +33,7 @@ import noobanidus.mods.lootr.api.ILootTile;
 import noobanidus.mods.lootr.blocks.LootrBarrelBlock;
 import noobanidus.mods.lootr.blocks.LootrChestBlock;
 import noobanidus.mods.lootr.blocks.LootrShulkerBlock;
-import noobanidus.mods.lootr.data.NewChestData;
+import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.tiles.SpecialLootInventoryTile;
@@ -161,7 +160,7 @@ public class CommandLootr {
         c.getSource().sendFailure(new StringTextComponent("Invalid player name: " + playerName + ", profile not found in the cache."));
         return 0;
       }
-      c.getSource().sendSuccess(new StringTextComponent(NewChestData.clearInventories(profile.getId()) ? "Cleared stored inventories for " + playerName : "No stored inventories for " + playerName + " to clear"), true);
+      c.getSource().sendSuccess(new StringTextComponent(DataStorage.clearInventories(profile.getId()) ? "Cleared stored inventories for " + playerName : "No stored inventories for " + playerName + " to clear"), true);
       return 1;
     })));
     builder.then(Commands.literal("cart").executes(c -> {

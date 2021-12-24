@@ -22,7 +22,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import noobanidus.mods.lootr.data.NewChestData;
+import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.init.ModTiles;
 import noobanidus.mods.lootr.tiles.SpecialLootChestTile;
 import noobanidus.mods.lootr.util.ChestUtil;
@@ -53,7 +53,7 @@ public class LootrChestBlock extends ChestBlock {
   @Override
   public void onRemove(BlockState oldState, World world, BlockPos pos, BlockState newState, boolean isMoving) {
     if (oldState.getBlock() != newState.getBlock() && world instanceof ServerWorld) {
-      NewChestData.deleteLootChest((ServerWorld) world, pos);
+      DataStorage.deleteLootChest((ServerWorld) world, pos);
     }
     super.onRemove(oldState, world, pos, newState, isMoving);
   }

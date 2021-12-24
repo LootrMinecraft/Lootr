@@ -18,11 +18,9 @@ import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.ILootTile;
 import noobanidus.mods.lootr.blocks.LootrShulkerBlock;
 import noobanidus.mods.lootr.data.DataStorage;
-import noobanidus.mods.lootr.data.NewChestData;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModStats;
 import noobanidus.mods.lootr.networking.CloseCart;
-import noobanidus.mods.lootr.networking.OpenCart;
 import noobanidus.mods.lootr.networking.PacketHandler;
 import noobanidus.mods.lootr.tiles.SpecialLootInventoryTile;
 
@@ -86,7 +84,7 @@ public class ChestUtil {
       } else if (block instanceof LootrShulkerBlock) {
         Lootr.SHULKER_PREDICATE.trigger((ServerPlayerEntity) player, ((ILootTile)te).getTileId());
       }
-      INamedContainerProvider provider = NewChestData.getInventory(world, ((ILootTile) te).getTileId(), pos, (ServerPlayerEntity) player, (LockableLootTileEntity) te, ((ILootTile) te)::fillWithLoot);
+      INamedContainerProvider provider = DataStorage.getInventory(world, ((ILootTile) te).getTileId(), pos, (ServerPlayerEntity) player, (LockableLootTileEntity) te, ((ILootTile) te)::fillWithLoot);
       if (!DataStorage.isScored(player.getUUID(), ((ILootTile)te).getTileId())) {
         player.awardStat(ModStats.LOOTED_STAT);
         Lootr.SCORE_PREDICATE.trigger((ServerPlayerEntity) player, null);
@@ -115,7 +113,7 @@ public class ChestUtil {
           Lootr.SCORE_PREDICATE.trigger((ServerPlayerEntity) player, null);
           DataStorage.score(player.getUUID(), cart.getUUID());
         }
-        INamedContainerProvider provider = NewChestData.getInventory(world, cart, (ServerPlayerEntity) player, cart::addLoot);
+        INamedContainerProvider provider = DataStorage.getInventory(world, cart, (ServerPlayerEntity) player, cart::addLoot);
         player.openMenu(provider);
       }
     }
@@ -137,7 +135,7 @@ public class ChestUtil {
       if (tile.getCustomInventory() != null) {
         stacks = copyItemList(tile.getCustomInventory());
       }
-      INamedContainerProvider provider = NewChestData.getInventory(world, tile.getTileId(), stacks, (ServerPlayerEntity) player, pos, tile);
+      INamedContainerProvider provider = DataStorage.getInventory(world, tile.getTileId(), stacks, (ServerPlayerEntity) player, pos, tile);
       if (!DataStorage.isScored(player.getUUID(), ((ILootTile)te).getTileId())) {
         player.awardStat(ModStats.LOOTED_STAT);
         Lootr.SCORE_PREDICATE.trigger((ServerPlayerEntity) player, null);
