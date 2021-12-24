@@ -16,8 +16,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.saveddata.SavedData;
-import net.minecraft.world.level.storage.DimensionDataStorage;
-import net.minecraft.world.level.storage.LevelResource;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fmllegacy.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.Lootr;
@@ -26,12 +24,8 @@ import noobanidus.mods.lootr.api.LootFiller;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 public class NewChestData extends SavedData {
   private String key;
@@ -113,7 +107,7 @@ public class NewChestData extends SavedData {
     };
   }
 
-  private LootFiller customInventory() {
+  public LootFiller customInventory() {
     return (player, inventory, table, seed) -> {
       for (int i = 0; i < reference.size(); i++) {
         inventory.setItem(i, reference.get(i).copy());
@@ -129,12 +123,12 @@ public class NewChestData extends SavedData {
     this.inventories = inventories;
   }
 
-  private boolean clearInventory(UUID uuid) {
+  public boolean clearInventory(UUID uuid) {
     return inventories.remove(uuid) != null;
   }
 
   @Nullable
-  private SpecialChestInventory getInventory(ServerPlayer player, BlockPos pos) {
+  public SpecialChestInventory getInventory(ServerPlayer player, BlockPos pos) {
     SpecialChestInventory result = inventories.get(player.getUUID());
     if (result != null) {
       result.setBlockPos(pos);
@@ -142,7 +136,7 @@ public class NewChestData extends SavedData {
     return result;
   }
 
-  private SpecialChestInventory createInventory(ServerPlayer player, LootFiller filler, @Nullable RandomizableContainerBlockEntity tile) {
+  public SpecialChestInventory createInventory(ServerPlayer player, LootFiller filler, @Nullable RandomizableContainerBlockEntity tile) {
     ServerLevel world = (ServerLevel) player.level;
     SpecialChestInventory result;
     LootrChestMinecartEntity cart = null;
@@ -267,134 +261,4 @@ public class NewChestData extends SavedData {
   public void clear() {
     inventories.clear();
   }
-
-  private static ServerLevel getServerWorld() {
-    return ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD);
-  }
-
-  private static NewChestData getInstanceUuid(ServerLevel world, UUID id) {
-    ResourceKey<Level> dimension = world.dimension();
-    return getServerWorld().getDataStorage().computeIfAbsent(NewChestData::load, NewChestData.id(dimension, id), ID(dimension, id));
-  }
-
-  private static NewChestData getInstance(ServerLevel world, UUID id) {
-    return getServerWorld().getDataStorage().computeIfAbsent(NewChestData::load, NewChestData.entity(id), ENTITY(id));
-  }
-
-  private static NewChestData getInstanceInventory(ServerLevel world, UUID id, @Nullable UUID customId, @Nullable NonNullList<ItemStack> base) {
-    ResourceKey<Level> dimension = world.dimension();
-    return getServerWorld().getDataStorage().computeIfAbsent(NewChestData::load, NewChestData.ref_id(dimension, id, customId, base), REF_ID(dimension, id));
-  }
-
-  @Nullable
-  public static SpecialChestInventory getInventory(Level world, UUID uuid, BlockPos pos, ServerPlayer player, RandomizableContainerBlockEntity tile, LootFiller filler) {
-    if (world.isClientSide || !(world instanceof ServerLevel)) {
-      return null;
-    }
-
-    NewChestData data = getInstanceUuid((ServerLevel) world, uuid);
-    SpecialChestInventory inventory = data.getInventory(player, pos);
-    if (inventory == null) {
-      inventory = data.createInventory(player, filler, tile);
-      inventory.setBlockPos(pos);
-    }
-
-    return inventory;
-  }
-
-  @Nullable
-  public static SpecialChestInventory getInventory(Level world, UUID uuid, NonNullList<ItemStack> base, ServerPlayer player, BlockPos pos, RandomizableContainerBlockEntity tile) {
-    if (world.isClientSide || !(world instanceof ServerLevel)) {
-      return null;
-    }
-    NewChestData data = getInstanceInventory((ServerLevel) world, uuid, null, base);
-    SpecialChestInventory inventory = data.getInventory(player, pos);
-    if (inventory == null) {
-      inventory = data.createInventory(player, data.customInventory(), tile);
-      inventory.setBlockPos(pos);
-    }
-
-    return inventory;
-  }
-
-  public static boolean clearInventories(ServerPlayer player) {
-    return clearInventories(player.getUUID());
-  }
-
-  public static boolean clearInventories(UUID uuid) {
-    ServerLevel world = getServerWorld();
-    DimensionDataStorage data = world.getDataStorage();
-    Path dataPath = world.getServer().getWorldPath(new LevelResource("data"));
-
-    List<String> ids = new ArrayList<>();
-    try (Stream<Path> paths = Files.walk(dataPath)) {
-      paths.forEach(o -> {
-        if (Files.isRegularFile(o)) {
-          String name = o.getFileName().toString();
-          if (name.startsWith("Lootr-")) {
-            ids.add(name.replace(".dat", ""));
-          }
-        }
-      });
-    } catch (IOException e) {
-      return false;
-    }
-
-    int cleared = 0;
-    for (String id : ids) {
-      NewChestData chestData = data.get(NewChestData::load, id);
-      if (chestData != null) {
-        if (chestData.clearInventory(uuid)) {
-          cleared++;
-          chestData.setDirty();
-        }
-      }
-    }
-    data.save();
-    Lootr.LOG.info("Cleared " + cleared + " inventories for play UUID " + uuid.toString());
-    return cleared != 0;
-  }
-
-  @Nullable
-  public static SpecialChestInventory getInventory(Level world, LootrChestMinecartEntity cart, ServerPlayer player, LootFiller filler) {
-    if (world.isClientSide || !(world instanceof ServerLevel)) {
-      return null;
-    }
-
-    NewChestData data = getInstance((ServerLevel) world, cart.getUUID());
-    SpecialChestInventory inventory = data.getInventory(player, null);
-    if (inventory == null) {
-      inventory = data.createInventory(player, filler, null);
-    }
-
-    return inventory;
-  }
-
-/*  public static void wipeInventory(ServerLevel world, BlockPos pos) {
-    ServerLevel serverWorld = getServerWorld();
-    ResourceKey<Level> dimension = world.dimension();
-    DimensionDataStorage manager = serverWorld.getDataStorage();
-    BlockEntity te = world.getBlockEntity(pos);
-    if (te instanceof ILootTile tile) {
-      String id = ID(dimension, tile.getTileId());
-      if (!manager.cache.containsKey(id)) {
-        return;
-      }
-
-      NewChestData data = manager.get(NewChestData::load, id);
-      if (data == null) {
-        return;
-      }
-      data.clear();
-      data.setDirty();
-    }
-  }*/
-
-/*  public static void deleteLootChest(ServerLevel world, BlockPos pos) {
-    if (world.isClientSide()) {
-      return;
-    }
-    NewChestData.wipeInventory(world, pos);
-    getServerWorld().getDataStorage().save();
-  }*/
 }

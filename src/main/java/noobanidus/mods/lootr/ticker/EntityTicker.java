@@ -5,6 +5,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraftforge.event.TickEvent;
+import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class EntityTicker {
         }
       }
       entities.removeAll(completed);
+      DataStorage.doDecay(event);
     }
   }
 

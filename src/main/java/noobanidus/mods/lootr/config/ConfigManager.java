@@ -48,14 +48,22 @@ public class ConfigManager {
   public static final ForgeConfigSpec.BooleanValue CONVERT_TRAPPED_CHESTS;
   public static final ForgeConfigSpec.BooleanValue REPORT_TABLES;
   public static final ForgeConfigSpec.BooleanValue DISABLE_BREAK;
+  public static final ForgeConfigSpec.IntValue DECAY_VALUE;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> ADDITIONAL_CHESTS;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> ADDITIONAL_TRAPPED_CHESTS;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DIMENSION_WHITELIST;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DIMENSION_BLACKLIST;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> LOOT_TABLE_BLACKLIST;
+  public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DECAY_MODIDS;
+  public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DECAY_LOOT_TABLES;
+  public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DECAY_DIMENSIONS;
+
+  private static Set<String> DECAY_MODS = null;
+  private static Set<ResourceLocation> DECAY_TABLES = null;
 
   private static Set<ResourceKey<Level>> DIM_WHITELIST = null;
   private static Set<ResourceKey<Level>> DIM_BLACKLIST = null;
+  private static Set<ResourceKey<Level>> DECAY_DIMS = null;
   private static Set<ResourceLocation> LOOT_BLACKLIST = null;
   private static Set<ResourceLocation> ADD_CHESTS = null;
   private static Set<ResourceLocation> ADD_TRAPPED_CHESTS = null;
@@ -76,6 +84,10 @@ public class ConfigManager {
     DIMENSION_BLACKLIST = COMMON_BUILDER.comment("list of dimensions that loot chests should not be replaced in [default: blank, allowing all dimensions, format e.g., minecraft:overworld]").defineList("dimension_blacklist", empty, validator);
     LOOT_TABLE_BLACKLIST = COMMON_BUILDER.comment("list of loot tables which shouldn't be converted [in the format of modid:loot_table]").defineList("loot_table_blacklist", empty, validator);
     DISABLE_BREAK = COMMON_BUILDER.comment("prevent the destruction of Lootr chests except while sneaking in creative mode").define("disable_break", false);
+    DECAY_VALUE = COMMON_BUILDER.comment("how long (in ticks) a decaying loot containers should take to decay [default 5 minutes = 5 * 60 * 20]").defineInRange("decay_value", 5*60*20, 0, Integer.MAX_VALUE);
+    DECAY_LOOT_TABLES = COMMON_BUILDER.comment("list of loot tables which will decay [default blank, meaning no chests decay, in the format of 'modid:loot_table']").defineList("decay_loot_tables", empty, validator);
+    DECAY_MODIDS = COMMON_BUILDER.comment("list of mod IDs whose loot tables will decay [default blank, meaning no chests decay, in the format of 'modid', 'modid']").defineList("decay_modids", empty, o -> o instanceof String);
+    DECAY_DIMENSIONS = COMMON_BUILDER.comment("list of dimensions where loot chests should automatically decay [default: blank, e.g., minecraft:overworld]").defineList("decay_dimensions", empty, validator);
     COMMON_CONFIG = COMMON_BUILDER.build();
   }
 
@@ -94,6 +106,9 @@ public class ConfigManager {
     LOOT_BLACKLIST = null;
     ADD_CHESTS = null;
     ADD_TRAPPED_CHESTS = null;
+    DECAY_MODS = null;
+    DECAY_TABLES = null;
+    DECAY_DIMS = null;
   }
 
   public static Set<ResourceKey<Level>> getDimensionWhitelist() {
@@ -110,11 +125,32 @@ public class ConfigManager {
     return DIM_BLACKLIST;
   }
 
+  public static Set<ResourceKey<Level>> getDecayDimensions () {
+    if (DECAY_DIMS == null) {
+      DECAY_DIMS = DECAY_DIMENSIONS.get().stream().map(o -> ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(o))).collect(Collectors.toSet());
+    }
+    return DECAY_DIMS;
+  }
+
   public static Set<ResourceLocation> getLootBlacklist() {
     if (LOOT_BLACKLIST == null) {
       LOOT_BLACKLIST = LOOT_TABLE_BLACKLIST.get().stream().map(ResourceLocation::new).collect(Collectors.toSet());
     }
     return LOOT_BLACKLIST;
+  }
+
+  public static Set<ResourceLocation> getDecayingTables () {
+    if (DECAY_TABLES == null) {
+      DECAY_TABLES = DECAY_LOOT_TABLES.get().stream().map(ResourceLocation::new).collect(Collectors.toSet());
+    }
+    return DECAY_TABLES;
+  }
+
+  public static Set<String> getDecayMods () {
+    if (DECAY_MODS == null) {
+      DECAY_MODS = new HashSet<>(DECAY_MODIDS.get());
+    }
+    return DECAY_MODS;
   }
 
   public static Set<ResourceLocation> getAdditionalChests() {
@@ -133,6 +169,10 @@ public class ConfigManager {
 
   public static boolean isDimensionBlocked(ResourceKey<Level> key) {
     return (!getDimensionWhitelist().isEmpty() && !getDimensionWhitelist().contains(key)) || getDimensionBlacklist().contains(key);
+  }
+
+  public static boolean isDimensionDecaying (ResourceKey<Level> key) {
+    return (getDecayDimensions().contains(key));
   }
 
   private static void addSafeReplacement(ResourceLocation location, Block replacement) {
