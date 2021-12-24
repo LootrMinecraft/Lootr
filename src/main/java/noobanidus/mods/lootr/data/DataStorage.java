@@ -5,7 +5,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -62,30 +61,34 @@ public class DataStorage {
     manager.save();
   }
 
-  public static int decayed (UUID id) {
+  public static int getDecayValue(UUID id) {
     DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
     DecayingData data = manager.computeIfAbsent(() -> new DecayingData(DECAY), DECAY);
-    return data.decay(id);
+    return data.getDecay(id);
   }
 
-  public static boolean hasDecayed (UUID id) {
+  public static boolean isDecayed(UUID id) {
     DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
     DecayingData data = manager.computeIfAbsent(() -> new DecayingData(DECAY), DECAY);
-    return data.hasDecayed(id);
+    return data.isDecayed(id);
+  }
+
+  public static boolean isDecaying (UUID id) {
+    return getDecayValue(id) > 0;
   }
 
   public static void setDecaying (UUID id, int decay) {
     DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
     DecayingData data = manager.computeIfAbsent(() -> new DecayingData(DECAY), DECAY);
-    data.decay(id, decay);
+    data.setDecay(id, decay);
     data.setDirty();
     manager.save();
   }
 
-  public static void decay (UUID id) {
+  public static void removeDecayed(UUID id) {
     DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
     DecayingData data = manager.computeIfAbsent(() -> new DecayingData(DECAY), DECAY);
-    if (data.decayed(id) != -1) {
+    if (data.removeDecayed(id) != -1) {
       data.setDirty();
       manager.save();
     }
@@ -94,7 +97,7 @@ public class DataStorage {
   public static void doDecay (TickEvent.ServerTickEvent event) {
     DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
     DecayingData data = manager.computeIfAbsent(() -> new DecayingData(DECAY), DECAY);
-    if (data.doDecay(event)) {
+    if (data.tickDecay(event)) {
       data.setDirty();
       manager.save();
     }

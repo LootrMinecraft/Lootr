@@ -24,6 +24,8 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import net.minecraftforge.registries.ForgeRegistries;
 import noobanidus.mods.lootr.Lootr;
+import noobanidus.mods.lootr.api.ILootTile;
+import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModBlocks;
 
 import java.nio.file.Path;
@@ -46,6 +48,7 @@ public class ConfigManager {
   public static final ForgeConfigSpec.BooleanValue REPORT_TABLES;
   public static final ForgeConfigSpec.BooleanValue DISABLE_BREAK;
   public static final ForgeConfigSpec.IntValue DECAY_VALUE;
+  public static final ForgeConfigSpec.BooleanValue DECAY_ALL;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> ADDITIONAL_CHESTS;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> ADDITIONAL_TRAPPED_CHESTS;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DIMENSION_WHITELIST;
@@ -81,10 +84,11 @@ public class ConfigManager {
     DIMENSION_BLACKLIST = COMMON_BUILDER.comment("list of dimensions that loot chests should not be replaced in [default: blank, allowing all dimensions, format e.g., minecraft:overworld]").defineList("dimension_blacklist", empty, validator);
     LOOT_TABLE_BLACKLIST = COMMON_BUILDER.comment("list of loot tables which shouldn't be converted [in the format of modid:loot_table]").defineList("loot_table_blacklist", empty, validator);
     DISABLE_BREAK = COMMON_BUILDER.comment("prevent the destruction of Lootr chests except while sneaking in creative mode").define("disable_break", false);
-    DECAY_VALUE = COMMON_BUILDER.comment("how long (in ticks) a decaying loot containers should take to decay [default 5 minutes = 5 * 60 * 20]").defineInRange("decay_value", 5*60*20, 0, Integer.MAX_VALUE);
+    DECAY_VALUE = COMMON_BUILDER.comment("how long (in ticks) a decaying loot containers should take to decay [default 5 minutes = 5 * 60 * 20]").defineInRange("decay_value", 5 * 60 * 20, 0, Integer.MAX_VALUE);
     DECAY_LOOT_TABLES = COMMON_BUILDER.comment("list of loot tables which will decay [default blank, meaning no chests decay, in the format of 'modid:loot_table']").defineList("decay_loot_tables", empty, validator);
     DECAY_MODIDS = COMMON_BUILDER.comment("list of mod IDs whose loot tables will decay [default blank, meaning no chests decay, in the format of 'modid', 'modid']").defineList("decay_modids", empty, o -> o instanceof String);
     DECAY_DIMENSIONS = COMMON_BUILDER.comment("list of dimensions where loot chests should automatically decay [default: blank, e.g., minecraft:overworld]").defineList("decay_dimensions", empty, validator);
+    DECAY_ALL = COMMON_BUILDER.comment("overriding decay_loot_tables, decay_modids and decay_dimensions: all chests will decay after being opened for the first time").define("decay_all", false);
     COMMON_CONFIG = COMMON_BUILDER.build();
   }
 
@@ -122,7 +126,7 @@ public class ConfigManager {
     return DIM_BLACKLIST;
   }
 
-  public static Set<RegistryKey<World>> getDecayDimensions () {
+  public static Set<RegistryKey<World>> getDecayDimensions() {
     if (DECAY_DIMS == null) {
       DECAY_DIMS = DECAY_DIMENSIONS.get().stream().map(o -> RegistryKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(o))).collect(Collectors.toSet());
     }
@@ -136,16 +140,16 @@ public class ConfigManager {
     return LOOT_BLACKLIST;
   }
 
-  public static Set<ResourceLocation> getDecayingTables () {
+  public static Set<ResourceLocation> getDecayingTables() {
     if (DECAY_TABLES == null) {
       DECAY_TABLES = DECAY_LOOT_TABLES.get().stream().map(ResourceLocation::new).collect(Collectors.toSet());
     }
     return DECAY_TABLES;
   }
 
-  public static Set<String> getDecayMods () {
+  public static Set<String> getDecayMods() {
     if (DECAY_MODS == null) {
-      DECAY_MODS = new HashSet<>(DECAY_MODIDS.get());
+      DECAY_MODS = DECAY_MODIDS.get().stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
     }
     return DECAY_MODS;
   }
@@ -168,8 +172,34 @@ public class ConfigManager {
     return (!getDimensionWhitelist().isEmpty() && !getDimensionWhitelist().contains(key)) || getDimensionBlacklist().contains(key);
   }
 
-  public static boolean isDimensionDecaying (RegistryKey<World> key) {
+  public static boolean isDimensionDecaying(RegistryKey<World> key) {
     return (getDecayDimensions().contains(key));
+  }
+
+  public static boolean isDecaying(World world, ILootTile tile) {
+    if (DECAY_ALL.get()) {
+      return true;
+    }
+    if (getDecayingTables().contains(tile.getTable())) {
+      return true;
+    }
+    if (getDecayMods().contains(tile.getTable().getNamespace().toLowerCase(Locale.ROOT))) {
+      return true;
+    }
+    return isDimensionDecaying(world.dimension());
+  }
+
+  public static boolean isDecaying(World world, LootrChestMinecartEntity entity) {
+    if (DECAY_ALL.get()) {
+      return true;
+    }
+    if (getDecayingTables().contains(entity.lootTable)) {
+      return true;
+    }
+    if (getDecayMods().contains(entity.lootTable.getNamespace().toLowerCase(Locale.ROOT))) {
+      return true;
+    }
+    return isDimensionDecaying(world.dimension());
   }
 
   private static void addSafeReplacement(ResourceLocation location, Block replacement) {

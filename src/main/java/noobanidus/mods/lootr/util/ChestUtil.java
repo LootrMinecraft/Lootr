@@ -11,12 +11,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.PacketDistributor;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.ILootTile;
 import noobanidus.mods.lootr.blocks.LootrShulkerBlock;
+import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModStats;
@@ -77,6 +82,22 @@ public class ChestUtil {
     }
     TileEntity te = world.getBlockEntity(pos);
     if (te instanceof ILootTile) {
+      UUID tileId = ((ILootTile)te).getTileId();
+      if (DataStorage.isDecayed(tileId)) {
+        world.destroyBlock(pos, true);
+        player.sendMessage(new TranslationTextComponent("lootr.message.decayed").setStyle(Style.EMPTY.withColor(TextFormatting.RED).withBold(true)), Util.NIL_UUID);
+        return false;
+      } else {
+        int decayValue = DataStorage.getDecayValue(tileId);
+        if (decayValue > 0) {
+          player.sendMessage(new TranslationTextComponent("lootr.message.decay_in", decayValue / 20).setStyle(Style.EMPTY.withColor(TextFormatting.RED).withBold(true)), Util.NIL_UUID);
+        } else if (decayValue == -1) {
+          if (ConfigManager.isDecaying(world, (ILootTile)te)) {
+            DataStorage.setDecaying(tileId, ConfigManager.DECAY_VALUE.get());
+            player.sendMessage(new TranslationTextComponent("lootr.message.decay_start", ConfigManager.DECAY_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextFormatting.RED).withBold(true)), Util.NIL_UUID);
+          }
+        }
+      }
       if (block instanceof BarrelBlock) {
         Lootr.BARREL_PREDICATE.trigger((ServerPlayerEntity) player, ((ILootTile)te).getTileId());
       } else if (block instanceof ChestBlock) {
@@ -103,6 +124,22 @@ public class ChestUtil {
       if (player.isSpectator()) {
         player.openMenu(null);
       } else {
+        UUID tileId = cart.getUUID();
+        if (DataStorage.isDecayed(tileId)) {
+          cart.kill();
+          player.sendMessage(new TranslationTextComponent("lootr.message.decayed").setStyle(Style.EMPTY.withColor(TextFormatting.RED).withBold(true)), Util.NIL_UUID);
+          return;
+        } else {
+          int decayValue = DataStorage.getDecayValue(tileId);
+          if (decayValue > 0) {
+            player.sendMessage(new TranslationTextComponent("lootr.message.decay_in", decayValue / 20).setStyle(Style.EMPTY.withColor(TextFormatting.RED).withBold(true)), Util.NIL_UUID);
+          } else if (decayValue == -1) {
+            if (ConfigManager.isDecaying(world, cart)) {
+              DataStorage.setDecaying(tileId, ConfigManager.DECAY_VALUE.get());
+              player.sendMessage(new TranslationTextComponent("lootr.message.decay_start", ConfigManager.DECAY_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextFormatting.RED).withBold(true)), Util.NIL_UUID);
+            }
+          }
+        }
         Lootr.CART_PREDICATE.trigger((ServerPlayerEntity) player, cart.getUUID());
 
         if (!cart.getOpeners().contains(player.getUUID())) {
