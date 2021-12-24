@@ -10,6 +10,7 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
@@ -126,7 +127,7 @@ public class ChestUtil {
       } else {
         UUID tileId = cart.getUUID();
         if (DataStorage.isDecayed(tileId)) {
-          cart.kill();
+          cart.destroy(DamageSource.OUT_OF_WORLD);
           player.sendMessage(new TranslationTextComponent("lootr.message.decayed").setStyle(Style.EMPTY.withColor(TextFormatting.RED).withBold(true)), Util.NIL_UUID);
           return;
         } else {
