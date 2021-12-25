@@ -4,8 +4,8 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.saveddata.SavedData;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.TickEvent;
 
 import java.util.UUID;
@@ -65,7 +65,7 @@ public class DecayingData extends SavedData {
     DecayingData data = new DecayingData();
     data.decayMap.clear();
     data.decayMap.defaultReturnValue(-1);
-    ListTag decayList = pCompound.getList("result", Constants.NBT.TAG_COMPOUND);
+    ListTag decayList = pCompound.getList("result", Tag.TAG_COMPOUND);
     for (int i = 0; i < decayList.size(); i++) {
       CompoundTag thisTag = decayList.getCompound(i);
       data.decayMap.put(thisTag.getUUID("id"), thisTag.getInt("value"));
