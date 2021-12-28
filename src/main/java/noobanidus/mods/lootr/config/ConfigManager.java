@@ -58,6 +58,9 @@ public class ConfigManager {
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DECAY_MODIDS;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DECAY_LOOT_TABLES;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DECAY_DIMENSIONS;
+  public static final ForgeConfigSpec.ConfigValue<List<? extends String>> REPORT_IGNORE_MODS;
+
+  private static Set<String> REPORT_IGNORE = null;
 
   private static Set<String> DECAY_MODS = null;
   private static Set<ResourceLocation> DECAY_TABLES = null;
@@ -79,6 +82,7 @@ public class ConfigManager {
     List<? extends String> empty = Collections.emptyList();
     Predicate<Object> validator = o -> o instanceof String && ((String) o).contains(":");
     REPORT_TABLES = COMMON_BUILDER.comment("catches loot chest creation that this mod cannot convert, reporting the loot table, location and mod").define("report_tables", false);
+    REPORT_IGNORE_MODS = COMMON_BUILDER.comment("when report_tables is true, a list of modids that shouldn't be reported").defineList("report_ignore_modids", empty, (o) -> o instanceof String);
     REPORT_UNRESOLVED_TABLES = COMMON_BUILDER.comment("lootr will automatically log all unresolved tables (i.e., for containers that have a loot table associated with them but, for whatever reason, the lookup for this table returns empty). setting this option to true additionally informs players when they open containers.").define("report_unresolved_tables", false);
     ADDITIONAL_CHESTS = COMMON_BUILDER.comment("a list of additional chests that should be converted [in the format of modid:name, must be a tile entity instance of LockableLootTileEntity]").defineList("additional_chests", empty, validator);
     ADDITIONAL_TRAPPED_CHESTS = COMMON_BUILDER.comment("a list of additional trapped chests that should be converted [in the format of modid:name, must be a tile entity instanceof LockableLootTileEntity]").defineList("additional_trapped_chests", empty, validator);
@@ -112,6 +116,7 @@ public class ConfigManager {
     DECAY_MODS = null;
     DECAY_TABLES = null;
     DECAY_DIMS = null;
+    REPORT_IGNORE = null;
   }
 
   public static Set<RegistryKey<World>> getDimensionWhitelist() {
@@ -168,6 +173,13 @@ public class ConfigManager {
       ADD_TRAPPED_CHESTS = ADDITIONAL_TRAPPED_CHESTS.get().stream().map(ResourceLocation::new).collect(Collectors.toSet());
     }
     return ADD_TRAPPED_CHESTS;
+  }
+
+  public static Set<String> getIgnoreReportMods () {
+    if (REPORT_IGNORE == null) {
+      REPORT_IGNORE = REPORT_IGNORE_MODS.get().stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
+    }
+    return REPORT_IGNORE;
   }
 
   public static boolean isDimensionBlocked(RegistryKey<World> key) {

@@ -58,19 +58,15 @@ public class MixinLockableLootTileEntity {
     }
   }
 
-  private static final ResourceLocation REPURPOSED_END_SHULKER = new ResourceLocation("repurposed_structures", "chests/dungeon/end");
-
   @Inject(method = "setLootTable(Lnet/minecraft/util/ResourceLocation;J)V", at = @At("HEAD"))
   private void setLootTable(ResourceLocation table, long seed, CallbackInfo info) {
     if (this instanceof ILootTile || !ConfigManager.REPORT_TABLES.get()) {
       return;
     }
 
-    Set<String> modids = Sets.newHashSet("apotheosis", "artifacts");
-    if (table != null && modids.contains(table.getNamespace()) || REPURPOSED_END_SHULKER.equals(table)) {
+    if (table != null && ConfigManager.getIgnoreReportMods().contains(table.getNamespace())) {
       return;
     }
-
 
     StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
 
