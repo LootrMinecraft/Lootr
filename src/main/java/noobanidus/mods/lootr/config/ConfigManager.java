@@ -3,26 +3,25 @@ package noobanidus.mods.lootr.config;
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.ChestBlock;
-import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.world.level.block.state.properties.ChestType;
-import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.Registry;
-import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.ChestType;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.server.ServerLifecycleHooks;
@@ -39,7 +38,7 @@ import java.util.stream.Collectors;
 @Mod.EventBusSubscriber(modid = Lootr.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ConfigManager {
   private static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
-  private static final List<ResourceLocation> QUARK_CHESTS = Arrays.asList(new ResourceLocation("quark", "oak_chest"), new ResourceLocation("quark", "spruce_chest"), new ResourceLocation("quark", "birch_chest"), new ResourceLocation("quark", "jungle_chest"), new ResourceLocation("quark", "acacia_chest"), new ResourceLocation("quark", "dark_oak_chest"), new ResourceLocation("quark", "warped_chest"), new ResourceLocation("quark", "crimson_chest")); // Quark normal chests
+  private static final List<ResourceLocation> QUARK_CHESTS = Arrays.asList(new ResourceLocation("quark", "oak_chest"), new ResourceLocation("quark", "spruce_chest"), new ResourceLocation("quark", "birch_chest"), new ResourceLocation("quark", "jungle_chest"), new ResourceLocation("quark", "acacia_chest"), new ResourceLocation("quark", "dark_oak_chest"), new ResourceLocation("quark", "warped_chest"), new ResourceLocation("quark", "crimson_chest"), new ResourceLocation("quark", "nether_brick_chest"), new ResourceLocation("quark", "purpur_chest")); // Quark normal chests
   private static final List<ResourceLocation> QUARK_TRAPPED_CHESTS = Arrays.asList(new ResourceLocation("quark", "oak_trapped_chest"), new ResourceLocation("quark", "spruce_trapped_chest"), new ResourceLocation("quark", "birch_trapped_chest"), new ResourceLocation("quark", "jungle_trapped_chest"), new ResourceLocation("quark", "acacia_trapped_chest"), new ResourceLocation("quark", "dark_oak_trapped_chest"), new ResourceLocation("quark", "warped_trapped_chest"), new ResourceLocation("quark", "crimson_trapped_chest"));
 
   public static ForgeConfigSpec COMMON_CONFIG;
@@ -217,7 +216,7 @@ public class ConfigManager {
   private static void addUnsafeReplacement(ResourceLocation location, Block replacement, ServerLevel world) {
     Block block = ForgeRegistries.BLOCKS.getValue(location);
     if (block instanceof EntityBlock) {
-      BlockEntity tile = ((EntityBlock)block).newBlockEntity(BlockPos.ZERO, block.defaultBlockState());
+      BlockEntity tile = ((EntityBlock) block).newBlockEntity(BlockPos.ZERO, block.defaultBlockState());
       if (tile instanceof RandomizableContainerBlockEntity) {
         replacements.put(block, replacement);
       }
@@ -243,7 +242,7 @@ public class ConfigManager {
               return;
             }
             if (o instanceof EntityBlock) {
-              BlockEntity tile = ((EntityBlock)o).newBlockEntity(BlockPos.ZERO, o.defaultBlockState());
+              BlockEntity tile = ((EntityBlock) o).newBlockEntity(BlockPos.ZERO, o.defaultBlockState());
               if (tile instanceof RandomizableContainerBlockEntity) {
                 replacements.put(o, ModBlocks.CHEST);
               }
@@ -256,7 +255,7 @@ public class ConfigManager {
               return;
             }
             if (o instanceof EntityBlock) {
-              BlockEntity tile = ((EntityBlock)o).newBlockEntity(BlockPos.ZERO, o.defaultBlockState());
+              BlockEntity tile = ((EntityBlock) o).newBlockEntity(BlockPos.ZERO, o.defaultBlockState());
               if (tile instanceof RandomizableContainerBlockEntity) {
                 replacements.put(o, ModBlocks.CHEST);
               }
