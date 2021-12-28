@@ -34,6 +34,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.network.NetworkHooks;
+import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.ILootCart;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlocks;
@@ -206,6 +207,12 @@ public class LootrChestMinecartEntity extends ContainerMinecartEntity implements
   public void addLoot(@Nullable PlayerEntity player, IInventory inventory, @Nullable ResourceLocation overrideTable, long seed) {
     if (this.lootTable != null && this.level.getServer() != null) {
       LootTable loottable = this.level.getServer().getLootTables().get(overrideTable != null ? overrideTable : this.lootTable);
+      if (loottable == LootTable.EMPTY) {
+        Lootr.LOG.error("Unable to fill loot cart in " + level.dimension() + " at " + position() + " as the loot table '" + (overrideTable != null ? overrideTable : this.lootTable) + "' couldn't be resolved! Please search the loot table in `latest.log` to see if there are errors in loading.");
+        if (ConfigManager.REPORT_UNRESOLVED_TABLES.get() && player != null) {
+          player.sendMessage(new TranslationTextComponent("lootr.message.invalid_table", (overrideTable != null ? overrideTable : this.lootTable).toString()).setStyle(Style.EMPTY.withColor(TextFormatting.DARK_RED).withBold(true)), Util.NIL_UUID);
+        }
+      }
       if (player instanceof ServerPlayerEntity) {
         CriteriaTriggers.GENERATE_LOOT.trigger((ServerPlayerEntity) player, overrideTable != null ? overrideTable : this.lootTable);
       }
