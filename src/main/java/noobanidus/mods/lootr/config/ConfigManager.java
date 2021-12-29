@@ -175,7 +175,7 @@ public class ConfigManager {
     return ADD_TRAPPED_CHESTS;
   }
 
-  public static Set<String> getIgnoreReportMods () {
+  public static Set<String> getIgnoreReportMods() {
     if (REPORT_IGNORE == null) {
       REPORT_IGNORE = REPORT_IGNORE_MODS.get().stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
     }
@@ -260,6 +260,17 @@ public class ConfigManager {
         }
         if (CONVERT_TRAPPED_CHESTS.get()) {
           Tags.Blocks.CHESTS_TRAPPED.getValues().forEach(o -> {
+            if (replacements.containsKey(o)) {
+              return;
+            }
+            TileEntity tile = o.createTileEntity(o.defaultBlockState(), world);
+            if (tile instanceof LockableLootTileEntity) {
+              replacements.put(o, ModBlocks.TRAPPED_CHEST);
+            }
+          });
+        }
+        if (CONVERT_WOODEN_CHESTS.get()) {
+          Tags.Blocks.CHESTS.getValues().forEach(o -> {
             if (replacements.containsKey(o)) {
               return;
             }
