@@ -6,7 +6,7 @@ import net.minecraft.entity.ai.goal.CatSitOnBlockGoal;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
 import noobanidus.mods.lootr.init.ModBlocks;
-import noobanidus.mods.lootr.tiles.SpecialLootChestTile;
+import noobanidus.mods.lootr.tiles.LootrChestTileEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -23,7 +23,7 @@ public class MixinCatSitOnBlockGoal {
 
   @Inject(method = "isValidTarget", at = @At(target = "Lnet/minecraft/tileentity/ChestTileEntity;getOpenCount(Lnet/minecraft/world/IBlockReader;Lnet/minecraft/util/math/BlockPos;)I", value = "INVOKE"), cancellable = true)
   protected void playersUsing(IWorldReader reader, BlockPos pos, CallbackInfoReturnable<Boolean> info) {
-    if (SpecialLootChestTile.getPlayersUsing(reader, pos) < 1) {
+    if (LootrChestTileEntity.getPlayersUsing(reader, pos) < 1) {
       info.setReturnValue(true);
       info.cancel();
     }

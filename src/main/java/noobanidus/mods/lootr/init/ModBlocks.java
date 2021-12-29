@@ -7,10 +7,13 @@ import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.blocks.*;
-import noobanidus.mods.lootr.tiles.SpecialLootShulkerTile;
+import noobanidus.mods.lootr.tiles.LootrShulkerTileEntity;
 
+@Mod.EventBusSubscriber(modid=Lootr.MODID, bus= Mod.EventBusSubscriber.Bus.MOD)
 public class ModBlocks {
   public static LootrBarrelBlock BARREL = new LootrBarrelBlock(Block.Properties.of(Material.WOOD).strength(2.5F).sound(SoundType.WOOD));
 
@@ -22,10 +25,10 @@ public class ModBlocks {
 
   private static final AbstractBlock.IPositionPredicate posPredicate = (state, level, pos) -> {
     TileEntity tileentity = level.getBlockEntity(pos);
-    if (!(tileentity instanceof SpecialLootShulkerTile)) {
+    if (!(tileentity instanceof LootrShulkerTileEntity)) {
       return true;
     } else {
-      SpecialLootShulkerTile shulkerboxtileentity = (SpecialLootShulkerTile) tileentity;
+      LootrShulkerTileEntity shulkerboxtileentity = (LootrShulkerTileEntity) tileentity;
       return shulkerboxtileentity.isClosed();
     }
   };
@@ -43,6 +46,7 @@ public class ModBlocks {
     TROPHY.setRegistryName(Lootr.MODID, "trophy");
   }
 
+  @SubscribeEvent
   public static void registerBlocks(RegistryEvent.Register<Block> event) {
     event.getRegistry().registerAll(BARREL, CHEST, TRAPPED_CHEST, INVENTORY, SHULKER, TROPHY);
   }

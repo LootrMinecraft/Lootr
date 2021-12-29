@@ -9,14 +9,19 @@ import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlocks;
 
 import java.util.Set;
 
+@Mod.EventBusSubscriber(modid= Lootr.MODID)
 public class HandleBreak {
   public static Set<Block> specialLootChests = Sets.newHashSet(ModBlocks.CHEST, ModBlocks.BARREL, ModBlocks.TRAPPED_CHEST, ModBlocks.SHULKER, ModBlocks.INVENTORY);
 
+  @SubscribeEvent
   public static void onBlockBreak(BlockEvent.BreakEvent event) {
     PlayerEntity player = event.getPlayer();
 

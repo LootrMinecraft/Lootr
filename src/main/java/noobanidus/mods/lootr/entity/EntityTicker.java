@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.ticker;
+package noobanidus.mods.lootr.entity;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;

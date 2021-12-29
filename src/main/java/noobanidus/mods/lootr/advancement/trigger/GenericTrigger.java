@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.advancement;
+package noobanidus.mods.lootr.advancement.trigger;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -11,6 +11,7 @@ import net.minecraft.advancements.criterion.EntityPredicate;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.loot.ConditionArrayParser;
 import net.minecraft.util.ResourceLocation;
+import noobanidus.mods.lootr.api.IGenericPredicate;
 
 import javax.annotation.Nonnull;
 import java.util.List;

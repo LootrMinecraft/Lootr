@@ -18,14 +18,14 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
-import noobanidus.mods.lootr.api.ILootTile;
+import noobanidus.mods.lootr.api.tile.ILootTile;
 import noobanidus.mods.lootr.api.LootFiller;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
 import javax.annotation.Nullable;
 import java.util.*;
 
-public class NewChestData extends WorldSavedData {
+public class ChestData extends WorldSavedData {
   private BlockPos pos;
   private RegistryKey<World> dimension;
   private UUID entityId;
@@ -55,7 +55,7 @@ public class NewChestData extends WorldSavedData {
     return "Lootr-entity-" + entityId.toString();
   }
 
-  public NewChestData(RegistryKey<World> dimension, UUID id, @Nullable UUID customId, @Nullable NonNullList<ItemStack> base) {
+  public ChestData(RegistryKey<World> dimension, UUID id, @Nullable UUID customId, @Nullable NonNullList<ItemStack> base) {
     super(REF_ID(dimension, id));
     this.pos = null;
     this.dimension = dimension;
@@ -69,7 +69,7 @@ public class NewChestData extends WorldSavedData {
     }
   }
 
-  public NewChestData(RegistryKey<World> dimension, UUID id) {
+  public ChestData(RegistryKey<World> dimension, UUID id) {
     super(ID(dimension, id));
     this.pos = null;
     this.dimension = dimension;
@@ -80,7 +80,7 @@ public class NewChestData extends WorldSavedData {
     this.customId = null;
   }
 
-  public NewChestData(RegistryKey<World> dimension, BlockPos pos) {
+  public ChestData(RegistryKey<World> dimension, BlockPos pos) {
     super(OLD_ID(dimension, pos));
     this.pos = pos;
     this.dimension = dimension;
@@ -91,7 +91,7 @@ public class NewChestData extends WorldSavedData {
     this.customId = null;
   }
 
-  public NewChestData(UUID entityId) {
+  public ChestData(UUID entityId) {
     super(ENTITY(entityId));
     this.pos = null;
     this.dimension = null;

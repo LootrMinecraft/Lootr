@@ -7,7 +7,7 @@ import net.minecraft.loot.conditions.ILootCondition;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
-import noobanidus.mods.lootr.api.ILootTile;
+import noobanidus.mods.lootr.api.tile.ILootTile;
 import noobanidus.mods.lootr.init.ModLoot;
 
 import javax.annotation.Nullable;

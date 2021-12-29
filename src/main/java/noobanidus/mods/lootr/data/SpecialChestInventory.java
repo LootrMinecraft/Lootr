@@ -15,30 +15,30 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import noobanidus.mods.lootr.api.ILootTile;
-import noobanidus.mods.lootr.api.ILootrInventory;
+import noobanidus.mods.lootr.api.tile.ILootTile;
+import noobanidus.mods.lootr.api.inventory.ILootrInventory;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
 import javax.annotation.Nullable;
 
 @SuppressWarnings("NullableProblems")
 public class SpecialChestInventory implements ILootrInventory {
-  private NewChestData newChestData;
+  private final ChestData chestData;
   private final NonNullList<ItemStack> contents;
   private final ITextComponent name;
 
   @Nullable
   private BlockPos pos;
 
-  public SpecialChestInventory(NewChestData newChestData, NonNullList<ItemStack> contents, ITextComponent name, @Nullable BlockPos pos) {
-    this.newChestData = newChestData;
+  public SpecialChestInventory(ChestData chestData, NonNullList<ItemStack> contents, ITextComponent name, @Nullable BlockPos pos) {
+    this.chestData = chestData;
     this.contents = contents;
     this.name = name;
     this.pos = pos;
   }
 
-  public SpecialChestInventory(NewChestData newChestData, CompoundNBT items, String componentAsJSON, BlockPos pos) {
-    this.newChestData = newChestData;
+  public SpecialChestInventory(ChestData chestData, CompoundNBT items, String componentAsJSON, BlockPos pos) {
+    this.chestData = chestData;
     this.name = ITextComponent.Serializer.fromJson(componentAsJSON);
     this.contents = NonNullList.withSize(27, ItemStack.EMPTY);
     ItemStackHelper.loadAllItems(items, this.contents);
@@ -67,7 +67,7 @@ public class SpecialChestInventory implements ILootrInventory {
   @Override
   @Nullable
   public LootrChestMinecartEntity getEntity(World world) {
-    if (world == null || world.isClientSide() || newChestData.getEntityId() == null) {
+    if (world == null || world.isClientSide() || chestData.getEntityId() == null) {
       return null;
     }
 
@@ -76,7 +76,7 @@ public class SpecialChestInventory implements ILootrInventory {
     }
 
     ServerWorld serverWorld = (ServerWorld) world;
-    Entity entity = serverWorld.getEntity(newChestData.getEntityId());
+    Entity entity = serverWorld.getEntity(chestData.getEntityId());
     if (entity instanceof LootrChestMinecartEntity) {
       return (LootrChestMinecartEntity) entity;
     }
@@ -138,7 +138,7 @@ public class SpecialChestInventory implements ILootrInventory {
 
   @Override
   public void setChanged() {
-    newChestData.setDirty();
+    chestData.setDirty();
   }
 
   @Override
@@ -170,7 +170,7 @@ public class SpecialChestInventory implements ILootrInventory {
     if (tile != null) {
       tile.startOpen(player);
     }
-    if (newChestData.getEntityId() != null) {
+    if (chestData.getEntityId() != null) {
       LootrChestMinecartEntity entity = getEntity(world);
       if (entity != null) {
         entity.startOpen(player);
@@ -188,7 +188,7 @@ public class SpecialChestInventory implements ILootrInventory {
         tile.stopOpen(player);
       }
     }
-    if (newChestData.getEntityId() != null) {
+    if (chestData.getEntityId() != null) {
       LootrChestMinecartEntity entity = getEntity(world);
       if (entity != null) {
         entity.stopOpen(player);

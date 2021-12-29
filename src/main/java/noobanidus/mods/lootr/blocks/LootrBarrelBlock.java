@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.client.model.data.ModelProperty;
 import noobanidus.mods.lootr.data.DataStorage;
-import noobanidus.mods.lootr.tiles.SpecialLootBarrelTile;
+import noobanidus.mods.lootr.tiles.LootrBarrelTileEntity;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;
@@ -47,14 +47,14 @@ public class LootrBarrelBlock extends BarrelBlock {
   @Nullable
   @Override
   public TileEntity newBlockEntity(IBlockReader p_196283_1_) {
-    return new SpecialLootBarrelTile();
+    return new LootrBarrelTileEntity();
   }
 
   @Override
   public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
     TileEntity te = world.getBlockEntity(pos);
-    if (te instanceof SpecialLootBarrelTile) {
-      ((SpecialLootBarrelTile) te).recheckOpen();
+    if (te instanceof LootrBarrelTileEntity) {
+      ((LootrBarrelTileEntity) te).recheckOpen();
     }
   }
 

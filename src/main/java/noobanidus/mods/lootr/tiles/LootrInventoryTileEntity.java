@@ -14,11 +14,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 @SuppressWarnings({"Duplicates", "ConstantConditions", "NullableProblems", "WeakerAccess"})
-public class SpecialLootInventoryTile extends SpecialLootChestTile {
+public class LootrInventoryTileEntity extends LootrChestTileEntity {
   private NonNullList<ItemStack> customInventory;
 
-  public SpecialLootInventoryTile() {
-    super(ModTiles.SPECIAL_LOOT_INVENTORY);
+  public LootrInventoryTileEntity() {
+    super(ModTiles.LOOT_INVENTORY);
   }
 
   @Override

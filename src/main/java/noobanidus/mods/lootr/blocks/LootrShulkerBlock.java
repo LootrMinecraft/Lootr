@@ -26,7 +26,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.init.ModItems;
-import noobanidus.mods.lootr.tiles.SpecialLootShulkerTile;
+import noobanidus.mods.lootr.tiles.LootrShulkerTileEntity;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;
@@ -42,7 +42,7 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
 
   @Override
   public TileEntity newBlockEntity(IBlockReader p_196283_1_) {
-    return new SpecialLootShulkerTile();
+    return new LootrShulkerTileEntity();
   }
 
   @Override
@@ -53,8 +53,8 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
       return ActionResultType.CONSUME;
     } else {
       TileEntity tileentity = pLevel.getBlockEntity(pPos);
-      if (tileentity instanceof SpecialLootShulkerTile) {
-        SpecialLootShulkerTile shulkerboxtileentity = (SpecialLootShulkerTile) tileentity;
+      if (tileentity instanceof LootrShulkerTileEntity) {
+        LootrShulkerTileEntity shulkerboxtileentity = (LootrShulkerTileEntity) tileentity;
         boolean flag;
         if (shulkerboxtileentity.getAnimationStatus() == ShulkerBoxTileEntity.AnimationStatus.CLOSED) {
           Direction direction = pState.getValue(FACING);
@@ -116,7 +116,7 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
 
     if (!pState.is(pNewState.getBlock())) {
       TileEntity tileentity = pLevel.getBlockEntity(pPos);
-      if (tileentity instanceof SpecialLootShulkerTile) {
+      if (tileentity instanceof LootrShulkerTileEntity) {
         pLevel.updateNeighbourForOutputSignal(pPos, pState.getBlock());
       }
 
@@ -134,7 +134,7 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
   @Override
   public VoxelShape getShape(BlockState pState, IBlockReader pLevel, BlockPos pPos, ISelectionContext pContext) {
     TileEntity tileentity = pLevel.getBlockEntity(pPos);
-    return tileentity instanceof SpecialLootShulkerTile ? VoxelShapes.create(((SpecialLootShulkerTile) tileentity).getBoundingBox(pState)) : VoxelShapes.block();
+    return tileentity instanceof LootrShulkerTileEntity ? VoxelShapes.create(((LootrShulkerTileEntity) tileentity).getBoundingBox(pState)) : VoxelShapes.block();
   }
 
   @Override

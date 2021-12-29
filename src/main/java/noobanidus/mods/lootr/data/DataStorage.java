@@ -107,23 +107,23 @@ public class DataStorage {
     return ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD);
   }
 
-  public static NewChestData getInstancePos(ServerWorld world, BlockPos pos) {
+  public static ChestData getInstancePos(ServerWorld world, BlockPos pos) {
     RegistryKey<World> dimension = world.dimension();
-    return getServerWorld().getDataStorage().get(() -> new NewChestData(dimension, pos), NewChestData.OLD_ID(dimension, pos));
+    return getServerWorld().getDataStorage().get(() -> new ChestData(dimension, pos), ChestData.OLD_ID(dimension, pos));
   }
 
-  public static NewChestData getInstanceUuid(ServerWorld world, UUID id) {
+  public static ChestData getInstanceUuid(ServerWorld world, UUID id) {
     RegistryKey<World> dimension = world.dimension();
-    return getServerWorld().getDataStorage().computeIfAbsent(() -> new NewChestData(dimension, id), NewChestData.ID(dimension, id));
+    return getServerWorld().getDataStorage().computeIfAbsent(() -> new ChestData(dimension, id), ChestData.ID(dimension, id));
   }
 
-  public static NewChestData getInstance(ServerWorld world, UUID id) {
-    return getServerWorld().getDataStorage().computeIfAbsent(() -> new NewChestData(id), NewChestData.ENTITY(id));
+  public static ChestData getInstance(ServerWorld world, UUID id) {
+    return getServerWorld().getDataStorage().computeIfAbsent(() -> new ChestData(id), ChestData.ENTITY(id));
   }
 
-  public static NewChestData getInstanceInventory(ServerWorld world, UUID id, @Nullable UUID customId, @Nullable NonNullList<ItemStack> base) {
+  public static ChestData getInstanceInventory(ServerWorld world, UUID id, @Nullable UUID customId, @Nullable NonNullList<ItemStack> base) {
     RegistryKey<World> dimension = world.dimension();
-    return getServerWorld().getDataStorage().computeIfAbsent(() -> new NewChestData(dimension, id, customId, base), NewChestData.REF_ID(dimension, id));
+    return getServerWorld().getDataStorage().computeIfAbsent(() -> new ChestData(dimension, id, customId, base), ChestData.REF_ID(dimension, id));
   }
 
   @Nullable
@@ -132,8 +132,8 @@ public class DataStorage {
       return null;
     }
 
-    NewChestData data = getInstanceUuid((ServerWorld) world, uuid);
-    NewChestData oldData = getInstancePos((ServerWorld) world, pos);
+    ChestData data = getInstanceUuid((ServerWorld) world, uuid);
+    ChestData oldData = getInstancePos((ServerWorld) world, pos);
     if (oldData != null) {
       Map<UUID, SpecialChestInventory> inventories = data.getInventories();
       inventories.putAll(oldData.getInventories());
@@ -155,7 +155,7 @@ public class DataStorage {
     if (world.isClientSide || !(world instanceof ServerWorld)) {
       return null;
     }
-    NewChestData data = getInstanceInventory((ServerWorld) world, uuid, null, base);
+    ChestData data = getInstanceInventory((ServerWorld) world, uuid, null, base);
     SpecialChestInventory inventory = data.getInventory(player, pos);
     if (inventory == null) {
       inventory = data.createInventory(player, data.customInventory(), tile);
@@ -190,7 +190,7 @@ public class DataStorage {
 
     int cleared = 0;
     for (String id : ids) {
-      NewChestData chestData = data.get(() -> null, id);
+      ChestData chestData = data.get(() -> null, id);
       if (chestData != null) {
         if (chestData.clearInventory(uuid)) {
           cleared++;
@@ -209,7 +209,7 @@ public class DataStorage {
       return null;
     }
 
-    NewChestData data = getInstance((ServerWorld) world, cart.getUUID());
+    ChestData data = getInstance((ServerWorld) world, cart.getUUID());
     SpecialChestInventory inventory = data.getInventory(player, null);
     if (inventory == null) {
       inventory = data.createInventory(player, filler, null);
@@ -222,11 +222,11 @@ public class DataStorage {
     ServerWorld serverWorld = getServerWorld();
     RegistryKey<World> dimension = world.dimension();
     DimensionSavedDataManager manager = serverWorld.getDataStorage();
-    String id = NewChestData.OLD_ID(dimension, pos);
+    String id = ChestData.OLD_ID(dimension, pos);
     if (!manager.cache.containsKey(id)) {
       return;
     }
-    NewChestData data = manager.get(() -> null, id);
+    ChestData data = manager.get(() -> null, id);
     if (data != null) {
       data.clear();
       data.setDirty();

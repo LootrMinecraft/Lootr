@@ -29,14 +29,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
-import noobanidus.mods.lootr.api.ILootTile;
+import noobanidus.mods.lootr.api.tile.ILootTile;
 import noobanidus.mods.lootr.blocks.LootrBarrelBlock;
 import noobanidus.mods.lootr.blocks.LootrChestBlock;
 import noobanidus.mods.lootr.blocks.LootrShulkerBlock;
 import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModBlocks;
-import noobanidus.mods.lootr.tiles.SpecialLootInventoryTile;
+import noobanidus.mods.lootr.tiles.LootrInventoryTileEntity;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;
@@ -186,10 +186,10 @@ public class CommandLootr {
         world.removeBlockEntity(pos);
         world.setBlockAndUpdate(pos, ModBlocks.INVENTORY.defaultBlockState().setValue(ChestBlock.FACING, state.getValue(ChestBlock.FACING)).setValue(ChestBlock.WATERLOGGED, state.getValue(ChestBlock.WATERLOGGED)));
         TileEntity te = world.getBlockEntity(pos);
-        if (!(te instanceof SpecialLootInventoryTile)) {
+        if (!(te instanceof LootrInventoryTileEntity)) {
           c.getSource().sendSuccess(new StringTextComponent("Unable to convert chest, BlockState is not a Lootr Inventory block."), false);
         } else {
-          SpecialLootInventoryTile inventory = (SpecialLootInventoryTile) te;
+          LootrInventoryTileEntity inventory = (LootrInventoryTileEntity) te;
           inventory.setCustomInventory(custom);
           inventory.setChanged();
         }

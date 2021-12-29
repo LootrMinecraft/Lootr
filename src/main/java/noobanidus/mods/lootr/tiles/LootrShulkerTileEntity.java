@@ -43,7 +43,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 import noobanidus.mods.lootr.Lootr;
-import noobanidus.mods.lootr.api.ILootTile;
+import noobanidus.mods.lootr.api.tile.ILootTile;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.init.ModTiles;
@@ -56,7 +56,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class SpecialLootShulkerTile extends LockableLootTileEntity implements ILootTile, ITickableTileEntity {
+public class LootrShulkerTileEntity extends LockableLootTileEntity implements ILootTile, ITickableTileEntity {
   public Set<UUID> openers = new HashSet<>();
   private NonNullList<ItemStack> itemStacks = NonNullList.withSize(27, ItemStack.EMPTY);
   private int openCount;
@@ -68,8 +68,8 @@ public class SpecialLootShulkerTile extends LockableLootTileEntity implements IL
   private UUID tileId = null;
   private boolean opened;
 
-  public SpecialLootShulkerTile() {
-    super(ModTiles.SPECIAL_LOOT_SHULKER);
+  public LootrShulkerTileEntity() {
+    super(ModTiles.LOOK_SHULKER);
   }
 
   @Override
@@ -360,11 +360,6 @@ public class SpecialLootShulkerTile extends LockableLootTileEntity implements IL
   @Override
   public ResourceLocation getTable() {
     return savedLootTable;
-  }
-
-  @Override
-  public long getSeed() {
-    return seed;
   }
 
   @Override

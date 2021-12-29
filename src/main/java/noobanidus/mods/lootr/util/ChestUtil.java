@@ -20,7 +20,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.PacketDistributor;
 import noobanidus.mods.lootr.Lootr;
-import noobanidus.mods.lootr.api.ILootTile;
+import noobanidus.mods.lootr.api.tile.ILootTile;
 import noobanidus.mods.lootr.blocks.LootrShulkerBlock;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.data.DataStorage;
@@ -28,7 +28,7 @@ import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModStats;
 import noobanidus.mods.lootr.networking.CloseCart;
 import noobanidus.mods.lootr.networking.PacketHandler;
-import noobanidus.mods.lootr.tiles.SpecialLootInventoryTile;
+import noobanidus.mods.lootr.tiles.LootrInventoryTileEntity;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -166,9 +166,9 @@ public class ChestUtil {
       return false;
     }
     TileEntity te = world.getBlockEntity(pos);
-    if (te instanceof SpecialLootInventoryTile) {
-      Lootr.CHEST_PREDICATE.trigger((ServerPlayerEntity) player, ((SpecialLootInventoryTile)te).getTileId());
-      SpecialLootInventoryTile tile = (SpecialLootInventoryTile) te;
+    if (te instanceof LootrInventoryTileEntity) {
+      Lootr.CHEST_PREDICATE.trigger((ServerPlayerEntity) player, ((LootrInventoryTileEntity)te).getTileId());
+      LootrInventoryTileEntity tile = (LootrInventoryTileEntity) te;
       NonNullList<ItemStack> stacks = null;
       if (tile.getCustomInventory() != null) {
         stacks = copyItemList(tile.getCustomInventory());

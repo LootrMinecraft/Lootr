@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.api;
+package noobanidus.mods.lootr.api.tile;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
@@ -11,8 +11,6 @@ public interface ILootTile {
   void fillWithLoot(PlayerEntity player, IInventory inventory, ResourceLocation table, long seed);
 
   ResourceLocation getTable();
-
-  long getSeed();
 
   Set<UUID> getOpeners();
 

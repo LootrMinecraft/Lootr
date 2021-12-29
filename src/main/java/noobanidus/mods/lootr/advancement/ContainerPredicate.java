@@ -2,6 +2,7 @@ package noobanidus.mods.lootr.advancement;
 
 import com.google.gson.JsonObject;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import noobanidus.mods.lootr.api.IGenericPredicate;
 import noobanidus.mods.lootr.data.DataStorage;
 
 import javax.annotation.Nullable;

@@ -24,7 +24,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.init.ModTiles;
-import noobanidus.mods.lootr.tiles.SpecialLootChestTile;
+import noobanidus.mods.lootr.tiles.LootrChestTileEntity;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;
@@ -33,7 +33,7 @@ import java.util.function.Supplier;
 @SuppressWarnings("NullableProblems")
 public class LootrChestBlock extends ChestBlock {
   public LootrChestBlock(Properties properties) {
-    this(properties, () -> ModTiles.SPECIAL_LOOT_CHEST);
+    this(properties, () -> ModTiles.LOOT_CHEST);
   }
 
   public LootrChestBlock(Properties builder, Supplier<TileEntityType<? extends ChestTileEntity>> tileEntityTypeIn) {
@@ -65,13 +65,13 @@ public class LootrChestBlock extends ChestBlock {
 
   @Override
   public TileEntity newBlockEntity(IBlockReader p_196283_1_) {
-    return new SpecialLootChestTile();
+    return new LootrChestTileEntity();
   }
 
   @Nullable
   @Override
   public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-    return new SpecialLootChestTile();
+    return new LootrChestTileEntity();
   }
 
   @Override

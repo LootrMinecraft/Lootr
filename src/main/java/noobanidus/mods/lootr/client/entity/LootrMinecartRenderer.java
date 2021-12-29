@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.client;
+package noobanidus.mods.lootr.client.entity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
@@ -13,11 +13,11 @@ import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
-import noobanidus.mods.lootr.tiles.SpecialLootChestTile;
+import noobanidus.mods.lootr.tiles.LootrChestTileEntity;
 
 @OnlyIn(Dist.CLIENT)
 public class LootrMinecartRenderer extends MinecartRenderer<LootrChestMinecartEntity> {
-  private final SpecialLootChestTile tile = new SpecialLootChestTile();
+  private final LootrChestTileEntity tile = new LootrChestTileEntity();
 
   public LootrMinecartRenderer(EntityRendererManager renderManagerIn) {
     super(renderManagerIn);

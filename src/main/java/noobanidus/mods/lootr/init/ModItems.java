@@ -4,11 +4,13 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.Rarity;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import noobanidus.mods.lootr.Lootr;
-import noobanidus.mods.lootr.client.SpecialLootChestItemRenderer;
-import noobanidus.mods.lootr.client.SpecialLootShulkerItemRenderer;
-import noobanidus.mods.lootr.client.SpecialLootShulkerTileRenderer;
+import noobanidus.mods.lootr.client.item.SpecialLootChestItemRenderer;
+import noobanidus.mods.lootr.client.item.SpecialLootShulkerItemRenderer;
 
+@Mod.EventBusSubscriber(modid=Lootr.MODID)
 public class ModItems {
   public static BlockItem CHEST = new BlockItem(ModBlocks.CHEST, new BlockItem.Properties().setISTER(() -> SpecialLootChestItemRenderer::new));
   public static BlockItem TRAPPED_CHEST = new BlockItem(ModBlocks.TRAPPED_CHEST, new BlockItem.Properties().setISTER(() -> SpecialLootChestItemRenderer::new));
@@ -27,6 +29,7 @@ public class ModItems {
     TROPHY.setRegistryName(Lootr.MODID, "trophy");
   }
 
+  @SubscribeEvent
   public static void registerItems(RegistryEvent.Register<Item> event) {
     event.getRegistry().registerAll(CHEST, TRAPPED_CHEST, BARREL, INVENTORY, SHULKER, TROPHY);
   }

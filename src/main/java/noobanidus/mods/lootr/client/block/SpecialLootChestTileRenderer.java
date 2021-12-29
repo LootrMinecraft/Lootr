@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.client;
+package noobanidus.mods.lootr.client.block;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.RenderMaterial;
@@ -8,13 +8,13 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.state.properties.ChestType;
 import net.minecraft.util.ResourceLocation;
 import noobanidus.mods.lootr.Lootr;
-import noobanidus.mods.lootr.api.ILootTile;
-import noobanidus.mods.lootr.tiles.SpecialLootChestTile;
+import noobanidus.mods.lootr.api.tile.ILootTile;
+import noobanidus.mods.lootr.tiles.LootrChestTileEntity;
 
 import java.util.UUID;
 
 @SuppressWarnings({"NullableProblems", "deprecation"})
-public class SpecialLootChestTileRenderer<T extends SpecialLootChestTile & ILootTile> extends ChestTileEntityRenderer<T> {
+public class SpecialLootChestTileRenderer<T extends LootrChestTileEntity & ILootTile> extends ChestTileEntityRenderer<T> {
   private UUID playerId = null;
   public static final RenderMaterial MATERIAL = new RenderMaterial(AtlasTexture.LOCATION_BLOCKS, new ResourceLocation(Lootr.MODID, "chest"));
   public static final RenderMaterial MATERIAL2 = new RenderMaterial(AtlasTexture.LOCATION_BLOCKS, new ResourceLocation(Lootr.MODID, "chest_opened"));

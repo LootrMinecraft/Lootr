@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.client;
+package noobanidus.mods.lootr.client.block;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
@@ -16,11 +16,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.blocks.LootrShulkerBlock;
-import noobanidus.mods.lootr.tiles.SpecialLootShulkerTile;
+import noobanidus.mods.lootr.tiles.LootrShulkerTileEntity;
 
 import java.util.UUID;
 
-public class SpecialLootShulkerTileRenderer extends TileEntityRenderer<SpecialLootShulkerTile> {
+public class SpecialLootShulkerTileRenderer extends TileEntityRenderer<LootrShulkerTileEntity> {
   public static final RenderMaterial MATERIAL = new RenderMaterial(AtlasTexture.LOCATION_BLOCKS, new ResourceLocation(Lootr.MODID, "shulker"));
   public static final RenderMaterial MATERIAL2 = new RenderMaterial(AtlasTexture.LOCATION_BLOCKS, new ResourceLocation(Lootr.MODID, "shulker_opened"));
   private final ShulkerModel<?> model = new ShulkerModel<>();
@@ -30,7 +30,7 @@ public class SpecialLootShulkerTileRenderer extends TileEntityRenderer<SpecialLo
     super(p_i226013_2_);
   }
 
-  protected RenderMaterial getMaterial(SpecialLootShulkerTile tile) {
+  protected RenderMaterial getMaterial(LootrShulkerTileEntity tile) {
     if (playerId == null) {
       Minecraft mc = Minecraft.getInstance();
       if (mc.player == null) {
@@ -50,7 +50,7 @@ public class SpecialLootShulkerTileRenderer extends TileEntityRenderer<SpecialLo
   }
 
   @Override
-  public void render(SpecialLootShulkerTile pBlockEntity, float pPartialTicks, MatrixStack pMatrixStack, IRenderTypeBuffer pBuffer, int pCombinedLight, int pCombinedOverlay) {
+  public void render(LootrShulkerTileEntity pBlockEntity, float pPartialTicks, MatrixStack pMatrixStack, IRenderTypeBuffer pBuffer, int pCombinedLight, int pCombinedOverlay) {
     Direction direction = Direction.UP;
     if (pBlockEntity.hasLevel()) {
       BlockState blockstate = pBlockEntity.getLevel().getBlockState(pBlockEntity.getBlockPos());

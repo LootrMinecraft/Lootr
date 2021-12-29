@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.api;
+package noobanidus.mods.lootr.api.inventory;
 
 import net.minecraft.entity.item.minecart.ContainerMinecartEntity;
 import net.minecraft.inventory.IInventory;

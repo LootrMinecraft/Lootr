@@ -20,8 +20,8 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import noobanidus.mods.lootr.data.DataStorage;
-import noobanidus.mods.lootr.tiles.SpecialLootChestTile;
-import noobanidus.mods.lootr.tiles.SpecialTrappedLootChestTile;
+import noobanidus.mods.lootr.tiles.LootrChestTileEntity;
+import noobanidus.mods.lootr.tiles.TrappedLootrChestTileEntity;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;
@@ -34,7 +34,7 @@ public class LootrTrappedChestBlock extends TrappedChestBlock {
 
   @Override
   public TileEntity newBlockEntity(IBlockReader p_196283_1_) {
-    return new SpecialTrappedLootChestTile();
+    return new TrappedLootrChestTileEntity();
   }
 
   @Override
@@ -83,6 +83,6 @@ public class LootrTrappedChestBlock extends TrappedChestBlock {
   @SuppressWarnings("deprecation")
   @Override
   public int getSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
-    return MathHelper.clamp(SpecialLootChestTile.getPlayersUsing(blockAccess, pos), 0, 15);
+    return MathHelper.clamp(LootrChestTileEntity.getPlayersUsing(blockAccess, pos), 0, 15);
   }
 }
