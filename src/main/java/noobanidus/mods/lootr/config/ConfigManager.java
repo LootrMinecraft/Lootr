@@ -270,8 +270,9 @@ public class ConfigManager {
           });
         }
         if (CONVERT_WOODEN_CHESTS.get()) {
+          Set<Block> enderChests = new HashSet<>(Tags.Blocks.CHESTS_ENDER.getValues());
           Tags.Blocks.CHESTS.getValues().forEach(o -> {
-            if (replacements.containsKey(o)) {
+            if (replacements.containsKey(o) || enderChests.contains(o)) {
               return;
             }
             TileEntity tile = o.createTileEntity(o.defaultBlockState(), world);
