@@ -127,9 +127,11 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     super.setLootTable(lootTableIn, seedIn);
   }
 
+  private NonNullList<ItemStack> items = NonNullList.withSize(27, ItemStack.EMPTY);
+
   @Override
   protected NonNullList<ItemStack> getItems() {
-    return null;
+    return items;
   }
 
   @Override
