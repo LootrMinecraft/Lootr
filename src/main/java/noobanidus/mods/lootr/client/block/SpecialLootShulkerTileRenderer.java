@@ -15,8 +15,8 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 import noobanidus.mods.lootr.Lootr;
-import noobanidus.mods.lootr.blocks.LootrShulkerBlock;
-import noobanidus.mods.lootr.tiles.LootrShulkerTileEntity;
+import noobanidus.mods.lootr.block.LootrShulkerBlock;
+import noobanidus.mods.lootr.block.tile.LootrShulkerTileEntity;
 
 import java.util.UUID;
 

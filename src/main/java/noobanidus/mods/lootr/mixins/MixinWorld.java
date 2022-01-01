@@ -4,7 +4,7 @@ import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import noobanidus.mods.lootr.api.tile.ILootTile;
-import noobanidus.mods.lootr.tiles.TileTicker;
+import noobanidus.mods.lootr.block.tile.TileTicker;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

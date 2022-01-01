@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.loot.conditions;
+package noobanidus.mods.lootr.loot.condition;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.gson.*;

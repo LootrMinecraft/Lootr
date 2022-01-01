@@ -4,7 +4,7 @@ import net.minecraft.loot.LootConditionType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import noobanidus.mods.lootr.Lootr;
-import noobanidus.mods.lootr.loot.conditions.LootCount;
+import noobanidus.mods.lootr.loot.condition.LootCount;
 
 public class ModLoot {
   public static final LootConditionType LOOT_COUNT = new LootConditionType(new LootCount.Serializer());

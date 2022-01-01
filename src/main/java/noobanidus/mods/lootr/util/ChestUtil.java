@@ -21,14 +21,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.network.PacketDistributor;
 import noobanidus.mods.lootr.init.ModAdvancements;
 import noobanidus.mods.lootr.api.tile.ILootTile;
-import noobanidus.mods.lootr.blocks.LootrShulkerBlock;
+import noobanidus.mods.lootr.block.LootrShulkerBlock;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModStats;
 import noobanidus.mods.lootr.networking.CloseCart;
 import noobanidus.mods.lootr.networking.PacketHandler;
-import noobanidus.mods.lootr.tiles.LootrInventoryTileEntity;
+import noobanidus.mods.lootr.block.tile.LootrInventoryTileEntity;
 
 import java.util.HashSet;
 import java.util.Random;

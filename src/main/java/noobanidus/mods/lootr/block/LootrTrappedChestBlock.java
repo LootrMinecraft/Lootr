@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.blocks;
+package noobanidus.mods.lootr.block;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ChestBlock;
@@ -20,8 +20,8 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import noobanidus.mods.lootr.data.DataStorage;
-import noobanidus.mods.lootr.tiles.LootrChestTileEntity;
-import noobanidus.mods.lootr.tiles.TrappedLootrChestTileEntity;
+import noobanidus.mods.lootr.block.tile.LootrChestTileEntity;
+import noobanidus.mods.lootr.block.tile.TrappedLootrChestTileEntity;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;

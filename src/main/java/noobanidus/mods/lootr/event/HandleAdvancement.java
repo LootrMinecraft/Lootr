@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.events;
+package noobanidus.mods.lootr.event;
 
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.event.entity.player.AdvancementEvent;

@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.tiles;
+package noobanidus.mods.lootr.block.tile;
 
 import noobanidus.mods.lootr.init.ModTiles;
 

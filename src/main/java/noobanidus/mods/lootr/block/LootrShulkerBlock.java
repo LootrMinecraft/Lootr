@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.blocks;
+package noobanidus.mods.lootr.block;
 
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;
@@ -26,7 +26,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.init.ModItems;
-import noobanidus.mods.lootr.tiles.LootrShulkerTileEntity;
+import noobanidus.mods.lootr.block.tile.LootrShulkerTileEntity;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;

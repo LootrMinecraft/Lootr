@@ -6,7 +6,7 @@ import net.minecraft.entity.ai.goal.CatSitOnBlockGoal;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
 import noobanidus.mods.lootr.init.ModBlocks;
-import noobanidus.mods.lootr.tiles.LootrChestTileEntity;
+import noobanidus.mods.lootr.block.tile.LootrChestTileEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

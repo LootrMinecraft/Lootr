@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.blocks;
+package noobanidus.mods.lootr.block;
 
 import net.minecraft.block.BarrelBlock;
 import net.minecraft.block.BlockState;
@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.client.model.data.ModelProperty;
 import noobanidus.mods.lootr.data.DataStorage;
-import noobanidus.mods.lootr.tiles.LootrBarrelTileEntity;
+import noobanidus.mods.lootr.block.tile.LootrBarrelTileEntity;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;

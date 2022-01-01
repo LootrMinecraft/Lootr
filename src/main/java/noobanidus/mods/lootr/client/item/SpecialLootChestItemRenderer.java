@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
-import noobanidus.mods.lootr.tiles.LootrChestTileEntity;
+import noobanidus.mods.lootr.block.tile.LootrChestTileEntity;
 
 public class SpecialLootChestItemRenderer extends ItemStackTileEntityRenderer {
   private final LootrChestTileEntity tile = new LootrChestTileEntity();

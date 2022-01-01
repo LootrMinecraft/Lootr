@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.commands;
+package noobanidus.mods.lootr.command;
 
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
@@ -30,13 +30,13 @@ import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.api.tile.ILootTile;
-import noobanidus.mods.lootr.blocks.LootrBarrelBlock;
-import noobanidus.mods.lootr.blocks.LootrChestBlock;
-import noobanidus.mods.lootr.blocks.LootrShulkerBlock;
+import noobanidus.mods.lootr.block.LootrBarrelBlock;
+import noobanidus.mods.lootr.block.LootrChestBlock;
+import noobanidus.mods.lootr.block.LootrShulkerBlock;
 import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModBlocks;
-import noobanidus.mods.lootr.tiles.LootrInventoryTileEntity;
+import noobanidus.mods.lootr.block.tile.LootrInventoryTileEntity;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;

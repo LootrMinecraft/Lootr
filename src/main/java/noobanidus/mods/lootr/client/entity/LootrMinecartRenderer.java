@@ -13,7 +13,7 @@ import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
-import noobanidus.mods.lootr.tiles.LootrChestTileEntity;
+import noobanidus.mods.lootr.block.tile.LootrChestTileEntity;
 
 @OnlyIn(Dist.CLIENT)
 public class LootrMinecartRenderer extends MinecartRenderer<LootrChestMinecartEntity> {

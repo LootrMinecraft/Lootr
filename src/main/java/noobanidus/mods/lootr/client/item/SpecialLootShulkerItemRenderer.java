@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
-import noobanidus.mods.lootr.tiles.LootrShulkerTileEntity;
+import noobanidus.mods.lootr.block.tile.LootrShulkerTileEntity;
 
 public class SpecialLootShulkerItemRenderer extends ItemStackTileEntityRenderer {
   private final LootrShulkerTileEntity tile = new LootrShulkerTileEntity();

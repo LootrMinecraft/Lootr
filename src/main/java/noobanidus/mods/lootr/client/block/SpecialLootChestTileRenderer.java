@@ -9,7 +9,7 @@ import net.minecraft.state.properties.ChestType;
 import net.minecraft.util.ResourceLocation;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.tile.ILootTile;
-import noobanidus.mods.lootr.tiles.LootrChestTileEntity;
+import noobanidus.mods.lootr.block.tile.LootrChestTileEntity;
 
 import java.util.UUID;
 

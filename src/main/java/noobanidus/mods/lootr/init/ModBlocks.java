@@ -11,8 +11,8 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import noobanidus.mods.lootr.Lootr;
-import noobanidus.mods.lootr.blocks.*;
-import noobanidus.mods.lootr.tiles.LootrShulkerTileEntity;
+import noobanidus.mods.lootr.block.*;
+import noobanidus.mods.lootr.block.tile.LootrShulkerTileEntity;
 
 import java.util.Set;
 

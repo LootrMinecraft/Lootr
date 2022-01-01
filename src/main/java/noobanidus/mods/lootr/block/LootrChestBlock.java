@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.blocks;
+package noobanidus.mods.lootr.block;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ChestBlock;
@@ -24,19 +24,19 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.init.ModTiles;
-import noobanidus.mods.lootr.tiles.LootrInventoryTileEntity;
+import noobanidus.mods.lootr.block.tile.LootrChestTileEntity;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
 @SuppressWarnings("NullableProblems")
-public class LootrInventoryBlock extends ChestBlock {
-  public LootrInventoryBlock(Properties properties) {
-    this(properties, () -> ModTiles.LOOT_INVENTORY);
+public class LootrChestBlock extends ChestBlock {
+  public LootrChestBlock(Properties properties) {
+    this(properties, () -> ModTiles.LOOT_CHEST);
   }
 
-  public LootrInventoryBlock(Properties builder, Supplier<TileEntityType<? extends ChestTileEntity>> tileEntityTypeIn) {
+  public LootrChestBlock(Properties builder, Supplier<TileEntityType<? extends ChestTileEntity>> tileEntityTypeIn) {
     super(builder, tileEntityTypeIn);
   }
 
@@ -45,7 +45,7 @@ public class LootrInventoryBlock extends ChestBlock {
     if (player.isShiftKeyDown()) {
       ChestUtil.handleLootSneak(this, world, pos, player);
     } else if (!ChestBlock.isChestBlockedAt(world, pos)) {
-      ChestUtil.handleLootInventory(this, world, pos, player);
+      ChestUtil.handleLootChest(this, world, pos, player);
     }
     return ActionResultType.SUCCESS;
   }
@@ -65,13 +65,13 @@ public class LootrInventoryBlock extends ChestBlock {
 
   @Override
   public TileEntity newBlockEntity(IBlockReader p_196283_1_) {
-    return new LootrInventoryTileEntity();
+    return new LootrChestTileEntity();
   }
 
   @Nullable
   @Override
   public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-    return new LootrInventoryTileEntity();
+    return new LootrChestTileEntity();
   }
 
   @Override

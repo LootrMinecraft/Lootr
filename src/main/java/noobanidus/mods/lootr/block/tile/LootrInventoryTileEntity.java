@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.tiles;
+package noobanidus.mods.lootr.block.tile;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.inventory.ItemStackHelper;

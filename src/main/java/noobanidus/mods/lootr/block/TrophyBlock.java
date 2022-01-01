@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.blocks;
+package noobanidus.mods.lootr.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
