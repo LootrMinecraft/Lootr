@@ -18,19 +18,19 @@ public class AdvancementData extends WorldSavedData {
     super(id);
   }
 
-  public boolean contains (UUID first, UUID second) {
+  public boolean contains(UUID first, UUID second) {
     return contains(new UUIDPair(first, second));
   }
 
-  public boolean contains (UUIDPair pair) {
+  public boolean contains(UUIDPair pair) {
     return data.contains(pair);
   }
 
-  public void add (UUID first, UUID second) {
+  public void add(UUID first, UUID second) {
     add(new UUIDPair(first, second));
   }
 
-  public void add (UUIDPair pair) {
+  public void add(UUIDPair pair) {
     data.add(pair);
   }
 
@@ -57,13 +57,14 @@ public class AdvancementData extends WorldSavedData {
     private UUID first;
     private UUID second;
 
-    protected UUIDPair () {
+    protected UUIDPair() {
     }
 
     public UUIDPair(@Nonnull UUID first, @Nonnull UUID second) {
       this.first = first;
       this.second = second;
     }
+
     @Nonnull
     public UUID getFirst() {
       return first;
@@ -106,7 +107,7 @@ public class AdvancementData extends WorldSavedData {
       this.second = nbt.getUUID("second");
     }
 
-    public static UUIDPair fromNBT (CompoundNBT tag) {
+    public static UUIDPair fromNBT(CompoundNBT tag) {
       UUIDPair pair = new UUIDPair();
       pair.deserializeNBT(tag);
       return pair;

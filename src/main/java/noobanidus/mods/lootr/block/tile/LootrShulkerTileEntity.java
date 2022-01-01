@@ -58,7 +58,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class LootrShulkerTileEntity extends LockableLootTileEntity implements ILootTile, ITickableTileEntity {
   public Set<UUID> openers = new HashSet<>();
-  private NonNullList<ItemStack> itemStacks = NonNullList.withSize(27, ItemStack.EMPTY);
+  private final NonNullList<ItemStack> itemStacks = NonNullList.withSize(27, ItemStack.EMPTY);
   private int openCount;
   private ShulkerBoxTileEntity.AnimationStatus animationStatus = ShulkerBoxTileEntity.AnimationStatus.CLOSED;
   private float progress;

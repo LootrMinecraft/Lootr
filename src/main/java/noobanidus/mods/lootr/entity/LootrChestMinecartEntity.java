@@ -50,7 +50,7 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class LootrChestMinecartEntity extends ContainerMinecartEntity implements ILootCart {
-  private Set<UUID> openers = new HashSet<>();
+  private final Set<UUID> openers = new HashSet<>();
   private boolean opened = false;
 
   public LootrChestMinecartEntity(EntityType<LootrChestMinecartEntity> type, World world) {
@@ -78,7 +78,7 @@ public class LootrChestMinecartEntity extends ContainerMinecartEntity implements
     this.opened = true;
   }
 
-  public void setClosed () {
+  public void setClosed() {
     this.opened = false;
   }
 
@@ -129,7 +129,7 @@ public class LootrChestMinecartEntity extends ContainerMinecartEntity implements
     return AbstractMinecartEntity.Type.CHEST;
   }
 
-  private static BlockState cartNormal = ModBlocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
+  private static final BlockState cartNormal = ModBlocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
 
   @Override
   public BlockState getDefaultDisplayBlockState() {

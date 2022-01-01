@@ -18,12 +18,14 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
-import noobanidus.mods.lootr.api.tile.ILootTile;
 import noobanidus.mods.lootr.api.LootFiller;
+import noobanidus.mods.lootr.api.tile.ILootTile;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class ChestData extends WorldSavedData {
   private BlockPos pos;

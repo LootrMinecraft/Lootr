@@ -142,7 +142,7 @@ public class ConfigManager {
     return DECAY_DIMS;
   }
 
-  public static boolean isBlacklisted (ResourceLocation table) {
+  public static boolean isBlacklisted(ResourceLocation table) {
     if (getLootBlacklist().contains(table)) {
       return true;
     }
@@ -157,7 +157,7 @@ public class ConfigManager {
     return LOOT_BLACKLIST;
   }
 
-  public static Set<String> getModBlacklist () {
+  public static Set<String> getModBlacklist() {
     if (LOOT_MOD_BLACKLIST == null) {
       LOOT_MOD_BLACKLIST = LOOT_MODID_BLACKLIST.get().stream().map(String::toLowerCase).collect(Collectors.toSet());
     }

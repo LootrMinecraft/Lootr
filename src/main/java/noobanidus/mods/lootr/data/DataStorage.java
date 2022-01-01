@@ -38,7 +38,7 @@ public class DataStorage {
     return data.contains(player, tileId);
   }
 
-  public static void award (UUID player, UUID tileId) {
+  public static void award(UUID player, UUID tileId) {
     DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
     AdvancementData data = manager.computeIfAbsent(() -> new AdvancementData(ID), ID);
     data.add(player, tileId);
@@ -53,7 +53,7 @@ public class DataStorage {
     return data.contains(player, tileId);
   }
 
-  public static void score (UUID player, UUID tileId) {
+  public static void score(UUID player, UUID tileId) {
     DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
     AdvancementData data = manager.computeIfAbsent(() -> new AdvancementData(SCORED), SCORED);
     data.add(player, tileId);
@@ -73,11 +73,11 @@ public class DataStorage {
     return data.isDecayed(id);
   }
 
-  public static boolean isDecaying (UUID id) {
+  public static boolean isDecaying(UUID id) {
     return getDecayValue(id) > 0;
   }
 
-  public static void setDecaying (UUID id, int decay) {
+  public static void setDecaying(UUID id, int decay) {
     DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
     DecayingData data = manager.computeIfAbsent(() -> new DecayingData(DECAY), DECAY);
     data.setDecay(id, decay);
@@ -94,7 +94,7 @@ public class DataStorage {
     }
   }
 
-  public static void doDecay (TickEvent.ServerTickEvent event) {
+  public static void doDecay(TickEvent.ServerTickEvent event) {
     DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
     DecayingData data = manager.computeIfAbsent(() -> new DecayingData(DECAY), DECAY);
     if (data.tickDecay(event)) {

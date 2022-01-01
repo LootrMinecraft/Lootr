@@ -13,13 +13,13 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.client.block.BarrelModel;
-import noobanidus.mods.lootr.client.entity.LootrMinecartRenderer;
 import noobanidus.mods.lootr.client.block.SpecialLootChestTileRenderer;
 import noobanidus.mods.lootr.client.block.SpecialLootShulkerTileRenderer;
+import noobanidus.mods.lootr.client.entity.LootrMinecartRenderer;
 import noobanidus.mods.lootr.init.ModEntities;
 import noobanidus.mods.lootr.init.ModTiles;
 
-@Mod.EventBusSubscriber(modid=Lootr.MODID, bus= Mod.EventBusSubscriber.Bus.MOD, value= Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = Lootr.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientSetup {
   @SubscribeEvent
   public static void init(FMLClientSetupEvent event) {

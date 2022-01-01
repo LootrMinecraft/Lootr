@@ -7,7 +7,7 @@ import net.minecraftforge.fml.common.Mod;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.block.tile.*;
 
-@Mod.EventBusSubscriber(modid=Lootr.MODID, bus= Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = Lootr.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModTiles {
   public static TileEntityType<LootrChestTileEntity> LOOT_CHEST = TileEntityType.Builder.of(LootrChestTileEntity::new, ModBlocks.CHEST).build(null);
   public static TileEntityType<TrappedLootrChestTileEntity> TRAPPED_LOOT_CHEST = TileEntityType.Builder.of(TrappedLootrChestTileEntity::new, ModBlocks.TRAPPED_CHEST).build(null);

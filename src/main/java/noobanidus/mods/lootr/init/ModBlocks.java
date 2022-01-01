@@ -16,7 +16,7 @@ import noobanidus.mods.lootr.block.tile.LootrShulkerTileEntity;
 
 import java.util.Set;
 
-@Mod.EventBusSubscriber(modid=Lootr.MODID, bus= Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = Lootr.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModBlocks {
   public static LootrBarrelBlock BARREL = new LootrBarrelBlock(Block.Properties.of(Material.WOOD).strength(2.5F).sound(SoundType.WOOD));
 

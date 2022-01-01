@@ -35,7 +35,7 @@ public class ClientPacketHandlers {
     ((LootrChestMinecartEntity) cart).setOpened();
   }
 
-  public static void handleCloseCart (CloseCart message, Supplier<NetworkEvent.Context> context) {
+  public static void handleCloseCart(CloseCart message, Supplier<NetworkEvent.Context> context) {
     World world = Minecraft.getInstance().level;
     if (world == null) {
       Lootr.LOG.info("Unable to mark entity with id '" + message.entityId + "' as closed as world is null.");

@@ -21,7 +21,9 @@ import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.tile.ILootTile;
 import noobanidus.mods.lootr.config.ConfigManager;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Mod.EventBusSubscriber(modid = Lootr.MODID)
 public class TileTicker {

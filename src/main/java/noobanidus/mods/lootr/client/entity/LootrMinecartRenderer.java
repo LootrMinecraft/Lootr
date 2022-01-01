@@ -12,8 +12,8 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.block.tile.LootrChestTileEntity;
+import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
 @OnlyIn(Dist.CLIENT)
 public class LootrMinecartRenderer extends MinecartRenderer<LootrChestMinecartEntity> {
@@ -76,11 +76,7 @@ public class LootrMinecartRenderer extends MinecartRenderer<LootrChestMinecartEn
     matrixStackIn.scale(0.75F, 0.75F, 0.75F);
     matrixStackIn.translate(-0.5D, (float) (j - 8) / 16.0F, 0.5D);
     matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(90.0F));
-    if (entityIn.isOpened()) {
-      tile.setOpened(true);
-    } else {
-      tile.setOpened(false);
-    }
+    tile.setOpened(entityIn.isOpened());
     TileEntityRendererDispatcher.instance.renderItem(tile, matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY);
     matrixStackIn.popPose();
 

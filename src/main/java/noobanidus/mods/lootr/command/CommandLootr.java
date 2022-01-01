@@ -33,10 +33,10 @@ import noobanidus.mods.lootr.api.tile.ILootTile;
 import noobanidus.mods.lootr.block.LootrBarrelBlock;
 import noobanidus.mods.lootr.block.LootrChestBlock;
 import noobanidus.mods.lootr.block.LootrShulkerBlock;
+import noobanidus.mods.lootr.block.tile.LootrInventoryTileEntity;
 import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModBlocks;
-import noobanidus.mods.lootr.block.tile.LootrInventoryTileEntity;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;
@@ -57,7 +57,7 @@ public class CommandLootr {
 
   private static List<ResourceLocation> tables = null;
   private static List<String> tableNames = null;
-  private static Map<String, UUID> profileMap = new HashMap<>();
+  private static final Map<String, UUID> profileMap = new HashMap<>();
 
   private static List<ResourceLocation> getTables() {
     if (tables == null) {
@@ -220,7 +220,7 @@ public class CommandLootr {
         c.getSource().sendSuccess(new StringTextComponent("Tile at location " + position + " has " + openers.size() + " openers. UUIDs as follows:"), true);
         for (UUID uuid : openers) {
           GameProfile profile = c.getSource().getServer().getProfileCache().get(uuid);
-          c.getSource().sendSuccess(new StringTextComponent("UUID: " + uuid.toString() + ", user profile: " + (profile == null ? "null" : profile.getName())), true);
+          c.getSource().sendSuccess(new StringTextComponent("UUID: " + uuid + ", user profile: " + (profile == null ? "null" : profile.getName())), true);
         }
       } else {
         c.getSource().sendSuccess(new StringTextComponent("No Lootr tile exists at location: " + position), false);

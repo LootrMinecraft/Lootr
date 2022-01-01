@@ -67,7 +67,7 @@ public class LootCount implements ILootCondition {
       List<Operation> operations = new ArrayList<>();
       for (JsonElement element : objects) {
         if (!element.isJsonObject()) {
-          throw new IllegalArgumentException("invalid operand for LootCount: " + element.toString());
+          throw new IllegalArgumentException("invalid operand for LootCount: " + element);
         }
         operations.add(Operation.deserialize(element.getAsJsonObject()));
       }

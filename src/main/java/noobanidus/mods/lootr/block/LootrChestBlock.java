@@ -22,9 +22,9 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import noobanidus.mods.lootr.block.tile.LootrChestTileEntity;
 import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.init.ModTiles;
-import noobanidus.mods.lootr.block.tile.LootrChestTileEntity;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;
