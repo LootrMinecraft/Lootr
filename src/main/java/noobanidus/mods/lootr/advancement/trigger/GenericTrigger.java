@@ -11,7 +11,7 @@ import net.minecraft.advancements.criterion.EntityPredicate;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.loot.ConditionArrayParser;
 import net.minecraft.util.ResourceLocation;
-import noobanidus.mods.lootr.api.IGenericPredicate;
+import noobanidus.mods.lootr.api.advancement.IGenericPredicate;
 
 import javax.annotation.Nonnull;
 import java.util.List;

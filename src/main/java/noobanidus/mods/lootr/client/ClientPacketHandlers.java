@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.networking.client;
+package noobanidus.mods.lootr.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -11,7 +11,7 @@ import noobanidus.mods.lootr.networking.OpenCart;
 
 import java.util.function.Supplier;
 
-public class ClientHandlers {
+public class ClientPacketHandlers {
   public static void handleOpenCart(OpenCart message, Supplier<NetworkEvent.Context> context) {
     World world = Minecraft.getInstance().level;
     if (world == null) {

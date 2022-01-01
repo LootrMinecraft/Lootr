@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.api;
+package noobanidus.mods.lootr.api.advancement;
 
 import com.google.gson.JsonObject;
 import net.minecraft.entity.player.ServerPlayerEntity;

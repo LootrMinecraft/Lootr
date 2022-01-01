@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.init;
 
+import com.google.common.collect.Sets;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -12,6 +13,8 @@ import net.minecraftforge.fml.common.Mod;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.blocks.*;
 import noobanidus.mods.lootr.tiles.LootrShulkerTileEntity;
+
+import java.util.Set;
 
 @Mod.EventBusSubscriber(modid=Lootr.MODID, bus= Mod.EventBusSubscriber.Bus.MOD)
 public class ModBlocks {
@@ -34,6 +37,7 @@ public class ModBlocks {
   };
 
   public static LootrShulkerBlock SHULKER = new LootrShulkerBlock(Block.Properties.of(Material.SHULKER_SHELL).strength(2.5f).dynamicShape().noOcclusion().isSuffocating(posPredicate).isViewBlocking(posPredicate));
+  public static Set<Block> LOOT_CONTAINERS = Sets.newHashSet(CHEST, BARREL, TRAPPED_CHEST, SHULKER, INVENTORY);
 
   public static Block TROPHY = new TrophyBlock(Block.Properties.of(Material.METAL).strength(15f).sound(SoundType.METAL).harvestTool(ToolType.PICKAXE).harvestLevel(0).noOcclusion().lightLevel((o) -> 15));
 
@@ -48,6 +52,6 @@ public class ModBlocks {
 
   @SubscribeEvent
   public static void registerBlocks(RegistryEvent.Register<Block> event) {
-    event.getRegistry().registerAll(BARREL, CHEST, TRAPPED_CHEST, INVENTORY, SHULKER, TROPHY);
+    LOOT_CONTAINERS.forEach(o -> event.getRegistry().register(o));
   }
 }

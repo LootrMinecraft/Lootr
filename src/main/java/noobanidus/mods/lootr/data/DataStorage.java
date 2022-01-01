@@ -179,7 +179,7 @@ public class DataStorage {
       paths.forEach(o -> {
         if (Files.isRegularFile(o)) {
           String name = o.getFileName().toString();
-          if (name.startsWith("Lootr-")) {
+          if (name.startsWith("Lootr-") && !name.endsWith("Data.dat")) {
             ids.add(name.replace(".dat", ""));
           }
         }

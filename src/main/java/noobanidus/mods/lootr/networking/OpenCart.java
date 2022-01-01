@@ -5,7 +5,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkEvent;
-import noobanidus.mods.lootr.networking.client.ClientHandlers;
+import noobanidus.mods.lootr.client.ClientPacketHandlers;
 
 import java.util.function.Supplier;
 
@@ -31,7 +31,7 @@ public class OpenCart {
 
   @OnlyIn(Dist.CLIENT)
   private static void handle(OpenCart message, Supplier<NetworkEvent.Context> context) {
-    ClientHandlers.handleOpenCart(message, context);
+    ClientPacketHandlers.handleOpenCart(message, context);
   }
 }
 
