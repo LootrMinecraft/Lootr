@@ -53,5 +53,6 @@ public class ModBlocks {
   @SubscribeEvent
   public static void registerBlocks(RegistryEvent.Register<Block> event) {
     LOOT_CONTAINERS.forEach(o -> event.getRegistry().register(o));
+    event.getRegistry().register(TROPHY);
   }
 }

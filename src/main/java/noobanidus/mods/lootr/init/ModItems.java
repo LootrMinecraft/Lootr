@@ -10,7 +10,7 @@ import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.client.item.SpecialLootChestItemRenderer;
 import noobanidus.mods.lootr.client.item.SpecialLootShulkerItemRenderer;
 
-@Mod.EventBusSubscriber(modid = Lootr.MODID)
+@Mod.EventBusSubscriber(modid = Lootr.MODID, bus= Mod.EventBusSubscriber.Bus.MOD)
 public class ModItems {
   public static BlockItem CHEST = new BlockItem(ModBlocks.CHEST, new BlockItem.Properties().setISTER(() -> SpecialLootChestItemRenderer::new));
   public static BlockItem TRAPPED_CHEST = new BlockItem(ModBlocks.TRAPPED_CHEST, new BlockItem.Properties().setISTER(() -> SpecialLootChestItemRenderer::new));

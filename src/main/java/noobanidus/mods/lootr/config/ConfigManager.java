@@ -48,7 +48,9 @@ public class ConfigManager {
   public static final ForgeConfigSpec.BooleanValue CONVERT_TRAPPED_CHESTS;
   public static final ForgeConfigSpec.BooleanValue DISABLE_BREAK;
   public static final ForgeConfigSpec.IntValue DECAY_VALUE;
+  public static final ForgeConfigSpec.IntValue REFRESH_VALUE;
   public static final ForgeConfigSpec.BooleanValue DECAY_ALL;
+  public static final ForgeConfigSpec.BooleanValue REFRESH_ALL;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> ADDITIONAL_CHESTS;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> ADDITIONAL_TRAPPED_CHESTS;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DIMENSION_WHITELIST;
@@ -58,16 +60,21 @@ public class ConfigManager {
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DECAY_MODIDS;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DECAY_LOOT_TABLES;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DECAY_DIMENSIONS;
-  public static final ForgeConfigSpec.ConfigValue<List<? extends String>> REPORT_IGNORE_MODS;
+  public static final ForgeConfigSpec.ConfigValue<List<? extends String>> REFRESH_MODIDS;
+  public static final ForgeConfigSpec.ConfigValue<List<? extends String>> REFRESH_LOOT_TABLES;
+  public static final ForgeConfigSpec.ConfigValue<List<? extends String>> REFRESH_DIMENSIONS;
 
   private static Set<String> REPORT_IGNORE = null;
 
   private static Set<String> DECAY_MODS = null;
   private static Set<ResourceLocation> DECAY_TABLES = null;
+  private static Set<String> REFRESH_MODS = null;
+  private static Set<ResourceLocation> REFRESH_TABLES = null;
 
   private static Set<RegistryKey<World>> DIM_WHITELIST = null;
   private static Set<RegistryKey<World>> DIM_BLACKLIST = null;
   private static Set<RegistryKey<World>> DECAY_DIMS = null;
+  private static Set<RegistryKey<World>> REFRESH_DIMS = null;
   private static Set<ResourceLocation> LOOT_BLACKLIST = null;
   private static Set<ResourceLocation> ADD_CHESTS = null;
   private static Set<ResourceLocation> ADD_TRAPPED_CHESTS = null;
@@ -82,7 +89,6 @@ public class ConfigManager {
     CONVERT_TRAPPED_CHESTS = COMMON_BUILDER.comment("whether or not the entire forge:chests/trapped tag should be added to the conversion list for structures (if they are backed by LockableLootTileEntity").define("convert_trapped_chests", true);
     List<? extends String> empty = Collections.emptyList();
     Predicate<Object> validator = o -> o instanceof String && ((String) o).contains(":");
-    REPORT_IGNORE_MODS = COMMON_BUILDER.comment("when report_tables is true, a list of modids that shouldn't be reported").defineList("report_ignore_modids", empty, (o) -> o instanceof String);
     REPORT_UNRESOLVED_TABLES = COMMON_BUILDER.comment("lootr will automatically log all unresolved tables (i.e., for containers that have a loot table associated with them but, for whatever reason, the lookup for this table returns empty). setting this option to true additionally informs players when they open containers.").define("report_unresolved_tables", false);
     ADDITIONAL_CHESTS = COMMON_BUILDER.comment("a list of additional chests that should be converted [in the format of modid:name, must be a tile entity instance of LockableLootTileEntity]").defineList("additional_chests", empty, validator);
     ADDITIONAL_TRAPPED_CHESTS = COMMON_BUILDER.comment("a list of additional trapped chests that should be converted [in the format of modid:name, must be a tile entity instanceof LockableLootTileEntity]").defineList("additional_trapped_chests", empty, validator);
@@ -96,6 +102,13 @@ public class ConfigManager {
     DECAY_MODIDS = COMMON_BUILDER.comment("list of mod IDs whose loot tables will decay [default blank, meaning no chests decay, in the format of 'modid', 'modid']").defineList("decay_modids", empty, o -> o instanceof String);
     DECAY_DIMENSIONS = COMMON_BUILDER.comment("list of dimensions where loot chests should automatically decay [default: blank, e.g., minecraft:overworld]").defineList("decay_dimensions", empty, validator);
     DECAY_ALL = COMMON_BUILDER.comment("overriding decay_loot_tables, decay_modids and decay_dimensions: all chests will decay after being opened for the first time").define("decay_all", false);
+
+
+    REFRESH_VALUE = COMMON_BUILDER.comment("how long (in ticks) before the contents of a loot container will be refresh [default 20 minutes = 20 * 60 * 20]").defineInRange("decay_value", 20 * 60 * 20, 0, Integer.MAX_VALUE);
+    REFRESH_LOOT_TABLES = COMMON_BUILDER.comment("list of loot tables which will refresh [default blank, meaning no chests refresh, in the format of 'modid:loot_table']").defineList("refresh_loot_tables", empty, validator);
+    REFRESH_MODIDS = COMMON_BUILDER.comment("list of mod IDs whose loot tables will refresh [default blank, meaning no chests refresh, in the format of 'modid', 'modid']").defineList("refresh_modids", empty, o -> o instanceof String);
+    REFRESH_DIMENSIONS = COMMON_BUILDER.comment("list of dimensions where loot chests should automatically refresh [default: blank, e.g., minecraft:overworld]").defineList("refresh_dimensions", empty, validator);
+    REFRESH_ALL = COMMON_BUILDER.comment("overriding refresh_loot_tables, refresh_modids and refresh_dimensions: all chests will refresh after being opened for the first time").define("refresh_all", false);
     COMMON_CONFIG = COMMON_BUILDER.build();
   }
 
@@ -119,6 +132,9 @@ public class ConfigManager {
     DECAY_DIMS = null;
     REPORT_IGNORE = null;
     LOOT_MOD_BLACKLIST = null;
+    REFRESH_MODS = null;
+    REFRESH_TABLES = null;
+    REFRESH_DIMS = null;
   }
 
   public static Set<RegistryKey<World>> getDimensionWhitelist() {
@@ -140,6 +156,13 @@ public class ConfigManager {
       DECAY_DIMS = DECAY_DIMENSIONS.get().stream().map(o -> RegistryKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(o))).collect(Collectors.toSet());
     }
     return DECAY_DIMS;
+  }
+
+  public static Set<RegistryKey<World>> getRefreshDimensions() {
+    if (REFRESH_DIMS == null) {
+      REFRESH_DIMS = REFRESH_DIMENSIONS.get().stream().map(o -> RegistryKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(o))).collect(Collectors.toSet());
+    }
+    return REFRESH_DIMS;
   }
 
   public static boolean isBlacklisted(ResourceLocation table) {
@@ -171,11 +194,25 @@ public class ConfigManager {
     return DECAY_TABLES;
   }
 
+  public static Set<ResourceLocation> getRefreshingTables() {
+    if (REFRESH_TABLES == null) {
+      REFRESH_TABLES = REFRESH_LOOT_TABLES.get().stream().map(ResourceLocation::new).collect(Collectors.toSet());
+    }
+    return REFRESH_TABLES;
+  }
+
   public static Set<String> getDecayMods() {
     if (DECAY_MODS == null) {
       DECAY_MODS = DECAY_MODIDS.get().stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
     }
     return DECAY_MODS;
+  }
+
+  public static Set<String> getRefreshMods() {
+    if (REFRESH_MODS == null) {
+      REFRESH_MODS = REFRESH_MODIDS.get().stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
+    }
+    return REFRESH_MODS;
   }
 
   public static Set<ResourceLocation> getAdditionalChests() {
@@ -192,19 +229,16 @@ public class ConfigManager {
     return ADD_TRAPPED_CHESTS;
   }
 
-  public static Set<String> getIgnoreReportMods() {
-    if (REPORT_IGNORE == null) {
-      REPORT_IGNORE = REPORT_IGNORE_MODS.get().stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
-    }
-    return REPORT_IGNORE;
-  }
-
   public static boolean isDimensionBlocked(RegistryKey<World> key) {
     return (!getDimensionWhitelist().isEmpty() && !getDimensionWhitelist().contains(key)) || getDimensionBlacklist().contains(key);
   }
 
   public static boolean isDimensionDecaying(RegistryKey<World> key) {
     return (getDecayDimensions().contains(key));
+  }
+
+  public static boolean isDimensionRefreshing(RegistryKey<World> key) {
+    return getRefreshDimensions().contains(key);
   }
 
   public static boolean isDecaying(World world, ILootTile tile) {
@@ -220,6 +254,21 @@ public class ConfigManager {
     return isDimensionDecaying(world.dimension());
   }
 
+  public static boolean isRefreshing(World world, ILootTile tile) {
+    if (REFRESH_ALL.get()) {
+      return true;
+    }
+    if (tile.getTable() != null) {
+      if (getRefreshingTables().contains(tile.getTable())) {
+        return true;
+      }
+      if (getRefreshMods().contains(tile.getTable().getNamespace().toLowerCase(Locale.ROOT))) {
+        return true;
+      }
+    }
+    return isDimensionRefreshing(world.dimension());
+  }
+
   public static boolean isDecaying(World world, LootrChestMinecartEntity entity) {
     if (DECAY_ALL.get()) {
       return true;
@@ -228,6 +277,19 @@ public class ConfigManager {
       return true;
     }
     if (getDecayMods().contains(entity.lootTable.getNamespace().toLowerCase(Locale.ROOT))) {
+      return true;
+    }
+    return isDimensionDecaying(world.dimension());
+  }
+
+  public static boolean isRefreshing(World world, LootrChestMinecartEntity entity) {
+    if (REFRESH_ALL.get()) {
+      return true;
+    }
+    if (getRefreshingTables().contains(entity.lootTable)) {
+      return true;
+    }
+    if (getRefreshMods().contains(entity.lootTable.getNamespace().toLowerCase(Locale.ROOT))) {
       return true;
     }
     return isDimensionDecaying(world.dimension());

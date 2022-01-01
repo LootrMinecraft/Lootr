@@ -107,6 +107,21 @@ public class ChestUtil {
       } else if (block instanceof LootrShulkerBlock) {
         ModAdvancements.SHULKER_PREDICATE.trigger((ServerPlayerEntity) player, ((ILootTile) te).getTileId());
       }
+      if (DataStorage.isRefreshed(tileId)) {
+        DataStorage.refreshInventory(world, ((ILootTile) te).getTileId(), (ServerPlayerEntity) player);
+        DataStorage.removeRefreshed(tileId);
+        player.sendMessage(new TranslationTextComponent("lootr.message.refreshed").setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), Util.NIL_UUID);
+      } else {
+        int refreshValue = DataStorage.getRefreshValue(tileId);
+        if (refreshValue > 0) {
+          player.sendMessage(new TranslationTextComponent("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), Util.NIL_UUID);
+        } else if (refreshValue == -1) {
+          if (ConfigManager.isRefreshing(world, (ILootTile) te)) {
+            DataStorage.setRefreshing(tileId, ConfigManager.REFRESH_VALUE.get());
+            player.sendMessage(new TranslationTextComponent("lootr.message.refresh_start", ConfigManager.REFRESH_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), Util.NIL_UUID);
+          }
+        }
+      }
       INamedContainerProvider provider = DataStorage.getInventory(world, ((ILootTile) te).getTileId(), pos, (ServerPlayerEntity) player, (LockableLootTileEntity) te, ((ILootTile) te)::fillWithLoot);
       if (!DataStorage.isScored(player.getUUID(), ((ILootTile) te).getTileId())) {
         player.awardStat(ModStats.LOOTED_STAT);
@@ -153,6 +168,21 @@ public class ChestUtil {
           ModAdvancements.SCORE_PREDICATE.trigger((ServerPlayerEntity) player, null);
           DataStorage.score(player.getUUID(), cart.getUUID());
         }
+        if (DataStorage.isRefreshed(tileId)) {
+          DataStorage.refreshInventory(world, cart, (ServerPlayerEntity) player);
+          DataStorage.removeRefreshed(tileId);
+          player.sendMessage(new TranslationTextComponent("lootr.message.refreshed").setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), Util.NIL_UUID);
+        } else {
+          int refreshValue = DataStorage.getRefreshValue(tileId);
+          if (refreshValue > 0) {
+            player.sendMessage(new TranslationTextComponent("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), Util.NIL_UUID);
+          } else if (refreshValue == -1) {
+            if (ConfigManager.isRefreshing(world, cart)) {
+              DataStorage.setRefreshing(tileId, ConfigManager.REFRESH_VALUE.get());
+              player.sendMessage(new TranslationTextComponent("lootr.message.refresh_start", ConfigManager.REFRESH_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), Util.NIL_UUID);
+            }
+          }
+        }
         INamedContainerProvider provider = DataStorage.getInventory(world, cart, (ServerPlayerEntity) player, cart::addLoot);
         player.openMenu(provider);
       }
@@ -174,6 +204,22 @@ public class ChestUtil {
       NonNullList<ItemStack> stacks = null;
       if (tile.getCustomInventory() != null) {
         stacks = copyItemList(tile.getCustomInventory());
+      }
+      UUID tileId = tile.getTileId();
+      if (DataStorage.isRefreshed(tileId)) {
+        DataStorage.refreshInventory(world, ((ILootTile) te).getTileId(), stacks, (ServerPlayerEntity) player);
+        DataStorage.removeRefreshed(tileId);
+        player.sendMessage(new TranslationTextComponent("lootr.message.refreshed").setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), Util.NIL_UUID);
+      } else {
+        int refreshValue = DataStorage.getRefreshValue(tileId);
+        if (refreshValue > 0) {
+          player.sendMessage(new TranslationTextComponent("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), Util.NIL_UUID);
+        } else if (refreshValue == -1) {
+          if (ConfigManager.isRefreshing(world, tile)) {
+            DataStorage.setRefreshing(tileId, ConfigManager.REFRESH_VALUE.get());
+            player.sendMessage(new TranslationTextComponent("lootr.message.refresh_start", ConfigManager.REFRESH_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), Util.NIL_UUID);
+          }
+        }
       }
       INamedContainerProvider provider = DataStorage.getInventory(world, tile.getTileId(), stacks, (ServerPlayerEntity) player, pos, tile);
       if (!DataStorage.isScored(player.getUUID(), ((ILootTile) te).getTileId())) {

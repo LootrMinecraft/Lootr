@@ -186,6 +186,17 @@ public class DataStorage {
   }
 
   @Nullable
+  public static void refreshInventory(World world, UUID uuid, ServerPlayerEntity player) {
+    if (world.isClientSide || !(world instanceof ServerWorld)) {
+      return;
+    }
+
+    ChestData data = getInstanceUuid((ServerWorld) world, uuid);
+    data.clearInventory(player.getUUID());
+    data.setDirty();
+  }
+
+  @Nullable
   public static SpecialChestInventory getInventory(World world, UUID uuid, NonNullList<ItemStack> base, ServerPlayerEntity player, BlockPos pos, LockableLootTileEntity tile) {
     if (world.isClientSide || !(world instanceof ServerWorld)) {
       return null;
@@ -198,6 +209,16 @@ public class DataStorage {
     }
 
     return inventory;
+  }
+
+  @Nullable
+  public static void refreshInventory(World world, UUID uuid, NonNullList<ItemStack> base, ServerPlayerEntity player) {
+    if (world.isClientSide || !(world instanceof ServerWorld)) {
+      return;
+    }
+    ChestData data = getInstanceInventory((ServerWorld) world, uuid, null, base);
+    data.clearInventory(player.getUUID());
+    data.setDirty();
   }
 
   public static boolean clearInventories(ServerPlayerEntity player) {
@@ -251,6 +272,17 @@ public class DataStorage {
     }
 
     return inventory;
+  }
+
+  @Nullable
+  public static void refreshInventory(World world, LootrChestMinecartEntity cart, ServerPlayerEntity player) {
+    if (world.isClientSide || !(world instanceof ServerWorld)) {
+      return;
+    }
+
+    ChestData data = getInstance((ServerWorld) world, cart.getUUID());
+    data.clearInventory(player.getUUID());
+    data.setDirty();
   }
 
   public static void wipeInventory(ServerWorld world, BlockPos pos) {
