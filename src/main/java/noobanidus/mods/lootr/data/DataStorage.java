@@ -10,7 +10,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.DimensionSavedDataManager;
 import net.minecraft.world.storage.FolderName;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.LootFiller;
