@@ -30,6 +30,7 @@ public class DataStorage {
   public static final String ID = "Lootr-AdvancementData";
   public static final String SCORED = "Lootr-ScoreData";
   public static final String DECAY = "Lootr-DecayData";
+  public static final String REFRESH = "Lootr-RefreshData";
 
   public static boolean isAwarded(UUID player, UUID tileId) {
     DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
@@ -63,32 +64,28 @@ public class DataStorage {
 
   public static int getDecayValue(UUID id) {
     DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
-    DecayingData data = manager.computeIfAbsent(() -> new DecayingData(DECAY), DECAY);
-    return data.getDecay(id);
+    TickingData data = manager.computeIfAbsent(() -> new TickingData(DECAY), DECAY);
+    return data.getValue(id);
   }
 
   public static boolean isDecayed(UUID id) {
     DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
-    DecayingData data = manager.computeIfAbsent(() -> new DecayingData(DECAY), DECAY);
-    return data.isDecayed(id);
-  }
-
-  public static boolean isDecaying(UUID id) {
-    return getDecayValue(id) > 0;
+    TickingData data = manager.computeIfAbsent(() -> new TickingData(DECAY), DECAY);
+    return data.isDone(id);
   }
 
   public static void setDecaying(UUID id, int decay) {
     DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
-    DecayingData data = manager.computeIfAbsent(() -> new DecayingData(DECAY), DECAY);
-    data.setDecay(id, decay);
+    TickingData data = manager.computeIfAbsent(() -> new TickingData(DECAY), DECAY);
+    data.setValue(id, decay);
     data.setDirty();
     manager.save();
   }
 
   public static void removeDecayed(UUID id) {
     DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
-    DecayingData data = manager.computeIfAbsent(() -> new DecayingData(DECAY), DECAY);
-    if (data.removeDecayed(id) != -1) {
+    TickingData data = manager.computeIfAbsent(() -> new TickingData(DECAY), DECAY);
+    if (data.removeDone(id) != -1) {
       data.setDirty();
       manager.save();
     }
@@ -96,8 +93,46 @@ public class DataStorage {
 
   public static void doDecay(TickEvent.ServerTickEvent event) {
     DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
-    DecayingData data = manager.computeIfAbsent(() -> new DecayingData(DECAY), DECAY);
-    if (data.tickDecay(event)) {
+    TickingData data = manager.computeIfAbsent(() -> new TickingData(DECAY), DECAY);
+    if (data.tick(event)) {
+      data.setDirty();
+      manager.save();
+    }
+  }
+
+  public static int getRefreshValue(UUID id) {
+    DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
+    TickingData data = manager.computeIfAbsent(() -> new TickingData(REFRESH), REFRESH);
+    return data.getValue(id);
+  }
+
+  public static boolean isRefreshed(UUID id) {
+    DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
+    TickingData data = manager.computeIfAbsent(() -> new TickingData(REFRESH), REFRESH);
+    return data.isDone(id);
+  }
+
+  public static void setRefreshing(UUID id, int decay) {
+    DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
+    TickingData data = manager.computeIfAbsent(() -> new TickingData(REFRESH), REFRESH);
+    data.setValue(id, decay);
+    data.setDirty();
+    manager.save();
+  }
+
+  public static void removeRefreshed(UUID id) {
+    DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
+    TickingData data = manager.computeIfAbsent(() -> new TickingData(REFRESH), REFRESH);
+    if (data.removeDone(id) != -1) {
+      data.setDirty();
+      manager.save();
+    }
+  }
+
+  public static void doRefresh(TickEvent.ServerTickEvent event) {
+    DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
+    TickingData data = manager.computeIfAbsent(() -> new TickingData(REFRESH), REFRESH);
+    if (data.tick(event)) {
       data.setDirty();
       manager.save();
     }

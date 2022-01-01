@@ -10,32 +10,32 @@ import net.minecraftforge.event.TickEvent;
 
 import java.util.UUID;
 
-public class DecayingData extends WorldSavedData {
-  private final Object2IntMap<UUID> decayMap = new Object2IntOpenHashMap<>();
+public class TickingData extends WorldSavedData {
+  private final Object2IntMap<UUID> tickMap = new Object2IntOpenHashMap<>();
 
-  public DecayingData(String id) {
+  public TickingData(String id) {
     super(id);
-    decayMap.defaultReturnValue(-1);
+    tickMap.defaultReturnValue(-1);
   }
 
-  public boolean isDecayed(UUID id) {
-    return decayMap.getInt(id) == 0;
+  public boolean isDone(UUID id) {
+    return tickMap.getInt(id) == 0;
   }
 
-  public int getDecay(UUID id) {
-    return decayMap.getInt(id);
+  public int getValue(UUID id) {
+    return tickMap.getInt(id);
   }
 
-  public boolean setDecay(UUID id, int decayAmount) {
-    return decayMap.put(id, decayAmount) == -1;
+  public boolean setValue(UUID id, int decayAmount) {
+    return tickMap.put(id, decayAmount) == -1;
   }
 
-  public int removeDecayed(UUID id) {
-    return decayMap.removeInt(id);
+  public int removeDone(UUID id) {
+    return tickMap.removeInt(id);
   }
 
-  public boolean tickDecay(TickEvent.ServerTickEvent event) {
-    if (decayMap.isEmpty()) {
+  public boolean tick(TickEvent.ServerTickEvent event) {
+    if (tickMap.isEmpty()) {
       return false;
     }
 
@@ -44,7 +44,7 @@ public class DecayingData extends WorldSavedData {
 
     boolean changed = false;
 
-    for (Object2IntMap.Entry<UUID> entry : decayMap.object2IntEntrySet()) {
+    for (Object2IntMap.Entry<UUID> entry : tickMap.object2IntEntrySet()) {
       int value = entry.getIntValue();
       if (value > 0) {
         value--;
@@ -54,8 +54,8 @@ public class DecayingData extends WorldSavedData {
     }
 
     if (changed) {
-      decayMap.clear();
-      decayMap.putAll(newMap);
+      tickMap.clear();
+      tickMap.putAll(newMap);
       return true;
     }
 
@@ -64,19 +64,19 @@ public class DecayingData extends WorldSavedData {
 
   @Override
   public void load(CompoundNBT pCompound) {
-    decayMap.clear();
-    decayMap.defaultReturnValue(-1);
+    tickMap.clear();
+    tickMap.defaultReturnValue(-1);
     ListNBT decayList = pCompound.getList("result", Constants.NBT.TAG_COMPOUND);
     for (int i = 0; i < decayList.size(); i++) {
       CompoundNBT thisTag = decayList.getCompound(i);
-      decayMap.put(thisTag.getUUID("id"), thisTag.getInt("value"));
+      tickMap.put(thisTag.getUUID("id"), thisTag.getInt("value"));
     }
   }
 
   @Override
   public CompoundNBT save(CompoundNBT pCompound) {
     ListNBT decayList = new ListNBT();
-    for (Object2IntMap.Entry<UUID> entry : decayMap.object2IntEntrySet()) {
+    for (Object2IntMap.Entry<UUID> entry : tickMap.object2IntEntrySet()) {
       CompoundNBT thisTag = new CompoundNBT();
       thisTag.putUUID("id", entry.getKey());
       thisTag.putInt("value", entry.getIntValue());

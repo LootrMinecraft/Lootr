@@ -86,6 +86,7 @@ public class ChestUtil {
       UUID tileId = ((ILootTile) te).getTileId();
       if (DataStorage.isDecayed(tileId)) {
         world.destroyBlock(pos, true);
+        DataStorage.removeDecayed(tileId);
         player.sendMessage(new TranslationTextComponent("lootr.message.decayed").setStyle(Style.EMPTY.withColor(TextFormatting.RED).withBold(true)), Util.NIL_UUID);
         return false;
       } else {
@@ -128,6 +129,7 @@ public class ChestUtil {
         UUID tileId = cart.getUUID();
         if (DataStorage.isDecayed(tileId)) {
           cart.destroy(DamageSource.OUT_OF_WORLD);
+          DataStorage.removeDecayed(tileId);
           player.sendMessage(new TranslationTextComponent("lootr.message.decayed").setStyle(Style.EMPTY.withColor(TextFormatting.RED).withBold(true)), Util.NIL_UUID);
           return;
         } else {

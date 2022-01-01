@@ -7,14 +7,19 @@ import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.server.ServerChunkProvider;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.data.DataStorage;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Mod.EventBusSubscriber(modid= Lootr.MODID)
 public class EntityTicker {
   private static final List<LootrChestMinecartEntity> entities = new ArrayList<>();
 
+  @SubscribeEvent
   public static void onServerTick(TickEvent.ServerTickEvent event) {
     if (event.phase == TickEvent.Phase.END) {
       entities.removeIf(Entity::isAddedToWorld);
@@ -27,6 +32,7 @@ public class EntityTicker {
         }
       }
       DataStorage.doDecay(event);
+      DataStorage.doRefresh(event);
     }
   }
 
