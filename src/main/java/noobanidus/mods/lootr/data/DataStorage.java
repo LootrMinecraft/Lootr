@@ -191,7 +191,7 @@ public class DataStorage {
     }
 
     ChestData data = getInstanceUuid((ServerWorld) world, uuid);
-    data.clearInventory(player.getUUID());
+    data.clear();
     data.setDirty();
   }
 
@@ -216,7 +216,7 @@ public class DataStorage {
       return;
     }
     ChestData data = getInstanceInventory((ServerWorld) world, uuid, null, base);
-    data.clearInventory(player.getUUID());
+    data.clear();
     data.setDirty();
   }
 
@@ -280,7 +280,7 @@ public class DataStorage {
     }
 
     ChestData data = getInstance((ServerWorld) world, cart.getUUID());
-    data.clearInventory(player.getUUID());
+    data.clear();
     data.setDirty();
   }
 
