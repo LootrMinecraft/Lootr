@@ -31,8 +31,8 @@ public class EntityTicker {
           world.addFreshEntity(entity);
         }
       }
-      DataStorage.doDecay(event);
-      DataStorage.doRefresh(event);
+      DataStorage.doDecay();
+      DataStorage.doRefresh();
     }
   }
 

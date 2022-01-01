@@ -91,10 +91,10 @@ public class DataStorage {
     }
   }
 
-  public static void doDecay(TickEvent.ServerTickEvent event) {
+  public static void doDecay() {
     DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
     TickingData data = manager.computeIfAbsent(() -> new TickingData(DECAY), DECAY);
-    if (data.tick(event)) {
+    if (data.tick()) {
       data.setDirty();
       manager.save();
     }
@@ -129,10 +129,10 @@ public class DataStorage {
     }
   }
 
-  public static void doRefresh(TickEvent.ServerTickEvent event) {
+  public static void doRefresh() {
     DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
     TickingData data = manager.computeIfAbsent(() -> new TickingData(REFRESH), REFRESH);
-    if (data.tick(event)) {
+    if (data.tick()) {
       data.setDirty();
       manager.save();
     }

@@ -34,7 +34,7 @@ public class TickingData extends WorldSavedData {
     return tickMap.removeInt(id);
   }
 
-  public boolean tick(TickEvent.ServerTickEvent event) {
+  public boolean tick() {
     if (tickMap.isEmpty()) {
       return false;
     }
