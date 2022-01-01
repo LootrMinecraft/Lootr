@@ -46,7 +46,6 @@ public class ConfigManager {
   public static final ForgeConfigSpec.BooleanValue CONVERT_QUARK;
   public static final ForgeConfigSpec.BooleanValue CONVERT_WOODEN_CHESTS;
   public static final ForgeConfigSpec.BooleanValue CONVERT_TRAPPED_CHESTS;
-  public static final ForgeConfigSpec.BooleanValue REPORT_TABLES;
   public static final ForgeConfigSpec.BooleanValue DISABLE_BREAK;
   public static final ForgeConfigSpec.IntValue DECAY_VALUE;
   public static final ForgeConfigSpec.BooleanValue DECAY_ALL;
@@ -55,6 +54,7 @@ public class ConfigManager {
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DIMENSION_WHITELIST;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DIMENSION_BLACKLIST;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> LOOT_TABLE_BLACKLIST;
+  public static final ForgeConfigSpec.ConfigValue<List<? extends String>> LOOT_MODID_BLACKLIST;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DECAY_MODIDS;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DECAY_LOOT_TABLES;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DECAY_DIMENSIONS;
@@ -72,6 +72,7 @@ public class ConfigManager {
   private static Set<ResourceLocation> ADD_CHESTS = null;
   private static Set<ResourceLocation> ADD_TRAPPED_CHESTS = null;
   private static Map<Block, Block> replacements = null;
+  private static Set<String> LOOT_MOD_BLACKLIST = null;
 
   static {
     RANDOMISE_SEED = COMMON_BUILDER.comment("determine whether or not loot generated is the same for all players using the provided seed, or randomised per player").define("randomise_seed", true);
@@ -81,7 +82,6 @@ public class ConfigManager {
     CONVERT_TRAPPED_CHESTS = COMMON_BUILDER.comment("whether or not the entire forge:chests/trapped tag should be added to the conversion list for structures (if they are backed by LockableLootTileEntity").define("convert_trapped_chests", true);
     List<? extends String> empty = Collections.emptyList();
     Predicate<Object> validator = o -> o instanceof String && ((String) o).contains(":");
-    REPORT_TABLES = COMMON_BUILDER.comment("catches loot chest creation that this mod cannot convert, reporting the loot table, location and mod").define("report_tables", false);
     REPORT_IGNORE_MODS = COMMON_BUILDER.comment("when report_tables is true, a list of modids that shouldn't be reported").defineList("report_ignore_modids", empty, (o) -> o instanceof String);
     REPORT_UNRESOLVED_TABLES = COMMON_BUILDER.comment("lootr will automatically log all unresolved tables (i.e., for containers that have a loot table associated with them but, for whatever reason, the lookup for this table returns empty). setting this option to true additionally informs players when they open containers.").define("report_unresolved_tables", false);
     ADDITIONAL_CHESTS = COMMON_BUILDER.comment("a list of additional chests that should be converted [in the format of modid:name, must be a tile entity instance of LockableLootTileEntity]").defineList("additional_chests", empty, validator);
@@ -89,6 +89,7 @@ public class ConfigManager {
     DIMENSION_WHITELIST = COMMON_BUILDER.comment("list of dimensions (to the exclusion of all others) that loot chest should be replaced in [default: blank, allowing all dimensions, e.g., minecraft:overworld]").defineList("dimension_whitelist", empty, validator);
     DIMENSION_BLACKLIST = COMMON_BUILDER.comment("list of dimensions that loot chests should not be replaced in [default: blank, allowing all dimensions, format e.g., minecraft:overworld]").defineList("dimension_blacklist", empty, validator);
     LOOT_TABLE_BLACKLIST = COMMON_BUILDER.comment("list of loot tables which shouldn't be converted [in the format of modid:loot_table]").defineList("loot_table_blacklist", empty, validator);
+    LOOT_MODID_BLACKLIST = COMMON_BUILDER.comment("list of modids which shouldn't be converted [in the format of modid, modid]").defineList("loot_mod_blacklist", empty, o -> o instanceof String);
     DISABLE_BREAK = COMMON_BUILDER.comment("prevent the destruction of Lootr chests except while sneaking in creative mode").define("disable_break", false);
     DECAY_VALUE = COMMON_BUILDER.comment("how long (in ticks) a decaying loot containers should take to decay [default 5 minutes = 5 * 60 * 20]").defineInRange("decay_value", 5 * 60 * 20, 0, Integer.MAX_VALUE);
     DECAY_LOOT_TABLES = COMMON_BUILDER.comment("list of loot tables which will decay [default blank, meaning no chests decay, in the format of 'modid:loot_table']").defineList("decay_loot_tables", empty, validator);
@@ -117,6 +118,7 @@ public class ConfigManager {
     DECAY_TABLES = null;
     DECAY_DIMS = null;
     REPORT_IGNORE = null;
+    LOOT_MOD_BLACKLIST = null;
   }
 
   public static Set<RegistryKey<World>> getDimensionWhitelist() {
@@ -140,11 +142,26 @@ public class ConfigManager {
     return DECAY_DIMS;
   }
 
+  public static boolean isBlacklisted (ResourceLocation table) {
+    if (getLootBlacklist().contains(table)) {
+      return true;
+    }
+
+    return getModBlacklist().contains(table.getNamespace());
+  }
+
   public static Set<ResourceLocation> getLootBlacklist() {
     if (LOOT_BLACKLIST == null) {
       LOOT_BLACKLIST = LOOT_TABLE_BLACKLIST.get().stream().map(ResourceLocation::new).collect(Collectors.toSet());
     }
     return LOOT_BLACKLIST;
+  }
+
+  public static Set<String> getModBlacklist () {
+    if (LOOT_MOD_BLACKLIST == null) {
+      LOOT_MOD_BLACKLIST = LOOT_MODID_BLACKLIST.get().stream().map(String::toLowerCase).collect(Collectors.toSet());
+    }
+    return LOOT_MOD_BLACKLIST;
   }
 
   public static Set<ResourceLocation> getDecayingTables() {

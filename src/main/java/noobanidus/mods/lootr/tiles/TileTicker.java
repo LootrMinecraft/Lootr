@@ -72,7 +72,7 @@ public class TileTicker {
               continue;
             }
             LockableLootTileEntity te = (LockableLootTileEntity) tile;
-            if (te.lootTable == null || ConfigManager.getLootBlacklist().contains(te.lootTable)) {
+            if (te.lootTable == null || ConfigManager.isBlacklisted(te.lootTable)) {
               toRemove.add(entry);
               continue;
             }
@@ -86,7 +86,6 @@ public class TileTicker {
             }
             chunk.pendingBlockEntities.remove(entry.getPosition());
             level.removeBlockEntity(entry.getPosition());
-            level.destroyBlock(entry.getPosition(), false);
             level.setBlock(entry.getPosition(), replacement, 2);
             tile = level.getBlockEntity(entry.getPosition());
             if (tile instanceof ILootTile) {
