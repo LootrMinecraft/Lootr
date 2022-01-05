@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.minecraft.advancements.CriterionTrigger.Listener;
+import noobanidus.mods.lootr.api.advancement.IGenericPredicate;
 
 public class GenericTrigger<T> implements CriterionTrigger<GenericTrigger.Instance<T>> {
   private final ResourceLocation id;

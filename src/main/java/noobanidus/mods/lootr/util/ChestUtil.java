@@ -21,7 +21,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraftforge.network.PacketDistributor;
 import noobanidus.mods.lootr.Lootr;
-import noobanidus.mods.lootr.api.ILootTile;
+import noobanidus.mods.lootr.api.blockentity.ILootTile;
 import noobanidus.mods.lootr.blocks.LootrShulkerBlock;
 import noobanidus.mods.lootr.blocks.entities.LootrInventoryBlockEntity;
 import noobanidus.mods.lootr.config.ConfigManager;

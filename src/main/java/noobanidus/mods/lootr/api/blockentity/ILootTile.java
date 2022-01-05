@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.api;
+package noobanidus.mods.lootr.api.blockentity;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.Container;

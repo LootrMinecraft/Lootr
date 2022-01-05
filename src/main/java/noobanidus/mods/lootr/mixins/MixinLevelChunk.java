@@ -3,7 +3,7 @@ package noobanidus.mods.lootr.mixins;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.chunk.LevelChunk;
-import noobanidus.mods.lootr.api.ILootTile;
+import noobanidus.mods.lootr.api.blockentity.ILootTile;
 import noobanidus.mods.lootr.blocks.entities.TileTicker;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

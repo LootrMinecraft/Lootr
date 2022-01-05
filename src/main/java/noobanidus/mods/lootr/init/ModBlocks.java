@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.init;
 
+import com.google.common.collect.Sets;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
@@ -12,6 +13,8 @@ import net.minecraftforge.fml.common.Mod;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.blocks.*;
 import noobanidus.mods.lootr.blocks.entities.LootrShulkerBlockEntity;
+
+import java.util.Set;
 
 @Mod.EventBusSubscriber(modid=Lootr.MODID, bus= Mod.EventBusSubscriber.Bus.MOD)
 public class ModBlocks {
@@ -46,8 +49,11 @@ public class ModBlocks {
     TROPHY.setRegistryName(Lootr.MODID, "trophy");
   }
 
+  public static Set<Block> specialLootChests = Sets.newHashSet(CHEST, BARREL, TRAPPED_CHEST, SHULKER, INVENTORY);
+
   @SubscribeEvent
   public static void registerBlocks(RegistryEvent.Register<Block> event) {
-    event.getRegistry().registerAll(BARREL, CHEST, TRAPPED_CHEST, INVENTORY, SHULKER, TROPHY);
+    specialLootChests.forEach(event.getRegistry()::register);
+    event.getRegistry().register(TROPHY);
   }
 }

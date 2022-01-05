@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.api;
+package noobanidus.mods.lootr.api.entity;
 
 import java.util.Set;
 import java.util.UUID;

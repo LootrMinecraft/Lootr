@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.client.model.ModelDataManager;
 import net.minecraftforge.network.NetworkEvent;
 import noobanidus.mods.lootr.Lootr;
-import noobanidus.mods.lootr.api.ILootTile;
+import noobanidus.mods.lootr.api.blockentity.ILootTile;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.networking.CloseCart;
 import noobanidus.mods.lootr.networking.OpenCart;

@@ -26,7 +26,7 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.Lootr;
-import noobanidus.mods.lootr.api.ILootTile;
+import noobanidus.mods.lootr.api.blockentity.ILootTile;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModBlocks;
 

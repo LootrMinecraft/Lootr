@@ -1,6 +1,5 @@
 package noobanidus.mods.lootr.client;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.ChestRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlas;
@@ -9,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import noobanidus.mods.lootr.Lootr;
-import noobanidus.mods.lootr.api.ILootTile;
+import noobanidus.mods.lootr.api.blockentity.ILootTile;
 import noobanidus.mods.lootr.blocks.entities.LootrChestBlockEntity;
 import noobanidus.mods.lootr.util.Getter;
 

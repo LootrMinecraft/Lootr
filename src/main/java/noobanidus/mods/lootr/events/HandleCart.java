@@ -7,6 +7,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModEntities;
@@ -14,7 +17,9 @@ import noobanidus.mods.lootr.networking.OpenCart;
 import noobanidus.mods.lootr.networking.PacketHandler;
 import noobanidus.mods.lootr.entity.EntityTicker;
 
+@Mod.EventBusSubscriber(modid= Lootr.MODID)
 public class HandleCart {
+  @SubscribeEvent
   public static void onEntityJoin(EntityJoinWorldEvent event) {
     if (event.getEntity().getType() == EntityType.CHEST_MINECART) {
       MinecartChest chest = (MinecartChest) event.getEntity();
@@ -27,6 +32,7 @@ public class HandleCart {
     }
   }
 
+  @SubscribeEvent
   public static void onEntityTrack(PlayerEvent.StartTracking event) {
     Entity target = event.getTarget();
     if (target.getType() == ModEntities.LOOTR_MINECART_ENTITY) {

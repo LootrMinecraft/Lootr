@@ -19,7 +19,6 @@ import noobanidus.mods.lootr.events.HandleAdvancement;
 import noobanidus.mods.lootr.events.HandleBreak;
 import noobanidus.mods.lootr.events.HandleCart;
 import noobanidus.mods.lootr.init.ModBlocks;
-import noobanidus.mods.lootr.setup.Setup;
 import noobanidus.mods.lootr.entity.EntityTicker;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -54,15 +53,7 @@ public class Lootr {
   public Lootr() {
     ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigManager.COMMON_CONFIG);
     ConfigManager.loadConfig(ConfigManager.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve(Lootr.MODID + "-common.toml"));
-    MinecraftForge.EVENT_BUS.addListener(HandleBreak::onBlockBreak);
-    MinecraftForge.EVENT_BUS.addListener(HandleCart::onEntityJoin);
-    MinecraftForge.EVENT_BUS.addListener(HandleCart::onEntityTrack);
-    MinecraftForge.EVENT_BUS.addListener(HandleAdvancement::onAdvancement);
-    MinecraftForge.EVENT_BUS.addListener(EntityTicker::onServerTick);
     MinecraftForge.EVENT_BUS.addListener(this::onCommands);
-
-
-    DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> Setup::client);
   }
 
   public void onCommands(RegisterCommandsEvent event) {

@@ -35,7 +35,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.network.NetworkHooks;
 import noobanidus.mods.lootr.Lootr;
-import noobanidus.mods.lootr.api.ILootCart;
+import noobanidus.mods.lootr.api.entity.ILootCart;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.init.ModEntities;

@@ -1,27 +1,25 @@
 package noobanidus.mods.lootr.events;
 
-import com.google.common.collect.Sets;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.block.Block;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.fml.common.Mod;
+import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlocks;
 
-import java.util.Set;
-
+@Mod.EventBusSubscriber(modid= Lootr.MODID)
 public class HandleBreak {
-  public static Set<Block> specialLootChests = Sets.newHashSet(ModBlocks.CHEST, ModBlocks.BARREL, ModBlocks.TRAPPED_CHEST, ModBlocks.SHULKER, ModBlocks.INVENTORY);
 
   public static void onBlockBreak(BlockEvent.BreakEvent event) {
     Player player = event.getPlayer();
 
     if (!event.getWorld().isClientSide()) {
-      if (specialLootChests.contains(event.getState().getBlock())) {
+      if (ModBlocks.specialLootChests.contains(event.getState().getBlock())) {
         if (ConfigManager.DISABLE_BREAK.get()) {
           if (player.getAbilities().instabuild) {
             if (!player.isShiftKeyDown()) {

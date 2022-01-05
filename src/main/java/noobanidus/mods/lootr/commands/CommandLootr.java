@@ -30,7 +30,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraftforge.server.ServerLifecycleHooks;
-import noobanidus.mods.lootr.api.ILootTile;
+import noobanidus.mods.lootr.api.blockentity.ILootTile;
 import noobanidus.mods.lootr.blocks.LootrBarrelBlock;
 import noobanidus.mods.lootr.blocks.LootrChestBlock;
 import noobanidus.mods.lootr.blocks.LootrShulkerBlock;
