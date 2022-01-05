@@ -48,7 +48,6 @@ public class ConfigManager {
   public static final ForgeConfigSpec.BooleanValue CONVERT_QUARK;
   public static final ForgeConfigSpec.BooleanValue CONVERT_WOODEN_CHESTS;
   public static final ForgeConfigSpec.BooleanValue CONVERT_TRAPPED_CHESTS;
-  public static final ForgeConfigSpec.BooleanValue REPORT_TABLES;
   public static final ForgeConfigSpec.BooleanValue DISABLE_BREAK;
   public static final ForgeConfigSpec.IntValue DECAY_VALUE;
   public static final ForgeConfigSpec.BooleanValue DECAY_ALL;
@@ -80,7 +79,6 @@ public class ConfigManager {
     CONVERT_TRAPPED_CHESTS = COMMON_BUILDER.comment("whether or not the entire forge:chests/trapped tag should be added to the conversion list for structures (if they are backed by LockableLootTileEntity").define("convert_trapped_chests", true);
     List<? extends String> empty = Collections.emptyList();
     Predicate<Object> validator = o -> o instanceof String && ((String) o).contains(":");
-    REPORT_TABLES = COMMON_BUILDER.comment("catches loot chest creation that this mod cannot convert, reporting the loot table, location and mod").define("report_tables", false);
     REPORT_UNRESOLVED_TABLES = COMMON_BUILDER.comment("lootr will automatically log all unresolved tables (i.e., for containers that have a loot table associated with them but, for whatever reason, the lookup for this table returns empty). setting this option to true additionally informs players when they open containers.").define("report_unresolved_tables", false);
     ADDITIONAL_CHESTS = COMMON_BUILDER.comment("a list of additional chests that should be converted [in the format of modid:name, must be a tile entity instance of LockableLootTileEntity]").defineList("additional_chests", empty, validator);
     ADDITIONAL_TRAPPED_CHESTS = COMMON_BUILDER.comment("a list of additional trapped chests that should be converted [in the format of modid:name, must be a tile entity instanceof LockableLootTileEntity]").defineList("additional_trapped_chests", empty, validator);
