@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.ticker;
+package noobanidus.mods.lootr.entity;
 
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;

@@ -12,7 +12,7 @@ import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModEntities;
 import noobanidus.mods.lootr.networking.OpenCart;
 import noobanidus.mods.lootr.networking.PacketHandler;
-import noobanidus.mods.lootr.ticker.EntityTicker;
+import noobanidus.mods.lootr.entity.EntityTicker;
 
 public class HandleCart {
   public static void onEntityJoin(EntityJoinWorldEvent event) {
