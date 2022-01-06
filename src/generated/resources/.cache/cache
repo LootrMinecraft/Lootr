@@ -1,6 +1,16 @@
 18c47337dfb46828c56b6031d8d86a55c861dca3 data/forge/tags/blocks/barrels.json
 cf71f28e404bf52385782fbeb459ba2a55bbc304 data/forge/tags/blocks/chests/trapped.json
 31471220acc51508000555ff1899cdaca306012c data/forge/tags/blocks/chests/wooden.json
+18c47337dfb46828c56b6031d8d86a55c861dca3 data/lootr/tags/blocks/barrels.json
+734e49aa39f5bd0070a54d27fb207e914924e45f data/lootr/tags/blocks/chests.json
+46e11c3fc4c62059da1662577421bf90bfd54689 data/lootr/tags/blocks/containers.json
+9efb16735427690b8c68c4907694188a39e71aff data/lootr/tags/blocks/shulkers.json
+cf71f28e404bf52385782fbeb459ba2a55bbc304 data/lootr/tags/blocks/trapped_chests.json
+18c47337dfb46828c56b6031d8d86a55c861dca3 data/lootr/tags/items/barrels.json
+734e49aa39f5bd0070a54d27fb207e914924e45f data/lootr/tags/items/chests.json
+46e11c3fc4c62059da1662577421bf90bfd54689 data/lootr/tags/items/containers.json
+9efb16735427690b8c68c4907694188a39e71aff data/lootr/tags/items/shulkers.json
+cf71f28e404bf52385782fbeb459ba2a55bbc304 data/lootr/tags/items/trapped_chests.json
 c2b28bc98dcde260b93d2537e1ff5d153edf8243 data/minecraft/tags/blocks/guarded_by_piglins.json
 c2b28bc98dcde260b93d2537e1ff5d153edf8243 data/minecraft/tags/blocks/mineable/axe.json
 e1ccc70745b5737745735464c29435e7fc462c56 data/minecraft/tags/blocks/mineable/pickaxe.json

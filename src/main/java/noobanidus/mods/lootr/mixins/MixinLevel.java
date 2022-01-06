@@ -14,7 +14,7 @@ import java.util.Collection;
 
 @Mixin(Level.class)
 public class MixinLevel {
-  @Inject(method="addFreshBlockEntities", at=@At(value="RETURN"))
+  @Inject(method="addFreshBlockEntities", at=@At(value="RETURN"), remap=false)
   private void lootrAddFreshBlockEntities (Collection<BlockEntity> entities, CallbackInfo cir) {
     Level level = (Level) (Object) this;
     if (!level.isClientSide()) {

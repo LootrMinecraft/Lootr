@@ -5,14 +5,8 @@
   "refmap": "lootr.refmap.json",
   "mixins": [
     "MixinCatSitOnBlockGoal",
-    "MixinIglooPieces$IglooPiece",
     "MixinLevel",
-    "MixinLevelChunk",
-    "MixinMonsterRoomFeature",
-    "MixinOceanRuinPieces$OceanRuinPiece",
-    "MixinRandomizableContainerBlockEntity",
-    "MixinStructurePiece",
-    "MixinStructureTemplate"
+    "MixinLevelChunk"
   ],
   "client": [
   ],
