@@ -34,7 +34,7 @@ public class EntityTicker {
         }
       }
       entities.removeAll(completed);
-      DataStorage.doDecay(event);
+      DataStorage.doDecay();
     }
   }
 

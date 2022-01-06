@@ -10,7 +10,7 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.loading.FMLPaths;
-import noobanidus.mods.lootr.commands.CommandLootr;
+import noobanidus.mods.lootr.command.CommandLootr;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModAdvancements;
 import noobanidus.mods.lootr.init.ModBlocks;

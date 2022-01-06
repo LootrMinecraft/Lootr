@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.events;
+package noobanidus.mods.lootr.event;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -13,8 +13,8 @@ import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModEntities;
-import noobanidus.mods.lootr.networking.OpenCart;
-import noobanidus.mods.lootr.networking.PacketHandler;
+import noobanidus.mods.lootr.network.OpenCart;
+import noobanidus.mods.lootr.network.PacketHandler;
 import noobanidus.mods.lootr.entity.EntityTicker;
 
 @Mod.EventBusSubscriber(modid= Lootr.MODID)

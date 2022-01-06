@@ -1,11 +1,11 @@
-package noobanidus.mods.lootr.networking;
+package noobanidus.mods.lootr.network;
 
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkEvent;
-import noobanidus.mods.lootr.networking.client.ClientHandlers;
+import noobanidus.mods.lootr.network.client.ClientHandlers;
 
 import java.util.function.Supplier;
 

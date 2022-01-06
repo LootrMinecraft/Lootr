@@ -39,8 +39,8 @@ import noobanidus.mods.lootr.api.entity.ILootCart;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.init.ModEntities;
-import noobanidus.mods.lootr.networking.OpenCart;
-import noobanidus.mods.lootr.networking.PacketHandler;
+import noobanidus.mods.lootr.network.OpenCart;
+import noobanidus.mods.lootr.network.PacketHandler;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;

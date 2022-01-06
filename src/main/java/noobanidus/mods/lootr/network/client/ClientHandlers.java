@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.networking.client;
+package noobanidus.mods.lootr.network.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
@@ -10,9 +10,9 @@ import net.minecraftforge.network.NetworkEvent;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.blockentity.ILootTile;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
-import noobanidus.mods.lootr.networking.CloseCart;
-import noobanidus.mods.lootr.networking.OpenCart;
-import noobanidus.mods.lootr.networking.UpdateModelData;
+import noobanidus.mods.lootr.network.CloseCart;
+import noobanidus.mods.lootr.network.OpenCart;
+import noobanidus.mods.lootr.network.UpdateModelData;
 
 import java.util.function.Supplier;
 

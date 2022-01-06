@@ -28,9 +28,9 @@ import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModAdvancements;
 import noobanidus.mods.lootr.init.ModStats;
-import noobanidus.mods.lootr.networking.CloseCart;
-import noobanidus.mods.lootr.networking.PacketHandler;
-import noobanidus.mods.lootr.networking.UpdateModelData;
+import noobanidus.mods.lootr.network.CloseCart;
+import noobanidus.mods.lootr.network.PacketHandler;
+import noobanidus.mods.lootr.network.UpdateModelData;
 
 import java.util.HashSet;
 import java.util.Random;

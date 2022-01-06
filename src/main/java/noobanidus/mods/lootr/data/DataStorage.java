@@ -60,14 +60,14 @@ public class DataStorage {
 
   public static int getDecayValue (UUID id) {
     DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
-    DecayingData data = manager.computeIfAbsent(DecayingData::load, DecayingData::new, DECAY);
-    return data.getDecay(id);
+    TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, DECAY);
+    return data.getValue(id);
   }
 
   public static boolean isDecayed(UUID id) {
     DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
-    DecayingData data = manager.computeIfAbsent(DecayingData::load, DecayingData::new, DECAY);
-    return data.isDecayed(id);
+    TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, DECAY);
+    return data.isComplete(id);
   }
 
   public static boolean isDecaying (UUID id) {
@@ -76,25 +76,25 @@ public class DataStorage {
 
   public static void setDecaying (UUID id, int decay) {
     DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
-    DecayingData data = manager.computeIfAbsent(DecayingData::load, DecayingData::new, DECAY);
-    data.setDecay(id, decay);
+    TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, DECAY);
+    data.setValue(id, decay);
     data.setDirty();
     manager.save();
   }
 
   public static void removeDecayed (UUID id) {
     DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
-    DecayingData data = manager.computeIfAbsent(DecayingData::load, DecayingData::new, DECAY);
-    if (data.removeDecayed(id) != -1) {
+    TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, DECAY);
+    if (data.remove(id) != -1) {
       data.setDirty();
       manager.save();
     }
   }
 
-  public static void doDecay (TickEvent.ServerTickEvent event) {
+  public static void doDecay () {
     DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
-    DecayingData data = manager.computeIfAbsent(DecayingData::load, DecayingData::new, DECAY);
-    if (data.tickDecay(event)) {
+    TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, DECAY);
+    if (data.tick()) {
       data.setDirty();
       manager.save();
     }

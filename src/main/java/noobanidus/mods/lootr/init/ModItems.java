@@ -7,8 +7,8 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import noobanidus.mods.lootr.Lootr;
-import noobanidus.mods.lootr.items.LootrChestBlockItem;
-import noobanidus.mods.lootr.items.LootrShulkerBlockItem;
+import noobanidus.mods.lootr.item.LootrChestBlockItem;
+import noobanidus.mods.lootr.item.LootrShulkerBlockItem;
 
 @Mod.EventBusSubscriber(modid=Lootr.MODID, bus= Mod.EventBusSubscriber.Bus.MOD)
 public class ModItems {

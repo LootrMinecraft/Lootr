@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.networking;
+package noobanidus.mods.lootr.network;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;

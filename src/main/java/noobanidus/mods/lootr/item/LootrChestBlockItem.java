@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.items;
+package noobanidus.mods.lootr.item;
 
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.world.item.BlockItem;

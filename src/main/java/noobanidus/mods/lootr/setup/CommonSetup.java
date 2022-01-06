@@ -15,7 +15,7 @@ import noobanidus.mods.lootr.impl.LootrHooksImpl;
 import noobanidus.mods.lootr.init.ModAdvancements;
 import noobanidus.mods.lootr.init.ModLoot;
 import noobanidus.mods.lootr.init.ModStats;
-import noobanidus.mods.lootr.networking.PacketHandler;
+import noobanidus.mods.lootr.network.PacketHandler;
 
 @Mod.EventBusSubscriber(modid=Lootr.MODID, bus= Mod.EventBusSubscriber.Bus.MOD)
 public class CommonSetup {

@@ -10,31 +10,31 @@ import net.minecraftforge.event.TickEvent;
 
 import java.util.UUID;
 
-public class DecayingData extends SavedData {
-  private final Object2IntMap<UUID> decayMap = new Object2IntOpenHashMap<>();
+public class TickingData extends SavedData {
+  private final Object2IntMap<UUID> tickMap = new Object2IntOpenHashMap<>();
 
-  public DecayingData() {
-    decayMap.defaultReturnValue(-1);
+  public TickingData() {
+    tickMap.defaultReturnValue(-1);
   }
 
-  public boolean isDecayed(UUID id) {
-    return decayMap.getInt(id) == 0;
+  public boolean isComplete(UUID id) {
+    return tickMap.getInt(id) == 0;
   }
 
-  public int getDecay(UUID id) {
-    return decayMap.getInt(id);
+  public int getValue(UUID id) {
+    return tickMap.getInt(id);
   }
 
-  public boolean setDecay(UUID id, int decayAmount) {
-    return decayMap.put(id, decayAmount) == -1;
+  public boolean setValue(UUID id, int decayAmount) {
+    return tickMap.put(id, decayAmount) == -1;
   }
 
-  public int removeDecayed(UUID id) {
-    return decayMap.removeInt(id);
+  public int remove(UUID id) {
+    return tickMap.removeInt(id);
   }
 
-  public boolean tickDecay(TickEvent.ServerTickEvent event) {
-    if (decayMap.isEmpty()) {
+  public boolean tick() {
+    if (tickMap.isEmpty()) {
       return false;
     }
 
@@ -43,7 +43,7 @@ public class DecayingData extends SavedData {
 
     boolean changed = false;
 
-    for (Object2IntMap.Entry<UUID> entry : decayMap.object2IntEntrySet()) {
+    for (Object2IntMap.Entry<UUID> entry : tickMap.object2IntEntrySet()) {
       int value = entry.getIntValue();
       if (value > 0) {
         value--;
@@ -53,22 +53,22 @@ public class DecayingData extends SavedData {
     }
 
     if (changed) {
-      decayMap.clear();
-      decayMap.putAll(newMap);
+      tickMap.clear();
+      tickMap.putAll(newMap);
       return true;
     }
 
     return false;
   }
 
-  public static DecayingData load(CompoundTag pCompound) {
-    DecayingData data = new DecayingData();
-    data.decayMap.clear();
-    data.decayMap.defaultReturnValue(-1);
+  public static TickingData load(CompoundTag pCompound) {
+    TickingData data = new TickingData();
+    data.tickMap.clear();
+    data.tickMap.defaultReturnValue(-1);
     ListTag decayList = pCompound.getList("result", Tag.TAG_COMPOUND);
     for (int i = 0; i < decayList.size(); i++) {
       CompoundTag thisTag = decayList.getCompound(i);
-      data.decayMap.put(thisTag.getUUID("id"), thisTag.getInt("value"));
+      data.tickMap.put(thisTag.getUUID("id"), thisTag.getInt("value"));
     }
     return data;
   }
@@ -76,7 +76,7 @@ public class DecayingData extends SavedData {
   @Override
   public CompoundTag save(CompoundTag pCompound) {
     ListTag decayList = new ListTag();
-    for (Object2IntMap.Entry<UUID> entry : decayMap.object2IntEntrySet()) {
+    for (Object2IntMap.Entry<UUID> entry : tickMap.object2IntEntrySet()) {
       CompoundTag thisTag = new CompoundTag();
       thisTag.putUUID("id", entry.getKey());
       thisTag.putInt("value", entry.getIntValue());

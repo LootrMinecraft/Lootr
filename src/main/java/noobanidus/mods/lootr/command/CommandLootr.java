@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.commands;
+package noobanidus.mods.lootr.command;
 
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
