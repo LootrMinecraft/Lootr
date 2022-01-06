@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.client;
+package noobanidus.mods.lootr.client.item;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
-import noobanidus.mods.lootr.blocks.entities.LootrShulkerBlockEntity;
+import noobanidus.mods.lootr.block.entities.LootrShulkerBlockEntity;
 import noobanidus.mods.lootr.init.ModBlocks;
 
 public class LootrShulkerItemRenderer extends BlockEntityWithoutLevelRenderer {

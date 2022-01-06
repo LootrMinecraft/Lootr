@@ -4,8 +4,7 @@ import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.IItemRenderProperties;
-import noobanidus.mods.lootr.client.LootrShulkerBlockRenderer;
-import noobanidus.mods.lootr.client.LootrShulkerItemRenderer;
+import noobanidus.mods.lootr.client.item.LootrShulkerItemRenderer;
 
 import java.util.function.Consumer;
 

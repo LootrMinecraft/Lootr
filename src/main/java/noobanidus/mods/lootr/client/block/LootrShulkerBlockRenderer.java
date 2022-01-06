@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.client;
+package noobanidus.mods.lootr.client.block;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -17,7 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import noobanidus.mods.lootr.Lootr;
-import noobanidus.mods.lootr.blocks.entities.LootrShulkerBlockEntity;
+import noobanidus.mods.lootr.block.entities.LootrShulkerBlockEntity;
 
 import java.util.UUID;
 

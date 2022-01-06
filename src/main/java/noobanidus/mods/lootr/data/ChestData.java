@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Supplier;
 
-public class NewChestData extends SavedData {
+public class ChestData extends SavedData {
   private String key;
   private BlockPos pos;
   private ResourceKey<Level> dimension;
@@ -37,7 +37,7 @@ public class NewChestData extends SavedData {
   private NonNullList<ItemStack> reference;
   private boolean custom;
 
-  protected NewChestData(String key) {
+  protected ChestData(String key) {
     this.key = key;
   }
 
@@ -75,9 +75,9 @@ public class NewChestData extends SavedData {
     return "Lootr-entity-" + entityId.toString();
   }
 
-  public static Supplier<NewChestData> ref_id(ResourceKey<Level> dimension, UUID id, @Nullable UUID customId, @Nullable NonNullList<ItemStack> base) {
+  public static Supplier<ChestData> ref_id(ResourceKey<Level> dimension, UUID id, @Nullable UUID customId, @Nullable NonNullList<ItemStack> base) {
     return () -> {
-      NewChestData data = new NewChestData(REF_ID(dimension, id));
+      ChestData data = new ChestData(REF_ID(dimension, id));
       data.pos = null;
       data.dimension = dimension;
       data.entityId = null;
@@ -92,9 +92,9 @@ public class NewChestData extends SavedData {
     };
   }
 
-  public static Supplier<NewChestData> id(ResourceKey<Level> dimension, UUID id) {
+  public static Supplier<ChestData> id(ResourceKey<Level> dimension, UUID id) {
     return () -> {
-      NewChestData data = new NewChestData(ID(dimension, id));
+      ChestData data = new ChestData(ID(dimension, id));
       data.pos = null;
       data.dimension = dimension;
       data.entityId = null;
@@ -106,9 +106,9 @@ public class NewChestData extends SavedData {
     };
   }
 
-  public static Supplier<NewChestData> entity(UUID entityId) {
+  public static Supplier<ChestData> entity(UUID entityId) {
     return () -> {
-      NewChestData data = new NewChestData(ENTITY(entityId));
+      ChestData data = new ChestData(ENTITY(entityId));
       data.pos = null;
       data.dimension = null;
       data.tileId = null;
@@ -192,8 +192,8 @@ public class NewChestData extends SavedData {
   }
 
   // TODO:
-  public static NewChestData load(CompoundTag compound) {
-    NewChestData data = new NewChestData(compound.getString("key"));
+  public static ChestData load(CompoundTag compound) {
+    ChestData data = new ChestData(compound.getString("key"));
     data.inventories.clear();
     data.pos = null;
     data.dimension = null;

@@ -12,7 +12,9 @@ public class LootrDataGenerators {
   public static void gatherData (GatherDataEvent event) {
     if (event.includeServer()) {
       ExistingFileHelper helper = event.getExistingFileHelper();
-      event.getGenerator().addProvider(new LootrBlockTagGenerator(event.getGenerator(), Lootr.MODID, helper));
+      LootrBlockTagProvider blocks;
+      event.getGenerator().addProvider(blocks = new LootrBlockTagProvider(event.getGenerator(), Lootr.MODID, helper));
+      event.getGenerator().addProvider(new LootrItemTagsProvider(event.getGenerator(), blocks, Lootr.MODID, helper));
     }
   }
 }

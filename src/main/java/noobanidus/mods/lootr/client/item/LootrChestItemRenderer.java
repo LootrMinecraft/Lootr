@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.client;
+package noobanidus.mods.lootr.client.item;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
-import noobanidus.mods.lootr.blocks.entities.LootrChestBlockEntity;
+import noobanidus.mods.lootr.block.entities.LootrChestBlockEntity;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModBlocks;
 

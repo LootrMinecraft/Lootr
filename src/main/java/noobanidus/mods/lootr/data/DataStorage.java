@@ -22,7 +22,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -105,18 +104,18 @@ public class DataStorage {
     return ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD);
   }
 
-  public static NewChestData getInstanceUuid(ServerLevel world, UUID id) {
+  public static ChestData getInstanceUuid(ServerLevel world, UUID id) {
     ResourceKey<Level> dimension = world.dimension();
-    return getServerLevel().getDataStorage().computeIfAbsent(NewChestData::load, NewChestData.id(dimension, id), ID(dimension, id));
+    return getServerLevel().getDataStorage().computeIfAbsent(ChestData::load, ChestData.id(dimension, id), ID(dimension, id));
   }
 
-  public static NewChestData getInstance(ServerLevel world, UUID id) {
-    return getServerLevel().getDataStorage().computeIfAbsent(NewChestData::load, NewChestData.entity(id), ENTITY(id));
+  public static ChestData getInstance(ServerLevel world, UUID id) {
+    return getServerLevel().getDataStorage().computeIfAbsent(ChestData::load, ChestData.entity(id), ENTITY(id));
   }
 
-  public static NewChestData getInstanceInventory(ServerLevel world, UUID id, @Nullable UUID customId, @Nullable NonNullList<ItemStack> base) {
+  public static ChestData getInstanceInventory(ServerLevel world, UUID id, @Nullable UUID customId, @Nullable NonNullList<ItemStack> base) {
     ResourceKey<Level> dimension = world.dimension();
-    return getServerLevel().getDataStorage().computeIfAbsent(NewChestData::load, NewChestData.ref_id(dimension, id, customId, base), REF_ID(dimension, id));
+    return getServerLevel().getDataStorage().computeIfAbsent(ChestData::load, ChestData.ref_id(dimension, id, customId, base), REF_ID(dimension, id));
   }
 
   @Nullable
@@ -125,7 +124,7 @@ public class DataStorage {
       return null;
     }
 
-    NewChestData data = getInstanceUuid((ServerLevel) world, uuid);
+    ChestData data = getInstanceUuid((ServerLevel) world, uuid);
     SpecialChestInventory inventory = data.getInventory(player, pos);
     if (inventory == null) {
       inventory = data.createInventory(player, filler, tile);
@@ -140,7 +139,7 @@ public class DataStorage {
     if (world.isClientSide || !(world instanceof ServerLevel)) {
       return null;
     }
-    NewChestData data = getInstanceInventory((ServerLevel) world, uuid, null, base);
+    ChestData data = getInstanceInventory((ServerLevel) world, uuid, null, base);
     SpecialChestInventory inventory = data.getInventory(player, pos);
     if (inventory == null) {
       inventory = data.createInventory(player, data.customInventory(), tile);
@@ -175,7 +174,7 @@ public class DataStorage {
 
     int cleared = 0;
     for (String id : ids) {
-      NewChestData chestData = data.get(NewChestData::load, id);
+      ChestData chestData = data.get(ChestData::load, id);
       if (chestData != null) {
         if (chestData.clearInventory(uuid)) {
           cleared++;
@@ -194,7 +193,7 @@ public class DataStorage {
       return null;
     }
 
-    NewChestData data = getInstance((ServerLevel) world, cart.getUUID());
+    ChestData data = getInstance((ServerLevel) world, cart.getUUID());
     SpecialChestInventory inventory = data.getInventory(player, null);
     if (inventory == null) {
       inventory = data.createInventory(player, filler, null);

@@ -1,8 +1,7 @@
-package noobanidus.mods.lootr.blocks;
+package noobanidus.mods.lootr.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -21,9 +20,8 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import noobanidus.mods.lootr.blocks.entities.LootrChestBlockEntity;
-import noobanidus.mods.lootr.blocks.entities.LootrTrappedChestBlockEntity;
-import noobanidus.mods.lootr.data.NewChestData;
+import noobanidus.mods.lootr.block.entities.LootrChestBlockEntity;
+import noobanidus.mods.lootr.block.entities.LootrTrappedChestBlockEntity;
 import noobanidus.mods.lootr.init.ModBlockEntities;
 import noobanidus.mods.lootr.util.ChestUtil;
 

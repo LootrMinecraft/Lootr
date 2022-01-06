@@ -10,12 +10,11 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import noobanidus.mods.lootr.Lootr;
-import noobanidus.mods.lootr.client.BarrelModel;
-import noobanidus.mods.lootr.client.LootrChestBlockRenderer;
-import noobanidus.mods.lootr.client.LootrChestCartRenderer;
-import noobanidus.mods.lootr.client.LootrShulkerBlockRenderer;
+import noobanidus.mods.lootr.client.block.BarrelModel;
+import noobanidus.mods.lootr.client.block.LootrChestBlockRenderer;
+import noobanidus.mods.lootr.client.entity.LootrChestCartRenderer;
+import noobanidus.mods.lootr.client.block.LootrShulkerBlockRenderer;
 import noobanidus.mods.lootr.init.ModBlockEntities;
 import noobanidus.mods.lootr.init.ModEntities;
 

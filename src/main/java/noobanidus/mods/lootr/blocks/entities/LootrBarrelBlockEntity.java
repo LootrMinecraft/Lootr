@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.blocks.entities;
+package noobanidus.mods.lootr.block.entities;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
@@ -46,7 +46,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.blockentity.ILootTile;
-import noobanidus.mods.lootr.blocks.LootrBarrelBlock;
+import noobanidus.mods.lootr.block.LootrBarrelBlock;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlockEntities;
 import noobanidus.mods.lootr.util.Getter;

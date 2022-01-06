@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.blocks.entities;
+package noobanidus.mods.lootr.block.entities;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;

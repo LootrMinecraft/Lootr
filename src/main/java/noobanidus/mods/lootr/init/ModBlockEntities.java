@@ -5,7 +5,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import noobanidus.mods.lootr.Lootr;
-import noobanidus.mods.lootr.blocks.entities.*;
+import noobanidus.mods.lootr.block.entities.*;
 
 @Mod.EventBusSubscriber(modid=Lootr.MODID, bus= Mod.EventBusSubscriber.Bus.MOD)
 public class ModBlockEntities {

@@ -4,7 +4,7 @@ import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.IItemRenderProperties;
-import noobanidus.mods.lootr.client.LootrChestItemRenderer;
+import noobanidus.mods.lootr.client.item.LootrChestItemRenderer;
 
 import java.util.function.Consumer;
 

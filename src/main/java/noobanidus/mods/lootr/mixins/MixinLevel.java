@@ -4,7 +4,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import noobanidus.mods.lootr.api.blockentity.ILootTile;
-import noobanidus.mods.lootr.blocks.entities.TileTicker;
+import noobanidus.mods.lootr.block.entities.TileTicker;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

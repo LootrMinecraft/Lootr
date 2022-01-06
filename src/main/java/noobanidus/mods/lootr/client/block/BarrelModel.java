@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.client;
+package noobanidus.mods.lootr.client.block;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -26,7 +26,7 @@ import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.client.model.data.IDynamicBakedModel;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
-import noobanidus.mods.lootr.blocks.LootrBarrelBlock;
+import noobanidus.mods.lootr.block.LootrBarrelBlock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

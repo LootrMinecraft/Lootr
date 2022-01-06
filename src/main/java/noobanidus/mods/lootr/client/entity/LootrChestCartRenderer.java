@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.client;
+package noobanidus.mods.lootr.client.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.entity.MinecartRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
+import noobanidus.mods.lootr.client.item.LootrChestItemRenderer;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
 public class LootrChestCartRenderer<T extends LootrChestMinecartEntity> extends MinecartRenderer<T> {

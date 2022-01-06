@@ -24,14 +24,14 @@ import java.util.UUID;
 
 @SuppressWarnings("NullableProblems")
 public class SpecialChestInventory implements ILootrInventory {
-  private NewChestData newChestData;
+  private ChestData newChestData;
   private final NonNullList<ItemStack> contents;
   private final Component name;
 
   @Nullable
   private BlockPos pos;
 
-  public SpecialChestInventory(NewChestData newChestData, NonNullList<ItemStack> contents, Component name, @Nullable BlockPos pos) {
+  public SpecialChestInventory(ChestData newChestData, NonNullList<ItemStack> contents, Component name, @Nullable BlockPos pos) {
     this.newChestData = newChestData;
     if (!contents.isEmpty()) {
       this.contents = contents;
@@ -42,7 +42,7 @@ public class SpecialChestInventory implements ILootrInventory {
     this.pos = pos;
   }
 
-  public SpecialChestInventory(NewChestData newChestData, CompoundTag items, String componentAsJSON, BlockPos pos) {
+  public SpecialChestInventory(ChestData newChestData, CompoundTag items, String componentAsJSON, BlockPos pos) {
     this.newChestData = newChestData;
     this.name = Component.Serializer.fromJson(componentAsJSON);
     this.contents = NonNullList.withSize(27, ItemStack.EMPTY);
