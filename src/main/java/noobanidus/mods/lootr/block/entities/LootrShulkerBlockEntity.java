@@ -287,6 +287,11 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   @Override
+  public BlockPos getPosition() {
+    return getBlockPos();
+  }
+
+  @Override
   public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
     return LazyOptional.empty();
   }

@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkStatus;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -20,6 +21,7 @@ import net.minecraftforge.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.config.ConfigManager;
+import noobanidus.mods.lootr.util.StructureUtil;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -76,6 +78,13 @@ public class TileTicker {
             if (be.lootTable == null || ConfigManager.isBlacklisted(be.lootTable)) {
               toRemove.add(entry);
               continue;
+            }
+            if (!ConfigManager.getLootStructureBlacklist().isEmpty()) {
+              StructureFeature<?> startAt = StructureUtil.featureFor(level, entry.getPosition());
+              if (startAt != null && ConfigManager.getLootStructureBlacklist().contains(startAt.getRegistryName())) {
+                toRemove.add(entry);
+                continue;
+              }
             }
             ResourceLocation table = be.lootTable;
             long seed = be.lootTableSeed;

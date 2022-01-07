@@ -287,6 +287,11 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
   }
 
   @Override
+  public BlockPos getPosition() {
+    return getBlockPos();
+  }
+
+  @Override
   public long getSeed() {
     return seed;
   }

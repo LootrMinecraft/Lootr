@@ -172,6 +172,11 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   }
 
   @Override
+  public BlockPos getPosition() {
+    return getBlockPos();
+  }
+
+  @Override
   public long getSeed() {
     return seed;
   }
