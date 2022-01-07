@@ -108,6 +108,21 @@ public class ChestUtil {
       } else if (block instanceof LootrShulkerBlock) {
         ModAdvancements.SHULKER_PREDICATE.trigger((ServerPlayer) player, ((ILootBlockEntity) te).getTileId());
       }
+      if (DataStorage.isRefreshed(tileId)) {
+        DataStorage.refreshInventory(world, ((ILootBlockEntity) te).getTileId(), (ServerPlayer) player);
+        DataStorage.removeRefreshed(tileId);
+        player.sendMessage(new TranslatableComponent("lootr.message.refreshed").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
+      } else {
+        int refreshValue = DataStorage.getRefreshValue(tileId);
+        if (refreshValue > 0) {
+          player.sendMessage(new TranslatableComponent("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
+        } else if (refreshValue == -1) {
+          if (ConfigManager.isRefreshing(world, (ILootBlockEntity) te)) {
+            DataStorage.setRefreshing(tileId, ConfigManager.REFRESH_VALUE.get());
+            player.sendMessage(new TranslatableComponent("lootr.message.refresh_start", ConfigManager.REFRESH_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
+          }
+        }
+      }
       MenuProvider provider = DataStorage.getInventory(world, ((ILootBlockEntity) te).getTileId(), pos, (ServerPlayer) player, (RandomizableContainerBlockEntity) te, ((ILootBlockEntity) te)::unpackLootTable);
       if (!DataStorage.isScored(player.getUUID(), ((ILootBlockEntity)te).getTileId())) {
         player.awardStat(ModStats.LOOTED_STAT);
@@ -156,6 +171,21 @@ public class ChestUtil {
           ModAdvancements.SCORE_PREDICATE.trigger((ServerPlayer) player, null);
           DataStorage.score(player.getUUID(), cart.getUUID());
         }
+        if (DataStorage.isRefreshed(tileId)) {
+          DataStorage.refreshInventory(world, cart, (ServerPlayer) player);
+          DataStorage.removeRefreshed(tileId);
+          player.sendMessage(new TranslatableComponent("lootr.message.refreshed").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
+        } else {
+          int refreshValue = DataStorage.getRefreshValue(tileId);
+          if (refreshValue > 0) {
+            player.sendMessage(new TranslatableComponent("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
+          } else if (refreshValue == -1) {
+            if (ConfigManager.isRefreshing(world, cart)) {
+              DataStorage.setRefreshing(tileId, ConfigManager.REFRESH_VALUE.get());
+              player.sendMessage(new TranslatableComponent("lootr.message.refresh_start", ConfigManager.REFRESH_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
+            }
+          }
+        }
         MenuProvider provider = DataStorage.getInventory(world, cart, (ServerPlayer) player, cart::addLoot);
         player.openMenu(provider);
       }
@@ -176,6 +206,22 @@ public class ChestUtil {
       NonNullList<ItemStack> stacks = null;
       if (tile.getCustomInventory() != null) {
         stacks = copyItemList(tile.getCustomInventory());
+      }
+      UUID tileId = tile.getTileId();
+      if (DataStorage.isRefreshed(tileId)) {
+        DataStorage.refreshInventory(world, ((ILootBlockEntity) te).getTileId(), stacks, (ServerPlayer) player);
+        DataStorage.removeRefreshed(tileId);
+        player.sendMessage(new TranslatableComponent("lootr.message.refreshed").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
+      } else {
+        int refreshValue = DataStorage.getRefreshValue(tileId);
+        if (refreshValue > 0) {
+          player.sendMessage(new TranslatableComponent("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
+        } else if (refreshValue == -1) {
+          if (ConfigManager.isRefreshing(world, tile)) {
+            DataStorage.setRefreshing(tileId, ConfigManager.REFRESH_VALUE.get());
+            player.sendMessage(new TranslatableComponent("lootr.message.refresh_start", ConfigManager.REFRESH_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
+          }
+        }
       }
       MenuProvider provider = DataStorage.getInventory(world, tile.getTileId(), stacks, (ServerPlayer) player, pos, tile);
       if (!DataStorage.isScored(player.getUUID(), ((ILootBlockEntity)te).getTileId())) {

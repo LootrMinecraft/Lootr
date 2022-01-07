@@ -11,7 +11,6 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraftforge.server.ServerLifecycleHooks;
 import net.minecraft.world.level.storage.LevelResource;
-import net.minecraftforge.event.TickEvent;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.LootFiller;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
@@ -235,6 +234,35 @@ public class DataStorage {
     }
 
     return inventory;
+  }
+
+  public static void refreshInventory(Level level, UUID uuid, ServerPlayer player) {
+    if (level.isClientSide() || !(level instanceof ServerLevel)) {
+      return;
+    }
+
+    ChestData data = getInstanceUuid((ServerLevel) level, uuid);
+    data.clear();
+    data.setDirty();
+  }
+
+  public static void refreshInventory(Level world, UUID uuid, NonNullList<ItemStack> base, ServerPlayer player) {
+    if (world.isClientSide() || !(world instanceof ServerLevel)) {
+      return;
+    }
+    ChestData data = getInstanceInventory((ServerLevel) world, uuid, null, base);
+    data.clear();
+    data.setDirty();
+  }
+
+  public static void refreshInventory(Level world, LootrChestMinecartEntity cart, ServerPlayer player) {
+    if (world.isClientSide() || !(world instanceof ServerLevel)) {
+      return;
+    }
+
+    ChestData data = getInstance((ServerLevel) world, cart.getUUID());
+    data.clear();
+    data.setDirty();
   }
 
   public static String REF_ID(ResourceKey<Level> dimension, UUID id) {
