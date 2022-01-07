@@ -2,7 +2,7 @@
   "parent": "lootr:root",
   "display": {
     "icon": {
-      "item": "lootr:lootr_chest"
+      "item": "minecraft:chest_minecart"
     },
     "title": {
       "translate": "lootr.advancements.1cart.title"
