@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.Set;
 import java.util.UUID;
 
-public interface ILootTile {
+public interface ILootBlockEntity {
   void unpackLootTable(Player player, Container inventory, ResourceLocation table, long seed);
 
   ResourceLocation getTable();

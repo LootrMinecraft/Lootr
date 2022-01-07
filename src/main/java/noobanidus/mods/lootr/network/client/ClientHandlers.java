@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.client.model.ModelDataManager;
 import net.minecraftforge.network.NetworkEvent;
 import noobanidus.mods.lootr.Lootr;
-import noobanidus.mods.lootr.api.blockentity.ILootTile;
+import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.network.CloseCart;
 import noobanidus.mods.lootr.network.OpenCart;
@@ -31,7 +31,7 @@ public class ClientHandlers {
     }
 
     BlockEntity be = level.getBlockEntity(message.pos);
-    if (be instanceof ILootTile tile) {
+    if (be instanceof ILootBlockEntity tile) {
       tile.getOpeners().remove(player.getUUID());
       ModelDataManager.requestModelDataRefresh(be);
     } else {

@@ -10,7 +10,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraft.world.phys.Vec3;
-import noobanidus.mods.lootr.api.blockentity.ILootTile;
+import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.init.ModLoot;
 
 import javax.annotation.Nullable;
@@ -38,8 +38,8 @@ public class LootCount implements LootItemCondition {
     }
     BlockPos position = new BlockPos(pos);
     BlockEntity tileentity = lootContext.getLevel().getBlockEntity(position);
-    if (tileentity instanceof ILootTile) {
-      int count = ((ILootTile) tileentity).getOpeners().size() + 1; // Additional opener to include the current opener
+    if (tileentity instanceof ILootBlockEntity) {
+      int count = ((ILootBlockEntity) tileentity).getOpeners().size() + 1; // Additional opener to include the current opener
       for (Operation op : operations) {
         if (!op.test(count)) {
           return false;

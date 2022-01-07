@@ -6,7 +6,8 @@
   "mixins": [
     "MixinCatSitOnBlockGoal",
     "MixinLevel",
-    "MixinLevelChunk"
+    "MixinLevelChunk",
+    "MixinStructureTemplate"
   ],
   "client": [
   ],

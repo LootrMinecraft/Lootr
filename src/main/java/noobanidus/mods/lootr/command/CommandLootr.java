@@ -30,7 +30,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraftforge.server.ServerLifecycleHooks;
-import noobanidus.mods.lootr.api.blockentity.ILootTile;
+import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.block.LootrBarrelBlock;
 import noobanidus.mods.lootr.block.LootrChestBlock;
 import noobanidus.mods.lootr.block.LootrShulkerBlock;
@@ -202,14 +202,14 @@ public class CommandLootr {
       BlockPos pos = new BlockPos(c.getSource().getPosition());
       Level world = c.getSource().getLevel();
       BlockEntity te = world.getBlockEntity(pos);
-      if (!(te instanceof ILootTile)) {
+      if (!(te instanceof ILootBlockEntity)) {
         pos = pos.below();
         te = world.getBlockEntity(pos);
       }
-      if (!(te instanceof ILootTile)) {
+      if (!(te instanceof ILootBlockEntity)) {
         c.getSource().sendSuccess(new TextComponent("Please stand on a valid Lootr chest."), false);
       } else {
-        c.getSource().sendSuccess(new TextComponent("The ID of this inventory is: " + ((ILootTile) te).getTileId().toString()), false);
+        c.getSource().sendSuccess(new TextComponent("The ID of this inventory is: " + ((ILootBlockEntity) te).getTileId().toString()), false);
       }
       return 1;
     }));
@@ -217,8 +217,8 @@ public class CommandLootr {
       BlockPos position = Vec3Argument.getCoordinates(c, "location").getBlockPos(c.getSource());
       Level world = c.getSource().getLevel();
       BlockEntity tile = world.getBlockEntity(position);
-      if (tile instanceof ILootTile) {
-        Set<UUID> openers = ((ILootTile) tile).getOpeners();
+      if (tile instanceof ILootBlockEntity) {
+        Set<UUID> openers = ((ILootBlockEntity) tile).getOpeners();
         c.getSource().sendSuccess(new TextComponent("Tile at location " + position + " has " + openers.size() + " openers. UUIDs as follows:"), true);
         for (UUID uuid : openers) {
           Optional<GameProfile> prof = c.getSource().getServer().getProfileCache().get(uuid);

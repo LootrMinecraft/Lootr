@@ -18,7 +18,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraftforge.server.ServerLifecycleHooks;
-import noobanidus.mods.lootr.api.blockentity.ILootTile;
+import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.api.LootFiller;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
@@ -178,7 +178,7 @@ public class ChestData extends SavedData {
         return null;
       }
 
-      lootTable = ((ILootTile) tile).getTable();
+      lootTable = ((ILootBlockEntity) tile).getTable();
 
       NonNullList<ItemStack> items = NonNullList.withSize(tile.getContainerSize(), ItemStack.EMPTY);
       // Saving this is handled elsewhere

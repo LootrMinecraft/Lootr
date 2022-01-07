@@ -3,7 +3,7 @@ package noobanidus.mods.lootr.mixins;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
-import noobanidus.mods.lootr.api.blockentity.ILootTile;
+import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.block.entities.TileTicker;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,7 +19,7 @@ public class MixinLevel {
     Level level = (Level) (Object) this;
     if (!level.isClientSide()) {
       for (BlockEntity be : entities) {
-        if (be instanceof RandomizableContainerBlockEntity && !(be instanceof ILootTile)) {
+        if (be instanceof RandomizableContainerBlockEntity && !(be instanceof ILootBlockEntity)) {
           TileTicker.addEntry(level.dimension(), be.getBlockPos());
         }
       }

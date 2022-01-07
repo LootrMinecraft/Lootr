@@ -26,7 +26,7 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.Lootr;
-import noobanidus.mods.lootr.api.blockentity.ILootTile;
+import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModBlocks;
 
@@ -42,31 +42,53 @@ public class ConfigManager {
   private static final List<ResourceLocation> QUARK_TRAPPED_CHESTS = Arrays.asList(new ResourceLocation("quark", "oak_trapped_chest"), new ResourceLocation("quark", "spruce_trapped_chest"), new ResourceLocation("quark", "birch_trapped_chest"), new ResourceLocation("quark", "jungle_trapped_chest"), new ResourceLocation("quark", "acacia_trapped_chest"), new ResourceLocation("quark", "dark_oak_trapped_chest"), new ResourceLocation("quark", "warped_trapped_chest"), new ResourceLocation("quark", "crimson_trapped_chest"));
 
   public static ForgeConfigSpec COMMON_CONFIG;
+
+  // Debug
   public static final ForgeConfigSpec.BooleanValue REPORT_UNRESOLVED_TABLES;
+
+  // Seed randomization
   public static final ForgeConfigSpec.BooleanValue RANDOMISE_SEED;
+
+  // Conversion
   public static final ForgeConfigSpec.BooleanValue CONVERT_MINESHAFTS;
   public static final ForgeConfigSpec.BooleanValue CONVERT_QUARK;
   public static final ForgeConfigSpec.BooleanValue CONVERT_WOODEN_CHESTS;
   public static final ForgeConfigSpec.BooleanValue CONVERT_TRAPPED_CHESTS;
-  public static final ForgeConfigSpec.BooleanValue DISABLE_BREAK;
-  public static final ForgeConfigSpec.IntValue DECAY_VALUE;
-  public static final ForgeConfigSpec.BooleanValue DECAY_ALL;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> ADDITIONAL_CHESTS;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> ADDITIONAL_TRAPPED_CHESTS;
+
+  // Breaking
+  public static final ForgeConfigSpec.BooleanValue DISABLE_BREAK;
+
+  // Whitelist/blacklist (loot table, modid, dimension)
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DIMENSION_WHITELIST;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DIMENSION_BLACKLIST;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> LOOT_TABLE_BLACKLIST;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> LOOT_MODID_BLACKLIST;
+
+  // Decay
+  public static final ForgeConfigSpec.IntValue DECAY_VALUE;
+  public static final ForgeConfigSpec.BooleanValue DECAY_ALL;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DECAY_MODIDS;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DECAY_LOOT_TABLES;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DECAY_DIMENSIONS;
 
+  // Refresh
+  public static final ForgeConfigSpec.IntValue REFRESH_VALUE;
+  public static final ForgeConfigSpec.BooleanValue REFRESH_ALL;
+  public static final ForgeConfigSpec.ConfigValue<List<? extends String>> REFRESH_MODIDS;
+  public static final ForgeConfigSpec.ConfigValue<List<? extends String>> REFRESH_LOOT_TABLES;
+  public static final ForgeConfigSpec.ConfigValue<List<? extends String>> REFRESH_DIMENSIONS;
+
   private static Set<String> DECAY_MODS = null;
   private static Set<ResourceLocation> DECAY_TABLES = null;
+  private static Set<String> REFRESH_MODS = null;
+  private static Set<ResourceLocation> REFRESH_TABLES = null;
 
   private static Set<ResourceKey<Level>> DIM_WHITELIST = null;
   private static Set<ResourceKey<Level>> DIM_BLACKLIST = null;
   private static Set<ResourceKey<Level>> DECAY_DIMS = null;
+  private static Set<ResourceKey<Level>> REFRESH_DIMS = null;
   private static Set<ResourceLocation> LOOT_BLACKLIST = null;
   private static Set<ResourceLocation> ADD_CHESTS = null;
   private static Set<ResourceLocation> ADD_TRAPPED_CHESTS = null;
@@ -94,6 +116,13 @@ public class ConfigManager {
     DECAY_MODIDS = COMMON_BUILDER.comment("list of mod IDs whose loot tables will decay [default blank, meaning no chests decay, in the format of 'modid', 'modid']").defineList("decay_modids", empty, o -> o instanceof String);
     DECAY_DIMENSIONS = COMMON_BUILDER.comment("list of dimensions where loot chests should automatically decay [default: blank, e.g., minecraft:overworld]").defineList("decay_dimensions", empty, validator);
     DECAY_ALL = COMMON_BUILDER.comment("overriding decay_loot_tables, decay_modids and decay_dimensions: all chests will decay after being opened for the first time").define("decay_all", false);
+
+    REFRESH_VALUE = COMMON_BUILDER.comment("how long (in ticks) a refreshing loot containers should take to refresh their contents [default 20 minutes = 20 * 60 * 20]").defineInRange("refresh_value", 20 * 60 * 20, 0, Integer.MAX_VALUE);
+    REFRESH_LOOT_TABLES = COMMON_BUILDER.comment("list of loot tables which will refresh [default blank, meaning no chests refresh, in the format of 'modid:loot_table']").defineList("refresh_loot_tables", empty, validator);
+    REFRESH_MODIDS = COMMON_BUILDER.comment("list of mod IDs whose loot tables will refresh [default blank, meaning no chests refresh, in the format of 'modid', 'modid']").defineList("refresh_modids", empty, o -> o instanceof String);
+    REFRESH_DIMENSIONS = COMMON_BUILDER.comment("list of dimensions where loot chests should automatically refresh [default: blank, e.g., minecraft:overworld]").defineList("refresh_dimensions", empty, validator);
+    REFRESH_ALL = COMMON_BUILDER.comment("overriding refresh_loot_tables, refresh_modids and refresh_dimensions: all chests will refresh after being opened for the first time").define("refresh_all", false);
+
     COMMON_CONFIG = COMMON_BUILDER.build();
   }
 
@@ -116,6 +145,9 @@ public class ConfigManager {
     DECAY_TABLES = null;
     DECAY_DIMS = null;
     LOOT_MODIDS = null;
+    REFRESH_DIMS = null;
+    REFRESH_MODS = null;
+    REFRESH_TABLES = null;
   }
 
   public static Set<ResourceKey<Level>> getDimensionWhitelist() {
@@ -139,6 +171,13 @@ public class ConfigManager {
     return DECAY_DIMS;
   }
 
+  public static Set<ResourceKey<Level>> getRefreshDimensions() {
+    if (REFRESH_DIMS == null) {
+      REFRESH_DIMS = REFRESH_DIMENSIONS.get().stream().map(o -> ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(o))).collect(Collectors.toSet());
+    }
+    return REFRESH_DIMS;
+  }
+
   public static Set<ResourceLocation> getLootBlacklist() {
     if (LOOT_BLACKLIST == null) {
       LOOT_BLACKLIST = LOOT_TABLE_BLACKLIST.get().stream().map(ResourceLocation::new).collect(Collectors.toSet());
@@ -146,7 +185,7 @@ public class ConfigManager {
     return LOOT_BLACKLIST;
   }
 
-  public static Set<String> getLootModids () {
+  public static Set<String> getLootModids() {
     if (LOOT_MODIDS == null) {
       LOOT_MODIDS = LOOT_MODID_BLACKLIST.get().stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
     }
@@ -175,6 +214,20 @@ public class ConfigManager {
     return DECAY_MODS;
   }
 
+  public static Set<ResourceLocation> getRefreshingTables () {
+    if (REFRESH_TABLES == null) {
+      REFRESH_TABLES = REFRESH_LOOT_TABLES.get().stream().map(ResourceLocation::new).collect(Collectors.toSet());
+    }
+    return REFRESH_TABLES;
+  }
+
+  public static Set<String> getRefreshMods () {
+    if (REFRESH_MODS == null) {
+      REFRESH_MODS = REFRESH_MODIDS.get().stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
+    }
+    return REFRESH_MODS;
+  }
+
   public static Set<ResourceLocation> getAdditionalChests() {
     if (ADD_CHESTS == null) {
       ADD_CHESTS = ADDITIONAL_CHESTS.get().stream().map(ResourceLocation::new).collect(Collectors.toSet());
@@ -194,33 +247,69 @@ public class ConfigManager {
   }
 
   public static boolean isDimensionDecaying(ResourceKey<Level> key) {
-    return (getDecayDimensions().contains(key));
+    return getDecayDimensions().contains(key);
   }
 
-  public static boolean isDecaying(Level world, ILootTile tile) {
+  public static boolean isDimensionRefreshing(ResourceKey<Level> key) {
+    return getRefreshDimensions().contains(key);
+  }
+
+  public static boolean isDecaying(Level world, ILootBlockEntity tile) {
     if (DECAY_ALL.get()) {
       return true;
     }
     if (getDecayingTables().contains(tile.getTable())) {
       return true;
     }
-    if (getDecayMods().contains(tile.getTable().getNamespace().toLowerCase(Locale.ROOT))) {
+    if (getDecayMods().contains(tile.getTable().getNamespace())) {
       return true;
     }
     return isDimensionDecaying(world.dimension());
+  }
+
+  public static boolean isRefreshing (Level world, ILootBlockEntity tile) {
+    if (REFRESH_ALL.get()) {
+      return true;
+    }
+    if (getRefreshingTables().contains(tile.getTable())) {
+      return true;
+    }
+    if (getRefreshMods().contains(tile.getTable().getNamespace())) {
+      return true;
+    }
+    return isDimensionRefreshing(world.dimension());
   }
 
   public static boolean isDecaying(Level world, LootrChestMinecartEntity entity) {
     if (DECAY_ALL.get()) {
       return true;
     }
-    if (getDecayingTables().contains(entity.lootTable)) {
-      return true;
-    }
-    if (getDecayMods().contains(entity.lootTable.getNamespace().toLowerCase(Locale.ROOT))) {
-      return true;
+    if (entity.lootTable != null) {
+      if (getDecayingTables().contains(entity.lootTable)) {
+        return true;
+      }
+      if (getDecayMods().contains(entity.lootTable.getNamespace())) {
+        return true;
+      }
     }
     return isDimensionDecaying(world.dimension());
+  }
+
+  public static boolean isRefreshing (Level world, LootrChestMinecartEntity entity) {
+    if (REFRESH_ALL.get()) {
+      return true;
+    }
+    if (entity.lootTable != null) {
+      if (getRefreshingTables().contains(entity.lootTable)) {
+        return true;
+      }
+
+      if (getDecayMods().contains(entity.lootTable.getNamespace())) {
+        return true;
+      }
+    }
+
+    return isDimensionRefreshing(world.dimension());
   }
 
   private static void addSafeReplacement(ResourceLocation location, Block replacement) {

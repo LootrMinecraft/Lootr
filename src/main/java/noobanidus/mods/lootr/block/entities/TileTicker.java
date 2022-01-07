@@ -18,7 +18,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.Lootr;
-import noobanidus.mods.lootr.api.blockentity.ILootTile;
+import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.config.ConfigManager;
 
 import java.util.HashSet;
@@ -69,7 +69,7 @@ public class TileTicker {
           ChunkAccess chunk = provider.getChunk(pos.x, pos.z, ChunkStatus.FULL, false);
           if (chunk != null) {
             BlockEntity blockEntity = level.getBlockEntity(entry.getPosition());
-            if (!(blockEntity instanceof RandomizableContainerBlockEntity be) || blockEntity instanceof ILootTile) {
+            if (!(blockEntity instanceof RandomizableContainerBlockEntity be) || blockEntity instanceof ILootBlockEntity) {
               toRemove.add(entry);
               continue;
             }
@@ -88,7 +88,7 @@ public class TileTicker {
             level.removeBlockEntity(entry.getPosition());
             level.setBlock(entry.getPosition(), replacement, 2);
             blockEntity = level.getBlockEntity(entry.getPosition());
-            if (blockEntity instanceof ILootTile) {
+            if (blockEntity instanceof ILootBlockEntity) {
               ((RandomizableContainerBlockEntity) blockEntity).setLootTable(table, seed);
             } else {
               Lootr.LOG.error("replacement " + replacement + " is not an ILootTile " + entry.getDimension() + " at " + entry.getPosition());

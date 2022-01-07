@@ -15,7 +15,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
-import noobanidus.mods.lootr.api.blockentity.ILootTile;
+import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.api.inventory.ILootrInventory;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
@@ -62,7 +62,7 @@ public class SpecialChestInventory implements ILootrInventory {
     }
 
     BlockEntity te = world.getBlockEntity(pos);
-    if (te instanceof ILootTile) {
+    if (te instanceof ILootBlockEntity) {
       return (RandomizableContainerBlockEntity) te;
     }
 

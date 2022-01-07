@@ -29,6 +29,7 @@ public class DataStorage {
   public static final String ID = "Lootr-AdvancementData";
   public static final String SCORED = "Lootr-ScoreData";
   public static final String DECAY = "Lootr-DecayData";
+  public static final String REFRESH = "Lootr-RefreshData";
 
   public static boolean isAwarded(UUID player, UUID tileId) {
     DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
@@ -70,10 +71,6 @@ public class DataStorage {
     return data.isComplete(id);
   }
 
-  public static boolean isDecaying (UUID id) {
-    return getDecayValue(id) > 0;
-  }
-
   public static void setDecaying (UUID id, int decay) {
     DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, DECAY);
@@ -94,6 +91,44 @@ public class DataStorage {
   public static void doDecay () {
     DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, DECAY);
+    if (data.tick()) {
+      data.setDirty();
+      manager.save();
+    }
+  }
+
+  public static int getRefreshValue (UUID id) {
+    DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
+    TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, REFRESH);
+    return data.getValue(id);
+  }
+
+  public static boolean isRefreshed(UUID id) {
+    DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
+    TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, REFRESH);
+    return data.isComplete(id);
+  }
+
+  public static void setRefreshing (UUID id, int decay) {
+    DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
+    TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, REFRESH);
+    data.setValue(id, decay);
+    data.setDirty();
+    manager.save();
+  }
+
+  public static void removeRefreshed (UUID id) {
+    DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
+    TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, REFRESH);
+    if (data.remove(id) != -1) {
+      data.setDirty();
+      manager.save();
+    }
+  }
+
+  public static void doRefresh () {
+    DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
+    TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, REFRESH);
     if (data.tick()) {
       data.setDirty();
       manager.save();
@@ -204,10 +239,6 @@ public class DataStorage {
 
   public static String REF_ID(ResourceKey<Level> dimension, UUID id) {
     return "Lootr-custom-" + dimension.location().getPath() + "-" + id.toString();
-  }
-
-  public static String OLD_ID(ResourceKey<Level> dimension, BlockPos pos) {
-    return "Lootr-chests-" + dimension.location().getPath() + "-" + pos.asLong();
   }
 
   public static String ID(ResourceKey<Level> dimension, UUID id) {

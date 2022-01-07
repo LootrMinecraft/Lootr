@@ -3,7 +3,7 @@ package noobanidus.mods.lootr.mixins;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.chunk.LevelChunk;
-import noobanidus.mods.lootr.api.blockentity.ILootTile;
+import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.block.entities.TileTicker;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinLevelChunk {
   @Inject(method="addAndRegisterBlockEntity", at=@At(target="Lnet/minecraft/world/level/block/entity/BlockEntity;onLoad()V", remap=false, value="INVOKE", shift= At.Shift.AFTER))
   private void lootrAddAndRegisterBlockEntity (BlockEntity entity, CallbackInfo cir) {
-    if (entity instanceof RandomizableContainerBlockEntity && !(entity instanceof ILootTile)) {
+    if (entity instanceof RandomizableContainerBlockEntity && !(entity instanceof ILootBlockEntity)) {
       LevelChunk levelChunk = (LevelChunk) (Object) this;
       if (!levelChunk.getLevel().isClientSide()) {
         TileTicker.addEntry(levelChunk.getLevel().dimension(), entity.getBlockPos());

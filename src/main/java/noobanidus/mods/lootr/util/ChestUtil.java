@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraftforge.network.PacketDistributor;
-import noobanidus.mods.lootr.api.blockentity.ILootTile;
+import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.block.LootrShulkerBlock;
 import noobanidus.mods.lootr.block.entities.LootrInventoryBlockEntity;
 import noobanidus.mods.lootr.config.ConfigManager;
@@ -32,15 +32,12 @@ import noobanidus.mods.lootr.network.CloseCart;
 import noobanidus.mods.lootr.network.PacketHandler;
 import noobanidus.mods.lootr.network.UpdateModelData;
 
-import java.util.HashSet;
 import java.util.Random;
-import java.util.Set;
 import java.util.UUID;
 
 @SuppressWarnings("unused")
 public class ChestUtil {
   public static Random random = new Random();
-  public static Set<Class<?>> tileClasses = new HashSet<>();
 
   public static boolean handleLootSneak(Block block, Level world, BlockPos pos, Player player) {
     if (world.isClientSide()) {
@@ -51,7 +48,7 @@ public class ChestUtil {
     }
 
     BlockEntity te = world.getBlockEntity(pos);
-    if (te instanceof ILootTile tile) {
+    if (te instanceof ILootBlockEntity tile) {
       if (tile.getOpeners().remove(player.getUUID())) {
         tile.updatePacketViaState();
         UpdateModelData message = new UpdateModelData(te.getBlockPos());
@@ -86,35 +83,36 @@ public class ChestUtil {
       return false;
     }
     BlockEntity te = world.getBlockEntity(pos);
-    if (te instanceof ILootTile tile) {
+    if (te instanceof ILootBlockEntity tile) {
       UUID tileId = tile.getTileId();
       if (DataStorage.isDecayed(tileId)) {
         world.destroyBlock(pos, true);
         player.sendMessage(new TranslatableComponent("lootr.message.decayed").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), Util.NIL_UUID);
+        DataStorage.removeDecayed(tileId);
         return false;
       } else {
         int decayValue = DataStorage.getDecayValue(tileId);
         if (decayValue > 0) {
           player.sendMessage(new TranslatableComponent("lootr.message.decay_in", decayValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), Util.NIL_UUID);
         } else if (decayValue == -1) {
-          if (ConfigManager.isDecaying(world, (ILootTile)te)) {
+          if (ConfigManager.isDecaying(world, (ILootBlockEntity)te)) {
             DataStorage.setDecaying(tileId, ConfigManager.DECAY_VALUE.get());
             player.sendMessage(new TranslatableComponent("lootr.message.decay_start", ConfigManager.DECAY_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), Util.NIL_UUID);
           }
         }
       }
       if (block instanceof BarrelBlock) {
-        ModAdvancements.BARREL_PREDICATE.trigger((ServerPlayer) player, ((ILootTile) te).getTileId());
+        ModAdvancements.BARREL_PREDICATE.trigger((ServerPlayer) player, ((ILootBlockEntity) te).getTileId());
       } else if (block instanceof ChestBlock) {
-        ModAdvancements.CHEST_PREDICATE.trigger((ServerPlayer) player, ((ILootTile) te).getTileId());
+        ModAdvancements.CHEST_PREDICATE.trigger((ServerPlayer) player, ((ILootBlockEntity) te).getTileId());
       } else if (block instanceof LootrShulkerBlock) {
-        ModAdvancements.SHULKER_PREDICATE.trigger((ServerPlayer) player, ((ILootTile) te).getTileId());
+        ModAdvancements.SHULKER_PREDICATE.trigger((ServerPlayer) player, ((ILootBlockEntity) te).getTileId());
       }
-      MenuProvider provider = DataStorage.getInventory(world, ((ILootTile) te).getTileId(), pos, (ServerPlayer) player, (RandomizableContainerBlockEntity) te, ((ILootTile) te)::unpackLootTable);
-      if (!DataStorage.isScored(player.getUUID(), ((ILootTile)te).getTileId())) {
+      MenuProvider provider = DataStorage.getInventory(world, ((ILootBlockEntity) te).getTileId(), pos, (ServerPlayer) player, (RandomizableContainerBlockEntity) te, ((ILootBlockEntity) te)::unpackLootTable);
+      if (!DataStorage.isScored(player.getUUID(), ((ILootBlockEntity)te).getTileId())) {
         player.awardStat(ModStats.LOOTED_STAT);
         ModAdvancements.SCORE_PREDICATE.trigger((ServerPlayer) player, null);
-        DataStorage.score(player.getUUID(), ((ILootTile) te).getTileId());
+        DataStorage.score(player.getUUID(), ((ILootBlockEntity) te).getTileId());
       }
       if (tile.getOpeners().add(player.getUUID())) {
         tile.updatePacketViaState();
@@ -137,6 +135,7 @@ public class ChestUtil {
         if (DataStorage.isDecayed(tileId)) {
           cart.destroy(DamageSource.OUT_OF_WORLD);
           player.sendMessage(new TranslatableComponent("lootr.message.decayed").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), Util.NIL_UUID);
+          DataStorage.removeDecayed(tileId);
           return;
         } else {
           int decayValue = DataStorage.getDecayValue(tileId);
@@ -179,10 +178,10 @@ public class ChestUtil {
         stacks = copyItemList(tile.getCustomInventory());
       }
       MenuProvider provider = DataStorage.getInventory(world, tile.getTileId(), stacks, (ServerPlayer) player, pos, tile);
-      if (!DataStorage.isScored(player.getUUID(), ((ILootTile)te).getTileId())) {
+      if (!DataStorage.isScored(player.getUUID(), ((ILootBlockEntity)te).getTileId())) {
         player.awardStat(ModStats.LOOTED_STAT);
         ModAdvancements.SCORE_PREDICATE.trigger((ServerPlayer) player, null);
-        DataStorage.score(player.getUUID(), ((ILootTile) te).getTileId());
+        DataStorage.score(player.getUUID(), ((ILootBlockEntity) te).getTileId());
       }
       if (tile.getOpeners().add(player.getUUID())) {
         tile.updatePacketViaState();
