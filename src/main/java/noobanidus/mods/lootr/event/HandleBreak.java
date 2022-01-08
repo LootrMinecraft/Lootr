@@ -7,6 +7,7 @@ import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.config.ConfigManager;
@@ -15,6 +16,7 @@ import noobanidus.mods.lootr.init.ModBlocks;
 @Mod.EventBusSubscriber(modid= Lootr.MODID)
 public class HandleBreak {
 
+  @SubscribeEvent
   public static void onBlockBreak(BlockEvent.BreakEvent event) {
     Player player = event.getPlayer();
 
