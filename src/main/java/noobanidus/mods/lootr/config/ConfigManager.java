@@ -201,7 +201,7 @@ public class ConfigManager {
 
   public static Set<ResourceLocation> getDecayStructures () {
     if (DECAY_STRUCTS == null) {
-      DECAY_STRUCTS = REFRESH_STRUCTURES.get().stream().map(ResourceLocation::new).collect(Collectors.toSet());
+      DECAY_STRUCTS = DECAY_STRUCTURES.get().stream().map(ResourceLocation::new).collect(Collectors.toSet());
     }
     return DECAY_STRUCTS;
   }
