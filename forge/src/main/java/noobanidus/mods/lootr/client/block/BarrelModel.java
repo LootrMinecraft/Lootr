@@ -28,7 +28,6 @@ import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
 import noobanidus.mods.lootr.block.LootrBarrelBlock;
 
-import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
@@ -88,9 +87,9 @@ public class BarrelModel implements IModelGeometry<BarrelModel> {
       this.unopened = unopened;
     }
 
-    @Nonnull
+    
     @Override
-    public List<BakedQuad> getQuads(BlockState state, Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
+    public List<BakedQuad> getQuads(BlockState state, Direction side,  Random rand,  IModelData extraData) {
       BakedModel model;
       if (extraData.hasProperty(LootrBarrelBlock.OPENED)) {
         if (extraData.getData(LootrBarrelBlock.OPENED) == Boolean.TRUE) {
@@ -132,7 +131,7 @@ public class BarrelModel implements IModelGeometry<BarrelModel> {
     }
 
     @Override
-    public TextureAtlasSprite getParticleIcon(@Nonnull IModelData data) {
+    public TextureAtlasSprite getParticleIcon( IModelData data) {
       if (data.getData(LootrBarrelBlock.OPENED) == Boolean.TRUE) {
         return opened.getParticleIcon();
       } else {

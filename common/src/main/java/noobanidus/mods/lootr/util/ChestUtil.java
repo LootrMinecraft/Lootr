@@ -20,7 +20,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
-import net.minecraftforge.network.PacketDistributor;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.block.LootrShulkerBlock;
 import noobanidus.mods.lootr.block.entities.LootrInventoryBlockEntity;
@@ -29,9 +28,6 @@ import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModAdvancements;
 import noobanidus.mods.lootr.init.ModStats;
-import noobanidus.mods.lootr.network.CloseCart;
-import noobanidus.mods.lootr.network.PacketHandler;
-import noobanidus.mods.lootr.network.UpdateModelData;
 
 import java.util.Random;
 import java.util.UUID;
@@ -52,8 +48,9 @@ public class ChestUtil {
     if (te instanceof ILootBlockEntity tile) {
       if (tile.getOpeners().remove(player.getUUID())) {
         tile.updatePacketViaState();
-        UpdateModelData message = new UpdateModelData(te.getBlockPos());
-        PacketHandler.sendToInternal(message, (ServerPlayer) player);
+        // TODO:
+/*        UpdateModelData message = new UpdateModelData(te.getBlockPos());
+        PacketHandler.sendToInternal(message, (ServerPlayer) player);*/
       }
       return true;
     }
@@ -71,8 +68,9 @@ public class ChestUtil {
     }
 
     cart.getOpeners().remove(player.getUUID());
-    CloseCart open = new CloseCart(cart.getId());
-    PacketHandler.sendInternal(PacketDistributor.TRACKING_ENTITY.with(() -> cart), open);
+    // TODO:
+/*    CloseCart open = new CloseCart(cart.getId());
+    PacketHandler.sendInternal(PacketDistributor.TRACKING_ENTITY.with(() -> cart), open);*/
   }
 
   public static boolean handleLootChest(Block block, Level level, BlockPos pos, Player player) {
@@ -97,8 +95,8 @@ public class ChestUtil {
           player.sendMessage(new TranslatableComponent("lootr.message.decay_in", decayValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), Util.NIL_UUID);
         } else if (decayValue == -1) {
           if (ConfigManager.isDecaying((ServerLevel) level, (ILootBlockEntity) te)) {
-            DataStorage.setDecaying(tileId, ConfigManager.DECAY_VALUE.get());
-            player.sendMessage(new TranslatableComponent("lootr.message.decay_start", ConfigManager.DECAY_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), Util.NIL_UUID);
+            DataStorage.setDecaying(tileId, ConfigManager.getDecayValue());
+            player.sendMessage(new TranslatableComponent("lootr.message.decay_start", ConfigManager.getDecayValue() / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), Util.NIL_UUID);
           }
         }
       }
@@ -119,8 +117,8 @@ public class ChestUtil {
           player.sendMessage(new TranslatableComponent("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
         } else if (refreshValue == -1) {
           if (ConfigManager.isRefreshing((ServerLevel) level, (ILootBlockEntity) te)) {
-            DataStorage.setRefreshing(tileId, ConfigManager.REFRESH_VALUE.get());
-            player.sendMessage(new TranslatableComponent("lootr.message.refresh_start", ConfigManager.REFRESH_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
+            DataStorage.setRefreshing(tileId, ConfigManager.getRefreshValue());
+            player.sendMessage(new TranslatableComponent("lootr.message.refresh_start", ConfigManager.getRefreshValue() / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
           }
         }
       }
@@ -159,8 +157,8 @@ public class ChestUtil {
             player.sendMessage(new TranslatableComponent("lootr.message.decay_in", decayValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), Util.NIL_UUID);
           } else if (decayValue == -1) {
             if (ConfigManager.isDecaying((ServerLevel) level, cart)) {
-              DataStorage.setDecaying(tileId, ConfigManager.DECAY_VALUE.get());
-              player.sendMessage(new TranslatableComponent("lootr.message.decay_start", ConfigManager.DECAY_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), Util.NIL_UUID);
+              DataStorage.setDecaying(tileId, ConfigManager.getDecayValue());
+              player.sendMessage(new TranslatableComponent("lootr.message.decay_start", ConfigManager.getDecayValue() / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), Util.NIL_UUID);
             }
           }
         }
@@ -182,8 +180,8 @@ public class ChestUtil {
             player.sendMessage(new TranslatableComponent("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
           } else if (refreshValue == -1) {
             if (ConfigManager.isRefreshing((ServerLevel) level, cart)) {
-              DataStorage.setRefreshing(tileId, ConfigManager.REFRESH_VALUE.get());
-              player.sendMessage(new TranslatableComponent("lootr.message.refresh_start", ConfigManager.REFRESH_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
+              DataStorage.setRefreshing(tileId, ConfigManager.getRefreshValue());
+              player.sendMessage(new TranslatableComponent("lootr.message.refresh_start", ConfigManager.getRefreshValue() / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
             }
           }
         }
@@ -219,8 +217,8 @@ public class ChestUtil {
           player.sendMessage(new TranslatableComponent("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
         } else if (refreshValue == -1) {
           if (ConfigManager.isRefreshing((ServerLevel) level, tile)) {
-            DataStorage.setRefreshing(tileId, ConfigManager.REFRESH_VALUE.get());
-            player.sendMessage(new TranslatableComponent("lootr.message.refresh_start", ConfigManager.REFRESH_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
+            DataStorage.setRefreshing(tileId, ConfigManager.getRefreshValue());
+            player.sendMessage(new TranslatableComponent("lootr.message.refresh_start", ConfigManager.getRefreshValue() / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
           }
         }
       }

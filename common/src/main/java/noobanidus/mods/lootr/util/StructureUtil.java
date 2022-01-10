@@ -2,6 +2,7 @@ package noobanidus.mods.lootr.util;
 
 import it.unimi.dsi.fastutil.longs.LongSet;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.core.SectionPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -36,13 +37,13 @@ public class StructureUtil {
           if (box.getCenter().distSqr(pos) > 15 * 15) {
             box = start.getFeature().adjustBoundingBox(StructurePiece.createBoundingBox(start.getPieces().stream()));
           }
-          if (JUNGLE_PYRAMID.equals(entry.getKey().getRegistryName())) {
+          if (JUNGLE_PYRAMID.equals(Registry.STRUCTURE_FEATURE.getKey(entry.getKey()))) {
             box = new BoundingBox(box.minX(), box.minY() - 2, box.minZ(), box.maxX(), box.maxY(), box.maxZ());
           }
           if (box.isInside(pos)) {
             return entry.getKey();
           }
-          if (DESERT_PYRAMID.equals(entry.getKey().getRegistryName())) {
+          if (DESERT_PYRAMID.equals(Registry.STRUCTURE_FEATURE.getKey(entry.getKey()))) {
             BlockPos corner = box.getCenter();
             BoundingBox additional = DESERT_PYRAMID_BOX.moved(corner.getX(), corner.getY(), corner.getZ());
             if (additional.isInside(pos)) {

@@ -1,13 +1,11 @@
 package noobanidus.mods.lootr.util;
 
+import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.fml.DistExecutor;
-import noobanidus.mods.lootr.client.impl.ClientGetter;
-import noobanidus.mods.lootr.impl.ServerGetter;
 
 public class Getter {
-
+  @ExpectPlatform
   public static Player getPlayer() {
-    return DistExecutor.safeRunForDist(() -> ClientGetter::getPlayer, () -> ServerGetter::getPlayer);
+    throw new AssertionError();
   }
 }

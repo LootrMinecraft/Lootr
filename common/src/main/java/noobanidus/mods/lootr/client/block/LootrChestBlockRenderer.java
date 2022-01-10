@@ -24,7 +24,8 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootBloc
     super(p_173607_);
   }
 
-  @Override
+  // TODO:
+/*  @Override
   protected Material getMaterial(T tile, ChestType type) {
     if (playerId == null) {
       Player player = Getter.getPlayer();
@@ -42,5 +43,5 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootBloc
     } else {
       return MATERIAL;
     }
-  }
+  }*/
 }

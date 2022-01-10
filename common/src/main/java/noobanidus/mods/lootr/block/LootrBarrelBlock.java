@@ -11,14 +11,14 @@ import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.client.model.data.ModelProperty;
 import noobanidus.mods.lootr.block.entities.LootrBarrelBlockEntity;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import java.util.Random;
 
 public class LootrBarrelBlock extends BarrelBlock {
-  public static final ModelProperty<Boolean> OPENED = new ModelProperty<>();
+  // TODO:
+/*  public static final ModelProperty<Boolean> OPENED = new ModelProperty<>();*/
 
   public LootrBarrelBlock(Properties p_49046_) {
     super(p_49046_);

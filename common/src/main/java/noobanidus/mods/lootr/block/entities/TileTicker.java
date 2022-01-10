@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.block.entities;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -14,20 +15,16 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.config.ConfigManager;
+import noobanidus.mods.lootr.util.ServerAccess;
 import noobanidus.mods.lootr.util.StructureUtil;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-@Mod.EventBusSubscriber(modid = Lootr.MODID)
 public class TileTicker {
   private final static Object listLock = new Object();
   private final static Object worldLock = new Object();
@@ -49,71 +46,68 @@ public class TileTicker {
     }
   }
 
-  @SubscribeEvent
-  public static void serverTick(TickEvent.ServerTickEvent event) {
-    if (event.phase == TickEvent.Phase.END) {
-      Set<Entry> toRemove = new HashSet<>();
-      Set<Entry> copy;
-      synchronized (listLock) {
-        tickingList = true;
-        copy = new HashSet<>(tileEntries);
-        tickingList = false;
-      }
-      synchronized (worldLock) {
-        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-        for (Entry entry : copy) {
-          ServerLevel level = server.getLevel(entry.getDimension());
-          if (level == null) {
-            throw new IllegalStateException("got a null world for tile ticker in dimension " + entry.getDimension() + " at " + entry.getPosition());
-          }
-          ServerChunkCache provider = level.getChunkSource();
-          ChunkPos pos = entry.getChunkPosition();
-          ChunkAccess chunk = provider.getChunk(pos.x, pos.z, ChunkStatus.FULL, false);
-          if (chunk != null) {
-            BlockEntity blockEntity = level.getBlockEntity(entry.getPosition());
-            if (!(blockEntity instanceof RandomizableContainerBlockEntity be) || blockEntity instanceof ILootBlockEntity) {
-              toRemove.add(entry);
-              continue;
-            }
-            if (be.lootTable == null || ConfigManager.isBlacklisted(be.lootTable)) {
-              toRemove.add(entry);
-              continue;
-            }
-            if (!ConfigManager.getLootStructureBlacklist().isEmpty()) {
-              StructureFeature<?> startAt = StructureUtil.featureFor(level, entry.getPosition());
-              if (startAt != null && ConfigManager.getLootStructureBlacklist().contains(startAt.getRegistryName())) {
-                toRemove.add(entry);
-                continue;
-              }
-            }
-            ResourceLocation table = be.lootTable;
-            long seed = be.lootTableSeed;
-            BlockState stateAt = level.getBlockState(entry.getPosition());
-            BlockState replacement = ConfigManager.replacement(stateAt);
-            if (replacement == null) {
-              toRemove.add(entry);
-              continue;
-            }
-            level.removeBlockEntity(entry.getPosition());
-            level.setBlock(entry.getPosition(), replacement, 2);
-            blockEntity = level.getBlockEntity(entry.getPosition());
-            if (blockEntity instanceof ILootBlockEntity) {
-              ((RandomizableContainerBlockEntity) blockEntity).setLootTable(table, seed);
-            } else {
-              Lootr.LOG.error("replacement " + replacement + " is not an ILootTile " + entry.getDimension() + " at " + entry.getPosition());
-            }
-
+  public static void serverTick() {
+    Set<Entry> toRemove = new HashSet<>();
+    Set<Entry> copy;
+    synchronized (listLock) {
+      tickingList = true;
+      copy = new HashSet<>(tileEntries);
+      tickingList = false;
+    }
+    synchronized (worldLock) {
+      MinecraftServer server = ServerAccess.getServer();
+      for (Entry entry : copy) {
+        ServerLevel level = server.getLevel(entry.getDimension());
+        if (level == null) {
+          throw new IllegalStateException("got a null world for tile ticker in dimension " + entry.getDimension() + " at " + entry.getPosition());
+        }
+        ServerChunkCache provider = level.getChunkSource();
+        ChunkPos pos = entry.getChunkPosition();
+        ChunkAccess chunk = provider.getChunk(pos.x, pos.z, ChunkStatus.FULL, false);
+        if (chunk != null) {
+          BlockEntity blockEntity = level.getBlockEntity(entry.getPosition());
+          if (!(blockEntity instanceof RandomizableContainerBlockEntity be) || blockEntity instanceof ILootBlockEntity) {
             toRemove.add(entry);
+            continue;
           }
+          if (be.lootTable == null || ConfigManager.isBlacklisted(be.lootTable)) {
+            toRemove.add(entry);
+            continue;
+          }
+          if (!ConfigManager.hasLootStructureBlacklist()) {
+            StructureFeature<?> startAt = StructureUtil.featureFor(level, entry.getPosition());
+            if (startAt != null && ConfigManager.isLootStructureBlacklisted(Registry.STRUCTURE_FEATURE.getKey(startAt))) {
+              toRemove.add(entry);
+              continue;
+            }
+          }
+          ResourceLocation table = be.lootTable;
+          long seed = be.lootTableSeed;
+          BlockState stateAt = level.getBlockState(entry.getPosition());
+          BlockState replacement = ConfigManager.replacement(stateAt);
+          if (replacement == null) {
+            toRemove.add(entry);
+            continue;
+          }
+          level.removeBlockEntity(entry.getPosition());
+          level.setBlock(entry.getPosition(), replacement, 2);
+          blockEntity = level.getBlockEntity(entry.getPosition());
+          if (blockEntity instanceof ILootBlockEntity) {
+            ((RandomizableContainerBlockEntity) blockEntity).setLootTable(table, seed);
+          } else {
+            Lootr.LOG.error("replacement " + replacement + " is not an ILootTile " + entry.getDimension() + " at " + entry.getPosition());
+          }
+
+          toRemove.add(entry);
         }
       }
-      synchronized (listLock) {
-        tickingList = true;
-        tileEntries.removeAll(toRemove);
-        tileEntries.addAll(pendingEntries);
-        tickingList = false;
-        pendingEntries.clear();
-      }
+    }
+    synchronized (listLock) {
+      tickingList = true;
+      tileEntries.removeAll(toRemove);
+      tileEntries.addAll(pendingEntries);
+      tickingList = false;
+      pendingEntries.clear();
     }
   }
 

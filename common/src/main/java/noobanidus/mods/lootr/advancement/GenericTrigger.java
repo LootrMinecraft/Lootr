@@ -13,7 +13,6 @@ import net.minecraft.server.PlayerAdvancements;
 import net.minecraft.server.level.ServerPlayer;
 import noobanidus.mods.lootr.api.advancement.IGenericPredicate;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -33,13 +32,13 @@ public class GenericTrigger<T> implements CriterionTrigger<GenericTrigger.Instan
   }
 
   @Override
-  @Nonnull
+  
   public ResourceLocation getId() {
     return id;
   }
 
   @Override
-  public void addPlayerListener(@Nonnull PlayerAdvancements advancementsIn, @Nonnull Listener<Instance<T>> listener) {
+  public void addPlayerListener( PlayerAdvancements advancementsIn,  Listener<Instance<T>> listener) {
     Listeners<T> list = listeners.get(advancementsIn);
 
     if (list == null) {
@@ -51,7 +50,7 @@ public class GenericTrigger<T> implements CriterionTrigger<GenericTrigger.Instan
   }
 
   @Override
-  public void removePlayerListener(@Nonnull PlayerAdvancements advancementsIn, @Nonnull Listener<Instance<T>> listener) {
+  public void removePlayerListener( PlayerAdvancements advancementsIn,  Listener<Instance<T>> listener) {
     Listeners<T> list = listeners.get(advancementsIn);
 
     if (list != null) {
@@ -64,7 +63,7 @@ public class GenericTrigger<T> implements CriterionTrigger<GenericTrigger.Instan
   }
 
   @Override
-  public void removePlayerListeners(@Nonnull PlayerAdvancements advancementsIn) {
+  public void removePlayerListeners( PlayerAdvancements advancementsIn) {
     listeners.remove(advancementsIn);
   }
 

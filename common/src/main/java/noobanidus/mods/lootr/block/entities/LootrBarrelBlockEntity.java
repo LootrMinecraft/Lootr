@@ -40,10 +40,6 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.model.data.IModelData;
-import net.minecraftforge.client.model.data.ModelDataMap;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.block.LootrBarrelBlock;
@@ -51,7 +47,6 @@ import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlockEntities;
 import noobanidus.mods.lootr.util.Getter;
 
-import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -96,9 +91,10 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     super(ModBlockEntities.SPECIAL_LOOT_BARREL, pWorldPosition, pBlockState);
   }
 
-  private IModelData modelData = null;
+  // TODO: Forge & Fabric
+/*  private IModelData modelData = null;
 
-  @Nonnull
+  
   @Override
   public IModelData getModelData() {
     if (modelData == null) {
@@ -109,7 +105,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
       modelData.setData(LootrBarrelBlock.OPENED, openers.contains(player.getUUID()));
     }
     return modelData;
-  }
+  }*/
 
   @Override
   public UUID getTileId() {
@@ -149,14 +145,14 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
       LootTable loottable = this.level.getServer().getLootTables().get(overrideTable != null ? overrideTable : this.savedLootTable);
       if (loottable == LootTable.EMPTY) {
         Lootr.LOG.error("Unable to fill loot barrel in " + level.dimension() + " at " + worldPosition + " as the loot table '" + (overrideTable != null ? overrideTable : this.savedLootTable) + "' couldn't be resolved! Please search the loot table in `latest.log` to see if there are errors in loading.");
-        if (ConfigManager.REPORT_UNRESOLVED_TABLES.get()) {
+        if (ConfigManager.reportUnresolvedTables()) {
           player.sendMessage(new TranslatableComponent("lootr.message.invalid_table", (overrideTable != null ? overrideTable : this.savedLootTable).toString()).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED)).withBold(true)), Util.NIL_UUID);
         }
       }
       if (player instanceof ServerPlayer) {
         CriteriaTriggers.GENERATE_LOOT.trigger((ServerPlayer) player, overrideTable != null ? overrideTable : this.lootTable);
       }
-      LootContext.Builder builder = (new LootContext.Builder((ServerLevel) this.level)).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(this.worldPosition)).withOptionalRandomSeed(ConfigManager.RANDOMISE_SEED.get() ? ThreadLocalRandom.current().nextLong() : seed == Long.MIN_VALUE ? this.seed : seed);
+      LootContext.Builder builder = (new LootContext.Builder((ServerLevel) this.level)).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(this.worldPosition)).withOptionalRandomSeed(ConfigManager.randomizeSeed() ? ThreadLocalRandom.current().nextLong() : seed == Long.MIN_VALUE ? this.seed : seed);
       if (player != null) {
         builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
       }
@@ -213,7 +209,8 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
         this.openers.add(NbtUtils.loadUUID(item));
       }
     }
-    requestModelDataUpdate();
+    // TODO: FORGE
+/*    requestModelDataUpdate();*/
     super.load(compound);
   }
 
@@ -246,10 +243,13 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     return null;
   }
 
+  // TODO: FORGE
+/*
   @Override
   public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
     return LazyOptional.empty();
   }
+*/
 
   @Override
   public int getContainerSize() {
@@ -306,7 +306,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
 
 
   @Override
-  @Nonnull
+  
   public CompoundTag getUpdateTag() {
     CompoundTag result = super.getUpdateTag();
     saveAdditional(result);
@@ -319,10 +319,11 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     return ClientboundBlockEntityDataPacket.create(this, BlockEntity::getUpdateTag);
   }
 
-  @Override
-  public void onDataPacket(@Nonnull Connection net, @Nonnull ClientboundBlockEntityDataPacket pkt) {
+  // TODO: FORGE
+/*  @Override
+  public void onDataPacket( Connection net,  ClientboundBlockEntityDataPacket pkt) {
     if (pkt.getTag() != null) {
       load(pkt.getTag());
     }
-  }
+  }*/
 }

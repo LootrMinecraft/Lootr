@@ -11,8 +11,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import noobanidus.mods.lootr.init.ModBlockEntities;
 
-import javax.annotation.Nonnull;
-
 public class LootrInventoryBlockEntity extends LootrChestBlockEntity {
   private NonNullList<ItemStack> customInventory;
 
@@ -52,8 +50,9 @@ public class LootrInventoryBlockEntity extends LootrChestBlockEntity {
     this.customInventory = customInventory;
   }
 
-  @Override
-  public void onDataPacket(@Nonnull Connection net, @Nonnull ClientboundBlockEntityDataPacket pkt) {
+  // TODO: IMPLEMENT
+/*  @Override
+  public void onDataPacket( Connection net,  ClientboundBlockEntityDataPacket pkt) {
     load(pkt.getTag());
-  }
+  }*/
 }

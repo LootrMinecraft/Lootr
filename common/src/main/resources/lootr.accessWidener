@@ -8,3 +8,5 @@ accessible field net/minecraft/server/players/GameProfileCache profilesByName Lj
 accessible field net/minecraft/world/level/levelgen/structure/OceanRuinPieces$OceanRuinPiece isLarge Z
 accessible field net/minecraft/world/level/block/entity/RandomizableContainerBlockEntity lootTable Lnet/minecraft/resources/ResourceLocation;
 accessible field net/minecraft/world/level/block/entity/RandomizableContainerBlockEntity lootTableSeed J
+accessible method net/minecraft/world/level/storage/LevelResource <init> (Ljava/lang/String;)V
+accessible class net/minecraft/world/level/block/entity/BlockEntityType$BlockEntitySupplier

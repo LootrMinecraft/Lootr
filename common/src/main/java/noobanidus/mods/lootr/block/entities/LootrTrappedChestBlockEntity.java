@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import noobanidus.mods.lootr.init.ModBlockEntities;
 
 public class LootrTrappedChestBlockEntity extends LootrChestBlockEntity {
-  protected LootrTrappedChestBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+  public LootrTrappedChestBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
     super(type, pos, state);
   }
 

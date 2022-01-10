@@ -4,9 +4,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.saveddata.SavedData;
-import net.minecraftforge.common.util.INBTSerializable;
 
-import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -53,25 +51,25 @@ public class AdvancementData extends SavedData {
     return pCompound;
   }
 
-  public static class UUIDPair implements INBTSerializable<CompoundTag> {
-    @Nonnull
+  public static class UUIDPair {
+    
     private UUID first;
     private UUID second;
 
     protected UUIDPair() {
     }
 
-    public UUIDPair(@Nonnull UUID first, @Nonnull UUID second) {
+    public UUIDPair( UUID first,  UUID second) {
       this.first = first;
       this.second = second;
     }
 
-    @Nonnull
+    
     public UUID getFirst() {
       return first;
     }
 
-    @Nonnull
+    
     public UUID getSecond() {
       return second;
     }
@@ -94,7 +92,6 @@ public class AdvancementData extends SavedData {
       return result;
     }
 
-    @Override
     public CompoundTag serializeNBT() {
       CompoundTag result = new CompoundTag();
       result.putUUID("first", getFirst());
@@ -102,7 +99,6 @@ public class AdvancementData extends SavedData {
       return result;
     }
 
-    @Override
     public void deserializeNBT(CompoundTag nbt) {
       this.first = nbt.getUUID("first");
       this.second = nbt.getUUID("second");

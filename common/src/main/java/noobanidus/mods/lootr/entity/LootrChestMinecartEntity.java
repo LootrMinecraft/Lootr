@@ -37,14 +37,11 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraftforge.network.NetworkHooks;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.entity.ILootCart;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.init.ModEntities;
-import noobanidus.mods.lootr.network.OpenCart;
-import noobanidus.mods.lootr.network.PacketHandler;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import java.util.HashSet;
@@ -155,7 +152,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     if (reason == RemovalReason.KILLED) {
       this.gameEvent(GameEvent.ENTITY_KILLED);
     }
-    this.invalidateCaps();
+/*    this.invalidateCaps();*/
   }
 
   @Override
@@ -213,14 +210,14 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
       LootTable loottable = this.level.getServer().getLootTables().get(overrideTable != null ? overrideTable : this.lootTable);
       if (loottable == LootTable.EMPTY) {
         Lootr.LOG.error("Unable to fill loot in " + level.dimension() + " at " + position() + " as the loot table '" + (overrideTable != null ? overrideTable : this.lootTable) + "' couldn't be resolved! Please search the loot table in `latest.log` to see if there are errors in loading.");
-        if (ConfigManager.REPORT_UNRESOLVED_TABLES.get() && player != null) {
+        if (ConfigManager.reportUnresolvedTables() && player != null) {
           player.sendMessage(new TranslatableComponent("lootr.message.invalid_table", (overrideTable != null ? overrideTable : this.lootTable).toString()).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED)).withBold(true)), Util.NIL_UUID);
         }
       }
       if (player instanceof ServerPlayer) {
         CriteriaTriggers.GENERATE_LOOT.trigger((ServerPlayer) player, overrideTable != null ? overrideTable : this.lootTable);
       }
-      LootContext.Builder lootcontext$builder = (new LootContext.Builder((ServerLevel) this.level)).withParameter(LootContextParams.ORIGIN, this.position()).withOptionalRandomSeed(ConfigManager.RANDOMISE_SEED.get() ? ThreadLocalRandom.current().nextLong() : seed == Long.MIN_VALUE ? this.lootTableSeed : seed);
+      LootContext.Builder lootcontext$builder = (new LootContext.Builder((ServerLevel) this.level)).withParameter(LootContextParams.ORIGIN, this.position()).withOptionalRandomSeed(ConfigManager.randomizeSeed() ? ThreadLocalRandom.current().nextLong() : seed == Long.MIN_VALUE ? this.lootTableSeed : seed);
       lootcontext$builder.withParameter(LootContextParams.KILLER_ENTITY, this);
       if (player != null) {
         lootcontext$builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
@@ -232,14 +229,16 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
 
   @Override
   public Packet<?> getAddEntityPacket() {
-    return NetworkHooks.getEntitySpawningPacket(this);
+    return null;
+/*    return NetworkHooks.getEntitySpawningPacket(this);*/
   }
 
   @Override
   public void startOpen(Player player) {
     if (!player.isSpectator()) {
-      OpenCart cart = new OpenCart(this.getId());
-      PacketHandler.sendToInternal(cart, (ServerPlayer) player);
+      // TODO:
+/*      OpenCart cart = new OpenCart(this.getId());
+      PacketHandler.sendToInternal(cart, (ServerPlayer) player);*/
     }
   }
 

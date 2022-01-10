@@ -10,10 +10,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraft.world.level.storage.LevelResource;
-import net.minecraftforge.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.LootFiller;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
+import noobanidus.mods.lootr.util.ServerAccess;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -30,13 +30,13 @@ public class DataStorage {
   public static final String REFRESH = "Lootr-RefreshData";
 
   public static boolean isAwarded(UUID player, UUID tileId) {
-    DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
+    DimensionDataStorage manager = ServerAccess.getServer().getLevel(Level.OVERWORLD).getDataStorage();
     AdvancementData data = manager.computeIfAbsent(AdvancementData::load, AdvancementData::new, ID);
     return data.contains(player, tileId);
   }
 
   public static void award(UUID player, UUID tileId) {
-    DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
+    DimensionDataStorage manager = ServerAccess.getServer().getLevel(Level.OVERWORLD).getDataStorage();
     AdvancementData data = manager.computeIfAbsent(AdvancementData::load, AdvancementData::new, ID);
     data.add(player, tileId);
     data.setDirty();
@@ -44,13 +44,13 @@ public class DataStorage {
   }
 
   public static boolean isScored(UUID player, UUID tileId) {
-    DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
+    DimensionDataStorage manager = ServerAccess.getServer().getLevel(Level.OVERWORLD).getDataStorage();
     AdvancementData data = manager.computeIfAbsent(AdvancementData::load, AdvancementData::new, SCORED);
     return data.contains(player, tileId);
   }
 
   public static void score(UUID player, UUID tileId) {
-    DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
+    DimensionDataStorage manager = ServerAccess.getServer().getLevel(Level.OVERWORLD).getDataStorage();
     AdvancementData data = manager.computeIfAbsent(AdvancementData::load, AdvancementData::new, SCORED);
     data.add(player, tileId);
     data.setDirty();
@@ -58,19 +58,19 @@ public class DataStorage {
   }
 
   public static int getDecayValue(UUID id) {
-    DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
+    DimensionDataStorage manager = ServerAccess.getServer().getLevel(Level.OVERWORLD).getDataStorage();
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, DECAY);
     return data.getValue(id);
   }
 
   public static boolean isDecayed(UUID id) {
-    DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
+    DimensionDataStorage manager = ServerAccess.getServer().getLevel(Level.OVERWORLD).getDataStorage();
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, DECAY);
     return data.isComplete(id);
   }
 
   public static void setDecaying(UUID id, int decay) {
-    DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
+    DimensionDataStorage manager = ServerAccess.getServer().getLevel(Level.OVERWORLD).getDataStorage();
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, DECAY);
     data.setValue(id, decay);
     data.setDirty();
@@ -78,7 +78,7 @@ public class DataStorage {
   }
 
   public static void removeDecayed(UUID id) {
-    DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
+    DimensionDataStorage manager = ServerAccess.getServer().getLevel(Level.OVERWORLD).getDataStorage();
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, DECAY);
     if (data.remove(id) != -1) {
       data.setDirty();
@@ -87,7 +87,7 @@ public class DataStorage {
   }
 
   public static void doDecay() {
-    DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
+    DimensionDataStorage manager = ServerAccess.getServer().getLevel(Level.OVERWORLD).getDataStorage();
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, DECAY);
     if (data.tick()) {
       data.setDirty();
@@ -96,19 +96,19 @@ public class DataStorage {
   }
 
   public static int getRefreshValue(UUID id) {
-    DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
+    DimensionDataStorage manager = ServerAccess.getServer().getLevel(Level.OVERWORLD).getDataStorage();
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, REFRESH);
     return data.getValue(id);
   }
 
   public static boolean isRefreshed(UUID id) {
-    DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
+    DimensionDataStorage manager = ServerAccess.getServer().getLevel(Level.OVERWORLD).getDataStorage();
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, REFRESH);
     return data.isComplete(id);
   }
 
   public static void setRefreshing(UUID id, int decay) {
-    DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
+    DimensionDataStorage manager = ServerAccess.getServer().getLevel(Level.OVERWORLD).getDataStorage();
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, REFRESH);
     data.setValue(id, decay);
     data.setDirty();
@@ -116,7 +116,7 @@ public class DataStorage {
   }
 
   public static void removeRefreshed(UUID id) {
-    DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
+    DimensionDataStorage manager = ServerAccess.getServer().getLevel(Level.OVERWORLD).getDataStorage();
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, REFRESH);
     if (data.remove(id) != -1) {
       data.setDirty();
@@ -125,7 +125,7 @@ public class DataStorage {
   }
 
   public static void doRefresh() {
-    DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
+    DimensionDataStorage manager = ServerAccess.getServer().getLevel(Level.OVERWORLD).getDataStorage();
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, REFRESH);
     if (data.tick()) {
       data.setDirty();
@@ -134,7 +134,7 @@ public class DataStorage {
   }
 
   public static ServerLevel getServerLevel() {
-    return ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD);
+    return ServerAccess.getServer().getLevel(Level.OVERWORLD);
   }
 
   public static ChestData getInstanceUuid(ServerLevel world, UUID id) {
