@@ -52,7 +52,6 @@ import noobanidus.mods.lootr.init.ModBlockEntities;
 import noobanidus.mods.lootr.util.Getter;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -64,7 +63,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   protected long seed = -1;
   protected UUID tileId = null;
   protected boolean opened = false;
-  private ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
+  private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
     @Override
     protected void onOpen(Level leve, BlockPos pos, BlockState state) {
       LootrBarrelBlockEntity.this.playSound(state, SoundEvents.BARREL_OPEN);
@@ -127,7 +126,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     super.setLootTable(lootTableIn, seedIn);
   }
 
-  private NonNullList<ItemStack> items = NonNullList.withSize(27, ItemStack.EMPTY);
+  private final NonNullList<ItemStack> items = NonNullList.withSize(27, ItemStack.EMPTY);
 
   @Override
   protected NonNullList<ItemStack> getItems() {
@@ -139,13 +138,13 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   }
 
   @Override
-  public void unpackLootTable(@Nullable Player player) {
+  public void unpackLootTable(Player player) {
     // TODO: Override
   }
 
   @Override
   @SuppressWarnings({"unused", "Duplicates"})
-  public void unpackLootTable(Player player, Container inventory, @Nullable ResourceLocation overrideTable, long seed) {
+  public void unpackLootTable(Player player, Container inventory, ResourceLocation overrideTable, long seed) {
     if (this.level != null && this.savedLootTable != null && this.level.getServer() != null) {
       LootTable loottable = this.level.getServer().getLootTables().get(overrideTable != null ? overrideTable : this.savedLootTable);
       if (loottable == LootTable.EMPTY) {
@@ -315,7 +314,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   }
 
   @Override
-  @Nullable
+
   public ClientboundBlockEntityDataPacket getUpdatePacket() {
     return ClientboundBlockEntityDataPacket.create(this, BlockEntity::getUpdateTag);
   }

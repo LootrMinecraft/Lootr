@@ -12,7 +12,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import noobanidus.mods.lootr.init.ModBlockEntities;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public class LootrInventoryBlockEntity extends LootrChestBlockEntity {
   private NonNullList<ItemStack> customInventory;
@@ -36,7 +35,7 @@ public class LootrInventoryBlockEntity extends LootrChestBlockEntity {
   }
 
   @Override
-  protected void saveAdditional (CompoundTag compound) {
+  protected void saveAdditional(CompoundTag compound) {
     super.saveAdditional(compound);
     if (this.customInventory != null) {
       compound.putInt("customSize", this.customInventory.size());
@@ -44,7 +43,7 @@ public class LootrInventoryBlockEntity extends LootrChestBlockEntity {
     }
   }
 
-  @Nullable
+
   public NonNullList<ItemStack> getCustomInventory() {
     return customInventory;
   }

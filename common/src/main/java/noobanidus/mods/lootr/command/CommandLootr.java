@@ -29,7 +29,6 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
-import net.minecraftforge.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.block.LootrBarrelBlock;
 import noobanidus.mods.lootr.block.LootrChestBlock;
@@ -39,8 +38,8 @@ import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.util.ChestUtil;
+import noobanidus.mods.lootr.util.ServerAccess;
 
-import javax.annotation.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -58,7 +57,7 @@ public class CommandLootr {
 
   private static List<ResourceLocation> tables = null;
   private static List<String> tableNames = null;
-  private static Map<String, UUID> profileMap = new HashMap<>();
+  private static final Map<String, UUID> profileMap = new HashMap<>();
 
   private static List<ResourceLocation> getTables() {
     if (tables == null) {
@@ -69,7 +68,7 @@ public class CommandLootr {
   }
 
   private static List<String> getProfiles() {
-    return Lists.newArrayList(ServerLifecycleHooks.getCurrentServer().getProfileCache().profilesByName.keySet());
+    return Lists.newArrayList(ServerAccess.getServer().getProfileCache().profilesByName.keySet());
   }
 
   private static List<String> getTableNames() {
@@ -77,7 +76,7 @@ public class CommandLootr {
     return tableNames;
   }
 
-  public static void createBlock(CommandSourceStack c, @Nullable Block block, @Nullable ResourceLocation table) {
+  public static void createBlock(CommandSourceStack c, Block block, ResourceLocation table) {
     Level world = c.getLevel();
     BlockPos pos = new BlockPos(c.getPosition());
     if (table == null) {

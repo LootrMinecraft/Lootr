@@ -13,7 +13,7 @@ public interface ILootBlockEntity {
 
   ResourceLocation getTable();
 
-  BlockPos getPosition ();
+  BlockPos getPosition();
 
   long getSeed();
 
@@ -23,5 +23,5 @@ public interface ILootBlockEntity {
 
   void updatePacketViaState();
 
-  void setOpened (boolean opened);
+  void setOpened(boolean opened);
 }

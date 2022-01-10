@@ -43,7 +43,6 @@ import noobanidus.mods.lootr.data.SpecialChestInventory;
 import noobanidus.mods.lootr.init.ModBlockEntities;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -238,7 +237,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
   }
 
   @Override
-  @Nullable
+
   public ClientboundBlockEntityDataPacket getUpdatePacket() {
     return ClientboundBlockEntityDataPacket.create(this, BlockEntity::getUpdateTag);
   }
@@ -251,7 +250,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
   }
 
   @Override
-  public void unpackLootTable(@Nullable Player player) {
+  public void unpackLootTable(Player player) {
   }
 
   @Override

@@ -5,7 +5,6 @@ import net.minecraft.server.level.ServerPlayer;
 import noobanidus.mods.lootr.api.advancement.IGenericPredicate;
 import noobanidus.mods.lootr.data.DataStorage;
 
-import javax.annotation.Nullable;
 import java.util.UUID;
 
 public class ContainerPredicate implements IGenericPredicate<UUID> {
@@ -20,7 +19,7 @@ public class ContainerPredicate implements IGenericPredicate<UUID> {
   }
 
   @Override
-  public IGenericPredicate<UUID> deserialize(@Nullable JsonObject element) {
+  public IGenericPredicate<UUID> deserialize(JsonObject element) {
     return new ContainerPredicate();
   }
 }

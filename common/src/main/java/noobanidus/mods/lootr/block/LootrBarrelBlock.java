@@ -15,7 +15,6 @@ import net.minecraftforge.client.model.data.ModelProperty;
 import noobanidus.mods.lootr.block.entities.LootrBarrelBlockEntity;
 import noobanidus.mods.lootr.util.ChestUtil;
 
-import javax.annotation.Nullable;
 import java.util.Random;
 
 public class LootrBarrelBlock extends BarrelBlock {
@@ -49,7 +48,7 @@ public class LootrBarrelBlock extends BarrelBlock {
     return InteractionResult.SUCCESS;
   }
 
-  @Nullable
+
   @Override
   public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
     return new LootrBarrelBlockEntity(pos, state);

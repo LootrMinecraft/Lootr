@@ -17,7 +17,7 @@ import noobanidus.mods.lootr.init.ModEntities;
 import noobanidus.mods.lootr.network.OpenCart;
 import noobanidus.mods.lootr.network.PacketHandler;
 
-@Mod.EventBusSubscriber(modid= Lootr.MODID)
+@Mod.EventBusSubscriber(modid = Lootr.MODID)
 public class HandleCart {
   @SubscribeEvent
   public static void onEntityJoin(EntityJoinWorldEvent event) {

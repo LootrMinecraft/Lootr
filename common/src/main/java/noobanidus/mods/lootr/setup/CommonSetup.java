@@ -17,7 +17,7 @@ import noobanidus.mods.lootr.init.ModLoot;
 import noobanidus.mods.lootr.init.ModStats;
 import noobanidus.mods.lootr.network.PacketHandler;
 
-@Mod.EventBusSubscriber(modid=Lootr.MODID, bus= Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = Lootr.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CommonSetup {
   @SubscribeEvent
   public static void init(FMLCommonSetupEvent event) {

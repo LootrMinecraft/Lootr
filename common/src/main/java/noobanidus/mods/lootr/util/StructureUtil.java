@@ -14,7 +14,6 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 
-import javax.annotation.Nullable;
 import java.util.Map;
 
 public class StructureUtil {
@@ -22,7 +21,7 @@ public class StructureUtil {
   private static final ResourceLocation DESERT_PYRAMID = new ResourceLocation("minecraft", "desert_pyramid");
   private static final ResourceLocation JUNGLE_PYRAMID = new ResourceLocation("minecraft", "jungle_pyramid");
 
-  @Nullable
+
   public static StructureFeature<?> featureFor(ServerLevel level, BlockPos pos) {
     ChunkPos cPos = new ChunkPos(pos);
     ChunkAccess chunk = level.getChunk(cPos.x, cPos.z, ChunkStatus.STRUCTURE_REFERENCES);

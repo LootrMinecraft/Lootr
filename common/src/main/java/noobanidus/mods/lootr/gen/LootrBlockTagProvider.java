@@ -7,10 +7,9 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import noobanidus.mods.lootr.LootrTags;
 import noobanidus.mods.lootr.init.ModBlocks;
-import org.jetbrains.annotations.Nullable;
 
 public class LootrBlockTagProvider extends BlockTagsProvider {
-  public LootrBlockTagProvider(DataGenerator p_126511_, String modId, @Nullable ExistingFileHelper existingFileHelper) {
+  public LootrBlockTagProvider(DataGenerator p_126511_, String modId, ExistingFileHelper existingFileHelper) {
     super(p_126511_, modId, existingFileHelper);
   }
 

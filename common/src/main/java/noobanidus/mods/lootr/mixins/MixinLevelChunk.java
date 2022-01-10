@@ -12,8 +12,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LevelChunk.class)
 public class MixinLevelChunk {
-  @Inject(method="addAndRegisterBlockEntity", at=@At(target="Lnet/minecraft/world/level/block/entity/BlockEntity;onLoad()V", remap=false, value="INVOKE", shift= At.Shift.AFTER))
-  private void lootrAddAndRegisterBlockEntity (BlockEntity entity, CallbackInfo cir) {
+  @Inject(method = "addAndRegisterBlockEntity", at = @At(value = "RETURN"))
+  private void lootrAddAndRegisterBlockEntity(BlockEntity entity, CallbackInfo cir) {
     if (entity instanceof RandomizableContainerBlockEntity && !(entity instanceof ILootBlockEntity)) {
       LevelChunk levelChunk = (LevelChunk) (Object) this;
       if (!levelChunk.getLevel().isClientSide()) {

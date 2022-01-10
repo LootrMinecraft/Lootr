@@ -47,14 +47,13 @@ import noobanidus.mods.lootr.network.OpenCart;
 import noobanidus.mods.lootr.network.PacketHandler;
 import noobanidus.mods.lootr.util.ChestUtil;
 
-import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class LootrChestMinecartEntity extends AbstractMinecartContainer implements ILootCart {
-  private Set<UUID> openers = new HashSet<>();
+  private final Set<UUID> openers = new HashSet<>();
   private boolean opened = false;
 
   public LootrChestMinecartEntity(EntityType<LootrChestMinecartEntity> type, Level world) {
@@ -82,7 +81,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     this.opened = true;
   }
 
-  public void setClosed () {
+  public void setClosed() {
     this.opened = false;
   }
 
@@ -133,7 +132,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     return Type.CHEST;
   }
 
-  private static BlockState cartNormal = ModBlocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
+  private static final BlockState cartNormal = ModBlocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
 
   @Override
   public BlockState getDefaultDisplayBlockState() {
@@ -209,7 +208,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     }
   }
 
-  public void addLoot(@Nullable Player player, Container inventory, @Nullable ResourceLocation overrideTable, long seed) {
+  public void addLoot(Player player, Container inventory, ResourceLocation overrideTable, long seed) {
     if (this.lootTable != null && this.level.getServer() != null) {
       LootTable loottable = this.level.getServer().getLootTables().get(overrideTable != null ? overrideTable : this.lootTable);
       if (loottable == LootTable.EMPTY) {

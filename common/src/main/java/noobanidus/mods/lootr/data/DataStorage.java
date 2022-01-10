@@ -15,7 +15,6 @@ import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.LootFiller;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -58,7 +57,7 @@ public class DataStorage {
     manager.save();
   }
 
-  public static int getDecayValue (UUID id) {
+  public static int getDecayValue(UUID id) {
     DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, DECAY);
     return data.getValue(id);
@@ -70,7 +69,7 @@ public class DataStorage {
     return data.isComplete(id);
   }
 
-  public static void setDecaying (UUID id, int decay) {
+  public static void setDecaying(UUID id, int decay) {
     DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, DECAY);
     data.setValue(id, decay);
@@ -78,7 +77,7 @@ public class DataStorage {
     manager.save();
   }
 
-  public static void removeDecayed (UUID id) {
+  public static void removeDecayed(UUID id) {
     DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, DECAY);
     if (data.remove(id) != -1) {
@@ -87,7 +86,7 @@ public class DataStorage {
     }
   }
 
-  public static void doDecay () {
+  public static void doDecay() {
     DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, DECAY);
     if (data.tick()) {
@@ -96,7 +95,7 @@ public class DataStorage {
     }
   }
 
-  public static int getRefreshValue (UUID id) {
+  public static int getRefreshValue(UUID id) {
     DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, REFRESH);
     return data.getValue(id);
@@ -108,7 +107,7 @@ public class DataStorage {
     return data.isComplete(id);
   }
 
-  public static void setRefreshing (UUID id, int decay) {
+  public static void setRefreshing(UUID id, int decay) {
     DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, REFRESH);
     data.setValue(id, decay);
@@ -116,7 +115,7 @@ public class DataStorage {
     manager.save();
   }
 
-  public static void removeRefreshed (UUID id) {
+  public static void removeRefreshed(UUID id) {
     DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, REFRESH);
     if (data.remove(id) != -1) {
@@ -125,7 +124,7 @@ public class DataStorage {
     }
   }
 
-  public static void doRefresh () {
+  public static void doRefresh() {
     DimensionDataStorage manager = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage();
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, REFRESH);
     if (data.tick()) {
@@ -147,12 +146,12 @@ public class DataStorage {
     return getServerLevel().getDataStorage().computeIfAbsent(ChestData::load, ChestData.entity(id), ENTITY(id));
   }
 
-  public static ChestData getInstanceInventory(ServerLevel world, UUID id, @Nullable UUID customId, @Nullable NonNullList<ItemStack> base) {
+  public static ChestData getInstanceInventory(ServerLevel world, UUID id, UUID customId, NonNullList<ItemStack> base) {
     ResourceKey<Level> dimension = world.dimension();
     return getServerLevel().getDataStorage().computeIfAbsent(ChestData::load, ChestData.ref_id(dimension, id, customId, base), REF_ID(dimension, id));
   }
 
-  @Nullable
+
   public static SpecialChestInventory getInventory(Level world, UUID uuid, BlockPos pos, ServerPlayer player, RandomizableContainerBlockEntity tile, LootFiller filler) {
     if (world.isClientSide || !(world instanceof ServerLevel)) {
       return null;
@@ -168,7 +167,7 @@ public class DataStorage {
     return inventory;
   }
 
-  @Nullable
+
   public static SpecialChestInventory getInventory(Level world, UUID uuid, NonNullList<ItemStack> base, ServerPlayer player, BlockPos pos, RandomizableContainerBlockEntity tile) {
     if (world.isClientSide || !(world instanceof ServerLevel)) {
       return null;
@@ -221,7 +220,7 @@ public class DataStorage {
     return cleared != 0;
   }
 
-  @Nullable
+
   public static SpecialChestInventory getInventory(Level world, LootrChestMinecartEntity cart, ServerPlayer player, LootFiller filler) {
     if (world.isClientSide || !(world instanceof ServerLevel)) {
       return null;

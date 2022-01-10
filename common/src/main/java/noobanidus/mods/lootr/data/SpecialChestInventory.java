@@ -19,19 +19,18 @@ import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.api.inventory.ILootrInventory;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
-import javax.annotation.Nullable;
 import java.util.UUID;
 
 @SuppressWarnings("NullableProblems")
 public class SpecialChestInventory implements ILootrInventory {
-  private ChestData newChestData;
+  private final ChestData newChestData;
   private final NonNullList<ItemStack> contents;
   private final Component name;
 
-  @Nullable
+
   private BlockPos pos;
 
-  public SpecialChestInventory(ChestData newChestData, NonNullList<ItemStack> contents, Component name, @Nullable BlockPos pos) {
+  public SpecialChestInventory(ChestData newChestData, NonNullList<ItemStack> contents, Component name, BlockPos pos) {
     this.newChestData = newChestData;
     if (!contents.isEmpty()) {
       this.contents = contents;
@@ -55,7 +54,7 @@ public class SpecialChestInventory implements ILootrInventory {
   }
 
   @Override
-  @Nullable
+
   public RandomizableContainerBlockEntity getTile(Level world) {
     if (world == null || world.isClientSide() || pos == null) {
       return null;
@@ -70,7 +69,7 @@ public class SpecialChestInventory implements ILootrInventory {
   }
 
   @Override
-  @Nullable
+
   public LootrChestMinecartEntity getEntity(Level world) {
     if (world == null || world.isClientSide() || newChestData.getEntityId() == null) {
       return null;
@@ -162,7 +161,7 @@ public class SpecialChestInventory implements ILootrInventory {
     return name;
   }
 
-  @Nullable
+
   @Override
   public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
     return ChestMenu.threeRows(id, inventory, this);
@@ -201,8 +200,8 @@ public class SpecialChestInventory implements ILootrInventory {
     }
   }
 
-  @Nullable
-  public UUID getTileId () {
+
+  public UUID getTileId() {
     if (newChestData == null) {
       return null;
     }
@@ -219,7 +218,7 @@ public class SpecialChestInventory implements ILootrInventory {
   }
 
   @Override
-  @Nullable
+
   public BlockPos getPos() {
     return pos;
   }

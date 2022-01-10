@@ -13,7 +13,6 @@ import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.init.ModLoot;
 
-import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
@@ -70,7 +69,7 @@ public class LootCount implements LootItemCondition {
       List<Operation> operations = new ArrayList<>();
       for (JsonElement element : objects) {
         if (!element.isJsonObject()) {
-          throw new IllegalArgumentException("invalid operand for LootCount: " + element.toString());
+          throw new IllegalArgumentException("invalid operand for LootCount: " + element);
         }
         operations.add(Operation.deserialize(element.getAsJsonObject()));
       }
@@ -104,7 +103,7 @@ public class LootCount implements LootItemCondition {
       return precedence;
     }
 
-    @Nullable
+
     public static Operand fromString(String name) {
       name = name.toUpperCase(Locale.ROOT);
       for (Operand o : values()) {

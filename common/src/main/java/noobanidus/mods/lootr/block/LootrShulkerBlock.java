@@ -39,7 +39,6 @@ import noobanidus.mods.lootr.init.ModBlockEntities;
 import noobanidus.mods.lootr.init.ModItems;
 import noobanidus.mods.lootr.util.ChestUtil;
 
-import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
@@ -130,7 +129,7 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
   }
 
   @Override
-  public void appendHoverText(ItemStack pStack, @Nullable BlockGetter pLevel, List<Component> pTooltip, TooltipFlag pFlag) {
+  public void appendHoverText(ItemStack pStack, BlockGetter pLevel, List<Component> pTooltip, TooltipFlag pFlag) {
   }
 
   @Override
@@ -155,7 +154,7 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
   }
 
   @Override
-  @Nullable
+
   public DyeColor getColor() {
     return DyeColor.YELLOW;
   }
@@ -166,7 +165,7 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
   }
 
   @Override
-  @Nullable
+
   public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
     return createTickerHelper(pBlockEntityType, ModBlockEntities.SPECIAL_LOOT_SHULKER, LootrShulkerBlockEntity::tick);
   }

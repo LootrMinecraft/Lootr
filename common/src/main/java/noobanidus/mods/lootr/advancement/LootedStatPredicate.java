@@ -5,8 +5,6 @@ import net.minecraft.server.level.ServerPlayer;
 import noobanidus.mods.lootr.api.advancement.IGenericPredicate;
 import noobanidus.mods.lootr.init.ModStats;
 
-import javax.annotation.Nullable;
-
 public class LootedStatPredicate implements IGenericPredicate<Void> {
   private int score = -1;
 
@@ -23,7 +21,7 @@ public class LootedStatPredicate implements IGenericPredicate<Void> {
   }
 
   @Override
-  public IGenericPredicate<Void> deserialize(@Nullable JsonObject element) {
+  public IGenericPredicate<Void> deserialize(JsonObject element) {
     if (element == null) {
       throw new IllegalArgumentException("element cannot be null");
     }

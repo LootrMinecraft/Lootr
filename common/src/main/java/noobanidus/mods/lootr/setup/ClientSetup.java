@@ -18,7 +18,7 @@ import noobanidus.mods.lootr.client.entity.LootrChestCartRenderer;
 import noobanidus.mods.lootr.init.ModBlockEntities;
 import noobanidus.mods.lootr.init.ModEntities;
 
-@Mod.EventBusSubscriber(modid=Lootr.MODID, value= Dist.CLIENT, bus= Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = Lootr.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientSetup {
   @SubscribeEvent
   public static void stitch(TextureStitchEvent.Pre event) {
@@ -36,7 +36,7 @@ public class ClientSetup {
   }
 
   @SubscribeEvent
-  public static void registerRenderers (EntityRenderersEvent.RegisterRenderers event) {
+  public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
     event.registerBlockEntityRenderer(ModBlockEntities.SPECIAL_LOOT_CHEST, LootrChestBlockRenderer::new);
     event.registerBlockEntityRenderer(ModBlockEntities.SPECIAL_TRAPPED_LOOT_CHEST, LootrChestBlockRenderer::new);
     event.registerBlockEntityRenderer(ModBlockEntities.SPECIAL_LOOT_INVENTORY, LootrChestBlockRenderer::new);

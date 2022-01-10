@@ -33,6 +33,6 @@ public class Lootr {
     COMMAND_LOOTR.register();
   }*/
 
-  public static void init () {
+  public static void init() {
   }
 }

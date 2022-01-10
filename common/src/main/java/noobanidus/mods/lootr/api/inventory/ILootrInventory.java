@@ -9,16 +9,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 
-import javax.annotation.Nullable;
-
 public interface ILootrInventory extends Container, MenuProvider {
-  @Nullable
+
   RandomizableContainerBlockEntity getTile(Level world);
 
-  @Nullable
+
   AbstractMinecartContainer getEntity(Level world);
 
-  @Nullable
+
   BlockPos getPos();
 
   NonNullList<ItemStack> getContents();

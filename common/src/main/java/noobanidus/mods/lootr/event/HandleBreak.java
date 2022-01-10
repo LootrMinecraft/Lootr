@@ -13,7 +13,7 @@ import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlocks;
 
-@Mod.EventBusSubscriber(modid= Lootr.MODID)
+@Mod.EventBusSubscriber(modid = Lootr.MODID)
 public class HandleBreak {
 
   @SubscribeEvent

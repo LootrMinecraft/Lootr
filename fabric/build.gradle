@@ -15,6 +15,10 @@ configurations {
     developmentFabric.extendsFrom common
 }
 
+loom {
+    accessWidenerPath = project(":common").file("src/main/resources/lootr.accesswidener")
+}
+
 dependencies {
     modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
     modApi "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"

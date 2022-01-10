@@ -30,6 +30,10 @@ processResources {
     }
 }
 
+loom {
+    accessWidenerPath = project(":common").file("src/main/resources/lootr.accesswidener")
+}
+
 shadowJar {
     exclude "fabric.mod.json"
 

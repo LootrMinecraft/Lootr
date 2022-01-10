@@ -54,7 +54,6 @@ import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlockEntities;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -72,7 +71,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   private ShulkerBoxBlockEntity.AnimationStatus animationStatus = ShulkerBoxBlockEntity.AnimationStatus.CLOSED;
   private float progress;
   private float progressOld;
-  @Nullable
+
   private final DyeColor color;
 
   public LootrShulkerBlockEntity(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState) {
@@ -336,7 +335,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   @Override
-  @Nullable
+
   public ClientboundBlockEntityDataPacket getUpdatePacket() {
     return ClientboundBlockEntityDataPacket.create(this, BlockEntity::getUpdateTag);
   }
@@ -349,7 +348,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   @Override
-  public void unpackLootTable(@Nullable Player player) {
+  public void unpackLootTable(Player player) {
   }
 
   @Override

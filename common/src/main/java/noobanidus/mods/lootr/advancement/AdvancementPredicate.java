@@ -5,8 +5,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import noobanidus.mods.lootr.api.advancement.IGenericPredicate;
 
-import javax.annotation.Nullable;
-
 public class AdvancementPredicate implements IGenericPredicate<ResourceLocation> {
   private ResourceLocation advancementId;
 
@@ -23,7 +21,7 @@ public class AdvancementPredicate implements IGenericPredicate<ResourceLocation>
   }
 
   @Override
-  public IGenericPredicate<ResourceLocation> deserialize(@Nullable JsonObject element) {
+  public IGenericPredicate<ResourceLocation> deserialize(JsonObject element) {
     if (element == null) {
       throw new IllegalArgumentException("AdvancementPredicate requires an object");
     }

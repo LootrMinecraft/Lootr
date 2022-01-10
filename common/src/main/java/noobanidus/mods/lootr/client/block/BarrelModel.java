@@ -29,7 +29,6 @@ import net.minecraftforge.client.model.geometry.IModelGeometry;
 import noobanidus.mods.lootr.block.LootrBarrelBlock;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
@@ -91,7 +90,7 @@ public class BarrelModel implements IModelGeometry<BarrelModel> {
 
     @Nonnull
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
+    public List<BakedQuad> getQuads(BlockState state, Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
       BakedModel model;
       if (extraData.hasProperty(LootrBarrelBlock.OPENED)) {
         if (extraData.getData(LootrBarrelBlock.OPENED) == Boolean.TRUE) {

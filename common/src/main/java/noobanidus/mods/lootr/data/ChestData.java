@@ -22,14 +22,13 @@ import noobanidus.mods.lootr.api.LootFiller;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Supplier;
 
 public class ChestData extends SavedData {
-  private String key;
+  private final String key;
   private BlockPos pos;
   private ResourceKey<Level> dimension;
   private UUID entityId;
@@ -47,8 +46,8 @@ public class ChestData extends SavedData {
     return entityId;
   }
 
-  @Nullable
-  public UUID getTileId () {
+
+  public UUID getTileId() {
     if (entityId != null) {
       return entityId;
     }
@@ -77,7 +76,7 @@ public class ChestData extends SavedData {
     return "Lootr-entity-" + entityId.toString();
   }
 
-  public static Supplier<ChestData> ref_id(ResourceKey<Level> dimension, UUID id, @Nullable UUID customId, @Nullable NonNullList<ItemStack> base) {
+  public static Supplier<ChestData> ref_id(ResourceKey<Level> dimension, UUID id, UUID customId, NonNullList<ItemStack> base) {
     return () -> {
       ChestData data = new ChestData(REF_ID(dimension, id));
       data.pos = null;
@@ -142,7 +141,7 @@ public class ChestData extends SavedData {
     return inventories.remove(uuid) != null;
   }
 
-  @Nullable
+
   public SpecialChestInventory getInventory(ServerPlayer player, BlockPos pos) {
     SpecialChestInventory result = inventories.get(player.getUUID());
     if (result != null) {
@@ -151,7 +150,7 @@ public class ChestData extends SavedData {
     return result;
   }
 
-  public SpecialChestInventory createInventory(ServerPlayer player, LootFiller filler, @Nullable RandomizableContainerBlockEntity tile) {
+  public SpecialChestInventory createInventory(ServerPlayer player, LootFiller filler, RandomizableContainerBlockEntity tile) {
     ServerLevel world = (ServerLevel) player.level;
     SpecialChestInventory result;
     LootrChestMinecartEntity cart = null;

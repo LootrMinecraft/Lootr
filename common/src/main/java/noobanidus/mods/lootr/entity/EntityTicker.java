@@ -13,7 +13,7 @@ import noobanidus.mods.lootr.data.DataStorage;
 import java.util.ArrayList;
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid= Lootr.MODID)
+@Mod.EventBusSubscriber(modid = Lootr.MODID)
 public class EntityTicker {
   private static final List<LootrChestMinecartEntity> entities = new ArrayList<>();
 

@@ -25,8 +25,6 @@ import noobanidus.mods.lootr.block.entities.LootrTrappedChestBlockEntity;
 import noobanidus.mods.lootr.init.ModBlockEntities;
 import noobanidus.mods.lootr.util.ChestUtil;
 
-import javax.annotation.Nullable;
-
 public class LootrTrappedChestBlock extends ChestBlock {
   public LootrTrappedChestBlock(Properties properties) {
     super(properties, () -> ModBlockEntities.SPECIAL_TRAPPED_LOOT_CHEST);
@@ -77,13 +75,13 @@ public class LootrTrappedChestBlock extends ChestBlock {
   }
 
   @Override
-  @Nullable
+
   public MenuProvider getMenuProvider(BlockState state, Level worldIn, BlockPos pos) {
     return null;
   }
 
   @Override
-  @Nullable
+
   public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
     return pLevel.isClientSide ? LootrChestBlockEntity::lootrLidAnimateTick : null;
   }

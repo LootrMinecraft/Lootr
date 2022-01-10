@@ -1,0 +1,10 @@
+accessWidener v2 named
+accessible method net/minecraft/world/level/block/entity/BarrelBlockEntity <init> (Lnet/minecraft/world/level/block/entity/BlockEntityType;)V
+accessible field net/minecraft/world/level/storage/DimensionDataStorage cache Ljava/util/Map;
+accessible field net/minecraft/world/entity/vehicle/AbstractMinecartContainer lootTable Lnet/minecraft/resources/ResourceLocation;
+accessible field net/minecraft/world/entity/vehicle/AbstractMinecartContainer lootTableSeed J
+accessible field net/minecraft/world/level/block/entity/ChestBlockEntity items Lnet/minecraft/core/NonNullList;
+accessible field net/minecraft/server/players/GameProfileCache profilesByName Ljava/util/Map;
+accessible field net/minecraft/world/level/levelgen/structure/OceanRuinPieces$OceanRuinPiece isLarge Z
+accessible field net/minecraft/world/level/block/entity/RandomizableContainerBlockEntity lootTable Lnet/minecraft/resources/ResourceLocation;
+accessible field net/minecraft/world/level/block/entity/RandomizableContainerBlockEntity lootTableSeed J
