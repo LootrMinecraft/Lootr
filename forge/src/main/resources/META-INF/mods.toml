@@ -1,0 +1,25 @@
+modLoader="javafml" 
+loaderVersion="[38,)"
+issueTrackerURL="https://github.com/noobanidus/Lootr/issues"
+license="https://github.com/noobanidus/Lootr/blob/1.16/LICENSE"
+[[mods]] 
+modId="lootr" 
+version="${version}"
+displayName="Lootr" 
+displayURL="https://minecraft.curseforge.com/projects/lootr" 
+authors="Noobanidus"
+description='''
+Makes loot chest loot per-user.
+'''
+[[dependencies.Lootr]] 
+    modId="forge" 
+    mandatory=true 
+    versionRange="[38,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.Lootr]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.18,)"
+    ordering="NONE"
+    side="BOTH"
