@@ -1,28 +1,27 @@
 {
   "schemaVersion": 1,
-  "id": "examplemod",
+  "id": "lootr",
   "version": "${version}",
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Lootr",
+  "description": "Makes loot chests per-user.",
   "authors": [
-    "Me!"
+    "Noobanidus"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://github.com/noobanidus/lootr",
+    "sources": "https://github.com/noobanidus/lootr"
   },
-  "license": "Insert License Here",
+  "license": "MIT",
   "icon": "assets/examplemod/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.examplemod.fabric.ExampleModFabric"
+      "noobanidus.mods.lootr.Lootr"
     ]
   },
   "depends": {
     "fabric": "*",
-    "minecraft": ">=1.18",
-    "architectury": ">=3.3.7"
+    "minecraft": ">=1.18"
   },
   "suggests": {
     "flamingo": "*"
