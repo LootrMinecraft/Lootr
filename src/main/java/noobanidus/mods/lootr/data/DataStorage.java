@@ -184,7 +184,6 @@ public class DataStorage {
     return inventory;
   }
 
-  @Nullable
   public static void refreshInventory(World world, UUID uuid, ServerPlayerEntity player) {
     if (world.isClientSide || !(world instanceof ServerWorld)) {
       return;

@@ -38,6 +38,7 @@ public class ConfigManager {
   private static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
   private static final List<ResourceLocation> QUARK_CHESTS = Arrays.asList(new ResourceLocation("quark", "oak_chest"), new ResourceLocation("quark", "spruce_chest"), new ResourceLocation("quark", "birch_chest"), new ResourceLocation("quark", "jungle_chest"), new ResourceLocation("quark", "acacia_chest"), new ResourceLocation("quark", "dark_oak_chest"), new ResourceLocation("quark", "warped_chest"), new ResourceLocation("quark", "crimson_chest"), new ResourceLocation("quark", "nether_brick_chest"), new ResourceLocation("quark", "purpur_chest")); // Quark normal chests
   private static final List<ResourceLocation> QUARK_TRAPPED_CHESTS = Arrays.asList(new ResourceLocation("quark", "oak_trapped_chest"), new ResourceLocation("quark", "spruce_trapped_chest"), new ResourceLocation("quark", "birch_trapped_chest"), new ResourceLocation("quark", "jungle_trapped_chest"), new ResourceLocation("quark", "acacia_trapped_chest"), new ResourceLocation("quark", "dark_oak_trapped_chest"), new ResourceLocation("quark", "warped_trapped_chest"), new ResourceLocation("quark", "crimson_trapped_chest"));
+  private static final List<ResourceLocation> ATUM_BLACKLIST = Collections.singletonList(new ResourceLocation("atum", "chests/pharaoh"));
 
   public static ForgeConfigSpec COMMON_CONFIG;
   public static final ForgeConfigSpec.BooleanValue REPORT_UNRESOLVED_TABLES;
@@ -63,8 +64,6 @@ public class ConfigManager {
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> REFRESH_MODIDS;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> REFRESH_LOOT_TABLES;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> REFRESH_DIMENSIONS;
-
-  private static Set<String> REPORT_IGNORE = null;
 
   private static Set<String> DECAY_MODS = null;
   private static Set<ResourceLocation> DECAY_TABLES = null;
@@ -130,7 +129,6 @@ public class ConfigManager {
     DECAY_MODS = null;
     DECAY_TABLES = null;
     DECAY_DIMS = null;
-    REPORT_IGNORE = null;
     LOOT_MOD_BLACKLIST = null;
     REFRESH_MODS = null;
     REFRESH_TABLES = null;
@@ -176,6 +174,10 @@ public class ConfigManager {
   public static Set<ResourceLocation> getLootBlacklist() {
     if (LOOT_BLACKLIST == null) {
       LOOT_BLACKLIST = LOOT_TABLE_BLACKLIST.get().stream().map(ResourceLocation::new).collect(Collectors.toSet());
+      // FIX for https://github.com/noobanidus/Lootr/issues/74
+      // Converting this atum chest results in completely breaking the
+      // atum pyramid fight, etc.
+      LOOT_BLACKLIST.addAll(ATUM_BLACKLIST);
     }
     return LOOT_BLACKLIST;
   }
