@@ -35,6 +35,7 @@ public class EntityTicker {
       }
       entities.removeAll(completed);
       DataStorage.doDecay();
+      DataStorage.doRefresh();
     }
   }
 
