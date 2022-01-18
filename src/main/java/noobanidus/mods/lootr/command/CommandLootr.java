@@ -7,6 +7,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -35,6 +36,7 @@ import noobanidus.mods.lootr.block.LootrBarrelBlock;
 import noobanidus.mods.lootr.block.LootrChestBlock;
 import noobanidus.mods.lootr.block.LootrShulkerBlock;
 import noobanidus.mods.lootr.block.entities.LootrInventoryBlockEntity;
+import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModBlocks;
@@ -58,7 +60,7 @@ public class CommandLootr {
 
   private static List<ResourceLocation> tables = null;
   private static List<String> tableNames = null;
-  private static Map<String, UUID> profileMap = new HashMap<>();
+  private static final Map<String, UUID> profileMap = new HashMap<>();
 
   private static List<ResourceLocation> getTables() {
     if (tables == null) {
@@ -210,6 +212,38 @@ public class CommandLootr {
         c.getSource().sendSuccess(new TextComponent("Please stand on a valid Lootr chest."), false);
       } else {
         c.getSource().sendSuccess(new TextComponent("The ID of this inventory is: " + ((ILootBlockEntity) te).getTileId().toString()), false);
+      }
+      return 1;
+    }));
+    builder.then(Commands.literal("refresh").executes(c -> {
+      BlockPos pos = new BlockPos(c.getSource().getPosition());
+      Level level = c.getSource().getLevel();
+      BlockEntity be = level.getBlockEntity(pos);
+      if (!(be instanceof ILootBlockEntity)) {
+        pos = pos.below();
+        be = level.getBlockEntity(pos);
+      }
+      if (be instanceof ILootBlockEntity) {
+        DataStorage.setRefreshing(((ILootBlockEntity)be).getTileId(), ConfigManager.REFRESH_VALUE.get());
+        c.getSource().sendSuccess(new TextComponent("Container with ID " + ((ILootBlockEntity)be).getTileId() + " has been set to refresh with a delay of " + ConfigManager.REFRESH_VALUE.get()), false);
+      } else {
+        c.getSource().sendSuccess(new TextComponent("Please stand on a valid Lootr container."), false);
+      }
+      return 1;
+    }));
+    builder.then(Commands.literal("decay").executes(c -> {
+      BlockPos pos = new BlockPos(c.getSource().getPosition());
+      Level level = c.getSource().getLevel();
+      BlockEntity be = level.getBlockEntity(pos);
+      if (!(be instanceof ILootBlockEntity)) {
+        pos = pos.below();
+        be = level.getBlockEntity(pos);
+      }
+      if (be instanceof ILootBlockEntity) {
+        DataStorage.setDecaying(((ILootBlockEntity)be).getTileId(), ConfigManager.DECAY_VALUE.get());
+        c.getSource().sendSuccess(new TextComponent("Container with ID " + ((ILootBlockEntity)be).getTileId() + " has been set to decay with a delay of " + ConfigManager.DECAY_VALUE.get()), false);
+      } else {
+        c.getSource().sendSuccess(new TextComponent("Please stand on a valid Lootr container."), false);
       }
       return 1;
     }));
