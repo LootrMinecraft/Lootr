@@ -1,9 +1,11 @@
 package noobanidus.mods.lootr.block.entities;
 
+import com.mojang.datafixers.util.Either;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Clearable;
@@ -24,9 +26,8 @@ import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.util.StructureUtil;
 
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 @Mod.EventBusSubscriber(modid = Lootr.MODID)
 public class TileTicker {
@@ -62,15 +63,22 @@ public class TileTicker {
       }
       synchronized (worldLock) {
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-        for (Entry entry : copy) {
+        outer: for (Entry entry : copy) {
           ServerLevel level = server.getLevel(entry.getDimension());
           if (level == null) {
             throw new IllegalStateException("got a null world for tile ticker in dimension " + entry.getDimension() + " at " + entry.getPosition());
           }
           ServerChunkCache provider = level.getChunkSource();
+          CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> chunkFuture;
+          for (ChunkPos pos : entry.getChunkPositions()) {
+            chunkFuture = provider.getChunkFuture(pos.x, pos.z, ChunkStatus.FULL, false);
+            if (!chunkFuture.isDone()) {
+              continue outer;
+            }
+          }
           ChunkPos pos = entry.getChunkPosition();
-          ChunkAccess chunk = provider.getChunk(pos.x, pos.z, ChunkStatus.FULL, false);
-          if (chunk != null) {
+          chunkFuture = provider.getChunkFuture(pos.x, pos.z, ChunkStatus.FULL, false);
+          if (chunkFuture.isDone()) {
             BlockEntity blockEntity = level.getBlockEntity(entry.getPosition());
             if (!(blockEntity instanceof RandomizableContainerBlockEntity be) || blockEntity instanceof ILootBlockEntity) {
               toRemove.add(entry);
@@ -91,7 +99,6 @@ public class TileTicker {
             long seed = be.lootTableSeed;
             be.unpackLootTable(null);
             Clearable.tryClear(be);
-
             BlockState stateAt = level.getBlockState(entry.getPosition());
             BlockState replacement = ConfigManager.replacement(stateAt);
             if (replacement == null) {
@@ -124,12 +131,22 @@ public class TileTicker {
   public static class Entry {
     private final ResourceKey<Level> dimension;
     private final BlockPos position;
+    private final Set<ChunkPos> chunks = new HashSet<>();
     private final ChunkPos chunkPos;
+
+    private static final List<BlockPos> offsets = Arrays.asList(new BlockPos(0, 0, 8), new BlockPos(8, 0, 0), new BlockPos(0, 0, -8), new BlockPos(-8, 0, 0), new BlockPos(8, 0, 8), new BlockPos(-8, 0, -8), new BlockPos(8, 0, -8), new BlockPos(-8, 0, 8));
 
     public Entry(ResourceKey<Level> dimension, BlockPos position) {
       this.dimension = dimension;
       this.position = position;
-      this.chunkPos = new ChunkPos(position);
+      this.chunkPos = new ChunkPos(this.position);
+
+      for (BlockPos offset : offsets) {
+        ChunkPos pos = new ChunkPos(position.offset(offset));
+        if (!this.chunkPos.equals(pos)) {
+          chunks.add(pos);
+        }
+      }
     }
 
     public ResourceKey<Level> getDimension() {
@@ -138,6 +155,10 @@ public class TileTicker {
 
     public BlockPos getPosition() {
       return position;
+    }
+
+    public Set<ChunkPos> getChunkPositions() {
+      return chunks;
     }
 
     public ChunkPos getChunkPosition() {
