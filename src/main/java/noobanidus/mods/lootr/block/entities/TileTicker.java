@@ -6,6 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Clearable;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -88,13 +89,16 @@ public class TileTicker {
             }
             ResourceLocation table = be.lootTable;
             long seed = be.lootTableSeed;
+            be.unpackLootTable(null);
+            Clearable.tryClear(be);
+
             BlockState stateAt = level.getBlockState(entry.getPosition());
             BlockState replacement = ConfigManager.replacement(stateAt);
             if (replacement == null) {
               toRemove.add(entry);
               continue;
             }
-            level.removeBlockEntity(entry.getPosition());
+            level.destroyBlock(entry.getPosition(), false);
             level.setBlock(entry.getPosition(), replacement, 2);
             blockEntity = level.getBlockEntity(entry.getPosition());
             if (blockEntity instanceof ILootBlockEntity) {
