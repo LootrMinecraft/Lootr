@@ -62,6 +62,12 @@ public class TileTicker {
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
         outer: for (Entry entry : copy) {
           ServerLevel level = server.getLevel(entry.getDimension());
+          // TODO: Make this configurable
+          if (entry.age(server) > (180 * 20)) {
+            Lootr.LOG.error("Removed an entry older than three minutes: " + entry);
+            toRemove.add(entry);
+            continue;
+          }
           if (level == null) {
             throw new IllegalStateException("got a null world for tile ticker in dimension " + entry.getDimension() + " at " + entry.getPosition());
           }
@@ -161,6 +167,10 @@ public class TileTicker {
       return chunks;
     }
 
+    public long age (MinecraftServer server) {
+      return server.getTickCount() - addedAt;
+    }
+
     @Override
     public boolean equals(Object o) {
       if (this == o) return true;
@@ -179,6 +189,15 @@ public class TileTicker {
       result = 31 * result + position.hashCode();
       result = 31 * result + (int) (addedAt ^ (addedAt >>> 32));
       return result;
+    }
+
+    @Override
+    public String toString() {
+      return "Entry{" +
+          "dimension=" + dimension +
+          ", position=" + position +
+          ", addedAt=" + addedAt +
+          '}';
     }
   }
 }
