@@ -100,8 +100,7 @@ public class TileTicker {
           }
           ResourceLocation table = be.lootTable;
           long seed = be.lootTableSeed;
-          be.unpackLootTable(null);
-          Clearable.tryClear(be);
+          be.lootTable = null;
           BlockState stateAt = level.getBlockState(entry.getPosition());
           BlockState replacement = ConfigManager.replacement(stateAt);
           if (replacement == null) {
