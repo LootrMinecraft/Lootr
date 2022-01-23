@@ -3,6 +3,8 @@ package noobanidus.mods.lootr.event;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkStatus;
+import net.minecraftforge.event.server.ServerStartedEvent;
+import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -25,6 +27,20 @@ public class HandleChunk {
           LOADED_CHUNKS.add(chunk.getPos());
         }
       }
+    }
+  }
+
+  @SubscribeEvent
+  public static void onServerStarted(ServerStartedEvent event) {
+    synchronized (LOADED_CHUNKS) {
+      LOADED_CHUNKS.clear();
+    }
+  }
+
+  @SubscribeEvent
+  public static void onServerStopped(ServerStoppedEvent event) {
+    synchronized (LOADED_CHUNKS) {
+      LOADED_CHUNKS.clear();
     }
   }
 }
