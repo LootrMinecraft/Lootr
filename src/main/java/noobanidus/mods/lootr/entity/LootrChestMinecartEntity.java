@@ -75,6 +75,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
 
   public void addOpener(Player player) {
     openers.add(player.getUUID());
+    setChanged();
   }
 
   public boolean isOpened() {

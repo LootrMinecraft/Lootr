@@ -41,7 +41,6 @@ public class DataStorage {
     AdvancementData data = manager.computeIfAbsent(AdvancementData::load, AdvancementData::new, ID);
     data.add(player, tileId);
     data.setDirty();
-    manager.save();
   }
 
   public static boolean isScored(UUID player, UUID tileId) {
@@ -55,7 +54,6 @@ public class DataStorage {
     AdvancementData data = manager.computeIfAbsent(AdvancementData::load, AdvancementData::new, SCORED);
     data.add(player, tileId);
     data.setDirty();
-    manager.save();
   }
 
   public static int getDecayValue (UUID id) {
@@ -75,7 +73,6 @@ public class DataStorage {
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, DECAY);
     data.setValue(id, decay);
     data.setDirty();
-    manager.save();
   }
 
   public static void removeDecayed (UUID id) {
@@ -83,7 +80,6 @@ public class DataStorage {
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, DECAY);
     if (data.remove(id) != -1) {
       data.setDirty();
-      manager.save();
     }
   }
 
@@ -92,7 +88,6 @@ public class DataStorage {
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, DECAY);
     if (data.tick()) {
       data.setDirty();
-      manager.save();
     }
   }
 
@@ -113,7 +108,6 @@ public class DataStorage {
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, REFRESH);
     data.setValue(id, decay);
     data.setDirty();
-    manager.save();
   }
 
   public static void removeRefreshed (UUID id) {
@@ -121,7 +115,6 @@ public class DataStorage {
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, REFRESH);
     if (data.remove(id) != -1) {
       data.setDirty();
-      manager.save();
     }
   }
 
@@ -130,7 +123,6 @@ public class DataStorage {
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, REFRESH);
     if (data.tick()) {
       data.setDirty();
-      manager.save();
     }
   }
 
@@ -216,7 +208,6 @@ public class DataStorage {
         }
       }
     }
-    data.save();
     Lootr.LOG.info("Cleared " + cleared + " inventories for play UUID " + uuid.toString());
     return cleared != 0;
   }

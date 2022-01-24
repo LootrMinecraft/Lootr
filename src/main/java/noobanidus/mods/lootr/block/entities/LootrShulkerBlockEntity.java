@@ -201,6 +201,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
         this.level.playSound(null, this.worldPosition, SoundEvents.SHULKER_BOX_CLOSE, SoundSource.BLOCKS, 0.5F, this.level.random.nextFloat() * 0.1F + 0.9F);
       }
       openers.add(pPlayer.getUUID());
+      setChanged();
       updatePacketViaState();
     }
   }

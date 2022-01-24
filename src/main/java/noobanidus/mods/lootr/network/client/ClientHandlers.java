@@ -33,6 +33,7 @@ public class ClientHandlers {
     BlockEntity be = level.getBlockEntity(message.pos);
     if (be instanceof ILootBlockEntity tile) {
       tile.getOpeners().remove(player.getUUID());
+      be.setChanged();
       ModelDataManager.requestModelDataRefresh(be);
     } else {
       Lootr.LOG.info("Unable to update model data for location '" + message.pos + "' as block entity is null or not a Lootr block entity.");

@@ -187,7 +187,6 @@ public class ChestData extends SavedData {
     filler.fillWithLoot(player, result, lootTable, seed);
     inventories.put(player.getUUID(), result);
     setDirty();
-    world.getDataStorage().save();
     return result;
   }
 

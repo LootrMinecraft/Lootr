@@ -51,6 +51,7 @@ public class ChestUtil {
     BlockEntity te = level.getBlockEntity(pos);
     if (te instanceof ILootBlockEntity tile) {
       if (tile.getOpeners().remove(player.getUUID())) {
+        te.setChanged();
         tile.updatePacketViaState();
         UpdateModelData message = new UpdateModelData(te.getBlockPos());
         PacketHandler.sendToInternal(message, (ServerPlayer) player);
@@ -131,6 +132,7 @@ public class ChestUtil {
         DataStorage.score(player.getUUID(), ((ILootBlockEntity) te).getTileId());
       }
       if (tile.getOpeners().add(player.getUUID())) {
+        te.setChanged();
         tile.updatePacketViaState();
       }
       player.openMenu(provider);
@@ -231,6 +233,7 @@ public class ChestUtil {
         DataStorage.score(player.getUUID(), ((ILootBlockEntity) te).getTileId());
       }
       if (tile.getOpeners().add(player.getUUID())) {
+        te.setChanged();
         tile.updatePacketViaState();
       }
       player.openMenu(provider);
