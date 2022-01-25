@@ -63,7 +63,7 @@ public class TileTicker {
         outer: for (Entry entry : copy) {
           ServerLevel level = server.getLevel(entry.getDimension());
           // TODO: Make this configurable
-          if (entry.age(server) > (180 * 20)) {
+          if (entry.age(server) > ConfigManager.MAXIMUM_AGE.get()) {
             Lootr.LOG.error("Removed an entry older than three minutes: " + entry);
             toRemove.add(entry);
             continue;
@@ -71,7 +71,7 @@ public class TileTicker {
           if (level == null) {
             throw new IllegalStateException("got a null world for tile ticker in dimension " + entry.getDimension() + " at " + entry.getPosition());
           }
-          if (!level.isAreaLoaded(entry.getPosition(), 1)) {
+          if (ConfigManager.SKIP_UNLOADED.get() && !level.isAreaLoaded(entry.getPosition(), 1)) {
             toRemove.add(entry);
             continue;
           }
