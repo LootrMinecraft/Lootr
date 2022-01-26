@@ -433,7 +433,7 @@ public class ConfigManager {
         }
       }
       if (!getAdditionalChests().isEmpty() || !getAdditionalTrappedChests().isEmpty()) {
-        final ServerLevel world = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD);
+        final ServerLevel world = ServerLifecycleHooks.getCurrentServer().overworld();
         getAdditionalChests().forEach(o -> addUnsafeReplacement(o, ModBlocks.CHEST, world));
         getAdditionalTrappedChests().forEach(o -> addUnsafeReplacement(o, ModBlocks.TRAPPED_CHEST, world));
       }
