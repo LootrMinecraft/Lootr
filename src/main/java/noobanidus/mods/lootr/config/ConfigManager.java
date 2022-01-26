@@ -298,11 +298,13 @@ public class ConfigManager {
     if (DECAY_ALL.get()) {
       return true;
     }
-    if (getDecayingTables().contains(tile.getTable())) {
-      return true;
-    }
-    if (getDecayMods().contains(tile.getTable().getNamespace())) {
-      return true;
+    if (tile.getTable() != null) {
+      if (getDecayingTables().contains(tile.getTable())) {
+        return true;
+      }
+      if (getDecayMods().contains(tile.getTable().getNamespace())) {
+        return true;
+      }
     }
     if (!ConfigManager.getDecayStructures().isEmpty()) {
       StructureFeature<?> startAt = StructureUtil.featureFor(level, tile.getPosition());
@@ -317,11 +319,13 @@ public class ConfigManager {
     if (REFRESH_ALL.get()) {
       return true;
     }
-    if (getRefreshingTables().contains(tile.getTable())) {
-      return true;
-    }
-    if (getRefreshMods().contains(tile.getTable().getNamespace())) {
-      return true;
+    if (tile.getTable() != null) {
+      if (getRefreshingTables().contains(tile.getTable())) {
+        return true;
+      }
+      if (getRefreshMods().contains(tile.getTable().getNamespace())) {
+        return true;
+      }
     }
     if (!ConfigManager.getRefreshStructures().isEmpty()) {
       StructureFeature<?> startAt = StructureUtil.featureFor(level, tile.getPosition());
