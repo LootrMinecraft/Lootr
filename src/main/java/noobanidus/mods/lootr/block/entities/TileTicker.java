@@ -5,7 +5,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.Clearable;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -60,26 +59,14 @@ public class TileTicker {
       }
       synchronized (worldLock) {
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-        outer: for (Entry entry : copy) {
+        for (Entry entry : copy) {
           ServerLevel level = server.getLevel(entry.getDimension());
-          // TODO: Make this configurable
-          if (entry.age(server) > ConfigManager.MAXIMUM_AGE.get()) {
-            Lootr.LOG.error("Removed an entry older than three minutes: " + entry);
-            toRemove.add(entry);
-            continue;
-          }
           if (level == null) {
             throw new IllegalStateException("got a null world for tile ticker in dimension " + entry.getDimension() + " at " + entry.getPosition());
           }
-          if (ConfigManager.SKIP_UNLOADED.get() && !level.isAreaLoaded(entry.getPosition(), 1)) {
-            toRemove.add(entry);
-            continue;
-          }
-          for (ChunkPos pos : entry.getChunkPositions()) {
-            synchronized (HandleChunk.LOADED_CHUNKS) {
-              if (!HandleChunk.LOADED_CHUNKS.contains(pos)) {
-                continue outer;
-              }
+          synchronized (HandleChunk.LOADED_CHUNKS) {
+            if (HandleChunk.LOADED_CHUNKS.get(entry.dimension) == null || !HandleChunk.LOADED_CHUNKS.get(entry.dimension).containsAll(entry.getChunkPositions())) {
+              continue;
             }
           }
           BlockEntity blockEntity = level.getBlockEntity(entry.getPosition());
@@ -166,7 +153,7 @@ public class TileTicker {
       return chunks;
     }
 
-    public long age (MinecraftServer server) {
+    public long age(MinecraftServer server) {
       return server.getTickCount() - addedAt;
     }
 
