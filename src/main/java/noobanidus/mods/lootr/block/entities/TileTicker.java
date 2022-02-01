@@ -62,7 +62,8 @@ public class TileTicker {
         for (Entry entry : copy) {
           ServerLevel level = server.getLevel(entry.getDimension());
           if (level == null) {
-            throw new IllegalStateException("got a null world for tile ticker in dimension " + entry.getDimension() + " at " + entry.getPosition());
+            toRemove.add(entry);
+            continue;
           }
           synchronized (HandleChunk.LOADED_CHUNKS) {
             if (HandleChunk.LOADED_CHUNKS.get(entry.dimension) == null || !HandleChunk.LOADED_CHUNKS.get(entry.dimension).containsAll(entry.getChunkPositions())) {
