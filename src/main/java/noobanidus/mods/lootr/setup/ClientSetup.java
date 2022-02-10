@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.setup;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -11,6 +12,7 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import noobanidus.libs.shoulders.client.bootstrap.Bootstrap;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.client.block.BarrelModel;
 import noobanidus.mods.lootr.client.block.SpecialLootChestTileRenderer;
@@ -28,6 +30,9 @@ public class ClientSetup {
     ClientRegistry.bindTileEntityRenderer(ModTiles.LOOT_INVENTORY, SpecialLootChestTileRenderer::new);
     ClientRegistry.bindTileEntityRenderer(ModTiles.LOOK_SHULKER, SpecialLootShulkerTileRenderer::new);
     RenderingRegistry.registerEntityRenderingHandler(ModEntities.LOOTR_MINECART_ENTITY, LootrMinecartRenderer::new);
+    event.enqueueWork(() -> {
+      Bootstrap.init(Minecraft.getInstance());
+    });
   }
 
   @SubscribeEvent
