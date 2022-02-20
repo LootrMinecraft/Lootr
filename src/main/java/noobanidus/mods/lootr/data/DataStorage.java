@@ -3,6 +3,7 @@ package noobanidus.mods.lootr.data;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
@@ -22,6 +23,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.LongSupplier;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class DataStorage {
@@ -142,6 +145,22 @@ public class DataStorage {
   public static ChestData getInstanceInventory(ServerLevel world, UUID id, @Nullable UUID customId, @Nullable NonNullList<ItemStack> base) {
     ResourceKey<Level> dimension = world.dimension();
     return getDataStorage().computeIfAbsent(ChestData::load, ChestData.ref_id(dimension, id, customId, base), REF_ID(dimension, id));
+  }
+
+  @Nullable
+  public static SpecialChestInventory getInventory (Level level, UUID uuid, BlockPos pos, ServerPlayer player, RandomizableContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
+    if (level.isClientSide() || !(level instanceof ServerLevel)) {
+      return null;
+    }
+
+    ChestData data = getInstanceUuid((ServerLevel) level, uuid);
+    SpecialChestInventory inventory = data.getInventory(player, pos);
+    if (inventory == null) {
+      inventory = data.createInventory(player, filler, blockEntity, tableSupplier, seedSupplier);
+      inventory.setBlockPos(pos);
+    }
+
+    return inventory;
   }
 
   @Nullable

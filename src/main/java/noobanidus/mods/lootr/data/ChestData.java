@@ -24,6 +24,7 @@ import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.LongSupplier;
 import java.util.function.Supplier;
 
 public class ChestData extends SavedData {
@@ -146,6 +147,30 @@ public class ChestData extends SavedData {
     if (result != null) {
       result.setBlockPos(pos);
     }
+    return result;
+  }
+
+  public SpecialChestInventory createInventory(ServerPlayer player, LootFiller filler, RandomizableContainerBlockEntity blockEntity, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
+    ServerLevel level = (ServerLevel) player.level;
+    SpecialChestInventory result;
+    if (level.dimension() != dimension) {
+      MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+      if (server == null) {
+        return null;
+      }
+      level = server.getLevel(dimension);
+    }
+
+    if (level == null || blockEntity == null) {
+      return null;
+    }
+
+    NonNullList<ItemStack> items = NonNullList.withSize(blockEntity.getContainerSize(), ItemStack.EMPTY);
+    // Saving this is handled elsewhere
+    result = new SpecialChestInventory(this, items, blockEntity.getDisplayName(), pos);
+    filler.fillWithLoot(player, result, tableSupplier.get(), seedSupplier.getAsLong());
+    inventories.put(player.getUUID(), result);
+    setDirty();
     return result;
   }
 
