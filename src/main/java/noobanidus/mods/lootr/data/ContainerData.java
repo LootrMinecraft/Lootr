@@ -17,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.LootFiller;
 import noobanidus.mods.lootr.api.tile.ILootTile;
 import noobanidus.mods.lootr.data.old.SpecialChestInventory;
@@ -82,8 +83,12 @@ public class ContainerData
 		};
 	}
 	
-	public SpecialChestInventory getInventory()
+	public SpecialChestInventory getInventory(BlockPos pos)
 	{
+		if(inventory != null)
+		{
+			inventory.setBlockPos(pos);
+		}
 		return inventory;
 	}
 	

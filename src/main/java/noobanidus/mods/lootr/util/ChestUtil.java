@@ -24,6 +24,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.PacketDistributor;
+import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.tile.ILootTile;
 import noobanidus.mods.lootr.block.LootrShulkerBlock;
 import noobanidus.mods.lootr.block.tile.LootrInventoryTileEntity;

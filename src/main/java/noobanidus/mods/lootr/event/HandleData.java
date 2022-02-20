@@ -107,7 +107,7 @@ public class HandleData
 		migrate(manager, path, "Lootr-DecayData", TickingData::new, T -> T.migrateDecay(manager.computeIfAbsent(DecayData::getDecay, "Lootr-Decay-Data"), time));
 		for(Map.Entry<UUID, PlayerData> entry : migrationMap.entrySet())
 		{
-			saveData(playerPath, entry.getKey().toString(), entry.getValue().save(time));
+			saveData(playerPath, entry.getKey().toString(), entry.getValue().save());
 		}
 		
 		return ActionResultType.SUCCESS;
@@ -150,7 +150,7 @@ public class HandleData
 	public static void onPlayerSaved(PlayerEvent.SaveToFile event)
 	{
 		UUID id = event.getPlayer().getUUID();
-		CompoundNBT data = DataStorage.DATA.getOrDefault(id, new PlayerData()).save(event.getPlayer().level.getGameTime());
+		CompoundNBT data = DataStorage.DATA.getOrDefault(id, new PlayerData()).save();
 		saveData(event.getPlayerDirectory(), event.getPlayerUUID(), data);
 		if(MARK_FOR_REMOVAL.contains(id))
 		{

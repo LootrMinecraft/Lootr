@@ -138,7 +138,7 @@ public class DataStorage {
     }
 
     ContainerData data = getInstanceUuid(player.getUUID(), (ServerWorld) world, uuid);
-    SpecialChestInventory inventory = data.getInventory();
+    SpecialChestInventory inventory = data.getInventory(pos);
     if (inventory == null) {
       inventory = data.createInventory(player, filler, tile);
       inventory.setBlockPos(pos);
@@ -159,7 +159,7 @@ public class DataStorage {
       return null;
     }
     ContainerData data = getInstanceInventory(player.getUUID(), (ServerWorld) world, uuid, null, base);
-    SpecialChestInventory inventory = data.getInventory();
+    SpecialChestInventory inventory = data.getInventory(pos);
     if (inventory == null) {
       inventory = data.createInventory(player, data.customInventory(), tile);
       inventory.setBlockPos(pos);
@@ -227,7 +227,7 @@ public class DataStorage {
     }
 
     ContainerData data = getInstance(player.getUUID(), cart.getUUID());
-    SpecialChestInventory inventory = data.getInventory();
+    SpecialChestInventory inventory = data.getInventory(null);
     if (inventory == null) {
       inventory = data.createInventory(player, filler, null);
     }

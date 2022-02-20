@@ -15,55 +15,42 @@ public class TimedData
 {
 	Object2LongMap<UUID> refreshTime = new Object2LongLinkedOpenHashMap<>();
 	
-	public CompoundNBT save(CompoundNBT nbt, long currentTime)
+	public void load(CompoundNBT compound)
 	{
-
-		ListNBT list = saveMap(refreshTime, currentTime);
-		if(list.size() > 0) {
-			nbt.put("refresh", list);
-		}
-		return nbt;
-	}
-	
-	public void load(CompoundNBT data) 
-	{
-		loadMap(refreshTime, data.getList("refresh", Constants.NBT.TAG_COMPOUND));
-	}
-	
-	private void loadMap(Object2LongMap<UUID> map, ListNBT list) {
+		ListNBT list = compound.getList("decay", Constants.NBT.TAG_COMPOUND);
 		for(int i = 0,m=list.size();i<m;i++) {
 			CompoundNBT data = list.getCompound(i);
-			map.put(data.getUUID("id"), data.getLong("time"));
+			refreshTime.put(data.getUUID("id"), data.getLong("time"));
 		}
 	}
 	
-	private ListNBT saveMap(Object2LongMap<UUID> map, long time) {
+	public CompoundNBT save(CompoundNBT compound)
+	{
 		ListNBT list = new ListNBT();
-		for(ObjectIterator<Entry<UUID>> iter = Object2LongMaps.fastIterator(map);iter.hasNext();) {
+		for(ObjectIterator<Entry<UUID>> iter = Object2LongMaps.fastIterator(refreshTime);iter.hasNext();) {
 			Entry<UUID> entry = iter.next();
-			if(entry.getLongValue() < time) {
-				iter.remove();
-				continue;
-			}
 			CompoundNBT data = new CompoundNBT();
 			data.putUUID("id", entry.getKey());
 			data.putLong("time", entry.getLongValue());
 			list.add(data);
 		}
-		return list;
+		if(list.size() > 0) {
+			compound.put("decay", list);
+		}
+		return compound;
 	}
-
 	
 	public void markRefresh(UUID id, long nextTime) {
 		refreshTime.put(id, nextTime);
 	}
 	
 	public boolean isRefreshed(UUID id, long currentTime) {
-		return refreshTime.getLong(id) < currentTime;
+		long time = refreshTime.getLong(id);
+		return time > 0 && time < currentTime;
 	}
 	
 	public int getRefreshTimeLeft(UUID id, long currentTime) {
-		return (int)(currentTime - refreshTime.getLong(id));
+		return (int)(Math.max(refreshTime.getLong(id) - currentTime, -1));
 	}
 	
 	public void removeRefresh(UUID id) {

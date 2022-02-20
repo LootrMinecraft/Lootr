@@ -5,7 +5,6 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraftforge.common.util.Constants;
@@ -20,11 +19,11 @@ public class PlayerData
 	{
 	}
 	
-	public CompoundNBT save(long currentTime)
+	public CompoundNBT save()
 	{
 		CompoundNBT data = new CompoundNBT();
 		putIfHasData(data, "stats", stats.save(new CompoundNBT()));
-		putIfHasData(data, "timed", time.save(new CompoundNBT(), currentTime));
+		putIfHasData(data, "timed", time.save(new CompoundNBT()));
 		ListNBT list = new ListNBT();
 		for(Map.Entry<UUID, ContainerData> entry : mappedContainers.entrySet())
 		{
@@ -47,7 +46,7 @@ public class PlayerData
 		for(int i = 0;i<list.size();i++) {
 			CompoundNBT data = list.getCompound(i);
 			ContainerData container = new ContainerData();
-			container.save(data);
+			container.load(data);
 			mappedContainers.put(data.getUUID("storage_id"), container);
 		}
 		return this;

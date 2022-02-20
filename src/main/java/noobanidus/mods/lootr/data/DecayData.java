@@ -58,11 +58,12 @@ public class DecayData extends WorldSavedData
 	}
 	
 	public boolean isDecayed(UUID id, long currentTime) {
-		return decayTime.getLong(id) < currentTime;
+		long time = decayTime.getLong(id);
+		return time > 0 && time < currentTime;
 	}
 	
 	public int getDecayTime(UUID id, long currentTime) {
-		return (int)(currentTime - decayTime.getLong(id));
+		return (int)(Math.max(decayTime.getLong(id) - currentTime, -1));
 	}
 	
 	public void removeDecay(UUID id) {
