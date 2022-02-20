@@ -1,5 +1,10 @@
 package noobanidus.mods.lootr.util;
 
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
+import java.util.UUID;
+
 import net.minecraft.block.BarrelBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.ChestBlock;
@@ -29,11 +34,6 @@ import noobanidus.mods.lootr.init.ModAdvancements;
 import noobanidus.mods.lootr.init.ModStats;
 import noobanidus.mods.lootr.networking.CloseCart;
 import noobanidus.mods.lootr.networking.PacketHandler;
-
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
-import java.util.UUID;
 
 @SuppressWarnings("unused")
 public class ChestUtil {
@@ -84,18 +84,18 @@ public class ChestUtil {
     TileEntity te = world.getBlockEntity(pos);
     if (te instanceof ILootTile) {
       UUID tileId = ((ILootTile) te).getTileId();
-      if (DataStorage.isDecayed(tileId)) {
+      if (DataStorage.isDecayed(tileId, world.getGameTime())) {
         world.destroyBlock(pos, true);
         DataStorage.removeDecayed(tileId);
         player.sendMessage(new TranslationTextComponent("lootr.message.decayed").setStyle(Style.EMPTY.withColor(TextFormatting.RED).withBold(true)), Util.NIL_UUID);
         return false;
       } else {
-        int decayValue = DataStorage.getDecayValue(tileId);
+        int decayValue = DataStorage.getDecayValue(tileId, world.getGameTime());
         if (decayValue > 0) {
           player.sendMessage(new TranslationTextComponent("lootr.message.decay_in", decayValue / 20).setStyle(Style.EMPTY.withColor(TextFormatting.RED).withBold(true)), Util.NIL_UUID);
         } else if (decayValue == -1) {
           if (ConfigManager.isDecaying(world, (ILootTile) te)) {
-            DataStorage.setDecaying(tileId, ConfigManager.DECAY_VALUE.get());
+            DataStorage.setDecaying(tileId, world.getGameTime() + ConfigManager.DECAY_VALUE.get());
             player.sendMessage(new TranslationTextComponent("lootr.message.decay_start", ConfigManager.DECAY_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextFormatting.RED).withBold(true)), Util.NIL_UUID);
           }
         }
@@ -107,17 +107,17 @@ public class ChestUtil {
       } else if (block instanceof LootrShulkerBlock) {
         ModAdvancements.SHULKER_PREDICATE.trigger((ServerPlayerEntity) player, ((ILootTile) te).getTileId());
       }
-      if (DataStorage.isRefreshed(tileId)) {
+      if (DataStorage.isRefreshed(player.getUUID(), tileId, world.getGameTime())) {
         DataStorage.refreshInventory(world, ((ILootTile) te).getTileId(), (ServerPlayerEntity) player);
-        DataStorage.removeRefreshed(tileId);
+        DataStorage.removeRefreshed(player.getUUID(), tileId);
         player.sendMessage(new TranslationTextComponent("lootr.message.refreshed").setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), Util.NIL_UUID);
       } else {
-        int refreshValue = DataStorage.getRefreshValue(tileId);
+        int refreshValue = DataStorage.getRefreshValue(player.getUUID(), tileId, world.getGameTime());
         if (refreshValue > 0) {
           player.sendMessage(new TranslationTextComponent("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), Util.NIL_UUID);
         } else if (refreshValue == -1) {
           if (ConfigManager.isRefreshing(world, (ILootTile) te)) {
-            DataStorage.setRefreshing(tileId, ConfigManager.REFRESH_VALUE.get());
+            DataStorage.setRefreshing(player.getUUID(), tileId, world.getGameTime() + ConfigManager.REFRESH_VALUE.get());
             player.sendMessage(new TranslationTextComponent("lootr.message.refresh_start", ConfigManager.REFRESH_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), Util.NIL_UUID);
           }
         }
@@ -142,18 +142,18 @@ public class ChestUtil {
         player.openMenu(null);
       } else {
         UUID tileId = cart.getUUID();
-        if (DataStorage.isDecayed(tileId)) {
+        if (DataStorage.isDecayed(tileId, world.getGameTime())) {
           cart.destroy(DamageSource.OUT_OF_WORLD);
           DataStorage.removeDecayed(tileId);
           player.sendMessage(new TranslationTextComponent("lootr.message.decayed").setStyle(Style.EMPTY.withColor(TextFormatting.RED).withBold(true)), Util.NIL_UUID);
           return;
         } else {
-          int decayValue = DataStorage.getDecayValue(tileId);
+          int decayValue = DataStorage.getDecayValue(tileId, world.getGameTime());
           if (decayValue > 0) {
             player.sendMessage(new TranslationTextComponent("lootr.message.decay_in", decayValue / 20).setStyle(Style.EMPTY.withColor(TextFormatting.RED).withBold(true)), Util.NIL_UUID);
           } else if (decayValue == -1) {
             if (ConfigManager.isDecaying(world, cart)) {
-              DataStorage.setDecaying(tileId, ConfigManager.DECAY_VALUE.get());
+              DataStorage.setDecaying(tileId, world.getGameTime() + ConfigManager.DECAY_VALUE.get());
               player.sendMessage(new TranslationTextComponent("lootr.message.decay_start", ConfigManager.DECAY_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextFormatting.RED).withBold(true)), Util.NIL_UUID);
             }
           }
@@ -168,17 +168,17 @@ public class ChestUtil {
           ModAdvancements.SCORE_PREDICATE.trigger((ServerPlayerEntity) player, null);
           DataStorage.score(player.getUUID(), cart.getUUID());
         }
-        if (DataStorage.isRefreshed(tileId)) {
+        if (DataStorage.isRefreshed(player.getUUID(), tileId, world.getGameTime())) {
           DataStorage.refreshInventory(world, cart, (ServerPlayerEntity) player);
-          DataStorage.removeRefreshed(tileId);
+          DataStorage.removeRefreshed(player.getUUID(), tileId);
           player.sendMessage(new TranslationTextComponent("lootr.message.refreshed").setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), Util.NIL_UUID);
         } else {
-          int refreshValue = DataStorage.getRefreshValue(tileId);
+          int refreshValue = DataStorage.getRefreshValue(player.getUUID(), tileId, world.getGameTime());
           if (refreshValue > 0) {
             player.sendMessage(new TranslationTextComponent("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), Util.NIL_UUID);
           } else if (refreshValue == -1) {
             if (ConfigManager.isRefreshing(world, cart)) {
-              DataStorage.setRefreshing(tileId, ConfigManager.REFRESH_VALUE.get());
+              DataStorage.setRefreshing(player.getUUID(), tileId, world.getGameTime() + ConfigManager.REFRESH_VALUE.get());
               player.sendMessage(new TranslationTextComponent("lootr.message.refresh_start", ConfigManager.REFRESH_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), Util.NIL_UUID);
             }
           }
@@ -206,17 +206,17 @@ public class ChestUtil {
         stacks = copyItemList(tile.getCustomInventory());
       }
       UUID tileId = tile.getTileId();
-      if (DataStorage.isRefreshed(tileId)) {
+      if (DataStorage.isRefreshed(player.getUUID(), tileId, world.getGameTime())) {
         DataStorage.refreshInventory(world, ((ILootTile) te).getTileId(), stacks, (ServerPlayerEntity) player);
-        DataStorage.removeRefreshed(tileId);
+        DataStorage.removeRefreshed(player.getUUID(), tileId);
         player.sendMessage(new TranslationTextComponent("lootr.message.refreshed").setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), Util.NIL_UUID);
       } else {
-        int refreshValue = DataStorage.getRefreshValue(tileId);
+        int refreshValue = DataStorage.getRefreshValue(player.getUUID(), tileId, world.getGameTime());
         if (refreshValue > 0) {
           player.sendMessage(new TranslationTextComponent("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), Util.NIL_UUID);
         } else if (refreshValue == -1) {
           if (ConfigManager.isRefreshing(world, tile)) {
-            DataStorage.setRefreshing(tileId, ConfigManager.REFRESH_VALUE.get());
+            DataStorage.setRefreshing(player.getUUID(), tileId, world.getGameTime() + ConfigManager.REFRESH_VALUE.get());
             player.sendMessage(new TranslationTextComponent("lootr.message.refresh_start", ConfigManager.REFRESH_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), Util.NIL_UUID);
           }
         }

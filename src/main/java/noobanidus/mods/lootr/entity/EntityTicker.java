@@ -15,15 +15,17 @@ import noobanidus.mods.lootr.data.DataStorage;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+
 @Mod.EventBusSubscriber(modid = Lootr.MODID)
 public class EntityTicker {
-  private static final List<LootrChestMinecartEntity> entities = new ArrayList<>();
+  private static final List<LootrChestMinecartEntity> ENTITIES = new ObjectArrayList<>();
 
   @SubscribeEvent
   public static void onServerTick(TickEvent.ServerTickEvent event) {
     if (event.phase == TickEvent.Phase.END) {
-      entities.removeIf(Entity::isAddedToWorld);
-      for (LootrChestMinecartEntity entity : entities) {
+      ENTITIES.removeIf(Entity::isAddedToWorld);
+      for (LootrChestMinecartEntity entity : ENTITIES) {
         ServerWorld world = (ServerWorld) entity.level;
         ServerChunkProvider provider = world.getChunkSource();
         IChunk ichunk = provider.getChunk(MathHelper.floor(entity.getX() / 16.0D), MathHelper.floor(entity.getZ() / 16.0D), ChunkStatus.FULL, false);
@@ -31,12 +33,10 @@ public class EntityTicker {
           world.addFreshEntity(entity);
         }
       }
-      DataStorage.doDecay();
-      DataStorage.doRefresh();
     }
   }
 
   public static void addEntity(LootrChestMinecartEntity entity) {
-    entities.add(entity);
+    ENTITIES.add(entity);
   }
 }

@@ -1,4 +1,11 @@
-package noobanidus.mods.lootr.data;
+package noobanidus.mods.lootr.data.old;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+import java.util.function.BiFunction;
+
+import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -20,12 +27,8 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.api.LootFiller;
 import noobanidus.mods.lootr.api.tile.ILootTile;
+import noobanidus.mods.lootr.data.ContainerData;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
-
-import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 public class ChestData extends WorldSavedData {
   private BlockPos pos;
@@ -92,7 +95,12 @@ public class ChestData extends WorldSavedData {
     this.custom = false;
     this.customId = null;
   }
-
+  
+  public ChestData(String id)
+  { 
+	  super(id);
+  }
+  
   public ChestData(UUID entityId) {
     super(ENTITY(entityId));
     this.pos = null;
@@ -102,6 +110,61 @@ public class ChestData extends WorldSavedData {
     this.reference = null;
     this.custom = false;
     this.customId = null;
+  }
+  
+  UUID getInternalId()
+  {
+	  if(entityId != null) return entityId;
+	  if(tileId != null) return tileId;
+	  if(customId != null) return customId;
+	  return null;
+  } 
+  
+  public void migrate(BiFunction<UUID, UUID, ContainerData> getter)
+  {
+	  UUID id = getInternalId();
+	  if(id == null) return;
+	  for(Map.Entry<UUID, SpecialChestInventory> entry : inventories.entrySet())
+	  {
+		  CompoundNBT data = saveMigrated(entry.getKey());
+		  if(data.isEmpty()) continue;
+		  getter.apply(entry.getKey(), id).load(data);
+	  }
+  }
+  
+  public CompoundNBT saveMigrated(UUID id) {
+	  CompoundNBT compound = new CompoundNBT();
+	  if (pos != null) {
+		  compound.putLong("position", pos.asLong());
+	  }
+	  if (dimension != null) {
+		  compound.putString("dimension", dimension.location().toString());
+	  }
+	  if (entityId != null) {
+		  compound.putUUID("entityId", entityId);
+	  }
+	  if (tileId != null) {
+		  compound.putUUID("tileId", tileId);
+	  }
+	  if (customId != null) {
+		  compound.putUUID("customId", customId);
+	  }
+	  if(custom) {
+		  compound.putBoolean("custom", custom);
+	  }
+	  if (reference != null) {
+		  compound.putInt("referenceSize", reference.size());
+	      compound.put("reference", ItemStackHelper.saveAllItems(new CompoundNBT(), reference, true));
+	  }
+	  SpecialChestInventory inventory = inventories.get(id);
+	  if(inventory != null)
+	  {
+		  CompoundNBT data = new CompoundNBT();
+		  data.put("chest", inventory.writeItems());
+		  data.putString("name", inventory.writeName());
+		  compound.put("inventory", data);
+	  }
+	  return compound;
   }
 
   public LootFiller customInventory() {

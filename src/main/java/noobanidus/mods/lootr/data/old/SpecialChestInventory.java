@@ -1,4 +1,6 @@
-package noobanidus.mods.lootr.data;
+package noobanidus.mods.lootr.data.old;
+
+import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,13 +19,12 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import noobanidus.mods.lootr.api.inventory.ILootrInventory;
 import noobanidus.mods.lootr.api.tile.ILootTile;
+import noobanidus.mods.lootr.data.ContainerData;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
-
-import javax.annotation.Nullable;
 
 @SuppressWarnings("NullableProblems")
 public class SpecialChestInventory implements ILootrInventory {
-  private final ChestData chestData;
+  private final ContainerData chestData;
   private final NonNullList<ItemStack> contents;
   private final ITextComponent name;
 
@@ -31,18 +32,33 @@ public class SpecialChestInventory implements ILootrInventory {
   private BlockPos pos;
 
   public SpecialChestInventory(ChestData chestData, NonNullList<ItemStack> contents, ITextComponent name, @Nullable BlockPos pos) {
-    this.chestData = chestData;
+    this.chestData = null;
     this.contents = contents;
     this.name = name;
     this.pos = pos;
   }
 
   public SpecialChestInventory(ChestData chestData, CompoundNBT items, String componentAsJSON, BlockPos pos) {
-    this.chestData = chestData;
+    this.chestData = null;
     this.name = ITextComponent.Serializer.fromJson(componentAsJSON);
     this.contents = NonNullList.withSize(27, ItemStack.EMPTY);
     ItemStackHelper.loadAllItems(items, this.contents);
     this.pos = pos;
+  }
+  
+  public SpecialChestInventory(ContainerData containerData, CompoundNBT items, String componentAsJSON, BlockPos pos) {
+    this.chestData = containerData;
+    this.name = ITextComponent.Serializer.fromJson(componentAsJSON);
+    this.contents = NonNullList.withSize(27, ItemStack.EMPTY);
+    ItemStackHelper.loadAllItems(items, this.contents);
+    this.pos = pos;
+  }
+
+  public SpecialChestInventory(ContainerData containerData, NonNullList<ItemStack> contents, ITextComponent name, BlockPos pos) {
+	  chestData = containerData;
+	  this.contents = contents;
+	  this.name = name;
+	  this.pos = pos;
   }
 
   public void setBlockPos(BlockPos pos) {
@@ -138,7 +154,6 @@ public class SpecialChestInventory implements ILootrInventory {
 
   @Override
   public void setChanged() {
-    chestData.setDirty();
   }
 
   @Override

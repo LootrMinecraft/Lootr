@@ -51,14 +51,6 @@ public class LootrInventoryBlock extends ChestBlock {
   }
 
   @Override
-  public void onRemove(BlockState oldState, World world, BlockPos pos, BlockState newState, boolean isMoving) {
-    if (oldState.getBlock() != newState.getBlock() && world instanceof ServerWorld) {
-      DataStorage.deleteLootChest((ServerWorld) world, pos);
-    }
-    super.onRemove(oldState, world, pos, newState, isMoving);
-  }
-
-  @Override
   public boolean hasTileEntity(BlockState state) {
     return true;
   }

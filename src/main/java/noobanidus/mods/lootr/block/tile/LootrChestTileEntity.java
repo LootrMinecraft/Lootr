@@ -38,7 +38,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.tile.ILootTile;
 import noobanidus.mods.lootr.config.ConfigManager;
-import noobanidus.mods.lootr.data.SpecialChestInventory;
+import noobanidus.mods.lootr.data.old.SpecialChestInventory;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.init.ModTiles;
 

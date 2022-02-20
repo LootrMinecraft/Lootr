@@ -1,13 +1,17 @@
-package noobanidus.mods.lootr.data;
+package noobanidus.mods.lootr.data.old;
+
+import java.util.Collection;
+import java.util.UUID;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntMap.Entry;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.common.util.Constants;
-
-import java.util.UUID;
+import noobanidus.mods.lootr.data.DecayData;
+import noobanidus.mods.lootr.data.TimedData;
 
 public class TickingData extends WorldSavedData {
   private final Object2IntMap<UUID> tickMap = new Object2IntOpenHashMap<>();
@@ -32,7 +36,21 @@ public class TickingData extends WorldSavedData {
   public int removeDone(UUID id) {
     return tickMap.removeInt(id);
   }
-
+  
+  public void migrateDecay(DecayData data, long delay) {
+	  for(Entry<UUID> ids : tickMap.object2IntEntrySet()) {
+		  data.markDecayed(ids.getKey(), delay + ids.getIntValue());
+	  }
+  }
+  
+  public void migrateRefresh(Collection<TimedData> timeData, long delay) {
+	 for(TimedData data : timeData) {
+		 for(Entry<UUID> ids : tickMap.object2IntEntrySet()) {
+			 data.markRefresh(ids.getKey(), delay + ids.getIntValue());
+		 }
+	 }
+  }
+  
   public boolean tick() {
     if (tickMap.isEmpty()) {
       return false;

@@ -1,15 +1,18 @@
-package noobanidus.mods.lootr.data;
+package noobanidus.mods.lootr.data.old;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+import java.util.function.Function;
+
+import javax.annotation.Nonnull;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
-
-import javax.annotation.Nonnull;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import noobanidus.mods.lootr.data.Statistics;
 
 public class AdvancementData extends WorldSavedData {
   private final Set<UUIDPair> data = new HashSet<>();
@@ -28,6 +31,18 @@ public class AdvancementData extends WorldSavedData {
 
   public void add(UUID first, UUID second) {
     add(new UUIDPair(first, second));
+  }
+  
+  public void migrateAwards(Function<UUID, Statistics> data) {
+	  for(UUIDPair pair : this.data) {
+		  data.apply(pair.getFirst()).award(pair.getSecond());
+	  }
+  }
+  
+  public void migrateScore(Function<UUID, Statistics> data) {
+	  for(UUIDPair pair : this.data) {
+		  data.apply(pair.getFirst()).score(pair.getSecond());
+	  }
   }
 
   public void add(UUIDPair pair) {
