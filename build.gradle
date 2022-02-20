@@ -48,7 +48,7 @@ apply from: 'gradle/top.gradle'
 apply from: 'gradle/minify_jsons.gradle'
 
 // Load publishing modules
-apply from: 'gradle/maven.gradle'
+apply from: 'gradle/maven2.gradle'
 apply from: 'gradle/signing.gradle'
 apply from: 'gradle/curseforge.gradle'
 apply from: 'gradle/version_checker.gradle'
