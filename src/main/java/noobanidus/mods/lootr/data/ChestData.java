@@ -23,12 +23,15 @@ import noobanidus.mods.lootr.api.LootFiller;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
 import javax.annotation.Nullable;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.LongSupplier;
 import java.util.function.Supplier;
 
 public class ChestData extends SavedData {
-  private String key;
+  private final String key;
   private BlockPos pos;
   private ResourceKey<Level> dimension;
   private UUID entityId;
@@ -61,19 +64,18 @@ public class ChestData extends SavedData {
   }
 
   public static String REF_ID(ResourceKey<Level> dimension, UUID id) {
-    return "Lootr-custom-" + dimension.location().getPath() + "-" + id.toString();
-  }
-
-  public static String OLD_ID(ResourceKey<Level> dimension, BlockPos pos) {
-    return "Lootr-chests-" + dimension.location().getPath() + "-" + pos.asLong();
+    String idString = id.toString();
+    return "lootr/" + idString.substring(0, 2) + "/Lootr-custom-" + dimension.location().getPath() + "-" + idString;
   }
 
   public static String ID(ResourceKey<Level> dimension, UUID id) {
-    return "Lootr-chests-" + dimension.location().getPath() + "-" + id.toString();
+    String idString = id.toString();
+    return "lootr/" + idString.substring(0, 2) + "/Lootr-chests-" + dimension.location().getPath() + "-" + idString;
   }
 
   public static String ENTITY(UUID entityId) {
-    return "Lootr-entity-" + entityId.toString();
+    String idString = entityId.toString();
+    return "lootr/" + idString.substring(0, 2) + "/Lootr-entity-" + idString;
   }
 
   public static Supplier<ChestData> ref_id(ResourceKey<Level> dimension, UUID id, @Nullable UUID customId, @Nullable NonNullList<ItemStack> base) {
@@ -177,9 +179,9 @@ public class ChestData extends SavedData {
   public SpecialChestInventory createInventory(ServerPlayer player, LootFiller filler, @Nullable RandomizableContainerBlockEntity tile) {
     ServerLevel world = (ServerLevel) player.level;
     SpecialChestInventory result;
-    LootrChestMinecartEntity cart = null;
+    LootrChestMinecartEntity cart;
     long seed = -1;
-    ResourceLocation lootTable = null;
+    ResourceLocation lootTable;
     if (entityId != null) {
       Entity initial = world.getEntity(entityId);
       if (!(initial instanceof LootrChestMinecartEntity)) {
@@ -297,5 +299,13 @@ public class ChestData extends SavedData {
 
   public void clear() {
     inventories.clear();
+  }
+
+  @Override
+  public void save(File pFile) {
+    if (isDirty()) {
+      pFile.getParentFile().mkdirs();
+    }
+    super.save(pFile);
   }
 }

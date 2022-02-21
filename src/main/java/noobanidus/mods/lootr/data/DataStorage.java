@@ -28,10 +28,15 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class DataStorage {
-  public static final String ID = "Lootr-AdvancementData";
-  public static final String SCORED = "Lootr-ScoreData";
-  public static final String DECAY = "Lootr-DecayData";
-  public static final String REFRESH = "Lootr-RefreshData";
+  public static final String ID_OLD = "Lootr-AdvancementData";
+  public static final String SCORED_OLD = "Lootr-ScoreData";
+  public static final String DECAY_OLD = "Lootr-DecayData";
+  public static final String REFRESH_OLD = "Lootr-RefreshData";
+
+  public static final String ID = "lootr/" + ID_OLD;
+  public static final String SCORED = "lootr/" + SCORED_OLD;
+  public static final String DECAY = "lootr/" + DECAY_OLD;
+  public static final String REFRESH = "lootr/" + REFRESH_OLD;
 
   public static DimensionDataStorage getDataStorage () {
     return ServerLifecycleHooks.getCurrentServer().overworld().getDataStorage();
@@ -135,16 +140,16 @@ public class DataStorage {
 
   public static ChestData getInstanceUuid(ServerLevel world, UUID id) {
     ResourceKey<Level> dimension = world.dimension();
-    return getDataStorage().computeIfAbsent(ChestData::load, ChestData.id(dimension, id), ID(dimension, id));
+    return getDataStorage().computeIfAbsent(ChestData::load, ChestData.id(dimension, id), ChestData.ID(dimension, id));
   }
 
   public static ChestData getInstance(ServerLevel world, UUID id) {
-    return getDataStorage().computeIfAbsent(ChestData::load, ChestData.entity(id), ENTITY(id));
+    return getDataStorage().computeIfAbsent(ChestData::load, ChestData.entity(id), ChestData.ENTITY(id));
   }
 
   public static ChestData getInstanceInventory(ServerLevel world, UUID id, @Nullable UUID customId, @Nullable NonNullList<ItemStack> base) {
     ResourceKey<Level> dimension = world.dimension();
-    return getDataStorage().computeIfAbsent(ChestData::load, ChestData.ref_id(dimension, id, customId, base), REF_ID(dimension, id));
+    return getDataStorage().computeIfAbsent(ChestData::load, ChestData.ref_id(dimension, id, customId, base), ChestData.REF_ID(dimension, id));
   }
 
   @Nullable
@@ -273,17 +278,5 @@ public class DataStorage {
     ChestData data = getInstance((ServerLevel) world, cart.getUUID());
     data.clear();
     data.setDirty();
-  }
-
-  public static String REF_ID(ResourceKey<Level> dimension, UUID id) {
-    return "Lootr-custom-" + dimension.location().getPath() + "-" + id.toString();
-  }
-
-  public static String ID(ResourceKey<Level> dimension, UUID id) {
-    return "Lootr-chests-" + dimension.location().getPath() + "-" + id.toString();
-  }
-
-  public static String ENTITY(UUID entityId) {
-    return "Lootr-entity-" + entityId.toString();
   }
 }
