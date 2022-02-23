@@ -10,24 +10,21 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.loading.FMLPaths;
+import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.command.CommandLootr;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModAdvancements;
 import noobanidus.mods.lootr.init.ModBlocks;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 @Mod("lootr")
 public class Lootr {
-  public static final Logger LOG = LogManager.getLogger();
-  public static final String MODID = "lootr";
 
   static {
     ModAdvancements.load();
   }
 
   public CommandLootr COMMAND_LOOTR;
-  public static CreativeModeTab TAB = new CreativeModeTab(MODID) {
+  public static CreativeModeTab TAB = new CreativeModeTab(LootrAPI.MODID) {
     @Override
     @OnlyIn(Dist.CLIENT)
     public ItemStack makeIcon() {
@@ -37,7 +34,7 @@ public class Lootr {
 
   public Lootr() {
     ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigManager.COMMON_CONFIG);
-    ConfigManager.loadConfig(ConfigManager.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve(Lootr.MODID + "-common.toml"));
+    ConfigManager.loadConfig(ConfigManager.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve(LootrAPI.MODID + "-common.toml"));
     MinecraftForge.EVENT_BUS.addListener(this::onCommands);
   }
 

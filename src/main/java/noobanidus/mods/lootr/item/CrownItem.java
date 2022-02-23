@@ -14,7 +14,7 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import noobanidus.mods.lootr.Lootr;
+import noobanidus.mods.lootr.api.LootrAPI;
 
 import java.util.UUID;
 
@@ -72,7 +72,7 @@ public class CrownItem extends ArmorItem {
 
     @Override
     public String getName() {
-      return new ResourceLocation(Lootr.MODID, "crown").toString();
+      return new ResourceLocation(LootrAPI.MODID, "crown").toString();
     }
 
     @Override

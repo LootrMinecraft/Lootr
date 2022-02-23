@@ -10,13 +10,13 @@ import net.minecraft.world.level.material.Material;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import noobanidus.mods.lootr.Lootr;
+import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.block.*;
 import noobanidus.mods.lootr.block.entities.LootrShulkerBlockEntity;
 
 import java.util.Set;
 
-@Mod.EventBusSubscriber(modid=Lootr.MODID, bus= Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid= LootrAPI.MODID, bus= Mod.EventBusSubscriber.Bus.MOD)
 public class ModBlocks {
   public static LootrBarrelBlock BARREL = new LootrBarrelBlock(BlockBehaviour.Properties.copy(Blocks.CHEST).strength(2.5f));
 
@@ -41,12 +41,12 @@ public class ModBlocks {
   public static Block TROPHY = new TrophyBlock(Block.Properties.of(Material.METAL).strength(15f).sound(SoundType.METAL).noOcclusion().lightLevel((o) -> 15));
 
   static {
-    BARREL.setRegistryName(Lootr.MODID, "lootr_barrel");
-    CHEST.setRegistryName(Lootr.MODID, "lootr_chest");
-    TRAPPED_CHEST.setRegistryName(Lootr.MODID, "lootr_trapped_chest");
-    INVENTORY.setRegistryName(Lootr.MODID, "lootr_inventory");
-    SHULKER.setRegistryName(Lootr.MODID, "lootr_shulker");
-    TROPHY.setRegistryName(Lootr.MODID, "trophy");
+    BARREL.setRegistryName(LootrAPI.MODID, "lootr_barrel");
+    CHEST.setRegistryName(LootrAPI.MODID, "lootr_chest");
+    TRAPPED_CHEST.setRegistryName(LootrAPI.MODID, "lootr_trapped_chest");
+    INVENTORY.setRegistryName(LootrAPI.MODID, "lootr_inventory");
+    SHULKER.setRegistryName(LootrAPI.MODID, "lootr_shulker");
+    TROPHY.setRegistryName(LootrAPI.MODID, "trophy");
   }
 
   public static Set<Block> specialLootChests = Sets.newHashSet(CHEST, BARREL, TRAPPED_CHEST, SHULKER, INVENTORY);

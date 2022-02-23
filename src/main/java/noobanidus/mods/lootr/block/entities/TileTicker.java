@@ -15,7 +15,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.ServerLifecycleHooks;
-import noobanidus.mods.lootr.Lootr;
+import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.event.HandleChunk;
@@ -25,7 +25,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-@Mod.EventBusSubscriber(modid = Lootr.MODID)
+@Mod.EventBusSubscriber(modid = LootrAPI.MODID)
 public class TileTicker {
   private final static Object listLock = new Object();
   private final static Object worldLock = new Object();
@@ -101,7 +101,7 @@ public class TileTicker {
           if (blockEntity instanceof ILootBlockEntity) {
             ((RandomizableContainerBlockEntity) blockEntity).setLootTable(table, seed);
           } else {
-            Lootr.LOG.error("replacement " + replacement + " is not an ILootTile " + entry.getDimension() + " at " + entry.getPosition());
+            LootrAPI.LOG.error("replacement " + replacement + " is not an ILootTile " + entry.getDimension() + " at " + entry.getPosition());
           }
 
           toRemove.add(entry);

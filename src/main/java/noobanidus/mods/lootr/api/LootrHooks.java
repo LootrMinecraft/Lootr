@@ -11,6 +11,7 @@ import java.util.UUID;
 import java.util.function.LongSupplier;
 import java.util.function.Supplier;
 
+@Deprecated
 public class LootrHooks implements ILootrHooks {
   public static ILootrHooks INSTANCE;
 

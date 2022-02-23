@@ -4,17 +4,17 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
-import noobanidus.mods.lootr.Lootr;
+import noobanidus.mods.lootr.api.LootrAPI;
 
-@Mod.EventBusSubscriber(modid= Lootr.MODID, bus= Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid= LootrAPI.MODID, bus= Mod.EventBusSubscriber.Bus.MOD)
 public class LootrDataGenerators {
   @SubscribeEvent
   public static void gatherData (GatherDataEvent event) {
     if (event.includeServer()) {
       ExistingFileHelper helper = event.getExistingFileHelper();
       LootrBlockTagProvider blocks;
-      event.getGenerator().addProvider(blocks = new LootrBlockTagProvider(event.getGenerator(), Lootr.MODID, helper));
-      event.getGenerator().addProvider(new LootrItemTagsProvider(event.getGenerator(), blocks, Lootr.MODID, helper));
+      event.getGenerator().addProvider(blocks = new LootrBlockTagProvider(event.getGenerator(), LootrAPI.MODID, helper));
+      event.getGenerator().addProvider(new LootrItemTagsProvider(event.getGenerator(), blocks, LootrAPI.MODID, helper));
     }
   }
 }

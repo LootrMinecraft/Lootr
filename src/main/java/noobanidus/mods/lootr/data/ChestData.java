@@ -6,6 +6,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -15,6 +16,7 @@ import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraftforge.server.ServerLifecycleHooks;
@@ -24,9 +26,8 @@ import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
 import javax.annotation.Nullable;
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
+import java.util.function.IntSupplier;
 import java.util.function.LongSupplier;
 import java.util.function.Supplier;
 
@@ -63,24 +64,14 @@ public class ChestData extends SavedData {
     return null;
   }
 
-  public static String REF_ID(ResourceKey<Level> dimension, UUID id) {
+  public static String ID(UUID id) {
     String idString = id.toString();
-    return "lootr/" + idString.substring(0, 2) + "/Lootr-custom-" + dimension.location().getPath() + "-" + idString;
-  }
-
-  public static String ID(ResourceKey<Level> dimension, UUID id) {
-    String idString = id.toString();
-    return "lootr/" + idString.substring(0, 2) + "/Lootr-chests-" + dimension.location().getPath() + "-" + idString;
-  }
-
-  public static String ENTITY(UUID entityId) {
-    String idString = entityId.toString();
-    return "lootr/" + idString.substring(0, 2) + "/Lootr-entity-" + idString;
+    return "lootr/" + idString.charAt(0) + "/" + idString.substring(0, 2) + "/" + idString;
   }
 
   public static Supplier<ChestData> ref_id(ResourceKey<Level> dimension, UUID id, @Nullable UUID customId, @Nullable NonNullList<ItemStack> base) {
     return () -> {
-      ChestData data = new ChestData(REF_ID(dimension, id));
+      ChestData data = new ChestData(ID(id));
       data.pos = null;
       data.dimension = dimension;
       data.entityId = null;
@@ -97,7 +88,7 @@ public class ChestData extends SavedData {
 
   public static Supplier<ChestData> id(ResourceKey<Level> dimension, UUID id) {
     return () -> {
-      ChestData data = new ChestData(ID(dimension, id));
+      ChestData data = new ChestData(ID(id));
       data.pos = null;
       data.dimension = dimension;
       data.entityId = null;
@@ -111,7 +102,7 @@ public class ChestData extends SavedData {
 
   public static Supplier<ChestData> entity(UUID entityId) {
     return () -> {
-      ChestData data = new ChestData(ENTITY(entityId));
+      ChestData data = new ChestData(ID(entityId));
       data.pos = null;
       data.dimension = null;
       data.tileId = null;
@@ -131,14 +122,6 @@ public class ChestData extends SavedData {
     };
   }
 
-  public Map<UUID, SpecialChestInventory> getInventories() {
-    return inventories;
-  }
-
-  public void setInventories(Map<UUID, SpecialChestInventory> inventories) {
-    this.inventories = inventories;
-  }
-
   public boolean clearInventory(UUID uuid) {
     return inventories.remove(uuid) != null;
   }
@@ -152,7 +135,7 @@ public class ChestData extends SavedData {
     return result;
   }
 
-  public SpecialChestInventory createInventory(ServerPlayer player, LootFiller filler, RandomizableContainerBlockEntity blockEntity, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
+  public SpecialChestInventory createInventory(ServerPlayer player, LootFiller filler, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
     ServerLevel level = (ServerLevel) player.level;
     SpecialChestInventory result;
     if (level.dimension() != dimension) {
@@ -163,14 +146,36 @@ public class ChestData extends SavedData {
       level = server.getLevel(dimension);
     }
 
-    if (level == null || blockEntity == null) {
+    if (level == null) {
+      return null;
+    }
+
+    NonNullList<ItemStack> items = NonNullList.withSize(sizeSupplier.getAsInt(), ItemStack.EMPTY);
+    result = new SpecialChestInventory(this, items, displaySupplier.get(), pos);
+    filler.unpackLootTable(player, result, tableSupplier.get(), seedSupplier.getAsLong());
+    inventories.put(player.getUUID(), result);
+    setDirty();
+    return result;
+  }
+
+  public SpecialChestInventory createInventory(ServerPlayer player, LootFiller filler, BaseContainerBlockEntity blockEntity, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
+    ServerLevel level = (ServerLevel) player.level;
+    SpecialChestInventory result;
+    if (level.dimension() != dimension) {
+      MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+      if (server == null) {
+        return null;
+      }
+      level = server.getLevel(dimension);
+    }
+
+    if (level == null) {
       return null;
     }
 
     NonNullList<ItemStack> items = NonNullList.withSize(blockEntity.getContainerSize(), ItemStack.EMPTY);
-    // Saving this is handled elsewhere
     result = new SpecialChestInventory(this, items, blockEntity.getDisplayName(), pos);
-    filler.fillWithLoot(player, result, tableSupplier.get(), seedSupplier.getAsLong());
+    filler.unpackLootTable(player, result, tableSupplier.get(), seedSupplier.getAsLong());
     inventories.put(player.getUUID(), result);
     setDirty();
     return result;
@@ -189,7 +194,6 @@ public class ChestData extends SavedData {
       }
       cart = (LootrChestMinecartEntity) initial;
       NonNullList<ItemStack> items = NonNullList.withSize(cart.getContainerSize(), ItemStack.EMPTY);
-      // Saving this is handled elsewhere
       result = new SpecialChestInventory(this, items, cart.getDisplayName(), pos);
       lootTable = cart.lootTable;
     } else {
@@ -208,10 +212,9 @@ public class ChestData extends SavedData {
       lootTable = ((ILootBlockEntity) tile).getTable();
 
       NonNullList<ItemStack> items = NonNullList.withSize(tile.getContainerSize(), ItemStack.EMPTY);
-      // Saving this is handled elsewhere
       result = new SpecialChestInventory(this, items, tile.getDisplayName(), pos);
     }
-    filler.fillWithLoot(player, result, lootTable, seed);
+    filler.unpackLootTable(player, result, lootTable, seed);
     inventories.put(player.getUUID(), result);
     setDirty();
     return result;

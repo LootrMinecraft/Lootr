@@ -6,6 +6,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.Tags;
+import noobanidus.mods.lootr.api.LootrAPI;
 
 public class LootrTags {
   public static class Blocks extends LootrTags {
@@ -16,7 +17,7 @@ public class LootrTags {
     public static Tags.IOptionalNamedTag<Block> CONTAINERS = tag("containers");
 
     static Tags.IOptionalNamedTag<Block> tag(String name) {
-      return BlockTags.createOptional(new ResourceLocation(Lootr.MODID, name));
+      return BlockTags.createOptional(new ResourceLocation(LootrAPI.MODID, name));
     }
   }
 
@@ -28,7 +29,7 @@ public class LootrTags {
     public static Tags.IOptionalNamedTag<Item> CONTAINERS = tag("containers");
 
     static Tags.IOptionalNamedTag<Item> tag(String name) {
-      return ItemTags.createOptional(new ResourceLocation(Lootr.MODID, name));
+      return ItemTags.createOptional(new ResourceLocation(LootrAPI.MODID, name));
     }
   }
 }

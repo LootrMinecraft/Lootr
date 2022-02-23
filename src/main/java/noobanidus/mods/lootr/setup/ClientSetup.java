@@ -10,7 +10,7 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import noobanidus.mods.lootr.Lootr;
+import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.client.block.BarrelModel;
 import noobanidus.mods.lootr.client.block.LootrChestBlockRenderer;
 import noobanidus.mods.lootr.client.entity.LootrChestCartRenderer;
@@ -18,7 +18,7 @@ import noobanidus.mods.lootr.client.block.LootrShulkerBlockRenderer;
 import noobanidus.mods.lootr.init.ModBlockEntities;
 import noobanidus.mods.lootr.init.ModEntities;
 
-@Mod.EventBusSubscriber(modid=Lootr.MODID, value= Dist.CLIENT, bus= Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid= LootrAPI.MODID, value= Dist.CLIENT, bus= Mod.EventBusSubscriber.Bus.MOD)
 public class ClientSetup {
   @SubscribeEvent
   public static void stitch(TextureStitchEvent.Pre event) {
@@ -32,7 +32,7 @@ public class ClientSetup {
 
   @SubscribeEvent
   public static void modelRegister(ModelRegistryEvent event) {
-    ModelLoaderRegistry.registerLoader(new ResourceLocation(Lootr.MODID, "barrel"), BarrelModel.Loader.INSTANCE);
+    ModelLoaderRegistry.registerLoader(new ResourceLocation(LootrAPI.MODID, "barrel"), BarrelModel.Loader.INSTANCE);
   }
 
   @SubscribeEvent

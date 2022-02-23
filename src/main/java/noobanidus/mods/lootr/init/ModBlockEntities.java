@@ -4,10 +4,10 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import noobanidus.mods.lootr.Lootr;
+import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.block.entities.*;
 
-@Mod.EventBusSubscriber(modid=Lootr.MODID, bus= Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid= LootrAPI.MODID, bus= Mod.EventBusSubscriber.Bus.MOD)
 public class ModBlockEntities {
   public static BlockEntityType<LootrChestBlockEntity> SPECIAL_LOOT_CHEST = BlockEntityType.Builder.of(LootrChestBlockEntity::new, ModBlocks.CHEST).build(null);
   public static BlockEntityType<LootrTrappedChestBlockEntity> SPECIAL_TRAPPED_LOOT_CHEST = BlockEntityType.Builder.of(LootrTrappedChestBlockEntity::new, ModBlocks.TRAPPED_CHEST).build(null);
@@ -17,15 +17,15 @@ public class ModBlockEntities {
 
   @SubscribeEvent
   public static void registerTileEntityType(RegistryEvent.Register<BlockEntityType<?>> event) {
-    SPECIAL_LOOT_CHEST.setRegistryName(Lootr.MODID, "special_loot_chest");
+    SPECIAL_LOOT_CHEST.setRegistryName(LootrAPI.MODID, "special_loot_chest");
     event.getRegistry().register(SPECIAL_LOOT_CHEST);
-    SPECIAL_TRAPPED_LOOT_CHEST.setRegistryName(Lootr.MODID, "special_trapped_loot_chest");
+    SPECIAL_TRAPPED_LOOT_CHEST.setRegistryName(LootrAPI.MODID, "special_trapped_loot_chest");
     event.getRegistry().register(SPECIAL_TRAPPED_LOOT_CHEST);
-    SPECIAL_LOOT_BARREL.setRegistryName(Lootr.MODID, "special_loot_barrel");
+    SPECIAL_LOOT_BARREL.setRegistryName(LootrAPI.MODID, "special_loot_barrel");
     event.getRegistry().register(SPECIAL_LOOT_BARREL);
-    SPECIAL_LOOT_INVENTORY.setRegistryName(Lootr.MODID, "special_loot_inventory");
+    SPECIAL_LOOT_INVENTORY.setRegistryName(LootrAPI.MODID, "special_loot_inventory");
     event.getRegistry().register(SPECIAL_LOOT_INVENTORY);
-    SPECIAL_LOOT_SHULKER.setRegistryName(Lootr.MODID, "special_loot_shulker");
+    SPECIAL_LOOT_SHULKER.setRegistryName(LootrAPI.MODID, "special_loot_shulker");
     event.getRegistry().register(SPECIAL_LOOT_SHULKER);
   }
 }

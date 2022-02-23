@@ -2,18 +2,20 @@ package noobanidus.mods.lootr.data;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraftforge.server.ServerLifecycleHooks;
 import net.minecraft.world.level.storage.LevelResource;
-import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.LootFiller;
+import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
 import javax.annotation.Nullable;
@@ -23,6 +25,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.IntSupplier;
 import java.util.function.LongSupplier;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -140,20 +143,36 @@ public class DataStorage {
 
   public static ChestData getInstanceUuid(ServerLevel world, UUID id) {
     ResourceKey<Level> dimension = world.dimension();
-    return getDataStorage().computeIfAbsent(ChestData::load, ChestData.id(dimension, id), ChestData.ID(dimension, id));
+    return getDataStorage().computeIfAbsent(ChestData::load, ChestData.id(dimension, id), ChestData.ID(id));
   }
 
   public static ChestData getInstance(ServerLevel world, UUID id) {
-    return getDataStorage().computeIfAbsent(ChestData::load, ChestData.entity(id), ChestData.ENTITY(id));
+    return getDataStorage().computeIfAbsent(ChestData::load, ChestData.entity(id), ChestData.ID(id));
   }
 
   public static ChestData getInstanceInventory(ServerLevel world, UUID id, @Nullable UUID customId, @Nullable NonNullList<ItemStack> base) {
     ResourceKey<Level> dimension = world.dimension();
-    return getDataStorage().computeIfAbsent(ChestData::load, ChestData.ref_id(dimension, id, customId, base), ChestData.REF_ID(dimension, id));
+    return getDataStorage().computeIfAbsent(ChestData::load, ChestData.ref_id(dimension, id, customId, base), ChestData.ID(id));
   }
 
   @Nullable
-  public static SpecialChestInventory getInventory (Level level, UUID uuid, BlockPos pos, ServerPlayer player, RandomizableContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
+  public static SpecialChestInventory getInventory (Level level, UUID uuid, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
+    if (level.isClientSide() || !(level instanceof ServerLevel)) {
+      return null;
+    }
+
+    ChestData data = getInstanceUuid((ServerLevel) level, uuid);
+    SpecialChestInventory inventory = data.getInventory(player, pos);
+    if (inventory == null) {
+      inventory = data.createInventory(player, filler, sizeSupplier, displaySupplier, tableSupplier, seedSupplier);
+      inventory.setBlockPos(pos);
+    }
+
+    return inventory;
+  }
+
+  @Nullable
+  public static SpecialChestInventory getInventory (Level level, UUID uuid, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
     if (level.isClientSide() || !(level instanceof ServerLevel)) {
       return null;
     }
@@ -232,7 +251,7 @@ public class DataStorage {
         }
       }
     }
-    Lootr.LOG.info("Cleared " + cleared + " inventories for play UUID " + uuid.toString());
+    LootrAPI.LOG.info("Cleared " + cleared + " inventories for play UUID " + uuid.toString());
     return cleared != 0;
   }
 

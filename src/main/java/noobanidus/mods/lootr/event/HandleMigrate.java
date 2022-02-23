@@ -4,7 +4,7 @@ import net.minecraft.world.level.storage.LevelResource;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import noobanidus.mods.lootr.Lootr;
+import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.data.DataStorage;
 
 import java.io.IOException;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Mod.EventBusSubscriber(modid = Lootr.MODID)
+@Mod.EventBusSubscriber(modid = LootrAPI.MODID)
 public class HandleMigrate {
   @SubscribeEvent
   public static void onServerStarting(ServerStartedEvent event) {
@@ -28,7 +28,7 @@ public class HandleMigrate {
     try {
       toMigrate = Files.walk(event.getServer().getWorldPath(new LevelResource("data")), 1).collect(Collectors.toList());
     } catch (IOException e) {
-      Lootr.LOG.error("Unable to begin migration of existing data!", e);
+      LootrAPI.LOG.error("Unable to begin migration of existing data!", e);
       return;
     }
 
@@ -43,35 +43,36 @@ public class HandleMigrate {
         migrations.put(path, dataLootr.resolve(path.getFileName()));
       } else {
         // Determine file ID
-        String containerId;
+        String uuid;
         if (fileName.startsWith("Lootr-chests") || fileName.startsWith("Lootr-custom")) {
-          containerId = fileName.split("-", 4)[3].substring(0, 2);
+          uuid = fileName.split("-", 4)[3];
         } else if (fileName.startsWith("Lootr-entity")) {
-          containerId = fileName.split("-", 3)[2].substring(0, 2);
+          uuid = fileName.split("-", 3)[2];
         } else {
-          Lootr.LOG.error("Invalid file name found while traversing data. Could not migrate: '" + path + "'");
+          LootrAPI.LOG.error("Invalid file name found while traversing data. Could not migrate: '" + path + "'");
           continue;
         }
+        String containerId = uuid.substring(0, 2);
         try {
-          Files.createDirectories(dataLootr.resolve(containerId));
+          Files.createDirectories(dataLootr.resolve(uuid.substring(0, 1)).resolve(containerId));
         } catch (IOException e) {
-          Lootr.LOG.error("Unable to create 'lootr/" + containerId + "' subdirectory. Could not migrate: '" + path + "'", e);
+          LootrAPI.LOG.error("Unable to create 'lootr/" + containerId + "' subdirectory. Could not migrate: '" + path + "'", e);
           continue;
         }
-        migrations.put(path, dataLootr.resolve(containerId).resolve(path.getFileName()));
+        migrations.put(path, dataLootr.resolve(uuid.substring(0, 1)).resolve(containerId).resolve(uuid + ".dat"));
       }
     }
 
     if (!migrations.isEmpty()) {
-      Lootr.LOG.info("Migrating Lootr data files to subdirectory...");
+      LootrAPI.LOG.info("Migrating Lootr data files to subdirectory...");
       for (Map.Entry<Path, Path> migrationEntry : migrations.entrySet()) {
         try {
           Files.move(migrationEntry.getKey(), migrationEntry.getValue());
         } catch (IOException e) {
-          Lootr.LOG.error("Unable to migrate from '" + migrationEntry.getKey() + "' to '" + migrationEntry.getValue() + "'", e);
+          LootrAPI.LOG.error("Unable to migrate from '" + migrationEntry.getKey() + "' to '" + migrationEntry.getValue() + "'", e);
         }
       }
-      Lootr.LOG.info("Migrated " + migrations.size() + " Lootr data files to subdirectory!");
+      LootrAPI.LOG.info("Migrated " + migrations.size() + " Lootr data files to subdirectory!");
     }
   }
 }

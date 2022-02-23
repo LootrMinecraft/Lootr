@@ -1,22 +1,20 @@
 package noobanidus.mods.lootr.event;
 
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraft.world.level.chunk.LevelChunk;
-import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraftforge.event.server.*;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import noobanidus.mods.lootr.Lootr;
+import noobanidus.mods.lootr.api.LootrAPI;
 
 import java.util.*;
 
-@Mod.EventBusSubscriber(modid = Lootr.MODID)
+@Mod.EventBusSubscriber(modid = LootrAPI.MODID)
 public class HandleChunk {
   public static final Map<ResourceKey<Level>, Set<ChunkPos>> LOADED_CHUNKS = Collections.synchronizedMap(new HashMap<>());
 

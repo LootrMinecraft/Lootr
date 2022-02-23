@@ -7,11 +7,12 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import noobanidus.mods.lootr.Lootr;
+import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.item.CrownItem;
 import noobanidus.mods.lootr.item.LootrChestBlockItem;
 import noobanidus.mods.lootr.item.LootrShulkerBlockItem;
 
-@Mod.EventBusSubscriber(modid=Lootr.MODID, bus= Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid= LootrAPI.MODID, bus= Mod.EventBusSubscriber.Bus.MOD)
 public class ModItems {
   public static BlockItem CHEST = new LootrChestBlockItem(ModBlocks.CHEST, new BlockItem.Properties());
   public static BlockItem TRAPPED_CHEST = new LootrChestBlockItem(ModBlocks.TRAPPED_CHEST, new BlockItem.Properties());
@@ -24,13 +25,13 @@ public class ModItems {
   public static CrownItem CROWN = new CrownItem(new Item.Properties().rarity(Rarity.EPIC).tab(Lootr.TAB));
 
   static {
-    CHEST.setRegistryName(Lootr.MODID, "lootr_chest");
-    TRAPPED_CHEST.setRegistryName(Lootr.MODID, "lootr_trapped_chest");
-    BARREL.setRegistryName(Lootr.MODID, "lootr_barrel");
-    INVENTORY.setRegistryName(Lootr.MODID, "lootr_inventory");
-    SHULKER.setRegistryName(Lootr.MODID, "lootr_shulker");
-    TROPHY.setRegistryName(Lootr.MODID, "trophy");
-    CROWN.setRegistryName(Lootr.MODID, "crown");
+    CHEST.setRegistryName(LootrAPI.MODID, "lootr_chest");
+    TRAPPED_CHEST.setRegistryName(LootrAPI.MODID, "lootr_trapped_chest");
+    BARREL.setRegistryName(LootrAPI.MODID, "lootr_barrel");
+    INVENTORY.setRegistryName(LootrAPI.MODID, "lootr_inventory");
+    SHULKER.setRegistryName(LootrAPI.MODID, "lootr_shulker");
+    TROPHY.setRegistryName(LootrAPI.MODID, "trophy");
+    CROWN.setRegistryName(LootrAPI.MODID, "crown");
   }
 
   @SubscribeEvent

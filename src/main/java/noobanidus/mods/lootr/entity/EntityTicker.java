@@ -7,14 +7,13 @@ import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import noobanidus.mods.lootr.Lootr;
+import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.data.DataStorage;
-import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid= Lootr.MODID)
+@Mod.EventBusSubscriber(modid= LootrAPI.MODID)
 public class EntityTicker {
   private static final List<LootrChestMinecartEntity> entities = new ArrayList<>();
 

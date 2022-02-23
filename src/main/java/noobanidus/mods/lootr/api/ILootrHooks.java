@@ -11,6 +11,7 @@ import java.util.UUID;
 import java.util.function.LongSupplier;
 import java.util.function.Supplier;
 
+@Deprecated
 public interface ILootrHooks {
   default boolean clearPlayerLoot(ServerPlayer entity) {
     return clearPlayerLoot(entity.getUUID());

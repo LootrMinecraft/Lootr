@@ -9,7 +9,7 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import noobanidus.mods.lootr.Lootr;
+import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModEntities;
@@ -17,7 +17,7 @@ import noobanidus.mods.lootr.network.OpenCart;
 import noobanidus.mods.lootr.network.PacketHandler;
 import noobanidus.mods.lootr.entity.EntityTicker;
 
-@Mod.EventBusSubscriber(modid= Lootr.MODID)
+@Mod.EventBusSubscriber(modid= LootrAPI.MODID)
 public class HandleCart {
   @SubscribeEvent
   public static void onEntityJoin(EntityJoinWorldEvent event) {
