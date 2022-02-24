@@ -1,10 +1,11 @@
 package net.zestyblaze.lootr.api;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
+import org.jetbrains.annotations.NotNull;
 
 @FunctionalInterface
 public interface LootFiller {
-    void fillWithLoot(PlayerEntity player, Inventory inventory, Identifier table, long seed);
+    void unpackLootTable(@NotNull Player player, Container container, ResourceLocation table, long seed);
 }

@@ -6,12 +6,13 @@
   "name": "Lootr",
   "description": "A mod that makes it so nobody misses out on Loot!",
   "authors": [
-    "ZestyBlaze"
+    "ZestyBlaze",
+    "Noobanidus"
   ],
   "contact": {
     "homepage": "",
-    "sources": "https://github.com/ZestyBlaze/Lootr-Fabric",
-    "issues": "https://github.com/ZestyBlaze/Lootr-Fabric/issues"
+    "sources": "https://github.com/noobanidus/Lootr/tree/fabric-1.18",
+    "issues": "https://github.com/noobanidus/Lootr/issues"
   },
 
   "license": "MIT License",
@@ -28,7 +29,7 @@
   },
 
   "depends": {
-    "fabricloader": ">=0.11.3",
+    "fabricloader": ">=0.12.12",
     "fabric": "*",
     "minecraft": "1.18.x",
     "java": ">=17",

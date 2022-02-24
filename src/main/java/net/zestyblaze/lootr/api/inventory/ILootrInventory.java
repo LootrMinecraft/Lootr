@@ -1,21 +1,21 @@
 package net.zestyblaze.lootr.api.inventory;
 
-import net.minecraft.block.entity.LootableContainerBlockEntity;
-import net.minecraft.entity.vehicle.StorageMinecartEntity;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.Container;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.vehicle.AbstractMinecartContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
-public interface ILootrInventory extends Inventory, NamedScreenHandlerFactory {
-    @Nullable LootableContainerBlockEntity getTile(World world);
+public interface ILootrInventory extends Container, MenuProvider {
+    @Nullable RandomizableContainerBlockEntity getTile(Level world);
 
-    @Nullable StorageMinecartEntity getEntity(World world);
+    @Nullable AbstractMinecartContainer getEntity(Level world);
 
     @Nullable BlockPos getPos();
 
-    DefaultedList<ItemStack> getContents();
+    NonNullList<ItemStack> getContents();
 }

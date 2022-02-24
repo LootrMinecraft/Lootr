@@ -1,17 +1,17 @@
 package net.zestyblaze.lootr.api.blockentity;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.Set;
 import java.util.UUID;
 
 public interface ILootBlockEntity {
-    void unpackLootTable(PlayerEntity player, Inventory inventory, Identifier table, long seed);
+    void unpackLootTable(Player player, Container inventory, ResourceLocation table, long seed);
 
-    Identifier getTable();
+    ResourceLocation getTable();
 
     BlockPos getPosition();
 
@@ -19,9 +19,9 @@ public interface ILootBlockEntity {
 
     Set<UUID> getOpeners();
 
-    UUID getTileID();
+    UUID getTileId();
 
     void updatePacketViaState();
 
-    void setOpened (boolean opened);
+    void setOpened(boolean opened);
 }
