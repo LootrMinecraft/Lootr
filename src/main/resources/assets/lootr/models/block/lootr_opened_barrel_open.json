@@ -1,9 +1,0 @@
-{
-  "parent": "block/cube_bottom_top",
-  "textures": {
-    "particle": "lootr:block/opened_barrel_top_open",
-    "top": "lootr:block/opened_barrel_top_open",
-    "side": "lootr:block/opened_barrel_side",
-    "bottom": "lootr:block/opened_barrel_bottom"
-  }
-}

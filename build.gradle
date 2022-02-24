@@ -1,54 +1,71 @@
 plugins {
-    id 'com.github.johnrengelman.shadow' version '5.2.0'
+	id 'fabric-loom' version '0.10-SNAPSHOT'
+	id 'maven-publish'
 }
 
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply from: 'gradle/property_helper.gradle'
-apply from: 'gradle/property_loader.gradle'
-apply from: 'https://raw.githubusercontent.com/SizableShrimp/Forge-Class-Remapper/main/classremapper.gradle'
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
-// Load mod related properties
-ext.modName = getRequiredString('mod_name')
-ext.modAuthor = getRequiredString('mod_author')
-ext.modId = getRequiredString('mod_id')
-ext.modCredits = getDefaultString('mod_credits', ext.modAuthor)
-ext.modDescription = getOptionalString('mod_description')
-ext.modChangelog = getOptionalString('mod_changelog')
-ext.modHomepage = getOptionalString('mod_homepage')
-ext.modSource = getOptionalString('mod_source')
-ext.modIssues = getOptionalString('mod_issues')
-ext.modLicense = getOptionalString('mod_license')
+archivesBaseName = project.archives_base_name
+version = project.mod_version
+group = project.maven_group
 
-// Load Minecraft specific properties
-ext.mcVersion = getRequiredString('minecraft_version')
+repositories {
+	maven {
+		name "Cloth Config"
+		url "https://maven.shedaniel.me/"
+	}
 
-// Load build-time modules
-apply from: 'gradle/build_number.gradle'
-apply from: 'gradle/git_changelog.gradle'
-apply from: 'gradle/patreon.gradle'
-apply from: 'gradle/java.gradle'
-apply from: 'gradle/forge.gradle'
-apply from: 'gradle/dependencies.gradle'
-apply from: 'gradle/aequivaleo.gradle'
-apply from: 'gradle/api.gradle'
-apply from: 'gradle/blame.gradle'
-apply from: 'gradle/carrier_bees.gradle'
-apply from: 'gradle/curios.gradle'
-apply from: 'gradle/dynamic_trees.gradle'
-apply from: 'gradle/geckolib.gradle'
-apply from: 'gradle/jade.gradle'
-apply from: 'gradle/jei.gradle'
-apply from: 'gradle/mana_and_artifice.gradle'
-apply from: 'gradle/mysticalworld.gradle'
-apply from: 'gradle/patchouli.gradle'
-apply from: 'gradle/shadow.gradle'
-apply from: 'gradle/stables.gradle'
-apply from: 'gradle/top.gradle'
-apply from: 'gradle/minify_jsons.gradle'
+	maven {
+		name "Modmenu"
+		url "https://maven.terraformersmc.com/"
+	}
+}
 
-// Load publishing modules
-apply from: 'gradle/maven.gradle'
-apply from: 'gradle/signing.gradle'
-apply from: 'gradle/curseforge.gradle'
-apply from: 'gradle/version_checker.gradle'
+dependencies {
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+	//Cloth Config
+	modApi("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
+		exclude (group: "net.fabricmc.fabric-api") }
+
+	//Modmenu
+	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}") {
+		exclude group: "net.fabricmc.fabric-api" }
+}
+
+processResources {
+	inputs.property "version", project.version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": project.version
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 17
+}
+
+java {
+	withSourcesJar()
+}
+
+jar {
+	from("LICENSE") {
+		rename { "${it}_${project.archivesBaseName}"}
+	}
+}
+
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			from components.java
+		}
+	}
+
+	repositories {
+	}
+}

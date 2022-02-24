@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "lootr",
+  "version": "${version}",
+
+  "name": "Lootr",
+  "description": "A mod that makes it so nobody misses out on Loot!",
+  "authors": [
+    "ZestyBlaze"
+  ],
+  "contact": {
+    "homepage": "",
+    "sources": "https://github.com/ZestyBlaze/Lootr-Fabric",
+    "issues": "https://github.com/ZestyBlaze/Lootr-Fabric/issues"
+  },
+
+  "license": "MIT License",
+  "icon": "icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.zestyblaze.lootr.Lootr"
+    ],
+    "modmenu": [
+      "net.zestyblaze.lootr.integration.ModMenuIntegration"
+    ]
+  },
+
+  "depends": {
+    "fabricloader": ">=0.11.3",
+    "fabric": "*",
+    "minecraft": "1.18.x",
+    "java": ">=17",
+    "cloth-config2": ">=6.1.48"
+  }
+}

@@ -1,50 +1,33 @@
-/download
-/eclipseBin
+# gradle
 
-## gradle
-**/.gradle
-**/build
+.gradle/
+build/
+out/
+classes/
 
-/structures
+# eclipse
 
-## ForgeGradle
-/run
-/*/run
-/*.launch
-/*/*.launch
+*.launch
 
-## eclipse
-/eclipse
-**/.settings
-**/.metadata
-**/.classpath
-**/.project
-**/bin
+# idea
 
-## intellij
-/out
-/.idea
-/*.iml
-/*.ipr
-/*.iws
-/atlassian-ide-plugin.xml
-/classes
+.idea/
+*.iml
+*.ipr
+*.iws
 
-## gedit
-*~
-## most Windows editors
-*.bak
-## OSX
-.DS_Store
+# vscode
 
-## translation reports
-resources/assets/enderio/lang/*.lang.txt
-/ebin/
+.settings/
+.vscode/
+bin/
+.classpath
+.project
 
-## local user properties
-user.properties
+# macos
 
-## temporary build files
-eiostore.jks
+*.DS_Store
 
-build\.sh
+# fabric
+
+run/
