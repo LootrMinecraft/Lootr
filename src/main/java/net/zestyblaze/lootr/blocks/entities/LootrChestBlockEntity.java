@@ -247,10 +247,6 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
     }
 
     @Override
-    public void unpackLootTable(Player player, Container inventory, ResourceLocation table, long seed) {
-    }
-
-    @Override
     public void unpackLootTable(Player player, Container inventory, ResourceLocation overrideTable, long seed) {
         if (this.level != null && this.savedLootTable != null && this.level.getServer() != null) {
             LootTable loottable = this.level.getServer().getLootTables().get(overrideTable != null ? overrideTable : this.savedLootTable);

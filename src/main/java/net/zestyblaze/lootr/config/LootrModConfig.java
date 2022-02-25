@@ -5,8 +5,9 @@ import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import net.zestyblaze.lootr.Lootr;
+import net.zestyblaze.lootr.api.LootrAPI;
 
-@Config(name = Lootr.MODID)
+@Config(name = LootrAPI.MODID)
 public class LootrModConfig implements ConfigData {
     @ConfigEntry.Gui.CollapsibleObject
     public Debug debug = new Debug();
