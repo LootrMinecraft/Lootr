@@ -59,7 +59,7 @@ public class HandleMigrate {
           LootrAPI.LOG.error("Unable to create 'lootr/" + containerId + "' subdirectory. Could not migrate: '" + path + "'", e);
           continue;
         }
-        migrations.put(path, dataLootr.resolve(uuid.substring(0, 1)).resolve(containerId).resolve(uuid + ".dat"));
+        migrations.put(path, dataLootr.resolve(uuid.substring(0, 1)).resolve(containerId).resolve(uuid));
       }
     }
 

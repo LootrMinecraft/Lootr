@@ -218,23 +218,21 @@ public class DataStorage {
     return inventory;
   }
 
-  public static boolean clearInventories(ServerPlayer player) {
-    return clearInventories(player.getUUID());
-  }
-
   public static boolean clearInventories(UUID uuid) {
     ServerLevel world = ServerLifecycleHooks.getCurrentServer().overworld();
     DimensionDataStorage data = world.getDataStorage();
-    Path dataPath = world.getServer().getWorldPath(new LevelResource("data"));
+    Path dataPath = world.getServer().getWorldPath(new LevelResource("data")).resolve("lootr");
 
+    // TODO: Clear
     List<String> ids = new ArrayList<>();
     try (Stream<Path> paths = Files.walk(dataPath)) {
       paths.forEach(o -> {
         if (Files.isRegularFile(o)) {
-          String name = o.getFileName().toString();
-          if (name.startsWith("Lootr-")) {
-            ids.add(name.replace(".dat", ""));
+          String fileName = o.getFileName().toString();
+          if (fileName.startsWith("Lootr-")) {
+            return;
           }
+          ids.add("lootr/" + fileName.charAt(0) + "/" + fileName.substring(0, 2) + "/" + fileName.replace(".dat", ""));
         }
       });
     } catch (IOException e) {
