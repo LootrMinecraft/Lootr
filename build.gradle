@@ -69,6 +69,10 @@ jar {
 	}
 }
 
+loom {
+	accessWidenerPath = file("src/main/resources/lootr.accessWidener")
+}
+
 publishing {
 	publications {
 		mavenJava(MavenPublication) {
