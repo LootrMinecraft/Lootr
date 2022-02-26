@@ -101,6 +101,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
         this.seed = seedIn;
     }
 
+    // TODO: Clean this up dramatically
     @Override
     public void load(CompoundTag compound) {
         if (compound.contains("specialLootChest_table", Tag.TAG_STRING)) {
@@ -233,17 +234,11 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
         return result;
     }
 
+    // `onDataPacket` from forge is uneeded; `ClientPacketListener` automatically loads from the relevant tag.
     @Override
     @Nullable
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this, BlockEntity::getUpdateTag);
-    }
-
-    @Override
-    public void onDataPacket(@NotNull Connection net, @NotNull ClientboundBlockEntityDataPacket pkt) {
-        if (pkt.getTag() != null) {
-            load(pkt.getTag());
-        }
     }
 
     @Override

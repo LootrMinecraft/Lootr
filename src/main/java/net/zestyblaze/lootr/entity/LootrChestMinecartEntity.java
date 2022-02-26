@@ -20,7 +20,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.AbstractMinecartContainer;
@@ -40,7 +39,6 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.zestyblaze.lootr.api.LootrAPI;
 import net.zestyblaze.lootr.api.entity.ILootCart;
 import net.zestyblaze.lootr.config.LootrModConfig;
-import net.zestyblaze.lootr.network.OpenCart;
 import net.zestyblaze.lootr.registry.LootrBlockInit;
 import org.jetbrains.annotations.Nullable;
 
@@ -50,7 +48,7 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class LootrChestMinecartEntity extends AbstractMinecartContainer implements ILootCart {
-    private Set<UUID> openers = new HashSet<>();
+    private final Set<UUID> openers = new HashSet<>();
     private boolean opened = false;
 
     public LootrChestMinecartEntity(EntityType<LootrChestMinecartEntity> type, Level world) {
@@ -187,7 +185,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     @Override
     public InteractionResult interact(Player player, InteractionHand hand) {
         InteractionResult ret = InteractionResult.PASS;
-        if (ret.consumesAction()) return ret;
+/*        if (ret.consumesAction()) return ret;
         if (player.isShiftKeyDown()) {
             ChestUtil.handleLootCartSneak(player.level, this, player);
             if (!player.level.isClientSide) {
@@ -203,7 +201,8 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
             } else {
                 return InteractionResult.SUCCESS;
             }
-        }
+        }*/
+        return ret;
     }
 
     public void addLoot(@Nullable Player player, Container inventory, @Nullable ResourceLocation overrideTable, long seed) {
@@ -218,7 +217,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
             if (player instanceof ServerPlayer) {
                 CriteriaTriggers.GENERATE_LOOT.trigger((ServerPlayer) player, overrideTable != null ? overrideTable : this.lootTable);
             }
-            LootContext.Builder lootcontext$builder = (new LootContext.Builder((ServerLevel) this.level)).withParameter(LootContextParams.ORIGIN, this.position()).withOptionalRandomSeed(ConfigManager.RANDOMISE_SEED.get() ? ThreadLocalRandom.current().nextLong() : seed == Long.MIN_VALUE ? this.lootTableSeed : seed);
+            LootContext.Builder lootcontext$builder = (new LootContext.Builder((ServerLevel) this.level)).withParameter(LootContextParams.ORIGIN, this.position()).withOptionalRandomSeed(LootrModConfig.get().seed.randomize_seed ? ThreadLocalRandom.current().nextLong() : seed == Long.MIN_VALUE ? this.lootTableSeed : seed);
             lootcontext$builder.withParameter(LootContextParams.KILLER_ENTITY, this);
             if (player != null) {
                 lootcontext$builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
