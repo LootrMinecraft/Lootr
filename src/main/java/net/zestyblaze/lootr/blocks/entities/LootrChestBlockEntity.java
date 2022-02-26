@@ -295,4 +295,6 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
     public void setOpened(boolean opened) {
         this.opened = opened;
     }
+
+
 }

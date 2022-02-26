@@ -39,6 +39,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.zestyblaze.lootr.api.LootrAPI;
 import net.zestyblaze.lootr.api.entity.ILootCart;
 import net.zestyblaze.lootr.config.LootrModConfig;
+import net.zestyblaze.lootr.network.NetworkConstants;
 import net.zestyblaze.lootr.registry.LootrBlockInit;
 import org.jetbrains.annotations.Nullable;
 
@@ -230,8 +231,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     @Override
     public void startOpen(Player player) {
         if (!player.isSpectator()) {
-            OpenCart cart = new OpenCart(this.getId());
-            //PacketHandler.sendToInternal(cart, (ServerPlayer) player);
+            NetworkConstants.sendOpenCart(this.getId(), (ServerPlayer) player);
         }
     }
 
@@ -240,5 +240,11 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
         if (!player.isSpectator()) {
             addOpener(player);
         }
+    }
+
+    // Replaces `HandleCart::onEntityTracking`
+    @Override
+    public void startSeenByPlayer(ServerPlayer player) {
+        super.startSeenByPlayer(player);
     }
 }

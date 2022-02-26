@@ -1,7 +1,11 @@
 package net.zestyblaze.lootr.events;
 
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.zestyblaze.lootr.entity.LootrChestMinecartEntity;
 
 public class ServerEvents {
     public static MinecraftServer serverInstance;
