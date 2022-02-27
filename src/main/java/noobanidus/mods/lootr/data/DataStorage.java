@@ -2,6 +2,7 @@ package noobanidus.mods.lootr.data;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -25,6 +26,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.function.IntSupplier;
 import java.util.function.LongSupplier;
 import java.util.function.Supplier;
@@ -141,18 +143,16 @@ public class DataStorage {
     }
   }
 
-  public static ChestData getInstanceUuid(ServerLevel world, UUID id) {
-    ResourceKey<Level> dimension = world.dimension();
-    return getDataStorage().computeIfAbsent(ChestData::load, ChestData.id(dimension, id), ChestData.ID(id));
+  public static ChestData getInstanceUuid(ServerLevel world, BlockPos pos, UUID id) {
+    return getDataStorage().computeIfAbsent(ChestData.loadWrapper(id), ChestData.id(world.dimension(), pos, id), ChestData.ID(id));
   }
 
-  public static ChestData getInstance(ServerLevel world, UUID id) {
-    return getDataStorage().computeIfAbsent(ChestData::load, ChestData.entity(id), ChestData.ID(id));
+  public static ChestData getInstance(ServerLevel world, BlockPos pos, UUID id) {
+    return getDataStorage().computeIfAbsent(ChestData.loadWrapper(id), ChestData.entity(world.dimension(), pos, id), ChestData.ID(id));
   }
 
-  public static ChestData getInstanceInventory(ServerLevel world, UUID id, @Nullable UUID customId, @Nullable NonNullList<ItemStack> base) {
-    ResourceKey<Level> dimension = world.dimension();
-    return getDataStorage().computeIfAbsent(ChestData::load, ChestData.ref_id(dimension, id, customId, base), ChestData.ID(id));
+  public static ChestData getInstanceInventory(ServerLevel world, BlockPos pos, UUID id, NonNullList<ItemStack> base) {
+    return getDataStorage().computeIfAbsent(ChestData.loadWrapper(id), ChestData.ref_id(world.dimension(), pos, id, base), ChestData.ID(id));
   }
 
   @Nullable
@@ -161,11 +161,10 @@ public class DataStorage {
       return null;
     }
 
-    ChestData data = getInstanceUuid((ServerLevel) level, uuid);
-    SpecialChestInventory inventory = data.getInventory(player, pos);
+    ChestData data = getInstanceUuid((ServerLevel) level, pos, uuid);
+    SpecialChestInventory inventory = data.getInventory(player);
     if (inventory == null) {
       inventory = data.createInventory(player, filler, sizeSupplier, displaySupplier, tableSupplier, seedSupplier);
-      inventory.setBlockPos(pos);
     }
 
     return inventory;
@@ -177,11 +176,10 @@ public class DataStorage {
       return null;
     }
 
-    ChestData data = getInstanceUuid((ServerLevel) level, uuid);
-    SpecialChestInventory inventory = data.getInventory(player, pos);
+    ChestData data = getInstanceUuid((ServerLevel) level, pos, uuid);
+    SpecialChestInventory inventory = data.getInventory(player);
     if (inventory == null) {
       inventory = data.createInventory(player, filler, blockEntity, tableSupplier, seedSupplier);
-      inventory.setBlockPos(pos);
     }
 
     return inventory;
@@ -193,11 +191,10 @@ public class DataStorage {
       return null;
     }
 
-    ChestData data = getInstanceUuid((ServerLevel) world, uuid);
-    SpecialChestInventory inventory = data.getInventory(player, pos);
+    ChestData data = getInstanceUuid((ServerLevel) world, pos, uuid);
+    SpecialChestInventory inventory = data.getInventory(player);
     if (inventory == null) {
       inventory = data.createInventory(player, filler, tile);
-      inventory.setBlockPos(pos);
     }
 
     return inventory;
@@ -208,11 +205,10 @@ public class DataStorage {
     if (world.isClientSide || !(world instanceof ServerLevel)) {
       return null;
     }
-    ChestData data = getInstanceInventory((ServerLevel) world, uuid, null, base);
-    SpecialChestInventory inventory = data.getInventory(player, pos);
+    ChestData data = getInstanceInventory((ServerLevel) world, pos, uuid, base);
+    SpecialChestInventory inventory = data.getInventory(player);
     if (inventory == null) {
       inventory = data.createInventory(player, data.customInventory(), tile);
-      inventory.setBlockPos(pos);
     }
 
     return inventory;
@@ -259,8 +255,8 @@ public class DataStorage {
       return null;
     }
 
-    ChestData data = getInstance((ServerLevel) world, cart.getUUID());
-    SpecialChestInventory inventory = data.getInventory(player, null);
+    ChestData data = getInstance((ServerLevel) world, cart.blockPosition(), cart.getUUID());
+    SpecialChestInventory inventory = data.getInventory(player);
     if (inventory == null) {
       inventory = data.createInventory(player, filler, null);
     }
@@ -268,21 +264,21 @@ public class DataStorage {
     return inventory;
   }
 
-  public static void refreshInventory(Level level, UUID uuid, ServerPlayer player) {
+  public static void refreshInventory(Level level, BlockPos pos, UUID uuid, ServerPlayer player) {
     if (level.isClientSide() || !(level instanceof ServerLevel)) {
       return;
     }
 
-    ChestData data = getInstanceUuid((ServerLevel) level, uuid);
+    ChestData data = getInstanceUuid((ServerLevel) level, pos, uuid);
     data.clear();
     data.setDirty();
   }
 
-  public static void refreshInventory(Level world, UUID uuid, NonNullList<ItemStack> base, ServerPlayer player) {
+  public static void refreshInventory(Level world, BlockPos pos, UUID uuid, NonNullList<ItemStack> base, ServerPlayer player) {
     if (world.isClientSide() || !(world instanceof ServerLevel)) {
       return;
     }
-    ChestData data = getInstanceInventory((ServerLevel) world, uuid, null, base);
+    ChestData data = getInstanceInventory((ServerLevel) world, pos, uuid, base);
     data.clear();
     data.setDirty();
   }
@@ -292,7 +288,7 @@ public class DataStorage {
       return;
     }
 
-    ChestData data = getInstance((ServerLevel) world, cart.getUUID());
+    ChestData data = getInstance((ServerLevel) world, cart.blockPosition(), cart.getUUID());
     data.clear();
     data.setDirty();
   }

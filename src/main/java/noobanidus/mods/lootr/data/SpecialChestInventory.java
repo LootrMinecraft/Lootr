@@ -8,6 +8,7 @@ import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.core.NonNullList;
@@ -28,10 +29,7 @@ public class SpecialChestInventory implements ILootrInventory {
   private final NonNullList<ItemStack> contents;
   private final Component name;
 
-  @Nullable
-  private BlockPos pos;
-
-  public SpecialChestInventory(ChestData newChestData, NonNullList<ItemStack> contents, Component name, @Nullable BlockPos pos) {
+  public SpecialChestInventory(ChestData newChestData, NonNullList<ItemStack> contents, Component name) {
     this.newChestData = newChestData;
     if (!contents.isEmpty()) {
       this.contents = contents;
@@ -39,31 +37,25 @@ public class SpecialChestInventory implements ILootrInventory {
       this.contents = NonNullList.withSize(27, ItemStack.EMPTY);
     }
     this.name = name;
-    this.pos = pos;
   }
 
-  public SpecialChestInventory(ChestData newChestData, CompoundTag items, String componentAsJSON, BlockPos pos) {
+  public SpecialChestInventory(ChestData newChestData, CompoundTag items, String componentAsJSON) {
     this.newChestData = newChestData;
     this.name = Component.Serializer.fromJson(componentAsJSON);
     this.contents = NonNullList.withSize(27, ItemStack.EMPTY);
     ContainerHelper.loadAllItems(items, this.contents);
-    this.pos = pos;
-  }
-
-  public void setBlockPos(BlockPos pos) {
-    this.pos = pos;
   }
 
   @Override
   @Nullable
-  public RandomizableContainerBlockEntity getTile(Level world) {
-    if (world == null || world.isClientSide() || pos == null) {
+  public BaseContainerBlockEntity getTile(Level world) {
+    if (world == null || world.isClientSide() || newChestData.getPos() == null) {
       return null;
     }
 
-    BlockEntity te = world.getBlockEntity(pos);
-    if (te instanceof ILootBlockEntity) {
-      return (RandomizableContainerBlockEntity) te;
+    BlockEntity te = world.getBlockEntity(newChestData.getPos());
+    if (te instanceof BaseContainerBlockEntity be) {
+      return be;
     }
 
     return null;
@@ -87,6 +79,12 @@ public class SpecialChestInventory implements ILootrInventory {
     }
 
     return null;
+  }
+
+  @org.jetbrains.annotations.Nullable
+  @Override
+  public BlockPos getPos() {
+    return newChestData.getPos();
   }
 
   @Override
@@ -171,7 +169,7 @@ public class SpecialChestInventory implements ILootrInventory {
   @Override
   public void startOpen(Player player) {
     Level world = player.level;
-    RandomizableContainerBlockEntity tile = getTile(world);
+    BaseContainerBlockEntity tile = getTile(world);
     if (tile != null) {
       tile.startOpen(player);
     }
@@ -187,8 +185,8 @@ public class SpecialChestInventory implements ILootrInventory {
   public void stopOpen(Player player) {
     setChanged();
     Level world = player.level;
-    if (pos != null) {
-      RandomizableContainerBlockEntity tile = getTile(world);
+    if (newChestData.getPos() != null) {
+      BaseContainerBlockEntity tile = getTile(world);
       if (tile != null) {
         tile.stopOpen(player);
       }
@@ -216,12 +214,6 @@ public class SpecialChestInventory implements ILootrInventory {
 
   public String writeName() {
     return Component.Serializer.toJson(this.name);
-  }
-
-  @Override
-  @Nullable
-  public BlockPos getPos() {
-    return pos;
   }
 
   @Override

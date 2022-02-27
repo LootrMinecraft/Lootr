@@ -111,7 +111,7 @@ public class ChestUtil {
         ModAdvancements.SHULKER_PREDICATE.trigger((ServerPlayer) player, ((ILootBlockEntity) te).getTileId());
       }
       if (DataStorage.isRefreshed(tileId)) {
-        DataStorage.refreshInventory(level, ((ILootBlockEntity) te).getTileId(), (ServerPlayer) player);
+        DataStorage.refreshInventory(level, pos, ((ILootBlockEntity) te).getTileId(), (ServerPlayer) player);
         DataStorage.removeRefreshed(tileId);
         player.sendMessage(new TranslatableComponent("lootr.message.refreshed").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
       } else {
@@ -212,7 +212,7 @@ public class ChestUtil {
       }
       UUID tileId = tile.getTileId();
       if (DataStorage.isRefreshed(tileId)) {
-        DataStorage.refreshInventory(level, ((ILootBlockEntity) te).getTileId(), stacks, (ServerPlayer) player);
+        DataStorage.refreshInventory(level, pos, ((ILootBlockEntity) te).getTileId(), stacks, (ServerPlayer) player);
         DataStorage.removeRefreshed(tileId);
         player.sendMessage(new TranslatableComponent("lootr.message.refreshed").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
       } else {
