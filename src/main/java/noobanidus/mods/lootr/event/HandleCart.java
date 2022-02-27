@@ -31,16 +31,4 @@ public class HandleCart {
       }
     }
   }
-
-  @SubscribeEvent
-  public static void onEntityTrack(PlayerEvent.StartTracking event) {
-    Entity target = event.getTarget();
-    if (target.getType() == ModEntities.LOOTR_MINECART_ENTITY) {
-      Player player = event.getPlayer();
-      if (((LootrChestMinecartEntity) event.getTarget()).getOpeners().contains(player.getUUID())) {
-        OpenCart cart = new OpenCart(event.getTarget().getId());
-        PacketHandler.sendToInternal(cart, (ServerPlayer) player);
-      }
-    }
-  }
 }
