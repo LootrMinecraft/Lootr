@@ -219,12 +219,21 @@ public class ChestData extends SavedData {
     return result;
   }
 
-  public static Function<CompoundTag, ChestData> loadWrapper (UUID id) {
+  public static Function<CompoundTag, ChestData> loadWrapper(UUID id, ResourceKey<Level> dimension, BlockPos position) {
     return (tag) -> {
       ChestData result = ChestData.load(tag);
       result.key = ID(id);
+      result.dimension = dimension;
+      result.pos = position;
       return result;
     };
+  }
+
+  public static ChestData unwrap(ChestData data, UUID id, ResourceKey<Level> dimension, BlockPos position) {
+    data.key = ID(id);
+    data.dimension = dimension;
+    data.pos = position;
+    return data;
   }
 
   public static ChestData load(CompoundTag compound) {

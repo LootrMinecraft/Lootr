@@ -144,15 +144,15 @@ public class DataStorage {
   }
 
   public static ChestData getInstanceUuid(ServerLevel world, BlockPos pos, UUID id) {
-    return getDataStorage().computeIfAbsent(ChestData.loadWrapper(id), ChestData.id(world.dimension(), pos, id), ChestData.ID(id));
+    return ChestData.unwrap(getDataStorage().computeIfAbsent(ChestData.loadWrapper(id, world.dimension(), pos), ChestData.id(world.dimension(), pos, id), ChestData.ID(id)), id, world.dimension(), pos);
   }
 
   public static ChestData getInstance(ServerLevel world, BlockPos pos, UUID id) {
-    return getDataStorage().computeIfAbsent(ChestData.loadWrapper(id), ChestData.entity(world.dimension(), pos, id), ChestData.ID(id));
+    return ChestData.unwrap(getDataStorage().computeIfAbsent(ChestData.loadWrapper(id, world.dimension(), pos), ChestData.entity(world.dimension(), pos, id), ChestData.ID(id)), id, world.dimension(), pos);
   }
 
   public static ChestData getInstanceInventory(ServerLevel world, BlockPos pos, UUID id, NonNullList<ItemStack> base) {
-    return getDataStorage().computeIfAbsent(ChestData.loadWrapper(id), ChestData.ref_id(world.dimension(), pos, id, base), ChestData.ID(id));
+    return ChestData.unwrap(getDataStorage().computeIfAbsent(ChestData.loadWrapper(id, world.dimension(), pos), ChestData.ref_id(world.dimension(), pos, id, base), ChestData.ID(id)), id, world.dimension(), pos);
   }
 
   @Nullable
