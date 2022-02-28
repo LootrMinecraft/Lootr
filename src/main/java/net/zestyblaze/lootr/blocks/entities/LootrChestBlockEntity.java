@@ -38,6 +38,7 @@ import net.zestyblaze.lootr.api.LootrAPI;
 import net.zestyblaze.lootr.api.blockentity.ILootBlockEntity;
 import net.zestyblaze.lootr.config.LootrModConfig;
 import net.zestyblaze.lootr.data.SpecialChestInventory;
+import net.zestyblaze.lootr.registry.LootrBlockEntityInit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -88,11 +89,9 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
         super(type, pos, state);
     }
 
-    /*
-    public LootrChestBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
-        this(ModBlockEntities.SPECIAL_LOOT_CHEST, pWorldPosition, pBlockState);
+    public LootrChestBlockEntity(BlockPos pos, BlockState state) {
+        this(LootrBlockEntityInit.SPECIAL_LOOT_CHEST, pos, state);
     }
-     */
 
     @Override
     public void setLootTable(ResourceLocation lootTableIn, long seedIn) {

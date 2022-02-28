@@ -80,7 +80,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
         this.opened = true;
     }
 
-    public void setClosed () {
+    public void setClosed() {
         this.opened = false;
     }
 
@@ -130,7 +130,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
         return Type.CHEST;
     }
 
-    private static BlockState cartNormal = LootrBlockInit.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
+    private static final BlockState cartNormal = LootrBlockInit.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
 
     @Override
     public BlockState getDefaultDisplayBlockState() {

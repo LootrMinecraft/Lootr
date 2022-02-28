@@ -10,7 +10,7 @@ public class LootrConfigInit {
         AutoConfig.register(LootrModConfig.class, GsonConfigSerializer::new);
 
         if(LootrModConfig.get().debug.debugMode) {
-            LootrAPI.LOG.info("Lootr: Registry - Config Registered");
+            LootrAPI.LOG.info("Lootr: Client/Common Registry - Config Registered");
         }
     }
 }

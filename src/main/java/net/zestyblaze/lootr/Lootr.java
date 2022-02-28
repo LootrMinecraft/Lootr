@@ -1,20 +1,30 @@
 package net.zestyblaze.lootr;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 import net.zestyblaze.lootr.api.LootrAPI;
 import net.zestyblaze.lootr.config.LootrModConfig;
-import net.zestyblaze.lootr.registry.LootrConfigInit;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import net.zestyblaze.lootr.registry.*;
 
 public class Lootr implements ModInitializer {
+	public static CreativeModeTab TAB = FabricItemGroupBuilder.build(new ResourceLocation(LootrAPI.MODID, LootrAPI.MODID), () -> new ItemStack(LootrItemInit.CHEST));
+
 	@Override
 	public void onInitialize() {
 		LootrAPI.LOG.info("Lootr is installed, loading now! Thanks for installing! <3");
+		LootrItemInit.registerItems();
+		LootrBlockInit.registerBlocks();
+		LootrBlockEntityInit.registerBlockEntities();
+		LootrStatsInit.registerStats();
+		LootrLootInit.registerLoot();
+		LootrEventsInit.registerEvents();
 		LootrConfigInit.registerConfig();
 
 		if(LootrModConfig.get().debug.debugMode) {
-			LootrAPI.LOG.info("Lootr: Registry - Mod Fully Loaded!");
+			LootrAPI.LOG.info("Lootr: Registry - Common Fully Loaded!");
 		}
 	}
 }
