@@ -1,3 +1,4 @@
 accessWidener v2 named
 accessible field net/minecraft/world/entity/vehicle/AbstractMinecartContainer lootTable Lnet/minecraft/resources/ResourceLocation;
 accessible field net/minecraft/world/entity/vehicle/AbstractMinecartContainer lootTableSeed J
+accessible method net/minecraft/world/level/storage/LevelResource <init> (Ljava/lang/String;)V

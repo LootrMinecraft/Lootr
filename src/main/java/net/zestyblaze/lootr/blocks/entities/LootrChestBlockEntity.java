@@ -290,10 +290,12 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
         return this.tileId;
     }
 
+    public boolean isOpened() {
+        return opened;
+    }
+
     @Override
     public void setOpened(boolean opened) {
         this.opened = opened;
     }
-
-
 }

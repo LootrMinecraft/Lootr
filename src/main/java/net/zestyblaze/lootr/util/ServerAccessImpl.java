@@ -1,10 +1,10 @@
 package net.zestyblaze.lootr.util;
 
 import net.minecraft.server.MinecraftServer;
-import net.zestyblaze.lootr.events.ServerEvents;
+import net.zestyblaze.lootr.registry.LootrEventsInit;
 
 public class ServerAccessImpl {
     public static MinecraftServer getServer() {
-        return ServerEvents.serverInstance;
+        return LootrEventsInit.serverInstance;
     }
 }

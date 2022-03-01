@@ -1,3 +1,8 @@
 {
-  "block.lootr.lootr_chest": "Lootr Chest"
+  "itemGroup.lootr.lootr": "Lootr",
+
+  "block.lootr.trophy": "Centennial Trophy",
+  "item.lootr.crown": "Crown of the Master Looter",
+
+  "block.lootr.lootr_chest": "Loot Chest"
 }

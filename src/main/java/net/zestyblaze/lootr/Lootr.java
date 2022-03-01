@@ -15,16 +15,16 @@ public class Lootr implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		LootrAPI.LOG.info("Lootr is installed, loading now! Thanks for installing! <3");
+		LootrConfigInit.registerConfig();
 		LootrItemInit.registerItems();
 		LootrBlockInit.registerBlocks();
 		LootrBlockEntityInit.registerBlockEntities();
-		LootrStatsInit.registerStats();
+		//LootrStatsInit.registerStats();
 		LootrLootInit.registerLoot();
 		LootrEventsInit.registerEvents();
-		LootrConfigInit.registerConfig();
 
 		if(LootrModConfig.get().debug.debugMode) {
-			LootrAPI.LOG.info("Lootr: Registry - Common Fully Loaded!");
+			LootrAPI.LOG.info("Lootr: Registry - Mod Fully Loaded!");
 		}
 	}
 }
