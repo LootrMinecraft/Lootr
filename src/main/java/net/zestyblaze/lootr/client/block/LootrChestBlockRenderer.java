@@ -25,6 +25,7 @@ import net.zestyblaze.lootr.blocks.entities.LootrChestBlockEntity;
 
 import java.util.UUID;
 
+@SuppressWarnings("deprecation")
 public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootBlockEntity> extends ChestRenderer<T> {
   private UUID playerId = null;
   public static final Material MATERIAL = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(LootrAPI.MODID, "chest"));
