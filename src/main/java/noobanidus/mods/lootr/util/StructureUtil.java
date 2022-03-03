@@ -9,6 +9,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureFeatureManager;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkStatus;
+import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
@@ -27,27 +28,27 @@ public class StructureUtil {
     ChunkPos cPos = new ChunkPos(pos);
     ChunkAccess chunk = level.getChunk(cPos.x, cPos.z, ChunkStatus.STRUCTURE_REFERENCES);
     StructureFeatureManager manager = level.structureFeatureManager();
-    Map<StructureFeature<?>, LongSet> references = chunk.getAllReferences();
-    for (Map.Entry<StructureFeature<?>, LongSet> entry : references.entrySet()) {
+    Map<ConfiguredStructureFeature<?, ?>, LongSet> references = chunk.getAllReferences();
+    for (Map.Entry<ConfiguredStructureFeature<?, ?>, LongSet> entry : references.entrySet()) {
       for (long i : entry.getValue()) {
         SectionPos sec = SectionPos.of(new ChunkPos(i), level.getMinSection());
-        StructureStart<?> start = manager.getStartForFeature(sec, entry.getKey(), level.getChunk(sec.x(), sec.z(), ChunkStatus.STRUCTURE_STARTS));
+        StructureStart start = manager.getStartForFeature(sec, entry.getKey(), level.getChunk(sec.x(), sec.z(), ChunkStatus.STRUCTURE_STARTS));
         if (start != null && start.isValid()) {
           BoundingBox box = start.getBoundingBox();
           if (box.getCenter().distSqr(pos) > 15 * 15) {
             box = start.getFeature().adjustBoundingBox(StructurePiece.createBoundingBox(start.getPieces().stream()));
           }
-          if (JUNGLE_PYRAMID.equals(entry.getKey().getRegistryName())) {
+          if (JUNGLE_PYRAMID.equals(entry.getKey().feature.getRegistryName())) {
             box = new BoundingBox(box.minX(), box.minY() - 2, box.minZ(), box.maxX(), box.maxY(), box.maxZ());
           }
           if (box.isInside(pos)) {
-            return entry.getKey();
+            return entry.getKey().feature;
           }
-          if (DESERT_PYRAMID.equals(entry.getKey().getRegistryName())) {
+          if (DESERT_PYRAMID.equals(entry.getKey().feature.getRegistryName())) {
             BlockPos corner = box.getCenter();
             BoundingBox additional = DESERT_PYRAMID_BOX.moved(corner.getX(), corner.getY(), corner.getZ());
             if (additional.isInside(pos)) {
-              return entry.getKey();
+              return entry.getKey().feature;
             }
           }
         }

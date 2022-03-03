@@ -408,29 +408,31 @@ public class ConfigManager {
         QUARK_CHESTS.forEach(o -> addSafeReplacement(o, ModBlocks.CHEST));
         QUARK_TRAPPED_CHESTS.forEach(o -> addSafeReplacement(o, ModBlocks.TRAPPED_CHEST));
       }
+
+
       if (CONVERT_WOODEN_CHESTS.get() || CONVERT_TRAPPED_CHESTS.get()) {
         if (CONVERT_WOODEN_CHESTS.get()) {
-          Tags.Blocks.CHESTS_WOODEN.getValues().forEach(o -> {
-            if (replacements.containsKey(o)) {
+          Registry.BLOCK.getTagOrEmpty(Tags.Blocks.CHESTS_WOODEN).forEach(o -> {
+            if (replacements.containsKey(o.value())) {
               return;
             }
             if (o instanceof EntityBlock) {
-              BlockEntity tile = ((EntityBlock) o).newBlockEntity(BlockPos.ZERO, o.defaultBlockState());
+              BlockEntity tile = ((EntityBlock) o).newBlockEntity(BlockPos.ZERO, o.value().defaultBlockState());
               if (tile instanceof RandomizableContainerBlockEntity) {
-                replacements.put(o, ModBlocks.CHEST);
+                replacements.put(o.value(), ModBlocks.CHEST);
               }
             }
           });
         }
         if (CONVERT_TRAPPED_CHESTS.get()) {
-          Tags.Blocks.CHESTS_TRAPPED.getValues().forEach(o -> {
-            if (replacements.containsKey(o)) {
+          Registry.BLOCK.getTagOrEmpty(Tags.Blocks.CHESTS_TRAPPED).forEach(o -> {
+            if (replacements.containsKey(o.value())) {
               return;
             }
-            if (o instanceof EntityBlock) {
-              BlockEntity tile = ((EntityBlock) o).newBlockEntity(BlockPos.ZERO, o.defaultBlockState());
+            if (o.value() instanceof EntityBlock) {
+              BlockEntity tile = ((EntityBlock) o).newBlockEntity(BlockPos.ZERO, o.value().defaultBlockState());
               if (tile instanceof RandomizableContainerBlockEntity) {
-                replacements.put(o, ModBlocks.CHEST);
+                replacements.put(o.value(), ModBlocks.TRAPPED_CHEST);
               }
             }
           });
