@@ -24,6 +24,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.zestyblaze.lootr.blocks.entities.LootrChestBlockEntity;
+import net.zestyblaze.lootr.blocks.entities.LootrInventoryBlockEntity;
 import net.zestyblaze.lootr.registry.LootrBlockEntityInit;
 import net.zestyblaze.lootr.util.ChestUtil;
 import org.jetbrains.annotations.Nullable;
@@ -31,12 +32,12 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Random;
 import java.util.function.Supplier;
 
-public class LootrChestBlock extends ChestBlock {
-    public LootrChestBlock(Properties properties) {
-        super(properties, () -> LootrBlockEntityInit.SPECIAL_LOOT_CHEST);
+public class LootrInventoryBlock extends ChestBlock {
+    public LootrInventoryBlock(Properties properties) {
+        super(properties, () -> LootrBlockEntityInit.SPECIAL_LOOT_INVENTORY);
     }
 
-    public LootrChestBlock(Properties properties, Supplier<BlockEntityType<? extends ChestBlockEntity>> supplier) {
+    protected LootrInventoryBlock(Properties properties, Supplier<BlockEntityType<? extends ChestBlockEntity>> supplier) {
         super(properties, supplier);
     }
 
@@ -45,14 +46,14 @@ public class LootrChestBlock extends ChestBlock {
         if (player.isCrouching()) {
             ChestUtil.handleLootSneak(this, world, pos, player);
         } else if (!ChestBlock.isChestBlockedAt(world, pos)) {
-            ChestUtil.handleLootChest(this, world, pos, player);
+            ChestUtil.handleLootInventory(this, world, pos, player);
         }
         return InteractionResult.SUCCESS;
     }
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new LootrChestBlockEntity(pos, state);
+        return new LootrInventoryBlockEntity(pos, state);
     }
 
     @Override
@@ -106,8 +107,8 @@ public class LootrChestBlock extends ChestBlock {
     @Override
     public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, Random pRandom) {
         BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-        if (blockentity instanceof LootrChestBlockEntity) {
-            ((LootrChestBlockEntity) blockentity).recheckOpen();
+        if (blockentity instanceof LootrInventoryBlockEntity) {
+            ((LootrInventoryBlockEntity) blockentity).recheckOpen();
         }
     }
 }

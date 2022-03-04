@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(PersistentEntitySectionManager.class)
 public class MixinPersistentEntitySectionManager {
   @Inject(method="addNewEntity", at=@At("HEAD"), cancellable = true)
-  protected void LootrAddNewEntity(EntityAccess entityAccess, CallbackInfoReturnable<Boolean> cir) {
+  private void LootrAddNewEntity(EntityAccess entityAccess, CallbackInfoReturnable<Boolean> cir) {
     if(entityAccess instanceof Entity entity && entity.getType() == EntityType.CHEST_MINECART) {
       // TODO: Handle minecarts properly
       cir.cancel();

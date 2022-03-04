@@ -4,6 +4,8 @@
   "package": "net.zestyblaze.lootr.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "MixinCatSitOnBlock",
+    "MixinLevel",
     "MixinPersistentEntitySectionManager"
   ],
   "injectors": {

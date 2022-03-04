@@ -24,7 +24,7 @@ public class HandleChunk {
     }
   }
 
-  public static void onServerStarted(MinecraftServer minecraftServer) {
+  public static void onServerStarted() {
     synchronized (LOADED_CHUNKS) {
       LOADED_CHUNKS.clear();
     }

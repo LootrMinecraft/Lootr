@@ -3,14 +3,17 @@ package net.zestyblaze.lootr.util;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.Block;
@@ -18,7 +21,11 @@ import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.zestyblaze.lootr.api.blockentity.ILootBlockEntity;
+import net.zestyblaze.lootr.blocks.entities.LootrInventoryBlockEntity;
+import net.zestyblaze.lootr.config.LootrModConfig;
 import net.zestyblaze.lootr.data.DataStorage;
+import net.zestyblaze.lootr.entity.LootrChestMinecartEntity;
+import net.zestyblaze.lootr.network.NetworkConstants;
 import net.zestyblaze.lootr.registry.LootrAdvancementsInit;
 import net.zestyblaze.lootr.registry.LootrStatsInit;
 
@@ -41,13 +48,24 @@ public class ChestUtil {
             if (tile.getOpeners().remove(player.getUUID())) {
                 te.setChanged();
                 tile.updatePacketViaState();
-                //UpdateModelData message = new UpdateModelData(te.getBlockPos());
-                //PacketHandler.sendToInternal(message, (ServerPlayer) player);
             }
             return true;
         }
 
         return false;
+    }
+
+    public static void handleLootCartSneak(Level level, LootrChestMinecartEntity cart, Player player) {
+        if (level.isClientSide()) {
+            return;
+        }
+
+        if (player.isSpectator()) {
+            return;
+        }
+
+        cart.getOpeners().remove(player.getUUID());
+        NetworkConstants.sendCloseCart(cart.getId(), (ServerPlayer)player);
     }
 
     public static boolean handleLootChest(Block block, Level level, BlockPos pos, Player player) {
@@ -71,13 +89,10 @@ public class ChestUtil {
                 if (decayValue > 0) {
                     player.sendMessage(new TranslatableComponent("lootr.message.decay_in", decayValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), Util.NIL_UUID);
                 } else if (decayValue == -1) {
-                    /*
-                    if (ConfigManager.isDecaying((ServerLevel)level, (ILootBlockEntity)te)) {
-                        DataStorage.setDecaying(tileId, ConfigManager.DECAY_VALUE.get());
-                        player.sendMessage(new TranslatableComponent("lootr.message.decay_start", ConfigManager.DECAY_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), Util.NIL_UUID);
+                    if (LootrModConfig.isDecaying((ServerLevel)level, (ILootBlockEntity)te)) {
+                        DataStorage.setDecaying(tileId, LootrModConfig.get().decay.decay_value);
+                        player.sendMessage(new TranslatableComponent("lootr.message.decay_start", LootrModConfig.get().decay.decay_value / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), Util.NIL_UUID);
                     }
-
-                     */
                 }
             }
             if (block instanceof BarrelBlock) {
@@ -97,13 +112,10 @@ public class ChestUtil {
                 if (refreshValue > 0) {
                     player.sendMessage(new TranslatableComponent("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
                 } else if (refreshValue == -1) {
-                    /*
-                    if (ConfigManager.isRefreshing((ServerLevel) level, (ILootBlockEntity) te)) {
-                        DataStorage.setRefreshing(tileId, ConfigManager.REFRESH_VALUE.get());
-                        player.sendMessage(new TranslatableComponent("lootr.message.refresh_start", ConfigManager.REFRESH_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
+                    if (LootrModConfig.isRefreshing((ServerLevel) level, (ILootBlockEntity) te)) {
+                        DataStorage.setRefreshing(tileId, LootrModConfig.get().refresh.refresh_value);
+                        player.sendMessage(new TranslatableComponent("lootr.message.refresh_start", LootrModConfig.get().refresh.refresh_value / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
                     }
-
-                     */
                 }
             }
             MenuProvider provider = DataStorage.getInventory(level, ((ILootBlockEntity) te).getTileId(), pos, (ServerPlayer) player, (RandomizableContainerBlockEntity) te, ((ILootBlockEntity) te)::unpackLootTable);
@@ -122,5 +134,114 @@ public class ChestUtil {
         } else {
             return false;
         }
+    }
+
+    public static void handleLootCart(Level level, LootrChestMinecartEntity cart, Player player) {
+        if (!level.isClientSide()) {
+            if (player.isSpectator()) {
+                player.openMenu(null);
+            } else {
+                LootrAdvancementsInit.CART_PREDICATE.trigger((ServerPlayer) player, cart.getUUID());
+                UUID tileId = cart.getUUID();
+                if (DataStorage.isDecayed(tileId)) {
+                    cart.destroy(DamageSource.OUT_OF_WORLD);
+                    player.sendMessage(new TranslatableComponent("lootr.message.decayed").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), Util.NIL_UUID);
+                    DataStorage.removeDecayed(tileId);
+                    return;
+                } else {
+                    int decayValue = DataStorage.getDecayValue(tileId);
+                    if (decayValue > 0) {
+                        player.sendMessage(new TranslatableComponent("lootr.message.decay_in", decayValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), Util.NIL_UUID);
+                    } else if (decayValue == -1) {
+                        if (LootrModConfig.isDecaying((ServerLevel) level, cart)) {
+                            DataStorage.setDecaying(tileId, LootrModConfig.get().decay.decay_value);
+                            player.sendMessage(new TranslatableComponent("lootr.message.decay_start", LootrModConfig.get().decay.decay_value / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), Util.NIL_UUID);
+                        }
+                    }
+                }
+                if (!cart.getOpeners().contains(player.getUUID())) {
+                    cart.addOpener(player);
+                }
+                if (!DataStorage.isScored(player.getUUID(), cart.getUUID())) {
+                    player.awardStat(LootrStatsInit.LOOTED_STAT);
+                    LootrAdvancementsInit.SCORE_PREDICATE.trigger((ServerPlayer) player, null);
+                    DataStorage.score(player.getUUID(), cart.getUUID());
+                }
+                if (DataStorage.isRefreshed(tileId)) {
+                    DataStorage.refreshInventory(level, cart, (ServerPlayer) player);
+                    DataStorage.removeRefreshed(tileId);
+                    player.sendMessage(new TranslatableComponent("lootr.message.refreshed").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
+                } else {
+                    int refreshValue = DataStorage.getRefreshValue(tileId);
+                    if (refreshValue > 0) {
+                        player.sendMessage(new TranslatableComponent("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
+                    } else if (refreshValue == -1) {
+                        if (LootrModConfig.isRefreshing((ServerLevel)level, cart)) {
+                            DataStorage.setRefreshing(tileId, LootrModConfig.get().refresh.refresh_value);
+                            player.sendMessage(new TranslatableComponent("lootr.message.refresh_start", LootrModConfig.get().refresh.refresh_value / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
+                        }
+                    }
+                }
+                MenuProvider provider = DataStorage.getInventory(level, cart, (ServerPlayer) player, cart::addLoot);
+                player.openMenu(provider);
+            }
+        }
+    }
+
+    public static boolean handleLootInventory(Block block, Level level, BlockPos pos, Player player) {
+        if (level.isClientSide()) {
+            return false;
+        }
+        if (player.isSpectator()) {
+            player.openMenu(null);
+            return false;
+        }
+        BlockEntity te = level.getBlockEntity(pos);
+        if (te instanceof LootrInventoryBlockEntity tile) {
+            LootrAdvancementsInit.CHEST_PREDICATE.trigger((ServerPlayer) player, tile.getTileId());
+            NonNullList<ItemStack> stacks = null;
+            if (tile.getCustomInventory() != null) {
+                stacks = copyItemList(tile.getCustomInventory());
+            }
+            UUID tileId = tile.getTileId();
+            if (DataStorage.isRefreshed(tileId)) {
+                DataStorage.refreshInventory(level, pos, ((ILootBlockEntity) te).getTileId(), stacks, (ServerPlayer) player);
+                DataStorage.removeRefreshed(tileId);
+                player.sendMessage(new TranslatableComponent("lootr.message.refreshed").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
+            } else {
+                int refreshValue = DataStorage.getRefreshValue(tileId);
+                if (refreshValue > 0) {
+                    player.sendMessage(new TranslatableComponent("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
+                } else if (refreshValue == -1) {
+                    if (LootrModConfig.isRefreshing((ServerLevel)level, tile)) {
+                        DataStorage.setRefreshing(tileId, LootrModConfig.get().refresh.refresh_value);
+                        player.sendMessage(new TranslatableComponent("lootr.message.refresh_start", LootrModConfig.get().refresh.refresh_value / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
+                    }
+                }
+            }
+            MenuProvider provider = DataStorage.getInventory(level, tile.getTileId(), stacks, (ServerPlayer) player, pos, tile);
+            if (!DataStorage.isScored(player.getUUID(), ((ILootBlockEntity)te).getTileId())) {
+                player.awardStat(LootrStatsInit.LOOTED_STAT);
+                LootrAdvancementsInit.SCORE_PREDICATE.trigger((ServerPlayer) player, null);
+                DataStorage.score(player.getUUID(), ((ILootBlockEntity) te).getTileId());
+            }
+            if (tile.getOpeners().add(player.getUUID())) {
+                te.setChanged();
+                tile.updatePacketViaState();
+            }
+            player.openMenu(provider);
+            PiglinAi.angerNearbyPiglins(player, true);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static NonNullList<ItemStack> copyItemList(NonNullList<ItemStack> reference) {
+        NonNullList<ItemStack> contents = NonNullList.withSize(reference.size(), ItemStack.EMPTY);
+        for (int i = 0; i < reference.size(); i++) {
+            contents.set(i, reference.get(i).copy());
+        }
+        return contents;
     }
 }
