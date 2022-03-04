@@ -412,27 +412,29 @@ public class ConfigManager {
 
       if (CONVERT_WOODEN_CHESTS.get() || CONVERT_TRAPPED_CHESTS.get()) {
         if (CONVERT_WOODEN_CHESTS.get()) {
-          Registry.BLOCK.getTagOrEmpty(Tags.Blocks.CHESTS_WOODEN).forEach(o -> {
-            if (replacements.containsKey(o.value())) {
+          Registry.BLOCK.getTagOrEmpty(Tags.Blocks.CHESTS_WOODEN).forEach(z -> {
+            Block o = z.value();
+            if (replacements.containsKey(o)) {
               return;
             }
             if (o instanceof EntityBlock) {
-              BlockEntity tile = ((EntityBlock) o).newBlockEntity(BlockPos.ZERO, o.value().defaultBlockState());
+              BlockEntity tile = ((EntityBlock) o).newBlockEntity(BlockPos.ZERO, o.defaultBlockState());
               if (tile instanceof RandomizableContainerBlockEntity) {
-                replacements.put(o.value(), ModBlocks.CHEST);
+                replacements.put(o, ModBlocks.CHEST);
               }
             }
           });
         }
         if (CONVERT_TRAPPED_CHESTS.get()) {
-          Registry.BLOCK.getTagOrEmpty(Tags.Blocks.CHESTS_TRAPPED).forEach(o -> {
-            if (replacements.containsKey(o.value())) {
+          Registry.BLOCK.getTagOrEmpty(Tags.Blocks.CHESTS_TRAPPED).forEach(z -> {
+            Block o = z.value();
+            if (replacements.containsKey(o)) {
               return;
             }
-            if (o.value() instanceof EntityBlock) {
-              BlockEntity tile = ((EntityBlock) o).newBlockEntity(BlockPos.ZERO, o.value().defaultBlockState());
+            if (o instanceof EntityBlock) {
+              BlockEntity tile = ((EntityBlock) o).newBlockEntity(BlockPos.ZERO, o.defaultBlockState());
               if (tile instanceof RandomizableContainerBlockEntity) {
-                replacements.put(o.value(), ModBlocks.TRAPPED_CHEST);
+                replacements.put(o, ModBlocks.TRAPPED_CHEST);
               }
             }
           });
