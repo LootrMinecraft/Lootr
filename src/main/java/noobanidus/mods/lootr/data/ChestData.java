@@ -41,24 +41,13 @@ public class ChestData extends WorldSavedData {
     return entityId;
   }
 
-  public static String REF_ID(RegistryKey<World> dimension, UUID id) {
-    return "Lootr-custom-" + dimension.location().getPath() + "-" + id.toString();
-  }
-
-  public static String OLD_ID(RegistryKey<World> dimension, BlockPos pos) {
-    return "Lootr-chests-" + dimension.location().getPath() + "-" + pos.asLong();
-  }
-
-  public static String ID(RegistryKey<World> dimension, UUID id) {
-    return "Lootr-chests-" + dimension.location().getPath() + "-" + id.toString();
-  }
-
-  public static String ENTITY(UUID entityId) {
-    return "Lootr-entity-" + entityId.toString();
+  public static String ID(UUID id) {
+    String idString = id.toString();
+    return "lootr/" + idString.charAt(0) + "/" + idString.substring(0, 2) + "/" + idString;
   }
 
   public ChestData(RegistryKey<World> dimension, UUID id, @Nullable UUID customId, @Nullable NonNullList<ItemStack> base) {
-    super(REF_ID(dimension, id));
+    super(ID(id));
     this.pos = null;
     this.dimension = dimension;
     this.entityId = null;
@@ -72,7 +61,7 @@ public class ChestData extends WorldSavedData {
   }
 
   public ChestData(RegistryKey<World> dimension, UUID id) {
-    super(ID(dimension, id));
+    super(ID(id));
     this.pos = null;
     this.dimension = dimension;
     this.entityId = null;
@@ -82,19 +71,8 @@ public class ChestData extends WorldSavedData {
     this.customId = null;
   }
 
-  public ChestData(RegistryKey<World> dimension, BlockPos pos) {
-    super(OLD_ID(dimension, pos));
-    this.pos = pos;
-    this.dimension = dimension;
-    this.entityId = null;
-    this.tileId = null;
-    this.reference = null;
-    this.custom = false;
-    this.customId = null;
-  }
-
   public ChestData(UUID entityId) {
-    super(ENTITY(entityId));
+    super(ID(entityId));
     this.pos = null;
     this.dimension = null;
     this.tileId = null;

@@ -26,10 +26,15 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 public class DataStorage {
-  public static final String ID = "Lootr-AdvancementData";
-  public static final String SCORED = "Lootr-ScoreData";
-  public static final String DECAY = "Lootr-DecayData";
-  public static final String REFRESH = "Lootr-RefreshData";
+  public static final String ID_OLD = "Lootr-AdvancementData";
+  public static final String SCORED_OLD = "Lootr-ScoreData";
+  public static final String DECAY_OLD = "Lootr-DecayData";
+  public static final String REFRESH_OLD = "Lootr-RefreshData";
+
+  public static final String ID = "lootr/" + ID_OLD;
+  public static final String SCORED = "lootr/" + SCORED_OLD;
+  public static final String DECAY = "lootr/" + DECAY_OLD;
+  public static final String REFRESH = "lootr/" + REFRESH_OLD;
 
   public static boolean isAwarded(UUID player, UUID tileId) {
     DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
@@ -141,23 +146,18 @@ public class DataStorage {
     return ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD);
   }
 
-  public static ChestData getInstancePos(ServerWorld world, BlockPos pos) {
-    RegistryKey<World> dimension = world.dimension();
-    return getServerWorld().getDataStorage().get(() -> new ChestData(dimension, pos), ChestData.OLD_ID(dimension, pos));
-  }
-
   public static ChestData getInstanceUuid(ServerWorld world, UUID id) {
     RegistryKey<World> dimension = world.dimension();
-    return getServerWorld().getDataStorage().computeIfAbsent(() -> new ChestData(dimension, id), ChestData.ID(dimension, id));
+    return getServerWorld().getDataStorage().computeIfAbsent(() -> new ChestData(dimension, id), ChestData.ID(id));
   }
 
   public static ChestData getInstance(ServerWorld world, UUID id) {
-    return getServerWorld().getDataStorage().computeIfAbsent(() -> new ChestData(id), ChestData.ENTITY(id));
+    return getServerWorld().getDataStorage().computeIfAbsent(() -> new ChestData(id), ChestData.ID(id));
   }
 
   public static ChestData getInstanceInventory(ServerWorld world, UUID id, @Nullable UUID customId, @Nullable NonNullList<ItemStack> base) {
     RegistryKey<World> dimension = world.dimension();
-    return getServerWorld().getDataStorage().computeIfAbsent(() -> new ChestData(dimension, id, customId, base), ChestData.REF_ID(dimension, id));
+    return getServerWorld().getDataStorage().computeIfAbsent(() -> new ChestData(dimension, id, customId, base), ChestData.ID(id));
   }
 
   @Nullable
@@ -167,14 +167,6 @@ public class DataStorage {
     }
 
     ChestData data = getInstanceUuid((ServerWorld) world, uuid);
-    ChestData oldData = getInstancePos((ServerWorld) world, pos);
-    if (oldData != null) {
-      Map<UUID, SpecialChestInventory> inventories = data.getInventories();
-      inventories.putAll(oldData.getInventories());
-      data.setInventories(inventories);
-      oldData.clear();
-      oldData.setDirty();
-    }
     SpecialChestInventory inventory = data.getInventory(player, pos);
     if (inventory == null) {
       inventory = data.createInventory(player, filler, tile);
@@ -219,16 +211,13 @@ public class DataStorage {
     data.setDirty();
   }
 
-  public static boolean clearInventories(ServerPlayerEntity player) {
-    return clearInventories(player.getUUID());
-  }
-
   public static boolean clearInventories(UUID uuid) {
     ServerWorld world = getServerWorld();
     DimensionSavedDataManager data = world.getDataStorage();
     Path dataPath = world.getServer().getWorldPath(new FolderName("data"));
 
     List<String> ids = new ArrayList<>();
+    // TODO: Improve
     try (Stream<Path> paths = Files.walk(dataPath)) {
       paths.forEach(o -> {
         if (Files.isRegularFile(o)) {
@@ -281,28 +270,5 @@ public class DataStorage {
     ChestData data = getInstance((ServerWorld) world, cart.getUUID());
     data.clear();
     data.setDirty();
-  }
-
-  public static void wipeInventory(ServerWorld world, BlockPos pos) {
-    ServerWorld serverWorld = getServerWorld();
-    RegistryKey<World> dimension = world.dimension();
-    DimensionSavedDataManager manager = serverWorld.getDataStorage();
-    String id = ChestData.OLD_ID(dimension, pos);
-    if (!manager.cache.containsKey(id)) {
-      return;
-    }
-    ChestData data = manager.get(() -> null, id);
-    if (data != null) {
-      data.clear();
-      data.setDirty();
-    }
-  }
-
-  public static void deleteLootChest(ServerWorld world, BlockPos pos) {
-    if (world.isClientSide()) {
-      return;
-    }
-    wipeInventory(world, pos);
-    getServerWorld().getDataStorage().save();
   }
 }

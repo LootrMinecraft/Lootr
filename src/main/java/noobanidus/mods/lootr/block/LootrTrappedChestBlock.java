@@ -38,14 +38,6 @@ public class LootrTrappedChestBlock extends TrappedChestBlock {
   }
 
   @Override
-  public void onRemove(BlockState oldState, World world, BlockPos pos, BlockState newState, boolean isMoving) {
-    if (oldState.getBlock() != newState.getBlock() && world instanceof ServerWorld) {
-      DataStorage.deleteLootChest((ServerWorld) world, pos);
-    }
-    super.onRemove(oldState, world, pos, newState, isMoving);
-  }
-
-  @Override
   public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
     if (player.isShiftKeyDown()) {
       ChestUtil.handleLootSneak(this, world, pos, player);

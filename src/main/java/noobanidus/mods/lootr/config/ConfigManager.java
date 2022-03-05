@@ -103,7 +103,7 @@ public class ConfigManager {
     DECAY_ALL = COMMON_BUILDER.comment("overriding decay_loot_tables, decay_modids and decay_dimensions: all chests will decay after being opened for the first time").define("decay_all", false);
 
 
-    REFRESH_VALUE = COMMON_BUILDER.comment("how long (in ticks) before the contents of a loot container will be refresh [default 20 minutes = 20 * 60 * 20]").defineInRange("decay_value", 20 * 60 * 20, 0, Integer.MAX_VALUE);
+    REFRESH_VALUE = COMMON_BUILDER.comment("how long (in ticks) before the contents of a loot container will be refresh [default 20 minutes = 20 * 60 * 20]").defineInRange("refresh_value", 20 * 60 * 20, 0, Integer.MAX_VALUE);
     REFRESH_LOOT_TABLES = COMMON_BUILDER.comment("list of loot tables which will refresh [default blank, meaning no chests refresh, in the format of 'modid:loot_table']").defineList("refresh_loot_tables", empty, validator);
     REFRESH_MODIDS = COMMON_BUILDER.comment("list of mod IDs whose loot tables will refresh [default blank, meaning no chests refresh, in the format of 'modid', 'modid']").defineList("refresh_modids", empty, o -> o instanceof String);
     REFRESH_DIMENSIONS = COMMON_BUILDER.comment("list of dimensions where loot chests should automatically refresh [default: blank, e.g., minecraft:overworld]").defineList("refresh_dimensions", empty, validator);

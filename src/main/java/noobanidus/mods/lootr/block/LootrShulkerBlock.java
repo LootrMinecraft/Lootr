@@ -110,10 +110,6 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
 
   @Override
   public void onRemove(BlockState pState, World pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
-    if (pState.getBlock() != pNewState.getBlock() && pLevel instanceof ServerWorld) {
-      DataStorage.deleteLootChest((ServerWorld) pLevel, pPos);
-    }
-
     if (!pState.is(pNewState.getBlock())) {
       TileEntity tileentity = pLevel.getBlockEntity(pPos);
       if (tileentity instanceof LootrShulkerTileEntity) {
