@@ -8,6 +8,7 @@ import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.TextureAtlas;
@@ -18,6 +19,7 @@ import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.block.entities.LootrShulkerBlockEntity;
+import noobanidus.mods.lootr.config.ConfigManager;
 
 import java.util.UUID;
 
@@ -34,6 +36,9 @@ public class LootrShulkerBlockRenderer implements BlockEntityRenderer<LootrShulk
   }
 
   protected Material getMaterial(LootrShulkerBlockEntity tile) {
+    if (ConfigManager.isVanillaTextures()) {
+      return Sheets.DEFAULT_SHULKER_TEXTURE_LOCATION;
+    }
     if (playerId == null) {
       Minecraft mc = Minecraft.getInstance();
       if (mc.player == null) {

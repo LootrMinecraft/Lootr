@@ -26,15 +26,17 @@ public class Lootr {
   public CommandLootr COMMAND_LOOTR;
   public static CreativeModeTab TAB = new CreativeModeTab(LootrAPI.MODID) {
     @Override
-    @OnlyIn(Dist.CLIENT)
     public ItemStack makeIcon() {
       return new ItemStack(ModBlocks.CHEST);
     }
   };
 
   public Lootr() {
-    ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigManager.COMMON_CONFIG);
+    ModLoadingContext context = ModLoadingContext.get();
+    context.registerConfig(ModConfig.Type.COMMON, ConfigManager.COMMON_CONFIG);
+    context.registerConfig(ModConfig.Type.CLIENT, ConfigManager.CLIENT_CONFIG);
     ConfigManager.loadConfig(ConfigManager.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve(LootrAPI.MODID + "-common.toml"));
+    ConfigManager.loadConfig(ConfigManager.CLIENT_CONFIG, FMLPaths.CONFIGDIR.get().resolve(LootrAPI.MODID + "-client.toml"));
     MinecraftForge.EVENT_BUS.addListener(this::onCommands);
   }
 

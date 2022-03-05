@@ -23,6 +23,7 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.server.ServerLifecycleHooks;
@@ -40,10 +41,13 @@ import java.util.stream.Collectors;
 @Mod.EventBusSubscriber(modid = LootrAPI.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ConfigManager {
   private static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
+  private static final ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
+
   private static final List<ResourceLocation> QUARK_CHESTS = Arrays.asList(new ResourceLocation("quark", "oak_chest"), new ResourceLocation("quark", "spruce_chest"), new ResourceLocation("quark", "birch_chest"), new ResourceLocation("quark", "jungle_chest"), new ResourceLocation("quark", "acacia_chest"), new ResourceLocation("quark", "dark_oak_chest"), new ResourceLocation("quark", "warped_chest"), new ResourceLocation("quark", "crimson_chest"), new ResourceLocation("quark", "nether_brick_chest"), new ResourceLocation("quark", "purpur_chest")); // Quark normal chests
   private static final List<ResourceLocation> QUARK_TRAPPED_CHESTS = Arrays.asList(new ResourceLocation("quark", "oak_trapped_chest"), new ResourceLocation("quark", "spruce_trapped_chest"), new ResourceLocation("quark", "birch_trapped_chest"), new ResourceLocation("quark", "jungle_trapped_chest"), new ResourceLocation("quark", "acacia_trapped_chest"), new ResourceLocation("quark", "dark_oak_trapped_chest"), new ResourceLocation("quark", "warped_trapped_chest"), new ResourceLocation("quark", "crimson_trapped_chest"));
 
   public static ForgeConfigSpec COMMON_CONFIG;
+  public static ForgeConfigSpec CLIENT_CONFIG;
 
   // Debug
   public static final ForgeConfigSpec.BooleanValue REPORT_UNRESOLVED_TABLES;
@@ -86,6 +90,9 @@ public class ConfigManager {
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> REFRESH_LOOT_TABLES;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> REFRESH_DIMENSIONS;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> REFRESH_STRUCTURES;
+
+  // Client-only
+  public static final ForgeConfigSpec.BooleanValue VANILLA_TEXTURES;
 
   private static Set<String> DECAY_MODS = null;
   private static Set<ResourceLocation> DECAY_TABLES = null;
@@ -140,6 +147,8 @@ public class ConfigManager {
     REFRESH_ALL = COMMON_BUILDER.comment("overriding refresh_loot_tables, refresh_modids and refresh_dimensions: all chests will refresh after being opened for the first time").define("refresh_all", false);
 
     COMMON_CONFIG = COMMON_BUILDER.build();
+    VANILLA_TEXTURES = CLIENT_BUILDER.comment("set to true to use vanilla textures instead of Lootr special textures. Note: this will prevent previously opened chests from rendering differently").define("vanilla_textures", false);
+    CLIENT_CONFIG = CLIENT_BUILDER.build();
   }
 
   public static void loadConfig(ForgeConfigSpec spec, Path path) {
@@ -150,23 +159,25 @@ public class ConfigManager {
 
   @SubscribeEvent
   public static void reloadConfig(ModConfigEvent event) {
-    COMMON_CONFIG.setConfig(event.getConfig().getConfigData());
-    replacements = null;
-    DIM_WHITELIST = null;
-    DIM_BLACKLIST = null;
-    LOOT_BLACKLIST = null;
-    ADD_CHESTS = null;
-    ADD_TRAPPED_CHESTS = null;
-    DECAY_MODS = null;
-    DECAY_TABLES = null;
-    DECAY_DIMS = null;
-    LOOT_MODIDS = null;
-    REFRESH_DIMS = null;
-    REFRESH_MODS = null;
-    REFRESH_TABLES = null;
-    STRUCTURE_BLACKLIST = null;
-    DECAY_STRUCTS = null;
-    REFRESH_STRUCTS = null;
+    if (event.getConfig().getType() == ModConfig.Type.COMMON) {
+      COMMON_CONFIG.setConfig(event.getConfig().getConfigData());
+      replacements = null;
+      DIM_WHITELIST = null;
+      DIM_BLACKLIST = null;
+      LOOT_BLACKLIST = null;
+      ADD_CHESTS = null;
+      ADD_TRAPPED_CHESTS = null;
+      DECAY_MODS = null;
+      DECAY_TABLES = null;
+      DECAY_DIMS = null;
+      LOOT_MODIDS = null;
+      REFRESH_DIMS = null;
+      REFRESH_MODS = null;
+      REFRESH_TABLES = null;
+      STRUCTURE_BLACKLIST = null;
+      DECAY_STRUCTS = null;
+      REFRESH_STRUCTS = null;
+    }
   }
 
   public static Set<ResourceKey<Level>> getDimensionWhitelist() {
@@ -377,6 +388,10 @@ public class ConfigManager {
       }
     }
     return isDimensionRefreshing(level.dimension());
+  }
+
+  public static boolean isVanillaTextures () {
+    return VANILLA_TEXTURES.get();
   }
 
   private static void addSafeReplacement(ResourceLocation location, Block replacement) {
