@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.client.block;
 
+import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.ChestRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlas;
@@ -10,6 +11,7 @@ import net.minecraft.world.level.block.state.properties.ChestType;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.block.entities.LootrChestBlockEntity;
+import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.util.Getter;
 
 import java.util.UUID;
@@ -26,6 +28,9 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootBloc
 
   @Override
   protected Material getMaterial(T tile, ChestType type) {
+    if (ConfigManager.isVanillaTextures()) {
+      return Sheets.chooseMaterial(tile, type, false);
+    }
     if (playerId == null) {
       Player player = Getter.getPlayer();
       if (player != null) {
