@@ -151,9 +151,11 @@ public class LootrModConfig implements ConfigData {
         }
         if (!getDecayStructures().isEmpty()) {
             StructureFeature<?> startAt = StructureUtil.featureFor(level, tile.getPosition());
-            if (startAt != null && getDecayStructures().contains(startAt.getRegistryName())) {
+            /*if (startAt != null && getDecayStructures().contains(startAt.getRegistryName())) {
                 return true;
             }
+
+             */
         }
         return isDimensionDecaying(level.dimension());
     }
@@ -172,9 +174,11 @@ public class LootrModConfig implements ConfigData {
         }
         if (!getDecayStructures().isEmpty()) {
             StructureFeature<?> startAt = StructureUtil.featureFor(level, new BlockPos(entity.position()));
-            if (startAt != null && getDecayStructures().contains(startAt.getRegistryName())) {
+            /*if (startAt != null && getDecayStructures().contains(startAt.getRegistryName())) {
                 return true;
             }
+
+             */
         }
         return isDimensionDecaying(level.dimension());
     }
@@ -194,9 +198,11 @@ public class LootrModConfig implements ConfigData {
         }
         if(!getRefreshStructures().isEmpty()) {
             StructureFeature<?> startAt = StructureUtil.featureFor(level, new BlockPos(entity.position()));
-            if(startAt != null && getRefreshStructures().contains(startAt.getRegistryName())) {
+            /*if(startAt != null && getRefreshStructures().contains(startAt.getRegistryName())) {
                 return true;
             }
+
+             */
         }
         return isDimensionRefreshing(level.dimension());
     }
@@ -247,9 +253,11 @@ public class LootrModConfig implements ConfigData {
         }
         if (!getRefreshStructures().isEmpty()) {
             StructureFeature<?> startAt = StructureUtil.featureFor(level, tile.getPosition());
-            if (startAt != null && getRefreshStructures().contains(startAt.getRegistryName())) {
+            /*if (startAt != null && getRefreshStructures().contains(startAt.getRegistryName())) {
                 return true;
             }
+            
+             */
         }
         return isDimensionRefreshing(level.dimension());
     }
