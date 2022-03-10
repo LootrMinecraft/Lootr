@@ -9,6 +9,9 @@
     "MixinPersistentEntitySectionManager",
     "MixinPiglinBrain"
   ],
+  "client": [
+    "MixinTextureAtlas"
+  ],
   "injectors": {
     "defaultRequire": 1
   }
