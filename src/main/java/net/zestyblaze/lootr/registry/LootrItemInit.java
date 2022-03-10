@@ -20,7 +20,7 @@ public class LootrItemInit {
     public static void registerItems() {
         Registry.register(Registry.ITEM, new ResourceLocation(LootrAPI.MODID, "lootr_chest"), CHEST);
         Registry.register(Registry.ITEM, new ResourceLocation(LootrAPI.MODID, "trophy"), TROPHY);
-        Registry.register(Registry.ITEM, new ResourceLocation(LootrAPI.MODID, "crown"), CROWN);
+        //Registry.register(Registry.ITEM, new ResourceLocation(LootrAPI.MODID, "crown"), CROWN);
 
         if(LootrModConfig.get().debug.debugMode) {
             LootrAPI.LOG.info("Lootr: Common Registry - Items Registered");

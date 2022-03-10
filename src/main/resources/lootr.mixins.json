@@ -4,8 +4,10 @@
   "package": "net.zestyblaze.lootr.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "MixinArmorItem",
     "MixinCatSitOnBlock",
-    "MixinPersistentEntitySectionManager"
+    "MixinPersistentEntitySectionManager",
+    "MixinPiglinBrain"
   ],
   "injectors": {
     "defaultRequire": 1
