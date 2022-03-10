@@ -1,7 +1,11 @@
 package net.zestyblaze.lootr.registry;
 
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.resources.ResourceLocation;
+import net.zestyblaze.lootr.advancement.AdvancementPredicate;
+import net.zestyblaze.lootr.advancement.ContainerPredicate;
 import net.zestyblaze.lootr.advancement.GenericTrigger;
+import net.zestyblaze.lootr.advancement.LootedStatPredicate;
 import net.zestyblaze.lootr.api.LootrAPI;
 
 import java.util.UUID;
@@ -21,5 +25,12 @@ public class LootrAdvancementsInit {
     public static GenericTrigger<ResourceLocation> ADVANCEMENT_PREDICATE = null;
 
     //TODO: Bruh dunno why I can't get this to load
-    public static void load() {}
+    public static void registerAdvancements () {
+        CHEST_PREDICATE = CriteriaTriggers.register(new GenericTrigger<>(CHEST_LOCATION, new ContainerPredicate()));
+        BARREL_PREDICATE = CriteriaTriggers.register(new GenericTrigger<>(BARREL_LOCATION, new ContainerPredicate()));
+        CART_PREDICATE = CriteriaTriggers.register(new GenericTrigger<>(CART_LOCATION, new ContainerPredicate()));
+        SHULKER_PREDICATE = CriteriaTriggers.register(new GenericTrigger<>(SHULKER_LOCATION, new ContainerPredicate()));
+        ADVANCEMENT_PREDICATE = CriteriaTriggers.register(new GenericTrigger<>(ADVANCEMENT_LOCATION, new AdvancementPredicate()));
+        SCORE_PREDICATE = CriteriaTriggers.register(new GenericTrigger<>(SCORE_LOCATION, new LootedStatPredicate()));
+    }
 }
