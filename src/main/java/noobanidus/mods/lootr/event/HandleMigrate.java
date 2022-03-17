@@ -8,6 +8,7 @@ import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.data.DataStorage;
 
 import java.io.*;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Calendar;
@@ -158,6 +159,13 @@ public class HandleMigrate {
       for (Map.Entry<Path, Path> migrationEntry : migrations.entrySet()) {
         try {
           Files.move(migrationEntry.getKey(), migrationEntry.getValue());
+        } catch (FileAlreadyExistsException e) {
+          Lootr.LOG.info("Unable to migrate from '" + migrationEntry.getKey() + "' to '" + migrationEntry.getValue() + "' as destination already exists! Deleting extraneous file.");
+          try {
+            Files.delete(migrationEntry.getKey());
+          } catch (IOException ex) {
+            Lootr.LOG.error("Unable to migrate from '" + migrationEntry.getKey() + "' to '" + migrationEntry.getValue() + "' as destination already exists! Unable to delete extraneous file. Please manually delete.", e);
+          }
         } catch (IOException e) {
           Lootr.LOG.error("Unable to migrate from '" + migrationEntry.getKey() + "' to '" + migrationEntry.getValue() + "'", e);
         }

@@ -7,6 +7,7 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
 
 import javax.annotation.Nonnull;
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -51,6 +52,14 @@ public class AdvancementData extends WorldSavedData {
     }
     pCompound.put("data", result);
     return pCompound;
+  }
+
+  @Override
+  public void save(File pFile) {
+    if (isDirty()) {
+      pFile.getParentFile().mkdirs();
+    }
+    super.save(pFile);
   }
 
   public static class UUIDPair implements INBTSerializable<CompoundNBT> {

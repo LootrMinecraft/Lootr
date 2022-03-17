@@ -23,6 +23,7 @@ import noobanidus.mods.lootr.api.tile.ILootTile;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
 import javax.annotation.Nullable;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -232,4 +233,11 @@ public class ChestData extends WorldSavedData {
     inventories.clear();
   }
 
+  @Override
+  public void save(File pFile) {
+    if (isDirty()) {
+      pFile.getParentFile().mkdirs();
+    }
+    super.save(pFile);
+  }
 }

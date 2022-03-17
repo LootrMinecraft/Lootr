@@ -7,6 +7,7 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.common.util.Constants;
 
+import java.io.File;
 import java.util.UUID;
 
 public class TickingData extends WorldSavedData {
@@ -83,5 +84,13 @@ public class TickingData extends WorldSavedData {
     }
     pCompound.put("result", decayList);
     return pCompound;
+  }
+
+  @Override
+  public void save(File pFile) {
+    if (isDirty()) {
+      pFile.getParentFile().mkdirs();
+    }
+    super.save(pFile);
   }
 }
