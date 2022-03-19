@@ -108,7 +108,7 @@ public class ChestUtil {
         ModAdvancements.SHULKER_PREDICATE.trigger((ServerPlayerEntity) player, ((ILootTile) te).getTileId());
       }
       if (DataStorage.isRefreshed(tileId)) {
-        DataStorage.refreshInventory(world, ((ILootTile) te).getTileId(), (ServerPlayerEntity) player);
+        DataStorage.refreshInventory(world, ((ILootTile) te).getTileId(), (ServerPlayerEntity) player, pos);
         DataStorage.removeRefreshed(tileId);
         player.sendMessage(new TranslationTextComponent("lootr.message.refreshed").setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), Util.NIL_UUID);
       } else {
@@ -169,7 +169,7 @@ public class ChestUtil {
           DataStorage.score(player.getUUID(), cart.getUUID());
         }
         if (DataStorage.isRefreshed(tileId)) {
-          DataStorage.refreshInventory(world, cart, (ServerPlayerEntity) player);
+          DataStorage.refreshInventory(world, cart, (ServerPlayerEntity) player, cart.blockPosition());
           DataStorage.removeRefreshed(tileId);
           player.sendMessage(new TranslationTextComponent("lootr.message.refreshed").setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), Util.NIL_UUID);
         } else {
@@ -183,7 +183,7 @@ public class ChestUtil {
             }
           }
         }
-        INamedContainerProvider provider = DataStorage.getInventory(world, cart, (ServerPlayerEntity) player, cart::addLoot);
+        INamedContainerProvider provider = DataStorage.getInventory(world, cart, (ServerPlayerEntity) player, cart::addLoot, cart.blockPosition());
         player.openMenu(provider);
       }
     }
@@ -207,7 +207,7 @@ public class ChestUtil {
       }
       UUID tileId = tile.getTileId();
       if (DataStorage.isRefreshed(tileId)) {
-        DataStorage.refreshInventory(world, ((ILootTile) te).getTileId(), stacks, (ServerPlayerEntity) player);
+        DataStorage.refreshInventory(world, ((ILootTile) te).getTileId(), stacks, (ServerPlayerEntity) player, pos);
         DataStorage.removeRefreshed(tileId);
         player.sendMessage(new TranslationTextComponent("lootr.message.refreshed").setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), Util.NIL_UUID);
       } else {

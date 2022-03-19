@@ -146,18 +146,18 @@ public class DataStorage {
     return ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD);
   }
 
-  public static ChestData getInstanceUuid(ServerWorld world, UUID id) {
+  public static ChestData getInstanceUuid(ServerWorld world, UUID id, BlockPos position) {
     RegistryKey<World> dimension = world.dimension();
-    return getServerWorld().getDataStorage().computeIfAbsent(() -> new ChestData(dimension, id), ChestData.ID(id));
+    return ChestData.unwrap(getServerWorld().getDataStorage().computeIfAbsent(() -> new ChestData(dimension, id), ChestData.ID(id)), dimension, position);
   }
 
-  public static ChestData getInstance(ServerWorld world, UUID id) {
-    return getServerWorld().getDataStorage().computeIfAbsent(() -> new ChestData(id), ChestData.ID(id));
+  public static ChestData getInstance(ServerWorld world, UUID id, BlockPos pos) {
+    return ChestData.unwrap(getServerWorld().getDataStorage().computeIfAbsent(() -> new ChestData(id), ChestData.ID(id)), world.dimension(), pos);
   }
 
-  public static ChestData getInstanceInventory(ServerWorld world, UUID id, @Nullable UUID customId, @Nullable NonNullList<ItemStack> base) {
+  public static ChestData getInstanceInventory(ServerWorld world, UUID id, @Nullable UUID customId, @Nullable NonNullList<ItemStack> base, BlockPos pos) {
     RegistryKey<World> dimension = world.dimension();
-    return getServerWorld().getDataStorage().computeIfAbsent(() -> new ChestData(dimension, id, customId, base), ChestData.ID(id));
+    return ChestData.unwrap(getServerWorld().getDataStorage().computeIfAbsent(() -> new ChestData(dimension, id, customId, base), ChestData.ID(id)), world.dimension(), pos);
   }
 
   @Nullable
@@ -166,7 +166,7 @@ public class DataStorage {
       return null;
     }
 
-    ChestData data = getInstanceUuid((ServerWorld) world, uuid);
+    ChestData data = getInstanceUuid((ServerWorld) world, uuid, pos);
     SpecialChestInventory inventory = data.getInventory(player, pos);
     if (inventory == null) {
       inventory = data.createInventory(player, filler, tile);
@@ -176,12 +176,12 @@ public class DataStorage {
     return inventory;
   }
 
-  public static void refreshInventory(World world, UUID uuid, ServerPlayerEntity player) {
+  public static void refreshInventory(World world, UUID uuid, ServerPlayerEntity player, BlockPos pos) {
     if (world.isClientSide || !(world instanceof ServerWorld)) {
       return;
     }
 
-    ChestData data = getInstanceUuid((ServerWorld) world, uuid);
+    ChestData data = getInstanceUuid((ServerWorld) world, uuid, pos);
     data.clear();
     data.setDirty();
   }
@@ -191,7 +191,7 @@ public class DataStorage {
     if (world.isClientSide || !(world instanceof ServerWorld)) {
       return null;
     }
-    ChestData data = getInstanceInventory((ServerWorld) world, uuid, null, base);
+    ChestData data = getInstanceInventory((ServerWorld) world, uuid, null, base, pos);
     SpecialChestInventory inventory = data.getInventory(player, pos);
     if (inventory == null) {
       inventory = data.createInventory(player, data.customInventory(), tile);
@@ -202,11 +202,11 @@ public class DataStorage {
   }
 
   @Nullable
-  public static void refreshInventory(World world, UUID uuid, NonNullList<ItemStack> base, ServerPlayerEntity player) {
+  public static void refreshInventory(World world, UUID uuid, NonNullList<ItemStack> base, ServerPlayerEntity player, BlockPos pos) {
     if (world.isClientSide || !(world instanceof ServerWorld)) {
       return;
     }
-    ChestData data = getInstanceInventory((ServerWorld) world, uuid, null, base);
+    ChestData data = getInstanceInventory((ServerWorld) world, uuid, null, base, pos);
     data.clear();
     data.setDirty();
   }
@@ -247,12 +247,12 @@ public class DataStorage {
   }
 
   @Nullable
-  public static SpecialChestInventory getInventory(World world, LootrChestMinecartEntity cart, ServerPlayerEntity player, LootFiller filler) {
+  public static SpecialChestInventory getInventory(World world, LootrChestMinecartEntity cart, ServerPlayerEntity player, LootFiller filler, BlockPos position) {
     if (world.isClientSide || !(world instanceof ServerWorld)) {
       return null;
     }
 
-    ChestData data = getInstance((ServerWorld) world, cart.getUUID());
+    ChestData data = getInstance((ServerWorld) world, cart.getUUID(), position);
     SpecialChestInventory inventory = data.getInventory(player, null);
     if (inventory == null) {
       inventory = data.createInventory(player, filler, null);
@@ -262,12 +262,12 @@ public class DataStorage {
   }
 
   @Nullable
-  public static void refreshInventory(World world, LootrChestMinecartEntity cart, ServerPlayerEntity player) {
+  public static void refreshInventory(World world, LootrChestMinecartEntity cart, ServerPlayerEntity player, BlockPos pos) {
     if (world.isClientSide || !(world instanceof ServerWorld)) {
       return;
     }
 
-    ChestData data = getInstance((ServerWorld) world, cart.getUUID());
+    ChestData data = getInstance((ServerWorld) world, cart.getUUID(), pos);
     data.clear();
     data.setDirty();
   }

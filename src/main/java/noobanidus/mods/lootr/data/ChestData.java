@@ -240,4 +240,10 @@ public class ChestData extends WorldSavedData {
     }
     super.save(pFile);
   }
+
+  public static ChestData unwrap(ChestData data, RegistryKey<World> dimension, BlockPos position) {
+    data.pos = position;
+    data.dimension = dimension;
+    return data;
+  }
 }
