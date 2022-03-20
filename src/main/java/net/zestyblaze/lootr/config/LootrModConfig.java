@@ -11,16 +11,22 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.ChestType;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.zestyblaze.lootr.api.LootrAPI;
 import net.zestyblaze.lootr.api.blockentity.ILootBlockEntity;
 import net.zestyblaze.lootr.entity.LootrChestMinecartEntity;
+import net.zestyblaze.lootr.registry.LootrBlockInit;
 import net.zestyblaze.lootr.util.StructureUtil;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Config(name = LootrAPI.MODID)
@@ -292,5 +298,104 @@ public class LootrModConfig implements ConfigData {
             REFRESH_DIMS = get().refresh.refresh_dimensions.stream().map(o -> ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(o))).collect(Collectors.toSet());
         }
         return REFRESH_DIMS;
+    }
+
+    private static void addSafeReplacement(ResourceLocation location, Block replacement) {
+        Block block = Registry.BLOCK.get(location);
+        if (block != Blocks.AIR) {
+            replacements.put(block, replacement);
+        }
+    }
+
+    private static void addUnsafeReplacement(ResourceLocation location, Block replacement, ServerLevel world) {
+        Block block = Registry.BLOCK.get(location);
+        if (block instanceof EntityBlock entityBlock) {
+            BlockEntity tile = entityBlock.newBlockEntity(BlockPos.ZERO, block.defaultBlockState());
+            if (tile instanceof RandomizableContainerBlockEntity) {
+                replacements.put(block, replacement);
+            }
+        }
+    }
+
+    // TODO: Move this to the config module?
+    public static BlockState replacement(BlockState original) {
+        if (replacements == null) {
+            replacements = new HashMap<>();
+            replacements.put(Blocks.CHEST, LootrBlockInit.CHEST);
+            // TODO:
+/*            replacements.put(Blocks.BARREL, LootrBlockInit.BARREL);
+            replacements.put(Blocks.TRAPPED_CHEST, LootrBlockInit.TRAPPED_CHEST);
+            replacements.put(Blocks.SHULKER_BOX, LootrBlockInit.SHULKER);*/
+
+           // TODO: Is Quark on Fabric?
+/*            if (CONVERT_QUARK.get() && ModList.get().isLoaded("quark")) {
+                QUARK_CHESTS.forEach(o -> addSafeReplacement(o, ModBlocks.CHEST));
+                QUARK_TRAPPED_CHESTS.forEach(o -> addSafeReplacement(o, ModBlocks.TRAPPED_CHEST));
+            }
+
+
+            if (CONVERT_WOODEN_CHESTS.get() || CONVERT_TRAPPED_CHESTS.get()) {
+                if (CONVERT_WOODEN_CHESTS.get()) {
+                    Registry.BLOCK.getTagOrEmpty(Tags.Blocks.CHESTS_WOODEN).forEach(z -> {
+                        Block o = z.value();
+                        if (replacements.containsKey(o)) {
+                            return;
+                        }
+                        if (o instanceof EntityBlock) {
+                            BlockEntity tile = ((EntityBlock) o).newBlockEntity(BlockPos.ZERO, o.defaultBlockState());
+                            if (tile instanceof RandomizableContainerBlockEntity) {
+                                replacements.put(o, ModBlocks.CHEST);
+                            }
+                        }
+                    });
+                }
+                if (CONVERT_TRAPPED_CHESTS.get()) {
+                    Registry.BLOCK.getTagOrEmpty(Tags.Blocks.CHESTS_TRAPPED).forEach(z -> {
+                        Block o = z.value();
+                        if (replacements.containsKey(o)) {
+                            return;
+                        }
+                        if (o instanceof EntityBlock) {
+                            BlockEntity tile = ((EntityBlock) o).newBlockEntity(BlockPos.ZERO, o.defaultBlockState());
+                            if (tile instanceof RandomizableContainerBlockEntity) {
+                                replacements.put(o, ModBlocks.TRAPPED_CHEST);
+                            }
+                        }
+                    });
+                }
+            }
+            if (!getAdditionalChests().isEmpty() || !getAdditionalTrappedChests().isEmpty()) {
+                final ServerLevel world = ServerLifecycleHooks.getCurrentServer().overworld();
+                getAdditionalChests().forEach(o -> addUnsafeReplacement(o, ModBlocks.CHEST, world));
+                getAdditionalTrappedChests().forEach(o -> addUnsafeReplacement(o, ModBlocks.TRAPPED_CHEST, world));
+            }*/
+        }
+
+        Block replacement = replacements.get(original.getBlock());
+        if (replacement == null) {
+            return null;
+        }
+
+        return copyProperties(replacement.defaultBlockState(), original);
+    }
+
+    private static BlockState copyProperties(BlockState state, BlockState original) {
+        for (Property<?> prop : original.getProperties()) {
+            if (state.hasProperty(prop)) {
+                state = safeReplace(state, original, prop);
+            }
+        }
+        return state;
+    }
+
+    private static <V extends Comparable<V>> BlockState safeReplace(BlockState state, BlockState original, Property<V> property) {
+        // TODO: Bit of a dirty hack
+        if (property == ChestBlock.TYPE && state.hasProperty(property)) {
+            return state.setValue(ChestBlock.TYPE, ChestType.SINGLE);
+        }
+        if (original.hasProperty(property) && state.hasProperty(property)) {
+            return state.setValue(property, original.getValue(property));
+        }
+        return state;
     }
 }
