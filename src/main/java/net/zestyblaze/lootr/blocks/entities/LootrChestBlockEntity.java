@@ -36,6 +36,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 import net.zestyblaze.lootr.api.LootrAPI;
 import net.zestyblaze.lootr.api.blockentity.ILootBlockEntity;
+import net.zestyblaze.lootr.blocks.LootrChestBlock;
 import net.zestyblaze.lootr.config.LootrModConfig;
 import net.zestyblaze.lootr.data.SpecialChestInventory;
 import net.zestyblaze.lootr.registry.LootrBlockEntityInit;
@@ -103,17 +104,11 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
     // TODO: Clean this up dramatically
     @Override
     public void load(CompoundTag compound) {
-        if (compound.contains("specialLootChest_table", Tag.TAG_STRING)) {
-            savedLootTable = new ResourceLocation(compound.getString("specialLootChest_table"));
-        }
-        if (compound.contains("specialLootChest_seed", Tag.TAG_LONG)) {
-            seed = compound.getLong("specialLootChest_seed");
-        }
-        if (savedLootTable == null && compound.contains("LootTable", Tag.TAG_STRING)) {
+        if (compound.contains("LootTable", Tag.TAG_STRING)) {
             savedLootTable = new ResourceLocation(compound.getString("LootTable"));
-            if (seed == 0L && compound.contains("LootTableSeed", Tag.TAG_LONG)) {
-                seed = compound.getLong("LootTableSeed");
-            }
+        }
+        if (compound.contains("LootTableSeed", Tag.TAG_LONG)) {
+            seed = compound.getLong("LootTableSeed");
         }
         if (compound.hasUUID("tileId")) {
             this.tileId = compound.getUUID("tileId");
@@ -134,11 +129,9 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
     protected void saveAdditional(CompoundTag compound) {
         super.saveAdditional(compound);
         if (savedLootTable != null) {
-            compound.putString("specialLootChest_table", savedLootTable.toString());
             compound.putString("LootTable", savedLootTable.toString());
         }
         if (seed != -1) {
-            compound.putLong("specialLootChest_seed", seed);
             compound.putLong("LootTableSeed", seed);
         }
         compound.putUUID("tileId", getTileId());
