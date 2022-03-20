@@ -67,7 +67,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
 
         @Override
         protected void openerCountChanged(Level level, BlockPos pos, BlockState state, int i, int j) {
-
+            LootrChestBlockEntity.this.signalOpenCount(level, pos, state,i, j);
         }
 
         @Override
