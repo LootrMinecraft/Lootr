@@ -26,8 +26,7 @@ import net.zestyblaze.lootr.registry.LootrBlockEntityInit;
 import net.zestyblaze.lootr.util.ChestUtil;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.Supplier;
-
+@SuppressWarnings("deprecation")
 public class LootrTrappedChestBlock extends ChestBlock {
     public LootrTrappedChestBlock(Properties properties) {
         super(properties, () -> LootrBlockEntityInit.SPECIAL_TRAPPED_LOOT_CHEST);

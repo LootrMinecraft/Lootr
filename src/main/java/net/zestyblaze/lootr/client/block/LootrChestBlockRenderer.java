@@ -70,18 +70,18 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootBloc
   }
 
   protected Material getMaterial(T tile) {
-    if (playerId == null) {
+    if(playerId == null) {
       Player player = Minecraft.getInstance().player;
-      if (player != null) {
+      if(player != null) {
         playerId = player.getUUID();
       } else {
         return MATERIAL;
       }
     }
-    if (tile.isOpened()) {
+    if(tile.isOpened()) {
       return MATERIAL2;
     }
-    if (tile.getOpeners().contains(playerId)) {
+    if(tile.getOpeners().contains(playerId)) {
       return MATERIAL2;
     } else {
       return MATERIAL;

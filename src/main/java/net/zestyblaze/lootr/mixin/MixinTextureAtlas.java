@@ -20,7 +20,7 @@ public class MixinTextureAtlas {
   @Inject(method = "prepareToStitch", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiling/ProfilerFiller;popPush(Ljava/lang/String;)V", shift = At.Shift.AFTER, ordinal = 0), locals = LocalCapture.CAPTURE_FAILHARD)
   private void preStitch(ResourceManager resourceManager, Stream<ResourceLocation> spriteStream, ProfilerFiller profiler, int i, CallbackInfoReturnable<TextureAtlas.Preparations> cir, Set<ResourceLocation> spriteSet) {
     TextureAtlas atlas = (TextureAtlas) (Object) this;
-    if (atlas.location().equals(TextureAtlas.LOCATION_BLOCKS)) {
+    if(atlas.location().equals(TextureAtlas.LOCATION_BLOCKS)) {
       spriteSet.add(LootrChestBlockRenderer.MATERIAL.texture());
       spriteSet.add(LootrChestBlockRenderer.MATERIAL2.texture());
     }
