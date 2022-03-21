@@ -11,6 +11,7 @@ import net.minecraft.world.level.material.Material;
 import net.zestyblaze.lootr.api.LootrAPI;
 import net.zestyblaze.lootr.blocks.LootrChestBlock;
 import net.zestyblaze.lootr.blocks.LootrInventoryBlock;
+import net.zestyblaze.lootr.blocks.LootrTrappedChestBlock;
 import net.zestyblaze.lootr.blocks.TrophyBlock;
 import net.zestyblaze.lootr.config.LootrModConfig;
 
@@ -18,6 +19,8 @@ import java.util.Set;
 
 public class LootrBlockInit {
     public static final LootrChestBlock CHEST = new LootrChestBlock(BlockBehaviour.Properties.copy(Blocks.BARREL).strength(2.5f));
+    public static final LootrTrappedChestBlock TRAPPED_CHEST = new LootrTrappedChestBlock(BlockBehaviour.Properties.copy(Blocks.TRAPPED_CHEST).strength(2.5f));
+
     public static final LootrInventoryBlock INVENTORY = new LootrInventoryBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.5f).sound(SoundType.WOOD));
 
     public static final Block TROPHY = new TrophyBlock(BlockBehaviour.Properties.of(Material.METAL).strength(15f).sound(SoundType.METAL).noOcclusion().lightLevel((o) -> 15));
@@ -26,6 +29,7 @@ public class LootrBlockInit {
 
     public static void registerBlocks() {
         Registry.register(Registry.BLOCK, new ResourceLocation(LootrAPI.MODID, "lootr_chest"), CHEST);
+        Registry.register(Registry.BLOCK, new ResourceLocation(LootrAPI.MODID, "lootr_trapped_chest"), TRAPPED_CHEST);
         Registry.register(Registry.BLOCK, new ResourceLocation(LootrAPI.MODID, "trophy"), TROPHY);
 
         if(LootrModConfig.get().debug.debugMode) {

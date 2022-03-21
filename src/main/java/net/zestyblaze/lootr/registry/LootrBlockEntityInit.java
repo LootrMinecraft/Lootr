@@ -7,10 +7,12 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.zestyblaze.lootr.api.LootrAPI;
 import net.zestyblaze.lootr.blocks.entities.LootrChestBlockEntity;
 import net.zestyblaze.lootr.blocks.entities.LootrInventoryBlockEntity;
+import net.zestyblaze.lootr.blocks.entities.LootrTrappedChestBlockEntity;
 import net.zestyblaze.lootr.config.LootrModConfig;
 
 public class LootrBlockEntityInit {
     public static final BlockEntityType<LootrChestBlockEntity> SPECIAL_LOOT_CHEST = FabricBlockEntityTypeBuilder.create(LootrChestBlockEntity::new, LootrBlockInit.CHEST).build(null);
+    public static final BlockEntityType<LootrTrappedChestBlockEntity> SPECIAL_TRAPPED_LOOT_CHEST = FabricBlockEntityTypeBuilder.create(LootrTrappedChestBlockEntity::new, LootrBlockInit.TRAPPED_CHEST).build(null);
     public static final BlockEntityType<LootrInventoryBlockEntity> SPECIAL_LOOT_INVENTORY = FabricBlockEntityTypeBuilder.create(LootrInventoryBlockEntity::new, LootrBlockInit.INVENTORY).build(null);
 
     public static void registerBlockEntities() {

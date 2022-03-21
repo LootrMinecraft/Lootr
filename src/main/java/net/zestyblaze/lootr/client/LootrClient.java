@@ -22,6 +22,9 @@ public class LootrClient implements ClientModInitializer {
         BlockEntityRendererRegistry.register(LootrBlockEntityInit.SPECIAL_LOOT_CHEST, LootrChestBlockRenderer::new);
         BuiltinItemRendererRegistry.INSTANCE.register(LootrBlockInit.CHEST, LootrChestItemRenderer.getInstance());
 
+        BlockEntityRendererRegistry.register(LootrBlockEntityInit.SPECIAL_TRAPPED_LOOT_CHEST, LootrChestBlockRenderer::new);
+        BuiltinItemRendererRegistry.INSTANCE.register(LootrBlockInit.TRAPPED_CHEST, LootrChestItemRenderer.getInstance());
+
         if(LootrModConfig.get().debug.debugMode) {
             LootrAPI.LOG.info("Lootr: Registry - Client Fully Loaded!");
         }
