@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import java.util.Set;
 import java.util.stream.Stream;
 
+@SuppressWarnings("deprecation")
 @Mixin(TextureAtlas.class)
 public class MixinTextureAtlas {
   @Inject(method = "prepareToStitch", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiling/ProfilerFiller;popPush(Ljava/lang/String;)V", shift = At.Shift.AFTER, ordinal = 0), locals = LocalCapture.CAPTURE_FAILHARD)
