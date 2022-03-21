@@ -104,12 +104,8 @@ public class ChestData extends WorldSavedData {
   }
 
   @Nullable
-  public SpecialChestInventory getInventory(ServerPlayerEntity player, BlockPos pos) {
-    SpecialChestInventory result = inventories.get(player.getUUID());
-    if (result != null) {
-      result.setBlockPos(pos);
-    }
-    return result;
+  public SpecialChestInventory getInventory(ServerPlayerEntity player) {
+    return inventories.get(player.getUUID());
   }
 
   public SpecialChestInventory createInventory(ServerPlayerEntity player, LootFiller filler, @Nullable LockableLootTileEntity tile) {
@@ -129,22 +125,21 @@ public class ChestData extends WorldSavedData {
       result = new SpecialChestInventory(this, items, cart.getDisplayName(), pos);
       lootTable = cart.lootTable;
     } else {
-      if (world.dimension() != dimension) {
+/*      if (world.dimension() != dimension) {
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
         if (server == null) {
           return null;
         }
         world = server.getLevel(dimension);
-      }
+      }*/
 
-      if (world == null || tile == null) {
+      if (/*world == null || */tile == null) {
         return null;
       }
 
       lootTable = ((ILootTile) tile).getTable();
 
       NonNullList<ItemStack> items = NonNullList.withSize(tile.getContainerSize(), ItemStack.EMPTY);
-      // Saving this is handled elsewhere
       result = new SpecialChestInventory(this, items, tile.getDisplayName(), pos);
     }
     filler.fillWithLoot(player, result, lootTable, seed);

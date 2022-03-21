@@ -48,7 +48,6 @@ public class DataStorage {
     AdvancementData data = manager.computeIfAbsent(() -> new AdvancementData(ID), ID);
     data.add(player, tileId);
     data.setDirty();
-    manager.save();
   }
 
   public static boolean isScored(UUID player, UUID tileId) {
@@ -63,7 +62,6 @@ public class DataStorage {
     AdvancementData data = manager.computeIfAbsent(() -> new AdvancementData(SCORED), SCORED);
     data.add(player, tileId);
     data.setDirty();
-    manager.save();
   }
 
   public static int getDecayValue(UUID id) {
@@ -83,7 +81,6 @@ public class DataStorage {
     TickingData data = manager.computeIfAbsent(() -> new TickingData(DECAY), DECAY);
     data.setValue(id, decay);
     data.setDirty();
-    manager.save();
   }
 
   public static void removeDecayed(UUID id) {
@@ -91,7 +88,6 @@ public class DataStorage {
     TickingData data = manager.computeIfAbsent(() -> new TickingData(DECAY), DECAY);
     if (data.removeDone(id) != -1) {
       data.setDirty();
-      manager.save();
     }
   }
 
@@ -100,7 +96,6 @@ public class DataStorage {
     TickingData data = manager.computeIfAbsent(() -> new TickingData(DECAY), DECAY);
     if (data.tick()) {
       data.setDirty();
-      manager.save();
     }
   }
 
@@ -121,7 +116,6 @@ public class DataStorage {
     TickingData data = manager.computeIfAbsent(() -> new TickingData(REFRESH), REFRESH);
     data.setValue(id, decay);
     data.setDirty();
-    manager.save();
   }
 
   public static void removeRefreshed(UUID id) {
@@ -129,7 +123,6 @@ public class DataStorage {
     TickingData data = manager.computeIfAbsent(() -> new TickingData(REFRESH), REFRESH);
     if (data.removeDone(id) != -1) {
       data.setDirty();
-      manager.save();
     }
   }
 
@@ -138,7 +131,6 @@ public class DataStorage {
     TickingData data = manager.computeIfAbsent(() -> new TickingData(REFRESH), REFRESH);
     if (data.tick()) {
       data.setDirty();
-      manager.save();
     }
   }
 
@@ -167,10 +159,9 @@ public class DataStorage {
     }
 
     ChestData data = getInstanceUuid((ServerWorld) world, uuid, pos);
-    SpecialChestInventory inventory = data.getInventory(player, pos);
+    SpecialChestInventory inventory = data.getInventory(player);
     if (inventory == null) {
       inventory = data.createInventory(player, filler, tile);
-      inventory.setBlockPos(pos);
     }
 
     return inventory;
@@ -192,10 +183,9 @@ public class DataStorage {
       return null;
     }
     ChestData data = getInstanceInventory((ServerWorld) world, uuid, null, base, pos);
-    SpecialChestInventory inventory = data.getInventory(player, pos);
+    SpecialChestInventory inventory = data.getInventory(player);
     if (inventory == null) {
       inventory = data.createInventory(player, data.customInventory(), tile);
-      inventory.setBlockPos(pos);
     }
 
     return inventory;
@@ -221,10 +211,11 @@ public class DataStorage {
     try (Stream<Path> paths = Files.walk(dataPath)) {
       paths.forEach(o -> {
         if (Files.isRegularFile(o)) {
-          String name = o.getFileName().toString();
-          if (name.startsWith("Lootr-") && !name.endsWith("Data.dat")) {
-            ids.add(name.replace(".dat", ""));
+          String fileName = o.getFileName().toString();
+          if (fileName.startsWith("Lootr-")) {
+            return;
           }
+          ids.add("lootr/" + fileName.charAt(0) + "/" + fileName.substring(0, 2) + "/" + fileName.replace(".dat", ""));
         }
       });
     } catch (IOException e) {
@@ -241,7 +232,6 @@ public class DataStorage {
         }
       }
     }
-    data.save();
     Lootr.LOG.info("Cleared " + cleared + " inventories for play UUID " + uuid.toString());
     return cleared != 0;
   }
@@ -253,7 +243,7 @@ public class DataStorage {
     }
 
     ChestData data = getInstance((ServerWorld) world, cart.getUUID(), position);
-    SpecialChestInventory inventory = data.getInventory(player, null);
+    SpecialChestInventory inventory = data.getInventory(player);
     if (inventory == null) {
       inventory = data.createInventory(player, filler, null);
     }
