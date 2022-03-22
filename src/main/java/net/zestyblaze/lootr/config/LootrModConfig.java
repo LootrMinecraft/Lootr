@@ -139,6 +139,14 @@ public class LootrModConfig implements ConfigData {
         public List<String> refresh_structures = List.of();
     }
 
+    @ConfigEntry.Gui.CollapsibleObject
+    public Vanilla vanilla = new Vanilla();
+
+    public static class Vanilla {
+        @ConfigEntry.Gui.RequiresRestart
+        public boolean vanilla_textures = false;
+    }
+
     public static LootrModConfig get() {
         return AutoConfig.getConfigHolder(LootrModConfig.class).getConfig();
     }
@@ -397,5 +405,9 @@ public class LootrModConfig implements ConfigData {
             return state.setValue(property, original.getValue(property));
         }
         return state;
+    }
+
+    public static boolean isVanillaTextures () {
+        return get().vanilla.vanilla_textures;
     }
 }
