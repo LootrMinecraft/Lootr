@@ -47,6 +47,10 @@ public class ChestData extends WorldSavedData {
     return "lootr/" + idString.charAt(0) + "/" + idString.substring(0, 2) + "/" + idString;
   }
 
+  public ChestData (String ID) {
+    super(ID);
+  }
+
   public ChestData(RegistryKey<World> dimension, UUID id, @Nullable UUID customId, @Nullable NonNullList<ItemStack> base) {
     super(ID(id));
     this.pos = null;

@@ -204,7 +204,7 @@ public class DataStorage {
   public static boolean clearInventories(UUID uuid) {
     ServerWorld world = getServerWorld();
     DimensionSavedDataManager data = world.getDataStorage();
-    Path dataPath = world.getServer().getWorldPath(new FolderName("data"));
+    Path dataPath = world.getServer().getWorldPath(new FolderName("data")).resolve("lootr");
 
     List<String> ids = new ArrayList<>();
     // TODO: Improve
@@ -224,7 +224,7 @@ public class DataStorage {
 
     int cleared = 0;
     for (String id : ids) {
-      ChestData chestData = data.get(() -> null, id);
+      ChestData chestData = data.get(() -> new ChestData(id), id);
       if (chestData != null) {
         if (chestData.clearInventory(uuid)) {
           cleared++;
