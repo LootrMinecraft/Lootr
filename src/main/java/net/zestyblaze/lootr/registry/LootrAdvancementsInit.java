@@ -24,7 +24,6 @@ public class LootrAdvancementsInit {
     public static GenericTrigger<Void> SCORE_PREDICATE = null;
     public static GenericTrigger<ResourceLocation> ADVANCEMENT_PREDICATE = null;
 
-    //TODO: Bruh dunno why I can't get this to load
     public static void registerAdvancements () {
         CHEST_PREDICATE = CriteriaTriggers.register(new GenericTrigger<>(CHEST_LOCATION, new ContainerPredicate()));
         BARREL_PREDICATE = CriteriaTriggers.register(new GenericTrigger<>(BARREL_LOCATION, new ContainerPredicate()));

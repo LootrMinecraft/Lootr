@@ -14,9 +14,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinLevelChunk {
   @Inject(method="addAndRegisterBlockEntity", at=@At(target="Lnet/minecraft/world/level/chunk/LevelChunk;updateBlockEntityTicker(Lnet/minecraft/world/level/block/entity/BlockEntity;)V", value="INVOKE", shift= At.Shift.AFTER))
   private void lootrAddAndRegisterBlockEntity (BlockEntity entity, CallbackInfo cir) {
-    if (entity instanceof RandomizableContainerBlockEntity && !(entity instanceof ILootBlockEntity)) {
+    if(entity instanceof RandomizableContainerBlockEntity && !(entity instanceof ILootBlockEntity)) {
       LevelChunk levelChunk = (LevelChunk) (Object) this;
-      if (!levelChunk.getLevel().isClientSide()) {
+      if(!levelChunk.getLevel().isClientSide()) {
         TileTicker.addEntry(levelChunk.getLevel().dimension(), entity.getBlockPos());
       }
     }
