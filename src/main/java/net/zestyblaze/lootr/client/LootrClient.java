@@ -7,7 +7,9 @@ import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.zestyblaze.lootr.api.LootrAPI;
 import net.zestyblaze.lootr.client.block.LootrChestBlockRenderer;
+import net.zestyblaze.lootr.client.block.LootrShulkerBlockRenderer;
 import net.zestyblaze.lootr.client.item.LootrChestItemRenderer;
+import net.zestyblaze.lootr.client.item.LootrShulkerItemRenderer;
 import net.zestyblaze.lootr.config.LootrModConfig;
 import net.zestyblaze.lootr.registry.LootrBlockEntityInit;
 import net.zestyblaze.lootr.registry.LootrBlockInit;
@@ -24,6 +26,9 @@ public class LootrClient implements ClientModInitializer {
 
         BlockEntityRendererRegistry.register(LootrBlockEntityInit.SPECIAL_TRAPPED_LOOT_CHEST, LootrChestBlockRenderer::new);
         BuiltinItemRendererRegistry.INSTANCE.register(LootrBlockInit.TRAPPED_CHEST, LootrChestItemRenderer.getInstance());
+
+        BlockEntityRendererRegistry.register(LootrBlockEntityInit.SPECIAL_LOOT_SHULKER, LootrShulkerBlockRenderer::new);
+        BuiltinItemRendererRegistry.INSTANCE.register(LootrBlockInit.SHULKER, LootrShulkerItemRenderer.getInstance());
 
         if(LootrModConfig.get().debug.debugMode) {
             LootrAPI.LOG.info("Lootr: Registry - Client Fully Loaded!");

@@ -5,6 +5,9 @@
   "item.lootr.crown": "Crown of the Master Looter",
 
   "block.lootr.lootr_chest": "Loot Chest",
+  "block.lootr.lootr_trapped_chest": "Loot Chest",
+  "block.lootr.lootr_inventory": "Loot Chest",
+  "block.lootr.lootr_shulker": "Loot Shulker",
 
   "lootr.message.should_sneak": "Breaking the chest will delete your unique loot and all items in the chest! In order to break, you must sneak while doing so.",
   "lootr.message.should_sneak2": "As loot is %s, only break if really needed.",

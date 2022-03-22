@@ -4,7 +4,9 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
+import net.zestyblaze.lootr.blocks.LootrShulkerBlock;
 import net.zestyblaze.lootr.client.block.LootrChestBlockRenderer;
+import net.zestyblaze.lootr.client.block.LootrShulkerBlockRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -23,6 +25,8 @@ public class MixinTextureAtlas {
     if(atlas.location().equals(TextureAtlas.LOCATION_BLOCKS)) {
       spriteSet.add(LootrChestBlockRenderer.MATERIAL.texture());
       spriteSet.add(LootrChestBlockRenderer.MATERIAL2.texture());
+      spriteSet.add(LootrShulkerBlockRenderer.MATERIAL.texture());
+      spriteSet.add(LootrShulkerBlockRenderer.MATERIAL2.texture());
     }
   }
 }
