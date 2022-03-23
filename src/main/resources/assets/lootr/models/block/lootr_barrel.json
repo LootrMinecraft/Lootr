@@ -9,5 +9,8 @@
   },
   "opened": {
     "parent": "lootr:block/lootr_opened_barrel"
+  },
+  "vanilla": {
+    "parent": "minecraft:block/barrel"
   }
 }

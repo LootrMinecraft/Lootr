@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.client.block;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Atlases;
 import net.minecraft.client.renderer.model.RenderMaterial;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.tileentity.ChestTileEntityRenderer;
@@ -10,6 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.tile.ILootTile;
 import noobanidus.mods.lootr.block.tile.LootrChestTileEntity;
+import noobanidus.mods.lootr.config.ConfigManager;
 
 import java.util.UUID;
 
@@ -25,6 +27,9 @@ public class SpecialLootChestTileRenderer<T extends LootrChestTileEntity & ILoot
 
   @Override
   protected RenderMaterial getMaterial(T tile, ChestType type) {
+    if (ConfigManager.isVanillaTextures()) {
+      return Atlases.chooseMaterial(tile, type, false);
+    }
     if (playerId == null) {
       Minecraft mc = Minecraft.getInstance();
       if (mc.player == null) {

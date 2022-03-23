@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Atlases;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.model.ShulkerModel;
@@ -17,6 +18,7 @@ import net.minecraft.util.math.vector.Vector3f;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.block.LootrShulkerBlock;
 import noobanidus.mods.lootr.block.tile.LootrShulkerTileEntity;
+import noobanidus.mods.lootr.config.ConfigManager;
 
 import java.util.UUID;
 
@@ -31,6 +33,9 @@ public class SpecialLootShulkerTileRenderer extends TileEntityRenderer<LootrShul
   }
 
   protected RenderMaterial getMaterial(LootrShulkerTileEntity tile) {
+    if (ConfigManager.isVanillaTextures()) {
+      return Atlases.DEFAULT_SHULKER_TEXTURE_LOCATION;
+    }
     if (playerId == null) {
       Minecraft mc = Minecraft.getInstance();
       if (mc.player == null) {

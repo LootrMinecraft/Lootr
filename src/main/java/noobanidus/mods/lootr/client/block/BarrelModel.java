@@ -23,6 +23,7 @@ import net.minecraftforge.client.model.data.IDynamicBakedModel;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
 import noobanidus.mods.lootr.block.LootrBarrelBlock;
+import noobanidus.mods.lootr.config.ConfigManager;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -35,10 +36,12 @@ import java.util.function.Function;
 public class BarrelModel implements IModelGeometry<BarrelModel> {
   private final IUnbakedModel opened;
   private final IUnbakedModel unopened;
+  private final IUnbakedModel vanilla;
 
-  public BarrelModel(IUnbakedModel opened, IUnbakedModel unopened) {
+  public BarrelModel(IUnbakedModel opened, IUnbakedModel unopened, IUnbakedModel vanilla) {
     this.opened = opened;
     this.unopened = unopened;
+    this.vanilla = vanilla;
   }
 
   @Override
@@ -47,6 +50,7 @@ public class BarrelModel implements IModelGeometry<BarrelModel> {
     materials.add(owner.resolveTexture("particle"));
     materials.addAll(unopened.getMaterials(modelGetter, missingTextureErrors));
     materials.addAll(opened.getMaterials(modelGetter, missingTextureErrors));
+    materials.addAll(vanilla.getMaterials(modelGetter, missingTextureErrors));
     return materials;
   }
 
@@ -60,6 +64,7 @@ public class BarrelModel implements IModelGeometry<BarrelModel> {
         spriteGetter.apply(owner.resolveTexture("particle")), overrides,
         buildModel(opened, modelTransform, bakery, spriteGetter, modelLocation),
         buildModel(unopened, modelTransform, bakery, spriteGetter, modelLocation),
+        buildModel(vanilla, modelTransform, bakery, spriteGetter, modelLocation),
         PerspectiveMapWrapper.getTransforms(new ModelTransformComposition(owner.getCombinedTransform(), modelTransform))
     );
   }
@@ -67,6 +72,7 @@ public class BarrelModel implements IModelGeometry<BarrelModel> {
   private static final class BarrelBakedModel implements IDynamicBakedModel {
     private final IBakedModel opened;
     private final IBakedModel unopened;
+    private final IBakedModel vanilla;
     private final ImmutableMap<ItemCameraTransforms.TransformType, TransformationMatrix> cameraTransforms;
     protected final boolean ambientOcclusion;
     protected final boolean gui3d;
@@ -74,7 +80,7 @@ public class BarrelModel implements IModelGeometry<BarrelModel> {
     protected final TextureAtlasSprite particle;
     protected final ItemOverrideList overrides;
 
-    public BarrelBakedModel(boolean ambientOcclusion, boolean isGui3d, boolean isSideLit, TextureAtlasSprite particle, ItemOverrideList overrides, IBakedModel opened, IBakedModel unopened, ImmutableMap<ItemCameraTransforms.TransformType, TransformationMatrix> cameraTransforms) {
+    public BarrelBakedModel(boolean ambientOcclusion, boolean isGui3d, boolean isSideLit, TextureAtlasSprite particle, ItemOverrideList overrides, IBakedModel opened, IBakedModel unopened, IBakedModel vanilla, ImmutableMap<ItemCameraTransforms.TransformType, TransformationMatrix> cameraTransforms) {
       this.isSideLit = isSideLit;
       this.cameraTransforms = cameraTransforms;
       this.ambientOcclusion = ambientOcclusion;
@@ -83,16 +89,21 @@ public class BarrelModel implements IModelGeometry<BarrelModel> {
       this.overrides = overrides;
       this.opened = opened;
       this.unopened = unopened;
+      this.vanilla = vanilla;
     }
 
     @Nonnull
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
       IBakedModel model;
-      if (extraData.getData(LootrBarrelBlock.OPENED) == Boolean.TRUE) {
-        model = opened;
-      } else {
-        model = unopened;
+      if (ConfigManager.isVanillaTextures()) {
+        model = vanilla;
+      }  else{
+        if (extraData.getData(LootrBarrelBlock.OPENED) == Boolean.TRUE) {
+          model = opened;
+        } else {
+          model = unopened;
+        }
       }
       ImmutableList.Builder<BakedQuad> builder = ImmutableList.builder();
       builder.addAll(model.getQuads(state, side, rand, extraData));
@@ -131,6 +142,9 @@ public class BarrelModel implements IModelGeometry<BarrelModel> {
 
     @Override
     public TextureAtlasSprite getParticleTexture(@Nonnull IModelData data) {
+      if (ConfigManager.isVanillaTextures()) {
+        return vanilla.getParticleIcon();
+      }
       if (data.getData(LootrBarrelBlock.OPENED) == Boolean.TRUE) {
         return opened.getParticleIcon();
       } else {
@@ -174,7 +188,8 @@ public class BarrelModel implements IModelGeometry<BarrelModel> {
     public BarrelModel read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
       IUnbakedModel unopened = deserializationContext.deserialize(JSONUtils.getAsJsonObject(modelContents, "unopened"), BlockModel.class);
       IUnbakedModel opened = deserializationContext.deserialize(JSONUtils.getAsJsonObject(modelContents, "opened"), BlockModel.class);
-      return new BarrelModel(opened, unopened);
+      IUnbakedModel vanilla = deserializationContext.deserialize(JSONUtils.getAsJsonObject(modelContents, "vanilla"), BlockModel.class);
+      return new BarrelModel(opened, unopened, vanilla);
     }
   }
 }
