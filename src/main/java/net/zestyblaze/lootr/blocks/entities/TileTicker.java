@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.zestyblaze.lootr.api.LootrAPI;
 import net.zestyblaze.lootr.api.blockentity.ILootBlockEntity;
 import net.zestyblaze.lootr.chunk.HandleChunk;
+import net.zestyblaze.lootr.config.LootrModConfig;
 import net.zestyblaze.lootr.util.ServerAccessImpl;
 
 import java.util.HashSet;
@@ -28,9 +29,9 @@ public class TileTicker {
 
   public static void addEntry(ResourceKey<Level> dimension, BlockPos position) {
     // TODO: Dimension Blacklisting
-/*    if (ConfigManager.isDimensionBlocked(dimension)) {
+    if (LootrModConfig.isDimensionBlacklisted(dimension)) {
       return;
-    }*/
+    }
     Entry newEntry = new Entry(dimension, position);
     synchronized (listLock) {
       if (tickingList) {
@@ -67,11 +68,10 @@ public class TileTicker {
             toRemove.add(entry);
             continue;
           }
-          // TODO: Loot table blacklisting
-/*          if (be.lootTable == null || ConfigManager.isBlacklisted(be.lootTable)) {
+          if (be.lootTable == null || LootrModConfig.isBlacklisted(be.lootTable)) {
             toRemove.add(entry);
             continue;
-          }*/
+          }
           // TODO: Structure blacklisting
 /*          if (!ConfigManager.getLootStructureBlacklist().isEmpty()) {
             StructureFeature<?> startAt = StructureUtil.featureFor(level, entry.getPosition());
@@ -89,7 +89,7 @@ public class TileTicker {
           be.lootTable = null;
           BlockState stateAt = level.getBlockState(entry.getPosition());
           // TODO: Replacement config
-          BlockState replacement = null; // ConfigManager.replacement(stateAt);
+          BlockState replacement = LootrModConfig.replacement(stateAt);
           if (replacement == null) {
             toRemove.add(entry);
             continue;
