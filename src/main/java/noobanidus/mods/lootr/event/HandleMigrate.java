@@ -66,6 +66,8 @@ public class HandleMigrate {
       String name = filenameBuilder.toString();
       Path backupName = data.resolve(name + ".zip");
       File backup = backupName.toFile();
+      //noinspection ResultOfMethodCallIgnored
+      backup.getParentFile().mkdirs();
       int inc = 0;
       while (backup.exists()) {
         backupName = data.resolve(name + "-" + inc + ".zip");
@@ -75,46 +77,29 @@ public class HandleMigrate {
         }
       }
 
-      try {
-        backup.getParentFile().mkdirs();
-        if (!backup.createNewFile()) {
-          throw new IllegalStateException("Unable to create backup for Lootr data files! Couldn't create " + backup);
-        }
-      } catch (IOException e) {
-        throw new IllegalStateException("Unable to create backup for Lootr data files!", e);
-      }
-
-      ZipOutputStream backupZip;
-      try {
-        backupZip = new ZipOutputStream(new FileOutputStream(backup));
-      } catch (FileNotFoundException e) {
-        throw new IllegalStateException("Unable to create backup for Lootr data files!", e);
-      }
-
-      backupZip.setLevel(0);
       boolean failure = false;
-      byte[] readBuffer = new byte[4096];
-      for (Path path : toMigrate) {
-        ZipEntry entry = new ZipEntry(path.getFileName().toString());
-        try {
-          backupZip.putNextEntry(entry);
-          FileInputStream inputStream = new FileInputStream(path.toFile());
-          int len;
-          while ((len = inputStream.read(readBuffer)) > 0) {
-            backupZip.write(readBuffer, 0, len);
-          }
-          backupZip.closeEntry();
-          inputStream.close();
-        } catch (IOException e) {
-          failure = true;
-          Lootr.LOG.error("Unable to fully back-up Lootr data, failure while reading: {}", path, e);
-        }
-      }
 
-      try {
-        backupZip.close();
+      try (FileOutputStream stream = new FileOutputStream(backup); ZipOutputStream backupZip = new ZipOutputStream(stream)) {
+        backupZip.setLevel(0);
+        byte[] readBuffer = new byte[4096];
+        for (Path path : toMigrate) {
+          ZipEntry entry = new ZipEntry(path.getFileName().toString());
+          try (FileInputStream inputStream = new FileInputStream(path.toFile())) {
+            backupZip.putNextEntry(entry);
+            int len;
+            while ((len = inputStream.read(readBuffer)) > 0) {
+              backupZip.write(readBuffer, 0, len);
+            }
+            backupZip.closeEntry();
+          } catch (IOException e) {
+            failure = true;
+            Lootr.LOG.error("Unable to fully back-up Lootr data, failure while reading: {}", path, e);
+          }
+        }
+      } catch (FileNotFoundException e) {
+        throw new IllegalStateException("Unable to create backup for Lootr data files! Backup file couldn't be opened for some reason.", e);
       } catch (IOException e) {
-        throw new IllegalStateException("Unable to close current back-up file: " + backup, e);
+        throw new IllegalStateException("Unable to create backup for Lootr data files! Backup file couldn't be written to.", e);
       }
 
       if (failure) {
@@ -122,55 +107,55 @@ public class HandleMigrate {
       } else {
         Lootr.LOG.info("Completed backup! {} files were backed up to {}", toMigrate.size(), backup);
       }
-    }
 
-    Map<Path, Path> migrations = new HashMap<>();
+      Map<Path, Path> migrations = new HashMap<>();
 
-    for (Path path : toMigrate) {
-      String fileName = path.getFileName().toString();
+      for (Path path : toMigrate) {
+        String fileName = path.getFileName().toString();
 
-      if (fileName.startsWith(DataStorage.ID_OLD) || fileName.startsWith(DataStorage.SCORED_OLD) || fileName.startsWith(DataStorage.DECAY_OLD) || fileName.startsWith(DataStorage.REFRESH_OLD)) {
-        // Data files go into the subdirectory
-        migrations.put(path, dataLootr.resolve(path.getFileName()));
-      } else {
-        // Determine file ID
-        String uuid;
-        if (fileName.startsWith("Lootr-chests") || fileName.startsWith("Lootr-custom")) {
-          uuid = fileName.split("-", 4)[3];
-        } else if (fileName.startsWith("Lootr-entity")) {
-          uuid = fileName.split("-", 3)[2];
+        if (fileName.startsWith(DataStorage.ID_OLD) || fileName.startsWith(DataStorage.SCORED_OLD) || fileName.startsWith(DataStorage.DECAY_OLD) || fileName.startsWith(DataStorage.REFRESH_OLD)) {
+          // Data files go into the subdirectory
+          migrations.put(path, dataLootr.resolve(path.getFileName()));
         } else {
-          Lootr.LOG.error("Invalid file name found while traversing data. Could not migrate: '" + path + "'");
-          continue;
-        }
-        String containerId = uuid.substring(0, 2);
-        try {
-          Files.createDirectories(dataLootr.resolve(uuid.substring(0, 1)).resolve(containerId));
-        } catch (IOException e) {
-          Lootr.LOG.error("Unable to create 'lootr/" + containerId + "' subdirectory. Could not migrate: '" + path + "'", e);
-          continue;
-        }
-        migrations.put(path, dataLootr.resolve(uuid.substring(0, 1)).resolve(containerId).resolve(uuid));
-      }
-    }
-
-    if (!migrations.isEmpty()) {
-      Lootr.LOG.info("Migrating Lootr data files to subdirectory...");
-      for (Map.Entry<Path, Path> migrationEntry : migrations.entrySet()) {
-        try {
-          Files.move(migrationEntry.getKey(), migrationEntry.getValue());
-        } catch (FileAlreadyExistsException e) {
-          Lootr.LOG.info("Unable to migrate from '" + migrationEntry.getKey() + "' to '" + migrationEntry.getValue() + "' as destination already exists! Deleting extraneous file.");
-          try {
-            Files.delete(migrationEntry.getKey());
-          } catch (IOException ex) {
-            Lootr.LOG.error("Unable to migrate from '" + migrationEntry.getKey() + "' to '" + migrationEntry.getValue() + "' as destination already exists! Unable to delete extraneous file. Please manually delete.", e);
+          // Determine file ID
+          String uuid;
+          if (fileName.startsWith("Lootr-chests") || fileName.startsWith("Lootr-custom")) {
+            uuid = fileName.split("-", 4)[3];
+          } else if (fileName.startsWith("Lootr-entity")) {
+            uuid = fileName.split("-", 3)[2];
+          } else {
+            Lootr.LOG.error("Invalid file name found while traversing data. Could not migrate: '" + path + "'");
+            continue;
           }
-        } catch (IOException e) {
-          Lootr.LOG.error("Unable to migrate from '" + migrationEntry.getKey() + "' to '" + migrationEntry.getValue() + "'", e);
+          String containerId = uuid.substring(0, 2);
+          try {
+            Files.createDirectories(dataLootr.resolve(uuid.substring(0, 1)).resolve(containerId));
+          } catch (IOException e) {
+            Lootr.LOG.error("Unable to create 'lootr/" + containerId + "' subdirectory. Could not migrate: '" + path + "'", e);
+            continue;
+          }
+          migrations.put(path, dataLootr.resolve(uuid.substring(0, 1)).resolve(containerId).resolve(uuid));
         }
       }
-      Lootr.LOG.info("Migrated " + migrations.size() + " Lootr data files to subdirectory!");
+
+      if (!migrations.isEmpty()) {
+        Lootr.LOG.info("Migrating Lootr data files to subdirectory...");
+        for (Map.Entry<Path, Path> migrationEntry : migrations.entrySet()) {
+          try {
+            Files.move(migrationEntry.getKey(), migrationEntry.getValue());
+          } catch (FileAlreadyExistsException e) {
+            Lootr.LOG.info("Unable to migrate from '" + migrationEntry.getKey() + "' to '" + migrationEntry.getValue() + "' as destination already exists! Deleting extraneous file.");
+            try {
+              Files.delete(migrationEntry.getKey());
+            } catch (IOException ex) {
+              Lootr.LOG.error("Unable to migrate from '" + migrationEntry.getKey() + "' to '" + migrationEntry.getValue() + "' as destination already exists! Unable to delete extraneous file. Please manually delete.", e);
+            }
+          } catch (IOException e) {
+            Lootr.LOG.error("Unable to migrate from '" + migrationEntry.getKey() + "' to '" + migrationEntry.getValue() + "'", e);
+          }
+        }
+        Lootr.LOG.info("Migrated " + migrations.size() + " Lootr data files to subdirectory!");
+      }
     }
   }
 }
