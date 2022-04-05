@@ -150,6 +150,7 @@ public class ChestData extends WorldSavedData {
     inventories.put(player.getUUID(), result);
     setDirty();
     world.getDataStorage().save();
+    result.setBlockPos(pos);
     return result;
   }
 

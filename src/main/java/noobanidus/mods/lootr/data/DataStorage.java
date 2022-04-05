@@ -163,6 +163,7 @@ public class DataStorage {
     if (inventory == null) {
       inventory = data.createInventory(player, filler, tile);
     }
+    inventory.setBlockPos(pos);
 
     return inventory;
   }
@@ -187,6 +188,8 @@ public class DataStorage {
     if (inventory == null) {
       inventory = data.createInventory(player, data.customInventory(), tile);
     }
+
+    inventory.setBlockPos(pos);
 
     return inventory;
   }
@@ -247,6 +250,8 @@ public class DataStorage {
     if (inventory == null) {
       inventory = data.createInventory(player, filler, null);
     }
+
+    inventory.setBlockPos(position);
 
     return inventory;
   }
