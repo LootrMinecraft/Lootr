@@ -236,7 +236,10 @@ public class LootrChestTileEntity extends ChestTileEntity implements ILootTile {
     for (PlayerEntity playerentity : world.getEntitiesOfClass(PlayerEntity.class, new AxisAlignedBB(x - 5.0, y - 5.0, z - 5.0, (x + 1) + 5.0, (y + 1) + 5.0, (z + 1) + 5.0))) {
       if (playerentity.containerMenu instanceof ChestContainer) {
         IInventory inv = ((ChestContainer) playerentity.containerMenu).getContainer();
-        if (inv == tile || (inv instanceof SpecialChestInventory && ((SpecialChestInventory) inv).getPos().equals(tile.getBlockPos()))) {
+        if (inv == null) {
+          continue;
+        }
+        if (inv == tile || (inv instanceof SpecialChestInventory && tile.getBlockPos().equals(((SpecialChestInventory) inv).getPos()))) {
           ++i;
         }
       }
