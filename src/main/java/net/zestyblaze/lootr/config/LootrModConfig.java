@@ -19,12 +19,10 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.zestyblaze.lootr.api.LootrAPI;
 import net.zestyblaze.lootr.api.blockentity.ILootBlockEntity;
 import net.zestyblaze.lootr.entity.LootrChestMinecartEntity;
 import net.zestyblaze.lootr.registry.LootrBlockInit;
-import net.zestyblaze.lootr.util.StructureUtil;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -158,14 +156,14 @@ public class LootrModConfig implements ConfigData {
                 return true;
             }
         }
-        if (!getDecayStructures().isEmpty()) {
+/*        if (!getDecayStructures().isEmpty()) {
             StructureFeature<?> startAt = StructureUtil.featureFor(level, tile.getPosition());
-            /*if (startAt != null && getDecayStructures().contains(startAt.getRegistryName())) {
+            *//*if (startAt != null && getDecayStructures().contains(startAt.getRegistryName())) {
                 return true;
             }
 
-             */
-        }
+             *//*
+        }*/
         return isDimensionDecaying(level.dimension());
     }
 
@@ -181,14 +179,14 @@ public class LootrModConfig implements ConfigData {
                 return true;
             }
         }
-        if (!getDecayStructures().isEmpty()) {
+/*        if (!getDecayStructures().isEmpty()) {
             StructureFeature<?> startAt = StructureUtil.featureFor(level, new BlockPos(entity.position()));
-            /*if (startAt != null && getDecayStructures().contains(startAt.getRegistryName())) {
+            *//*if (startAt != null && getDecayStructures().contains(startAt.getRegistryName())) {
                 return true;
             }
 
-             */
-        }
+             *//*
+        }*/
         return isDimensionDecaying(level.dimension());
     }
 
@@ -205,14 +203,14 @@ public class LootrModConfig implements ConfigData {
                 return true;
             }
         }
-        if(!getRefreshStructures().isEmpty()) {
+/*        if(!getRefreshStructures().isEmpty()) {
             StructureFeature<?> startAt = StructureUtil.featureFor(level, new BlockPos(entity.position()));
-            /*if(startAt != null && getRefreshStructures().contains(startAt.getRegistryName())) {
+            *//*if(startAt != null && getRefreshStructures().contains(startAt.getRegistryName())) {
                 return true;
             }
 
-             */
-        }
+             *//*
+        }*/
         return isDimensionRefreshing(level.dimension());
     }
 
@@ -228,13 +226,6 @@ public class LootrModConfig implements ConfigData {
             DECAY_MODS = get().decay.decay_modids.stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
         }
         return DECAY_MODS;
-    }
-
-    public static Set<ResourceLocation> getDecayStructures () {
-        if (DECAY_STRUCTS == null) {
-            DECAY_STRUCTS = get().decay.decay_structures.stream().map(ResourceLocation::new).collect(Collectors.toSet());
-        }
-        return DECAY_STRUCTS;
     }
 
     public static boolean isDimensionDecaying(ResourceKey<Level> key) {
@@ -260,14 +251,14 @@ public class LootrModConfig implements ConfigData {
                 return true;
             }
         }
-        if (!getRefreshStructures().isEmpty()) {
+/*        if (!getRefreshStructures().isEmpty()) {
             StructureFeature<?> startAt = StructureUtil.featureFor(level, tile.getPosition());
-            /*if (startAt != null && getRefreshStructures().contains(startAt.getRegistryName())) {
+            *//*if (startAt != null && getRefreshStructures().contains(startAt.getRegistryName())) {
                 return true;
             }
             
-             */
-        }
+             *//*
+        }*/
         return isDimensionRefreshing(level.dimension());
     }
 
@@ -283,13 +274,6 @@ public class LootrModConfig implements ConfigData {
             REFRESH_MODS = get().refresh.refresh_modids.stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
         }
         return REFRESH_MODS;
-    }
-
-    public static Set<ResourceLocation> getRefreshStructures () {
-        if (REFRESH_STRUCTS == null) {
-            REFRESH_STRUCTS = get().refresh.refresh_structures.stream().map(ResourceLocation::new).collect(Collectors.toSet());
-        }
-        return REFRESH_STRUCTS;
     }
 
     public static boolean isDimensionRefreshing(ResourceKey<Level> key) {
