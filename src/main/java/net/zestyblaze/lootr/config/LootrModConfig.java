@@ -41,11 +41,6 @@ public class LootrModConfig implements ConfigData {
     private static Set<ResourceKey<Level>> DECAY_DIMS = null;
     private static Set<ResourceKey<Level>> REFRESH_DIMS = null;
     private static Set<ResourceLocation> LOOT_BLACKLIST = null;
-    private static Set<ResourceLocation> STRUCTURE_BLACKLIST = null;
-    private static Set<ResourceLocation> REFRESH_STRUCTS = null;
-    private static Set<ResourceLocation> DECAY_STRUCTS = null;
-    private static Set<ResourceLocation> ADD_CHESTS = null;
-    private static Set<ResourceLocation> ADD_TRAPPED_CHESTS = null;
     private static Map<Block, Block> replacements = null;
     private static Set<String> LOOT_MODIDS = null;
 
