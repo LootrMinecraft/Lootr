@@ -42,17 +42,20 @@ public class BarrelModel implements UnbakedModel {
   private final UnbakedModel opened;
   private final UnbakedModel unopened;
   private final UnbakedModel vanilla;
-  private final Collection<ResourceLocation> dependencies;
 
   public BarrelModel(UnbakedModel opened, UnbakedModel unopened, UnbakedModel vanilla) {
     this.opened = opened;
     this.unopened = unopened;
     this.vanilla = vanilla;
-    this.dependencies = Streams.concat(opened.getDependencies().stream(), unopened.getDependencies().stream(), vanilla.getDependencies().stream()).collect(Collectors.toSet());
   }
+
+  private Collection<ResourceLocation> dependencies = null;
 
   @Override
   public Collection<ResourceLocation> getDependencies() {
+    if (dependencies == null) {
+      this.dependencies = Streams.concat(opened.getDependencies().stream(), unopened.getDependencies().stream(), vanilla.getDependencies().stream()).collect(Collectors.toSet());
+    }
     return dependencies;
   }
 
@@ -92,15 +95,13 @@ public class BarrelModel implements UnbakedModel {
     @Override
     public void emitBlockQuads(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext context) {
       BlockEntity blockEntity = blockView.getBlockEntity(pos);
-      BakedModel model = null;
+      BakedModel model = opened;
       if (LootrModConfig.isVanillaTextures()) {
         model = vanilla;
       } else {
         if (blockEntity instanceof ILootBlockEntity lootContainer) {
           LocalPlayer player = Minecraft.getInstance().player;
-          if (player != null && lootContainer.getOpeners().contains(player.getUUID())) {
-            model = opened;
-          } else {
+          if (player == null || !lootContainer.getOpeners().contains(player.getUUID())) {
             model = unopened;
           }
         }
@@ -190,9 +191,9 @@ public class BarrelModel implements UnbakedModel {
     @Override
     public @Nullable UnbakedModel loadModelResource(ResourceLocation resourceId, ModelProviderContext context) throws ModelProviderException {
       if (resourceId.equals(LOOTR_BARREL_MODEL_UNOPENED)) {
-        return new BarrelModel(context.loadModel(LOOTR_BARREL_UNOPENED), context.loadModel(LOOTR_BARREL_UNOPENED_OPEN), context.loadModel(VANILLA));
+        return new BarrelModel(context.loadModel(LOOTR_OPENED_BARREL), context.loadModel(LOOTR_BARREL_UNOPENED), context.loadModel(VANILLA));
       } else if (resourceId.equals(LOOTR_BARREL_MODEL_OPENED)) {
-        return new BarrelModel(context.loadModel(LOOTR_OPENED_BARREL), context.loadModel(LOOTR_OPENED_BARREL_OPEN), context.loadModel(VANILLA_OPEN));
+        return new BarrelModel(context.loadModel(LOOTR_OPENED_BARREL_OPEN), context.loadModel(LOOTR_BARREL_UNOPENED_OPEN), context.loadModel(VANILLA_OPEN));
       } else {
         return null;
       }
