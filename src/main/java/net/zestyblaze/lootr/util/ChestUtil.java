@@ -21,6 +21,9 @@ import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.zestyblaze.lootr.api.blockentity.ILootBlockEntity;
+import net.zestyblaze.lootr.blocks.LootrBarrelBlock;
+import net.zestyblaze.lootr.blocks.LootrChestBlock;
+import net.zestyblaze.lootr.blocks.LootrShulkerBlock;
 import net.zestyblaze.lootr.blocks.entities.LootrInventoryBlockEntity;
 import net.zestyblaze.lootr.config.LootrModConfig;
 import net.zestyblaze.lootr.data.DataStorage;
@@ -33,8 +36,6 @@ import java.util.Random;
 import java.util.UUID;
 
 public class ChestUtil {
-    public static Random random = new Random();
-
     public static boolean handleLootSneak(Block block, Level level, BlockPos pos, Player player) {
         if (level.isClientSide()) {
             return false;
@@ -45,10 +46,9 @@ public class ChestUtil {
 
         BlockEntity te = level.getBlockEntity(pos);
         if (te instanceof ILootBlockEntity tile) {
-            if (tile.getOpeners().remove(player.getUUID())) {
-                te.setChanged();
-                tile.updatePacketViaState();
-            }
+            tile.getOpeners().remove(player.getUUID());
+            te.setChanged();
+            tile.updatePacketViaState();
             return true;
         }
 
@@ -95,14 +95,13 @@ public class ChestUtil {
                     }
                 }
             }
-            if (block instanceof BarrelBlock) {
+            if (block instanceof LootrBarrelBlock) {
                 LootrAdvancementsInit.BARREL_PREDICATE.trigger((ServerPlayer) player, ((ILootBlockEntity) te).getTileId());
-            } else if (block instanceof ChestBlock) {
+            } else if (block instanceof LootrChestBlock) {
                 LootrAdvancementsInit.CHEST_PREDICATE.trigger((ServerPlayer) player, ((ILootBlockEntity) te).getTileId());
-            } /* else if (block instanceof LootrShulkerBlock) {
+            } else if (block instanceof LootrShulkerBlock) {
                 LootrAdvancementsInit.SHULKER_PREDICATE.trigger((ServerPlayer) player, ((ILootBlockEntity) te).getTileId());
             }
-            */
             if (DataStorage.isRefreshed(tileId)) {
                 DataStorage.refreshInventory(level, pos, ((ILootBlockEntity) te).getTileId(), (ServerPlayer) player);
                 DataStorage.removeRefreshed(tileId);

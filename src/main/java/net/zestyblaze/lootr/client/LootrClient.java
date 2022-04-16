@@ -3,9 +3,11 @@ package net.zestyblaze.lootr.client;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.zestyblaze.lootr.api.LootrAPI;
+import net.zestyblaze.lootr.client.block.BarrelModel;
 import net.zestyblaze.lootr.client.block.LootrChestBlockRenderer;
 import net.zestyblaze.lootr.client.block.LootrShulkerBlockRenderer;
 import net.zestyblaze.lootr.client.item.LootrChestItemRenderer;
@@ -29,6 +31,8 @@ public class LootrClient implements ClientModInitializer {
 
         BlockEntityRendererRegistry.register(LootrBlockEntityInit.SPECIAL_LOOT_SHULKER, LootrShulkerBlockRenderer::new);
         BuiltinItemRendererRegistry.INSTANCE.register(LootrBlockInit.SHULKER, LootrShulkerItemRenderer.getInstance());
+
+        ModelLoadingRegistry.INSTANCE.registerResourceProvider(o -> new BarrelModel.BarrelModelLoader());
 
         if(LootrModConfig.get().debug.debugMode) {
             LootrAPI.LOG.info("Lootr: Registry - Client Fully Loaded!");

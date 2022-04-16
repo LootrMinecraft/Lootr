@@ -26,7 +26,8 @@ public class LootrBlockInit {
         }
     };
 
-    public static final LootrChestBlock CHEST = new LootrChestBlock(BlockBehaviour.Properties.copy(Blocks.BARREL).strength(2.5f));
+    public static final LootrChestBlock CHEST = new LootrChestBlock(BlockBehaviour.Properties.copy(Blocks.CHEST).strength(2.5f));
+    public static final LootrBarrelBlock BARREL = new LootrBarrelBlock(BlockBehaviour.Properties.copy(Blocks.BARREL).strength(2.5f));
     public static final LootrTrappedChestBlock TRAPPED_CHEST = new LootrTrappedChestBlock(BlockBehaviour.Properties.copy(Blocks.TRAPPED_CHEST).strength(2.5f));
     public static final LootrShulkerBlock SHULKER = new LootrShulkerBlock(BlockBehaviour.Properties.of(Material.SHULKER_SHELL).strength(2.5f).dynamicShape().noOcclusion().isSuffocating(posPredicate).isViewBlocking(posPredicate));
 
@@ -38,8 +39,10 @@ public class LootrBlockInit {
 
     public static void registerBlocks() {
         Registry.register(Registry.BLOCK, new ResourceLocation(LootrAPI.MODID, "lootr_chest"), CHEST);
+        Registry.register(Registry.BLOCK, new ResourceLocation(LootrAPI.MODID, "lootr_barrel"), BARREL);
         Registry.register(Registry.BLOCK, new ResourceLocation(LootrAPI.MODID, "lootr_trapped_chest"), TRAPPED_CHEST);
         Registry.register(Registry.BLOCK, new ResourceLocation(LootrAPI.MODID, "lootr_shulker"), SHULKER);
+        Registry.register(Registry.BLOCK, new ResourceLocation(LootrAPI.MODID, "lootr_inventory"), INVENTORY);
         Registry.register(Registry.BLOCK, new ResourceLocation(LootrAPI.MODID, "trophy"), TROPHY);
 
         if(LootrModConfig.get().debug.debugMode) {
