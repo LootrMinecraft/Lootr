@@ -8,9 +8,11 @@ import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.zestyblaze.lootr.blocks.entities.LootrChestBlockEntity;
+import net.zestyblaze.lootr.entity.LootrChestMinecartEntity;
 import net.zestyblaze.lootr.registry.LootrBlockInit;
 
 public class LootrChestItemRenderer extends BlockEntityWithoutLevelRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer {
@@ -40,12 +42,12 @@ public class LootrChestItemRenderer extends BlockEntityWithoutLevelRenderer impl
     renderByItem(stack, mode, matrices, vertexConsumers, light, overlay);
   }
 
-/*  public void renderByMinecart (LootrChestMinecartEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight) {
+  public void renderByMinecart (LootrChestMinecartEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight) {
     boolean open = tile.isOpened();
     tile.setOpened(entity.isOpened());
     this.blockEntityRenderDispatcher.renderItem(tile, matrixStack, buffer, combinedLight, OverlayTexture.NO_OVERLAY);
     tile.setOpened(open);
-  }*/
+  }
 
   public static LootrChestItemRenderer getInstance() {
     if (INSTANCE == null) {

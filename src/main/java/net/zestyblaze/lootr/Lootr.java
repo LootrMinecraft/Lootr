@@ -19,6 +19,7 @@ public class Lootr implements ModInitializer {
 		LootrItemInit.registerItems();
 		LootrBlockInit.registerBlocks();
 		LootrBlockEntityInit.registerBlockEntities();
+		LootrEntityInit.registerEntities();
 		LootrLootInit.registerLoot();
 		LootrEventsInit.registerEvents();
 		LootrStatsInit.registerStats();

@@ -15,6 +15,7 @@ import net.zestyblaze.lootr.client.item.LootrShulkerItemRenderer;
 import net.zestyblaze.lootr.config.LootrModConfig;
 import net.zestyblaze.lootr.registry.LootrBlockEntityInit;
 import net.zestyblaze.lootr.registry.LootrBlockInit;
+import net.zestyblaze.lootr.registry.LootrEntityInit;
 import net.zestyblaze.lootr.registry.LootrNetworkingInit;
 
 @Environment(EnvType.CLIENT)

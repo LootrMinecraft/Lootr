@@ -20,6 +20,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.AbstractMinecartContainer;
@@ -41,6 +42,7 @@ import net.zestyblaze.lootr.api.entity.ILootCart;
 import net.zestyblaze.lootr.config.LootrModConfig;
 import net.zestyblaze.lootr.network.NetworkConstants;
 import net.zestyblaze.lootr.registry.LootrBlockInit;
+import net.zestyblaze.lootr.util.ChestUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
@@ -186,7 +188,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     @Override
     public InteractionResult interact(Player player, InteractionHand hand) {
         InteractionResult ret = InteractionResult.PASS;
-/*        if (ret.consumesAction()) return ret;
+        if (ret.consumesAction()) return ret;
         if (player.isShiftKeyDown()) {
             ChestUtil.handleLootCartSneak(player.level, this, player);
             if (!player.level.isClientSide) {
@@ -202,8 +204,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
             } else {
                 return InteractionResult.SUCCESS;
             }
-        }*/
-        return ret;
+        }
     }
 
     public void addLoot(@Nullable Player player, Container inventory, @Nullable ResourceLocation overrideTable, long seed) {
