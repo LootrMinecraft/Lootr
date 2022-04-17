@@ -41,6 +41,7 @@ import net.minecraft.world.phys.Vec3;
 import net.zestyblaze.lootr.api.LootrAPI;
 import net.zestyblaze.lootr.api.blockentity.ILootBlockEntity;
 import net.zestyblaze.lootr.config.LootrModConfig;
+import net.zestyblaze.lootr.data.SpecialChestInventory;
 import net.zestyblaze.lootr.registry.LootrBlockEntityInit;
 
 import java.util.HashSet;
@@ -73,9 +74,8 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
 
     @Override
     protected boolean isOwnContainer(Player player) {
-      if (player.containerMenu instanceof ChestMenu) {
-        Container container = ((ChestMenu) player.containerMenu).getContainer();
-        return container == LootrBarrelBlockEntity.this;
+      if (player.containerMenu instanceof ChestMenu menu && menu.getContainer() instanceof SpecialChestInventory chestInventory && chestInventory.getTileId() != null) {
+        return chestInventory.getTileId().equals(LootrBarrelBlockEntity.this.getTileId());
       } else {
         return false;
       }
