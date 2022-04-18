@@ -19,16 +19,20 @@ public class LootrEventsInit {
     public static MinecraftServer serverInstance;
 
     public static void registerEvents() {
-        ServerLifecycleEvents.SERVER_STARTED.register(server -> serverInstance = server);
-        ServerLifecycleEvents.SERVER_STARTING.register(minecraftServer1 -> HandleChunk.onServerStarted());
+        ServerLifecycleEvents.SERVER_STARTING.register(server -> {
+            serverInstance = server;
+            HandleChunk.onServerStarted();
+        });
 
-        ServerLifecycleEvents.SERVER_STOPPED.register(server -> serverInstance = null);
-        ServerLifecycleEvents.SERVER_STOPPED.register(minecraftServer -> HandleChunk.onServerStarted());
+        ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
+            serverInstance = null;
+        });
 
         ServerTickEvents.END_SERVER_TICK.register(server -> TileTicker.serverTick());
 
         ServerChunkEvents.CHUNK_LOAD.register(HandleChunk::onChunkLoad);
 
+        // TODO: Check to see if this properly cancels block breaking
         PlayerBlockBreakEvents.BEFORE.register((world, player, pos, state, blockEntity) -> {
             if(!world.isClientSide()) {
                 if(LootrBlockInit.specialLootChests.contains(state.getBlock())) {

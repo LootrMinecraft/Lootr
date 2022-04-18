@@ -35,7 +35,7 @@ public class LootrBlockInit {
 
     public static final Block TROPHY = new TrophyBlock(BlockBehaviour.Properties.of(Material.METAL).strength(15f).sound(SoundType.METAL).noOcclusion().lightLevel((o) -> 15));
 
-    public static Set<Block> specialLootChests = Sets.newHashSet(CHEST, TRAPPED_CHEST, SHULKER, INVENTORY);
+    public static Set<Block> specialLootChests = Sets.newHashSet(CHEST, TRAPPED_CHEST, SHULKER, INVENTORY, BARREL);
 
     public static void registerBlocks() {
         Registry.register(Registry.BLOCK, new ResourceLocation(LootrAPI.MODID, "lootr_chest"), CHEST);

@@ -309,54 +309,12 @@ public class LootrModConfig implements ConfigData {
         if (replacements == null) {
             replacements = new HashMap<>();
             replacements.put(Blocks.CHEST, LootrBlockInit.CHEST);
-            // TODO:
-/*            replacements.put(Blocks.BARREL, LootrBlockInit.BARREL);
+            replacements.put(Blocks.BARREL, LootrBlockInit.BARREL);
             replacements.put(Blocks.TRAPPED_CHEST, LootrBlockInit.TRAPPED_CHEST);
-            replacements.put(Blocks.SHULKER_BOX, LootrBlockInit.SHULKER);*/
-
-           // TODO: Is Quark on Fabric?
-/*            if (CONVERT_QUARK.get() && ModList.get().isLoaded("quark")) {
-                QUARK_CHESTS.forEach(o -> addSafeReplacement(o, ModBlocks.CHEST));
-                QUARK_TRAPPED_CHESTS.forEach(o -> addSafeReplacement(o, ModBlocks.TRAPPED_CHEST));
-            }
-
-
-            if (CONVERT_WOODEN_CHESTS.get() || CONVERT_TRAPPED_CHESTS.get()) {
-                if (CONVERT_WOODEN_CHESTS.get()) {
-                    Registry.BLOCK.getTagOrEmpty(Tags.Blocks.CHESTS_WOODEN).forEach(z -> {
-                        Block o = z.value();
-                        if (replacements.containsKey(o)) {
-                            return;
-                        }
-                        if (o instanceof EntityBlock) {
-                            BlockEntity tile = ((EntityBlock) o).newBlockEntity(BlockPos.ZERO, o.defaultBlockState());
-                            if (tile instanceof RandomizableContainerBlockEntity) {
-                                replacements.put(o, ModBlocks.CHEST);
-                            }
-                        }
-                    });
-                }
-                if (CONVERT_TRAPPED_CHESTS.get()) {
-                    Registry.BLOCK.getTagOrEmpty(Tags.Blocks.CHESTS_TRAPPED).forEach(z -> {
-                        Block o = z.value();
-                        if (replacements.containsKey(o)) {
-                            return;
-                        }
-                        if (o instanceof EntityBlock) {
-                            BlockEntity tile = ((EntityBlock) o).newBlockEntity(BlockPos.ZERO, o.defaultBlockState());
-                            if (tile instanceof RandomizableContainerBlockEntity) {
-                                replacements.put(o, ModBlocks.TRAPPED_CHEST);
-                            }
-                        }
-                    });
-                }
-            }
-            if (!getAdditionalChests().isEmpty() || !getAdditionalTrappedChests().isEmpty()) {
-                final ServerLevel world = ServerLifecycleHooks.getCurrentServer().overworld();
-                getAdditionalChests().forEach(o -> addUnsafeReplacement(o, ModBlocks.CHEST, world));
-                getAdditionalTrappedChests().forEach(o -> addUnsafeReplacement(o, ModBlocks.TRAPPED_CHEST, world));
-            }*/
+            replacements.put(Blocks.SHULKER_BOX, LootrBlockInit.SHULKER);
         }
+
+        // TODO: Tag replacements
 
         Block replacement = replacements.get(original.getBlock());
         if (replacement == null) {

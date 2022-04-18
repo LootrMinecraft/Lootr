@@ -1,5 +1,6 @@
 package net.zestyblaze.lootr.mixin;
 
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.chunk.LevelChunk;
@@ -12,12 +13,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LevelChunk.class)
 public class MixinLevelChunk {
-  @Inject(method="addAndRegisterBlockEntity", at=@At(target="Lnet/minecraft/world/level/chunk/LevelChunk;updateBlockEntityTicker(Lnet/minecraft/world/level/block/entity/BlockEntity;)V", value="INVOKE", shift= At.Shift.AFTER))
-  private void lootrAddAndRegisterBlockEntity (BlockEntity entity, CallbackInfo cir) {
+  @Inject(method="updateBlockEntityTicker", at=@At(value="HEAD"))
+  private void lootrUpdateBlockEntityTicker(BlockEntity entity, CallbackInfo cir) {
     if(entity instanceof RandomizableContainerBlockEntity && !(entity instanceof ILootBlockEntity)) {
-      LevelChunk levelChunk = (LevelChunk) (Object) this;
-      if(!levelChunk.getLevel().isClientSide()) {
-        TileTicker.addEntry(levelChunk.getLevel().dimension(), entity.getBlockPos());
+      LevelChunk level = (LevelChunk) (Object) this;
+      if(!level.getLevel().isClientSide()) {
+        TileTicker.addEntry(level.getLevel().dimension(), entity.getBlockPos());
       }
     }
   }
