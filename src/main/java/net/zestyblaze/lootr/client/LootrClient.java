@@ -6,10 +6,13 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.minecraft.client.model.geom.ModelLayers;
 import net.zestyblaze.lootr.api.LootrAPI;
 import net.zestyblaze.lootr.client.block.BarrelModel;
 import net.zestyblaze.lootr.client.block.LootrChestBlockRenderer;
 import net.zestyblaze.lootr.client.block.LootrShulkerBlockRenderer;
+import net.zestyblaze.lootr.client.entity.LootrChestCartRenderer;
 import net.zestyblaze.lootr.client.item.LootrChestItemRenderer;
 import net.zestyblaze.lootr.client.item.LootrShulkerItemRenderer;
 import net.zestyblaze.lootr.config.LootrModConfig;
@@ -34,6 +37,8 @@ public class LootrClient implements ClientModInitializer {
         BuiltinItemRendererRegistry.INSTANCE.register(LootrBlockInit.SHULKER, LootrShulkerItemRenderer.getInstance());
 
         ModelLoadingRegistry.INSTANCE.registerResourceProvider(o -> new BarrelModel.BarrelModelLoader());
+
+        EntityRendererRegistry.register(LootrEntityInit.LOOTR_MINECART_ENTITY, (context) -> new  LootrChestCartRenderer<>(context, ModelLayers.CHEST_MINECART));
 
         if(LootrModConfig.get().debug.debugMode) {
             LootrAPI.LOG.info("Lootr: Registry - Client Fully Loaded!");
