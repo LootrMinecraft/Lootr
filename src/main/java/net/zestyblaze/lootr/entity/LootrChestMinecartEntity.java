@@ -240,9 +240,12 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
         }
     }
 
-    // Replaces `HandleCart::onEntityTracking`
     @Override
-    public void startSeenByPlayer(ServerPlayer player) {
-        super.startSeenByPlayer(player);
+    public void startSeenByPlayer(ServerPlayer pPlayer) {
+        super.startSeenByPlayer(pPlayer);
+
+        if (getOpeners().contains(pPlayer.getUUID())) {
+            NetworkConstants.sendOpenCart(this.getId(), pPlayer);
+        }
     }
 }
