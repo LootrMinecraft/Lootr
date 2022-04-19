@@ -14,6 +14,7 @@ import net.zestyblaze.lootr.api.LootrAPI;
 import net.zestyblaze.lootr.blocks.entities.TileTicker;
 import net.zestyblaze.lootr.chunk.HandleChunk;
 import net.zestyblaze.lootr.config.LootrModConfig;
+import net.zestyblaze.lootr.entity.EntityTicker;
 
 public class LootrEventsInit {
     public static MinecraftServer serverInstance;
@@ -28,7 +29,10 @@ public class LootrEventsInit {
             serverInstance = null;
         });
 
-        ServerTickEvents.END_SERVER_TICK.register(server -> TileTicker.serverTick());
+        ServerTickEvents.END_SERVER_TICK.register(server -> {
+            EntityTicker.serverTick();
+            TileTicker.serverTick();
+        });
 
         ServerChunkEvents.CHUNK_LOAD.register(HandleChunk::onChunkLoad);
 

@@ -58,11 +58,9 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
         super(type, world);
     }
 
-    /*
-    public LootrChestMinecartEntity(Level worldIn, double x, double y, double z) {
-        super(ModEntities.LOOTR_MINECART_ENTITY, x, y, z, worldIn);
+    public LootrChestMinecartEntity(EntityType<?> entityType, double d, double e, double f, Level level) {
+        super(entityType, d, e, f, level);
     }
-     */
 
     @Override
     public Set<UUID> getOpeners() {
