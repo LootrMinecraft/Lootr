@@ -6,6 +6,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.saveddata.SavedData;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -50,6 +51,14 @@ public class AdvancementData extends SavedData {
         }
         compoundTag.put("data", result);
         return compoundTag;
+    }
+
+    @Override
+    public void save(File pFile) {
+        if (isDirty()) {
+            pFile.getParentFile().mkdirs();
+        }
+        super.save(pFile);
     }
 
     public static class UUIDPair {
