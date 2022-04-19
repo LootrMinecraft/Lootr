@@ -4,11 +4,9 @@
   "package": "net.zestyblaze.lootr.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "MixinArmorItem",
     "MixinCatSitOnBlock",
     "MixinLevelChunk",
-    "MixinPersistentEntitySectionManager",
-    "MixinPiglinBrain"
+    "MixinPersistentEntitySectionManager"
   ],
   "client": [
     "MixinTextureAtlas"

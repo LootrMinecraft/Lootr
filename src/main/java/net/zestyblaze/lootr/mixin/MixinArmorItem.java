@@ -20,6 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.UUID;
 
+// TODO: When the crown gets implemented
 @Mixin(ArmorItem.class)
 public class MixinArmorItem {
     @Shadow @Final private static UUID[] ARMOR_MODIFIER_UUID_PER_SLOT;

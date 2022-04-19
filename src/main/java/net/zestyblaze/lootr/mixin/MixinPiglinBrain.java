@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+// TODO: When the crown gets implemented
 @Mixin(PiglinAi.class)
 public class MixinPiglinBrain {
     @Inject(method = "isWearingGold", at = @At("HEAD"), cancellable = true)
