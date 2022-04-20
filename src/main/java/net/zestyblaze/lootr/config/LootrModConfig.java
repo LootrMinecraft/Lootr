@@ -23,6 +23,7 @@ import net.zestyblaze.lootr.api.LootrAPI;
 import net.zestyblaze.lootr.api.blockentity.ILootBlockEntity;
 import net.zestyblaze.lootr.entity.LootrChestMinecartEntity;
 import net.zestyblaze.lootr.registry.LootrBlockInit;
+import net.zestyblaze.lootr.tags.LootrTags;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -317,11 +318,29 @@ public class LootrModConfig implements ConfigData {
         // TODO: Tag replacements
 
         Block replacement = replacements.get(original.getBlock());
-        if (replacement == null) {
-            return null;
+        if (replacement == null && (original.is(LootrTags.Blocks.CONVERT_BARRELS) || original.is(LootrTags.Blocks.CONVERT_CHESTS) || original.is(LootrTags.Blocks.CONVERT_CHESTS) || original.is(LootrTags.Blocks.CONVERT_SHULKERS) || original.is(LootrTags.Blocks.CONVERT_TRAPPED_CHESTS))) {
+            if (original.getBlock() instanceof EntityBlock entityBlock) {
+                BlockEntity be = entityBlock.newBlockEntity(BlockPos.ZERO, original);
+                if (be instanceof RandomizableContainerBlockEntity) {
+                    if (original.is(LootrTags.Blocks.CONVERT_BARRELS)) {
+                        replacements.put(original.getBlock(), LootrBlockInit.BARREL);
+                    } else if (original.is(LootrTags.Blocks.CONVERT_CHESTS)) {
+                        replacements.put(original.getBlock(), LootrBlockInit.CHEST);
+                    } else if (original.is(LootrTags.Blocks.CONVERT_SHULKERS)) {
+                        replacements.put(original.getBlock(), LootrBlockInit.SHULKER);
+                    } else if (original.is(LootrTags.Blocks.CONVERT_TRAPPED_CHESTS)) {
+                        replacements.put(original.getBlock(), LootrBlockInit.TRAPPED_CHEST);
+                    }
+                }
+            }
+            replacement = replacements.get(original.getBlock());
         }
 
-        return copyProperties(replacement.defaultBlockState(), original);
+        if (replacement != null) {
+            return copyProperties(replacement.defaultBlockState(), original);
+        }
+
+        return null;
     }
 
     private static BlockState copyProperties(BlockState state, BlockState original) {
