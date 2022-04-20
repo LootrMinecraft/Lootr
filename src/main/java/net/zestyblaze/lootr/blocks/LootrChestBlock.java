@@ -24,6 +24,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.zestyblaze.lootr.blocks.entities.LootrChestBlockEntity;
+import net.zestyblaze.lootr.blocks.entities.LootrShulkerBlockEntity;
 import net.zestyblaze.lootr.registry.LootrBlockEntityInit;
 import net.zestyblaze.lootr.util.ChestUtil;
 import org.jetbrains.annotations.Nullable;
@@ -108,6 +109,20 @@ public class LootrChestBlock extends ChestBlock {
         BlockEntity blockentity = pLevel.getBlockEntity(pPos);
         if (blockentity instanceof LootrChestBlockEntity) {
             ((LootrChestBlockEntity) blockentity).recheckOpen();
+        }
+    }
+
+    @Override
+    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
+        if (!pState.is(pNewState.getBlock())) {
+            BlockEntity blockentity = pLevel.getBlockEntity(pPos);
+            if (blockentity instanceof LootrShulkerBlockEntity) {
+                pLevel.updateNeighbourForOutputSignal(pPos, pState.getBlock());
+            }
+
+            if (pState.hasBlockEntity() && (!pState.is(pNewState.getBlock()) || !pNewState.hasBlockEntity())) {
+                pLevel.removeBlockEntity(pPos);
+            }
         }
     }
 }
