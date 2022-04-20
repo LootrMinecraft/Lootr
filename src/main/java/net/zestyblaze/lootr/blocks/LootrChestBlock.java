@@ -116,7 +116,7 @@ public class LootrChestBlock extends ChestBlock {
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
         if (!pState.is(pNewState.getBlock())) {
             BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-            if (blockentity instanceof LootrShulkerBlockEntity) {
+            if (blockentity instanceof LootrChestBlockEntity) {
                 pLevel.updateNeighbourForOutputSignal(pPos, pState.getBlock());
             }
 
