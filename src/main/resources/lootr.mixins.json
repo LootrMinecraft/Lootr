@@ -6,7 +6,8 @@
   "mixins": [
     "MixinCatSitOnBlock",
     "MixinLevelChunk",
-    "MixinPersistentEntitySectionManager"
+    "MixinPersistentEntitySectionManager",
+    "MixinPlayerAdvancements"
   ],
   "client": [
     "MixinTextureAtlas"
