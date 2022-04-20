@@ -6,6 +6,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -38,21 +39,15 @@ import net.zestyblaze.lootr.config.LootrModConfig;
 import net.zestyblaze.lootr.data.DataStorage;
 import net.zestyblaze.lootr.entity.LootrChestMinecartEntity;
 import net.zestyblaze.lootr.util.ChestUtil;
+import net.zestyblaze.lootr.util.ServerAccessImpl;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class LootrCommandInit {
-    private final CommandDispatcher<CommandSourceStack> dispatcher;
-
-    public LootrCommandInit(CommandDispatcher<CommandSourceStack> dispatcher) {
-        this.dispatcher = dispatcher;
-    }
-
     private static List<ResourceLocation> tables = null;
     private static List<String> tableNames = null;
-    private static final Map<String, UUID> profileMap = new HashMap<>();
 
     private static List<ResourceLocation> getTables() {
         if (tables == null) {
@@ -63,7 +58,7 @@ public class LootrCommandInit {
     }
 
     private static List<String> getProfiles() {
-        return Lists.newArrayList(ServerLifecycleHooks.getCurrentServer().getProfileCache().profilesByName.keySet());
+        return Lists.newArrayList(ServerAccessImpl.getServer().getProfileCache().profilesByName.keySet());
     }
 
     private static List<String> getTableNames() {
@@ -78,7 +73,7 @@ public class LootrCommandInit {
             table = getTables().get(world.getRandom().nextInt(getTables().size()));
         }
         if (block == null) {
-            LootrChestMinecartEntity cart = new LootrChestMinecartEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+            LootrChestMinecartEntity cart = new LootrChestMinecartEntity(LootrEntityInit.LOOTR_MINECART_ENTITY, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, world);
             Entity e = c.getEntity();
             if (e != null) {
                 cart.setYRot(e.getYRot());
@@ -110,16 +105,16 @@ public class LootrCommandInit {
         }
     }
 
-    private RequiredArgumentBuilder<CommandSourceStack, ResourceLocation> suggestTables() {
+    private static RequiredArgumentBuilder<CommandSourceStack, ResourceLocation> suggestTables() {
         return Commands.argument("table", ResourceLocationArgument.id())
                 .suggests((c, build) -> SharedSuggestionProvider.suggest(getTableNames(), build));
     }
 
-    private RequiredArgumentBuilder<CommandSourceStack, String> suggestProfiles() {
+    private static RequiredArgumentBuilder<CommandSourceStack, String> suggestProfiles() {
         return Commands.argument("profile", StringArgumentType.string()).suggests((c, build) -> SharedSuggestionProvider.suggest(getProfiles(), build));
     }
 
-    public LiteralArgumentBuilder<CommandSourceStack> builder(LiteralArgumentBuilder<CommandSourceStack> builder) {
+    private static LiteralArgumentBuilder<CommandSourceStack> builder(LiteralArgumentBuilder<CommandSourceStack> builder) {
         builder.executes(c -> {
             c.getSource().sendSuccess(new TranslatableComponent("lootr.commands.usage"), false);
             return 1;
@@ -258,7 +253,7 @@ public class LootrCommandInit {
         return builder;
     }
 
-    public static void registerCommands() {
-
+    public static void registerCommands () {
+        CommandRegistrationCallback.EVENT.register(((dispatcher, dedicated) -> dispatcher.register(builder(Commands.literal("lootr").requires(p -> p.hasPermission(2))))));
     }
 }
