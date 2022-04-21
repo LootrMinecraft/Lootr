@@ -11,6 +11,7 @@ import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.MinecraftServer;
 import net.zestyblaze.lootr.api.LootrAPI;
+import net.zestyblaze.lootr.api.blockentity.ILootBlockEntity;
 import net.zestyblaze.lootr.blocks.entities.TileTicker;
 import net.zestyblaze.lootr.chunk.HandleChunk;
 import net.zestyblaze.lootr.config.LootrModConfig;
@@ -38,7 +39,6 @@ public class LootrEventsInit {
 
         // TODO: Check to see if this properly cancels block breaking
         PlayerBlockBreakEvents.BEFORE.register((world, player, pos, state, blockEntity) -> {
-            if(!world.isClientSide()) {
                 if(LootrBlockInit.specialLootChests.contains(state.getBlock())) {
                     if(LootrModConfig.get().breaking.disable_break) {
                         if(player.getAbilities().instabuild) {
@@ -58,8 +58,16 @@ public class LootrEventsInit {
                         }
                     }
                 }
-            }
             return true;
+        });
+
+        PlayerBlockBreakEvents.CANCELED.register((world, player, pos, state, blockEntity) -> {
+            if(LootrBlockInit.specialLootChests.contains(state.getBlock())) {
+                blockEntity.setChanged();
+                if (blockEntity instanceof ILootBlockEntity lbe) {
+                    lbe.updatePacketViaState();
+                }
+            }
         });
 
         if(LootrModConfig.get().debug.debugMode) {
