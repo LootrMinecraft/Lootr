@@ -303,7 +303,7 @@ public class ConfigManager {
     if (getRefreshMods().contains(entity.lootTable.getNamespace().toLowerCase(Locale.ROOT))) {
       return true;
     }
-    return isDimensionDecaying(world.dimension());
+    return isDimensionRefreshing(world.dimension());
   }
 
   private static void addSafeReplacement(ResourceLocation location, Block replacement) {
