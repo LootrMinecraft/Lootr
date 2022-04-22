@@ -92,7 +92,6 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     }
   };
 
-  // TODO
   public LootrBarrelBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
     super(ModBlockEntities.SPECIAL_LOOT_BARREL, pWorldPosition, pBlockState);
   }

@@ -8,6 +8,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraftforge.event.TickEvent;
 
+import java.io.File;
 import java.util.UUID;
 
 public class TickingData extends SavedData {
@@ -84,5 +85,13 @@ public class TickingData extends SavedData {
     }
     pCompound.put("result", decayList);
     return pCompound;
+  }
+
+  @Override
+  public void save(File pFile) {
+    if (isDirty()) {
+      pFile.getParentFile().mkdirs();
+    }
+    super.save(pFile);
   }
 }
