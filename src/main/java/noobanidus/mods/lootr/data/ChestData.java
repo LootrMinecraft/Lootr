@@ -1,23 +1,21 @@
 package noobanidus.mods.lootr.data;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.tileentity.LockableLootTileEntity;
+import net.minecraft.tileentity.TileEntityLockableLoot;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.api.LootFiller;
 import noobanidus.mods.lootr.api.tile.ILootTile;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
@@ -30,7 +28,7 @@ import java.util.UUID;
 
 public class ChestData extends WorldSavedData {
   private BlockPos pos;
-  private RegistryKey<World> dimension;
+  private DimensionType dimension;
   private UUID entityId;
   private UUID tileId;
   private UUID customId;
@@ -51,7 +49,7 @@ public class ChestData extends WorldSavedData {
     super(ID);
   }
 
-  public ChestData(RegistryKey<World> dimension, UUID id, @Nullable UUID customId, @Nullable NonNullList<ItemStack> base) {
+  public ChestData(DimensionType dimension, UUID id, @Nullable UUID customId, @Nullable NonNullList<ItemStack> base) {
     super(ID(id));
     this.pos = null;
     this.dimension = dimension;
@@ -65,7 +63,7 @@ public class ChestData extends WorldSavedData {
     }
   }
 
-  public ChestData(RegistryKey<World> dimension, UUID id) {
+  public ChestData(DimensionType dimension, UUID id) {
     super(ID(id));
     this.pos = null;
     this.dimension = dimension;
@@ -90,7 +88,7 @@ public class ChestData extends WorldSavedData {
   public LootFiller customInventory() {
     return (player, inventory, table, seed) -> {
       for (int i = 0; i < reference.size(); i++) {
-        inventory.setItem(i, reference.get(i).copy());
+        inventory.setInventorySlotContents(i, reference.get(i).copy());
       }
     };
   }
@@ -108,23 +106,23 @@ public class ChestData extends WorldSavedData {
   }
 
   @Nullable
-  public SpecialChestInventory getInventory(ServerPlayerEntity player) {
-    return inventories.get(player.getUUID());
+  public SpecialChestInventory getInventory(EntityPlayerMP player) {
+    return inventories.get(player.getUniqueID());
   }
 
-  public SpecialChestInventory createInventory(ServerPlayerEntity player, LootFiller filler, @Nullable LockableLootTileEntity tile) {
-    ServerWorld world = (ServerWorld) player.level;
+  public SpecialChestInventory createInventory(EntityPlayerMP player, LootFiller filler, @Nullable TileEntityLockableLoot tile) {
+    WorldServer world = (WorldServer) player.world;
     SpecialChestInventory result;
     LootrChestMinecartEntity cart = null;
     long seed = -1;
     ResourceLocation lootTable = null;
     if (entityId != null) {
-      Entity initial = world.getEntity(entityId);
+      Entity initial = world.getEntityFromUuid(entityId);
       if (!(initial instanceof LootrChestMinecartEntity)) {
         return null;
       }
       cart = (LootrChestMinecartEntity) initial;
-      NonNullList<ItemStack> items = NonNullList.withSize(cart.getContainerSize(), ItemStack.EMPTY);
+      NonNullList<ItemStack> items = NonNullList.withSize(cart.getSizeInventory(), ItemStack.EMPTY);
       // Saving this is handled elsewhere
       result = new SpecialChestInventory(this, items, cart.getDisplayName(), pos);
       lootTable = cart.lootTable;
@@ -143,88 +141,89 @@ public class ChestData extends WorldSavedData {
 
       lootTable = ((ILootTile) tile).getTable();
 
-      NonNullList<ItemStack> items = NonNullList.withSize(tile.getContainerSize(), ItemStack.EMPTY);
+      NonNullList<ItemStack> items = NonNullList.withSize(tile.getSizeInventory(), ItemStack.EMPTY);
       result = new SpecialChestInventory(this, items, tile.getDisplayName(), pos);
     }
     filler.fillWithLoot(player, result, lootTable, seed);
-    inventories.put(player.getUUID(), result);
-    setDirty();
-    world.getDataStorage().save();
+    inventories.put(player.getUniqueID(), result);
+    setDirty(true);
+
+    world.getPerWorldStorage().saveAllData();
     result.setBlockPos(pos);
     return result;
   }
 
   @Override
-  public void load(CompoundNBT compound) {
+  public void readFromNBT(NBTTagCompound compound) {
     inventories.clear();
     pos = null;
     dimension = null;
     entityId = null;
     tileId = null;
-    if (compound.contains("position")) {
-      pos = BlockPos.of(compound.getLong("position"));
+    if (compound.hasKey("position")) {
+      pos = BlockPos.fromLong(compound.getLong("position"));
     }
-    if (compound.contains("dimension")) {
-      dimension = RegistryKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(compound.getString("dimension")));
+    if (compound.hasKey("dimension")) {
+      dimension = DimensionType.getById(compound.getInteger("dimension"));
     }
-    if (compound.hasUUID("entityId")) {
-      entityId = compound.getUUID("entityId");
+    if (compound.hasUniqueId("entityId")) {
+      entityId = compound.getUniqueId("entityId");
     }
-    if (compound.hasUUID("tileId")) {
-      tileId = compound.getUUID("tileId");
+    if (compound.hasUniqueId("tileId")) {
+      tileId = compound.getUniqueId("tileId");
     }
-    if (compound.contains("custom")) {
+    if (compound.hasKey("custom")) {
       custom = compound.getBoolean("custom");
     }
-    if (compound.hasUUID("customId")) {
-      customId = compound.getUUID("customId");
+    if (compound.hasUniqueId("customId")) {
+      customId = compound.getUniqueId("customId");
     }
-    if (compound.contains("reference") && compound.contains("referenceSize")) {
-      int size = compound.getInt("referenceSize");
+    if (compound.hasKey("reference") && compound.hasKey("referenceSize")) {
+      int size = compound.getInteger("referenceSize");
       reference = NonNullList.withSize(size, ItemStack.EMPTY);
-      ItemStackHelper.loadAllItems(compound.getCompound("reference"), reference);
+      ItemStackHelper.loadAllItems(compound.getCompoundTag("reference"), reference);
     }
-    ListNBT compounds = compound.getList("inventories", Constants.NBT.TAG_COMPOUND);
-    for (int i = 0; i < compounds.size(); i++) {
-      CompoundNBT thisTag = compounds.getCompound(i);
-      CompoundNBT items = thisTag.getCompound("chest");
+    NBTTagList compounds = compound.getTagList("inventories", Constants.NBT.TAG_COMPOUND);
+    for (int i = 0; i < compounds.tagCount(); i++) {
+      NBTTagCompound thisTag = compounds.getCompoundTagAt(i);
+      NBTTagCompound items = thisTag.getCompoundTag("chest");
       String name = thisTag.getString("name");
-      UUID uuid = thisTag.getUUID("uuid");
+      UUID uuid = thisTag.getUniqueId("uuid");
       inventories.put(uuid, new SpecialChestInventory(this, items, name, pos));
     }
   }
 
   @Override
-  public CompoundNBT save(CompoundNBT compound) {
+  public NBTTagCompound writeToNBT(NBTTagCompound compound) {
     if (pos != null) {
-      compound.putLong("position", pos.asLong());
+      compound.setLong("position", pos.toLong());
     }
     if (dimension != null) {
-      compound.putString("dimension", dimension.location().toString());
+      compound.setInteger("dimension", dimension.getId());
     }
     if (entityId != null) {
-      compound.putUUID("entityId", entityId);
+      compound.setUniqueId("entityId", entityId);
     }
     if (tileId != null) {
-      compound.putUUID("tileId", tileId);
+      compound.setUniqueId("tileId", tileId);
     }
     if (customId != null) {
-      compound.putUUID("customId", customId);
+      compound.setUniqueId("customId", customId);
     }
-    compound.putBoolean("custom", custom);
+    compound.setBoolean("custom", custom);
     if (reference != null) {
-      compound.putInt("referenceSize", reference.size());
-      compound.put("reference", ItemStackHelper.saveAllItems(new CompoundNBT(), reference, true));
+      compound.setInteger("referenceSize", reference.size());
+      compound.setTag("reference", ItemStackHelper.saveAllItems(new NBTTagCompound(), reference, true));
     }
-    ListNBT compounds = new ListNBT();
+    NBTTagList compounds = new NBTTagList();
     for (Map.Entry<UUID, SpecialChestInventory> entry : inventories.entrySet()) {
-      CompoundNBT thisTag = new CompoundNBT();
-      thisTag.putUUID("uuid", entry.getKey());
-      thisTag.put("chest", entry.getValue().writeItems());
-      thisTag.putString("name", entry.getValue().writeName());
-      compounds.add(thisTag);
+      NBTTagCompound thisTag = new NBTTagCompound();
+      thisTag.setUniqueId("uuid", entry.getKey());
+      thisTag.setTag("chest", entry.getValue().writeItems());
+      thisTag.setString("name", entry.getValue().writeName());
+      compounds.appendTag(thisTag);
     }
-    compound.put("inventories", compounds);
+    compound.setTag("inventories", compounds);
 
     return compound;
   }
@@ -233,15 +232,7 @@ public class ChestData extends WorldSavedData {
     inventories.clear();
   }
 
-  @Override
-  public void save(File pFile) {
-    if (isDirty()) {
-      pFile.getParentFile().mkdirs();
-    }
-    super.save(pFile);
-  }
-
-  public static ChestData unwrap(ChestData data, RegistryKey<World> dimension, BlockPos position) {
+  public static ChestData unwrap(ChestData data, DimensionType dimension, BlockPos position) {
     data.pos = position;
     data.dimension = dimension;
     return data;

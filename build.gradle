@@ -1,54 +1,85 @@
-plugins {
-    id 'com.github.johnrengelman.shadow' version '5.2.0'
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "https://files.minecraftforge.net/maven"
+        }
+        maven {
+            url = 'https://repo.spongepowered.org/maven'
+        }
+    }
+    dependencies {
+        classpath "net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT"
+        classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
+    }
 }
 
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply from: 'gradle/property_helper.gradle'
-apply from: 'gradle/property_loader.gradle'
-apply from: 'https://raw.githubusercontent.com/SizableShrimp/Forge-Class-Remapper/main/classremapper.gradle'
+apply plugin: "net.minecraftforge.gradle.forge"
+apply plugin: 'org.spongepowered.mixin'
 
-// Load mod related properties
-ext.modName = getRequiredString('mod_name')
-ext.modAuthor = getRequiredString('mod_author')
-ext.modId = getRequiredString('mod_id')
-ext.modCredits = getDefaultString('mod_credits', ext.modAuthor)
-ext.modDescription = getOptionalString('mod_description')
-ext.modChangelog = getOptionalString('mod_changelog')
-ext.modHomepage = getOptionalString('mod_homepage')
-ext.modSource = getOptionalString('mod_source')
-ext.modIssues = getOptionalString('mod_issues')
-ext.modLicense = getOptionalString('mod_license')
+group = 'noobanidus.mods.lootr'
+version = '0.1.0'
+archivesBaseName = 'lootr'
 
-// Load Minecraft specific properties
-ext.mcVersion = getRequiredString('minecraft_version')
+minecraft {
+    version = project.forgeVersion
+    runDir = "run"
 
-// Load build-time modules
-apply from: 'gradle/build_number.gradle'
-apply from: 'gradle/git_changelog.gradle'
-apply from: 'gradle/patreon.gradle'
-apply from: 'gradle/java.gradle'
-apply from: 'gradle/forge.gradle'
-apply from: 'gradle/dependencies.gradle'
-apply from: 'gradle/aequivaleo.gradle'
-apply from: 'gradle/api.gradle'
-apply from: 'gradle/blame.gradle'
-apply from: 'gradle/carrier_bees.gradle'
-apply from: 'gradle/curios.gradle'
-apply from: 'gradle/dynamic_trees.gradle'
-apply from: 'gradle/geckolib.gradle'
-apply from: 'gradle/jade.gradle'
-apply from: 'gradle/jei.gradle'
-apply from: 'gradle/mana_and_artifice.gradle'
-apply from: 'gradle/mysticalworld.gradle'
-apply from: 'gradle/patchouli.gradle'
-apply from: 'gradle/shadow.gradle'
-apply from: 'gradle/stables.gradle'
-apply from: 'gradle/top.gradle'
-apply from: 'gradle/minify_jsons.gradle'
+    // the mappings can be changed at any time, and must be in the following format.
+    // snapshot_YYYYMMDD   snapshot are built nightly.
+    // stable_#            stables are built at the discretion of the MCP team.
+    // Use non-default mappings at your own risk. they may not always work.
+    // simply re-run your setup task after changing the mappings to update your workspace.
+    mappings = project.mcpVersion
+    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 
-// Load publishing modules
-apply from: 'gradle/maven.gradle'
-apply from: 'gradle/signing.gradle'
-apply from: 'gradle/curseforge.gradle'
-apply from: 'gradle/version_checker.gradle'
+    clientJvmArgs += "-Dfml.coreMods.load=noobanidus.mods.lootr.LootrCore"
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://maven.cleanroommc.com"
+    }
+}
+
+dependencies {
+    deobfCompile ("zone.rong:mixinbooter:4.2")
+}
+sourceSets {
+    main {
+        ext.refMap = 'mixins.chunkbert.refmap.json'
+    }
+}
+
+jar {
+    manifest {
+        attributes([
+                "FMLCorePluginContainsFMLMod": true,
+                "FMLCorePlugin": 'noobanidus.mods.lootr.LootrCore',
+                "ForceLoadAsMod": true,
+                "FMLAT": "lootr_at.cfg"
+        ])
+    }
+}
+
+
+processResources {
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include "mcmod.info"
+
+        // replace version and mcversion
+        expand "version": project.version, "mcversion": project.minecraft.version
+    }
+
+    // copy everything else, thats not the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude "mcmod.info"
+    }
+}

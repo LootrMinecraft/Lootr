@@ -1,47 +1,40 @@
 package noobanidus.mods.lootr.client.block;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.block.BlockState;
+import net.minecraft.block.BlockShulkerBox;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Atlases;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.model.ShulkerModel;
-import net.minecraft.client.renderer.model.RenderMaterial;
-import net.minecraft.client.renderer.texture.AtlasTexture;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.util.Direction;
+import net.minecraft.client.model.ModelShulker;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.entity.RenderShulker;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
 import noobanidus.mods.lootr.Lootr;
-import noobanidus.mods.lootr.block.LootrShulkerBlock;
 import noobanidus.mods.lootr.block.tile.LootrShulkerTileEntity;
 import noobanidus.mods.lootr.config.ConfigManager;
 
 import java.util.UUID;
 
-public class SpecialLootShulkerTileRenderer extends TileEntityRenderer<LootrShulkerTileEntity> {
-  public static final RenderMaterial MATERIAL = new RenderMaterial(AtlasTexture.LOCATION_BLOCKS, new ResourceLocation(Lootr.MODID, "shulker"));
-  public static final RenderMaterial MATERIAL2 = new RenderMaterial(AtlasTexture.LOCATION_BLOCKS, new ResourceLocation(Lootr.MODID, "shulker_opened"));
-  private final ShulkerModel<?> model = new ShulkerModel<>();
+public class SpecialLootShulkerTileRenderer extends TileEntitySpecialRenderer<LootrShulkerTileEntity> {
+  public static final ResourceLocation MATERIAL = new ResourceLocation(Lootr.MODID, "textures/shulker.png");
+  public static final ResourceLocation MATERIAL2 = new ResourceLocation(Lootr.MODID, "textures/shulker_opened.png");
+  private final ModelShulker model = new ModelShulker();
   private UUID playerId = null;
 
-  public SpecialLootShulkerTileRenderer(TileEntityRendererDispatcher p_i226013_2_) {
-    super(p_i226013_2_);
+  public SpecialLootShulkerTileRenderer() {
+    super();
   }
 
-  protected RenderMaterial getMaterial(LootrShulkerTileEntity tile) {
+  protected ResourceLocation getMaterial(LootrShulkerTileEntity tile) {
     if (ConfigManager.isVanillaTextures()) {
-      return Atlases.DEFAULT_SHULKER_TEXTURE_LOCATION;
+      return RenderShulker.SHULKER_ENDERGOLEM_TEXTURE[tile.getColor().getMetadata()];
     }
     if (playerId == null) {
-      Minecraft mc = Minecraft.getInstance();
+      Minecraft mc = Minecraft.getMinecraft();
       if (mc.player == null) {
         return MATERIAL;
       } else {
-        playerId = mc.player.getUUID();
+        playerId = mc.player.getUniqueID();
       }
     }
     if (tile.isOpened()) {
@@ -55,28 +48,96 @@ public class SpecialLootShulkerTileRenderer extends TileEntityRenderer<LootrShul
   }
 
   @Override
-  public void render(LootrShulkerTileEntity pBlockEntity, float pPartialTicks, MatrixStack pMatrixStack, IRenderTypeBuffer pBuffer, int pCombinedLight, int pCombinedOverlay) {
-    Direction direction = Direction.UP;
-    if (pBlockEntity.hasLevel()) {
-      BlockState blockstate = pBlockEntity.getLevel().getBlockState(pBlockEntity.getBlockPos());
-      if (blockstate.getBlock() instanceof LootrShulkerBlock) {
-        direction = blockstate.getValue(LootrShulkerBlock.FACING);
+  public void render(LootrShulkerTileEntity te, double x, double y, double z, float partialTicks, int destroyStage, float alpha)
+  {
+    EnumFacing enumfacing = EnumFacing.UP;
+
+    if (te.hasWorld())
+    {
+      IBlockState iblockstate = this.getWorld().getBlockState(te.getPos());
+
+      if (iblockstate.getBlock() instanceof BlockShulkerBox)
+      {
+        enumfacing = (EnumFacing)iblockstate.getValue(BlockShulkerBox.FACING);
       }
     }
 
-    RenderMaterial rendermaterial = getMaterial(pBlockEntity);
+    GlStateManager.enableDepth();
+    GlStateManager.depthFunc(515);
+    GlStateManager.depthMask(true);
+    GlStateManager.disableCull();
 
-    pMatrixStack.pushPose();
-    pMatrixStack.translate(0.5D, 0.5D, 0.5D);
-    pMatrixStack.scale(0.9995F, 0.9995F, 0.9995F);
-    pMatrixStack.mulPose(direction.getRotation());
-    pMatrixStack.scale(1.0F, -1.0F, -1.0F);
-    pMatrixStack.translate(0.0D, -1.0D, 0.0D);
-    IVertexBuilder ivertexbuilder = rendermaterial.buffer(pBuffer, RenderType::entityCutoutNoCull);
-    this.model.getBase().render(pMatrixStack, ivertexbuilder, pCombinedLight, pCombinedOverlay);
-    pMatrixStack.translate(0.0D, -pBlockEntity.getProgress(pPartialTicks) * 0.5F, 0.0D);
-    pMatrixStack.mulPose(Vector3f.YP.rotationDegrees(270.0F * pBlockEntity.getProgress(pPartialTicks)));
-    this.model.getLid().render(pMatrixStack, ivertexbuilder, pCombinedLight, pCombinedOverlay);
-    pMatrixStack.popPose();
+    if (destroyStage >= 0)
+    {
+      this.bindTexture(DESTROY_STAGES[destroyStage]);
+      GlStateManager.matrixMode(5890);
+      GlStateManager.pushMatrix();
+      GlStateManager.scale(4.0F, 4.0F, 1.0F);
+      GlStateManager.translate(0.0625F, 0.0625F, 0.0625F);
+      GlStateManager.matrixMode(5888);
+    }
+    else
+    {
+      this.bindTexture(getMaterial(te));
+    }
+
+    GlStateManager.pushMatrix();
+    GlStateManager.enableRescaleNormal();
+
+    if (destroyStage < 0)
+    {
+      GlStateManager.color(1.0F, 1.0F, 1.0F, alpha);
+    }
+
+    GlStateManager.translate((float)x + 0.5F, (float)y + 1.5F, (float)z + 0.5F);
+    GlStateManager.scale(1.0F, -1.0F, -1.0F);
+    GlStateManager.translate(0.0F, 1.0F, 0.0F);
+    float f = 0.9995F;
+    GlStateManager.scale(0.9995F, 0.9995F, 0.9995F);
+    GlStateManager.translate(0.0F, -1.0F, 0.0F);
+
+    switch (enumfacing)
+    {
+      case DOWN:
+        GlStateManager.translate(0.0F, 2.0F, 0.0F);
+        GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
+      case UP:
+      default:
+        break;
+      case NORTH:
+        GlStateManager.translate(0.0F, 1.0F, 1.0F);
+        GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
+        GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
+        break;
+      case SOUTH:
+        GlStateManager.translate(0.0F, 1.0F, -1.0F);
+        GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
+        break;
+      case WEST:
+        GlStateManager.translate(-1.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
+        GlStateManager.rotate(-90.0F, 0.0F, 0.0F, 1.0F);
+        break;
+      case EAST:
+        GlStateManager.translate(1.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
+        GlStateManager.rotate(90.0F, 0.0F, 0.0F, 1.0F);
+    }
+
+    this.model.base.render(0.0625F);
+    GlStateManager.translate(0.0F, -te.getProgress(partialTicks) * 0.5F, 0.0F);
+    GlStateManager.rotate(270.0F * te.getProgress(partialTicks), 0.0F, 1.0F, 0.0F);
+    this.model.lid.render(0.0625F);
+    GlStateManager.enableCull();
+    GlStateManager.disableRescaleNormal();
+    GlStateManager.popMatrix();
+    GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+
+    if (destroyStage >= 0)
+    {
+      GlStateManager.matrixMode(5890);
+      GlStateManager.popMatrix();
+      GlStateManager.matrixMode(5888);
+    }
   }
 }

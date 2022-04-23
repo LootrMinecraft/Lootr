@@ -2,12 +2,11 @@ package noobanidus.mods.lootr.data;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.common.util.Constants;
 
-import java.io.File;
 import java.util.UUID;
 
 public class TickingData extends WorldSavedData {
@@ -63,34 +62,26 @@ public class TickingData extends WorldSavedData {
   }
 
   @Override
-  public void load(CompoundNBT pCompound) {
+  public void readFromNBT(NBTTagCompound pCompound) {
     tickMap.clear();
     tickMap.defaultReturnValue(-1);
-    ListNBT decayList = pCompound.getList("result", Constants.NBT.TAG_COMPOUND);
-    for (int i = 0; i < decayList.size(); i++) {
-      CompoundNBT thisTag = decayList.getCompound(i);
-      tickMap.put(thisTag.getUUID("id"), thisTag.getInt("value"));
+    NBTTagList decayList = pCompound.getTagList("result", Constants.NBT.TAG_COMPOUND);
+    for (int i = 0; i < decayList.tagCount(); i++) {
+      NBTTagCompound thisTag = decayList.getCompoundTagAt(i);
+      tickMap.put(thisTag.getUniqueId("id"), thisTag.getInteger("value"));
     }
   }
 
   @Override
-  public CompoundNBT save(CompoundNBT pCompound) {
-    ListNBT decayList = new ListNBT();
+  public NBTTagCompound writeToNBT(NBTTagCompound pCompound) {
+    NBTTagList decayList = new NBTTagList();
     for (Object2IntMap.Entry<UUID> entry : tickMap.object2IntEntrySet()) {
-      CompoundNBT thisTag = new CompoundNBT();
-      thisTag.putUUID("id", entry.getKey());
-      thisTag.putInt("value", entry.getIntValue());
-      decayList.add(thisTag);
+      NBTTagCompound thisTag = new NBTTagCompound();
+      thisTag.setUniqueId("id", entry.getKey());
+      thisTag.setInteger("value", entry.getIntValue());
+      decayList.appendTag(thisTag);
     }
-    pCompound.put("result", decayList);
+    pCompound.setTag("result", decayList);
     return pCompound;
-  }
-
-  @Override
-  public void save(File pFile) {
-    if (isDirty()) {
-      pFile.getParentFile().mkdirs();
-    }
-    super.save(pFile);
   }
 }

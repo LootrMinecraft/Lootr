@@ -1,100 +1,47 @@
 package noobanidus.mods.lootr.block;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ChestBlock;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.properties.ChestType;
-import net.minecraft.tileentity.ChestTileEntity;
+import net.minecraft.block.BlockChest;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 import noobanidus.mods.lootr.block.tile.LootrChestTileEntity;
-import noobanidus.mods.lootr.data.DataStorage;
-import noobanidus.mods.lootr.init.ModTiles;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
 @SuppressWarnings("NullableProblems")
-public class LootrChestBlock extends ChestBlock {
-  public LootrChestBlock(Properties properties) {
-    this(properties, () -> ModTiles.LOOT_CHEST);
-  }
-
-  public LootrChestBlock(Properties builder, Supplier<TileEntityType<? extends ChestTileEntity>> tileEntityTypeIn) {
-    super(builder, tileEntityTypeIn);
+public class LootrChestBlock extends BlockChest {
+  public LootrChestBlock() {
+    super(Type.BASIC);
+    this.setSoundType(SoundType.WOOD);
   }
 
   @Override
-  public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
-    if (player.isShiftKeyDown()) {
+  public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    if (player.isSneaking()) {
       ChestUtil.handleLootSneak(this, world, pos, player);
-    } else if (!ChestBlock.isChestBlockedAt(world, pos)) {
+    } else if (!this.isBlocked(world, pos)) {
       ChestUtil.handleLootChest(this, world, pos, player);
     }
-    return ActionResultType.SUCCESS;
-  }
-
-  @Override
-  public boolean hasTileEntity(BlockState state) {
     return true;
   }
 
   @Override
-  public TileEntity newBlockEntity(IBlockReader p_196283_1_) {
-    return new LootrChestTileEntity();
-  }
-
-  @Nullable
-  @Override
-  public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+  public TileEntity createNewTileEntity(World worldIn, int meta) {
     return new LootrChestTileEntity();
   }
 
   @Override
-  public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
-    if (stateIn.getValue(WATERLOGGED)) {
-      worldIn.getLiquidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
-    }
-
-    return stateIn;
-  }
-
-  @Override
-  public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-    return AABB;
-  }
-
-  @Override
-  public BlockState getStateForPlacement(BlockItemUseContext context) {
-    Direction direction = context.getHorizontalDirection().getOpposite();
-    FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
-    return this.defaultBlockState().setValue(FACING, direction).setValue(TYPE, ChestType.SINGLE).setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
-  }
-
-  @Override
-  public FluidState getFluidState(BlockState state) {
-    return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
-  }
-
-  @Override
-  @Nullable
-  public INamedContainerProvider getMenuProvider(BlockState state, World worldIn, BlockPos pos) {
-    return null;
+  @SuppressWarnings("deprecated")
+  public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+    return NOT_CONNECTED_AABB;
   }
 }

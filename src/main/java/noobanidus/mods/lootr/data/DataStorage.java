@@ -1,16 +1,17 @@
 package noobanidus.mods.lootr.data;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.LockableLootTileEntity;
+import net.minecraft.tileentity.TileEntityLockableLoot;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.DimensionSavedDataManager;
-import net.minecraft.world.storage.FolderName;
-import net.minecraftforge.fml.server.ServerLifecycleHooks;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.storage.MapStorage;
+import net.minecraft.world.storage.WorldSavedData;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.server.FMLServerHandler;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.LootFiller;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class DataStorage {
@@ -36,129 +38,111 @@ public class DataStorage {
   public static final String DECAY = "lootr/" + DECAY_OLD;
   public static final String REFRESH = "lootr/" + REFRESH_OLD;
 
-  public static boolean isAwarded(UUID player, UUID tileId) {
-    DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
-    AdvancementData data = manager.computeIfAbsent(() -> new AdvancementData(ID), ID);
-
-    return data.contains(player, tileId);
-  }
-
-  public static void award(UUID player, UUID tileId) {
-    DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
-    AdvancementData data = manager.computeIfAbsent(() -> new AdvancementData(ID), ID);
-    data.add(player, tileId);
-    data.setDirty();
-  }
-
-  public static boolean isScored(UUID player, UUID tileId) {
-    DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
-    AdvancementData data = manager.computeIfAbsent(() -> new AdvancementData(SCORED), SCORED);
-
-    return data.contains(player, tileId);
-  }
-
-  public static void score(UUID player, UUID tileId) {
-    DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
-    AdvancementData data = manager.computeIfAbsent(() -> new AdvancementData(SCORED), SCORED);
-    data.add(player, tileId);
-    data.setDirty();
+  private static <T extends WorldSavedData> T computeIfAbsentManager(MapStorage manager, Supplier<T> supplier, String key) {
+    T newData = supplier.get();
+    T value = (T)manager.getOrLoadData(newData.getClass(), key);
+    if(value == null) {
+      manager.setData(key, newData);
+      return newData;
+    } else
+      return value;
   }
 
   public static int getDecayValue(UUID id) {
-    DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
-    TickingData data = manager.computeIfAbsent(() -> new TickingData(DECAY), DECAY);
+    MapStorage manager = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(0).getMapStorage();
+    TickingData data = computeIfAbsentManager(manager, () -> new TickingData(DECAY), DECAY);
     return data.getValue(id);
   }
 
   public static boolean isDecayed(UUID id) {
-    DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
-    TickingData data = manager.computeIfAbsent(() -> new TickingData(DECAY), DECAY);
+    MapStorage manager = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(0).getMapStorage();
+    TickingData data = computeIfAbsentManager(manager, () -> new TickingData(DECAY), DECAY);
     return data.isDone(id);
   }
 
   public static void setDecaying(UUID id, int decay) {
-    DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
-    TickingData data = manager.computeIfAbsent(() -> new TickingData(DECAY), DECAY);
+    MapStorage manager = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(0).getMapStorage();
+    TickingData data = computeIfAbsentManager(manager, () -> new TickingData(DECAY), DECAY);
     data.setValue(id, decay);
-    data.setDirty();
+    data.markDirty();
   }
 
   public static void removeDecayed(UUID id) {
-    DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
-    TickingData data = manager.computeIfAbsent(() -> new TickingData(DECAY), DECAY);
+    MapStorage manager = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(0).getMapStorage();
+    TickingData data = computeIfAbsentManager(manager, () -> new TickingData(DECAY), DECAY);
     if (data.removeDone(id) != -1) {
-      data.setDirty();
+      data.markDirty();
     }
   }
 
   public static void doDecay() {
-    DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
-    TickingData data = manager.computeIfAbsent(() -> new TickingData(DECAY), DECAY);
+    MapStorage manager = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(0).getMapStorage();
+    TickingData data = computeIfAbsentManager(manager, () -> new TickingData(DECAY), DECAY);
     if (data.tick()) {
-      data.setDirty();
+      data.markDirty();
     }
   }
 
   public static int getRefreshValue(UUID id) {
-    DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
-    TickingData data = manager.computeIfAbsent(() -> new TickingData(REFRESH), REFRESH);
+    MapStorage manager = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(0).getMapStorage();
+    TickingData data = computeIfAbsentManager(manager, () -> new TickingData(REFRESH), REFRESH);
     return data.getValue(id);
   }
 
   public static boolean isRefreshed(UUID id) {
-    DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
-    TickingData data = manager.computeIfAbsent(() -> new TickingData(REFRESH), REFRESH);
+    MapStorage manager = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(0).getMapStorage();
+    TickingData data = computeIfAbsentManager(manager, () -> new TickingData(REFRESH), REFRESH);
     return data.isDone(id);
   }
 
   public static void setRefreshing(UUID id, int decay) {
-    DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
-    TickingData data = manager.computeIfAbsent(() -> new TickingData(REFRESH), REFRESH);
+    MapStorage manager = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(0).getMapStorage();
+    TickingData data = computeIfAbsentManager(manager, () -> new TickingData(REFRESH), REFRESH);
     data.setValue(id, decay);
-    data.setDirty();
+    data.markDirty();
   }
 
   public static void removeRefreshed(UUID id) {
-    DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
-    TickingData data = manager.computeIfAbsent(() -> new TickingData(REFRESH), REFRESH);
+    MapStorage manager = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(0).getMapStorage();
+    TickingData data = computeIfAbsentManager(manager, () -> new TickingData(REFRESH), REFRESH);
     if (data.removeDone(id) != -1) {
-      data.setDirty();
+      data.markDirty();
     }
   }
 
   public static void doRefresh() {
-    DimensionSavedDataManager manager = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD).getDataStorage();
-    TickingData data = manager.computeIfAbsent(() -> new TickingData(REFRESH), REFRESH);
+    MapStorage manager = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(0).getMapStorage();
+    TickingData data = computeIfAbsentManager(manager, () -> new TickingData(REFRESH), REFRESH);
     if (data.tick()) {
-      data.setDirty();
+      data.markDirty();
     }
   }
 
-  public static ServerWorld getServerWorld() {
-    return ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD);
+  public static WorldServer getWorldServer() {
+    return FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(0);
   }
 
-  public static ChestData getInstanceUuid(ServerWorld world, UUID id, BlockPos position) {
-    RegistryKey<World> dimension = world.dimension();
-    return ChestData.unwrap(getServerWorld().getDataStorage().computeIfAbsent(() -> new ChestData(dimension, id), ChestData.ID(id)), dimension, position);
+  public static ChestData getInstanceUuid(WorldServer world, UUID id, BlockPos position) {
+    DimensionType dimension = world.provider.getDimensionType();
+    return ChestData.unwrap(computeIfAbsentManager(getWorldServer().getMapStorage(),  () -> new ChestData(dimension, id), ChestData.ID(id)), dimension, position);
   }
 
-  public static ChestData getInstance(ServerWorld world, UUID id, BlockPos pos) {
-    return ChestData.unwrap(getServerWorld().getDataStorage().computeIfAbsent(() -> new ChestData(id), ChestData.ID(id)), world.dimension(), pos);
+  public static ChestData getInstance(WorldServer world, UUID id, BlockPos pos) {
+    return ChestData.unwrap(computeIfAbsentManager(getWorldServer().getMapStorage(),  () -> new ChestData(id), ChestData.ID(id)), world.provider.getDimensionType(), pos);
   }
 
-  public static ChestData getInstanceInventory(ServerWorld world, UUID id, @Nullable UUID customId, @Nullable NonNullList<ItemStack> base, BlockPos pos) {
-    RegistryKey<World> dimension = world.dimension();
-    return ChestData.unwrap(getServerWorld().getDataStorage().computeIfAbsent(() -> new ChestData(dimension, id, customId, base), ChestData.ID(id)), world.dimension(), pos);
+  public static ChestData getInstanceInventory(WorldServer world, UUID id, @Nullable UUID customId, @Nullable NonNullList<ItemStack> base, BlockPos pos) {
+    DimensionType dimension = world.provider.getDimensionType();
+    return ChestData.unwrap(computeIfAbsentManager(getWorldServer().getMapStorage(),  () -> new ChestData(dimension, id, customId, base), ChestData.ID(id)), world.provider.getDimensionType(), pos);
   }
 
   @Nullable
-  public static SpecialChestInventory getInventory(World world, UUID uuid, BlockPos pos, ServerPlayerEntity player, LockableLootTileEntity tile, LootFiller filler) {
-    if (world.isClientSide || !(world instanceof ServerWorld)) {
+  public static SpecialChestInventory getInventory(World world, UUID uuid, BlockPos pos, EntityPlayerMP player, TileEntityLockableLoot tile, LootFiller filler) {
+    if (world.isRemote || !(world instanceof WorldServer)) {
       return null;
     }
 
-    ChestData data = getInstanceUuid((ServerWorld) world, uuid, pos);
+    ChestData data = getInstanceUuid((WorldServer) world, uuid, pos);
     SpecialChestInventory inventory = data.getInventory(player);
     if (inventory == null) {
       inventory = data.createInventory(player, filler, tile);
@@ -168,22 +152,22 @@ public class DataStorage {
     return inventory;
   }
 
-  public static void refreshInventory(World world, UUID uuid, ServerPlayerEntity player, BlockPos pos) {
-    if (world.isClientSide || !(world instanceof ServerWorld)) {
+  public static void refreshInventory(World world, UUID uuid, EntityPlayerMP player, BlockPos pos) {
+    if (world.isRemote || !(world instanceof WorldServer)) {
       return;
     }
 
-    ChestData data = getInstanceUuid((ServerWorld) world, uuid, pos);
+    ChestData data = getInstanceUuid((WorldServer) world, uuid, pos);
     data.clear();
-    data.setDirty();
+    data.markDirty();
   }
 
   @Nullable
-  public static SpecialChestInventory getInventory(World world, UUID uuid, NonNullList<ItemStack> base, ServerPlayerEntity player, BlockPos pos, LockableLootTileEntity tile) {
-    if (world.isClientSide || !(world instanceof ServerWorld)) {
+  public static SpecialChestInventory getInventory(World world, UUID uuid, NonNullList<ItemStack> base, EntityPlayerMP player, BlockPos pos, TileEntityLockableLoot tile) {
+    if (world.isRemote || !(world instanceof WorldServer)) {
       return null;
     }
-    ChestData data = getInstanceInventory((ServerWorld) world, uuid, null, base, pos);
+    ChestData data = getInstanceInventory((WorldServer) world, uuid, null, base, pos);
     SpecialChestInventory inventory = data.getInventory(player);
     if (inventory == null) {
       inventory = data.createInventory(player, data.customInventory(), tile);
@@ -195,57 +179,22 @@ public class DataStorage {
   }
 
   @Nullable
-  public static void refreshInventory(World world, UUID uuid, NonNullList<ItemStack> base, ServerPlayerEntity player, BlockPos pos) {
-    if (world.isClientSide || !(world instanceof ServerWorld)) {
+  public static void refreshInventory(World world, UUID uuid, NonNullList<ItemStack> base, EntityPlayerMP player, BlockPos pos) {
+    if (world.isRemote || !(world instanceof WorldServer)) {
       return;
     }
-    ChestData data = getInstanceInventory((ServerWorld) world, uuid, null, base, pos);
+    ChestData data = getInstanceInventory((WorldServer) world, uuid, null, base, pos);
     data.clear();
-    data.setDirty();
-  }
-
-  public static boolean clearInventories(UUID uuid) {
-    ServerWorld world = getServerWorld();
-    DimensionSavedDataManager data = world.getDataStorage();
-    Path dataPath = world.getServer().getWorldPath(new FolderName("data")).resolve("lootr");
-
-    List<String> ids = new ArrayList<>();
-    // TODO: Improve
-    try (Stream<Path> paths = Files.walk(dataPath)) {
-      paths.forEach(o -> {
-        if (Files.isRegularFile(o)) {
-          String fileName = o.getFileName().toString();
-          if (fileName.startsWith("Lootr-")) {
-            return;
-          }
-          ids.add("lootr/" + fileName.charAt(0) + "/" + fileName.substring(0, 2) + "/" + fileName.replace(".dat", ""));
-        }
-      });
-    } catch (IOException e) {
-      return false;
-    }
-
-    int cleared = 0;
-    for (String id : ids) {
-      ChestData chestData = data.get(() -> new ChestData(id), id);
-      if (chestData != null) {
-        if (chestData.clearInventory(uuid)) {
-          cleared++;
-          chestData.setDirty();
-        }
-      }
-    }
-    Lootr.LOG.info("Cleared " + cleared + " inventories for play UUID " + uuid.toString());
-    return cleared != 0;
+    data.markDirty();
   }
 
   @Nullable
-  public static SpecialChestInventory getInventory(World world, LootrChestMinecartEntity cart, ServerPlayerEntity player, LootFiller filler, BlockPos position) {
-    if (world.isClientSide || !(world instanceof ServerWorld)) {
+  public static SpecialChestInventory getInventory(World world, LootrChestMinecartEntity cart, EntityPlayerMP player, LootFiller filler, BlockPos position) {
+    if (world.isRemote || !(world instanceof WorldServer)) {
       return null;
     }
 
-    ChestData data = getInstance((ServerWorld) world, cart.getUUID(), position);
+    ChestData data = getInstance((WorldServer) world, cart.getUniqueID(), position);
     SpecialChestInventory inventory = data.getInventory(player);
     if (inventory == null) {
       inventory = data.createInventory(player, filler, null);
@@ -257,13 +206,13 @@ public class DataStorage {
   }
 
   @Nullable
-  public static void refreshInventory(World world, LootrChestMinecartEntity cart, ServerPlayerEntity player, BlockPos pos) {
-    if (world.isClientSide || !(world instanceof ServerWorld)) {
+  public static void refreshInventory(World world, LootrChestMinecartEntity cart, EntityPlayerMP player, BlockPos pos) {
+    if (world.isRemote || !(world instanceof WorldServer)) {
       return;
     }
 
-    ChestData data = getInstance((ServerWorld) world, cart.getUUID(), pos);
+    ChestData data = getInstance((WorldServer) world, cart.getUniqueID(), pos);
     data.clear();
-    data.setDirty();
+    data.markDirty();
   }
 }

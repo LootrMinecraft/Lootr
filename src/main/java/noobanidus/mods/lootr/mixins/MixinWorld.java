@@ -1,6 +1,6 @@
 package noobanidus.mods.lootr.mixins;
 
-import net.minecraft.tileentity.LockableLootTileEntity;
+import net.minecraft.tileentity.TileEntityLockableLoot;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import noobanidus.mods.lootr.api.tile.ILootTile;
@@ -12,12 +12,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(World.class)
 public class MixinWorld {
-  @Inject(method = "addBlockEntity", at = @At(target = "Lnet/minecraft/tileentity/TileEntity;onLoad()V", value = "INVOKE", shift = At.Shift.AFTER))
+  @Inject(method = "addTileEntity", at = @At(target = "Lnet/minecraft/tileentity/TileEntity;onLoad()V", value = "INVOKE", shift = At.Shift.AFTER))
   protected void lootrAddBlockEntity(TileEntity tile, CallbackInfoReturnable<Boolean> cir) {
-    if (!(tile instanceof LockableLootTileEntity) || tile instanceof ILootTile) {
+    if (!(tile instanceof TileEntityLockableLoot) || tile instanceof ILootTile) {
       return;
     }
 
-    TileTicker.addEntry(((World) (Object) this).dimension(), tile.getBlockPos());
+    TileTicker.addEntry(((World) (Object) this).provider.getDimensionType(), tile.getPos());
   }
 }

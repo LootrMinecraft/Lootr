@@ -1,37 +1,26 @@
 package noobanidus.mods.lootr.networking;
 
 
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.NetworkEvent;
-import noobanidus.mods.lootr.client.ClientPacketHandlers;
+import io.netty.buffer.ByteBuf;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
-import java.util.function.Supplier;
-
-public class OpenCart {
+public class OpenCart implements IMessage {
   public int entityId;
 
-  public OpenCart(PacketBuffer buffer) {
-    this.entityId = buffer.readInt();
+  public OpenCart() {
+    this.entityId = -1;
+  }
+
+  public void fromBytes(ByteBuf buf) {
+    this.entityId = buf.readInt();
   }
 
   public OpenCart(int entityId) {
     this.entityId = entityId;
   }
 
-  public void encode(PacketBuffer buf) {
+  public void toBytes(ByteBuf buf) {
     buf.writeInt(this.entityId);
-  }
-
-  public void handle(Supplier<NetworkEvent.Context> context) {
-    context.get().enqueueWork(() -> handle(this, context));
-    context.get().setPacketHandled(true);
-  }
-
-  @OnlyIn(Dist.CLIENT)
-  private static void handle(OpenCart message, Supplier<NetworkEvent.Context> context) {
-    ClientPacketHandlers.handleOpenCart(message, context);
   }
 }
 

@@ -1,20 +1,20 @@
 package noobanidus.mods.lootr.data;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ContainerChest;
 import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.inventory.container.ChestContainer;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.LockableLootTileEntity;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntityLockableLoot;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.WorldServer;
 import noobanidus.mods.lootr.api.inventory.ILootrInventory;
 import noobanidus.mods.lootr.api.tile.ILootTile;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
@@ -37,9 +37,9 @@ public class SpecialChestInventory implements ILootrInventory {
     this.pos = pos;
   }
 
-  public SpecialChestInventory(ChestData chestData, CompoundNBT items, String componentAsJSON, BlockPos pos) {
+  public SpecialChestInventory(ChestData chestData, NBTTagCompound items, String componentAsJSON, BlockPos pos) {
     this.chestData = chestData;
-    this.name = ITextComponent.Serializer.fromJson(componentAsJSON);
+    this.name = ITextComponent.Serializer.jsonToComponent(componentAsJSON);
     this.contents = NonNullList.withSize(27, ItemStack.EMPTY);
     ItemStackHelper.loadAllItems(items, this.contents);
     this.pos = pos;
@@ -51,14 +51,14 @@ public class SpecialChestInventory implements ILootrInventory {
 
   @Override
   @Nullable
-  public LockableLootTileEntity getTile(World world) {
-    if (world == null || world.isClientSide() || pos == null) {
+  public TileEntityLockableLoot getTile(World world) {
+    if (world == null || world.isRemote || pos == null) {
       return null;
     }
 
-    TileEntity te = world.getBlockEntity(pos);
+    TileEntity te = world.getTileEntity(pos);
     if (te instanceof ILootTile) {
-      return (LockableLootTileEntity) te;
+      return (TileEntityLockableLoot) te;
     }
 
     return null;
@@ -67,16 +67,16 @@ public class SpecialChestInventory implements ILootrInventory {
   @Override
   @Nullable
   public LootrChestMinecartEntity getEntity(World world) {
-    if (world == null || world.isClientSide() || chestData.getEntityId() == null) {
+    if (world == null || world.isRemote || chestData.getEntityId() == null) {
       return null;
     }
 
-    if (!(world instanceof ServerWorld)) {
+    if (!(world instanceof WorldServer)) {
       return null;
     }
 
-    ServerWorld serverWorld = (ServerWorld) world;
-    Entity entity = serverWorld.getEntity(chestData.getEntityId());
+    WorldServer serverWorld = (WorldServer) world;
+    Entity entity = serverWorld.getEntityFromUuid(chestData.getEntityId());
     if (entity instanceof LootrChestMinecartEntity) {
       return (LootrChestMinecartEntity) entity;
     }
@@ -85,7 +85,7 @@ public class SpecialChestInventory implements ILootrInventory {
   }
 
   @Override
-  public int getContainerSize() {
+  public int getSizeInventory() {
     return 27;
   }
 
@@ -101,15 +101,15 @@ public class SpecialChestInventory implements ILootrInventory {
   }
 
   @Override
-  public ItemStack getItem(int index) {
+  public ItemStack getStackInSlot(int index) {
     return contents.get(index);
   }
 
   @Override
-  public ItemStack removeItem(int index, int count) {
-    ItemStack itemstack = ItemStackHelper.removeItem(this.contents, index, count);
+  public ItemStack decrStackSize(int index, int count) {
+    ItemStack itemstack = ItemStackHelper.getAndSplit(this.contents, index, count);
     if (!itemstack.isEmpty()) {
-      this.setChanged();
+      this.markDirty();
       // TODO: Trigger save?
     }
 
@@ -117,39 +117,39 @@ public class SpecialChestInventory implements ILootrInventory {
   }
 
   @Override
-  public ItemStack removeItemNoUpdate(int index) {
-    ItemStack result = ItemStackHelper.takeItem(contents, index);
+  public ItemStack removeStackFromSlot(int index) {
+    ItemStack result = ItemStackHelper.getAndRemove(contents, index);
     if (!result.isEmpty()) {
-      this.setChanged();
+      this.markDirty();
     }
 
     return result;
   }
 
   @Override
-  public void setItem(int index, ItemStack stack) {
+  public void setInventorySlotContents(int index, ItemStack stack) {
     this.contents.set(index, stack);
-    if (stack.getCount() > this.getMaxStackSize()) {
-      stack.setCount(this.getMaxStackSize());
+    if (stack.getCount() > this.getInventoryStackLimit()) {
+      stack.setCount(this.getInventoryStackLimit());
     }
 
-    this.setChanged();
+    this.markDirty();
   }
 
   @Override
-  public void setChanged() {
-    chestData.setDirty();
+  public void markDirty() {
+    chestData.setDirty(true);
   }
 
   @Override
-  public boolean stillValid(PlayerEntity player) {
+  public boolean isUsableByPlayer(EntityPlayer player) {
     return true;
   }
 
   @Override
-  public void clearContent() {
+  public void clear() {
     contents.clear();
-    setChanged();
+    markDirty();
   }
 
   @Override
@@ -159,50 +159,50 @@ public class SpecialChestInventory implements ILootrInventory {
 
   @Nullable
   @Override
-  public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
-    return ChestContainer.threeRows(id, inventory, this);
+  public Container createContainer(InventoryPlayer inventory, EntityPlayer player) {
+    return new ContainerChest(inventory, this, player);
   }
 
   @Override
-  public void startOpen(PlayerEntity player) {
-    World world = player.level;
-    LockableLootTileEntity tile = getTile(world);
+  public void openInventory(EntityPlayer player) {
+    World world = player.world;
+    TileEntityLockableLoot tile = getTile(world);
     if (tile != null) {
-      tile.startOpen(player);
+      tile.openInventory(player);
     }
     if (chestData.getEntityId() != null) {
       LootrChestMinecartEntity entity = getEntity(world);
       if (entity != null) {
-        entity.startOpen(player);
+        entity.openInventory(player);
       }
     }
   }
 
   @Override
-  public void stopOpen(PlayerEntity player) {
-    setChanged();
-    World world = player.level;
+  public void closeInventory(EntityPlayer player) {
+    markDirty();
+    World world = player.world;
     if (pos != null) {
-      LockableLootTileEntity tile = getTile(world);
+      TileEntityLockableLoot tile = getTile(world);
       if (tile != null) {
-        tile.stopOpen(player);
+        tile.closeInventory(player);
       }
     }
     if (chestData.getEntityId() != null) {
       LootrChestMinecartEntity entity = getEntity(world);
       if (entity != null) {
-        entity.stopOpen(player);
+        entity.closeInventory(player);
       }
     }
   }
 
-  public CompoundNBT writeItems() {
-    CompoundNBT result = new CompoundNBT();
+  public NBTTagCompound writeItems() {
+    NBTTagCompound result = new NBTTagCompound();
     return ItemStackHelper.saveAllItems(result, this.contents);
   }
 
   public String writeName() {
-    return ITextComponent.Serializer.toJson(this.name);
+    return ITextComponent.Serializer.componentToJson(this.name);
   }
 
   @Override
@@ -214,5 +214,44 @@ public class SpecialChestInventory implements ILootrInventory {
   @Override
   public NonNullList<ItemStack> getContents() {
     return this.contents;
+  }
+
+  @Override
+  public int getInventoryStackLimit() {
+    return 64;
+  }
+
+  public boolean isItemValidForSlot(int index, ItemStack stack)
+  {
+    return true;
+  }
+
+  public int getField(int id)
+  {
+    return 0;
+  }
+
+  public void setField(int id, int value)
+  {
+  }
+
+  public int getFieldCount()
+  {
+    return 0;
+  }
+
+  @Override
+  public String getGuiID() {
+    return "minecraft:chest";
+  }
+
+  @Override
+  public String getName() {
+    return this.name.getFormattedText();
+  }
+
+  @Override
+  public boolean hasCustomName() {
+    return this.name != null;
   }
 }

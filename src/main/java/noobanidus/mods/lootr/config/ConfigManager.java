@@ -1,40 +1,31 @@
 package noobanidus.mods.lootr.config;
 
-import com.electronwill.nightconfig.core.file.CommentedFileConfig;
-import com.electronwill.nightconfig.core.io.WritingMode;
+import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.ChestBlock;
-import net.minecraft.state.Property;
-import net.minecraft.state.properties.ChestType;
-import net.minecraft.tileentity.LockableLootTileEntity;
+import net.minecraft.block.BlockChest;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.tileentity.TileEntityLockableLoot;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.server.ServerLifecycleHooks;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.fml.server.FMLServerHandler;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.tile.ILootTile;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModBlocks;
 
-import java.nio.file.Path;
 import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
-@Mod.EventBusSubscriber(modid = Lootr.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = Lootr.MODID)
 public class ConfigManager {
+  /*
   private static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
   private static final ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
 
@@ -74,27 +65,29 @@ public class ConfigManager {
   private static Set<String> REFRESH_MODS = null;
   private static Set<ResourceLocation> REFRESH_TABLES = null;
 
-  private static Set<RegistryKey<World>> DIM_WHITELIST = null;
-  private static Set<RegistryKey<World>> DIM_BLACKLIST = null;
-  private static Set<RegistryKey<World>> DECAY_DIMS = null;
-  private static Set<RegistryKey<World>> REFRESH_DIMS = null;
+  private static Set<DimensionType> DIM_WHITELIST = null;
+  private static Set<DimensionType> DIM_BLACKLIST = null;
+  private static Set<DimensionType> DECAY_DIMS = null;
+  private static Set<DimensionType> REFRESH_DIMS = null;
   private static Set<ResourceLocation> LOOT_BLACKLIST = null;
   private static Set<ResourceLocation> ADD_CHESTS = null;
   private static Set<ResourceLocation> ADD_TRAPPED_CHESTS = null;
+  */
   private static Map<Block, Block> replacements = null;
+  /*
   private static Set<String> LOOT_MOD_BLACKLIST = null;
 
   static {
     RANDOMISE_SEED = COMMON_BUILDER.comment("determine whether or not loot generated is the same for all players using the provided seed, or randomised per player").define("randomise_seed", true);
     CONVERT_MINESHAFTS = COMMON_BUILDER.comment("whether or not mineshaft chest minecarts should be converted to standard loot chests").define("convert_mineshafts", true);
     CONVERT_QUARK = COMMON_BUILDER.comment("whether or not quark chests used in world generation for loot purposes should be replaced with Lootr chests").define("convert_quark", true);
-    CONVERT_WOODEN_CHESTS = COMMON_BUILDER.comment("whether or not the entire forge:chests/wooden tag should be added to the conversion list for structures (if they are backed by LockableLootTileEntity)").define("convert_wooden_chests", true);
-    CONVERT_TRAPPED_CHESTS = COMMON_BUILDER.comment("whether or not the entire forge:chests/trapped tag should be added to the conversion list for structures (if they are backed by LockableLootTileEntity").define("convert_trapped_chests", true);
+    CONVERT_WOODEN_CHESTS = COMMON_BUILDER.comment("whether or not the entire forge:chests/wooden tag should be added to the conversion list for structures (if they are backed by TileEntityLockableLoot)").define("convert_wooden_chests", true);
+    CONVERT_TRAPPED_CHESTS = COMMON_BUILDER.comment("whether or not the entire forge:chests/trapped tag should be added to the conversion list for structures (if they are backed by TileEntityLockableLoot").define("convert_trapped_chests", true);
     List<? extends String> empty = Collections.emptyList();
     Predicate<Object> validator = o -> o instanceof String && ((String) o).contains(":");
     REPORT_UNRESOLVED_TABLES = COMMON_BUILDER.comment("lootr will automatically log all unresolved tables (i.e., for containers that have a loot table associated with them but, for whatever reason, the lookup for this table returns empty). setting this option to true additionally informs players when they open containers.").define("report_unresolved_tables", false);
-    ADDITIONAL_CHESTS = COMMON_BUILDER.comment("a list of additional chests that should be converted [in the format of modid:name, must be a tile entity instance of LockableLootTileEntity]").defineList("additional_chests", empty, validator);
-    ADDITIONAL_TRAPPED_CHESTS = COMMON_BUILDER.comment("a list of additional trapped chests that should be converted [in the format of modid:name, must be a tile entity instanceof LockableLootTileEntity]").defineList("additional_trapped_chests", empty, validator);
+    ADDITIONAL_CHESTS = COMMON_BUILDER.comment("a list of additional chests that should be converted [in the format of modid:name, must be a tile entity instance of TileEntityLockableLoot]").defineList("additional_chests", empty, validator);
+    ADDITIONAL_TRAPPED_CHESTS = COMMON_BUILDER.comment("a list of additional trapped chests that should be converted [in the format of modid:name, must be a tile entity instanceof TileEntityLockableLoot]").defineList("additional_trapped_chests", empty, validator);
     DIMENSION_WHITELIST = COMMON_BUILDER.comment("list of dimensions (to the exclusion of all others) that loot chest should be replaced in [default: blank, allowing all dimensions, e.g., minecraft:overworld]").defineList("dimension_whitelist", empty, validator);
     DIMENSION_BLACKLIST = COMMON_BUILDER.comment("list of dimensions that loot chests should not be replaced in [default: blank, allowing all dimensions, format e.g., minecraft:overworld]").defineList("dimension_blacklist", empty, validator);
     LOOT_TABLE_BLACKLIST = COMMON_BUILDER.comment("list of loot tables which shouldn't be converted [in the format of modid:loot_table]").defineList("loot_table_blacklist", empty, validator);
@@ -143,33 +136,48 @@ public class ConfigManager {
       REFRESH_DIMS = null;
     }
   }
+  
+   */
 
-  public static Set<RegistryKey<World>> getDimensionWhitelist() {
+  public static Set<DimensionType> getDimensionWhitelist() {
+    return ImmutableSet.of();
+    /*
     if (DIM_WHITELIST == null) {
       DIM_WHITELIST = DIMENSION_WHITELIST.get().stream().map(o -> RegistryKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(o))).collect(Collectors.toSet());
     }
     return DIM_WHITELIST;
+    
+     */
   }
 
-  public static Set<RegistryKey<World>> getDimensionBlacklist() {
+  public static Set<DimensionType> getDimensionBlacklist() {
+    return ImmutableSet.of();
+    /*
     if (DIM_BLACKLIST == null) {
       DIM_BLACKLIST = DIMENSION_BLACKLIST.get().stream().map(o -> RegistryKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(o))).collect(Collectors.toSet());
     }
     return DIM_BLACKLIST;
+     */
   }
 
-  public static Set<RegistryKey<World>> getDecayDimensions() {
+  public static Set<DimensionType> getDecayDimensions() {
+    return ImmutableSet.of();
+    /*
     if (DECAY_DIMS == null) {
       DECAY_DIMS = DECAY_DIMENSIONS.get().stream().map(o -> RegistryKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(o))).collect(Collectors.toSet());
     }
     return DECAY_DIMS;
+     */
   }
 
-  public static Set<RegistryKey<World>> getRefreshDimensions() {
+  public static Set<DimensionType> getRefreshDimensions() {
+    return ImmutableSet.of();
+    /*
     if (REFRESH_DIMS == null) {
       REFRESH_DIMS = REFRESH_DIMENSIONS.get().stream().map(o -> RegistryKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(o))).collect(Collectors.toSet());
     }
     return REFRESH_DIMS;
+     */
   }
 
   public static boolean isBlacklisted(ResourceLocation table) {
@@ -181,6 +189,8 @@ public class ConfigManager {
   }
 
   public static Set<ResourceLocation> getLootBlacklist() {
+    return ImmutableSet.of();
+    /*
     if (LOOT_BLACKLIST == null) {
       LOOT_BLACKLIST = LOOT_TABLE_BLACKLIST.get().stream().map(ResourceLocation::new).collect(Collectors.toSet());
       // FIX for https://github.com/noobanidus/Lootr/issues/74
@@ -189,86 +199,113 @@ public class ConfigManager {
       LOOT_BLACKLIST.addAll(ATUM_BLACKLIST);
     }
     return LOOT_BLACKLIST;
+     */
   }
 
   public static Set<String> getModBlacklist() {
+    return ImmutableSet.of();
+    /*
     if (LOOT_MOD_BLACKLIST == null) {
       LOOT_MOD_BLACKLIST = LOOT_MODID_BLACKLIST.get().stream().map(String::toLowerCase).collect(Collectors.toSet());
     }
     return LOOT_MOD_BLACKLIST;
+     */
   }
 
   public static Set<ResourceLocation> getDecayingTables() {
+    return ImmutableSet.of();
+    /*
     if (DECAY_TABLES == null) {
       DECAY_TABLES = DECAY_LOOT_TABLES.get().stream().map(ResourceLocation::new).collect(Collectors.toSet());
     }
     return DECAY_TABLES;
+     */
   }
 
   public static Set<ResourceLocation> getRefreshingTables() {
+    return ImmutableSet.of();
+    /*
     if (REFRESH_TABLES == null) {
       REFRESH_TABLES = REFRESH_LOOT_TABLES.get().stream().map(ResourceLocation::new).collect(Collectors.toSet());
     }
     return REFRESH_TABLES;
+     */
   }
 
   public static Set<String> getDecayMods() {
+    return ImmutableSet.of();
+    /*
     if (DECAY_MODS == null) {
       DECAY_MODS = DECAY_MODIDS.get().stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
     }
     return DECAY_MODS;
+     */
   }
 
   public static Set<String> getRefreshMods() {
+    return ImmutableSet.of();
+    /*
     if (REFRESH_MODS == null) {
       REFRESH_MODS = REFRESH_MODIDS.get().stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
     }
     return REFRESH_MODS;
+     */
   }
 
   public static Set<ResourceLocation> getAdditionalChests() {
+    return ImmutableSet.of();
+    /*
     if (ADD_CHESTS == null) {
       ADD_CHESTS = ADDITIONAL_CHESTS.get().stream().map(ResourceLocation::new).collect(Collectors.toSet());
     }
     return ADD_CHESTS;
+     */
   }
 
   public static Set<ResourceLocation> getAdditionalTrappedChests() {
+    return ImmutableSet.of();
+    /*
     if (ADD_TRAPPED_CHESTS == null) {
       ADD_TRAPPED_CHESTS = ADDITIONAL_TRAPPED_CHESTS.get().stream().map(ResourceLocation::new).collect(Collectors.toSet());
     }
     return ADD_TRAPPED_CHESTS;
+     */
   }
 
-  public static boolean isDimensionBlocked(RegistryKey<World> key) {
+  public static boolean isDimensionBlocked(DimensionType key) {
     return (!getDimensionWhitelist().isEmpty() && !getDimensionWhitelist().contains(key)) || getDimensionBlacklist().contains(key);
   }
 
-  public static boolean isDimensionDecaying(RegistryKey<World> key) {
+  public static boolean isDimensionDecaying(DimensionType key) {
     return (getDecayDimensions().contains(key));
   }
 
-  public static boolean isDimensionRefreshing(RegistryKey<World> key) {
+  public static boolean isDimensionRefreshing(DimensionType key) {
     return getRefreshDimensions().contains(key);
   }
 
   public static boolean isDecaying(World world, ILootTile tile) {
+    /*
     if (DECAY_ALL.get()) {
       return true;
     }
+    
+     */
     if (getDecayingTables().contains(tile.getTable())) {
       return true;
     }
     if (getDecayMods().contains(tile.getTable().getNamespace().toLowerCase(Locale.ROOT))) {
       return true;
     }
-    return isDimensionDecaying(world.dimension());
+    return isDimensionDecaying(world.provider.getDimensionType());
   }
 
   public static boolean isRefreshing(World world, ILootTile tile) {
+    /*
     if (REFRESH_ALL.get()) {
       return true;
     }
+     */
     if (tile.getTable() != null) {
       if (getRefreshingTables().contains(tile.getTable())) {
         return true;
@@ -277,33 +314,37 @@ public class ConfigManager {
         return true;
       }
     }
-    return isDimensionRefreshing(world.dimension());
+    return isDimensionRefreshing(world.provider.getDimensionType());
   }
 
   public static boolean isDecaying(World world, LootrChestMinecartEntity entity) {
+    /*
     if (DECAY_ALL.get()) {
       return true;
     }
+     */
     if (getDecayingTables().contains(entity.lootTable)) {
       return true;
     }
     if (getDecayMods().contains(entity.lootTable.getNamespace().toLowerCase(Locale.ROOT))) {
       return true;
     }
-    return isDimensionDecaying(world.dimension());
+    return isDimensionDecaying(world.provider.getDimensionType());
   }
 
   public static boolean isRefreshing(World world, LootrChestMinecartEntity entity) {
+    /*
     if (REFRESH_ALL.get()) {
       return true;
     }
+     */
     if (getRefreshingTables().contains(entity.lootTable)) {
       return true;
     }
     if (getRefreshMods().contains(entity.lootTable.getNamespace().toLowerCase(Locale.ROOT))) {
       return true;
     }
-    return isDimensionDecaying(world.dimension());
+    return isDimensionRefreshing(world.provider.getDimensionType());
   }
 
   private static void addSafeReplacement(ResourceLocation location, Block replacement) {
@@ -313,24 +354,24 @@ public class ConfigManager {
     }
   }
 
-  private static void addUnsafeReplacement(ResourceLocation location, Block replacement, ServerWorld world) {
+  private static void addUnsafeReplacement(ResourceLocation location, Block replacement, WorldServer world) {
     Block block = ForgeRegistries.BLOCKS.getValue(location);
     if (block != null) {
-      TileEntity tile = block.createTileEntity(block.defaultBlockState(), world);
-      if (tile instanceof LockableLootTileEntity) {
+      TileEntity tile = block.createTileEntity(world, block.getDefaultState());
+      if (tile instanceof TileEntityLockableLoot) {
         replacements.put(block, replacement);
       }
     }
   }
 
   // TODO: Move this to the config module?
-  public static BlockState replacement(BlockState original) {
+  public static IBlockState replacement(IBlockState original) {
     if (replacements == null) {
       replacements = new HashMap<>();
       replacements.put(Blocks.CHEST, ModBlocks.CHEST);
-      replacements.put(Blocks.BARREL, ModBlocks.BARREL);
       replacements.put(Blocks.TRAPPED_CHEST, ModBlocks.TRAPPED_CHEST);
-      replacements.put(Blocks.SHULKER_BOX, ModBlocks.SHULKER);
+      replacements.put(Blocks.PURPLE_SHULKER_BOX, ModBlocks.SHULKER);
+      /*
       if (CONVERT_QUARK.get() && ModList.get().isLoaded("quark")) {
         QUARK_CHESTS.forEach(o -> addSafeReplacement(o, ModBlocks.CHEST));
         QUARK_TRAPPED_CHESTS.forEach(o -> addSafeReplacement(o, ModBlocks.TRAPPED_CHEST));
@@ -343,7 +384,7 @@ public class ConfigManager {
               return;
             }
             TileEntity tile = o.createTileEntity(o.defaultBlockState(), world);
-            if (tile instanceof LockableLootTileEntity) {
+            if (tile instanceof TileEntityLockableLoot) {
               replacements.put(o, ModBlocks.CHEST);
             }
           });
@@ -354,7 +395,7 @@ public class ConfigManager {
               return;
             }
             TileEntity tile = o.createTileEntity(o.defaultBlockState(), world);
-            if (tile instanceof LockableLootTileEntity) {
+            if (tile instanceof TileEntityLockableLoot) {
               replacements.put(o, ModBlocks.TRAPPED_CHEST);
             }
           });
@@ -366,14 +407,16 @@ public class ConfigManager {
               return;
             }
             TileEntity tile = o.createTileEntity(o.defaultBlockState(), world);
-            if (tile instanceof LockableLootTileEntity) {
+            if (tile instanceof TileEntityLockableLoot) {
               replacements.put(o, ModBlocks.CHEST);
             }
           });
         }
       }
+
+       */
       if (!getAdditionalChests().isEmpty() || !getAdditionalTrappedChests().isEmpty()) {
-        final ServerWorld world = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD);
+        final WorldServer world = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(0);
         getAdditionalChests().forEach(o -> addUnsafeReplacement(o, ModBlocks.CHEST, world));
         getAdditionalTrappedChests().forEach(o -> addUnsafeReplacement(o, ModBlocks.TRAPPED_CHEST, world));
       }
@@ -384,30 +427,34 @@ public class ConfigManager {
       return null;
     }
 
-    return copyProperties(replacement.defaultBlockState(), original);
+    return copyProperties(replacement.getDefaultState(), original);
   }
 
-  private static BlockState copyProperties(BlockState state, BlockState original) {
-    for (Property<?> prop : original.getProperties()) {
-      if (state.hasProperty(prop)) {
+  private static IBlockState copyProperties(IBlockState state, IBlockState original) {
+    for (IProperty<?> prop : original.getPropertyKeys()) {
+      if (state.getPropertyKeys().contains(prop)) {
         state = safeReplace(state, original, prop);
       }
     }
     return state;
   }
 
-  private static <V extends Comparable<V>> BlockState safeReplace(BlockState state, BlockState original, Property<V> property) {
+  private static <V extends Comparable<V>> IBlockState safeReplace(IBlockState state, IBlockState original, IProperty<V> property) {
     // TODO: Bit of a dirty hack
-    if (property == ChestBlock.TYPE && state.hasProperty(property)) {
-      return state.setValue(ChestBlock.TYPE, ChestType.SINGLE);
-    }
-    if (original.hasProperty(property) && state.hasProperty(property)) {
-      return state.setValue(property, original.getValue(property));
+    if (original.getPropertyKeys().contains(property) && state.getPropertyKeys().contains(property)) {
+      return state.withProperty(property, original.getValue(property));
     }
     return state;
   }
 
   public static boolean isVanillaTextures () {
-    return VANILLA_TEXTURES.get();
+    return false; //.get();
+  }
+
+  public static int getDecayValue() {
+    return 0;
+  }
+  public static int getRefreshValue() {
+    return 0;
   }
 }

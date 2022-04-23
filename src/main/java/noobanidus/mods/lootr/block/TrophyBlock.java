@@ -1,40 +1,57 @@
 package noobanidus.mods.lootr.block;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.HorizontalBlock;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.StateContainer;
-import net.minecraft.util.Direction;
+import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import noobanidus.mods.lootr.Lootr;
 
 public class TrophyBlock extends Block {
-  public TrophyBlock(Properties properties) {
-    super(properties);
+  public TrophyBlock() {
+    super(Material.IRON);
+    this.setSoundType(SoundType.METAL);
+    setRegistryName(Lootr.MODID, "trophy");
+    setHarvestLevel("pickaxe", 0);
   }
 
   @Override
-  public BlockState getStateForPlacement(BlockItemUseContext context) {
-    return this.defaultBlockState().setValue(HorizontalBlock.FACING, context.getHorizontalDirection().getOpposite());
+  public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
+    return this.getDefaultState().withProperty(BlockHorizontal.FACING, placer.getHorizontalFacing().getOpposite());
   }
 
   @Override
-  protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
-    super.createBlockStateDefinition(builder);
-    builder.add(HorizontalBlock.FACING);
+  public int getMetaFromState(IBlockState state) {
+    return state.getValue(BlockHorizontal.FACING).getHorizontalIndex();
   }
 
-  private static final VoxelShape EAST_WEST = Block.box(1.5, 0, 4, 14.5, 14.5, 12);
-  private static final VoxelShape NORTH_SOUTH = Block.box(4, 0, 1.5, 12, 14.5, 14.5);
+  @Override
+  public IBlockState getStateFromMeta(int meta) {
+    return this.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.HORIZONTALS[meta]);
+  }
+
+  @Override
+  protected BlockStateContainer createBlockState()
+  {
+    return new BlockStateContainer(this, BlockHorizontal.FACING);
+  }
+
+  private static final AxisAlignedBB EAST_WEST = new AxisAlignedBB(1.5/16.0, 0, 4.0/16.0d, 14.5/16.0, 14.5/16.0, 12.0/16.0);
+  private static final AxisAlignedBB NORTH_SOUTH = new AxisAlignedBB(4.0/16.0, 0, 1.5/16.0, 12.0/16.0, 14.5/16.0, 14.5/16.0);
 
   @Override
   @SuppressWarnings("deprecation")
-  public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-    Direction facing = state.getValue(HorizontalBlock.FACING);
-    if (facing == Direction.EAST || facing == Direction.WEST) {
+  public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+    EnumFacing facing = state.getValue(BlockHorizontal.FACING);
+    if (facing == EnumFacing.EAST || facing == EnumFacing.WEST) {
       return EAST_WEST;
     } else {
       return NORTH_SOUTH;

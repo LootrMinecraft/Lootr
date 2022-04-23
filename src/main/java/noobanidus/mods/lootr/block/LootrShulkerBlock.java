@@ -1,156 +1,119 @@
 package noobanidus.mods.lootr.block;
 
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ShulkerBoxBlock;
+import net.minecraft.block.BlockShulkerBox;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.monster.piglin.PiglinTasks;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.DyeColor;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.loot.*;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tileentity.ShulkerBoxTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityShulkerBox;
 import net.minecraft.util.*;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import noobanidus.mods.lootr.block.tile.LootrShulkerTileEntity;
-import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.init.ModItems;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
 import java.util.List;
 
 @SuppressWarnings({"deprecation", "NullableProblems"})
-public class LootrShulkerBlock extends ShulkerBoxBlock {
-  public LootrShulkerBlock(AbstractBlock.Properties pProperties) {
-    super(DyeColor.YELLOW, pProperties);
-    this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.UP));
+public class LootrShulkerBlock extends BlockShulkerBox {
+  public LootrShulkerBlock() {
+    super(EnumDyeColor.YELLOW);
   }
 
   @Override
-  public TileEntity newBlockEntity(IBlockReader p_196283_1_) {
+  public TileEntity createNewTileEntity(World worldIn, int meta)
+  {
     return new LootrShulkerTileEntity();
   }
 
   @Override
-  public ActionResultType use(BlockState pState, World pLevel, BlockPos pPos, PlayerEntity pPlayer, Hand pHand, BlockRayTraceResult pHit) {
-    if (pLevel.isClientSide) {
-      return ActionResultType.SUCCESS;
-    } else if (pPlayer.isSpectator()) {
-      return ActionResultType.CONSUME;
-    } else {
-      TileEntity tileentity = pLevel.getBlockEntity(pPos);
-      if (tileentity instanceof LootrShulkerTileEntity) {
-        LootrShulkerTileEntity shulkerboxtileentity = (LootrShulkerTileEntity) tileentity;
+  public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+  {
+    if (worldIn.isRemote)
+    {
+      return true;
+    }
+    else if (playerIn.isSpectator())
+    {
+      return true;
+    }
+    else
+    {
+      TileEntity tileentity = worldIn.getTileEntity(pos);
+
+      if (tileentity instanceof TileEntityShulkerBox)
+      {
+        EnumFacing enumfacing = (EnumFacing)state.getValue(FACING);
         boolean flag;
-        if (shulkerboxtileentity.getAnimationStatus() == ShulkerBoxTileEntity.AnimationStatus.CLOSED) {
-          Direction direction = pState.getValue(FACING);
-          flag = pLevel.noCollision(ShulkerAABBHelper.openBoundingBox(pPos, direction));
-        } else {
+
+        if (((TileEntityShulkerBox)tileentity).getAnimationStatus() == TileEntityShulkerBox.AnimationStatus.CLOSED)
+        {
+          AxisAlignedBB axisalignedbb = FULL_BLOCK_AABB.expand((double)(0.5F * (float)enumfacing.getXOffset()), (double)(0.5F * (float)enumfacing.getYOffset()), (double)(0.5F * (float)enumfacing.getZOffset())).contract((double)enumfacing.getXOffset(), (double)enumfacing.getYOffset(), (double)enumfacing.getZOffset());
+          flag = !worldIn.collidesWithAnyBlock(axisalignedbb.offset(pos.offset(enumfacing)));
+        }
+        else
+        {
           flag = true;
         }
 
-        if (flag) {
-          if (pPlayer.isShiftKeyDown()) {
-            ChestUtil.handleLootSneak(this, pLevel, pPos, pPlayer);
+        if (flag)
+        {
+          if (playerIn.isSneaking()) {
+            ChestUtil.handleLootSneak(this, worldIn, pos, playerIn);
           } else {
-            ChestUtil.handleLootChest(this, pLevel, pPos, pPlayer);
+            ChestUtil.handleLootChest(this, worldIn, pos, playerIn);
           }
         }
 
-        return ActionResultType.CONSUME;
-      } else {
-        return ActionResultType.PASS;
+        return true;
+      }
+      else
+      {
+        return false;
       }
     }
   }
 
+  @SideOnly(Side.CLIENT)
   @Override
-  public void playerWillDestroy(World pLevel, BlockPos pPos, BlockState pState, PlayerEntity pPlayer) {
-/*    TileEntity tileentity = pLevel.getBlockEntity(pPos);
-    if (tileentity instanceof SpecialLootShulkerTile) {
-      if (!pLevel.isClientSide) {
-        ItemEntity itementity = new ItemEntity(pLevel, pPos.getX() + 0.5, pPos.getY() + 0.5, pPos.getZ() + 0.5, new ItemStack(Items.SHULKER_BOX));
-        itementity.setDefaultPickUpDelay();
-        pLevel.addFreshEntity(itementity);
-      }
-    }*/
-
-    pLevel.levelEvent(pPlayer, 2001, pPos, getId(pState));
-    if (this.is(BlockTags.GUARDED_BY_PIGLINS)) {
-      PiglinTasks.angerNearbyPiglins(pPlayer, false);
-    }
+  public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
+  {
+    
   }
 
   @Override
-  public List<ItemStack> getDrops(BlockState pState, LootContext.Builder pBuilder) {
-    ResourceLocation resourcelocation = this.getLootTable();
-    if (resourcelocation == LootTables.EMPTY) {
-      return Collections.emptyList();
-    } else {
-      LootContext lootcontext = pBuilder.withParameter(LootParameters.BLOCK_STATE, pState).create(LootParameterSets.BLOCK);
-      ServerWorld serverworld = lootcontext.getLevel();
-      LootTable loottable = serverworld.getServer().getLootTables().get(resourcelocation);
-      return loottable.getRandomItems(lootcontext);
-    }
+  public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+  {
+    TileEntity tileentity = source.getTileEntity(pos);
+    return tileentity instanceof LootrShulkerTileEntity ? ((LootrShulkerTileEntity)tileentity).getBoundingBox(state) : FULL_BLOCK_AABB;
   }
 
   @Override
-  public void onRemove(BlockState pState, World pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
-    if (!pState.is(pNewState.getBlock())) {
-      TileEntity tileentity = pLevel.getBlockEntity(pPos);
-      if (tileentity instanceof LootrShulkerTileEntity) {
-        pLevel.updateNeighbourForOutputSignal(pPos, pState.getBlock());
-      }
-
-      if (pState.hasTileEntity() && (!pState.is(pNewState.getBlock()) || !pNewState.hasTileEntity())) {
-        pLevel.removeBlockEntity(pPos);
-      }
-    }
-  }
-
-  @Override
-  @OnlyIn(Dist.CLIENT)
-  public void appendHoverText(ItemStack pStack, @Nullable IBlockReader pLevel, List<ITextComponent> pTooltip, ITooltipFlag pFlag) {
-  }
-
-  @Override
-  public VoxelShape getShape(BlockState pState, IBlockReader pLevel, BlockPos pPos, ISelectionContext pContext) {
-    TileEntity tileentity = pLevel.getBlockEntity(pPos);
-    return tileentity instanceof LootrShulkerTileEntity ? VoxelShapes.create(((LootrShulkerTileEntity) tileentity).getBoundingBox(pState)) : VoxelShapes.block();
-  }
-
-  @Override
-  public boolean hasAnalogOutputSignal(BlockState pState) {
+  public boolean hasComparatorInputOverride(IBlockState pState) {
     return true;
   }
 
   @Override
-  public int getAnalogOutputSignal(BlockState pBlockState, World pLevel, BlockPos pPos) {
+  public int getComparatorInputOverride(IBlockState pBlockState, World pLevel, BlockPos pPos) {
     return 0;
   }
 
   @Override
-  public ItemStack getCloneItemStack(IBlockReader pLevel, BlockPos pPos, BlockState pState) {
+  public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
     return new ItemStack(ModItems.SHULKER);
   }
 
   @Override
   @Nullable
-  public DyeColor getColor() {
-    return DyeColor.YELLOW;
+  public EnumDyeColor getColor() {
+    return EnumDyeColor.YELLOW;
   }
 }

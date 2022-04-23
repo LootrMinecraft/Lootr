@@ -1,80 +1,62 @@
 package noobanidus.mods.lootr.block;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ChestBlock;
-import net.minecraft.block.TrappedChestBlock;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.block.BlockChest;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
+import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 import noobanidus.mods.lootr.block.tile.LootrChestTileEntity;
 import noobanidus.mods.lootr.block.tile.TrappedLootrChestTileEntity;
-import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 @SuppressWarnings({"NullableProblems"})
-public class LootrTrappedChestBlock extends TrappedChestBlock {
-  public LootrTrappedChestBlock(Properties properties) {
-    super(properties);
+public class LootrTrappedChestBlock extends BlockChest {
+  public LootrTrappedChestBlock() {
+    super(Type.TRAP);
+    this.setSoundType(SoundType.WOOD);
   }
-
   @Override
-  public TileEntity newBlockEntity(IBlockReader p_196283_1_) {
-    return new TrappedLootrChestTileEntity();
-  }
-
-  @Override
-  public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
-    if (player.isShiftKeyDown()) {
+  public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    if (player.isSneaking()) {
       ChestUtil.handleLootSneak(this, world, pos, player);
-    } else if (!ChestBlock.isChestBlockedAt(world, pos)) {
+    } else if (!this.isBlocked(world, pos)) {
       ChestUtil.handleLootChest(this, world, pos, player);
     }
-    return ActionResultType.SUCCESS;
-  }
-
-  @Override
-  public boolean hasTileEntity(BlockState state) {
     return true;
   }
 
   @Override
-  public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
-    if (stateIn.getValue(WATERLOGGED)) {
-      worldIn.getLiquidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
+  public TileEntity createNewTileEntity(World worldIn, int meta) {
+    return new TrappedLootrChestTileEntity();
+  }
+
+  @Override
+  @SuppressWarnings("deprecated")
+  public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+    return NOT_CONNECTED_AABB;
+  }
+
+  @Override
+  public int getWeakPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
+  {
+    if (!blockState.canProvidePower())
+    {
+      return 0;
     }
-
-    return stateIn;
-  }
-
-  @Override
-  public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-    return AABB;
-  }
-
-  @Override
-  @Nullable
-  public INamedContainerProvider getMenuProvider(BlockState state, World worldIn, BlockPos pos) {
-    return null;
-  }
-
-  @SuppressWarnings("deprecation")
-  @Override
-  public int getSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
-    return MathHelper.clamp(LootrChestTileEntity.getPlayersUsing(blockAccess, pos), 0, 15);
+    else
+    {
+      return MathHelper.clamp(LootrChestTileEntity.getPlayersUsing(blockAccess, pos), 0, 15);
+    }
   }
 }

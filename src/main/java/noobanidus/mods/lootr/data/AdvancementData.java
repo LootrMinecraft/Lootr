@@ -1,7 +1,7 @@
 package noobanidus.mods.lootr.data;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -36,33 +36,25 @@ public class AdvancementData extends WorldSavedData {
   }
 
   @Override
-  public void load(CompoundNBT compound) {
+  public void readFromNBT(NBTTagCompound compound) {
     this.data.clear();
-    ListNBT data = compound.getList("data", Constants.NBT.TAG_COMPOUND);
-    for (int i = 0; i < data.size(); i++) {
-      this.data.add(UUIDPair.fromNBT(data.getCompound(i)));
+    NBTTagList data = compound.getTagList("data", Constants.NBT.TAG_COMPOUND);
+    for (int i = 0; i < data.tagCount(); i++) {
+      this.data.add(UUIDPair.fromNBT(data.getCompoundTagAt(i)));
     }
   }
 
   @Override
-  public CompoundNBT save(CompoundNBT pCompound) {
-    ListNBT result = new ListNBT();
+  public NBTTagCompound writeToNBT(NBTTagCompound pCompound) {
+    NBTTagList result = new NBTTagList();
     for (UUIDPair pair : this.data) {
-      result.add(pair.serializeNBT());
+      result.appendTag(pair.serializeNBT());
     }
-    pCompound.put("data", result);
+    pCompound.setTag("data", result);
     return pCompound;
   }
 
-  @Override
-  public void save(File pFile) {
-    if (isDirty()) {
-      pFile.getParentFile().mkdirs();
-    }
-    super.save(pFile);
-  }
-
-  public static class UUIDPair implements INBTSerializable<CompoundNBT> {
+  public static class UUIDPair implements INBTSerializable<NBTTagCompound> {
     private UUID first;
     private UUID second;
 
@@ -103,20 +95,20 @@ public class AdvancementData extends WorldSavedData {
     }
 
     @Override
-    public CompoundNBT serializeNBT() {
-      CompoundNBT result = new CompoundNBT();
-      result.putUUID("first", getFirst());
-      result.putUUID("second", getSecond());
+    public NBTTagCompound serializeNBT() {
+      NBTTagCompound result = new NBTTagCompound();
+      result.setUniqueId("first", getFirst());
+      result.setUniqueId("second", getSecond());
       return result;
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT nbt) {
-      this.first = nbt.getUUID("first");
-      this.second = nbt.getUUID("second");
+    public void deserializeNBT(NBTTagCompound nbt) {
+      this.first = nbt.getUniqueId("first");
+      this.second = nbt.getUniqueId("second");
     }
 
-    public static UUIDPair fromNBT(CompoundNBT tag) {
+    public static UUIDPair fromNBT(NBTTagCompound tag) {
       UUIDPair pair = new UUIDPair();
       pair.deserializeNBT(tag);
       return pair;

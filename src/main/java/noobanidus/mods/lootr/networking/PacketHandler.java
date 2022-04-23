@@ -1,52 +1,44 @@
 package noobanidus.mods.lootr.networking;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.PacketDistributor;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.relauncher.Side;
 import noobanidus.mods.lootr.Lootr;
-
-import java.util.function.BiConsumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import noobanidus.mods.lootr.client.ClientPacketHandlers;
 
 public class PacketHandler {
 
   private static final String PROTOCOL_VERSION = Integer.toString(2);
   private static short index = 0;
 
-  public static final SimpleChannel HANDLER = NetworkRegistry.ChannelBuilder
-      .named(new ResourceLocation(Lootr.MODID, "main_network_channel"))
-      .clientAcceptedVersions(PROTOCOL_VERSION::equals)
-      .serverAcceptedVersions(PROTOCOL_VERSION::equals)
-      .networkProtocolVersion(() -> PROTOCOL_VERSION)
-      .simpleChannel();
+  public static final SimpleNetworkWrapper HANDLER = NetworkRegistry.INSTANCE.newSimpleChannel(Lootr.MODID);
 
   public static void registerMessages() {
-    registerMessage(OpenCart.class, OpenCart::encode, OpenCart::new, OpenCart::handle);
-    registerMessage(CloseCart.class, CloseCart::encode, CloseCart::new, CloseCart::handle);
+    registerMessage(OpenCart.class, ClientPacketHandlers::handleOpenCart);
+    registerMessage(CloseCart.class, ClientPacketHandlers::handleCloseCart);
   }
 
-  public static void sendToInternal(Object msg, ServerPlayerEntity player) {
+  public static void sendToInternal(IMessage msg, EntityPlayerMP player) {
     if (!(player instanceof FakePlayer))
-      HANDLER.sendTo(msg, player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+      HANDLER.sendTo(msg, player);
   }
 
-  public static void sendToServerInternal(Object msg) {
+  public static void sendToServerInternal(IMessage msg) {
     HANDLER.sendToServer(msg);
   }
 
-  public static <MSG> void sendInternal(PacketDistributor.PacketTarget target, MSG message) {
-    HANDLER.send(target, message);
+  public static <MSG extends IMessage> void sendToAllTracking(Entity tracking, MSG message) {
+    HANDLER.sendToAllTracking(message, tracking);
   }
 
-  public static <MSG> void registerMessage(Class<MSG> messageType, BiConsumer<MSG, PacketBuffer> encoder, Function<PacketBuffer, MSG> decoder, BiConsumer<MSG, Supplier<NetworkEvent.Context>> messageConsumer) {
-    HANDLER.registerMessage(index, messageType, encoder, decoder, messageConsumer);
+  public static <MSG extends IMessage> void registerMessage(Class<MSG> messageType, IMessageHandler<MSG, IMessage> messageConsumer) {
+    HANDLER.registerMessage(messageConsumer, messageType, index, Side.CLIENT);
+    HANDLER.registerMessage(messageConsumer, messageType, index, Side.SERVER);
     index++;
     if (index > 0xFF)
       throw new RuntimeException("Too many messages!");
