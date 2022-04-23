@@ -6,6 +6,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -21,6 +22,7 @@ public class TrophyBlock extends Block {
     this.setSoundType(SoundType.METAL);
     setRegistryName(Lootr.MODID, "trophy");
     setHarvestLevel("pickaxe", 0);
+    setTranslationKey("lootr_trophy");
   }
 
   @Override
@@ -56,5 +58,10 @@ public class TrophyBlock extends Block {
     } else {
       return NORTH_SOUTH;
     }
+  }
+
+  @Override
+  public CreativeTabs getCreativeTab() {
+    return Lootr.TAB;
   }
 }

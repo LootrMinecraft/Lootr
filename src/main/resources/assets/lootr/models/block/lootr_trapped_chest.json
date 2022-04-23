@@ -1,4 +1,5 @@
 {
+  "parent": "builtin/entity",
   "textures": {
     "particle": "blocks/planks_oak"
   }

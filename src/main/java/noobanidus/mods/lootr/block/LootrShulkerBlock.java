@@ -3,6 +3,7 @@ package noobanidus.mods.lootr.block;
 import net.minecraft.block.BlockShulkerBox;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
@@ -15,6 +16,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.block.tile.LootrShulkerTileEntity;
 import noobanidus.mods.lootr.init.ModItems;
 import noobanidus.mods.lootr.util.ChestUtil;
@@ -26,6 +28,7 @@ import java.util.List;
 public class LootrShulkerBlock extends BlockShulkerBox {
   public LootrShulkerBlock() {
     super(EnumDyeColor.YELLOW);
+    setTranslationKey("lootr_shulker");
   }
 
   @Override
@@ -115,5 +118,10 @@ public class LootrShulkerBlock extends BlockShulkerBox {
   @Nullable
   public EnumDyeColor getColor() {
     return EnumDyeColor.YELLOW;
+  }
+
+  @Override
+  public CreativeTabs getCreativeTab() {
+    return Lootr.TAB;
   }
 }

@@ -3,6 +3,7 @@ package noobanidus.mods.lootr.block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
@@ -13,6 +14,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.block.tile.LootrChestTileEntity;
 import noobanidus.mods.lootr.block.tile.TrappedLootrChestTileEntity;
 import noobanidus.mods.lootr.util.ChestUtil;
@@ -25,6 +27,7 @@ public class LootrTrappedChestBlock extends BlockChest {
   public LootrTrappedChestBlock() {
     super(Type.TRAP);
     this.setSoundType(SoundType.WOOD);
+    setTranslationKey("lootr_trapped_chest");
   }
   @Override
   public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
@@ -58,5 +61,10 @@ public class LootrTrappedChestBlock extends BlockChest {
     {
       return MathHelper.clamp(LootrChestTileEntity.getPlayersUsing(blockAccess, pos), 0, 15);
     }
+  }
+
+  @Override
+  public CreativeTabs getCreativeTab() {
+    return Lootr.TAB;
   }
 }

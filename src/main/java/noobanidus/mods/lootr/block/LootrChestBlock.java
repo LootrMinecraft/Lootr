@@ -3,6 +3,7 @@ package noobanidus.mods.lootr.block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -11,6 +12,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.block.tile.LootrChestTileEntity;
 import noobanidus.mods.lootr.util.ChestUtil;
 
@@ -22,6 +24,7 @@ public class LootrChestBlock extends BlockChest {
   public LootrChestBlock() {
     super(Type.BASIC);
     this.setSoundType(SoundType.WOOD);
+    setTranslationKey("lootr_chest");
   }
 
   @Override
@@ -43,5 +46,10 @@ public class LootrChestBlock extends BlockChest {
   @SuppressWarnings("deprecated")
   public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
     return NOT_CONNECTED_AABB;
+  }
+
+  @Override
+  public CreativeTabs getCreativeTab() {
+    return Lootr.TAB;
   }
 }

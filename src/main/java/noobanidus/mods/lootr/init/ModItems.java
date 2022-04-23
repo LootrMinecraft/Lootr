@@ -13,7 +13,7 @@ public class ModItems {
   public static ItemBlock TRAPPED_CHEST = new ItemLootrChestBlock(ModBlocks.TRAPPED_CHEST);
   public static ItemBlock SHULKER = new ItemLootrShulkerBlock(ModBlocks.SHULKER);
 
-  public static ItemBlock TROPHY = (ItemBlock)new ItemBlock(ModBlocks.TROPHY).setCreativeTab(Lootr.TAB);
+  public static ItemBlock TROPHY = new ItemBlock(ModBlocks.TROPHY);
 
   static {
     CHEST.setRegistryName(Lootr.MODID, "lootr_chest");

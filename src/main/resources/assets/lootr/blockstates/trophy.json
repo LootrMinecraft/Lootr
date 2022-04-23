@@ -1,18 +1,18 @@
 {
   "variants": {
     "facing=north": {
-      "model": "lootr:block/trophy"
+      "model": "lootr:trophy"
     },
     "facing=south": {
-      "model": "lootr:block/trophy",
+      "model": "lootr:trophy",
       "y": 180
     },
     "facing=west": {
-      "model": "lootr:block/trophy",
+      "model": "lootr:trophy",
       "y": 270
     },
     "facing=east": {
-      "model": "lootr:block/trophy",
+      "model": "lootr:trophy",
       "y": 90
     }
   }

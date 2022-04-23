@@ -1,7 +1,10 @@
 {
+  "forge_marker": 1,
+  "defaults": {
+    "model": "lootr:lootr_shulker"
+  },
   "variants": {
-    "": {
-      "model": "lootr:block/lootr_shulker"
-    }
+    "normal": [{}],
+    "inventory": [{}]
   }
 }

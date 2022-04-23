@@ -1,7 +1,10 @@
 {
+  "forge_marker": 1,
+  "defaults": {
+    "model": "lootr:lootr_chest"
+  },
   "variants": {
-    "": {
-      "model": "lootr:block/lootr_chest"
-    }
+    "normal": [{}],
+    "inventory": [{}]
   }
 }
