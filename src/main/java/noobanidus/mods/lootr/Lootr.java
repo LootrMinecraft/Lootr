@@ -6,8 +6,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import noobanidus.mods.lootr.command.LootrCommand;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.setup.CommonSetup;
 import org.apache.logging.log4j.LogManager;
@@ -34,6 +36,11 @@ public class Lootr {
   @Mod.EventHandler
   private void init(FMLInitializationEvent event) {
     proxy.init();
+  }
+
+  @Mod.EventHandler
+  public void serverLoad(FMLServerStartingEvent event) {
+    event.registerServerCommand(new LootrCommand());
   }
 
   public static CreativeTabs TAB = new CreativeTabs(MODID) {

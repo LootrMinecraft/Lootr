@@ -136,6 +136,41 @@ public class DataStorage {
     return ChestData.unwrap(computeIfAbsentManager(getWorldServer().getMapStorage(),  () -> new ChestData(dimension, id, customId, base), ChestData.ID(id)), world.provider.getDimensionType(), pos);
   }
 
+  public static boolean clearInventories(UUID uuid) {
+    WorldServer world = getWorldServer();
+    MapStorage data = world.getMapStorage();
+    Path dataPath = world.getSaveHandler().getWorldDirectory().toPath().resolve("data").resolve("lootr");
+
+    List<String> ids = new ArrayList<>();
+    // TODO: Improve
+    try (Stream<Path> paths = Files.walk(dataPath)) {
+      paths.forEach(o -> {
+        if (Files.isRegularFile(o)) {
+          String fileName = o.getFileName().toString();
+          if (fileName.startsWith("Lootr-")) {
+            return;
+          }
+          ids.add("lootr/" + fileName.charAt(0) + "/" + fileName.substring(0, 2) + "/" + fileName.replace(".dat", ""));
+        }
+      });
+    } catch (IOException e) {
+      return false;
+    }
+
+    int cleared = 0;
+    for (String id : ids) {
+      ChestData chestData = (ChestData)data.getOrLoadData(ChestData.class, id);
+      if (chestData != null) {
+        if (chestData.clearInventory(uuid)) {
+          cleared++;
+          chestData.markDirty();
+        }
+      }
+    }
+    Lootr.LOG.info("Cleared " + cleared + " inventories for play UUID " + uuid.toString());
+    return cleared != 0;
+  }
+
   @Nullable
   public static SpecialChestInventory getInventory(World world, UUID uuid, BlockPos pos, EntityPlayerMP player, TileEntityLockableLoot tile, LootFiller filler) {
     if (world.isRemote || !(world instanceof WorldServer)) {

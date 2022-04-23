@@ -297,7 +297,6 @@ public class LootrShulkerTileEntity extends TileEntityLockableLoot implements IL
         this.openers.add(NBTUtil.getUUIDFromTag((NBTTagCompound)item));
       }
     }
-    this.world.markBlockRangeForRenderUpdate(this.pos, this.pos);
     super.readFromNBT(compound);
   }
 
@@ -444,6 +443,7 @@ public class LootrShulkerTileEntity extends TileEntityLockableLoot implements IL
   @Override
   public void onDataPacket(@Nonnull NetworkManager net, @Nonnull SPacketUpdateTileEntity pkt) {
     readFromNBT(pkt.getNbtCompound());
+    this.world.markBlockRangeForRenderUpdate(this.pos, this.pos);
   }
 
   public boolean isOpened() {

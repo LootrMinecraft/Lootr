@@ -52,14 +52,14 @@ public class LootrShulkerBlock extends BlockShulkerBox {
     {
       TileEntity tileentity = worldIn.getTileEntity(pos);
 
-      if (tileentity instanceof TileEntityShulkerBox)
+      if (tileentity instanceof LootrShulkerTileEntity)
       {
-        EnumFacing enumfacing = (EnumFacing)state.getValue(FACING);
+        EnumFacing enumfacing = state.getValue(FACING);
         boolean flag;
 
-        if (((TileEntityShulkerBox)tileentity).getAnimationStatus() == TileEntityShulkerBox.AnimationStatus.CLOSED)
+        if (((LootrShulkerTileEntity)tileentity).getAnimationStatus() == TileEntityShulkerBox.AnimationStatus.CLOSED)
         {
-          AxisAlignedBB axisalignedbb = FULL_BLOCK_AABB.expand((double)(0.5F * (float)enumfacing.getXOffset()), (double)(0.5F * (float)enumfacing.getYOffset()), (double)(0.5F * (float)enumfacing.getZOffset())).contract((double)enumfacing.getXOffset(), (double)enumfacing.getYOffset(), (double)enumfacing.getZOffset());
+          AxisAlignedBB axisalignedbb = FULL_BLOCK_AABB.expand(0.5F * (float)enumfacing.getXOffset(), 0.5F * (float)enumfacing.getYOffset(), 0.5F * (float)enumfacing.getZOffset()).contract(enumfacing.getXOffset(), enumfacing.getYOffset(), enumfacing.getZOffset());
           flag = !worldIn.collidesWithAnyBlock(axisalignedbb.offset(pos.offset(enumfacing)));
         }
         else
