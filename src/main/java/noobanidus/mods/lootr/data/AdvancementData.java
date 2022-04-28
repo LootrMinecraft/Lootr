@@ -53,6 +53,14 @@ public class AdvancementData extends SavedData {
     return pCompound;
   }
 
+  @Override
+  public void save(File pFile) {
+    if (isDirty()) {
+      pFile.getParentFile().mkdirs();
+    }
+    super.save(pFile);
+  }
+
   public static class UUIDPair implements INBTSerializable<CompoundTag> {
     @Nonnull
     private UUID first;

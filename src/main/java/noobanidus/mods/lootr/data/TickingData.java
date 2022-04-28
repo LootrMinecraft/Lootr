@@ -85,4 +85,12 @@ public class TickingData extends SavedData {
     pCompound.put("result", decayList);
     return pCompound;
   }
+
+  @Override
+  public void save(File pFile) {
+    if (isDirty()) {
+      pFile.getParentFile().mkdirs();
+    }
+    super.save(pFile);
+  }
 }
