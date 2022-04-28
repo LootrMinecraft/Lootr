@@ -7,6 +7,7 @@ import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraftforge.common.util.INBTSerializable;
 
 import javax.annotation.Nonnull;
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;

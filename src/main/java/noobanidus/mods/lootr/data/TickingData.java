@@ -8,6 +8,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraftforge.event.TickEvent;
 
+import java.io.File;
 import java.util.UUID;
 
 public class TickingData extends SavedData {
