@@ -8,8 +8,10 @@ import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.ChestRenderer;
+import net.minecraft.client.renderer.texture.AtlasSet;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.Direction;
@@ -22,6 +24,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.zestyblaze.lootr.api.LootrAPI;
 import net.zestyblaze.lootr.api.blockentity.ILootBlockEntity;
 import net.zestyblaze.lootr.blocks.entities.LootrChestBlockEntity;
+import net.zestyblaze.lootr.config.LootrModConfig;
 
 import java.util.UUID;
 
@@ -70,6 +73,9 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootBloc
   }
 
   protected Material getMaterial(T tile) {
+    if (LootrModConfig.isVanillaTextures()) {
+      return Sheets.CHEST_LOCATION;
+    }
     if(playerId == null) {
       Player player = Minecraft.getInstance().player;
       if(player != null) {

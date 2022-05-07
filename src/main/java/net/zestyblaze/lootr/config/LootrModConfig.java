@@ -309,10 +309,10 @@ public class LootrModConfig implements ConfigData {
     public static BlockState replacement(BlockState original) {
         if (replacements == null) {
             replacements = new HashMap<>();
-            replacements.put(Blocks.CHEST, LootrBlockInit.CHEST);
+/*            replacements.put(Blocks.CHEST, LootrBlockInit.CHEST);
             replacements.put(Blocks.BARREL, LootrBlockInit.BARREL);
             replacements.put(Blocks.TRAPPED_CHEST, LootrBlockInit.TRAPPED_CHEST);
-            replacements.put(Blocks.SHULKER_BOX, LootrBlockInit.SHULKER);
+            replacements.put(Blocks.SHULKER_BOX, LootrBlockInit.SHULKER);*/
         }
 
         // TODO: Tag replacements
