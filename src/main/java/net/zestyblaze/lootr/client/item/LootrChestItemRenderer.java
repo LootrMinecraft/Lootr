@@ -18,12 +18,10 @@ import net.zestyblaze.lootr.registry.LootrBlockInit;
 public class LootrChestItemRenderer extends BlockEntityWithoutLevelRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer {
   private static LootrChestItemRenderer INSTANCE = null;
 
-  private BlockEntityRenderDispatcher blockEntityRenderDispatcher;
   private final LootrChestBlockEntity tile = new LootrChestBlockEntity(BlockPos.ZERO, LootrBlockInit.CHEST.defaultBlockState());
 
   public LootrChestItemRenderer(BlockEntityRenderDispatcher pBlockEntityRenderDispatcher, EntityModelSet pEntityModelSet) {
     super(pBlockEntityRenderDispatcher, pEntityModelSet);
-    this.blockEntityRenderDispatcher = pBlockEntityRenderDispatcher;
   }
 
   public LootrChestItemRenderer() {
@@ -32,10 +30,7 @@ public class LootrChestItemRenderer extends BlockEntityWithoutLevelRenderer impl
 
   @Override
   public void renderByItem(ItemStack stack, ItemTransforms.TransformType p_239207_2_, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
-    if (this.blockEntityRenderDispatcher == null) {
-      this.blockEntityRenderDispatcher = Minecraft.getInstance().getBlockEntityRenderDispatcher();
-    }
-    this.blockEntityRenderDispatcher.renderItem(tile, matrixStack, buffer, combinedLight, combinedOverlay);
+    Minecraft.getInstance().getBlockEntityRenderDispatcher().renderItem(tile, matrixStack, buffer, combinedLight, combinedOverlay);
   }
 
   public void render(ItemStack stack, ItemTransforms.TransformType mode, PoseStack matrices, MultiBufferSource vertexConsumers, int light, int overlay) {
@@ -45,7 +40,8 @@ public class LootrChestItemRenderer extends BlockEntityWithoutLevelRenderer impl
   public void renderByMinecart (LootrChestMinecartEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight) {
     boolean open = tile.isOpened();
     tile.setOpened(entity.isOpened());
-    this.blockEntityRenderDispatcher.renderItem(tile, matrixStack, buffer, combinedLight, OverlayTexture.NO_OVERLAY);
+
+    Minecraft.getInstance().getBlockEntityRenderDispatcher().renderItem(tile, matrixStack, buffer, combinedLight, OverlayTexture.NO_OVERLAY);
     tile.setOpened(open);
   }
 
