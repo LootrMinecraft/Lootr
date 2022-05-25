@@ -45,6 +45,7 @@ public class ConfigManager {
 
   private static final List<ResourceLocation> QUARK_CHESTS = Arrays.asList(new ResourceLocation("quark", "oak_chest"), new ResourceLocation("quark", "spruce_chest"), new ResourceLocation("quark", "birch_chest"), new ResourceLocation("quark", "jungle_chest"), new ResourceLocation("quark", "acacia_chest"), new ResourceLocation("quark", "dark_oak_chest"), new ResourceLocation("quark", "warped_chest"), new ResourceLocation("quark", "crimson_chest"), new ResourceLocation("quark", "nether_brick_chest"), new ResourceLocation("quark", "purpur_chest")); // Quark normal chests
   private static final List<ResourceLocation> QUARK_TRAPPED_CHESTS = Arrays.asList(new ResourceLocation("quark", "oak_trapped_chest"), new ResourceLocation("quark", "spruce_trapped_chest"), new ResourceLocation("quark", "birch_trapped_chest"), new ResourceLocation("quark", "jungle_trapped_chest"), new ResourceLocation("quark", "acacia_trapped_chest"), new ResourceLocation("quark", "dark_oak_trapped_chest"), new ResourceLocation("quark", "warped_trapped_chest"), new ResourceLocation("quark", "crimson_trapped_chest"));
+  private static final List<ResourceLocation> PROBLEMATIC_CHESTS = Arrays.asList(new ResourceLocation("twilightforest", "structures/stronghold_boss"), new ResourceLocation("atum", "chests/pharaoh"));
 
   public static ForgeConfigSpec COMMON_CONFIG;
   public static ForgeConfigSpec CLIENT_CONFIG;
@@ -225,6 +226,8 @@ public class ConfigManager {
   public static Set<ResourceLocation> getLootBlacklist() {
     if (LOOT_BLACKLIST == null) {
       LOOT_BLACKLIST = LOOT_TABLE_BLACKLIST.get().stream().map(ResourceLocation::new).collect(Collectors.toSet());
+      // Fixes for #74, #79
+      LOOT_BLACKLIST.addAll(PROBLEMATIC_CHESTS);
     }
     return LOOT_BLACKLIST;
   }
