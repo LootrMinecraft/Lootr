@@ -86,15 +86,15 @@ public class TileTicker {
               continue;
             }
           }
-          ResourceLocation table = be.lootTable;
-          long seed = be.lootTableSeed;
-          be.lootTable = null;
           BlockState stateAt = level.getBlockState(entry.getPosition());
           BlockState replacement = ConfigManager.replacement(stateAt);
           if (replacement == null) {
             toRemove.add(entry);
             continue;
           }
+          ResourceLocation table = be.lootTable;
+          long seed = be.lootTableSeed;
+          be.lootTable = null;
           level.destroyBlock(entry.getPosition(), false);
           level.setBlock(entry.getPosition(), replacement, 2);
           blockEntity = level.getBlockEntity(entry.getPosition());
