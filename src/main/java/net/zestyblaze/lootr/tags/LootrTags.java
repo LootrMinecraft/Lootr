@@ -5,7 +5,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.zestyblaze.lootr.api.LootrAPI;
 
 public class LootrTags {
@@ -39,14 +39,14 @@ public class LootrTags {
     }
 
     public static class Structures {
-        public static final TagKey<Structure> DESERT_PYRAMID = tag("desert_pyramid");
-        public static final TagKey<Structure> JUNGLE_TEMPLE = tag("jungle_temple");
-        public static final TagKey<Structure> STRUCTURE_BLACKLIST = tag("structure_blacklist");
-        public static final TagKey<Structure> REFRESH_STRUCTURES = tag("refresh_structures");
-        public static final TagKey<Structure> DECAY_STRUCTURES = tag("decay_structures");
+        public static final TagKey<ConfiguredStructureFeature<?, ?>> DESERT_PYRAMID = tag("desert_pyramid");
+        public static final TagKey<ConfiguredStructureFeature<?, ?>> JUNGLE_TEMPLE = tag("jungle_temple");
+        public static final TagKey<ConfiguredStructureFeature<?, ?>> STRUCTURE_BLACKLIST = tag("structure_blacklist");
+        public static final TagKey<ConfiguredStructureFeature<?, ?>> REFRESH_STRUCTURES = tag("refresh_structures");
+        public static final TagKey<ConfiguredStructureFeature<?, ?>> DECAY_STRUCTURES = tag("decay_structures");
 
-        static TagKey<Structure> tag (String name) {
-            return TagKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(LootrAPI.MODID, name));
+        static TagKey<ConfiguredStructureFeature<?, ?>> tag (String name) {
+            return TagKey.create(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY, new ResourceLocation(LootrAPI.MODID, name));
         }
     }
 }
