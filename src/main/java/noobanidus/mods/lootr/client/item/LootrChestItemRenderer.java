@@ -18,11 +18,12 @@ public class LootrChestItemRenderer extends BlockEntityWithoutLevelRenderer {
   private static LootrChestItemRenderer INSTANCE = null;
 
   private final BlockEntityRenderDispatcher blockEntityRenderDispatcher;
-  private final LootrChestBlockEntity tile = new LootrChestBlockEntity(BlockPos.ZERO, ModBlocks.CHEST.defaultBlockState());
+  private final LootrChestBlockEntity tile;
 
   public LootrChestItemRenderer(BlockEntityRenderDispatcher pBlockEntityRenderDispatcher, EntityModelSet pEntityModelSet) {
     super(pBlockEntityRenderDispatcher, pEntityModelSet);
     this.blockEntityRenderDispatcher = pBlockEntityRenderDispatcher;
+    this.tile = new LootrChestBlockEntity(BlockPos.ZERO, ModBlocks.CHEST.get().defaultBlockState());
   }
 
   public LootrChestItemRenderer() {

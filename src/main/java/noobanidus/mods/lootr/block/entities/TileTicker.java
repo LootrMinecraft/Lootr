@@ -10,7 +10,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -79,13 +78,13 @@ public class TileTicker {
             toRemove.add(entry);
             continue;
           }
-          if (!ConfigManager.getLootStructureBlacklist().isEmpty()) {
+/*          if (!ConfigManager.getLootStructureBlacklist().isEmpty()) {
             StructureFeature<?> startAt = StructureUtil.featureFor(level, entry.getPosition());
             if (startAt != null && ConfigManager.getLootStructureBlacklist().contains(startAt.getRegistryName())) {
               toRemove.add(entry);
               continue;
             }
-          }
+          }*/
           BlockState stateAt = level.getBlockState(entry.getPosition());
           BlockState replacement = ConfigManager.replacement(stateAt);
           if (replacement == null) {

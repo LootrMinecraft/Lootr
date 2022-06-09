@@ -1,16 +1,15 @@
 package noobanidus.mods.lootr.entity;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -28,6 +27,7 @@ import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.entity.vehicle.AbstractMinecartContainer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
@@ -64,7 +64,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
   public LootrChestMinecartEntity(Level worldIn, double x, double y, double z) {
-    super(ModEntities.LOOTR_MINECART_ENTITY, x, y, z, worldIn);
+    super(ModEntities.LOOTR_MINECART_ENTITY.get(), x, y, z, worldIn);
   }
 
   @Override
@@ -99,8 +99,8 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
       if (source.getEntity().isShiftKeyDown()) {
         return false;
       } else {
-        source.getEntity().sendMessage(new TranslatableComponent("lootr.message.cart_should_sneak").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))), Util.NIL_UUID);
-        source.getEntity().sendMessage(new TranslatableComponent("lootr.message.should_sneak2", new TranslatableComponent("lootr.message.cart_should_sneak3").setStyle(Style.EMPTY.withBold(true))).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))), Util.NIL_UUID);
+        ((Player) source.getEntity()).displayClientMessage(Component.translatable("lootr.message.cart_should_sneak").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))), false);
+        ((Player) source.getEntity()).displayClientMessage(Component.translatable("lootr.message.should_sneak2", Component.translatable("lootr.message.cart_should_sneak3").setStyle(Style.EMPTY.withBold(true))).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))), false);
       }
     } else {
       return true;
@@ -136,10 +136,13 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     return AbstractMinecart.Type.CHEST;
   }
 
-  private static BlockState cartNormal = ModBlocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
+  private static BlockState cartNormal = null;
 
   @Override
   public BlockState getDefaultDisplayBlockState() {
+    if (cartNormal == null) {
+      cartNormal = ModBlocks.CHEST.get().defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
+    }
     return cartNormal;
   }
 
@@ -157,7 +160,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   public void remove(RemovalReason reason) {
     this.setRemoved(reason);
     if (reason == Entity.RemovalReason.KILLED) {
-      this.gameEvent(GameEvent.ENTITY_KILLED);
+      this.gameEvent(GameEvent.ENTITY_DIE);
     }
     this.invalidateCaps();
   }
@@ -218,7 +221,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
       if (loottable == LootTable.EMPTY) {
         LootrAPI.LOG.error("Unable to fill loot in " + level.dimension() + " at " + position() + " as the loot table '" + (overrideTable != null ? overrideTable : this.lootTable) + "' couldn't be resolved! Please search the loot table in `latest.log` to see if there are errors in loading.");
         if (ConfigManager.REPORT_UNRESOLVED_TABLES.get() && player != null) {
-          player.sendMessage(new TranslatableComponent("lootr.message.invalid_table", (overrideTable != null ? overrideTable : this.lootTable).toString()).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED)).withBold(true)), Util.NIL_UUID);
+          player.displayClientMessage(Component.translatable("lootr.message.invalid_table", (overrideTable != null ? overrideTable : this.lootTable).toString()).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED)).withBold(true)), false);
         }
       }
       if (player instanceof ServerPlayer) {
@@ -262,5 +265,10 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
       OpenCart cart = new OpenCart(getId());
       PacketHandler.sendToInternal(cart, pPlayer);
     }
+  }
+
+  @Override
+  public Item getDropItem() {
+    return Items.CHEST_MINECART;
   }
 }

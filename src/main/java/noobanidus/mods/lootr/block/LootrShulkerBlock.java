@@ -151,7 +151,7 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
 
   @Override
   public ItemStack getCloneItemStack(BlockGetter pLevel, BlockPos pPos, BlockState pState) {
-    return new ItemStack(ModItems.SHULKER);
+    return new ItemStack(ModItems.SHULKER.get());
   }
 
   @Override
@@ -162,12 +162,12 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
 
   @Override
   public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-    return new LootrShulkerBlockEntity(ModBlockEntities.SPECIAL_LOOT_SHULKER, pPos, pState);
+    return new LootrShulkerBlockEntity(ModBlockEntities.LOOTR_SHULKER.get(), pPos, pState);
   }
 
   @Override
   @Nullable
   public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-    return createTickerHelper(pBlockEntityType, ModBlockEntities.SPECIAL_LOOT_SHULKER, LootrShulkerBlockEntity::tick);
+    return createTickerHelper(pBlockEntityType, ModBlockEntities.LOOTR_SHULKER.get(), LootrShulkerBlockEntity::tick);
   }
 }

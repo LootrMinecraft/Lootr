@@ -16,10 +16,10 @@ public class LootrItemTagsProvider extends ItemTagsProvider {
 
   @Override
   protected void addTags() {
-    tag(LootrTags.Items.BARRELS).add(ModItems.BARREL);
-    tag(LootrTags.Items.CHESTS).add(ModItems.CHEST, ModItems.INVENTORY);
-    tag(LootrTags.Items.TRAPPED_CHESTS).add(ModItems.TRAPPED_CHEST);
-    tag(LootrTags.Items.SHULKERS).add(ModItems.SHULKER);
+    tag(LootrTags.Items.BARRELS).add(ModItems.BARREL.get());
+    tag(LootrTags.Items.CHESTS).add(ModItems.CHEST.get(), ModItems.INVENTORY.get());
+    tag(LootrTags.Items.TRAPPED_CHESTS).add(ModItems.TRAPPED_CHEST.get());
+    tag(LootrTags.Items.SHULKERS).add(ModItems.SHULKER.get());
     //noinspection unchecked
     tag(LootrTags.Items.CONTAINERS).addTags(LootrTags.Items.BARRELS, LootrTags.Items.CHESTS, LootrTags.Items.TRAPPED_CHESTS, LootrTags.Items.SHULKERS);
   }

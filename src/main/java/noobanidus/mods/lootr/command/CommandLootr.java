@@ -93,7 +93,7 @@ public class CommandLootr {
       }
       cart.setLootTable(table, world.getRandom().nextLong());
       world.addFreshEntity(cart);
-      c.sendSuccess(new TranslatableComponent("lootr.commands.summon", ComponentUtils.wrapInSquareBrackets(new TranslatableComponent("lootr.commands.blockpos", pos.getX(), pos.getY(), pos.getZ()).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.GREEN)).withBold(true))), table.toString()), false);
+      c.sendSuccess(Component.translatable("lootr.commands.summon", ComponentUtils.wrapInSquareBrackets(Component.translatable("lootr.commands.blockpos", pos.getX(), pos.getY(), pos.getZ()).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.GREEN)).withBold(true))), table.toString()), false);
     } else {
       BlockState placementState = block.defaultBlockState();
       Entity e = c.getEntity();
@@ -114,7 +114,7 @@ public class CommandLootr {
       }
       world.setBlock(pos, placementState, 2);
       RandomizableContainerBlockEntity.setLootTable(world, world.getRandom(), pos, table);
-      c.sendSuccess(new TranslatableComponent("lootr.commands.create", new TranslatableComponent(block.getDescriptionId()), ComponentUtils.wrapInSquareBrackets(new TranslatableComponent("lootr.commands.blockpos", pos.getX(), pos.getY(), pos.getZ()).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.GREEN)).withBold(true))), table.toString()), false);
+      c.sendSuccess(Component.translatable("lootr.commands.create", Component.translatable(block.getDescriptionId()), ComponentUtils.wrapInSquareBrackets(Component.translatable("lootr.commands.blockpos", pos.getX(), pos.getY(), pos.getZ()).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.GREEN)).withBold(true))), table.toString()), false);
     }
   }
 
@@ -129,42 +129,42 @@ public class CommandLootr {
 
   public LiteralArgumentBuilder<CommandSourceStack> builder(LiteralArgumentBuilder<CommandSourceStack> builder) {
     builder.executes(c -> {
-      c.getSource().sendSuccess(new TranslatableComponent("lootr.commands.usage"), false);
+      c.getSource().sendSuccess(Component.translatable("lootr.commands.usage"), false);
       return 1;
     });
     builder.then(Commands.literal("barrel").executes(c -> {
-      createBlock(c.getSource(), ModBlocks.BARREL, null);
+      createBlock(c.getSource(), ModBlocks.BARREL.get(), null);
       return 1;
     }).then(suggestTables().executes(c -> {
-      createBlock(c.getSource(), ModBlocks.BARREL, ResourceLocationArgument.getId(c, "table"));
+      createBlock(c.getSource(), ModBlocks.BARREL.get(), ResourceLocationArgument.getId(c, "table"));
       return 1;
     })));
     builder.then(Commands.literal("chest").executes(c -> {
-      createBlock(c.getSource(), ModBlocks.CHEST, null);
+      createBlock(c.getSource(), ModBlocks.CHEST.get(), null);
       return 1;
     }).then(suggestTables().executes(c -> {
-      createBlock(c.getSource(), ModBlocks.CHEST, ResourceLocationArgument.getId(c, "table"));
+      createBlock(c.getSource(), ModBlocks.CHEST.get(), ResourceLocationArgument.getId(c, "table"));
       return 1;
     })));
     builder.then(Commands.literal("shulker").executes(c -> {
-      createBlock(c.getSource(), ModBlocks.SHULKER, null);
+      createBlock(c.getSource(), ModBlocks.SHULKER.get(), null);
       return 1;
     }).then(suggestTables().executes(c -> {
-      createBlock(c.getSource(), ModBlocks.SHULKER, ResourceLocationArgument.getId(c, "table"));
+      createBlock(c.getSource(), ModBlocks.SHULKER.get(), ResourceLocationArgument.getId(c, "table"));
       return 1;
     })));
     builder.then(Commands.literal("clear").executes(c -> {
-      c.getSource().sendSuccess(new TextComponent("Must provide player name."), true);
+      c.getSource().sendSuccess(Component.literal("Must provide player name."), true);
       return 1;
     }).then(suggestProfiles().executes(c -> {
       String playerName = StringArgumentType.getString(c, "profile");
       Optional<GameProfile> opt_profile = c.getSource().getServer().getProfileCache().get(playerName);
       if (!opt_profile.isPresent()) {
-        c.getSource().sendFailure(new TextComponent("Invalid player name: " + playerName + ", profile not found in the cache."));
+        c.getSource().sendFailure(Component.literal("Invalid player name: " + playerName + ", profile not found in the cache."));
         return 0;
       }
       GameProfile profile = opt_profile.get();
-      c.getSource().sendSuccess(new TextComponent(DataStorage.clearInventories(profile.getId()) ? "Cleared stored inventories for " + playerName : "No stored inventories for " + playerName + " to clear"), true);
+      c.getSource().sendSuccess(Component.literal(DataStorage.clearInventories(profile.getId()) ? "Cleared stored inventories for " + playerName : "No stored inventories for " + playerName + " to clear"), true);
       return 1;
     })));
     builder.then(Commands.literal("cart").executes(c -> {
@@ -183,15 +183,15 @@ public class CommandLootr {
         state = world.getBlockState(pos);
       }
       if (!state.is(Blocks.CHEST)) {
-        c.getSource().sendSuccess(new TextComponent("Please stand on the chest you wish to convert."), false);
+        c.getSource().sendSuccess(Component.literal("Please stand on the chest you wish to convert."), false);
       } else {
         NonNullList<ItemStack> reference = ((ChestBlockEntity) Objects.requireNonNull(world.getBlockEntity(pos))).items;
         NonNullList<ItemStack> custom = ChestUtil.copyItemList(reference);
         world.removeBlockEntity(pos);
-        world.setBlockAndUpdate(pos, ModBlocks.INVENTORY.defaultBlockState().setValue(ChestBlock.FACING, state.getValue(ChestBlock.FACING)).setValue(ChestBlock.WATERLOGGED, state.getValue(ChestBlock.WATERLOGGED)));
+        world.setBlockAndUpdate(pos, ModBlocks.INVENTORY.get().defaultBlockState().setValue(ChestBlock.FACING, state.getValue(ChestBlock.FACING)).setValue(ChestBlock.WATERLOGGED, state.getValue(ChestBlock.WATERLOGGED)));
         BlockEntity te = world.getBlockEntity(pos);
         if (!(te instanceof LootrInventoryBlockEntity)) {
-          c.getSource().sendSuccess(new TextComponent("Unable to convert chest, BlockState is not a Lootr Inventory block."), false);
+          c.getSource().sendSuccess(Component.literal("Unable to convert chest, BlockState is not a Lootr Inventory block."), false);
         } else {
           LootrInventoryBlockEntity inventory = (LootrInventoryBlockEntity) te;
           inventory.setCustomInventory(custom);
@@ -209,9 +209,9 @@ public class CommandLootr {
         te = world.getBlockEntity(pos);
       }
       if (!(te instanceof ILootBlockEntity)) {
-        c.getSource().sendSuccess(new TextComponent("Please stand on a valid Lootr chest."), false);
+        c.getSource().sendSuccess(Component.literal("Please stand on a valid Lootr chest."), false);
       } else {
-        c.getSource().sendSuccess(new TextComponent("The ID of this inventory is: " + ((ILootBlockEntity) te).getTileId().toString()), false);
+        c.getSource().sendSuccess(Component.literal("The ID of this inventory is: " + ((ILootBlockEntity) te).getTileId().toString()), false);
       }
       return 1;
     }));
@@ -225,9 +225,9 @@ public class CommandLootr {
       }
       if (be instanceof ILootBlockEntity) {
         DataStorage.setRefreshing(((ILootBlockEntity)be).getTileId(), ConfigManager.REFRESH_VALUE.get());
-        c.getSource().sendSuccess(new TextComponent("Container with ID " + ((ILootBlockEntity)be).getTileId() + " has been set to refresh with a delay of " + ConfigManager.REFRESH_VALUE.get()), false);
+        c.getSource().sendSuccess(Component.literal("Container with ID " + ((ILootBlockEntity)be).getTileId() + " has been set to refresh with a delay of " + ConfigManager.REFRESH_VALUE.get()), false);
       } else {
-        c.getSource().sendSuccess(new TextComponent("Please stand on a valid Lootr container."), false);
+        c.getSource().sendSuccess(Component.literal("Please stand on a valid Lootr container."), false);
       }
       return 1;
     }));
@@ -241,9 +241,9 @@ public class CommandLootr {
       }
       if (be instanceof ILootBlockEntity) {
         DataStorage.setDecaying(((ILootBlockEntity)be).getTileId(), ConfigManager.DECAY_VALUE.get());
-        c.getSource().sendSuccess(new TextComponent("Container with ID " + ((ILootBlockEntity)be).getTileId() + " has been set to decay with a delay of " + ConfigManager.DECAY_VALUE.get()), false);
+        c.getSource().sendSuccess(Component.literal("Container with ID " + ((ILootBlockEntity)be).getTileId() + " has been set to decay with a delay of " + ConfigManager.DECAY_VALUE.get()), false);
       } else {
-        c.getSource().sendSuccess(new TextComponent("Please stand on a valid Lootr container."), false);
+        c.getSource().sendSuccess(Component.literal("Please stand on a valid Lootr container."), false);
       }
       return 1;
     }));
@@ -253,13 +253,13 @@ public class CommandLootr {
       BlockEntity tile = world.getBlockEntity(position);
       if (tile instanceof ILootBlockEntity) {
         Set<UUID> openers = ((ILootBlockEntity) tile).getOpeners();
-        c.getSource().sendSuccess(new TextComponent("Tile at location " + position + " has " + openers.size() + " openers. UUIDs as follows:"), true);
+        c.getSource().sendSuccess(Component.literal("Tile at location " + position + " has " + openers.size() + " openers. UUIDs as follows:"), true);
         for (UUID uuid : openers) {
           Optional<GameProfile> prof = c.getSource().getServer().getProfileCache().get(uuid);
-          c.getSource().sendSuccess(new TextComponent("UUID: " + uuid.toString() + ", user profile: " + (prof.isPresent() ? prof.get().getName() : "null")), true);
+          c.getSource().sendSuccess(Component.literal("UUID: " + uuid.toString() + ", user profile: " + (prof.isPresent() ? prof.get().getName() : "null")), true);
         }
       } else {
-        c.getSource().sendSuccess(new TextComponent("No Lootr tile exists at location: " + position), false);
+        c.getSource().sendSuccess(Component.literal("No Lootr tile exists at location: " + position), false);
       }
       return 1;
     })));

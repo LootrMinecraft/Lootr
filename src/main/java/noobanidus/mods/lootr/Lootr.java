@@ -6,15 +6,16 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.command.CommandLootr;
 import noobanidus.mods.lootr.config.ConfigManager;
-import noobanidus.mods.lootr.init.ModAdvancements;
-import noobanidus.mods.lootr.init.ModBlocks;
+import noobanidus.mods.lootr.init.*;
 
 @Mod("lootr")
 public class Lootr {
@@ -27,7 +28,7 @@ public class Lootr {
   public static CreativeModeTab TAB = new CreativeModeTab(LootrAPI.MODID) {
     @Override
     public ItemStack makeIcon() {
-      return new ItemStack(ModBlocks.CHEST);
+      return new ItemStack(ModBlocks.CHEST.get());
     }
   };
 
@@ -38,6 +39,11 @@ public class Lootr {
     ConfigManager.loadConfig(ConfigManager.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve(LootrAPI.MODID + "-common.toml"));
     ConfigManager.loadConfig(ConfigManager.CLIENT_CONFIG, FMLPaths.CONFIGDIR.get().resolve(LootrAPI.MODID + "-client.toml"));
     MinecraftForge.EVENT_BUS.addListener(this::onCommands);
+    IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+    ModBlockEntities.register(modBus);
+    ModBlocks.register(modBus);
+    ModEntities.register(modBus);
+    ModItems.register(modBus);
   }
 
   public void onCommands(RegisterCommandsEvent event) {

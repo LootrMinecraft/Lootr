@@ -37,10 +37,10 @@ public class ClientSetup {
 
   @SubscribeEvent
   public static void registerRenderers (EntityRenderersEvent.RegisterRenderers event) {
-    event.registerBlockEntityRenderer(ModBlockEntities.SPECIAL_LOOT_CHEST, LootrChestBlockRenderer::new);
-    event.registerBlockEntityRenderer(ModBlockEntities.SPECIAL_TRAPPED_LOOT_CHEST, LootrChestBlockRenderer::new);
-    event.registerBlockEntityRenderer(ModBlockEntities.SPECIAL_LOOT_INVENTORY, LootrChestBlockRenderer::new);
-    event.registerBlockEntityRenderer(ModBlockEntities.SPECIAL_LOOT_SHULKER, LootrShulkerBlockRenderer::new);
-    event.registerEntityRenderer(ModEntities.LOOTR_MINECART_ENTITY, (e) -> new LootrChestCartRenderer<>(e, ModelLayers.CHEST_MINECART));
+    event.registerBlockEntityRenderer(ModBlockEntities.LOOTR_CHEST.get(), LootrChestBlockRenderer::new);
+    event.registerBlockEntityRenderer(ModBlockEntities.LOOTR_TRAPPED_CHEST.get(), LootrChestBlockRenderer::new);
+    event.registerBlockEntityRenderer(ModBlockEntities.LOOTR_INVENTORY.get(), LootrChestBlockRenderer::new);
+    event.registerBlockEntityRenderer(ModBlockEntities.LOOTR_SHULKER.get(), LootrShulkerBlockRenderer::new);
+    event.registerEntityRenderer(ModEntities.LOOTR_MINECART_ENTITY.get(), (e) -> new LootrChestCartRenderer<>(e, ModelLayers.CHEST_MINECART));
   }
 }

@@ -16,11 +16,12 @@ public class LootrShulkerItemRenderer extends BlockEntityWithoutLevelRenderer {
   private static LootrShulkerItemRenderer INSTANCE = null;
 
   private final BlockEntityRenderDispatcher blockEntityRenderDispatcher;
-  private final LootrShulkerBlockEntity tile = new LootrShulkerBlockEntity(BlockPos.ZERO, ModBlocks.CHEST.defaultBlockState());
+  private final LootrShulkerBlockEntity tile;
 
   public LootrShulkerItemRenderer(BlockEntityRenderDispatcher pBlockEntityRenderDispatcher, EntityModelSet pEntityModelSet) {
     super(pBlockEntityRenderDispatcher, pEntityModelSet);
     this.blockEntityRenderDispatcher = pBlockEntityRenderDispatcher;
+    this.tile = new LootrShulkerBlockEntity(BlockPos.ZERO, ModBlocks.CHEST.get().defaultBlockState());
   }
 
   public LootrShulkerItemRenderer() {

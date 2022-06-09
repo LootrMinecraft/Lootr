@@ -17,7 +17,6 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -320,12 +319,12 @@ public class ConfigManager {
         return true;
       }
     }
-    if (!ConfigManager.getDecayStructures().isEmpty()) {
+/*    if (!ConfigManager.getDecayStructures().isEmpty()) {
       StructureFeature<?> startAt = StructureUtil.featureFor(level, tile.getPosition());
       if (startAt != null && ConfigManager.getDecayStructures().contains(startAt.getRegistryName())) {
         return true;
       }
-    }
+    }*/
     return isDimensionDecaying(level.dimension());
   }
 
@@ -341,12 +340,12 @@ public class ConfigManager {
         return true;
       }
     }
-    if (!ConfigManager.getRefreshStructures().isEmpty()) {
+/*    if (!ConfigManager.getRefreshStructures().isEmpty()) {
       StructureFeature<?> startAt = StructureUtil.featureFor(level, tile.getPosition());
       if (startAt != null && ConfigManager.getRefreshStructures().contains(startAt.getRegistryName())) {
         return true;
       }
-    }
+    }*/
     return isDimensionRefreshing(level.dimension());
   }
 
@@ -362,12 +361,12 @@ public class ConfigManager {
         return true;
       }
     }
-    if (!ConfigManager.getDecayStructures().isEmpty()) {
+/*    if (!ConfigManager.getDecayStructures().isEmpty()) {
       StructureFeature<?> startAt = StructureUtil.featureFor(level, new BlockPos(entity.position()));
       if (startAt != null && ConfigManager.getDecayStructures().contains(startAt.getRegistryName())) {
         return true;
       }
-    }
+    }*/
     return isDimensionDecaying(level.dimension());
   }
 
@@ -384,12 +383,12 @@ public class ConfigManager {
         return true;
       }
     }
-    if (!ConfigManager.getRefreshStructures().isEmpty()) {
+/*    if (!ConfigManager.getRefreshStructures().isEmpty()) {
       StructureFeature<?> startAt = StructureUtil.featureFor(level, new BlockPos(entity.position()));
       if (startAt != null && ConfigManager.getRefreshStructures().contains(startAt.getRegistryName())) {
         return true;
       }
-    }
+    }*/
     return isDimensionRefreshing(level.dimension());
   }
 
@@ -418,13 +417,13 @@ public class ConfigManager {
   public static BlockState replacement(BlockState original) {
     if (replacements == null) {
       replacements = new HashMap<>();
-      replacements.put(Blocks.CHEST, ModBlocks.CHEST);
-      replacements.put(Blocks.BARREL, ModBlocks.BARREL);
-      replacements.put(Blocks.TRAPPED_CHEST, ModBlocks.TRAPPED_CHEST);
-      replacements.put(Blocks.SHULKER_BOX, ModBlocks.SHULKER);
+      replacements.put(Blocks.CHEST, ModBlocks.CHEST.get());
+      replacements.put(Blocks.BARREL, ModBlocks.BARREL.get());
+      replacements.put(Blocks.TRAPPED_CHEST, ModBlocks.TRAPPED_CHEST.get());
+      replacements.put(Blocks.SHULKER_BOX, ModBlocks.SHULKER.get());
       if (CONVERT_QUARK.get() && ModList.get().isLoaded("quark")) {
-        QUARK_CHESTS.forEach(o -> addSafeReplacement(o, ModBlocks.CHEST));
-        QUARK_TRAPPED_CHESTS.forEach(o -> addSafeReplacement(o, ModBlocks.TRAPPED_CHEST));
+        QUARK_CHESTS.forEach(o -> addSafeReplacement(o, ModBlocks.CHEST.get()));
+        QUARK_TRAPPED_CHESTS.forEach(o -> addSafeReplacement(o, ModBlocks.TRAPPED_CHEST.get()));
       }
 
 
@@ -438,7 +437,7 @@ public class ConfigManager {
             if (o instanceof EntityBlock) {
               BlockEntity tile = ((EntityBlock) o).newBlockEntity(BlockPos.ZERO, o.defaultBlockState());
               if (tile instanceof RandomizableContainerBlockEntity) {
-                replacements.put(o, ModBlocks.CHEST);
+                replacements.put(o, ModBlocks.CHEST.get());
               }
             }
           });
@@ -452,7 +451,7 @@ public class ConfigManager {
             if (o instanceof EntityBlock) {
               BlockEntity tile = ((EntityBlock) o).newBlockEntity(BlockPos.ZERO, o.defaultBlockState());
               if (tile instanceof RandomizableContainerBlockEntity) {
-                replacements.put(o, ModBlocks.TRAPPED_CHEST);
+                replacements.put(o, ModBlocks.TRAPPED_CHEST.get());
               }
             }
           });
@@ -460,8 +459,8 @@ public class ConfigManager {
       }
       if (!getAdditionalChests().isEmpty() || !getAdditionalTrappedChests().isEmpty()) {
         final ServerLevel world = ServerLifecycleHooks.getCurrentServer().overworld();
-        getAdditionalChests().forEach(o -> addUnsafeReplacement(o, ModBlocks.CHEST, world));
-        getAdditionalTrappedChests().forEach(o -> addUnsafeReplacement(o, ModBlocks.TRAPPED_CHEST, world));
+        getAdditionalChests().forEach(o -> addUnsafeReplacement(o, ModBlocks.CHEST.get(), world));
+        getAdditionalTrappedChests().forEach(o -> addUnsafeReplacement(o, ModBlocks.TRAPPED_CHEST.get(), world));
       }
     }
 

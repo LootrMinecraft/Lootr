@@ -1,29 +1,14 @@
 package noobanidus.mods.lootr.util;
 
-import it.unimi.dsi.fastutil.longs.LongSet;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.SectionPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.StructureFeatureManager;
-import net.minecraft.world.level.chunk.ChunkAccess;
-import net.minecraft.world.level.chunk.ChunkStatus;
-import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
-import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraft.world.level.levelgen.structure.StructurePiece;
-import net.minecraft.world.level.levelgen.structure.StructureStart;
-
-import javax.annotation.Nullable;
-import java.util.Map;
 
 public class StructureUtil {
   private static final BoundingBox DESERT_PYRAMID_BOX = new BoundingBox(-2, -20, -2, 3, 2, 3);
   private static final ResourceLocation DESERT_PYRAMID = new ResourceLocation("minecraft", "desert_pyramid");
   private static final ResourceLocation JUNGLE_PYRAMID = new ResourceLocation("minecraft", "jungle_pyramid");
 
-  @Nullable
+/*  @Nullable
   public static StructureFeature<?> featureFor(ServerLevel level, BlockPos pos) {
     ChunkPos cPos = new ChunkPos(pos);
     ChunkAccess chunk = level.getChunk(cPos.x, cPos.z, ChunkStatus.STRUCTURE_REFERENCES);
@@ -56,5 +41,5 @@ public class StructureUtil {
     }
 
     return null;
-  }
+  }*/
 }

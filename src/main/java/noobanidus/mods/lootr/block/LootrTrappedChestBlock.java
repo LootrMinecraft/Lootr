@@ -29,7 +29,7 @@ import javax.annotation.Nullable;
 
 public class LootrTrappedChestBlock extends ChestBlock {
   public LootrTrappedChestBlock(Properties properties) {
-    super(properties, () -> ModBlockEntities.SPECIAL_TRAPPED_LOOT_CHEST);
+    super(properties, ModBlockEntities.LOOTR_TRAPPED_CHEST::get);
   }
 
   @Override

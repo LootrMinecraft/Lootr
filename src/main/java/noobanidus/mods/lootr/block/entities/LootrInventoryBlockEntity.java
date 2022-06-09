@@ -22,7 +22,7 @@ public class LootrInventoryBlockEntity extends LootrChestBlockEntity {
   }
 
   public LootrInventoryBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
-    super(ModBlockEntities.SPECIAL_LOOT_INVENTORY, pWorldPosition, pBlockState);
+    super(ModBlockEntities.LOOTR_INVENTORY.get(), pWorldPosition, pBlockState);
   }
 
   @Override

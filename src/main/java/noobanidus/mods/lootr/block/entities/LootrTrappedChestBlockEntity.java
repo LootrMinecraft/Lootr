@@ -13,7 +13,7 @@ public class LootrTrappedChestBlockEntity extends LootrChestBlockEntity {
   }
 
   public LootrTrappedChestBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
-    this(ModBlockEntities.SPECIAL_TRAPPED_LOOT_CHEST, pWorldPosition, pBlockState);
+    this(ModBlockEntities.LOOTR_TRAPPED_CHEST.get(), pWorldPosition, pBlockState);
   }
 
   @Override

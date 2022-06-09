@@ -3,6 +3,7 @@ package noobanidus.mods.lootr.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -34,7 +35,7 @@ import java.util.function.Supplier;
 
 public class LootrInventoryBlock extends ChestBlock {
   public LootrInventoryBlock(Properties properties) {
-    super(properties, () -> ModBlockEntities.SPECIAL_LOOT_INVENTORY);
+    super(properties, ModBlockEntities.LOOTR_INVENTORY::get);
   }
 
   public LootrInventoryBlock(Properties properties, Supplier<BlockEntityType<? extends ChestBlockEntity>> type) {
@@ -105,7 +106,7 @@ public class LootrInventoryBlock extends ChestBlock {
   }
 
   @Override
-  public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, Random pRandom) {
+  public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
     BlockEntity blockentity = pLevel.getBlockEntity(pPos);
     if (blockentity instanceof LootrInventoryBlockEntity) {
       ((LootrInventoryBlockEntity) blockentity).recheckOpen();

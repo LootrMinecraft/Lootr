@@ -14,7 +14,6 @@ import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -81,7 +80,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   public LootrShulkerBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
-    this(ModBlockEntities.SPECIAL_LOOT_SHULKER, pWorldPosition, pBlockState);
+    this(ModBlockEntities.LOOTR_SHULKER.get(), pWorldPosition, pBlockState);
   }
 
   public static void tick(Level pLevel, BlockPos pPos, BlockState pState, LootrShulkerBlockEntity pBlockEntity) {
@@ -208,7 +207,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
 
   @Override
   protected Component getDefaultName() {
-    return new TranslatableComponent("container.shulkerBox");
+    return Component.translatable("container.shulkerBox");
   }
 
   @Override
@@ -360,7 +359,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
       if (loottable == LootTable.EMPTY) {
         LootrAPI.LOG.error("Unable to fill loot shulker in " + level.dimension() + " at " + worldPosition + " as the loot table '" + (overrideTable != null ? overrideTable : this.savedLootTable) + "' couldn't be resolved! Please search the loot table in `latest.log` to see if there are errors in loading.");
         if (ConfigManager.REPORT_UNRESOLVED_TABLES.get()) {
-          player.sendMessage(new TranslatableComponent("lootr.message.invalid_table", (overrideTable != null ? overrideTable : this.savedLootTable).toString()).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED)).withBold(true)), Util.NIL_UUID);
+          player.displayClientMessage(Component.translatable("lootr.message.invalid_table", (overrideTable != null ? overrideTable : this.savedLootTable).toString()).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED)).withBold(true)), false);
         }
       }
       if (player instanceof ServerPlayer) {

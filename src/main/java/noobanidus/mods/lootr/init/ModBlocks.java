@@ -5,50 +5,23 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
-import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.block.*;
 import noobanidus.mods.lootr.block.entities.LootrShulkerBlockEntity;
 
 import java.util.Set;
 
-@Mod.EventBusSubscriber(modid= LootrAPI.MODID, bus= Mod.EventBusSubscriber.Bus.MOD)
 public class ModBlocks {
-  public static LootrBarrelBlock BARREL;
-  public static LootrChestBlock CHEST;
-  public static LootrTrappedChestBlock TRAPPED_CHEST;
-  public static LootrInventoryBlock INVENTORY;
-  public static LootrShulkerBlock SHULKER;
-  public static Block TROPHY;
-
-  public static Set<Block> specialLootChests;
-
-  public static void construct () {
-    BARREL = new LootrBarrelBlock(BlockBehaviour.Properties.copy(Blocks.CHEST).strength(2.5f));
-    CHEST = new LootrChestBlock(BlockBehaviour.Properties.copy(Blocks.BARREL).strength(2.5f));
-    TRAPPED_CHEST = new LootrTrappedChestBlock(BlockBehaviour.Properties.copy(Blocks.TRAPPED_CHEST).strength(2.5f));
-    INVENTORY = new LootrInventoryBlock(Block.Properties.of(Material.WOOD).strength(2.5f).sound(SoundType.WOOD));
-    SHULKER = new LootrShulkerBlock(Block.Properties.of(Material.SHULKER_SHELL).strength(2.5f).dynamicShape().noOcclusion().isSuffocating(posPredicate).isViewBlocking(posPredicate));
-    TROPHY = new TrophyBlock(Block.Properties.of(Material.METAL).strength(15f).sound(SoundType.METAL).noOcclusion().lightLevel((o) -> 15));
-    BARREL.setRegistryName(LootrAPI.MODID, "lootr_barrel");
-    CHEST.setRegistryName(LootrAPI.MODID, "lootr_chest");
-    TRAPPED_CHEST.setRegistryName(LootrAPI.MODID, "lootr_trapped_chest");
-    INVENTORY.setRegistryName(LootrAPI.MODID, "lootr_inventory");
-    SHULKER.setRegistryName(LootrAPI.MODID, "lootr_shulker");
-    TROPHY.setRegistryName(LootrAPI.MODID, "trophy");
-    specialLootChests = Sets.newHashSet(CHEST, BARREL, TRAPPED_CHEST, SHULKER, INVENTORY);
-  }
-
-  @SubscribeEvent
-  public static void registerBlocks(RegistryEvent.Register<Block> event) {
-    construct();
-    specialLootChests.forEach(event.getRegistry()::register);
-    event.getRegistry().register(TROPHY);
-  }
+  private static final DeferredRegister<Block> REGISTER = DeferredRegister.create(ForgeRegistries.BLOCKS, LootrAPI.MODID);
 
   private static final BlockBehaviour.StatePredicate posPredicate = (state, level, pos) -> {
     BlockEntity blockentity = level.getBlockEntity(pos);
@@ -58,4 +31,25 @@ public class ModBlocks {
       return false;
     }
   };
+
+  public static final RegistryObject<LootrBarrelBlock> BARREL = REGISTER.register("lootr_barrel", () -> new LootrBarrelBlock(BlockBehaviour.Properties.copy(Blocks.CHEST).strength(2.5f)));
+  public static final RegistryObject<LootrChestBlock> CHEST = REGISTER.register("lootr_chest", () -> new LootrChestBlock(BlockBehaviour.Properties.copy(Blocks.BARREL).strength(2.5f)));
+  public static final RegistryObject<LootrTrappedChestBlock> TRAPPED_CHEST = REGISTER.register("lootr_trapped_chest", () -> new LootrTrappedChestBlock(BlockBehaviour.Properties.copy(Blocks.TRAPPED_CHEST).strength(2.5f)));
+  public static final RegistryObject<LootrInventoryBlock> INVENTORY = REGISTER.register("lootr_inventory", () -> new LootrInventoryBlock(Block.Properties.of(Material.WOOD).strength(2.5f).sound(SoundType.WOOD)));
+  public static final RegistryObject<LootrShulkerBlock> SHULKER = REGISTER.register("lootr_shulker", () -> new LootrShulkerBlock(Block.Properties.of(Material.SHULKER_SHELL).strength(2.5f).dynamicShape().noOcclusion().isSuffocating(posPredicate).isViewBlocking(posPredicate)));
+  public static final RegistryObject<Block> TROPHY = REGISTER.register("trophy", () -> new TrophyBlock(Block.Properties.of(Material.METAL).strength(15f).sound(SoundType.METAL).noOcclusion().lightLevel((o) -> 15)));
+
+  private static Set<Block> specialLootChests = null;
+
+  public static Set<Block> getSpecialLootChests () {
+   if (specialLootChests == null) {
+    specialLootChests = Sets.newHashSet(CHEST.get(), BARREL.get(), TRAPPED_CHEST.get(), SHULKER.get(), INVENTORY.get());
+    }
+
+   return specialLootChests;
+  }
+
+  public static void register (IEventBus bus) {
+    REGISTER.register(bus);
+  }
 }

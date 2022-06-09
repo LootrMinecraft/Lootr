@@ -15,7 +15,6 @@ import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -93,7 +92,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   };
 
   public LootrBarrelBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
-    super(ModBlockEntities.SPECIAL_LOOT_BARREL, pWorldPosition, pBlockState);
+    super(ModBlockEntities.LOOTR_BARREL.get(), pWorldPosition, pBlockState);
   }
 
   private IModelData modelData = null;
@@ -150,7 +149,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
       if (loottable == LootTable.EMPTY) {
         LootrAPI.LOG.error("Unable to fill loot barrel in " + level.dimension() + " at " + worldPosition + " as the loot table '" + (overrideTable != null ? overrideTable : this.savedLootTable) + "' couldn't be resolved! Please search the loot table in `latest.log` to see if there are errors in loading.");
         if (ConfigManager.REPORT_UNRESOLVED_TABLES.get()) {
-          player.sendMessage(new TranslatableComponent("lootr.message.invalid_table", (overrideTable != null ? overrideTable : this.savedLootTable).toString()).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED)).withBold(true)), Util.NIL_UUID);
+          player.displayClientMessage(Component.translatable("lootr.message.invalid_table", (overrideTable != null ? overrideTable : this.savedLootTable).toString()).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED)).withBold(true)), false);
         }
       }
       if (player instanceof ServerPlayer) {
@@ -238,7 +237,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
 
   @Override
   protected Component getDefaultName() {
-    return new TranslatableComponent("container.barrel");
+    return Component.translatable("container.barrel");
   }
 
   @Override
