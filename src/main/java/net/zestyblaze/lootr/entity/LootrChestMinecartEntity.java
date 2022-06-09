@@ -8,9 +8,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -26,6 +26,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.AbstractMinecartContainer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
@@ -63,6 +64,11 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     }
 
     @Override
+    public Item getDropItem() {
+        return Items.CHEST_MINECART;
+    }
+
+    @Override
     public Set<UUID> getOpeners() {
         return openers;
     }
@@ -94,8 +100,8 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
             if (source.getEntity().isShiftKeyDown()) {
                 return false;
             } else {
-                source.getEntity().sendMessage(new TranslatableComponent("lootr.message.cart_should_sneak").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))), Util.NIL_UUID);
-                source.getEntity().sendMessage(new TranslatableComponent("lootr.message.should_sneak2", new TranslatableComponent("lootr.message.cart_should_sneak3").setStyle(Style.EMPTY.withBold(true))).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))), Util.NIL_UUID);
+                source.getEntity().sendSystemMessage(Component.translatable("lootr.message.cart_should_sneak").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))));
+                source.getEntity().sendSystemMessage(Component.translatable("lootr.message.should_sneak2", Component.translatable("lootr.message.cart_should_sneak3").setStyle(Style.EMPTY.withBold(true))).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))));
             }
         } else {
             return true;
@@ -108,15 +114,12 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     public void destroy(DamageSource source) {
         this.remove(Entity.RemovalReason.KILLED);
         if (this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
-            ItemStack itemstack = new ItemStack(Items.MINECART);
-            ItemStack itemstack2 = new ItemStack(Items.CHEST);
+            ItemStack itemstack = new ItemStack(Items.CHEST_MINECART);
             if (this.hasCustomName()) {
                 itemstack.setHoverName(this.getCustomName());
-                itemstack2.setHoverName(this.getCustomName());
             }
 
             this.spawnAtLocation(itemstack);
-            this.spawnAtLocation(itemstack2);
         }
     }
 
@@ -151,7 +154,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     public void remove(RemovalReason reason) {
         this.setRemoved(reason);
         if (reason == Entity.RemovalReason.KILLED) {
-            this.gameEvent(GameEvent.ENTITY_KILLED);
+            this.gameEvent(GameEvent.ENTITY_DIE);
         }
     }
 
@@ -211,7 +214,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
             if (loottable == LootTable.EMPTY) {
                 LootrAPI.LOG.error("Unable to fill loot in " + level.dimension() + " at " + position() + " as the loot table '" + (overrideTable != null ? overrideTable : this.lootTable) + "' couldn't be resolved! Please search the loot table in `latest.log` to see if there are errors in loading.");
                 if (LootrModConfig.get().debug.report_unresolved_tables && player != null) {
-                    player.sendMessage(new TranslatableComponent("lootr.message.invalid_table", (overrideTable != null ? overrideTable : this.lootTable).toString()).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED)).withBold(true)), Util.NIL_UUID);
+                    player.sendSystemMessage(Component.translatable("lootr.message.invalid_table", (overrideTable != null ? overrideTable : this.lootTable).toString()).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED)).withBold(true)));
                 }
             }
             if (player instanceof ServerPlayer) {

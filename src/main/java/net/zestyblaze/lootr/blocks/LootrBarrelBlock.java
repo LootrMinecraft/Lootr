@@ -2,6 +2,7 @@ package net.zestyblaze.lootr.blocks;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -59,7 +60,7 @@ public class LootrBarrelBlock extends BarrelBlock {
   }
 
   @Override
-  public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, Random pRandom) {
+  public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource source) {
     BlockEntity blockentity = pLevel.getBlockEntity(pPos);
     if (blockentity instanceof LootrBarrelBlockEntity barrel) {
       barrel.recheckOpen();
