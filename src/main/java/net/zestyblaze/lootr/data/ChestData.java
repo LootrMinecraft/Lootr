@@ -24,7 +24,6 @@ import net.zestyblaze.lootr.api.LootFiller;
 import net.zestyblaze.lootr.api.LootrAPI;
 import net.zestyblaze.lootr.api.blockentity.ILootBlockEntity;
 import net.zestyblaze.lootr.entity.LootrChestMinecartEntity;
-import net.zestyblaze.lootr.registry.LootrEventsInit;
 import net.zestyblaze.lootr.util.ServerAccessImpl;
 import org.jetbrains.annotations.Nullable;
 

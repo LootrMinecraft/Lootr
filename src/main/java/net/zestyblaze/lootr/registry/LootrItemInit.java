@@ -9,7 +9,6 @@ import net.minecraft.world.item.Rarity;
 import net.zestyblaze.lootr.Lootr;
 import net.zestyblaze.lootr.api.LootrAPI;
 import net.zestyblaze.lootr.config.LootrModConfig;
-import net.zestyblaze.lootr.item.CrownItem;
 
 public class LootrItemInit {
     public static final BlockItem CHEST = new BlockItem(LootrBlockInit.CHEST, new Item.Properties());

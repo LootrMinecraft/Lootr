@@ -25,12 +25,10 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.zestyblaze.lootr.blocks.entities.LootrChestBlockEntity;
-import net.zestyblaze.lootr.blocks.entities.LootrShulkerBlockEntity;
 import net.zestyblaze.lootr.registry.LootrBlockEntityInit;
 import net.zestyblaze.lootr.util.ChestUtil;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Random;
 import java.util.function.Supplier;
 
 public class LootrChestBlock extends ChestBlock {

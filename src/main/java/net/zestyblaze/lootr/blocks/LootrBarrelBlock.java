@@ -15,8 +15,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.zestyblaze.lootr.blocks.entities.LootrBarrelBlockEntity;
 import net.zestyblaze.lootr.util.ChestUtil;
 
-import java.util.Random;
-
 public class LootrBarrelBlock extends BarrelBlock {
   public LootrBarrelBlock(Properties p_49046_) {
     super(p_49046_);

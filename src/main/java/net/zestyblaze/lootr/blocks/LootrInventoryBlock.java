@@ -30,7 +30,6 @@ import net.zestyblaze.lootr.registry.LootrBlockEntityInit;
 import net.zestyblaze.lootr.util.ChestUtil;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Random;
 import java.util.function.Supplier;
 
 public class LootrInventoryBlock extends ChestBlock {

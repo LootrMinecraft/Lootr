@@ -4,7 +4,6 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.zestyblaze.lootr.blocks.LootrShulkerBlock;
 import net.zestyblaze.lootr.client.block.LootrChestBlockRenderer;
 import net.zestyblaze.lootr.client.block.LootrShulkerBlockRenderer;
 import org.spongepowered.asm.mixin.Mixin;

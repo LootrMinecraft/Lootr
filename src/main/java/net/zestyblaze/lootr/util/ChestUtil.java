@@ -1,7 +1,6 @@
 package net.zestyblaze.lootr.util;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
@@ -15,9 +14,7 @@ import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.zestyblaze.lootr.api.blockentity.ILootBlockEntity;
@@ -32,7 +29,6 @@ import net.zestyblaze.lootr.network.NetworkConstants;
 import net.zestyblaze.lootr.registry.LootrAdvancementsInit;
 import net.zestyblaze.lootr.registry.LootrStatsInit;
 
-import java.util.Random;
 import java.util.UUID;
 
 public class ChestUtil {
