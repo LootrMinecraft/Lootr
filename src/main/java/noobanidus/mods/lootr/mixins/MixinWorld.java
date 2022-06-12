@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(World.class)
 public class MixinWorld {
-  @Inject(method = "addTileEntity", at = @At(target = "Lnet/minecraft/tileentity/TileEntity;onLoad()V", value = "INVOKE", shift = At.Shift.AFTER))
+  @Inject(method = "addTileEntity", at = @At(target = "Lnet/minecraft/tileentity/TileEntity;onLoad()V", value = "INVOKE", remap = false, shift = At.Shift.AFTER))
   protected void lootrAddBlockEntity(TileEntity tile, CallbackInfoReturnable<Boolean> cir) {
     if (!(tile instanceof TileEntityLockableLoot) || tile instanceof ILootTile) {
       return;

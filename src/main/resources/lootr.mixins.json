@@ -2,7 +2,7 @@
   "required": true,
   "package": "noobanidus.mods.lootr.mixins",
   "compatibilityLevel": "JAVA_8",
-  "refmap": "lootr.refmap.json",
+  "refmap": "mixins.lootr.refmap.json",
   "mixins": [
     "MixinSaveHandler",
     "MixinWorld"

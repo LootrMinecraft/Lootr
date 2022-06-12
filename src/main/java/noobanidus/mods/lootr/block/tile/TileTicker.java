@@ -11,6 +11,7 @@ import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.ChunkProviderServer;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -61,7 +62,7 @@ public class TileTicker {
         if(server == null)
           return;
         for (Entry entry : copy) {
-          WorldServer level = server.getWorld(entry.getDimension().getId());
+          WorldServer level = DimensionManager.getWorld(entry.getDimension().getId(), false);
           if (level == null) {
             toRemove.add(entry);
             continue;

@@ -24,8 +24,8 @@ import java.util.function.Supplier;
 
 @SuppressWarnings({"NullableProblems"})
 public class LootrTrappedChestBlock extends BlockChest {
-  public LootrTrappedChestBlock() {
-    super(Type.TRAP);
+  public LootrTrappedChestBlock(Type type) {
+    super(type);
     this.setSoundType(SoundType.WOOD);
     setTranslationKey("lootr_trapped_chest");
   }
@@ -36,6 +36,11 @@ public class LootrTrappedChestBlock extends BlockChest {
     } else if (!this.isBlocked(world, pos)) {
       ChestUtil.handleLootChest(this, world, pos, player);
     }
+    return true;
+  }
+
+  @Override
+  public boolean canProvidePower(IBlockState state) {
     return true;
   }
 

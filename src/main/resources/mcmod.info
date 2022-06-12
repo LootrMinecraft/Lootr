@@ -1,0 +1,15 @@
+[
+{
+  "modid": "lootr",
+  "name": "Lootr",
+  "description": "Makes loot chest loot per-user.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "https://minecraft.curseforge.com/projects/lootr",
+  "updateUrl": "",
+  "authorList": ["Noobanidus","embeddedt"],
+  "logoFile": "assets/loliasm/loliasm.png",
+  "screenshots": [],
+  "dependencies": []
+}
+]

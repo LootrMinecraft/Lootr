@@ -312,6 +312,17 @@ public class LootrChestTileEntity extends TileEntityChest implements ILootTile, 
     readFromNBT(pkt.getNbtCompound());
   }
 
+  @Override
+  public void checkForAdjacentChests() {
+    if (!this.adjacentChestChecked) {
+      this.adjacentChestChecked = true;
+      this.adjacentChestXNeg = null;
+      this.adjacentChestXPos = null;
+      this.adjacentChestZNeg = null;
+      this.adjacentChestZPos = null;
+    }
+  }
+
   public static int getPlayersUsing(IBlockAccess reader, BlockPos posIn) {
     IBlockState blockstate = reader.getBlockState(posIn);
     if (blockstate.getBlock().hasTileEntity(blockstate)) {

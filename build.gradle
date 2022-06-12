@@ -35,6 +35,7 @@ minecraft {
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 
     clientJvmArgs += "-Dfml.coreMods.load=noobanidus.mods.lootr.LootrCore"
+    clientRunArgs += "--username=LootrDev"
 }
 
 repositories {
@@ -49,7 +50,7 @@ dependencies {
 }
 sourceSets {
     main {
-        ext.refMap = 'mixins.chunkbert.refmap.json'
+        ext.refMap = 'mixins.lootr.refmap.json'
     }
 }
 

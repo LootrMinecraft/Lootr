@@ -13,6 +13,7 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.ResourceLocation;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.tile.ILootTile;
+import noobanidus.mods.lootr.block.LootrChestBlock;
 import noobanidus.mods.lootr.block.tile.LootrChestTileEntity;
 import noobanidus.mods.lootr.config.ConfigManager;
 
@@ -25,8 +26,7 @@ public class SpecialLootChestTileRenderer<T extends LootrChestTileEntity & ILoot
   private static final ResourceLocation TEXTURE_NORMAL = new ResourceLocation("textures/entity/chest/normal.png");
   public static final ResourceLocation MATERIAL_NOT_OPENED = new ResourceLocation(Lootr.MODID, "textures/chest.png");
   public static final ResourceLocation MATERIAL_OPENED = new ResourceLocation(Lootr.MODID, "textures/chest_opened.png");
-  private final ModelChest simpleChest = new ModelChest();
-  private final ModelChest largeChest = new ModelLargeChest();
+  private final ModelLootChest simpleChest = new ModelLootChest();
 
   public SpecialLootChestTileRenderer() {
     super();
@@ -38,66 +38,25 @@ public class SpecialLootChestTileRenderer<T extends LootrChestTileEntity & ILoot
     GlStateManager.enableDepth();
     GlStateManager.depthFunc(515);
     GlStateManager.depthMask(true);
-    int i;
+    int i = te.hasWorld() ? te.getBlockMetadata() : 0;
 
-    if (te.hasWorld())
+    ModelChest modelchest = this.simpleChest;
+
+    if (destroyStage >= 0)
     {
-      Block block = te.getBlockType();
-      i = te.getBlockMetadata();
-
-      if (block instanceof BlockChest && i == 0)
-      {
-        ((BlockChest)block).checkForSurroundingChests(te.getWorld(), te.getPos(), te.getWorld().getBlockState(te.getPos()));
-        i = te.getBlockMetadata();
-      }
-
-      te.checkForAdjacentChests();
+      this.bindTexture(DESTROY_STAGES[destroyStage]);
+      GlStateManager.matrixMode(5890);
+      GlStateManager.pushMatrix();
+      GlStateManager.scale(4.0F, 4.0F, 1.0F);
+      GlStateManager.translate(0.0625F, 0.0625F, 0.0625F);
+      GlStateManager.matrixMode(5888);
     }
     else
     {
-      i = 0;
+      this.bindTexture(getChestTexture(te));
     }
 
-    if (te.adjacentChestZNeg == null && te.adjacentChestXNeg == null)
-    {
-      ModelChest modelchest;
 
-      if (te.adjacentChestXPos == null && te.adjacentChestZPos == null)
-      {
-        modelchest = this.simpleChest;
-
-        if (destroyStage >= 0)
-        {
-          this.bindTexture(DESTROY_STAGES[destroyStage]);
-          GlStateManager.matrixMode(5890);
-          GlStateManager.pushMatrix();
-          GlStateManager.scale(4.0F, 4.0F, 1.0F);
-          GlStateManager.translate(0.0625F, 0.0625F, 0.0625F);
-          GlStateManager.matrixMode(5888);
-        }
-        else
-        {
-          this.bindTexture(getChestTexture(te));
-        }
-      }
-      else
-      {
-        modelchest = this.largeChest;
-
-        if (destroyStage >= 0)
-        {
-          this.bindTexture(DESTROY_STAGES[destroyStage]);
-          GlStateManager.matrixMode(5890);
-          GlStateManager.pushMatrix();
-          GlStateManager.scale(8.0F, 4.0F, 1.0F);
-          GlStateManager.translate(0.0625F, 0.0625F, 0.0625F);
-          GlStateManager.matrixMode(5888);
-        }
-        else
-        {
-          this.bindTexture(getChestTexture(te));
-        }
-      }
 
       GlStateManager.pushMatrix();
       GlStateManager.enableRescaleNormal();
@@ -132,39 +91,10 @@ public class SpecialLootChestTileRenderer<T extends LootrChestTileEntity & ILoot
         j = -90;
       }
 
-      if (i == 2 && te.adjacentChestXPos != null)
-      {
-        GlStateManager.translate(1.0F, 0.0F, 0.0F);
-      }
-
-      if (i == 5 && te.adjacentChestZPos != null)
-      {
-        GlStateManager.translate(0.0F, 0.0F, -1.0F);
-      }
 
       GlStateManager.rotate((float)j, 0.0F, 1.0F, 0.0F);
       GlStateManager.translate(-0.5F, -0.5F, -0.5F);
       float f = te.prevLidAngle + (te.lidAngle - te.prevLidAngle) * partialTicks;
-
-      if (te.adjacentChestZNeg != null)
-      {
-        float f1 = te.adjacentChestZNeg.prevLidAngle + (te.adjacentChestZNeg.lidAngle - te.adjacentChestZNeg.prevLidAngle) * partialTicks;
-
-        if (f1 > f)
-        {
-          f = f1;
-        }
-      }
-
-      if (te.adjacentChestXNeg != null)
-      {
-        float f2 = te.adjacentChestXNeg.prevLidAngle + (te.adjacentChestXNeg.lidAngle - te.adjacentChestXNeg.prevLidAngle) * partialTicks;
-
-        if (f2 > f)
-        {
-          f = f2;
-        }
-      }
 
       f = 1.0F - f;
       f = 1.0F - f * f * f;
@@ -180,7 +110,6 @@ public class SpecialLootChestTileRenderer<T extends LootrChestTileEntity & ILoot
         GlStateManager.popMatrix();
         GlStateManager.matrixMode(5888);
       }
-    }
   }
 
   private ResourceLocation getChestTexture(T tile) {

@@ -21,8 +21,8 @@ import java.util.function.Supplier;
 
 @SuppressWarnings("NullableProblems")
 public class LootrChestBlock extends BlockChest {
-  public LootrChestBlock() {
-    super(Type.BASIC);
+  public LootrChestBlock(Type type) {
+    super(type);
     this.setSoundType(SoundType.WOOD);
     setTranslationKey("lootr_chest");
   }
@@ -46,6 +46,11 @@ public class LootrChestBlock extends BlockChest {
   @SuppressWarnings("deprecated")
   public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
     return NOT_CONNECTED_AABB;
+  }
+
+  @Override
+  public IBlockState checkForSurroundingChests(World world, BlockPos pos, IBlockState state) {
+    return state;
   }
 
   @Override
