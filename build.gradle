@@ -63,6 +63,7 @@ jar {
                 "FMLAT": "lootr_at.cfg"
         ])
     }
+    baseName 'lootr-1.12.2'
 }
 
 

@@ -15,7 +15,7 @@ import noobanidus.mods.lootr.setup.CommonSetup;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = "lootr")
+@Mod(modid = Lootr.MODID)
 public class Lootr {
   public static final Logger LOG = LogManager.getLogger();
   public static final String MODID = "lootr";
