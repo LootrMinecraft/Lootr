@@ -17,12 +17,11 @@ import noobanidus.mods.lootr.networking.PacketHandler;
 
 @Mod.EventBusSubscriber(modid = Lootr.MODID)
 public class HandleCart {
-  private static boolean CONVERT_MINESHAFTS = true;
   @SubscribeEvent
   public static void onEntityJoin(EntityJoinWorldEvent event) {
     if (event.getEntity() instanceof EntityMinecartChest) {
       EntityMinecartChest chest = (EntityMinecartChest) event.getEntity();
-      if (!chest.world.isRemote && chest.lootTable != null && CONVERT_MINESHAFTS && !ConfigManager.isBlacklisted(chest.lootTable)) {
+      if (!chest.world.isRemote && chest.lootTable != null && ConfigManager.CONVERT_MINESHAFTS && !ConfigManager.isBlacklisted(chest.lootTable)) {
         LootrChestMinecartEntity lootr = new LootrChestMinecartEntity(chest.world, chest.posX, chest.posY, chest.posZ);
         lootr.setLootTable(chest.lootTable, chest.lootTableSeed);
         chest.world.spawnEntity(lootr);

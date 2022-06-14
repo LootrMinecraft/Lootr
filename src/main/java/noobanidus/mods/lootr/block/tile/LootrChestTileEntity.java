@@ -95,7 +95,7 @@ public class LootrChestTileEntity extends TileEntityChest implements ILootTile, 
         //CriteriaTriggers.GENERATE_LOOT.trigger((EntityPlayerMP) player, overrideTable != null ? overrideTable : this.lootTable);
       }
       Random random;
-      long theSeed = Lootr.CONFIG_RANDOMIZE_SEED ? ThreadLocalRandom.current().nextLong() : seed == Long.MIN_VALUE ? this.seed : seed;
+      long theSeed = ConfigManager.RANDOMISE_SEED ? ThreadLocalRandom.current().nextLong() : seed == Long.MIN_VALUE ? this.seed : seed;
       LootContext.Builder builder = (new LootContext.Builder((WorldServer) this.world));
       if (player != null) {
         builder.withLuck(player.getLuck()).withPlayer(player);

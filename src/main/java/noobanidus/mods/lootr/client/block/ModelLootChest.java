@@ -9,7 +9,7 @@ import net.minecraft.client.model.ModelChest;
 public class ModelLootChest extends ModelChest {
     public ModelLootChest() {
         this.chestBelow.cubeList.remove(0);
-        float zFightAdjustment = 0.001f;
+        float zFightAdjustment = 0.01f;
         this.chestBelow.addBox(zFightAdjustment, 0.0F, zFightAdjustment, 14, 10, 14, 0.0F);
     }
 }

@@ -17,7 +17,6 @@ import org.apache.logging.log4j.Logger;
 
 @Mod(modid = "lootr")
 public class Lootr {
-  public static final boolean CONFIG_RANDOMIZE_SEED = true;
   public static final Logger LOG = LogManager.getLogger();
   public static final String MODID = "lootr";
 

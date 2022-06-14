@@ -192,7 +192,7 @@ public class LootrChestMinecartEntity extends EntityMinecartContainer implements
       }
 
       Random random;
-      long theSeed = Lootr.CONFIG_RANDOMIZE_SEED ? ThreadLocalRandom.current().nextLong() : seed == Long.MIN_VALUE ? this.lootTableSeed : seed;
+      long theSeed = ConfigManager.RANDOMISE_SEED ? ThreadLocalRandom.current().nextLong() : seed == Long.MIN_VALUE ? this.lootTableSeed : seed;
       LootContext.Builder builder = (new LootContext.Builder((WorldServer) this.world));
       if (player != null) {
         builder.withLuck(player.getLuck()).withPlayer(player);

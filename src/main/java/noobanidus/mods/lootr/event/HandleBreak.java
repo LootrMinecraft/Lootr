@@ -14,7 +14,6 @@ import noobanidus.mods.lootr.init.ModBlocks;
 
 @Mod.EventBusSubscriber(modid = Lootr.MODID)
 public class HandleBreak {
-  private static final boolean DISABLE_BREAK = false;
 
   @SubscribeEvent
   public static void onBlockBreak(BlockEvent.BreakEvent event) {
@@ -22,7 +21,7 @@ public class HandleBreak {
 
     if (!event.getWorld().isRemote) {
       if (ModBlocks.LOOT_CONTAINERS.contains(event.getState().getBlock())) {
-        if (DISABLE_BREAK) {
+        if (ConfigManager.DISABLE_BREAK) {
           if (player.capabilities.isCreativeMode) {
             if (!player.isSneaking()) {
               event.setCanceled(true);
