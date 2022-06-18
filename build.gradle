@@ -19,8 +19,8 @@ apply plugin: "net.minecraftforge.gradle.forge"
 apply plugin: 'org.spongepowered.mixin'
 
 group = 'noobanidus.mods.lootr'
-version = '0.1.0'
-archivesBaseName = 'lootr'
+version = '0.1.1'
+archivesBaseName = 'lootr-1.12.2'
 
 minecraft {
     version = project.forgeVersion
@@ -63,7 +63,6 @@ jar {
                 "FMLAT": "lootr_at.cfg"
         ])
     }
-    baseName 'lootr-1.12.2'
 }
 
 
