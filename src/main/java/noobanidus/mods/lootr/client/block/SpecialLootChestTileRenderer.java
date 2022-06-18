@@ -26,7 +26,7 @@ public class SpecialLootChestTileRenderer<T extends LootrChestTileEntity & ILoot
   private static final ResourceLocation TEXTURE_NORMAL = new ResourceLocation("textures/entity/chest/normal.png");
   public static final ResourceLocation MATERIAL_NOT_OPENED = new ResourceLocation(Lootr.MODID, "textures/chest.png");
   public static final ResourceLocation MATERIAL_OPENED = new ResourceLocation(Lootr.MODID, "textures/chest_opened.png");
-  private final ModelLootChest simpleChest = new ModelLootChest();
+  private final ModelChest simpleChest = new ModelChest();
 
   public SpecialLootChestTileRenderer() {
     super();
