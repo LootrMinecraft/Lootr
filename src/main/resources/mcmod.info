@@ -5,7 +5,7 @@
   "description": "Makes loot chest loot per-user.",
   "version": "${version}",
   "mcversion": "${mcversion}",
-  "url": "https://minecraft.curseforge.com/projects/lootr",
+  "url": "https://www.curseforge.com/minecraft/mc-mods/lootr",
   "updateUrl": "",
   "authorList": ["Noobanidus","embeddedt"],
   "logoFile": "assets/loliasm/loliasm.png",
