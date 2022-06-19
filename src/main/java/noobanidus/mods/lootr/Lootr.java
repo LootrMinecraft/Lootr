@@ -17,13 +17,13 @@ import org.apache.logging.log4j.Logger;
 
 @Mod(modid = Lootr.MODID)
 public class Lootr {
-  public static final Logger LOG = LogManager.getLogger();
+  public static final Logger LOG = LogManager.getLogger("Lootr");
   public static final String MODID = "lootr";
 
   @Mod.Instance("lootr")
   public static Lootr instance;
 
-  @SidedProxy(clientSide = "noobanidus.mods.lootr.setup.ClientSetup", serverSide = "noobanidus.mods.lootr.setup.CommonSetup")
+  @SidedProxy(clientSide = "noobanidus.mods.lootr.setup.ClientSetup", serverSide = "noobanidus.mods.lootr.setup.ServerSetup")
   public static CommonSetup proxy;
 
 

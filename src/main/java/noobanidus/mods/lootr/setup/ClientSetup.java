@@ -7,8 +7,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.renderer.block.statemap.StateMap;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoader;
@@ -27,6 +29,8 @@ import noobanidus.mods.lootr.client.ClientGetter;
 import noobanidus.mods.lootr.client.block.SpecialLootChestTileRenderer;
 import noobanidus.mods.lootr.client.block.SpecialLootShulkerTileRenderer;
 import noobanidus.mods.lootr.client.entity.LootrMinecartRenderer;
+import noobanidus.mods.lootr.client.item.SpecialLootChestItemRenderer;
+import noobanidus.mods.lootr.client.item.SpecialLootShulkerItemRenderer;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.init.ModEntities;
@@ -36,13 +40,22 @@ import noobanidus.mods.lootr.init.ModTiles;
 @Mod.EventBusSubscriber(modid = Lootr.MODID, value = Side.CLIENT)
 public class ClientSetup extends CommonSetup {
   public void preInit() {
+    super.preInit();
     ClientRegistry.bindTileEntitySpecialRenderer(LootrChestTileEntity.class, new SpecialLootChestTileRenderer<>());
     ClientRegistry.bindTileEntitySpecialRenderer(TrappedLootrChestTileEntity.class, new SpecialLootChestTileRenderer<>());
     ClientRegistry.bindTileEntitySpecialRenderer(LootrShulkerTileEntity.class, new SpecialLootShulkerTileRenderer());
     RenderingRegistry.registerEntityRenderingHandler(LootrChestMinecartEntity.class, LootrMinecartRenderer::new);
   }
 
-  @SubscribeEvent
+  @Override
+  public void init() {
+    super.init();
+    ModItems.CHEST.setTileEntityItemStackRenderer(new SpecialLootChestItemRenderer());
+    ModItems.TRAPPED_CHEST.setTileEntityItemStackRenderer(new SpecialLootChestItemRenderer());
+    ModItems.SHULKER.setTileEntityItemStackRenderer(new SpecialLootShulkerItemRenderer());
+  }
+
+    @SubscribeEvent
   public static void registerModels(ModelRegistryEvent event) {
       ModelLoader.setCustomStateMapper(ModBlocks.CHEST, new StateMap.Builder().ignore(BlockChest.FACING).build());
       ModelLoader.setCustomStateMapper(ModBlocks.TRAPPED_CHEST, new StateMap.Builder().ignore(BlockChest.FACING).build());
@@ -65,4 +78,30 @@ public class ClientSetup extends CommonSetup {
       event.getMap().registerSprite(new ResourceLocation(Lootr.MODID, "shulker_opened"));
       event.getMap().registerSprite(new ResourceLocation(Lootr.MODID, "chest_opened"));
   }
+
+    @Override
+    public void changeCartStatus(int entityId, boolean status) {
+        Minecraft.getMinecraft().addScheduledTask(() -> {
+            World world = Minecraft.getMinecraft().world;
+            if (world == null) {
+                Lootr.LOG.info("Unable to mark entity with id '" + entityId + "' as opened as world is null.");
+                return;
+            }
+            Entity cart = world.getEntityByID(entityId);
+            if (cart == null) {
+                Lootr.LOG.info("Unable to mark entity with id '" + entityId + "' as opened as entity is null.");
+                return;
+            }
+
+            if (!(cart instanceof LootrChestMinecartEntity)) {
+                Lootr.LOG.info("Unable to mark entity with id '" + entityId + "' as opened as entity is not a Lootr minecart.");
+                return;
+            }
+
+            if(status)
+                ((LootrChestMinecartEntity) cart).setOpened();
+            else
+                ((LootrChestMinecartEntity) cart).setClosed();
+        });
+    }
 }

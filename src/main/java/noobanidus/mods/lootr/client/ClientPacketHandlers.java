@@ -12,48 +12,12 @@ import noobanidus.mods.lootr.networking.OpenCart;
 
 public class ClientPacketHandlers {
   public static IMessage handleOpenCart(OpenCart message, MessageContext context) {
-    Minecraft.getMinecraft().addScheduledTask(() -> {
-      World world = Minecraft.getMinecraft().world;
-      if (world == null) {
-        Lootr.LOG.info("Unable to mark entity with id '" + message.entityId + "' as opened as world is null.");
-        return;
-      }
-      Entity cart = world.getEntityByID(message.entityId);
-      if (cart == null) {
-        Lootr.LOG.info("Unable to mark entity with id '" + message.entityId + "' as opened as entity is null.");
-        return;
-      }
-
-      if (!(cart instanceof LootrChestMinecartEntity)) {
-        Lootr.LOG.info("Unable to mark entity with id '" + message.entityId + "' as opened as entity is not a Lootr minecart.");
-        return;
-      }
-
-      ((LootrChestMinecartEntity) cart).setOpened();
-    });
+    Lootr.proxy.changeCartStatus(message.entityId, true);
     return null;
   }
 
   public static IMessage handleCloseCart(CloseCart message, MessageContext context) {
-    Minecraft.getMinecraft().addScheduledTask(() -> {
-      World world = Minecraft.getMinecraft().world;
-      if (world == null) {
-        Lootr.LOG.info("Unable to mark entity with id '" + message.entityId + "' as closed as world is null.");
-        return;
-      }
-      Entity cart = world.getEntityByID(message.entityId);
-      if (cart == null) {
-        Lootr.LOG.info("Unable to mark entity with id '" + message.entityId + "' as closed as entity is null.");
-        return;
-      }
-
-      if (!(cart instanceof LootrChestMinecartEntity)) {
-        Lootr.LOG.info("Unable to mark entity with id '" + message.entityId + "' as closed as entity is not a Lootr minecart.");
-        return;
-      }
-
-      ((LootrChestMinecartEntity) cart).setClosed();
-    });
+    Lootr.proxy.changeCartStatus(message.entityId, false);
     return null;
   }
 }

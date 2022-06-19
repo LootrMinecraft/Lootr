@@ -16,4 +16,6 @@ public abstract class CommonSetup {
   public void init() {
       PacketHandler.registerMessages();
   }
+
+  public abstract void changeCartStatus(int entityId, boolean status);
 }
