@@ -309,6 +309,8 @@ public class ConfigManager {
     if (block != null) {
       if(replacements.containsKey(block))
         return;
+      if(!block.hasTileEntity(block.getDefaultState()))
+        return;
       TileEntity tile = block.createTileEntity(world, block.getDefaultState());
       if (tile instanceof TileEntityLockableLoot && !(tile instanceof ILootTile)) {
         Lootr.LOG.info("Added " + block.getRegistryName() + " to the Lootr block replacement list.");
