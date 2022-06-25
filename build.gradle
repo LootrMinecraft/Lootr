@@ -19,7 +19,7 @@ apply plugin: "net.minecraftforge.gradle.forge"
 apply plugin: 'org.spongepowered.mixin'
 
 group = 'noobanidus.mods.lootr'
-version = '0.1.3'
+version = '0.2.0'
 archivesBaseName = 'lootr-1.12.2'
 
 minecraft {
