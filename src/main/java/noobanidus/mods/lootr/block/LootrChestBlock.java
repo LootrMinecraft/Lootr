@@ -14,6 +14,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.block.tile.LootrChestTileEntity;
+import noobanidus.mods.lootr.block.tile.LootrInventoryTileEntity;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;
@@ -21,10 +22,12 @@ import java.util.function.Supplier;
 
 @SuppressWarnings("NullableProblems")
 public class LootrChestBlock extends BlockChest {
-  public LootrChestBlock(Type type) {
+  private final boolean isInventory;
+  public LootrChestBlock(Type type, boolean isInventory) {
     super(type);
+    this.isInventory = isInventory;
     this.setSoundType(SoundType.WOOD);
-    setTranslationKey("lootr_chest");
+    setTranslationKey(isInventory ? "lootr_inventory" : "lootr_chest");
   }
 
   @Override
@@ -32,14 +35,20 @@ public class LootrChestBlock extends BlockChest {
     if (player.isSneaking()) {
       ChestUtil.handleLootSneak(this, world, pos, player);
     } else if (!this.isBlocked(world, pos)) {
-      ChestUtil.handleLootChest(this, world, pos, player);
+      if(isInventory)
+        ChestUtil.handleLootInventory(this, world, pos, player);
+      else
+        ChestUtil.handleLootChest(this, world, pos, player);
     }
     return true;
   }
 
   @Override
   public TileEntity createNewTileEntity(World worldIn, int meta) {
-    return new LootrChestTileEntity();
+    if(isInventory)
+      return new LootrInventoryTileEntity();
+    else
+      return new LootrChestTileEntity();
   }
 
   @Override

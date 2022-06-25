@@ -16,18 +16,20 @@ import java.util.Set;
 public class ModBlocks {
   public static final BlockChest.Type TYPE_LOOTR = EnumHelper.addEnum(BlockChest.Type.class, "LOOTR", new Class[0]);
   public static final BlockChest.Type TYPE_LOOTR_TRAP = EnumHelper.addEnum(BlockChest.Type.class, "LOOTR_TRAP", new Class[0]);
-  public static LootrChestBlock CHEST = (LootrChestBlock) new LootrChestBlock(TYPE_LOOTR).setHardness(2.5F);
+  public static LootrChestBlock CHEST = (LootrChestBlock) new LootrChestBlock(TYPE_LOOTR, false).setHardness(2.5F);
+  public static LootrChestBlock INVENTORY = (LootrChestBlock) new LootrChestBlock(TYPE_LOOTR, true).setHardness(2.5F);
 
   public static LootrTrappedChestBlock TRAPPED_CHEST = (LootrTrappedChestBlock) new LootrTrappedChestBlock(TYPE_LOOTR_TRAP).setHardness(2.5F);
 
 
   public static LootrShulkerBlock SHULKER = (LootrShulkerBlock) new LootrShulkerBlock().setHardness(2.5f);
-  public static Set<Block> LOOT_CONTAINERS = Sets.newHashSet(CHEST, TRAPPED_CHEST, SHULKER);
+  public static Set<Block> LOOT_CONTAINERS = Sets.newHashSet(CHEST, TRAPPED_CHEST, SHULKER, INVENTORY);
 
   public static Block TROPHY = new TrophyBlock().setHardness(15f);
 
   static {
     CHEST.setRegistryName(Lootr.MODID, "lootr_chest");
+    INVENTORY.setRegistryName(Lootr.MODID, "lootr_inventory");
     TRAPPED_CHEST.setRegistryName(Lootr.MODID, "lootr_trapped_chest");
     SHULKER.setRegistryName(Lootr.MODID, "lootr_shulker");
   }

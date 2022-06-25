@@ -3,14 +3,19 @@ package noobanidus.mods.lootr.command;
 import com.google.common.collect.ImmutableList;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockChest;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.*;
 import net.minecraft.entity.Entity;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntityLockableLoot;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -23,9 +28,11 @@ import net.minecraft.world.storage.loot.LootTableList;
 import noobanidus.mods.lootr.api.tile.ILootTile;
 import noobanidus.mods.lootr.block.LootrChestBlock;
 import noobanidus.mods.lootr.block.LootrShulkerBlock;
+import noobanidus.mods.lootr.block.tile.LootrInventoryTileEntity;
 import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModBlocks;
+import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -130,6 +137,34 @@ public class LootrCommand implements ICommand {
                 }
                 break;
             }
+            case "custom" : {
+                BlockPos pos = sender.getPosition();
+                World world = sender.getEntityWorld();
+                IBlockState state = world.getBlockState(pos);
+                if (state.getBlock() != Blocks.CHEST) {
+                    pos = pos.down();
+                    state = world.getBlockState(pos);
+                }
+                if (state.getBlock() != Blocks.CHEST) {
+                    sender.sendMessage(new TextComponentString("Please stand on the chest you wish to convert."));
+                } else {
+                    NonNullList<ItemStack> reference = ((TileEntityChest) Objects.requireNonNull(world.getTileEntity(pos))).chestContents;
+                    NonNullList<ItemStack> custom = ChestUtil.copyItemList(reference);
+                    world.removeTileEntity(pos);
+                    world.setBlockState(pos, ModBlocks.INVENTORY.getDefaultState().withProperty(BlockChest.FACING, state.getValue(BlockChest.FACING)));
+                    TileEntity te = world.getTileEntity(pos);
+                    if (!(te instanceof LootrInventoryTileEntity)) {
+                        sender.sendMessage(new TextComponentString("Unable to convert chest, BlockState is not a Lootr Inventory block."));
+                    } else {
+                        LootrInventoryTileEntity inventory = (LootrInventoryTileEntity) te;
+                        inventory.setCustomInventory(custom);
+                        inventory.markDirty();
+                    }
+                }
+                break;
+            }
+            default:
+                throw new WrongUsageException("lootr.commands.usage");
         }
     }
 

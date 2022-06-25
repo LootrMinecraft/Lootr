@@ -14,6 +14,7 @@ public class ModTiles {
   @SubscribeEvent
   public static void registerTileEntityType(RegistryEvent.Register<Block> event) {
     GameRegistry.registerTileEntity(LootrChestTileEntity.class, new ResourceLocation(Lootr.MODID, "special_loot_chest"));
+    GameRegistry.registerTileEntity(LootrInventoryTileEntity.class, new ResourceLocation(Lootr.MODID, "special_loot_inventory"));
     GameRegistry.registerTileEntity(TrappedLootrChestTileEntity.class, new ResourceLocation(Lootr.MODID, "special_trapped_loot_chest"));
     GameRegistry.registerTileEntity(LootrShulkerTileEntity.class, new ResourceLocation(Lootr.MODID, "special_loot_shulker"));
   }

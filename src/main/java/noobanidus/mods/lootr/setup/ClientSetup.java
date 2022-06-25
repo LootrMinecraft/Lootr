@@ -23,6 +23,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.block.tile.LootrChestTileEntity;
+import noobanidus.mods.lootr.block.tile.LootrInventoryTileEntity;
 import noobanidus.mods.lootr.block.tile.LootrShulkerTileEntity;
 import noobanidus.mods.lootr.block.tile.TrappedLootrChestTileEntity;
 import noobanidus.mods.lootr.client.ClientGetter;
@@ -42,6 +43,7 @@ public class ClientSetup extends CommonSetup {
   public void preInit() {
     super.preInit();
     ClientRegistry.bindTileEntitySpecialRenderer(LootrChestTileEntity.class, new SpecialLootChestTileRenderer<>());
+    ClientRegistry.bindTileEntitySpecialRenderer(LootrInventoryTileEntity.class, new SpecialLootChestTileRenderer<>());
     ClientRegistry.bindTileEntitySpecialRenderer(TrappedLootrChestTileEntity.class, new SpecialLootChestTileRenderer<>());
     ClientRegistry.bindTileEntitySpecialRenderer(LootrShulkerTileEntity.class, new SpecialLootShulkerTileRenderer());
     RenderingRegistry.registerEntityRenderingHandler(LootrChestMinecartEntity.class, LootrMinecartRenderer::new);
