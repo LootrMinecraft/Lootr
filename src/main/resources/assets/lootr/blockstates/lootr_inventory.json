@@ -1,0 +1,10 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "lootr:lootr_inventory"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}]
+  }
+}

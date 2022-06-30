@@ -62,6 +62,7 @@ public class ClientSetup extends CommonSetup {
       ModelLoader.setCustomStateMapper(ModBlocks.CHEST, new StateMap.Builder().ignore(BlockChest.FACING).build());
       ModelLoader.setCustomStateMapper(ModBlocks.TRAPPED_CHEST, new StateMap.Builder().ignore(BlockChest.FACING).build());
       ModelLoader.setCustomStateMapper(ModBlocks.SHULKER, new StateMap.Builder().ignore(BlockShulkerBox.FACING).build());
+      ModelLoader.setCustomStateMapper(ModBlocks.INVENTORY, new StateMap.Builder().ignore(BlockChest.FACING).build());
       ModelLoader.setCustomModelResourceLocation(ModItems.CHEST, 0, new ModelResourceLocation(new ResourceLocation(Lootr.MODID, "lootr_chest_item"), null));
       ModelLoader.setCustomModelResourceLocation(ModItems.SHULKER, 0, new ModelResourceLocation(new ResourceLocation(Lootr.MODID, "lootr_shulker_item"), null));
       ModelLoader.setCustomModelResourceLocation(ModItems.TRAPPED_CHEST, 0, new ModelResourceLocation(new ResourceLocation(Lootr.MODID, "lootr_trapped_chest_item"), null));
