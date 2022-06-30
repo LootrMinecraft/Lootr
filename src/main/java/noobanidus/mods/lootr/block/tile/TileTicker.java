@@ -7,7 +7,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.ChunkProviderServer;
@@ -16,7 +15,6 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.server.FMLServerHandler;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.tile.ILootTile;
 import noobanidus.mods.lootr.config.ConfigManager;
@@ -33,7 +31,7 @@ public class TileTicker {
   private final static Set<Entry> tileEntries = new LinkedHashSet<>();
   private final static Set<Entry> pendingEntries = new LinkedHashSet<>();
 
-  public static void addEntry(DimensionType dimension, BlockPos position) {
+  public static void addEntry(int dimension, BlockPos position) {
     if (ConfigManager.isDimensionBlocked(dimension)) {
       return;
     }
@@ -62,7 +60,7 @@ public class TileTicker {
         if(server == null)
           return;
         for (Entry entry : copy) {
-          WorldServer level = DimensionManager.getWorld(entry.getDimension().getId(), false);
+          WorldServer level = DimensionManager.getWorld(entry.getDimension(), false);
           if (level == null) {
             toRemove.add(entry);
             continue;
@@ -113,19 +111,17 @@ public class TileTicker {
   }
 
   public static class Entry {
-    private final DimensionType dimension;
+    private final int dimension;
     private final BlockPos position;
     private final ChunkPos chunkPos;
 
-    public Entry(DimensionType dimension, BlockPos position) {
-      if(dimension == null)
-        throw new IllegalArgumentException();
+    public Entry(int dimension, BlockPos position) {
       this.dimension = dimension;
       this.position = position;
       this.chunkPos = new ChunkPos(position);
     }
 
-    public DimensionType getDimension() {
+    public int getDimension() {
       return dimension;
     }
 

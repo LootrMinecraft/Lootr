@@ -11,7 +11,6 @@ import net.minecraft.tileentity.TileEntityLockableLoot;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.WorldSavedData;
@@ -28,7 +27,7 @@ import java.util.UUID;
 
 public class ChestData extends WorldSavedData {
   private BlockPos pos;
-  private DimensionType dimension;
+  private Integer dimension;
   private UUID entityId;
   private UUID tileId;
   private UUID customId;
@@ -49,7 +48,7 @@ public class ChestData extends WorldSavedData {
     super(ID);
   }
 
-  public ChestData(DimensionType dimension, UUID id, @Nullable UUID customId, @Nullable NonNullList<ItemStack> base) {
+  public ChestData(int dimension, UUID id, @Nullable UUID customId, @Nullable NonNullList<ItemStack> base) {
     super(ID(id));
     this.pos = null;
     this.dimension = dimension;
@@ -63,7 +62,7 @@ public class ChestData extends WorldSavedData {
     }
   }
 
-  public ChestData(DimensionType dimension, UUID id) {
+  public ChestData(int dimension, UUID id) {
     super(ID(id));
     this.pos = null;
     this.dimension = dimension;
@@ -164,7 +163,7 @@ public class ChestData extends WorldSavedData {
       pos = BlockPos.fromLong(compound.getLong("position"));
     }
     if (compound.hasKey("dimension")) {
-      dimension = DimensionType.getById(compound.getInteger("dimension"));
+      dimension = compound.getInteger("dimension");
     }
     if (compound.hasUniqueId("entityId")) {
       entityId = compound.getUniqueId("entityId");
@@ -199,7 +198,7 @@ public class ChestData extends WorldSavedData {
       compound.setLong("position", pos.toLong());
     }
     if (dimension != null) {
-      compound.setInteger("dimension", dimension.getId());
+      compound.setInteger("dimension", dimension);
     }
     if (entityId != null) {
       compound.setUniqueId("entityId", entityId);
@@ -232,7 +231,7 @@ public class ChestData extends WorldSavedData {
     inventories.clear();
   }
 
-  public static ChestData unwrap(ChestData data, DimensionType dimension, BlockPos position) {
+  public static ChestData unwrap(ChestData data, int dimension, BlockPos position) {
     data.pos = position;
     data.dimension = dimension;
     return data;

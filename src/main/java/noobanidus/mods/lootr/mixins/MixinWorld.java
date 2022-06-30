@@ -18,6 +18,6 @@ public class MixinWorld {
       return;
     }
 
-    TileTicker.addEntry(((World) (Object) this).provider.getDimensionType(), tile.getPos());
+    TileTicker.addEntry(((World) (Object) this).provider.getDimension(), tile.getPos());
   }
 }

@@ -5,7 +5,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityLockableLoot;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.MapStorage;
@@ -123,17 +122,17 @@ public class DataStorage {
   }
 
   public static ChestData getInstanceUuid(WorldServer world, UUID id, BlockPos position) {
-    DimensionType dimension = world.provider.getDimensionType();
+    int dimension = world.provider.getDimension();
     return ChestData.unwrap(computeIfAbsentManager(getWorldServer().getMapStorage(),  () -> new ChestData(dimension, id), ChestData.ID(id)), dimension, position);
   }
 
   public static ChestData getInstance(WorldServer world, UUID id, BlockPos pos) {
-    return ChestData.unwrap(computeIfAbsentManager(getWorldServer().getMapStorage(),  () -> new ChestData(id), ChestData.ID(id)), world.provider.getDimensionType(), pos);
+    return ChestData.unwrap(computeIfAbsentManager(getWorldServer().getMapStorage(),  () -> new ChestData(id), ChestData.ID(id)), world.provider.getDimension(), pos);
   }
 
   public static ChestData getInstanceInventory(WorldServer world, UUID id, @Nullable UUID customId, @Nullable NonNullList<ItemStack> base, BlockPos pos) {
-    DimensionType dimension = world.provider.getDimensionType();
-    return ChestData.unwrap(computeIfAbsentManager(getWorldServer().getMapStorage(),  () -> new ChestData(dimension, id, customId, base), ChestData.ID(id)), world.provider.getDimensionType(), pos);
+    int dimension = world.provider.getDimension();
+    return ChestData.unwrap(computeIfAbsentManager(getWorldServer().getMapStorage(),  () -> new ChestData(dimension, id, customId, base), ChestData.ID(id)), world.provider.getDimension(), pos);
   }
 
   public static boolean clearInventories(UUID uuid) {

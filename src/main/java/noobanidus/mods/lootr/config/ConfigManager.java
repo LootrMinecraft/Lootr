@@ -1,5 +1,7 @@
 package noobanidus.mods.lootr.config;
 
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -7,10 +9,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntityLockableLoot;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -88,10 +88,10 @@ public class ConfigManager {
   private static Set<String> REFRESH_MODS = null;
   private static Set<ResourceLocation> REFRESH_TABLES = null;
 
-  private static Set<DimensionType> DIM_WHITELIST = null;
-  private static Set<DimensionType> DIM_BLACKLIST = null;
-  private static Set<DimensionType> DECAY_DIMS = null;
-  private static Set<DimensionType> REFRESH_DIMS = null;
+  private static IntSet DIM_WHITELIST = null;
+  private static IntSet DIM_BLACKLIST = null;
+  private static IntSet DECAY_DIMS = null;
+  private static IntSet REFRESH_DIMS = null;
   private static Set<ResourceLocation> LOOT_BLACKLIST = null;
   private static Set<ResourceLocation> ADD_CHESTS = null;
   private static Set<ResourceLocation> ADD_TRAPPED_CHESTS = null;
@@ -129,30 +129,30 @@ public class ConfigManager {
     return Arrays.stream(list).mapToObj(func).collect(Collectors.toSet());
   }
 
-  public static Set<DimensionType> getDimensionWhitelist() {
+  public static IntSet getDimensionWhitelist() {
     if (DIM_WHITELIST == null) {
-      DIM_WHITELIST = mapIdListToTypes(DIMENSION_WHITELIST, DimensionManager::getProviderType);
+      DIM_WHITELIST = new IntOpenHashSet(DIMENSION_WHITELIST);
     }
     return DIM_WHITELIST;
   }
 
-  public static Set<DimensionType> getDimensionBlacklist() {
+  public static IntSet getDimensionBlacklist() {
     if (DIM_BLACKLIST == null) {
-      DIM_BLACKLIST = mapIdListToTypes(DIMENSION_BLACKLIST, DimensionManager::getProviderType);
+      DIM_BLACKLIST = new IntOpenHashSet(DIMENSION_BLACKLIST);
     }
     return DIM_BLACKLIST;
   }
 
-  public static Set<DimensionType> getDecayDimensions() {
+  public static IntSet getDecayDimensions() {
     if (DECAY_DIMS == null) {
-      DECAY_DIMS = mapIdListToTypes(DECAY_DIMENSIONS, DimensionManager::getProviderType);
+      DECAY_DIMS = new IntOpenHashSet(DECAY_DIMENSIONS);
     }
     return DECAY_DIMS;
   }
 
-  public static Set<DimensionType> getRefreshDimensions() {
+  public static IntSet getRefreshDimensions() {
     if (REFRESH_DIMS == null) {
-      REFRESH_DIMS = mapIdListToTypes(REFRESH_DIMENSIONS, DimensionManager::getProviderType);
+      REFRESH_DIMS = new IntOpenHashSet(REFRESH_DIMENSIONS);
     }
     return REFRESH_DIMS;
   }
@@ -225,15 +225,15 @@ public class ConfigManager {
     return ADD_TRAPPED_CHESTS;
   }
 
-  public static boolean isDimensionBlocked(DimensionType key) {
+  public static boolean isDimensionBlocked(int key) {
     return (!getDimensionWhitelist().isEmpty() && !getDimensionWhitelist().contains(key)) || getDimensionBlacklist().contains(key);
   }
 
-  public static boolean isDimensionDecaying(DimensionType key) {
+  public static boolean isDimensionDecaying(int key) {
     return (getDecayDimensions().contains(key));
   }
 
-  public static boolean isDimensionRefreshing(DimensionType key) {
+  public static boolean isDimensionRefreshing(int key) {
     return getRefreshDimensions().contains(key);
   }
 
@@ -250,7 +250,7 @@ public class ConfigManager {
         return true;
       }
     }
-    return isDimensionDecaying(world.provider.getDimensionType());
+    return isDimensionDecaying(world.provider.getDimension());
   }
 
   public static boolean isRefreshing(World world, ILootTile tile) {
@@ -266,7 +266,7 @@ public class ConfigManager {
         return true;
       }
     }
-    return isDimensionRefreshing(world.provider.getDimensionType());
+    return isDimensionRefreshing(world.provider.getDimension());
   }
 
   public static boolean isDecaying(World world, LootrChestMinecartEntity entity) {
@@ -280,7 +280,7 @@ public class ConfigManager {
     if (getDecayMods().contains(entity.lootTable.getNamespace().toLowerCase(Locale.ROOT))) {
       return true;
     }
-    return isDimensionDecaying(world.provider.getDimensionType());
+    return isDimensionDecaying(world.provider.getDimension());
   }
 
   public static boolean isRefreshing(World world, LootrChestMinecartEntity entity) {
@@ -294,7 +294,7 @@ public class ConfigManager {
     if (getRefreshMods().contains(entity.lootTable.getNamespace().toLowerCase(Locale.ROOT))) {
       return true;
     }
-    return isDimensionRefreshing(world.provider.getDimensionType());
+    return isDimensionRefreshing(world.provider.getDimension());
   }
 
   private static void addSafeReplacement(ResourceLocation location, Block replacement) {
