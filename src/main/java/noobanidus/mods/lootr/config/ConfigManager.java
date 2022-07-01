@@ -57,7 +57,9 @@ public class ConfigManager {
   @Config.Comment("Whether or not ADDITIONAL_CHESTS and ADDITIONAL_TRAPPED_CHESTS below are blacklists instead of whitelists")
   public static boolean CONVERT_ALL_LOOTABLES_EXCEPT_BELOW = true;
   @Config.Comment("a list of additional chests that should/should not be converted [in the format of modid:name, must be a tile entity instance of TileEntityLockableLoot]")
-  public static String[] ADDITIONAL_CHESTS = new String[0];
+  public static String[] ADDITIONAL_CHESTS = new String[] {
+          "minecraft:dispenser"
+  };
   @Config.Comment("a list of additional trapped chests that should/should not be converted [in the format of modid:name, must be a tile entity instanceof TileEntityLockableLoot]")
   public static String[] ADDITIONAL_TRAPPED_CHESTS = new String[0];
   @Config.Comment("list of dimensions (to the exclusion of all others) that loot chest should be replaced in [default: blank, allowing all dimensions, format e.g., 0")
