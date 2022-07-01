@@ -84,6 +84,8 @@ public class ConfigManager {
   public static int[] REFRESH_DIMENSIONS = new int[0];
   @Config.Comment("set to true to use vanilla textures instead of Lootr special textures. Note: this will prevent previously opened chests from rendering differently")
   public static boolean VANILLA_TEXTURES = false;
+  @Config.Comment("when true, any worldgen chests, etc. that do not have a loot table but aren't empty will be converted. This can help with legacy mods that don't use loot tables")
+  public static boolean CONVERT_WORLDGEN_INVENTORIES = false;
 
   private static Set<String> DECAY_MODS = null;
   private static Set<ResourceLocation> DECAY_TABLES = null;
