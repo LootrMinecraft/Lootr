@@ -46,8 +46,9 @@ public class HandleWorldGen {
                     for (int slot = 0; slot < size; slot++) {
                         ItemStack stack = teLockable.getStackInSlot(slot);
                         if (!stack.isEmpty() || size <= 27) {
-                            newInventory.add(stack);
+                            newInventory.add(stack.copy());
                         }
+                        teLockable.setInventorySlotContents(slot, ItemStack.EMPTY);
                     }
                     if (newInventory.size() > 0) {
                         BlockPos pos = te.getPos();
@@ -58,7 +59,6 @@ public class HandleWorldGen {
                             newFacing = currentBlockState.getValue(BlockChest.FACING);
                         }
                         IBlockState replacement = ModBlocks.INVENTORY.getDefaultState().withProperty(BlockChest.FACING, newFacing);
-                        world.removeTileEntity(pos);
                         world.setBlockState(pos, replacement);
                         te = world.getTileEntity(pos);
                         if (te instanceof LootrInventoryTileEntity) {
