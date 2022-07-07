@@ -2,6 +2,7 @@ package noobanidus.mods.lootr.event;
 
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityLockableLoot;
@@ -35,6 +36,17 @@ public class HandleWorldGen {
             generatedChunks.add(Pair.of(new WeakReference<>(event.getWorld()), new ChunkPos(event.getChunkX(), event.getChunkZ())));
         }
     }
+
+    public static TileEntity replaceOldLootBlockAt(Chunk chunk, BlockPos worldPos, IBlockState newState) {
+        World world = chunk.getWorld();
+        world.destroyBlock(worldPos, false);
+        TileEntity prevTe = chunk.getTileEntityMap().remove(worldPos);
+        if(prevTe != null)
+            prevTe.invalidate();
+        world.setBlockState(worldPos, newState, 2);
+        return chunk.getTileEntity(worldPos, Chunk.EnumCreateEntityType.IMMEDIATE);
+    }
+
     private static void processChunkForWorldgen(Chunk chunk) {
         List<TileEntity> tileEntities = new ArrayList<>(chunk.getTileEntityMap().values());
         for (TileEntity te : tileEntities) {
@@ -52,21 +64,20 @@ public class HandleWorldGen {
                     }
                     if (newInventory.size() > 0) {
                         BlockPos pos = te.getPos();
-                        World world = chunk.getWorld();
+                        teLockable.clear();
                         IBlockState currentBlockState = chunk.getBlockState(pos);
                         EnumFacing newFacing = EnumFacing.SOUTH;
                         if (currentBlockState.getPropertyKeys().contains(BlockChest.FACING)) {
                             newFacing = currentBlockState.getValue(BlockChest.FACING);
                         }
                         IBlockState replacement = ModBlocks.INVENTORY.getDefaultState().withProperty(BlockChest.FACING, newFacing);
-                        world.setBlockState(pos, replacement);
-                        te = world.getTileEntity(pos);
+                        te = replaceOldLootBlockAt(chunk, pos, replacement);
                         if (te instanceof LootrInventoryTileEntity) {
                             LootrInventoryTileEntity inventory = (LootrInventoryTileEntity) te;
                             inventory.setCustomInventory(newInventory);
                             inventory.markDirty();
                         } else {
-                            Lootr.LOG.error("replacement " + replacement + " is not an LootrInventoryTileEntity dim " + chunk.getWorld().provider.getDimension() + " at " + pos);
+                            Lootr.LOG.error("replacement TE " + te + " is not an LootrInventoryTileEntity dim " + chunk.getWorld().provider.getDimension() + " at " + pos);
                         }
                     }
                 }

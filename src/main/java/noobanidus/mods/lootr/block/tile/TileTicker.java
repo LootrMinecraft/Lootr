@@ -18,6 +18,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.tile.ILootTile;
 import noobanidus.mods.lootr.config.ConfigManager;
+import noobanidus.mods.lootr.event.HandleWorldGen;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -87,13 +88,12 @@ public class TileTicker {
               toRemove.add(entry);
               continue;
             }
-            level.removeTileEntity(entry.getPosition());
-            level.setBlockState(entry.getPosition(), replacement, 2);
-            tile = level.getTileEntity(entry.getPosition());
+            te.clear();
+            tile = HandleWorldGen.replaceOldLootBlockAt(chunk, entry.getPosition(), replacement);
             if (tile instanceof ILootTile) {
               ((TileEntityLockableLoot) tile).setLootTable(table, seed);
             } else {
-              Lootr.LOG.error("replacement " + replacement + " is not an ILootTile " + entry.getDimension() + " at " + entry.getPosition());
+              Lootr.LOG.error("replacement TE " + tile + " is not an ILootTile " + entry.getDimension() + " at " + entry.getPosition());
             }
 
             toRemove.add(entry);
