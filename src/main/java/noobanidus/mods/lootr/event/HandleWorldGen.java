@@ -39,8 +39,20 @@ public class HandleWorldGen {
 
     public static TileEntity replaceOldLootBlockAt(Chunk chunk, BlockPos worldPos, IBlockState newState) {
         World world = chunk.getWorld();
+        /*
+         * We do some clever magic with tile entities here to try and prevent crashes.
+         * 1. Get the original tile entity.
+         * 2. Remove it the vanilla way.
+         * 3. Invalidate it, in case vanilla doesn't.
+         * 4. Change the block by calling destroyBlock.
+         * 5. Invalidate any tile entity that's still there *again*, to make sure the Lootr one really will be created.
+         */
+        TileEntity prevTe = chunk.getTileEntityMap().get(worldPos);
+        world.removeTileEntity(worldPos);
+        if(prevTe != null)
+            prevTe.invalidate();
         world.destroyBlock(worldPos, false);
-        TileEntity prevTe = chunk.getTileEntityMap().remove(worldPos);
+        prevTe = chunk.getTileEntityMap().remove(worldPos);
         if(prevTe != null)
             prevTe.invalidate();
         world.setBlockState(worldPos, newState, 2);
