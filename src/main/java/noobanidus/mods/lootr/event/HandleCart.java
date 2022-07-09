@@ -24,9 +24,10 @@ public class HandleCart {
       if (!chest.world.isRemote && chest.lootTable != null && ConfigManager.CONVERT_MINESHAFTS && !ConfigManager.isBlacklisted(chest.lootTable)) {
         LootrChestMinecartEntity lootr = new LootrChestMinecartEntity(chest.world, chest.posX, chest.posY, chest.posZ);
         lootr.setLootTable(chest.lootTable, chest.lootTableSeed);
+        lootr.forceSpawn = true;
         chest.world.spawnEntity(lootr);
         event.setCanceled(true);
-        EntityTicker.addEntity(lootr);
+        //EntityTicker.addEntity(lootr);
       }
     }
   }
