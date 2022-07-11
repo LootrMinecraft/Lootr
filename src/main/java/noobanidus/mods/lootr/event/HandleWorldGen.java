@@ -99,6 +99,7 @@ public class HandleWorldGen {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onServerTick(TickEvent.ServerTickEvent event) {
         if (ConfigManager.CONVERT_WORLDGEN_INVENTORIES && event.phase == TickEvent.Phase.END && generatedChunks.size() > 0) {
+            ArrayList<Chunk> processing = new ArrayList<>();
             generatedChunks.removeIf(pair -> {
                 World world = pair.getLeft().get();
                 if(world == null)
@@ -106,9 +107,12 @@ public class HandleWorldGen {
                 Chunk chunk = world.getChunkProvider().getLoadedChunk(pair.getRight().x, pair.getRight().z);
                 if(chunk == null)
                     return false;
-                processChunkForWorldgen(chunk);
+                processing.add(chunk);
                 return true;
             });
+            for(Chunk chunk : processing) {
+                processChunkForWorldgen(chunk);
+            }
         }
     }
 }
