@@ -14,7 +14,7 @@ Makes loot chest loot per-user.
 [[dependencies.Lootr]] 
     modId="forge" 
     mandatory=true 
-    versionRange="[41,)"
+    versionRange="[41.0.94,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.Lootr]]

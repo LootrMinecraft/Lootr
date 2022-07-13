@@ -39,8 +39,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.model.data.IModelData;
-import net.minecraftforge.client.model.data.ModelDataMap;
+import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import noobanidus.mods.lootr.api.LootrAPI;
@@ -95,17 +94,17 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     super(ModBlockEntities.LOOTR_BARREL.get(), pWorldPosition, pBlockState);
   }
 
-  private IModelData modelData = null;
+  private ModelData modelData = null;
 
   @Nonnull
   @Override
-  public IModelData getModelData() {
+  public ModelData getModelData() {
     if (modelData == null) {
-      modelData = new ModelDataMap.Builder().withInitial(LootrBarrelBlock.OPENED, false).build();
+      modelData = ModelData.builder().with(LootrBarrelBlock.OPENED, false).build();
     }
     Player player = Getter.getPlayer();
     if (player != null) {
-      modelData.setData(LootrBarrelBlock.OPENED, openers.contains(player.getUUID()));
+      return modelData.derive().with(LootrBarrelBlock.OPENED, openers.contains(player.getUUID())).build();
     }
     return modelData;
   }
