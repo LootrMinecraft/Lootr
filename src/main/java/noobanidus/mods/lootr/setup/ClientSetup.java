@@ -5,9 +5,8 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import noobanidus.mods.lootr.api.LootrAPI;
@@ -31,8 +30,8 @@ public class ClientSetup {
   }
 
   @SubscribeEvent
-  public static void modelRegister(ModelRegistryEvent event) {
-    ModelLoaderRegistry.registerLoader(new ResourceLocation(LootrAPI.MODID, "barrel"), BarrelModel.Loader.INSTANCE);
+  public static void modelRegister(ModelEvent.RegisterGeometryLoaders event) {
+    event.register("barrel", BarrelModel.Loader.INSTANCE);
   }
 
   @SubscribeEvent

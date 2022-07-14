@@ -3,7 +3,7 @@ package noobanidus.mods.lootr.item;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.client.IItemRenderProperties;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import noobanidus.mods.lootr.client.item.LootrShulkerItemRenderer;
 
 import java.util.function.Consumer;
@@ -14,10 +14,10 @@ public class LootrShulkerBlockItem extends BlockItem {
   }
 
   @Override
-  public void initializeClient(Consumer<IItemRenderProperties> consumer) {
-    consumer.accept(new IItemRenderProperties() {
+  public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+    consumer.accept(new IClientItemExtensions() {
       @Override
-      public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+      public BlockEntityWithoutLevelRenderer getCustomRenderer() {
         return LootrShulkerItemRenderer.getInstance();
       }
     });

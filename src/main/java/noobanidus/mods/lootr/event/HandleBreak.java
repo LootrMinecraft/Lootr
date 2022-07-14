@@ -6,7 +6,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import noobanidus.mods.lootr.api.LootrAPI;
@@ -20,7 +20,7 @@ public class HandleBreak {
   public static void onBlockBreak(BlockEvent.BreakEvent event) {
     Player player = event.getPlayer();
 
-    if (!event.getWorld().isClientSide()) {
+    if (!event.getLevel().isClientSide()) {
       if (ModBlocks.getSpecialLootChests().contains(event.getState().getBlock())) {
         if (ConfigManager.DISABLE_BREAK.get()) {
           if (player.getAbilities().instabuild) {

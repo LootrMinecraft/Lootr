@@ -5,7 +5,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.client.model.ModelDataManager;
 import net.minecraftforge.network.NetworkEvent;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
@@ -34,7 +33,8 @@ public class ClientHandlers {
     if (be instanceof ILootBlockEntity tile) {
       tile.getOpeners().remove(player.getUUID());
       be.setChanged();
-      ModelDataManager.requestModelDataRefresh(be);
+      if(level.isClientSide)
+        level.getModelDataManager().requestRefresh(be);
     } else {
       LootrAPI.LOG.info("Unable to update model data for location '" + message.pos + "' as block entity is null or not a Lootr block entity.");
     }

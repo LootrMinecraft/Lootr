@@ -5,7 +5,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.vehicle.MinecartChest;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -20,7 +20,7 @@ import noobanidus.mods.lootr.entity.EntityTicker;
 @Mod.EventBusSubscriber(modid= LootrAPI.MODID)
 public class HandleCart {
   @SubscribeEvent
-  public static void onEntityJoin(EntityJoinWorldEvent event) {
+  public static void onEntityJoin(EntityJoinLevelEvent event) {
     if (event.getEntity().getType() == EntityType.CHEST_MINECART) {
       MinecartChest chest = (MinecartChest) event.getEntity();
       if (!chest.level.isClientSide && chest.lootTable != null && ConfigManager.CONVERT_MINESHAFTS.get() && !ConfigManager.getLootBlacklist().contains(chest.lootTable)) {
