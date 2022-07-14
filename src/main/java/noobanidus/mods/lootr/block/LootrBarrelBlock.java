@@ -88,6 +88,10 @@ public class LootrBarrelBlock extends BarrelBlock {
 
   @Override
   public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos) {
-    return 0;
+    if (ConfigManager.ZERO_COMPARATOR.get()) {
+      return 0;
+    } else {
+      return 1;
+    }
   }
 }
