@@ -26,6 +26,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import noobanidus.mods.lootr.block.entities.LootrChestBlockEntity;
 import noobanidus.mods.lootr.block.entities.LootrInventoryBlockEntity;
+import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlockEntities;
 import noobanidus.mods.lootr.util.ChestUtil;
 
@@ -40,6 +41,15 @@ public class LootrInventoryBlock extends ChestBlock {
 
   public LootrInventoryBlock(Properties properties, Supplier<BlockEntityType<? extends ChestBlockEntity>> type) {
     super(properties, type);
+  }
+
+  @Override
+  public float getExplosionResistance() {
+    if (ConfigManager.BLAST_RESISTANT.get()) {
+      return 16.0f;
+    } else {
+      return super.getExplosionResistance();
+    }
   }
 
   @Override
