@@ -432,8 +432,8 @@ public class ConfigManager {
         QUARK_TRAPPED_CHESTS.forEach(o -> addSafeReplacement(o, ModBlocks.TRAPPED_CHEST));
       }
       if (CONVERT_WOODEN_CHESTS.get() || CONVERT_TRAPPED_CHESTS.get()) {
-        if (CONVERT_WOODEN_CHESTS.get()) {
-          Tags.Blocks.CHESTS_WOODEN.getValues().forEach(o -> {
+        if (CONVERT_TRAPPED_CHESTS.get()) {
+          Tags.Blocks.CHESTS_TRAPPED.getValues().forEach(o -> {
             if (replacements.containsKey(o)) {
               return;
             }
@@ -445,8 +445,8 @@ public class ConfigManager {
             }
           });
         }
-        if (CONVERT_TRAPPED_CHESTS.get()) {
-          Tags.Blocks.CHESTS_TRAPPED.getValues().forEach(o -> {
+        if (CONVERT_WOODEN_CHESTS.get()) {
+          Tags.Blocks.CHESTS_WOODEN.getValues().forEach(o -> {
             if (replacements.containsKey(o)) {
               return;
             }
