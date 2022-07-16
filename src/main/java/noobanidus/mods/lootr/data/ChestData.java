@@ -17,13 +17,18 @@ import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.common.util.Constants;
 import noobanidus.mods.lootr.api.LootFiller;
 import noobanidus.mods.lootr.api.tile.ILootTile;
+import noobanidus.mods.lootr.compat.CompatHelper;
+import noobanidus.mods.lootr.compat.RecurrentComplexCompat;
+import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
 import javax.annotation.Nullable;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class ChestData extends WorldSavedData {
   private BlockPos pos;
@@ -144,6 +149,10 @@ public class ChestData extends WorldSavedData {
       result = new SpecialChestInventory(this, items, tile.getDisplayName(), pos);
     }
     filler.fillWithLoot(player, result, lootTable, seed);
+    if(CompatHelper.isRecComplexLoaded()) {
+      long theSeed = ConfigManager.RANDOMISE_SEED ? ThreadLocalRandom.current().nextLong() : seed == Long.MIN_VALUE ? 0 : seed;
+      RecurrentComplexCompat.checkInventory(world, result, theSeed == 0 ? new Random() : new Random(theSeed));
+    }
     inventories.put(player.getUniqueID(), result);
     setDirty(true);
 

@@ -43,10 +43,15 @@ repositories {
     maven {
         url "https://maven.cleanroommc.com"
     }
+    maven {
+        url "https://cursemaven.com"
+    }
 }
 
 dependencies {
     deobfCompile ("zone.rong:mixinbooter:4.2")
+    deobfProvided ("curse.maven:reccomplex-223150:2689602")
+    deobfProvided ("curse.maven:ivtoolkit-224535:2443253")
 }
 sourceSets {
     main {
