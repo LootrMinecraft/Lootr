@@ -10,11 +10,14 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.block.tile.LootrChestTileEntity;
 import noobanidus.mods.lootr.block.tile.LootrInventoryTileEntity;
+import noobanidus.mods.lootr.block.tile.TrappedLootrChestTileEntity;
+import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;
@@ -27,7 +30,12 @@ public class LootrChestBlock extends BlockChest {
     super(type);
     this.isInventory = isInventory;
     this.setSoundType(SoundType.WOOD);
-    setTranslationKey(isInventory ? "lootr_inventory" : "lootr_chest");
+    if(isInventory)
+      setTranslationKey("lootr_inventory");
+    else if(type == ModBlocks.TYPE_LOOTR_TRAP)
+      setTranslationKey("lootr_trapped_chest");
+    else
+      setTranslationKey("lootr_chest");
   }
 
   @Override
@@ -47,6 +55,8 @@ public class LootrChestBlock extends BlockChest {
   public TileEntity createNewTileEntity(World worldIn, int meta) {
     if(isInventory)
       return new LootrInventoryTileEntity();
+    else if(chestType == ModBlocks.TYPE_LOOTR_TRAP)
+      return new TrappedLootrChestTileEntity();
     else
       return new LootrChestTileEntity();
   }
@@ -60,6 +70,24 @@ public class LootrChestBlock extends BlockChest {
   @Override
   public IBlockState checkForSurroundingChests(World world, BlockPos pos, IBlockState state) {
     return state;
+  }
+
+  @Override
+  public boolean canProvidePower(IBlockState state) {
+    return chestType == ModBlocks.TYPE_LOOTR_TRAP;
+  }
+
+  @Override
+  public int getWeakPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
+  {
+    if (!blockState.canProvidePower())
+    {
+      return 0;
+    }
+    else
+    {
+      return MathHelper.clamp(LootrChestTileEntity.getPlayersUsing(blockAccess, pos), 0, 15);
+    }
   }
 
   @Override

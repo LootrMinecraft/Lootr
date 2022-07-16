@@ -19,7 +19,7 @@ public class ModBlocks {
   public static LootrChestBlock CHEST = (LootrChestBlock) new LootrChestBlock(TYPE_LOOTR, false).setHardness(2.5F);
   public static LootrChestBlock INVENTORY = (LootrChestBlock) new LootrChestBlock(TYPE_LOOTR, true).setHardness(2.5F);
 
-  public static LootrTrappedChestBlock TRAPPED_CHEST = (LootrTrappedChestBlock) new LootrTrappedChestBlock(TYPE_LOOTR_TRAP).setHardness(2.5F);
+  public static LootrChestBlock TRAPPED_CHEST = (LootrChestBlock) new LootrChestBlock(TYPE_LOOTR_TRAP, false).setHardness(2.5F);
 
 
   public static LootrShulkerBlock SHULKER = (LootrShulkerBlock) new LootrShulkerBlock().setHardness(2.5f);
