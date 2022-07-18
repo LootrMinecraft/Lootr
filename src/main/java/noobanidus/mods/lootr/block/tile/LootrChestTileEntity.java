@@ -131,8 +131,6 @@ public class LootrChestTileEntity extends TileEntityChest implements ILootTile, 
     }
     if (compound.hasUniqueId("tileId")) {
       this.tileId = compound.getUniqueId("tileId");
-    } else if (this.tileId == null) {
-      getTileId();
     }
     if (compound.hasKey("LootrOpeners")) {
       NBTTagList openers = compound.getTagList("LootrOpeners", Constants.NBT.TAG_COMPOUND);
@@ -155,7 +153,8 @@ public class LootrChestTileEntity extends TileEntityChest implements ILootTile, 
       compound.setLong("specialLootChest_seed", seed);
       compound.setLong("LootTableSeed", seed);
     }
-    compound.setUniqueId("tileId", getTileId());
+    if(this.tileId != null)
+      compound.setUniqueId("tileId", this.tileId);
     NBTTagList list = new NBTTagList();
     for (UUID opener : this.openers) {
       list.appendTag(NBTUtil.createUUIDTag(opener));
