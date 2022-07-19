@@ -5,8 +5,11 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityShulkerBox;
 import net.minecraft.util.*;
@@ -23,6 +26,7 @@ import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Random;
 
 @SuppressWarnings({"deprecation", "NullableProblems"})
 public class LootrShulkerBlock extends BlockShulkerBox {
@@ -123,5 +127,25 @@ public class LootrShulkerBlock extends BlockShulkerBox {
   @Override
   public CreativeTabs getCreativeTab() {
     return Lootr.TAB;
+  }
+
+  @Override
+  public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+    TileEntity tileentity = worldIn.getTileEntity(pos);
+
+    if (tileentity instanceof LootrShulkerTileEntity)
+    {
+      LootrShulkerTileEntity tileentityshulkerbox = (LootrShulkerTileEntity)tileentity;
+
+      ItemStack itemstack = new ItemStack(Item.getItemFromBlock(Blocks.PURPLE_SHULKER_BOX));
+      if (tileentityshulkerbox.hasCustomName())
+      {
+        itemstack.setStackDisplayName(tileentityshulkerbox.getName());
+        tileentityshulkerbox.setCustomName("");
+      }
+      spawnAsEntity(worldIn, pos, itemstack);
+      worldIn.updateComparatorOutputLevel(pos, state.getBlock());
+    }
+    super.breakBlock(worldIn, pos, state);
   }
 }

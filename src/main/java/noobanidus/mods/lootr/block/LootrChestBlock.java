@@ -5,6 +5,8 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -21,6 +23,7 @@ import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 import java.util.function.Supplier;
 
 @SuppressWarnings("NullableProblems")
@@ -93,5 +96,10 @@ public class LootrChestBlock extends BlockChest {
   @Override
   public CreativeTabs getCreativeTab() {
     return Lootr.TAB;
+  }
+
+  @Override
+  public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+    return Item.getItemFromBlock(chestType == ModBlocks.TYPE_LOOTR_TRAP ? Blocks.TRAPPED_CHEST : Blocks.CHEST);
   }
 }

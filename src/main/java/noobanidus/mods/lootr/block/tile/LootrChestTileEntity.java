@@ -84,6 +84,10 @@ public class LootrChestTileEntity extends TileEntityChest implements ILootTile, 
   }
 
   @Override
+  public void fillWithLoot(@Nullable EntityPlayer player) {
+  }
+
+  @Override
   public void fillWithLoot(EntityPlayer player, IInventory inventory, @Nullable ResourceLocation overrideTable, long seed) {
     if (this.world != null && this.savedLootTable != null && this.world.getMinecraftServer() != null) {
       BlockPos worldPosition = this.getPos();
