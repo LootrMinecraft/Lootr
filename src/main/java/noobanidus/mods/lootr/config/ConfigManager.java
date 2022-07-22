@@ -434,9 +434,8 @@ public class ConfigManager {
 
 
       if (CONVERT_WOODEN_CHESTS.get() || CONVERT_TRAPPED_CHESTS.get()) {
-        if (CONVERT_WOODEN_CHESTS.get()) {
-          Registry.BLOCK.getTagOrEmpty(Tags.Blocks.CHESTS_WOODEN).forEach(z -> {
-            Block o = z.value();
+        if (CONVERT_TRAPPED_CHESTS.get()) {
+          Tags.Blocks.CHESTS_TRAPPED.getValues().forEach(o -> {
             if (replacements.containsKey(o)) {
               return;
             }
@@ -448,9 +447,8 @@ public class ConfigManager {
             }
           });
         }
-        if (CONVERT_TRAPPED_CHESTS.get()) {
-          Registry.BLOCK.getTagOrEmpty(Tags.Blocks.CHESTS_TRAPPED).forEach(z -> {
-            Block o = z.value();
+        if (CONVERT_WOODEN_CHESTS.get()) {
+          Tags.Blocks.CHESTS_WOODEN.getValues().forEach(o -> {
             if (replacements.containsKey(o)) {
               return;
             }
