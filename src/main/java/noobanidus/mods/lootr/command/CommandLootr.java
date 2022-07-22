@@ -136,6 +136,13 @@ public class CommandLootr {
       createBlock(c.getSource(), ModBlocks.BARREL, ResourceLocationArgument.getId(c, "table"));
       return 1;
     })));
+    builder.then(Commands.literal("trapped_chest").executes(c -> {
+      createBlock(c.getSource(), ModBlocks.TRAPPED_CHEST, null);
+      return 1;
+    }).then(suggestTables().executes(c -> {
+      createBlock(c.getSource(), ModBlocks.TRAPPED_CHEST, ResourceLocationArgument.getId(c, "table"));
+      return 1;
+    })));
     builder.then(Commands.literal("chest").executes(c -> {
       createBlock(c.getSource(), ModBlocks.CHEST, null);
       return 1;
