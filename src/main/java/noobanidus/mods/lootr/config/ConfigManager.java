@@ -338,22 +338,11 @@ public class ConfigManager {
       replacements.put(Blocks.TRAPPED_CHEST, ModBlocks.TRAPPED_CHEST);
       replacements.put(Blocks.SHULKER_BOX, ModBlocks.SHULKER);
       if (CONVERT_QUARK.get() && ModList.get().isLoaded("quark")) {
-        QUARK_CHESTS.forEach(o -> addSafeReplacement(o, ModBlocks.CHEST));
         QUARK_TRAPPED_CHESTS.forEach(o -> addSafeReplacement(o, ModBlocks.TRAPPED_CHEST));
+        QUARK_CHESTS.forEach(o -> addSafeReplacement(o, ModBlocks.CHEST));
       }
       if (CONVERT_WOODEN_CHESTS.get() || CONVERT_TRAPPED_CHESTS.get()) {
         final ServerWorld world = ServerLifecycleHooks.getCurrentServer().getLevel(World.OVERWORLD);
-        if (CONVERT_WOODEN_CHESTS.get()) {
-          Tags.Blocks.CHESTS_WOODEN.getValues().forEach(o -> {
-            if (replacements.containsKey(o)) {
-              return;
-            }
-            TileEntity tile = o.createTileEntity(o.defaultBlockState(), world);
-            if (tile instanceof LockableLootTileEntity) {
-              replacements.put(o, ModBlocks.CHEST);
-            }
-          });
-        }
         if (CONVERT_TRAPPED_CHESTS.get()) {
           Tags.Blocks.CHESTS_TRAPPED.getValues().forEach(o -> {
             if (replacements.containsKey(o)) {
@@ -362,6 +351,17 @@ public class ConfigManager {
             TileEntity tile = o.createTileEntity(o.defaultBlockState(), world);
             if (tile instanceof LockableLootTileEntity) {
               replacements.put(o, ModBlocks.TRAPPED_CHEST);
+            }
+          });
+        }
+        if (CONVERT_WOODEN_CHESTS.get()) {
+          Tags.Blocks.CHESTS_WOODEN.getValues().forEach(o -> {
+            if (replacements.containsKey(o)) {
+              return;
+            }
+            TileEntity tile = o.createTileEntity(o.defaultBlockState(), world);
+            if (tile instanceof LockableLootTileEntity) {
+              replacements.put(o, ModBlocks.CHEST);
             }
           });
         }
