@@ -434,20 +434,7 @@ public class ConfigManager {
 
       if (CONVERT_WOODEN_CHESTS.get() || CONVERT_TRAPPED_CHESTS.get()) {
         if (CONVERT_TRAPPED_CHESTS.get()) {
-          Tags.Blocks.CHESTS_TRAPPED.getValues().forEach(o -> {
-            if (replacements.containsKey(o)) {
-              return;
-            }
-            if (o instanceof EntityBlock) {
-              BlockEntity tile = ((EntityBlock) o).newBlockEntity(BlockPos.ZERO, o.defaultBlockState());
-              if (tile instanceof RandomizableContainerBlockEntity) {
-                replacements.put(o, ModBlocks.CHEST.get());
-              }
-            }
-          });
-        }
-        if (CONVERT_WOODEN_CHESTS.get()) {
-          Tags.Blocks.CHESTS_WOODEN.getValues().forEach(o -> {
+          ForgeRegistries.BLOCKS.tags().getTag(Tags.Blocks.CHESTS_TRAPPED).forEach(o -> {
             if (replacements.containsKey(o)) {
               return;
             }
@@ -455,6 +442,19 @@ public class ConfigManager {
               BlockEntity tile = ((EntityBlock) o).newBlockEntity(BlockPos.ZERO, o.defaultBlockState());
               if (tile instanceof RandomizableContainerBlockEntity) {
                 replacements.put(o, ModBlocks.TRAPPED_CHEST.get());
+              }
+            }
+          });
+        }
+        if (CONVERT_WOODEN_CHESTS.get()) {
+          ForgeRegistries.BLOCKS.tags().getTag(Tags.Blocks.CHESTS_WOODEN).forEach(o -> {
+            if (replacements.containsKey(o)) {
+              return;
+            }
+            if (o instanceof EntityBlock) {
+              BlockEntity tile = ((EntityBlock) o).newBlockEntity(BlockPos.ZERO, o.defaultBlockState());
+              if (tile instanceof RandomizableContainerBlockEntity) {
+                replacements.put(o, ModBlocks.CHEST.get());
               }
             }
           });
