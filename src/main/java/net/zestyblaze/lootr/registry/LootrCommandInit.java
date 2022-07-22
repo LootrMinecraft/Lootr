@@ -126,6 +126,13 @@ public class LootrCommandInit {
             createBlock(c.getSource(), LootrBlockInit.BARREL, ResourceLocationArgument.getId(c, "table"));
             return 1;
         })));
+        builder.then(Commands.literal("trapped_chest").executes(c -> {
+            createBlock(c.getSource(), LootrBlockInit.TRAPPED_CHEST, null);
+            return 1;
+        }).then(suggestTables().executes(c -> {
+            createBlock(c.getSource(), LootrBlockInit.TRAPPED_CHEST, ResourceLocationArgument.getId(c, "table"));
+            return 1;
+        })));
         builder.then(Commands.literal("chest").executes(c -> {
             createBlock(c.getSource(), LootrBlockInit.CHEST, null);
             return 1;
