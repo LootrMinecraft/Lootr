@@ -92,7 +92,7 @@ public class ConfigManager {
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> REFRESH_DIMENSIONS;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> REFRESH_STRUCTURES;
 
-  public static final ForgeConfigSpec.BooleanValue ZERO_COMPARATOR;
+  public static final ForgeConfigSpec.BooleanValue POWER_COMPARATORS;
   public static final ForgeConfigSpec.BooleanValue BLAST_RESISTANT;
 
   // Client-only
@@ -135,7 +135,7 @@ public class ConfigManager {
     LOOT_MODID_BLACKLIST = COMMON_BUILDER.comment("list of modids whose loot tables shouldn't be converted (in the format of [\"modid\", \"other_modid\"])").defineList("loot_modid_blacklist", empty, (s) -> s instanceof String);
     LOOT_STRUCTURE_BLACKLIST = COMMON_BUILDER.comment("list of structures in which contains shouldn't be converted (in the format of [\"modid:structure_name\", \"othermodid:other_structure_name\"])").defineList("loot_structure_blacklist", empty, validator);
     DISABLE_BREAK = COMMON_BUILDER.comment("prevent the destruction of Lootr chests except while sneaking in creative mode").define("disable_break", false);
-    ZERO_COMPARATOR = COMMON_BUILDER.comment("comparators will output a value of 1 for all lootr chests, rather than 0").define("zero_comparators", false);
+    POWER_COMPARATORS = COMMON_BUILDER.comment("when true, comparators on Lootr containers will give an output of 1; when false, they will give an output of 0").define("power_comparators", true);
     BLAST_RESISTANT = COMMON_BUILDER.comment("lootr chests cannot be destroyed by explosions").define("blast_resistant", false);
 
     DECAY_VALUE = COMMON_BUILDER.comment("how long (in ticks) a decaying loot containers should take to decay (default 5 minutes = 5 * 60 * 20)").defineInRange("decay_value", 5 * 60 * 20, 0, Integer.MAX_VALUE);

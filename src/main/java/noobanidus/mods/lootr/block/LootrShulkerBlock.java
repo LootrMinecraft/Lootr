@@ -156,10 +156,10 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
 
   @Override
   public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos) {
-    if (ConfigManager.ZERO_COMPARATOR.get()) {
-      return 0;
-    } else {
+    if (ConfigManager.POWER_COMPARATORS.get()) {
       return 1;
+    } else {
+      return 0;
     }
   }
 
