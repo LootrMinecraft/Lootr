@@ -22,6 +22,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.zestyblaze.lootr.blocks.entities.LootrChestBlockEntity;
 import net.zestyblaze.lootr.blocks.entities.LootrTrappedChestBlockEntity;
+import net.zestyblaze.lootr.config.LootrModConfig;
 import net.zestyblaze.lootr.registry.LootrBlockEntityInit;
 import net.zestyblaze.lootr.util.ChestUtil;
 import org.jetbrains.annotations.Nullable;
@@ -30,6 +31,15 @@ import org.jetbrains.annotations.Nullable;
 public class LootrTrappedChestBlock extends ChestBlock {
     public LootrTrappedChestBlock(Properties properties) {
         super(properties, () -> LootrBlockEntityInit.SPECIAL_TRAPPED_LOOT_CHEST);
+    }
+
+    @Override
+    public float getExplosionResistance() {
+        if (LootrModConfig.get().breaking.blast_resistant) {
+            return 16.0f;
+        } else {
+            return super.getExplosionResistance();
+        }
     }
 
     @Override
@@ -44,7 +54,7 @@ public class LootrTrappedChestBlock extends ChestBlock {
 
     @Override
     public int getSignal(BlockState state, BlockGetter block, BlockPos pos, Direction direction) {
-        return Mth.clamp(ChestBlockEntity.getOpenCount(block, pos), 0, 15);
+        return Mth.clamp(LootrChestBlockEntity.getOpenCount(block, pos), 0, 15);
     }
 
     @Override

@@ -26,6 +26,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.zestyblaze.lootr.blocks.entities.LootrChestBlockEntity;
 import net.zestyblaze.lootr.blocks.entities.LootrInventoryBlockEntity;
+import net.zestyblaze.lootr.config.LootrModConfig;
 import net.zestyblaze.lootr.registry.LootrBlockEntityInit;
 import net.zestyblaze.lootr.util.ChestUtil;
 import org.jetbrains.annotations.Nullable;
@@ -35,6 +36,15 @@ import java.util.function.Supplier;
 public class LootrInventoryBlock extends ChestBlock {
     public LootrInventoryBlock(Properties properties) {
         super(properties, () -> LootrBlockEntityInit.SPECIAL_LOOT_INVENTORY);
+    }
+
+    @Override
+    public float getExplosionResistance() {
+        if (LootrModConfig.get().breaking.blast_resistant) {
+            return 16.0f;
+        } else {
+            return super.getExplosionResistance();
+        }
     }
 
     protected LootrInventoryBlock(Properties properties, Supplier<BlockEntityType<? extends ChestBlockEntity>> supplier) {
@@ -90,12 +100,16 @@ public class LootrInventoryBlock extends ChestBlock {
 
     @Override
     public boolean hasAnalogOutputSignal(BlockState pState) {
-        return false;
+        return true;
     }
 
     @Override
     public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos) {
-        return 0;
+        if (LootrModConfig.get().breaking.power_comparators) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
     @Override

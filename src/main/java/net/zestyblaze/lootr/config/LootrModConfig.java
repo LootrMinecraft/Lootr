@@ -79,6 +79,8 @@ public class LootrModConfig implements ConfigData {
     public static class Breaking {
         @ConfigEntry.Gui.RequiresRestart
         public boolean disable_break = false;
+        public boolean power_comparators = true;
+        public boolean blast_resistant = false;
     }
 
     @ConfigEntry.Gui.CollapsibleObject
