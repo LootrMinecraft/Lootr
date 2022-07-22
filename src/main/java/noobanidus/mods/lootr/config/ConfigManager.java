@@ -214,14 +214,14 @@ public class ConfigManager {
     return REFRESH_DIMS;
   }
 
-  public static Set<ResourceLocation> getRefreshStructures () {
+  public static Set<ResourceLocation> getRefreshStructures() {
     if (REFRESH_STRUCTS == null) {
       REFRESH_STRUCTS = REFRESH_STRUCTURES.get().stream().map(ResourceLocation::new).collect(Collectors.toSet());
     }
     return REFRESH_STRUCTS;
   }
 
-  public static Set<ResourceLocation> getDecayStructures () {
+  public static Set<ResourceLocation> getDecayStructures() {
     if (DECAY_STRUCTS == null) {
       DECAY_STRUCTS = DECAY_STRUCTURES.get().stream().map(ResourceLocation::new).collect(Collectors.toSet());
     }
@@ -273,14 +273,14 @@ public class ConfigManager {
     return DECAY_MODS;
   }
 
-  public static Set<ResourceLocation> getRefreshingTables () {
+  public static Set<ResourceLocation> getRefreshingTables() {
     if (REFRESH_TABLES == null) {
       REFRESH_TABLES = REFRESH_LOOT_TABLES.get().stream().map(ResourceLocation::new).collect(Collectors.toSet());
     }
     return REFRESH_TABLES;
   }
 
-  public static Set<String> getRefreshMods () {
+  public static Set<String> getRefreshMods() {
     if (REFRESH_MODS == null) {
       REFRESH_MODS = REFRESH_MODIDS.get().stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
     }
@@ -334,7 +334,7 @@ public class ConfigManager {
     return isDimensionDecaying(level.dimension());
   }
 
-  public static boolean isRefreshing (ServerLevel level, ILootBlockEntity tile) {
+  public static boolean isRefreshing(ServerLevel level, ILootBlockEntity tile) {
     if (REFRESH_ALL.get()) {
       return true;
     }
@@ -376,7 +376,7 @@ public class ConfigManager {
     return isDimensionDecaying(level.dimension());
   }
 
-  public static boolean isRefreshing (ServerLevel level, LootrChestMinecartEntity entity) {
+  public static boolean isRefreshing(ServerLevel level, LootrChestMinecartEntity entity) {
     if (REFRESH_ALL.get()) {
       return true;
     }
@@ -398,7 +398,7 @@ public class ConfigManager {
     return isDimensionRefreshing(level.dimension());
   }
 
-  public static boolean isVanillaTextures () {
+  public static boolean isVanillaTextures() {
     return VANILLA_TEXTURES.get();
   }
 
@@ -435,7 +435,8 @@ public class ConfigManager {
 
       if (CONVERT_WOODEN_CHESTS.get() || CONVERT_TRAPPED_CHESTS.get()) {
         if (CONVERT_TRAPPED_CHESTS.get()) {
-          Tags.Blocks.CHESTS_TRAPPED.getValues().forEach(o -> {
+          Registry.BLOCK.getTag(Tags.Blocks.CHESTS_TRAPPED).get().forEach(l -> {
+            Block o = l.value();
             if (replacements.containsKey(o)) {
               return;
             }
@@ -448,7 +449,8 @@ public class ConfigManager {
           });
         }
         if (CONVERT_WOODEN_CHESTS.get()) {
-          Tags.Blocks.CHESTS_WOODEN.getValues().forEach(o -> {
+          Registry.BLOCK.getTag(Tags.Blocks.CHESTS_WOODEN).get().forEach(l -> {
+            Block o = l.value();
             if (replacements.containsKey(o)) {
               return;
             }
