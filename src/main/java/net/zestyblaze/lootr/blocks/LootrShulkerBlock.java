@@ -35,6 +35,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.zestyblaze.lootr.blocks.entities.LootrShulkerBlockEntity;
+import net.zestyblaze.lootr.config.LootrModConfig;
 import net.zestyblaze.lootr.registry.LootrBlockEntityInit;
 import net.zestyblaze.lootr.registry.LootrItemInit;
 import net.zestyblaze.lootr.util.ChestUtil;
@@ -47,6 +48,15 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
     public LootrShulkerBlock(Properties properties) {
         super(DyeColor.YELLOW, properties);
         this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.UP));
+    }
+
+    @Override
+    public float getExplosionResistance() {
+        if (LootrModConfig.get().breaking.blast_resistant) {
+            return 16.0f;
+        } else {
+            return super.getExplosionResistance();
+        }
     }
 
     private static boolean canOpen(BlockState state, Level level, BlockPos pos, LootrShulkerBlockEntity blockEntity) {
@@ -138,7 +148,11 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
 
     @Override
     public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos) {
-        return 0;
+        if (LootrModConfig.get().breaking.power_comparators) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
     @Override

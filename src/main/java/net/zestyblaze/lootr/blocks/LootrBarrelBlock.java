@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.zestyblaze.lootr.blocks.entities.LootrBarrelBlockEntity;
+import net.zestyblaze.lootr.config.LootrModConfig;
 import net.zestyblaze.lootr.util.ChestUtil;
 
 import java.util.Random;
@@ -19,6 +20,15 @@ import java.util.Random;
 public class LootrBarrelBlock extends BarrelBlock {
   public LootrBarrelBlock(Properties p_49046_) {
     super(p_49046_);
+  }
+
+  @Override
+  public float getExplosionResistance() {
+    if (LootrModConfig.get().breaking.blast_resistant) {
+      return 16.0f;
+    } else {
+      return super.getExplosionResistance();
+    }
   }
 
   @Override
@@ -68,11 +78,15 @@ public class LootrBarrelBlock extends BarrelBlock {
 
   @Override
   public boolean hasAnalogOutputSignal(BlockState pState) {
-    return false;
+    return true;
   }
 
   @Override
   public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos) {
-    return 0;
+    if (LootrModConfig.get().breaking.power_comparators) {
+      return 1;
+    } else {
+      return 0;
+    }
   }
 }
