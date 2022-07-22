@@ -442,7 +442,7 @@ public class ConfigManager {
             if (o instanceof EntityBlock) {
               BlockEntity tile = ((EntityBlock) o).newBlockEntity(BlockPos.ZERO, o.defaultBlockState());
               if (tile instanceof RandomizableContainerBlockEntity) {
-                replacements.put(o, ModBlocks.CHEST);
+                replacements.put(o, ModBlocks.TRAPPED_CHEST);
               }
             }
           });
