@@ -23,6 +23,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import noobanidus.mods.lootr.block.tile.LootrChestTileEntity;
+import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.init.ModTiles;
 import noobanidus.mods.lootr.util.ChestUtil;
@@ -38,6 +39,29 @@ public class LootrChestBlock extends ChestBlock {
 
   public LootrChestBlock(Properties builder, Supplier<TileEntityType<? extends ChestTileEntity>> tileEntityTypeIn) {
     super(builder, tileEntityTypeIn);
+  }
+
+  @Override
+  public float getExplosionResistance() {
+    if (ConfigManager.BLAST_RESISTANT.get()) {
+      return 16.0f;
+    } else {
+      return super.getExplosionResistance();
+    }
+  }
+
+  @Override
+  public boolean hasAnalogOutputSignal(BlockState pState) {
+    return true;
+  }
+
+  @Override
+  public int getAnalogOutputSignal(BlockState pBlockState, World pLevel, BlockPos pPos) {
+    if (ConfigManager.POWER_COMPARATORS.get()) {
+      return 1;
+    } else {
+      return 0;
+    }
   }
 
   @Override

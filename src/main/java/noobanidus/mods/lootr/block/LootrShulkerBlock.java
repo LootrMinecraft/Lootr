@@ -25,6 +25,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import noobanidus.mods.lootr.block.tile.LootrShulkerTileEntity;
+import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.init.ModItems;
 import noobanidus.mods.lootr.util.ChestUtil;
@@ -38,6 +39,29 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
   public LootrShulkerBlock(AbstractBlock.Properties pProperties) {
     super(DyeColor.YELLOW, pProperties);
     this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.UP));
+  }
+
+  @Override
+  public float getExplosionResistance() {
+    if (ConfigManager.BLAST_RESISTANT.get()) {
+      return 16.0f;
+    } else {
+      return super.getExplosionResistance();
+    }
+  }
+
+  @Override
+  public boolean hasAnalogOutputSignal(BlockState pState) {
+    return true;
+  }
+
+  @Override
+  public int getAnalogOutputSignal(BlockState pBlockState, World pLevel, BlockPos pPos) {
+    if (ConfigManager.POWER_COMPARATORS.get()) {
+      return 1;
+    } else {
+      return 0;
+    }
   }
 
   @Override
@@ -131,16 +155,6 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
   public VoxelShape getShape(BlockState pState, IBlockReader pLevel, BlockPos pPos, ISelectionContext pContext) {
     TileEntity tileentity = pLevel.getBlockEntity(pPos);
     return tileentity instanceof LootrShulkerTileEntity ? VoxelShapes.create(((LootrShulkerTileEntity) tileentity).getBoundingBox(pState)) : VoxelShapes.block();
-  }
-
-  @Override
-  public boolean hasAnalogOutputSignal(BlockState pState) {
-    return true;
-  }
-
-  @Override
-  public int getAnalogOutputSignal(BlockState pBlockState, World pLevel, BlockPos pPos) {
-    return 0;
   }
 
   @Override
