@@ -326,6 +326,11 @@ public class LootrShulkerTileEntity extends TileEntityLockableLoot implements IL
   }
 
   @Override
+  public boolean hasCapability(Capability<?> capability, @org.jetbrains.annotations.Nullable EnumFacing facing) {
+    return false;
+  }
+
+  @Override
   protected NonNullList<ItemStack> getItems() {
     return this.itemStacks;
   }

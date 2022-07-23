@@ -173,6 +173,11 @@ public class LootrChestTileEntity extends TileEntityChest implements ILootTile, 
   }
 
   @Override
+  public boolean hasCapability(Capability<?> capability, @org.jetbrains.annotations.Nullable EnumFacing facing) {
+    return false;
+  }
+
+  @Override
   public void update() {
     int i = this.pos.getX();
     int j = this.pos.getY();
