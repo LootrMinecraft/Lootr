@@ -252,6 +252,10 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
     }
 
     @Override
+    public void unpackLootTable(@Nullable Player player) {
+    }
+
+    @Override
     public ResourceLocation getTable() {
         return savedLootTable;
     }
