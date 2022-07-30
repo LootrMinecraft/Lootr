@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "noobanidus.mods.lootr.mixins",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "mixins.lootr.refmap.json",
+  "mixins": [
+    "MixinPocketTemplate"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "minVersion": "0.8"
+}

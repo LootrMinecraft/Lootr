@@ -19,7 +19,7 @@ apply plugin: "net.minecraftforge.gradle.forge"
 apply plugin: 'org.spongepowered.mixin'
 
 group = 'noobanidus.mods.lootr'
-version = '0.4.2'
+version = '0.4.4'
 archivesBaseName = 'lootr-1.12.2'
 
 minecraft {
@@ -52,6 +52,7 @@ dependencies {
     deobfCompile ("zone.rong:mixinbooter:4.2")
     deobfProvided ("curse.maven:reccomplex-223150:2689602")
     deobfProvided ("curse.maven:ivtoolkit-224535:2443253")
+    deobfProvided ("curse.maven:dimdoors-284876:3693025")
 }
 sourceSets {
     main {
