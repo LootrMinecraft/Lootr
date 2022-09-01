@@ -137,6 +137,7 @@ public class ChestData extends SavedData {
   }
 
   public SpecialChestInventory createInventory(ServerPlayer player, LootFiller filler, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
+    filler = LootFiller.wrapped(filler);
     ServerLevel level = (ServerLevel) player.level;
     SpecialChestInventory result;
     if (level.dimension() != dimension) {
@@ -160,6 +161,7 @@ public class ChestData extends SavedData {
   }
 
   public SpecialChestInventory createInventory(ServerPlayer player, LootFiller filler, BaseContainerBlockEntity blockEntity, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
+    filler = LootFiller.wrapped(filler);
     ServerLevel level = (ServerLevel) player.level;
     SpecialChestInventory result;
     if (level.dimension() != dimension) {
@@ -183,6 +185,7 @@ public class ChestData extends SavedData {
   }
 
   public SpecialChestInventory createInventory(ServerPlayer player, LootFiller filler, @Nullable RandomizableContainerBlockEntity tile) {
+    filler = LootFiller.wrapped(filler);
     ServerLevel world = (ServerLevel) player.level;
     SpecialChestInventory result;
     long seed = -1;

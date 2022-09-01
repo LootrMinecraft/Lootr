@@ -1,14 +1,13 @@
 package noobanidus.mods.lootr.setup;
 
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.critereon.LootTableTrigger;
 import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import noobanidus.mods.lootr.advancement.AdvancementPredicate;
-import noobanidus.mods.lootr.advancement.ContainerPredicate;
-import noobanidus.mods.lootr.advancement.GenericTrigger;
-import noobanidus.mods.lootr.advancement.LootedStatPredicate;
+import noobanidus.mods.lootr.advancement.*;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.LootrHooks;
 import noobanidus.mods.lootr.impl.LootrAPIImpl;
@@ -34,6 +33,7 @@ public class CommonSetup {
       Registry.register(Registry.CUSTOM_STAT, ModStats.LOOTED_LOCATION, ModStats.LOOTED_LOCATION);
       ModStats.load();
       ModAdvancements.SCORE_PREDICATE = CriteriaTriggers.register(new GenericTrigger<>(ModAdvancements.SCORE_LOCATION, new LootedStatPredicate()));
+      ModAdvancements.LOOT_TABLE_PREDICATE = CriteriaTriggers.register(new GenericTrigger<>(ModAdvancements.LOOT_TABLE_LOCATION, new LootTablePredicate()));
       PacketHandler.registerMessages();
     });
   }

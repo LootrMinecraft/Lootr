@@ -1,8 +1,11 @@
 package noobanidus.mods.lootr.api;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
+import noobanidus.mods.lootr.init.ModAdvancements;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
@@ -23,4 +26,22 @@ public interface LootFiller {
    *                  Example implementations can be found in `LootrChestblockEntity::unpackLootTable`.
    */
   void unpackLootTable(@Nonnull Player player, Container inventory, ResourceLocation table, long seed);
+
+  class WrappedFiller implements LootFiller {
+    private final LootFiller filler;
+
+    protected WrappedFiller(LootFiller filler) {
+      this.filler = filler;
+    }
+
+    @Override
+    public void unpackLootTable(@NotNull Player player, Container inventory, ResourceLocation table, long seed) {
+      ModAdvancements.LOOT_TABLE_PREDICATE.trigger((ServerPlayer) player, table);
+      filler.unpackLootTable(player, inventory, table, seed);
+    }
+  }
+
+  static LootFiller wrapped (LootFiller filler) {
+    return new WrappedFiller(filler);
+  }
 }
