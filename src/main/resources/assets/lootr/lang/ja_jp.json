@@ -1,6 +1,6 @@
 {
   "lootr.message.should_sneak": "このチェストを壊すと中身のアイテムがすべて削除されます。スニーク中のみ破壊することが出来ます。",
-  "lootr.message.should_sneak2": "このアイテムは%sだけのものだから、必要なとき以外破壊する必要はない",
+  "lootr.message.should_sneak2": "この中のアイテムは%sのものだから、必要なとき以外破壊する必要はない",
   "lootr.message.should_sneak3": "1人1チェスト",
   "lootr.message.cart_should_sneak": "このトロッコを壊すと中身のアイテムがすべて削除されます。スニーク中のみ破壊することが出来ます。",
   "lootr.message.cart_should_sneak3": "1人1トロッコ",
