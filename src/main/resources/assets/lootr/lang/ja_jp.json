@@ -1,9 +1,9 @@
 {
   "lootr.message.should_sneak": "このチェストを壊すと中身のアイテムがすべて削除されます。スニーク中のみ破壊することが出来ます。",
-  "lootr.message.should_sneak2": "この中のアイテムは%sのものだから、必要なとき以外破壊する必要はない",
-  "lootr.message.should_sneak3": "1人1チェスト",
+  "lootr.message.should_sneak2": "この中には%sのお宝が入っているから、必要なとき以外破壊する必要はない",
+  "lootr.message.should_sneak3": "それぞれのプレイヤーごと",
   "lootr.message.cart_should_sneak": "このトロッコを壊すと中身のアイテムがすべて削除されます。スニーク中のみ破壊することが出来ます。",
-  "lootr.message.cart_should_sneak3": "1人1トロッコ",
+  "lootr.message.cart_should_sneak3": "それぞれのプレイヤーごと",
   "lootr.message.cannot_break": "アイテム入りの宝箱やトロッコは破壊できません。",
   "lootr.message.cannot_break_sneak": "アイテム入りの宝箱やトロッコはクリエイティブモード時のみにスニークしながら破壊することが出来ます。",
   "lootr.message.decayed": "朽ちた宝箱が崩れていく!",
