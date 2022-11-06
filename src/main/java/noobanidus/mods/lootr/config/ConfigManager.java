@@ -87,6 +87,12 @@ public class ConfigManager {
   @Config.Comment("when true, any worldgen chests, etc. that do not have a loot table but aren't empty will be converted. This can help with legacy mods that don't use loot tables")
   public static boolean CONVERT_WORLDGEN_INVENTORIES = false;
 
+  @Config.Comment("when true, Lootr-provided containers will be blast resistant")
+  public static boolean BLAST_RESISTANT = false;
+
+  @Config.Comment("when true, Lootr chests will output a comparator value of 0 instead of 1")
+  public static boolean ZERO_COMPARATOR = false;
+
   private static Set<String> DECAY_MODS = null;
   private static Set<ResourceLocation> DECAY_TABLES = null;
   private static Set<String> REFRESH_MODS = null;

@@ -4,6 +4,7 @@ import net.minecraft.block.BlockChest;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -13,16 +14,18 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.block.tile.LootrChestTileEntity;
 import noobanidus.mods.lootr.block.tile.LootrInventoryTileEntity;
 import noobanidus.mods.lootr.block.tile.TrappedLootrChestTileEntity;
+import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.util.ChestUtil;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.Random;
 import java.util.function.Supplier;
 
@@ -101,5 +104,21 @@ public class LootrChestBlock extends BlockChest {
   @Override
   public Item getItemDropped(IBlockState state, Random rand, int fortune) {
     return Item.getItemFromBlock(chestType == ModBlocks.TYPE_LOOTR_TRAP ? Blocks.TRAPPED_CHEST : Blocks.CHEST);
+  }
+
+  @Override
+  public float getExplosionResistance(World world, BlockPos pos, @Nullable Entity exploder, Explosion explosion) {
+    if(ConfigManager.BLAST_RESISTANT)
+      return 16.0f;
+    else
+      return super.getExplosionResistance(world, pos, exploder, explosion);
+  }
+
+  @Override
+  public int getComparatorInputOverride(IBlockState blockState, World worldIn, BlockPos pos) {
+    if(ConfigManager.ZERO_COMPARATOR)
+      return 0;
+    else
+      return 1;
   }
 }
