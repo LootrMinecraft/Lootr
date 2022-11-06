@@ -81,16 +81,16 @@ public class ChestUtil {
       if (DataStorage.isDecayed(tileId)) {
         world.destroyBlock(pos, true);
         DataStorage.removeDecayed(tileId);
-        player.sendMessage(new TextComponentTranslation("lootr.message.decayed").setStyle(new Style().setColor(TextFormatting.RED).setBold(true)));
+        player.sendStatusMessage(new TextComponentTranslation("lootr.message.decayed").setStyle(new Style().setColor(TextFormatting.RED).setBold(true)), true);
         return false;
       } else {
         int decayValue = DataStorage.getDecayValue(tileId);
         if (decayValue > 0) {
-          player.sendMessage(new TextComponentTranslation("lootr.message.decay_in", decayValue / 20).setStyle(new Style().setColor(TextFormatting.RED).setBold(true)));
+          player.sendStatusMessage(new TextComponentTranslation("lootr.message.decay_in", decayValue / 20).setStyle(new Style().setColor(TextFormatting.RED).setBold(true)), true);
         } else if (decayValue == -1) {
           if (ConfigManager.isDecaying(world, (ILootTile) te)) {
             DataStorage.setDecaying(tileId, ConfigManager.getDecayValue());
-            player.sendMessage(new TextComponentTranslation("lootr.message.decay_start", ConfigManager.getDecayValue() / 20).setStyle(new Style().setColor(TextFormatting.RED).setBold(true)));
+            player.sendStatusMessage(new TextComponentTranslation("lootr.message.decay_start", ConfigManager.getDecayValue() / 20).setStyle(new Style().setColor(TextFormatting.RED).setBold(true)), true);
           }
         }
       }
@@ -98,15 +98,15 @@ public class ChestUtil {
       if (DataStorage.isRefreshed(tileId)) {
         DataStorage.refreshInventory(world, ((ILootTile) te).getTileId(), (EntityPlayerMP) player, pos);
         DataStorage.removeRefreshed(tileId);
-        player.sendMessage(new TextComponentTranslation("lootr.message.refreshed").setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)));
+        player.sendStatusMessage(new TextComponentTranslation("lootr.message.refreshed").setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)), true);
       } else {
         int refreshValue = DataStorage.getRefreshValue(tileId);
         if (refreshValue > 0) {
-          player.sendMessage(new TextComponentTranslation("lootr.message.refresh_in", refreshValue / 20).setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)));
+          player.sendStatusMessage(new TextComponentTranslation("lootr.message.refresh_in", refreshValue / 20).setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)), true);
         } else if (refreshValue == -1) {
           if (ConfigManager.isRefreshing(world, (ILootTile) te)) {
             DataStorage.setRefreshing(tileId, ConfigManager.getRefreshValue());
-            player.sendMessage(new TextComponentTranslation("lootr.message.refresh_start", ConfigManager.getRefreshValue() / 20).setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)));
+            player.sendStatusMessage(new TextComponentTranslation("lootr.message.refresh_start", ConfigManager.getRefreshValue() / 20).setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)), true);
           }
         }
       }
@@ -128,16 +128,16 @@ public class ChestUtil {
         if (DataStorage.isDecayed(tileId)) {
           cart.attackEntityFrom(DamageSource.OUT_OF_WORLD, Float.MAX_VALUE);
           DataStorage.removeDecayed(tileId);
-          player.sendMessage(new TextComponentTranslation("lootr.message.decayed").setStyle(new Style().setColor(TextFormatting.RED).setBold(true)));
+          player.sendStatusMessage(new TextComponentTranslation("lootr.message.decayed").setStyle(new Style().setColor(TextFormatting.RED).setBold(true)), true);
           return;
         } else {
           int decayValue = DataStorage.getDecayValue(tileId);
           if (decayValue > 0) {
-            player.sendMessage(new TextComponentTranslation("lootr.message.decay_in", decayValue / 20).setStyle(new Style().setColor(TextFormatting.RED).setBold(true)));
+            player.sendStatusMessage(new TextComponentTranslation("lootr.message.decay_in", decayValue / 20).setStyle(new Style().setColor(TextFormatting.RED).setBold(true)), true);
           } else if (decayValue == -1) {
             if (ConfigManager.isDecaying(world, cart)) {
               DataStorage.setDecaying(tileId, ConfigManager.getDecayValue());
-              player.sendMessage(new TextComponentTranslation("lootr.message.decay_start", ConfigManager.getDecayValue() / 20).setStyle(new Style().setColor(TextFormatting.RED).setBold(true)));
+              player.sendStatusMessage(new TextComponentTranslation("lootr.message.decay_start", ConfigManager.getDecayValue() / 20).setStyle(new Style().setColor(TextFormatting.RED).setBold(true)), true);
             }
           }
         }
@@ -150,15 +150,15 @@ public class ChestUtil {
         if (DataStorage.isRefreshed(tileId)) {
           DataStorage.refreshInventory(world, cart, (EntityPlayerMP) player, cart.getPosition());
           DataStorage.removeRefreshed(tileId);
-          player.sendMessage(new TextComponentTranslation("lootr.message.refreshed").setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)));
+          player.sendStatusMessage(new TextComponentTranslation("lootr.message.refreshed").setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)), true);
         } else {
           int refreshValue = DataStorage.getRefreshValue(tileId);
           if (refreshValue > 0) {
-            player.sendMessage(new TextComponentTranslation("lootr.message.refresh_in", refreshValue / 20).setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)));
+            player.sendStatusMessage(new TextComponentTranslation("lootr.message.refresh_in", refreshValue / 20).setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)), true);
           } else if (refreshValue == -1) {
             if (ConfigManager.isRefreshing(world, cart)) {
               DataStorage.setRefreshing(tileId, ConfigManager.getRefreshValue());
-              player.sendMessage(new TextComponentTranslation("lootr.message.refresh_start", ConfigManager.getRefreshValue() / 20).setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)));
+              player.sendStatusMessage(new TextComponentTranslation("lootr.message.refresh_start", ConfigManager.getRefreshValue() / 20).setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)), true);
             }
           }
         }
@@ -187,16 +187,16 @@ public class ChestUtil {
       if (DataStorage.isDecayed(tileId)) {
         world.destroyBlock(pos, true);
         DataStorage.removeDecayed(tileId);
-        player.sendMessage(new TextComponentTranslation("lootr.message.decayed").setStyle(new Style().setColor(TextFormatting.RED).setBold(true)));
+        player.sendStatusMessage(new TextComponentTranslation("lootr.message.decayed").setStyle(new Style().setColor(TextFormatting.RED).setBold(true)), true);
         return false;
       } else {
         int decayValue = DataStorage.getDecayValue(tileId);
         if (decayValue > 0) {
-          player.sendMessage(new TextComponentTranslation("lootr.message.decay_in", decayValue / 20).setStyle(new Style().setColor(TextFormatting.RED).setBold(true)));
+          player.sendStatusMessage(new TextComponentTranslation("lootr.message.decay_in", decayValue / 20).setStyle(new Style().setColor(TextFormatting.RED).setBold(true)), true);
         } else if (decayValue == -1) {
           if (ConfigManager.isDecaying(world, (ILootTile) te)) {
             DataStorage.setDecaying(tileId, ConfigManager.getDecayValue());
-            player.sendMessage(new TextComponentTranslation("lootr.message.decay_start", ConfigManager.getDecayValue() / 20).setStyle(new Style().setColor(TextFormatting.RED).setBold(true)));
+            player.sendStatusMessage(new TextComponentTranslation("lootr.message.decay_start", ConfigManager.getDecayValue() / 20).setStyle(new Style().setColor(TextFormatting.RED).setBold(true)), true);
           }
         }
       }
@@ -204,15 +204,15 @@ public class ChestUtil {
       if (DataStorage.isRefreshed(tileId)) {
         DataStorage.refreshInventory(world, ((ILootTile) te).getTileId(), (EntityPlayerMP) player, pos);
         DataStorage.removeRefreshed(tileId);
-        player.sendMessage(new TextComponentTranslation("lootr.message.refreshed").setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)));
+        player.sendStatusMessage(new TextComponentTranslation("lootr.message.refreshed").setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)), true);
       } else {
         int refreshValue = DataStorage.getRefreshValue(tileId);
         if (refreshValue > 0) {
-          player.sendMessage(new TextComponentTranslation("lootr.message.refresh_in", refreshValue / 20).setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)));
+          player.sendStatusMessage(new TextComponentTranslation("lootr.message.refresh_in", refreshValue / 20).setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)), true);
         } else if (refreshValue == -1) {
           if (ConfigManager.isRefreshing(world, (ILootTile) te)) {
             DataStorage.setRefreshing(tileId, ConfigManager.getRefreshValue());
-            player.sendMessage(new TextComponentTranslation("lootr.message.refresh_start", ConfigManager.getRefreshValue() / 20).setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)));
+            player.sendStatusMessage(new TextComponentTranslation("lootr.message.refresh_start", ConfigManager.getRefreshValue() / 20).setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)), true);
           }
         }
       }
