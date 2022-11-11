@@ -97,7 +97,7 @@ public class ChestUtil {
         if (decayValue > 0) {
           player.displayClientMessage(new TranslatableComponent("lootr.message.decay_in", decayValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), true);
         } else if (decayValue == -1) {
-          if (ConfigManager.isDecaying((ServerLevel)level, (ILootBlockEntity)te)) {
+          if (ConfigManager.isDecaying((ServerLevel) level, (ILootBlockEntity) te)) {
             DataStorage.setDecaying(tileId, ConfigManager.DECAY_VALUE.get());
             player.displayClientMessage(new TranslatableComponent("lootr.message.decay_start", ConfigManager.DECAY_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), true);
           }
@@ -114,19 +114,18 @@ public class ChestUtil {
         DataStorage.refreshInventory(level, pos, ((ILootBlockEntity) te).getTileId(), (ServerPlayer) player);
         DataStorage.removeRefreshed(tileId);
         player.displayClientMessage(new TranslatableComponent("lootr.message.refreshed").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), true);
-      } else {
-        int refreshValue = DataStorage.getRefreshValue(tileId);
-        if (refreshValue > 0) {
-          player.displayClientMessage(new TranslatableComponent("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), true);
-        } else if (refreshValue == -1) {
-          if (ConfigManager.isRefreshing((ServerLevel) level, (ILootBlockEntity) te)) {
-            DataStorage.setRefreshing(tileId, ConfigManager.REFRESH_VALUE.get());
-            player.displayClientMessage(new TranslatableComponent("lootr.message.refresh_start", ConfigManager.REFRESH_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), true);
-          }
+      }
+      int refreshValue = DataStorage.getRefreshValue(tileId);
+      if (refreshValue > 0) {
+        player.displayClientMessage(new TranslatableComponent("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), true);
+      } else if (refreshValue == -1) {
+        if (ConfigManager.isRefreshing((ServerLevel) level, (ILootBlockEntity) te)) {
+          DataStorage.setRefreshing(tileId, ConfigManager.REFRESH_VALUE.get());
+          player.displayClientMessage(new TranslatableComponent("lootr.message.refresh_start", ConfigManager.REFRESH_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), true);
         }
       }
       MenuProvider provider = DataStorage.getInventory(level, ((ILootBlockEntity) te).getTileId(), pos, (ServerPlayer) player, (RandomizableContainerBlockEntity) te, ((ILootBlockEntity) te)::unpackLootTable);
-      if (!DataStorage.isScored(player.getUUID(), ((ILootBlockEntity)te).getTileId())) {
+      if (!DataStorage.isScored(player.getUUID(), ((ILootBlockEntity) te).getTileId())) {
         player.awardStat(ModStats.LOOTED_STAT);
         ModAdvancements.SCORE_PREDICATE.trigger((ServerPlayer) player, null);
         DataStorage.score(player.getUUID(), ((ILootBlockEntity) te).getTileId());
@@ -178,15 +177,14 @@ public class ChestUtil {
           DataStorage.refreshInventory(level, cart, (ServerPlayer) player);
           DataStorage.removeRefreshed(tileId);
           player.displayClientMessage(new TranslatableComponent("lootr.message.refreshed").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), true);
-        } else {
-          int refreshValue = DataStorage.getRefreshValue(tileId);
-          if (refreshValue > 0) {
-            player.displayClientMessage(new TranslatableComponent("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), true);
-          } else if (refreshValue == -1) {
-            if (ConfigManager.isRefreshing((ServerLevel)level, cart)) {
-              DataStorage.setRefreshing(tileId, ConfigManager.REFRESH_VALUE.get());
-              player.displayClientMessage(new TranslatableComponent("lootr.message.refresh_start", ConfigManager.REFRESH_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), true);
-            }
+        }
+        int refreshValue = DataStorage.getRefreshValue(tileId);
+        if (refreshValue > 0) {
+          player.displayClientMessage(new TranslatableComponent("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), true);
+        } else if (refreshValue == -1) {
+          if (ConfigManager.isRefreshing((ServerLevel) level, cart)) {
+            DataStorage.setRefreshing(tileId, ConfigManager.REFRESH_VALUE.get());
+            player.displayClientMessage(new TranslatableComponent("lootr.message.refresh_start", ConfigManager.REFRESH_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), true);
           }
         }
         MenuProvider provider = DataStorage.getInventory(level, cart, (ServerPlayer) player, cart::addLoot);
@@ -215,19 +213,18 @@ public class ChestUtil {
         DataStorage.refreshInventory(level, pos, ((ILootBlockEntity) te).getTileId(), stacks, (ServerPlayer) player);
         DataStorage.removeRefreshed(tileId);
         player.displayClientMessage(new TranslatableComponent("lootr.message.refreshed").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), true);
-      } else {
-        int refreshValue = DataStorage.getRefreshValue(tileId);
-        if (refreshValue > 0) {
-          player.displayClientMessage(new TranslatableComponent("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), true);
-        } else if (refreshValue == -1) {
-          if (ConfigManager.isRefreshing((ServerLevel)level, tile)) {
-            DataStorage.setRefreshing(tileId, ConfigManager.REFRESH_VALUE.get());
-            player.displayClientMessage(new TranslatableComponent("lootr.message.refresh_start", ConfigManager.REFRESH_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), true);
-          }
+      }
+      int refreshValue = DataStorage.getRefreshValue(tileId);
+      if (refreshValue > 0) {
+        player.displayClientMessage(new TranslatableComponent("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), true);
+      } else if (refreshValue == -1) {
+        if (ConfigManager.isRefreshing((ServerLevel) level, tile)) {
+          DataStorage.setRefreshing(tileId, ConfigManager.REFRESH_VALUE.get());
+          player.displayClientMessage(new TranslatableComponent("lootr.message.refresh_start", ConfigManager.REFRESH_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), true);
         }
       }
       MenuProvider provider = DataStorage.getInventory(level, tile.getTileId(), stacks, (ServerPlayer) player, pos, tile);
-      if (!DataStorage.isScored(player.getUUID(), ((ILootBlockEntity)te).getTileId())) {
+      if (!DataStorage.isScored(player.getUUID(), ((ILootBlockEntity) te).getTileId())) {
         player.awardStat(ModStats.LOOTED_STAT);
         ModAdvancements.SCORE_PREDICATE.trigger((ServerPlayer) player, null);
         DataStorage.score(player.getUUID(), ((ILootBlockEntity) te).getTileId());
