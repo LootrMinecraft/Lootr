@@ -259,6 +259,9 @@ public class ConfigManager {
   }
 
   public static boolean isDecaying(World world, ILootTile tile) {
+    if (tile.getTable() == null) {
+      return false;
+    }
     if (DECAY_ALL.get()) {
       return true;
     }
@@ -272,6 +275,9 @@ public class ConfigManager {
   }
 
   public static boolean isRefreshing(World world, ILootTile tile) {
+    if (tile.getTable() == null) {
+      return false;
+    }
     if (REFRESH_ALL.get()) {
       return true;
     }
@@ -287,6 +293,9 @@ public class ConfigManager {
   }
 
   public static boolean isDecaying(World world, LootrChestMinecartEntity entity) {
+    if (entity.lootTable == null) {
+      return false;
+    }
     if (DECAY_ALL.get()) {
       return true;
     }
@@ -300,6 +309,9 @@ public class ConfigManager {
   }
 
   public static boolean isRefreshing(World world, LootrChestMinecartEntity entity) {
+    if (entity.lootTable == null) {
+      return false;
+    }
     if (REFRESH_ALL.get()) {
       return true;
     }
