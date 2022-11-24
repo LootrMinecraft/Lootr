@@ -12,7 +12,6 @@ import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
@@ -111,15 +110,14 @@ public class ChestUtil {
         DataStorage.refreshInventory(world, ((ILootTile) te).getTileId(), (ServerPlayerEntity) player, pos);
         DataStorage.removeRefreshed(tileId);
         player.displayClientMessage(new TranslationTextComponent("lootr.message.refreshed").setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), true);
-      } else {
-        int refreshValue = DataStorage.getRefreshValue(tileId);
-        if (refreshValue > 0) {
-          player.displayClientMessage(new TranslationTextComponent("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), true);
-        } else if (refreshValue == -1) {
-          if (ConfigManager.isRefreshing(world, (ILootTile) te)) {
-            DataStorage.setRefreshing(tileId, ConfigManager.REFRESH_VALUE.get());
-            player.displayClientMessage(new TranslationTextComponent("lootr.message.refresh_start", ConfigManager.REFRESH_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), true);
-          }
+      }
+      int refreshValue = DataStorage.getRefreshValue(tileId);
+      if (refreshValue > 0) {
+        player.displayClientMessage(new TranslationTextComponent("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), true);
+      } else if (refreshValue == -1) {
+        if (ConfigManager.isRefreshing(world, (ILootTile) te)) {
+          DataStorage.setRefreshing(tileId, ConfigManager.REFRESH_VALUE.get());
+          player.displayClientMessage(new TranslationTextComponent("lootr.message.refresh_start", ConfigManager.REFRESH_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), true);
         }
       }
       INamedContainerProvider provider = DataStorage.getInventory(world, ((ILootTile) te).getTileId(), pos, (ServerPlayerEntity) player, (LockableLootTileEntity) te, ((ILootTile) te)::fillWithLoot);
@@ -172,15 +170,14 @@ public class ChestUtil {
           DataStorage.refreshInventory(world, cart, (ServerPlayerEntity) player, cart.blockPosition());
           DataStorage.removeRefreshed(tileId);
           player.displayClientMessage(new TranslationTextComponent("lootr.message.refreshed").setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), true);
-        } else {
-          int refreshValue = DataStorage.getRefreshValue(tileId);
-          if (refreshValue > 0) {
-            player.displayClientMessage(new TranslationTextComponent("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), true);
-          } else if (refreshValue == -1) {
-            if (ConfigManager.isRefreshing(world, cart)) {
-              DataStorage.setRefreshing(tileId, ConfigManager.REFRESH_VALUE.get());
-              player.displayClientMessage(new TranslationTextComponent("lootr.message.refresh_start", ConfigManager.REFRESH_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), true);
-            }
+        }
+        int refreshValue = DataStorage.getRefreshValue(tileId);
+        if (refreshValue > 0) {
+          player.displayClientMessage(new TranslationTextComponent("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), true);
+        } else if (refreshValue == -1) {
+          if (ConfigManager.isRefreshing(world, cart)) {
+            DataStorage.setRefreshing(tileId, ConfigManager.REFRESH_VALUE.get());
+            player.displayClientMessage(new TranslationTextComponent("lootr.message.refresh_start", ConfigManager.REFRESH_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), true);
           }
         }
         INamedContainerProvider provider = DataStorage.getInventory(world, cart, (ServerPlayerEntity) player, cart::addLoot, cart.blockPosition());
@@ -210,15 +207,14 @@ public class ChestUtil {
         DataStorage.refreshInventory(world, ((ILootTile) te).getTileId(), stacks, (ServerPlayerEntity) player, pos);
         DataStorage.removeRefreshed(tileId);
         player.displayClientMessage(new TranslationTextComponent("lootr.message.refreshed").setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), true);
-      } else {
-        int refreshValue = DataStorage.getRefreshValue(tileId);
-        if (refreshValue > 0) {
-          player.displayClientMessage(new TranslationTextComponent("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), true);
-        } else if (refreshValue == -1) {
-          if (ConfigManager.isRefreshing(world, tile)) {
-            DataStorage.setRefreshing(tileId, ConfigManager.REFRESH_VALUE.get());
-            player.displayClientMessage(new TranslationTextComponent("lootr.message.refresh_start", ConfigManager.REFRESH_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), true);
-          }
+      }
+      int refreshValue = DataStorage.getRefreshValue(tileId);
+      if (refreshValue > 0) {
+        player.displayClientMessage(new TranslationTextComponent("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), true);
+      } else if (refreshValue == -1) {
+        if (ConfigManager.isRefreshing(world, tile)) {
+          DataStorage.setRefreshing(tileId, ConfigManager.REFRESH_VALUE.get());
+          player.displayClientMessage(new TranslationTextComponent("lootr.message.refresh_start", ConfigManager.REFRESH_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextFormatting.BLUE).withBold(true)), true);
         }
       }
       INamedContainerProvider provider = DataStorage.getInventory(world, tile.getTileId(), stacks, (ServerPlayerEntity) player, pos, tile);
