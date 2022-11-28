@@ -18,7 +18,8 @@ public class TickingData extends WorldSavedData {
   }
 
   public boolean isDone(UUID id) {
-    return tickMap.getInt(id) == 0;
+    int val = tickMap.getInt(id);
+    return val == 0 || val == 1;
   }
 
   public int getValue(UUID id) {

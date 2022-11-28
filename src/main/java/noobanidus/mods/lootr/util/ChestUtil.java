@@ -99,15 +99,14 @@ public class ChestUtil {
         DataStorage.refreshInventory(world, ((ILootTile) te).getTileId(), (EntityPlayerMP) player, pos);
         DataStorage.removeRefreshed(tileId);
         player.sendStatusMessage(new TextComponentTranslation("lootr.message.refreshed").setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)), true);
-      } else {
-        int refreshValue = DataStorage.getRefreshValue(tileId);
-        if (refreshValue > 0) {
-          player.sendStatusMessage(new TextComponentTranslation("lootr.message.refresh_in", refreshValue / 20).setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)), true);
-        } else if (refreshValue == -1) {
-          if (ConfigManager.isRefreshing(world, (ILootTile) te)) {
-            DataStorage.setRefreshing(tileId, ConfigManager.getRefreshValue());
-            player.sendStatusMessage(new TextComponentTranslation("lootr.message.refresh_start", ConfigManager.getRefreshValue() / 20).setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)), true);
-          }
+      }
+      int refreshValue = DataStorage.getRefreshValue(tileId);
+      if (refreshValue > 0) {
+        player.sendStatusMessage(new TextComponentTranslation("lootr.message.refresh_in", refreshValue / 20).setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)), true);
+      } else if (refreshValue == -1) {
+        if (ConfigManager.isRefreshing(world, (ILootTile) te)) {
+          DataStorage.setRefreshing(tileId, ConfigManager.getRefreshValue());
+          player.sendStatusMessage(new TextComponentTranslation("lootr.message.refresh_start", ConfigManager.getRefreshValue() / 20).setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)), true);
         }
       }
       IInteractionObject provider = DataStorage.getInventory(world, ((ILootTile) te).getTileId(), pos, (EntityPlayerMP) player, (TileEntityLockableLoot) te, ((ILootTile) te)::fillWithLoot);
@@ -151,15 +150,14 @@ public class ChestUtil {
           DataStorage.refreshInventory(world, cart, (EntityPlayerMP) player, cart.getPosition());
           DataStorage.removeRefreshed(tileId);
           player.sendStatusMessage(new TextComponentTranslation("lootr.message.refreshed").setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)), true);
-        } else {
-          int refreshValue = DataStorage.getRefreshValue(tileId);
-          if (refreshValue > 0) {
-            player.sendStatusMessage(new TextComponentTranslation("lootr.message.refresh_in", refreshValue / 20).setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)), true);
-          } else if (refreshValue == -1) {
-            if (ConfigManager.isRefreshing(world, cart)) {
-              DataStorage.setRefreshing(tileId, ConfigManager.getRefreshValue());
-              player.sendStatusMessage(new TextComponentTranslation("lootr.message.refresh_start", ConfigManager.getRefreshValue() / 20).setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)), true);
-            }
+        }
+        int refreshValue = DataStorage.getRefreshValue(tileId);
+        if (refreshValue > 0) {
+          player.sendStatusMessage(new TextComponentTranslation("lootr.message.refresh_in", refreshValue / 20).setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)), true);
+        } else if (refreshValue == -1) {
+          if (ConfigManager.isRefreshing(world, cart)) {
+            DataStorage.setRefreshing(tileId, ConfigManager.getRefreshValue());
+            player.sendStatusMessage(new TextComponentTranslation("lootr.message.refresh_start", ConfigManager.getRefreshValue() / 20).setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)), true);
           }
         }
         IInteractionObject provider = DataStorage.getInventory(world, cart, (EntityPlayerMP) player, cart::addLoot, cart.getPosition());
@@ -205,15 +203,14 @@ public class ChestUtil {
         DataStorage.refreshInventory(world, ((ILootTile) te).getTileId(), (EntityPlayerMP) player, pos);
         DataStorage.removeRefreshed(tileId);
         player.sendStatusMessage(new TextComponentTranslation("lootr.message.refreshed").setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)), true);
-      } else {
-        int refreshValue = DataStorage.getRefreshValue(tileId);
-        if (refreshValue > 0) {
-          player.sendStatusMessage(new TextComponentTranslation("lootr.message.refresh_in", refreshValue / 20).setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)), true);
-        } else if (refreshValue == -1) {
-          if (ConfigManager.isRefreshing(world, (ILootTile) te)) {
-            DataStorage.setRefreshing(tileId, ConfigManager.getRefreshValue());
-            player.sendStatusMessage(new TextComponentTranslation("lootr.message.refresh_start", ConfigManager.getRefreshValue() / 20).setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)), true);
-          }
+      }
+      int refreshValue = DataStorage.getRefreshValue(tileId);
+      if (refreshValue > 0) {
+        player.sendStatusMessage(new TextComponentTranslation("lootr.message.refresh_in", refreshValue / 20).setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)), true);
+      } else if (refreshValue == -1) {
+        if (ConfigManager.isRefreshing(world, (ILootTile) te)) {
+          DataStorage.setRefreshing(tileId, ConfigManager.getRefreshValue());
+          player.sendStatusMessage(new TextComponentTranslation("lootr.message.refresh_start", ConfigManager.getRefreshValue() / 20).setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)), true);
         }
       }
       IInteractionObject provider = DataStorage.getInventory(world, tile.getTileId(), stacks, (EntityPlayerMP) player, pos, tile);
