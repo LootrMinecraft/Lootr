@@ -18,7 +18,8 @@ public class TickingData extends SavedData {
     }
 
     public boolean isComplete(UUID id) {
-        return tickMap.getInt(id) == 0;
+        int tickVal = tickMap.getInt(id);
+        return tickVal == 0 || tickVal == 1;
     }
 
     public int getValue(UUID id) {

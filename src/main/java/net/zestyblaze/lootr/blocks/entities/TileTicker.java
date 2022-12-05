@@ -119,7 +119,6 @@ public class TileTicker {
     private final ResourceKey<Level> dimension;
     private final BlockPos position;
     private final Set<ChunkPos> chunks = new HashSet<>();
-    private final long addedAt;
 
     public Entry(ResourceKey<Level> dimension, BlockPos position) {
       this.dimension = dimension;
@@ -136,8 +135,6 @@ public class TileTicker {
           chunks.add(new ChunkPos(oX + x, oZ + z));
         }
       }
-
-      this.addedAt = ServerAccessImpl.getServer().getTickCount();
     }
 
     public ResourceKey<Level> getDimension() {
@@ -152,10 +149,6 @@ public class TileTicker {
       return chunks;
     }
 
-    public long age(MinecraftServer server) {
-      return server.getTickCount() - addedAt;
-    }
-
     @Override
     public boolean equals(Object o) {
       if (this == o) return true;
@@ -163,7 +156,6 @@ public class TileTicker {
 
       Entry entry = (Entry) o;
 
-      if (addedAt != entry.addedAt) return false;
       if (!dimension.equals(entry.dimension)) return false;
       return position.equals(entry.position);
     }
@@ -172,7 +164,6 @@ public class TileTicker {
     public int hashCode() {
       int result = dimension.hashCode();
       result = 31 * result + position.hashCode();
-      result = 31 * result + (int) (addedAt ^ (addedAt >>> 32));
       return result;
     }
 
@@ -181,7 +172,6 @@ public class TileTicker {
       return "Entry{" +
           "dimension=" + dimension +
           ", position=" + position +
-          ", addedAt=" + addedAt +
           '}';
     }
   }

@@ -102,15 +102,14 @@ public class ChestUtil {
                 DataStorage.refreshInventory(level, pos, ((ILootBlockEntity) te).getTileId(), (ServerPlayer) player);
                 DataStorage.removeRefreshed(tileId);
                 player.sendSystemMessage(Component.translatable("lootr.message.refreshed").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)));
-            } else {
-                int refreshValue = DataStorage.getRefreshValue(tileId);
-                if (refreshValue > 0) {
-                    player.sendSystemMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)));
-                } else if (refreshValue == -1) {
-                    if (LootrModConfig.isRefreshing((ServerLevel) level, (ILootBlockEntity) te)) {
-                        DataStorage.setRefreshing(tileId, LootrModConfig.get().refresh.refresh_value);
-                        player.sendSystemMessage(Component.translatable("lootr.message.refresh_start", LootrModConfig.get().refresh.refresh_value / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)));
-                    }
+            }
+            int refreshValue = DataStorage.getRefreshValue(tileId);
+            if (refreshValue > 0) {
+                player.sendSystemMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)));
+            } else if (refreshValue == -1) {
+                if (LootrModConfig.isRefreshing((ServerLevel) level, (ILootBlockEntity) te)) {
+                    DataStorage.setRefreshing(tileId, LootrModConfig.get().refresh.refresh_value);
+                    player.sendSystemMessage(Component.translatable("lootr.message.refresh_start", LootrModConfig.get().refresh.refresh_value / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)));
                 }
             }
             MenuProvider provider = DataStorage.getInventory(level, ((ILootBlockEntity) te).getTileId(), pos, (ServerPlayer) player, (RandomizableContainerBlockEntity) te, ((ILootBlockEntity) te)::unpackLootTable);
@@ -166,15 +165,14 @@ public class ChestUtil {
                     DataStorage.refreshInventory(level, cart, (ServerPlayer) player);
                     DataStorage.removeRefreshed(tileId);
                     player.sendSystemMessage(Component.translatable("lootr.message.refreshed").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)));
-                } else {
-                    int refreshValue = DataStorage.getRefreshValue(tileId);
-                    if (refreshValue > 0) {
-                        player.sendSystemMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)));
-                    } else if (refreshValue == -1) {
-                        if (LootrModConfig.isRefreshing((ServerLevel)level, cart)) {
-                            DataStorage.setRefreshing(tileId, LootrModConfig.get().refresh.refresh_value);
-                            player.sendSystemMessage(Component.translatable("lootr.message.refresh_start", LootrModConfig.get().refresh.refresh_value / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)));
-                        }
+                }
+                int refreshValue = DataStorage.getRefreshValue(tileId);
+                if (refreshValue > 0) {
+                    player.sendSystemMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)));
+                } else if (refreshValue == -1) {
+                    if (LootrModConfig.isRefreshing((ServerLevel)level, cart)) {
+                        DataStorage.setRefreshing(tileId, LootrModConfig.get().refresh.refresh_value);
+                        player.sendSystemMessage(Component.translatable("lootr.message.refresh_start", LootrModConfig.get().refresh.refresh_value / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)));
                     }
                 }
                 MenuProvider provider = DataStorage.getInventory(level, cart, (ServerPlayer) player, cart::addLoot);
@@ -203,15 +201,14 @@ public class ChestUtil {
                 DataStorage.refreshInventory(level, pos, ((ILootBlockEntity) te).getTileId(), stacks, (ServerPlayer) player);
                 DataStorage.removeRefreshed(tileId);
                 player.sendSystemMessage(Component.translatable("lootr.message.refreshed").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)));
-            } else {
-                int refreshValue = DataStorage.getRefreshValue(tileId);
-                if (refreshValue > 0) {
-                    player.sendSystemMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)));
-                } else if (refreshValue == -1) {
-                    if (LootrModConfig.isRefreshing((ServerLevel)level, tile)) {
-                        DataStorage.setRefreshing(tileId, LootrModConfig.get().refresh.refresh_value);
-                        player.sendSystemMessage(Component.translatable("lootr.message.refresh_start", LootrModConfig.get().refresh.refresh_value / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)));
-                    }
+            }
+            int refreshValue = DataStorage.getRefreshValue(tileId);
+            if (refreshValue > 0) {
+                player.sendSystemMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)));
+            } else if (refreshValue == -1) {
+                if (LootrModConfig.isRefreshing((ServerLevel)level, tile)) {
+                    DataStorage.setRefreshing(tileId, LootrModConfig.get().refresh.refresh_value);
+                    player.sendSystemMessage(Component.translatable("lootr.message.refresh_start", LootrModConfig.get().refresh.refresh_value / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)));
                 }
             }
             MenuProvider provider = DataStorage.getInventory(level, tile.getTileId(), stacks, (ServerPlayer) player, pos, tile);
