@@ -23,9 +23,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.entity.BarrelBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
@@ -174,22 +176,31 @@ public class LootrCommandInit {
             BlockPos pos = new BlockPos(c.getSource().getPosition());
             Level world = c.getSource().getLevel();
             BlockState state = world.getBlockState(pos);
-            if (!state.is(Blocks.CHEST)) {
+            if (!state.is(Blocks.CHEST) && !state.is(Blocks.BARREL)) {
                 pos = pos.below();
                 state = world.getBlockState(pos);
             }
-            if (!state.is(Blocks.CHEST)) {
-                c.getSource().sendSuccess(Component.literal("Please stand on the chest you wish to convert."), false);
+            if (!state.is(Blocks.CHEST) && !state.is(Blocks.BARREL)) {
+                c.getSource().sendSuccess(Component.literal("Please stand on the chest or barrel you wish to convert."), false);
             } else {
-                NonNullList<ItemStack> reference = ((ChestBlockEntity)Objects.requireNonNull(world.getBlockEntity(pos))).items;
+                NonNullList<ItemStack> reference;
+                BlockState newState = LootrBlockInit.INVENTORY.defaultBlockState();
+                if (state.is(Blocks.CHEST)) {
+                    reference = ((ChestBlockEntity) Objects.requireNonNull(world.getBlockEntity(pos))).items;
+                    newState = newState.setValue(ChestBlock.FACING, state.getValue(ChestBlock.FACING)).setValue(ChestBlock.WATERLOGGED, state.getValue(ChestBlock.WATERLOGGED));
+                } else if (state.is(Blocks.BARREL)) {
+                    reference = ((BarrelBlockEntity) Objects.requireNonNull(world.getBlockEntity(pos))).items;
+                } else {
+                    c.getSource().sendSuccess(Component.literal("Unable to convert barrel or chest."), false);
+                    return -1;
+                }
                 NonNullList<ItemStack> custom = ChestUtil.copyItemList(reference);
                 world.removeBlockEntity(pos);
-                world.setBlockAndUpdate(pos, LootrBlockInit.INVENTORY.defaultBlockState().setValue(ChestBlock.FACING, state.getValue(ChestBlock.FACING)).setValue(ChestBlock.WATERLOGGED, state.getValue(ChestBlock.WATERLOGGED)));
+                world.setBlockAndUpdate(pos, newState);
                 BlockEntity te = world.getBlockEntity(pos);
-                if (!(te instanceof LootrInventoryBlockEntity)) {
+                if (!(te instanceof LootrInventoryBlockEntity inventory)) {
                     c.getSource().sendSuccess(Component.literal("Unable to convert chest, BlockState is not a Lootr Inventory block."), false);
                 } else {
-                    LootrInventoryBlockEntity inventory = (LootrInventoryBlockEntity) te;
                     inventory.setCustomInventory(custom);
                     inventory.setChanged();
                 }

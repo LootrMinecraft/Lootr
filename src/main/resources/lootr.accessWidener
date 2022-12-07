@@ -9,3 +9,4 @@ accessible method net/minecraft/advancements/CriteriaTriggers register (Lnet/min
 accessible field net/minecraft/server/players/GameProfileCache profilesByName Ljava/util/Map;
 accessible field net/minecraft/world/level/block/entity/ChestBlockEntity items Lnet/minecraft/core/NonNullList;
 accessible field net/minecraft/server/PlayerAdvancements player Lnet/minecraft/server/level/ServerPlayer;
+accessible field net/minecraft/world/level/block/entity/BarrelBlockEntity items Lnet/minecraft/core/NonNullList;
