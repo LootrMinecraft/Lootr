@@ -22,7 +22,7 @@ public class ModItems {
   public static final RegistryObject<BlockItem> BARREL = REGISTER.register("lootr_barrel", () -> new BlockItem(ModBlocks.BARREL.get(), new BlockItem.Properties()));
   public static final RegistryObject<BlockItem> INVENTORY = REGISTER.register("lootr_inventory", () -> new LootrChestBlockItem(ModBlocks.INVENTORY.get(), new BlockItem.Properties()));
   public static final RegistryObject<BlockItem> SHULKER = REGISTER.register("lootr_shulker", () -> new LootrShulkerBlockItem(ModBlocks.SHULKER.get(), new BlockItem.Properties()));
-  public static final RegistryObject<BlockItem> TROPHY = REGISTER.register("trophy", () -> new BlockItem(ModBlocks.TROPHY.get(), new Item.Properties().rarity(Rarity.EPIC).tab(Lootr.TAB)));
+  public static final RegistryObject<BlockItem> TROPHY = REGISTER.register("trophy", () -> new BlockItem(ModBlocks.TROPHY.get(), new Item.Properties().rarity(Rarity.EPIC)));
 
   public static void register (IEventBus bus) {
     REGISTER.register(bus);

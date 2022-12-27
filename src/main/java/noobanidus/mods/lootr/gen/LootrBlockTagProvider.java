@@ -1,21 +1,25 @@
 package noobanidus.mods.lootr.gen;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import noobanidus.mods.lootr.LootrTags;
 import noobanidus.mods.lootr.init.ModBlocks;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.concurrent.CompletableFuture;
+
 public class LootrBlockTagProvider extends BlockTagsProvider {
-  public LootrBlockTagProvider(DataGenerator p_126511_, String modId, @Nullable ExistingFileHelper existingFileHelper) {
-    super(p_126511_, modId, existingFileHelper);
+  public LootrBlockTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, String modId, @Nullable ExistingFileHelper existingFileHelper) {
+    super(output, lookupProvider, modId, existingFileHelper);
   }
 
   @Override
-  protected void addTags() {
+  protected void addTags(HolderLookup.Provider provider) {
     tag(BlockTags.SHULKER_BOXES).add(ModBlocks.SHULKER.get());
     tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.TROPHY.get());
     tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.CHEST.get(), ModBlocks.TRAPPED_CHEST.get(), ModBlocks.BARREL.get());

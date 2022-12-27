@@ -49,22 +49,12 @@ public class BarrelModel implements IUnbakedGeometry<BarrelModel> {
     this.vanilla = vanilla;
   }
 
-  @Override
-  public Collection<Material> getMaterials(IGeometryBakingContext context, Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
-    Set<Material> materials = Sets.newHashSet();
-    materials.add(context.getMaterial("particle"));
-    materials.addAll(unopened.getMaterials(modelGetter, missingTextureErrors));
-    materials.addAll(opened.getMaterials(modelGetter, missingTextureErrors));
-    materials.addAll(vanilla.getMaterials(modelGetter, missingTextureErrors));
-    return materials;
-  }
-
-  private static BakedModel buildModel(UnbakedModel entry, ModelState modelTransform, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ResourceLocation modelLocation) {
+  private static BakedModel buildModel(UnbakedModel entry, ModelState modelTransform, ModelBaker bakery, Function<Material, TextureAtlasSprite> spriteGetter, ResourceLocation modelLocation) {
     return entry.bake(bakery, spriteGetter, modelTransform, modelLocation);
   }
 
   @Override
-  public BakedModel bake(IGeometryBakingContext context, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides, ResourceLocation modelLocation) {
+  public BakedModel bake(IGeometryBakingContext context, ModelBaker bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides, ResourceLocation modelLocation) {
     return new BarrelBakedModel(context.useAmbientOcclusion(), context.isGui3d(), context.useBlockLight(),
         spriteGetter.apply(context.getMaterial("particle")), overrides,
         buildModel(opened, modelTransform, bakery, spriteGetter, modelLocation),

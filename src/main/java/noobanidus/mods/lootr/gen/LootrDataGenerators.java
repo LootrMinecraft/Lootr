@@ -13,8 +13,8 @@ public class LootrDataGenerators {
     if (event.includeServer()) {
       ExistingFileHelper helper = event.getExistingFileHelper();
       LootrBlockTagProvider blocks;
-      event.getGenerator().addProvider(true, blocks = new LootrBlockTagProvider(event.getGenerator(), LootrAPI.MODID, helper));
-      event.getGenerator().addProvider(true, new LootrItemTagsProvider(event.getGenerator(), blocks, LootrAPI.MODID, helper));
+      event.getGenerator().addProvider(true, blocks = new LootrBlockTagProvider(event.getGenerator().getPackOutput(), event.getLookupProvider(), LootrAPI.MODID, helper));
+      event.getGenerator().addProvider(true, new LootrItemTagsProvider(event.getGenerator().getPackOutput(), event.getLookupProvider(), blocks, LootrAPI.MODID, helper));
     }
   }
 }

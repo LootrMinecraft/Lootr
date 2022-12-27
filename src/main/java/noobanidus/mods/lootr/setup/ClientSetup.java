@@ -1,12 +1,9 @@
 package noobanidus.mods.lootr.setup;
 
 import net.minecraft.client.model.geom.ModelLayers;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import noobanidus.mods.lootr.api.LootrAPI;
@@ -19,15 +16,6 @@ import noobanidus.mods.lootr.init.ModEntities;
 
 @Mod.EventBusSubscriber(modid= LootrAPI.MODID, value= Dist.CLIENT, bus= Mod.EventBusSubscriber.Bus.MOD)
 public class ClientSetup {
-  @SubscribeEvent
-  public static void stitch(TextureStitchEvent.Pre event) {
-    if (event.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS)) {
-      event.addSprite(LootrChestBlockRenderer.MATERIAL.texture());
-      event.addSprite(LootrChestBlockRenderer.MATERIAL2.texture());
-      event.addSprite(LootrShulkerBlockRenderer.MATERIAL.texture());
-      event.addSprite(LootrShulkerBlockRenderer.MATERIAL2.texture());
-    }
-  }
 
   @SubscribeEvent
   public static void modelRegister(ModelEvent.RegisterGeometryLoaders event) {
