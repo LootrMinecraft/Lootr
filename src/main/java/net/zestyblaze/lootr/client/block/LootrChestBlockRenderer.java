@@ -2,7 +2,7 @@ package net.zestyblaze.lootr.client.block;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.geom.ModelPart;
@@ -14,12 +14,15 @@ import net.minecraft.client.renderer.blockentity.ChestRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.phys.Vec3;
 import net.zestyblaze.lootr.api.LootrAPI;
 import net.zestyblaze.lootr.api.blockentity.ILootBlockEntity;
 import net.zestyblaze.lootr.blocks.entities.LootrChestBlockEntity;
@@ -50,7 +53,7 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootBloc
     poseStack.pushPose();
     float f = blockState.getValue(ChestBlock.FACING).toYRot();
     poseStack.translate(0.5D, 0.5D, 0.5D);
-    poseStack.mulPose(Vector3f.YP.rotationDegrees(-f));
+    poseStack.mulPose(Axis.YP.rotationDegrees(-f));
     poseStack.translate(-0.5D, -0.5D, -0.5D);
 
     float g = blockEntity.getOpenNess(partialTick);

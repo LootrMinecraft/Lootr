@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.12-SNAPSHOT'
+	id 'fabric-loom' version '1.0-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -12,6 +12,11 @@ group = project.maven_group
 
 repositories {
 	maven {
+		name "Parchment"
+		url "https://maven.parchmentmc.org"
+	}
+
+	maven {
 		name "Cloth Config"
 		url "https://maven.shedaniel.me/"
 	}
@@ -19,11 +24,6 @@ repositories {
 	maven {
 		name "Modmenu"
 		url "https://maven.terraformersmc.com/"
-	}
-
-	maven {
-		name "Parchment"
-		url "https://maven.parchmentmc.org"
 	}
 }
 
@@ -33,6 +33,7 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	mappings loom.layered() {
 		officialMojangMappings()
+		parchment("org.parchmentmc.data:parchment-1.19.3:2022.12.18@zip")
 	}
 
 	//Cloth Config

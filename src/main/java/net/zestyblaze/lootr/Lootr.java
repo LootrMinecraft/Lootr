@@ -1,20 +1,20 @@
 package net.zestyblaze.lootr;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.zestyblaze.lootr.api.LootrAPI;
-import net.zestyblaze.lootr.config.LootrModConfig;
 import net.zestyblaze.lootr.registry.*;
 
 public class Lootr implements ModInitializer {
-  public static CreativeModeTab TAB = FabricItemGroupBuilder.build(new ResourceLocation(LootrAPI.MODID, LootrAPI.MODID), () -> new ItemStack(LootrItemInit.CHEST));
+  private static final CreativeModeTab TAB = FabricItemGroup.builder(new ResourceLocation(LootrAPI.MODID, LootrAPI.MODID)).title(Component.translatable("itemGroup.lootr.lootr")).icon(() -> new ItemStack(LootrItemInit.CHEST)).build();
 
   @Override
   public void onInitialize() {
-    LootrAPI.LOG.info("Lootr is installed, loading now! Thanks for installing! <3");
     LootrConfigInit.registerConfig();
     LootrItemInit.registerItems();
     LootrBlockInit.registerBlocks();
@@ -26,8 +26,6 @@ public class Lootr implements ModInitializer {
     LootrAdvancementsInit.registerAdvancements();
     LootrCommandInit.registerCommands();
 
-    if (LootrModConfig.get().debug.debugMode) {
-      LootrAPI.LOG.info("Lootr: Registry - Mod Fully Loaded!");
-    }
+    ItemGroupEvents.modifyEntriesEvent(TAB).register(content -> content.accept(LootrItemInit.TROPHY));
   }
 }
