@@ -64,6 +64,13 @@ public class BarrelModel implements IUnbakedGeometry<BarrelModel> {
     );
   }
 
+  @Override
+  public void resolveParents(Function<ResourceLocation, UnbakedModel> modelGetter, IGeometryBakingContext context) {
+    opened.resolveParents(modelGetter);
+    unopened.resolveParents(modelGetter);
+    vanilla.resolveParents(modelGetter);
+  }
+
   private static final class BarrelBakedModel implements IDynamicBakedModel {
     private final BakedModel opened;
     private final BakedModel unopened;
