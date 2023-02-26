@@ -6,10 +6,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 import noobanidus.mods.lootr.api.LootrAPI;
 
-@Mod.EventBusSubscriber(modid= LootrAPI.MODID, bus= Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = LootrAPI.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class LootrDataGenerators {
   @SubscribeEvent
-  public static void gatherData (GatherDataEvent event) {
+  public static void gatherData(GatherDataEvent event) {
     if (event.includeServer()) {
       ExistingFileHelper helper = event.getExistingFileHelper();
       LootrBlockTagProvider blocks;

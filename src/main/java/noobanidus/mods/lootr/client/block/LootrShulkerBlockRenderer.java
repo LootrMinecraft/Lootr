@@ -75,7 +75,7 @@ public class LootrShulkerBlockRenderer implements BlockEntityRenderer<LootrShulk
     pMatrixStack.translate(0.0D, -1.0D, 0.0D);
     ModelPart modelpart = this.model.getLid();
     modelpart.setPos(0.0F, 24.0F - pBlockEntity.getProgress(pPartialTicks) * 0.5F * 16.0F, 0.0F);
-    modelpart.yRot = 270.0F * pBlockEntity.getProgress(pPartialTicks) * ((float)Math.PI / 180F);
+    modelpart.yRot = 270.0F * pBlockEntity.getProgress(pPartialTicks) * ((float) Math.PI / 180F);
     VertexConsumer vertexconsumer = material.buffer(pBuffer, RenderType::entityCutoutNoCull);
     this.model.renderToBuffer(pMatrixStack, vertexconsumer, pCombinedLight, pCombinedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
     pMatrixStack.popPose();

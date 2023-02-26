@@ -7,7 +7,6 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -224,8 +223,8 @@ public class CommandLootr {
         be = level.getBlockEntity(pos);
       }
       if (be instanceof ILootBlockEntity) {
-        DataStorage.setRefreshing(((ILootBlockEntity)be).getTileId(), ConfigManager.REFRESH_VALUE.get());
-        c.getSource().sendSuccess(new TextComponent("Container with ID " + ((ILootBlockEntity)be).getTileId() + " has been set to refresh with a delay of " + ConfigManager.REFRESH_VALUE.get()), false);
+        DataStorage.setRefreshing(((ILootBlockEntity) be).getTileId(), ConfigManager.REFRESH_VALUE.get());
+        c.getSource().sendSuccess(new TextComponent("Container with ID " + ((ILootBlockEntity) be).getTileId() + " has been set to refresh with a delay of " + ConfigManager.REFRESH_VALUE.get()), false);
       } else {
         c.getSource().sendSuccess(new TextComponent("Please stand on a valid Lootr container."), false);
       }
@@ -240,8 +239,8 @@ public class CommandLootr {
         be = level.getBlockEntity(pos);
       }
       if (be instanceof ILootBlockEntity) {
-        DataStorage.setDecaying(((ILootBlockEntity)be).getTileId(), ConfigManager.DECAY_VALUE.get());
-        c.getSource().sendSuccess(new TextComponent("Container with ID " + ((ILootBlockEntity)be).getTileId() + " has been set to decay with a delay of " + ConfigManager.DECAY_VALUE.get()), false);
+        DataStorage.setDecaying(((ILootBlockEntity) be).getTileId(), ConfigManager.DECAY_VALUE.get());
+        c.getSource().sendSuccess(new TextComponent("Container with ID " + ((ILootBlockEntity) be).getTileId() + " has been set to decay with a delay of " + ConfigManager.DECAY_VALUE.get()), false);
       } else {
         c.getSource().sendSuccess(new TextComponent("Please stand on a valid Lootr container."), false);
       }

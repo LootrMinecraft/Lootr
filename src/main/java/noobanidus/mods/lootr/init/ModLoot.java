@@ -1,8 +1,8 @@
 package noobanidus.mods.lootr.init;
 
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.loot.conditions.LootCount;
 

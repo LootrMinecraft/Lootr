@@ -13,7 +13,7 @@ import noobanidus.mods.lootr.data.DataStorage;
 import java.util.ArrayList;
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid= LootrAPI.MODID)
+@Mod.EventBusSubscriber(modid = LootrAPI.MODID)
 public class EntityTicker {
   private static final List<LootrChestMinecartEntity> entities = new ArrayList<>();
   private static final List<LootrChestMinecartEntity> pendingEntities = new ArrayList<>();
@@ -61,7 +61,7 @@ public class EntityTicker {
 
   public static void addEntity(LootrChestMinecartEntity entity) {
     synchronized (listLock) {
-      if(tickingList)
+      if (tickingList)
         pendingEntities.add(entity);
       else
         entities.add(entity);
