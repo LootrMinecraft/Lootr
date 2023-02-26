@@ -10,14 +10,13 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.MinecraftServer;
-import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.block.entities.TileTicker;
 import noobanidus.mods.lootr.event.HandleChunk;
-import noobanidus.mods.lootr.config.LootrModConfig;
+import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.entity.EntityTicker;
 
-public class LootrEventsInit {
+public class ModEvents {
   public static MinecraftServer serverInstance;
 
   public static void registerEvents() {
@@ -37,10 +36,9 @@ public class LootrEventsInit {
 
     ServerChunkEvents.CHUNK_LOAD.register(HandleChunk::onChunkLoad);
 
-    // TODO: Check to see if this properly cancels block breaking
     PlayerBlockBreakEvents.BEFORE.register((world, player, pos, state, blockEntity) -> {
-      if (LootrBlockInit.specialLootChests.contains(state.getBlock())) {
-        if (LootrModConfig.get().breaking.disable_break) {
+      if (ModBlocks.specialLootChests.contains(state.getBlock())) {
+        if (ConfigManager.get().breaking.disable_break) {
           if (player.getAbilities().instabuild) {
             if (!player.isShiftKeyDown()) {
               player.sendMessage(new TranslatableComponent("lootr.message.cannot_break_sneak").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))), Util.NIL_UUID);
@@ -62,7 +60,7 @@ public class LootrEventsInit {
     });
 
     PlayerBlockBreakEvents.CANCELED.register((world, player, pos, state, blockEntity) -> {
-      if (LootrBlockInit.specialLootChests.contains(state.getBlock())) {
+      if (ModBlocks.specialLootChests.contains(state.getBlock())) {
         blockEntity.setChanged();
         if (blockEntity instanceof ILootBlockEntity lbe) {
           lbe.updatePacketViaState();

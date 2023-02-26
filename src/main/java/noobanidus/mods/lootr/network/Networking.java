@@ -1,13 +1,10 @@
-package noobanidus.mods.lootr.init;
+package noobanidus.mods.lootr.network;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.world.entity.Entity;
-import noobanidus.mods.lootr.api.LootrAPI;
-import noobanidus.mods.lootr.config.LootrModConfig;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
-import noobanidus.mods.lootr.network.NetworkConstants;
 
-public class LootrNetworkingInit {
+public class Networking {
   public static void registerClientNetwork() {
     ClientPlayNetworking.registerGlobalReceiver(NetworkConstants.CLOSE_CART_CHANNEL, (client, handler, buf, responseSender) -> {
       int entityId = buf.readVarInt();

@@ -8,10 +8,9 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.Level;
 import noobanidus.mods.lootr.api.LootrAPI;
-import noobanidus.mods.lootr.config.LootrModConfig;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
-public class LootrEntityInit {
+public class ModEntities {
   public static EntityType<LootrChestMinecartEntity> LOOTR_MINECART_ENTITY;
 
   public static void registerEntities() {

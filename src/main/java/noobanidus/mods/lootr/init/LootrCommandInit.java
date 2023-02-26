@@ -34,7 +34,7 @@ import noobanidus.mods.lootr.block.LootrBarrelBlock;
 import noobanidus.mods.lootr.block.LootrChestBlock;
 import noobanidus.mods.lootr.block.LootrShulkerBlock;
 import noobanidus.mods.lootr.block.entities.LootrInventoryBlockEntity;
-import noobanidus.mods.lootr.config.LootrModConfig;
+import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.util.ChestUtil;
@@ -72,7 +72,7 @@ public class LootrCommandInit {
       table = getTables().get(world.getRandom().nextInt(getTables().size()));
     }
     if (block == null) {
-      LootrChestMinecartEntity cart = new LootrChestMinecartEntity(LootrEntityInit.LOOTR_MINECART_ENTITY, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, world);
+      LootrChestMinecartEntity cart = new LootrChestMinecartEntity(ModEntities.LOOTR_MINECART_ENTITY, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, world);
       Entity e = c.getEntity();
       if (e != null) {
         cart.setYRot(e.getYRot());
@@ -119,31 +119,31 @@ public class LootrCommandInit {
       return 1;
     });
     builder.then(Commands.literal("barrel").executes(c -> {
-      createBlock(c.getSource(), LootrBlockInit.BARREL, null);
+      createBlock(c.getSource(), ModBlocks.BARREL, null);
       return 1;
     }).then(suggestTables().executes(c -> {
-      createBlock(c.getSource(), LootrBlockInit.BARREL, ResourceLocationArgument.getId(c, "table"));
+      createBlock(c.getSource(), ModBlocks.BARREL, ResourceLocationArgument.getId(c, "table"));
       return 1;
     })));
     builder.then(Commands.literal("trapped_chest").executes(c -> {
-      createBlock(c.getSource(), LootrBlockInit.TRAPPED_CHEST, null);
+      createBlock(c.getSource(), ModBlocks.TRAPPED_CHEST, null);
       return 1;
     }).then(suggestTables().executes(c -> {
-      createBlock(c.getSource(), LootrBlockInit.TRAPPED_CHEST, ResourceLocationArgument.getId(c, "table"));
+      createBlock(c.getSource(), ModBlocks.TRAPPED_CHEST, ResourceLocationArgument.getId(c, "table"));
       return 1;
     })));
     builder.then(Commands.literal("chest").executes(c -> {
-      createBlock(c.getSource(), LootrBlockInit.CHEST, null);
+      createBlock(c.getSource(), ModBlocks.CHEST, null);
       return 1;
     }).then(suggestTables().executes(c -> {
-      createBlock(c.getSource(), LootrBlockInit.CHEST, ResourceLocationArgument.getId(c, "table"));
+      createBlock(c.getSource(), ModBlocks.CHEST, ResourceLocationArgument.getId(c, "table"));
       return 1;
     })));
     builder.then(Commands.literal("shulker").executes(c -> {
-      createBlock(c.getSource(), LootrBlockInit.SHULKER, null);
+      createBlock(c.getSource(), ModBlocks.SHULKER, null);
       return 1;
     }).then(suggestTables().executes(c -> {
-      createBlock(c.getSource(), LootrBlockInit.SHULKER, ResourceLocationArgument.getId(c, "table"));
+      createBlock(c.getSource(), ModBlocks.SHULKER, ResourceLocationArgument.getId(c, "table"));
       return 1;
     })));
     builder.then(Commands.literal("clear").executes(c -> {
@@ -181,7 +181,7 @@ public class LootrCommandInit {
         NonNullList<ItemStack> reference = ((ChestBlockEntity) Objects.requireNonNull(world.getBlockEntity(pos))).items;
         NonNullList<ItemStack> custom = ChestUtil.copyItemList(reference);
         world.removeBlockEntity(pos);
-        world.setBlockAndUpdate(pos, LootrBlockInit.INVENTORY.defaultBlockState().setValue(ChestBlock.FACING, state.getValue(ChestBlock.FACING)).setValue(ChestBlock.WATERLOGGED, state.getValue(ChestBlock.WATERLOGGED)));
+        world.setBlockAndUpdate(pos, ModBlocks.INVENTORY.defaultBlockState().setValue(ChestBlock.FACING, state.getValue(ChestBlock.FACING)).setValue(ChestBlock.WATERLOGGED, state.getValue(ChestBlock.WATERLOGGED)));
         BlockEntity te = world.getBlockEntity(pos);
         if (!(te instanceof LootrInventoryBlockEntity)) {
           c.getSource().sendSuccess(new TextComponent("Unable to convert chest, BlockState is not a Lootr Inventory block."), false);
@@ -217,8 +217,8 @@ public class LootrCommandInit {
         be = level.getBlockEntity(pos);
       }
       if (be instanceof ILootBlockEntity) {
-        DataStorage.setRefreshing(((ILootBlockEntity) be).getTileId(), LootrModConfig.get().refresh.refresh_value);
-        c.getSource().sendSuccess(new TextComponent("Container with ID " + ((ILootBlockEntity) be).getTileId() + " has been set to refresh with a delay of " + LootrModConfig.get().refresh.refresh_value), false);
+        DataStorage.setRefreshing(((ILootBlockEntity) be).getTileId(), ConfigManager.get().refresh.refresh_value);
+        c.getSource().sendSuccess(new TextComponent("Container with ID " + ((ILootBlockEntity) be).getTileId() + " has been set to refresh with a delay of " + ConfigManager.get().refresh.refresh_value), false);
       } else {
         c.getSource().sendSuccess(new TextComponent("Please stand on a valid Lootr container."), false);
       }
@@ -233,8 +233,8 @@ public class LootrCommandInit {
         be = level.getBlockEntity(pos);
       }
       if (be instanceof ILootBlockEntity) {
-        DataStorage.setDecaying(((ILootBlockEntity) be).getTileId(), LootrModConfig.get().decay.decay_value);
-        c.getSource().sendSuccess(new TextComponent("Container with ID " + ((ILootBlockEntity) be).getTileId() + " has been set to decay with a delay of " + LootrModConfig.get().decay.decay_value), false);
+        DataStorage.setDecaying(((ILootBlockEntity) be).getTileId(), ConfigManager.get().decay.decay_value);
+        c.getSource().sendSuccess(new TextComponent("Container with ID " + ((ILootBlockEntity) be).getTileId() + " has been set to decay with a delay of " + ConfigManager.get().decay.decay_value), false);
       } else {
         c.getSource().sendSuccess(new TextComponent("Please stand on a valid Lootr container."), false);
       }

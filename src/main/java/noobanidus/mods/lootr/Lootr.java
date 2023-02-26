@@ -9,17 +9,17 @@ import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.init.*;
 
 public class Lootr implements ModInitializer {
-  public static CreativeModeTab TAB = FabricItemGroupBuilder.build(new ResourceLocation(LootrAPI.MODID, LootrAPI.MODID), () -> new ItemStack(LootrItemInit.CHEST));
+  public static CreativeModeTab TAB = FabricItemGroupBuilder.build(new ResourceLocation(LootrAPI.MODID, LootrAPI.MODID), () -> new ItemStack(ModItems.CHEST));
 
   @Override
   public void onInitialize() {
     LootrConfigInit.registerConfig();
-    LootrItemInit.registerItems();
-    LootrBlockInit.registerBlocks();
-    LootrBlockEntityInit.registerBlockEntities();
-    LootrEntityInit.registerEntities();
-    LootrLootInit.registerLoot();
-    LootrEventsInit.registerEvents();
+    ModItems.registerItems();
+    ModBlocks.registerBlocks();
+    ModBlockEntities.registerBlockEntities();
+    ModEntities.registerEntities();
+    ModLoot.registerLoot();
+    ModEvents.registerEvents();
     ModStats.register();
     ModAdvancements.registerAdvancements();
     LootrCommandInit.registerCommands();

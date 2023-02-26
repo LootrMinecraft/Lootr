@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.block.entities.LootrChestBlockEntity;
-import noobanidus.mods.lootr.config.LootrModConfig;
+import noobanidus.mods.lootr.config.ConfigManager;
 
 import java.util.UUID;
 
@@ -72,7 +72,7 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootBloc
   }
 
   protected Material getMaterial(T tile) {
-    if (LootrModConfig.isVanillaTextures()) {
+    if (ConfigManager.isVanillaTextures()) {
       return Sheets.CHEST_LOCATION;
     }
     if (playerId == null) {

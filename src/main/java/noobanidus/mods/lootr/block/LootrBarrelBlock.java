@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import noobanidus.mods.lootr.block.entities.LootrBarrelBlockEntity;
-import noobanidus.mods.lootr.config.LootrModConfig;
+import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import java.util.Random;
@@ -24,7 +24,7 @@ public class LootrBarrelBlock extends BarrelBlock {
 
   @Override
   public float getExplosionResistance() {
-    if (LootrModConfig.get().breaking.blast_resistant) {
+    if (ConfigManager.get().breaking.blast_resistant) {
       return 16.0f;
     } else {
       return super.getExplosionResistance();
@@ -83,7 +83,7 @@ public class LootrBarrelBlock extends BarrelBlock {
 
   @Override
   public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos) {
-    if (LootrModConfig.get().breaking.power_comparators) {
+    if (ConfigManager.get().breaking.power_comparators) {
       return 1;
     } else {
       return 0;

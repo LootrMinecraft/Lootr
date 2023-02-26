@@ -13,12 +13,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import noobanidus.mods.lootr.block.entities.LootrChestBlockEntity;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
-import noobanidus.mods.lootr.init.LootrBlockInit;
+import noobanidus.mods.lootr.init.ModBlocks;
 
 public class LootrChestItemRenderer extends BlockEntityWithoutLevelRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer {
   private static LootrChestItemRenderer INSTANCE = null;
 
-  private final LootrChestBlockEntity tile = new LootrChestBlockEntity(BlockPos.ZERO, LootrBlockInit.CHEST.defaultBlockState());
+  private final LootrChestBlockEntity tile = new LootrChestBlockEntity(BlockPos.ZERO, ModBlocks.CHEST.defaultBlockState());
 
   public LootrChestItemRenderer(BlockEntityRenderDispatcher pBlockEntityRenderDispatcher, EntityModelSet pEntityModelSet) {
     super(pBlockEntityRenderDispatcher, pEntityModelSet);

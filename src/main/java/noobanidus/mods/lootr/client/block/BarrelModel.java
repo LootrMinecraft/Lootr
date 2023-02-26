@@ -27,7 +27,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
-import noobanidus.mods.lootr.config.LootrModConfig;
+import noobanidus.mods.lootr.config.ConfigManager;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -96,7 +96,7 @@ public class BarrelModel implements UnbakedModel {
     public void emitBlockQuads(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext context) {
       BlockEntity blockEntity = blockView.getBlockEntity(pos);
       BakedModel model = opened;
-      if (LootrModConfig.isVanillaTextures()) {
+      if (ConfigManager.isVanillaTextures()) {
         model = vanilla;
       } else {
         if (blockEntity instanceof ILootBlockEntity lootContainer) {
@@ -128,7 +128,7 @@ public class BarrelModel implements UnbakedModel {
 
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
-      if (LootrModConfig.isVanillaTextures()) {
+      if (ConfigManager.isVanillaTextures()) {
         return vanilla.getQuads(state, side, rand);
       } else {
         return unopened.getQuads(state, side, rand);
