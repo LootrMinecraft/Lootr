@@ -21,13 +21,13 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.zestyblaze.lootr.Lootr"
+      "noobanidus.zestyblaze.lootr.Lootr"
     ],
     "client": [
-      "net.zestyblaze.lootr.client.LootrClient"
+      "noobanidus.zestyblaze.lootr.client.LootrClient"
     ],
     "modmenu": [
-      "net.zestyblaze.lootr.integration.ModMenuIntegration"
+      "noobanidus.zestyblaze.lootr.integration.ModMenuIntegration"
     ]
   },
   "mixins": [
