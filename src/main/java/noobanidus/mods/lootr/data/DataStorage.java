@@ -2,7 +2,9 @@ package noobanidus.mods.lootr.data;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -11,8 +13,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.storage.DimensionDataStorage;
-import net.minecraft.world.level.storage.LevelResource;
 import net.minecraftforge.server.ServerLifecycleHooks;
+import net.minecraft.world.level.storage.LevelResource;
 import noobanidus.mods.lootr.api.LootFiller;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
@@ -24,6 +26,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.function.IntSupplier;
 import java.util.function.LongSupplier;
 import java.util.function.Supplier;
@@ -40,7 +43,7 @@ public class DataStorage {
   public static final String DECAY = "lootr/" + DECAY_OLD;
   public static final String REFRESH = "lootr/" + REFRESH_OLD;
 
-  public static DimensionDataStorage getDataStorage() {
+  public static DimensionDataStorage getDataStorage () {
     return ServerLifecycleHooks.getCurrentServer().overworld().getDataStorage();
   }
 
@@ -70,7 +73,7 @@ public class DataStorage {
     data.setDirty();
   }
 
-  public static int getDecayValue(UUID id) {
+  public static int getDecayValue (UUID id) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, DECAY);
     return data.getValue(id);
@@ -82,14 +85,14 @@ public class DataStorage {
     return data.isComplete(id);
   }
 
-  public static void setDecaying(UUID id, int decay) {
+  public static void setDecaying (UUID id, int decay) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, DECAY);
     data.setValue(id, decay);
     data.setDirty();
   }
 
-  public static void removeDecayed(UUID id) {
+  public static void removeDecayed (UUID id) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, DECAY);
     if (data.remove(id) != -1) {
@@ -97,7 +100,7 @@ public class DataStorage {
     }
   }
 
-  public static void doDecay() {
+  public static void doDecay () {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, DECAY);
     if (data.tick()) {
@@ -105,7 +108,7 @@ public class DataStorage {
     }
   }
 
-  public static int getRefreshValue(UUID id) {
+  public static int getRefreshValue (UUID id) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, REFRESH);
     return data.getValue(id);
@@ -117,14 +120,14 @@ public class DataStorage {
     return data.isComplete(id);
   }
 
-  public static void setRefreshing(UUID id, int decay) {
+  public static void setRefreshing (UUID id, int decay) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, REFRESH);
     data.setValue(id, decay);
     data.setDirty();
   }
 
-  public static void removeRefreshed(UUID id) {
+  public static void removeRefreshed (UUID id) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, REFRESH);
     if (data.remove(id) != -1) {
@@ -132,7 +135,7 @@ public class DataStorage {
     }
   }
 
-  public static void doRefresh() {
+  public static void doRefresh () {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, REFRESH);
     if (data.tick()) {
@@ -153,7 +156,7 @@ public class DataStorage {
   }
 
   @Nullable
-  public static SpecialChestInventory getInventory(Level level, UUID uuid, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
+  public static SpecialChestInventory getInventory (Level level, UUID uuid, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
     if (level.isClientSide() || !(level instanceof ServerLevel)) {
       return null;
     }
@@ -168,7 +171,7 @@ public class DataStorage {
   }
 
   @Nullable
-  public static SpecialChestInventory getInventory(Level level, UUID uuid, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
+  public static SpecialChestInventory getInventory (Level level, UUID uuid, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
     if (level.isClientSide() || !(level instanceof ServerLevel)) {
       return null;
     }

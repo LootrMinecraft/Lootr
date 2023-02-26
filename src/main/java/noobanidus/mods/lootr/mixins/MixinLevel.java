@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.mixin;
+package noobanidus.mods.lootr.mixins;
 
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -14,8 +14,8 @@ import java.util.Collection;
 
 @Mixin(Level.class)
 public class MixinLevel {
-  @Inject(method = "addFreshBlockEntities", at = @At(value = "RETURN"), remap = false)
-  private void lootrAddFreshBlockEntities(Collection<BlockEntity> entities, CallbackInfo cir) {
+  @Inject(method="addFreshBlockEntities", at=@At(value="RETURN"), remap=false)
+  private void lootrAddFreshBlockEntities (Collection<BlockEntity> entities, CallbackInfo cir) {
     Level level = (Level) (Object) this;
     if (!level.isClientSide()) {
       for (BlockEntity be : entities) {

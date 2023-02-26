@@ -23,6 +23,6 @@ public class ModAdvancements {
   public static GenericTrigger<ResourceLocation> LOOT_TABLE_PREDICATE = null;
   public static GenericTrigger<ResourceLocation> ADVANCEMENT_PREDICATE = null;
 
-  public static void load() {
+  public static void load () {
   }
 }

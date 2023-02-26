@@ -1,8 +1,8 @@
 package noobanidus.mods.lootr.init;
 
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stat;
 import net.minecraft.stats.Stats;
+import net.minecraft.resources.ResourceLocation;
 import noobanidus.mods.lootr.api.LootrAPI;
 
 public class ModStats {

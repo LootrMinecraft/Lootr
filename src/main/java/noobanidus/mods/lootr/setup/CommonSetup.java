@@ -1,19 +1,23 @@
 package noobanidus.mods.lootr.setup;
 
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.critereon.LootTableTrigger;
 import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import noobanidus.mods.lootr.advancement.*;
 import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.LootrHooks;
 import noobanidus.mods.lootr.impl.LootrAPIImpl;
+import noobanidus.mods.lootr.impl.LootrHooksImpl;
 import noobanidus.mods.lootr.init.ModAdvancements;
 import noobanidus.mods.lootr.init.ModLoot;
 import noobanidus.mods.lootr.init.ModStats;
 import noobanidus.mods.lootr.network.PacketHandler;
 
-@Mod.EventBusSubscriber(modid = LootrAPI.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid= LootrAPI.MODID, bus= Mod.EventBusSubscriber.Bus.MOD)
 public class CommonSetup {
   @SubscribeEvent
   public static void init(FMLCommonSetupEvent event) {

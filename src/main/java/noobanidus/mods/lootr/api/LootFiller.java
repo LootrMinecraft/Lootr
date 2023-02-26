@@ -41,7 +41,7 @@ public interface LootFiller {
     }
   }
 
-  static LootFiller wrapped(LootFiller filler) {
+  static LootFiller wrapped (LootFiller filler) {
     return new WrappedFiller(filler);
   }
 }

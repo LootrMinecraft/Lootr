@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.mixin;
+package noobanidus.mods.lootr.mixins;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.ai.goal.CatSitOnBlockGoal;

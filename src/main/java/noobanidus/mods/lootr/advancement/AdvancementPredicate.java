@@ -1,8 +1,8 @@
 package noobanidus.mods.lootr.advancement;
 
 import com.google.gson.JsonObject;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.resources.ResourceLocation;
 import noobanidus.mods.lootr.api.advancement.IGenericPredicate;
 
 import javax.annotation.Nullable;

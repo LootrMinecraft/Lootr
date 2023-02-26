@@ -7,7 +7,7 @@ import net.minecraftforge.fml.common.Mod;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.init.ModAdvancements;
 
-@Mod.EventBusSubscriber(modid = LootrAPI.MODID)
+@Mod.EventBusSubscriber(modid= LootrAPI.MODID)
 public class HandleAdvancement {
   @SubscribeEvent
   public static void onAdvancement(AdvancementEvent event) {
