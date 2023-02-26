@@ -63,10 +63,8 @@ public class LootrModConfig implements ConfigData {
   public Conversion conversion = new Conversion();
 
   public static class Conversion {
-    // TODO: Currently unused
     @ConfigEntry.Gui.RequiresRestart
     public boolean skip_unloaded = true;
-    // TODO: Currently unused
     @ConfigEntry.Gui.RequiresRestart
     public int maximum_age = 3600;
     @ConfigEntry.Gui.RequiresRestart
