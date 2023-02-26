@@ -26,5 +26,10 @@ public class LootrItemInit {
     Registry.register(Registry.ITEM, new ResourceLocation(LootrAPI.MODID, "lootr_shulker"), SHULKER);
     Registry.register(Registry.ITEM, new ResourceLocation(LootrAPI.MODID, "lootr_inventory"), INVENTORY);
     Registry.register(Registry.ITEM, new ResourceLocation(LootrAPI.MODID, "trophy"), TROPHY);
+    //Registry.register(Registry.ITEM, new ResourceLocation(LootrAPI.MODID, "crown"), CROWN);
+
+    if (LootrModConfig.get().debug.debugMode) {
+      LootrAPI.LOG.info("Lootr: Common Registry - Items Registered");
+    }
   }
 }

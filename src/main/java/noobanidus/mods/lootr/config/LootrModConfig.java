@@ -48,6 +48,8 @@ public class LootrModConfig implements ConfigData {
 
   public static class Debug {
     @ConfigEntry.Gui.RequiresRestart
+    public boolean debugMode = false;
+    @ConfigEntry.Gui.RequiresRestart
     public boolean report_unresolved_tables = false;
   }
 
