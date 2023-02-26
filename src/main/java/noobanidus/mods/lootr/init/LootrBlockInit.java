@@ -44,9 +44,5 @@ public class LootrBlockInit {
     Registry.register(Registry.BLOCK, new ResourceLocation(LootrAPI.MODID, "lootr_shulker"), SHULKER);
     Registry.register(Registry.BLOCK, new ResourceLocation(LootrAPI.MODID, "lootr_inventory"), INVENTORY);
     Registry.register(Registry.BLOCK, new ResourceLocation(LootrAPI.MODID, "trophy"), TROPHY);
-
-    if (LootrModConfig.get().debug.debugMode) {
-      LootrAPI.LOG.info("Lootr: Common Registry - Blocks Registered");
-    }
   }
 }
