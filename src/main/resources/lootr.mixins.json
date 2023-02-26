@@ -4,13 +4,13 @@
   "package": "net.zestyblaze.lootr.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "noobanidus.zestyblaze.lootr.mixin.MixinCatSitOnBlock",
-    "noobanidus.zestyblaze.lootr.mixin.MixinLevelChunk",
-    "noobanidus.zestyblaze.lootr.mixin.MixinPersistentEntitySectionManager",
-    "noobanidus.zestyblaze.lootr.mixin.MixinPlayerAdvancements"
+    "MixinCatSitOnBlock",
+    "MixinLevelChunk",
+    "MixinPersistentEntitySectionManager",
+    "MixinPlayerAdvancements"
   ],
   "client": [
-    "noobanidus.zestyblaze.lootr.mixin.MixinTextureAtlas"
+    "MixinTextureAtlas"
   ],
   "injectors": {
     "defaultRequire": 1
