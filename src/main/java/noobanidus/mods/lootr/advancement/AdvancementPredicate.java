@@ -17,8 +17,8 @@ public class AdvancementPredicate implements IGenericPredicate<ResourceLocation>
   }
 
   @Override
-  public boolean test(ServerPlayer player, ResourceLocation condition) {
-    return advancementId != null && advancementId.equals(condition);
+  public boolean test(ServerPlayer player, ResourceLocation location) {
+    return advancementId != null && advancementId.equals(location);
   }
 
   @Override

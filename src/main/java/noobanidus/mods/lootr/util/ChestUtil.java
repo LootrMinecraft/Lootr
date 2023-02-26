@@ -27,8 +27,8 @@ import noobanidus.mods.lootr.config.LootrModConfig;
 import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.network.NetworkConstants;
-import noobanidus.mods.lootr.init.LootrAdvancementsInit;
-import noobanidus.mods.lootr.init.LootrStatsInit;
+import noobanidus.mods.lootr.init.ModAdvancements;
+import noobanidus.mods.lootr.init.ModStats;
 
 import java.util.UUID;
 
@@ -93,11 +93,11 @@ public class ChestUtil {
         }
       }
       if (block instanceof LootrBarrelBlock) {
-        LootrAdvancementsInit.BARREL_PREDICATE.trigger((ServerPlayer) player, ((ILootBlockEntity) te).getTileId());
+        ModAdvancements.BARREL_PREDICATE.trigger((ServerPlayer) player, ((ILootBlockEntity) te).getTileId());
       } else if (block instanceof LootrChestBlock) {
-        LootrAdvancementsInit.CHEST_PREDICATE.trigger((ServerPlayer) player, ((ILootBlockEntity) te).getTileId());
+        ModAdvancements.CHEST_PREDICATE.trigger((ServerPlayer) player, ((ILootBlockEntity) te).getTileId());
       } else if (block instanceof LootrShulkerBlock) {
-        LootrAdvancementsInit.SHULKER_PREDICATE.trigger((ServerPlayer) player, ((ILootBlockEntity) te).getTileId());
+        ModAdvancements.SHULKER_PREDICATE.trigger((ServerPlayer) player, ((ILootBlockEntity) te).getTileId());
       }
       if (DataStorage.isRefreshed(tileId)) {
         DataStorage.refreshInventory(level, pos, ((ILootBlockEntity) te).getTileId(), (ServerPlayer) player);
@@ -116,8 +116,8 @@ public class ChestUtil {
       }
       MenuProvider provider = DataStorage.getInventory(level, ((ILootBlockEntity) te).getTileId(), pos, (ServerPlayer) player, (RandomizableContainerBlockEntity) te, ((ILootBlockEntity) te)::unpackLootTable);
       if (!DataStorage.isScored(player.getUUID(), ((ILootBlockEntity) te).getTileId())) {
-        player.awardStat(LootrStatsInit.LOOTED_STAT);
-        LootrAdvancementsInit.SCORE_PREDICATE.trigger((ServerPlayer) player, null);
+        player.awardStat(ModStats.LOOTED_STAT);
+        ModAdvancements.SCORE_PREDICATE.trigger((ServerPlayer) player, null);
         DataStorage.score(player.getUUID(), ((ILootBlockEntity) te).getTileId());
       }
       if (tile.getOpeners().add(player.getUUID())) {
@@ -137,7 +137,7 @@ public class ChestUtil {
       if (player.isSpectator()) {
         player.openMenu(null);
       } else {
-        LootrAdvancementsInit.CART_PREDICATE.trigger((ServerPlayer) player, cart.getUUID());
+        ModAdvancements.CART_PREDICATE.trigger((ServerPlayer) player, cart.getUUID());
         UUID tileId = cart.getUUID();
         if (DataStorage.isDecayed(tileId)) {
           cart.destroy(DamageSource.OUT_OF_WORLD);
@@ -159,8 +159,8 @@ public class ChestUtil {
           cart.addOpener(player);
         }
         if (!DataStorage.isScored(player.getUUID(), cart.getUUID())) {
-          player.awardStat(LootrStatsInit.LOOTED_STAT);
-          LootrAdvancementsInit.SCORE_PREDICATE.trigger((ServerPlayer) player, null);
+          player.awardStat(ModStats.LOOTED_STAT);
+          ModAdvancements.SCORE_PREDICATE.trigger((ServerPlayer) player, null);
           DataStorage.score(player.getUUID(), cart.getUUID());
         }
         if (DataStorage.isRefreshed(tileId)) {
@@ -194,7 +194,7 @@ public class ChestUtil {
     }
     BlockEntity te = level.getBlockEntity(pos);
     if (te instanceof LootrInventoryBlockEntity tile) {
-      LootrAdvancementsInit.CHEST_PREDICATE.trigger((ServerPlayer) player, tile.getTileId());
+      ModAdvancements.CHEST_PREDICATE.trigger((ServerPlayer) player, tile.getTileId());
       NonNullList<ItemStack> stacks = null;
       if (tile.getCustomInventory() != null) {
         stacks = copyItemList(tile.getCustomInventory());
@@ -217,8 +217,8 @@ public class ChestUtil {
       }
       MenuProvider provider = DataStorage.getInventory(level, tile.getTileId(), stacks, (ServerPlayer) player, pos, tile);
       if (!DataStorage.isScored(player.getUUID(), ((ILootBlockEntity) te).getTileId())) {
-        player.awardStat(LootrStatsInit.LOOTED_STAT);
-        LootrAdvancementsInit.SCORE_PREDICATE.trigger((ServerPlayer) player, null);
+        player.awardStat(ModStats.LOOTED_STAT);
+        ModAdvancements.SCORE_PREDICATE.trigger((ServerPlayer) player, null);
         DataStorage.score(player.getUUID(), ((ILootBlockEntity) te).getTileId());
       }
       if (tile.getOpeners().add(player.getUUID())) {

@@ -97,7 +97,7 @@ public class GenericTrigger<T> implements CriterionTrigger<GenericTrigger.Instan
 
   public static class Listeners<T> {
     PlayerAdvancements advancements;
-    Set<CriterionTrigger.Listener<Instance<T>>> listeners = Sets.newHashSet();
+    Set<Listener<Instance<T>>> listeners = Sets.newHashSet();
 
     Listeners(PlayerAdvancements advancementsIn) {
       this.advancements = advancementsIn;
@@ -107,25 +107,25 @@ public class GenericTrigger<T> implements CriterionTrigger<GenericTrigger.Instan
       return listeners.isEmpty();
     }
 
-    public void add(CriterionTrigger.Listener<Instance<T>> listener) {
+    public void add(Listener<Instance<T>> listener) {
       listeners.add(listener);
     }
 
-    public void remove(CriterionTrigger.Listener<Instance<T>> listener) {
+    public void remove(Listener<Instance<T>> listener) {
       listeners.remove(listener);
     }
 
     void trigger(ServerPlayer player, T condition) {
-      List<CriterionTrigger.Listener<Instance<T>>> list = Lists.newArrayList();
+      List<Listener<Instance<T>>> list = Lists.newArrayList();
 
-      for (CriterionTrigger.Listener<Instance<T>> listener : listeners) {
+      for (Listener<Instance<T>> listener : listeners) {
         if (listener.getTriggerInstance().test(player, condition)) {
           list.add(listener);
         }
       }
 
       if (list.size() != 0) {
-        for (CriterionTrigger.Listener<Instance<T>> listener : list) {
+        for (Listener<Instance<T>> listener : list) {
           listener.run(advancements);
         }
       }
