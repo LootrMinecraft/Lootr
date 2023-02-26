@@ -35,9 +35,9 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import noobanidus.mods.lootr.block.entities.LootrShulkerBlockEntity;
-import noobanidus.mods.lootr.config.ConfigManager;
-import noobanidus.mods.lootr.init.ModBlockEntities;
-import noobanidus.mods.lootr.init.ModItems;
+import noobanidus.mods.lootr.config.LootrModConfig;
+import noobanidus.mods.lootr.init.LootrBlockEntityInit;
+import noobanidus.mods.lootr.init.LootrItemInit;
 import noobanidus.mods.lootr.util.ChestUtil;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,7 +52,7 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
 
   @Override
   public float getExplosionResistance() {
-    if (ConfigManager.get().breaking.blast_resistant) {
+    if (LootrModConfig.get().breaking.blast_resistant) {
       return 16.0f;
     } else {
       return super.getExplosionResistance();
@@ -148,7 +148,7 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
 
   @Override
   public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos) {
-    if (ConfigManager.get().breaking.power_comparators) {
+    if (LootrModConfig.get().breaking.power_comparators) {
       return 1;
     } else {
       return 0;
@@ -157,7 +157,7 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
 
   @Override
   public ItemStack getCloneItemStack(BlockGetter pLevel, BlockPos pPos, BlockState pState) {
-    return new ItemStack(ModItems.SHULKER);
+    return new ItemStack(LootrItemInit.SHULKER);
   }
 
   @Override
@@ -168,12 +168,12 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
 
   @Override
   public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-    return new LootrShulkerBlockEntity(ModBlockEntities.SPECIAL_LOOT_SHULKER, pPos, pState);
+    return new LootrShulkerBlockEntity(LootrBlockEntityInit.SPECIAL_LOOT_SHULKER, pPos, pState);
   }
 
   @Override
   @Nullable
   public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-    return createTickerHelper(pBlockEntityType, ModBlockEntities.SPECIAL_LOOT_SHULKER, LootrShulkerBlockEntity::tick);
+    return createTickerHelper(pBlockEntityType, LootrBlockEntityInit.SPECIAL_LOOT_SHULKER, LootrShulkerBlockEntity::tick);
   }
 }

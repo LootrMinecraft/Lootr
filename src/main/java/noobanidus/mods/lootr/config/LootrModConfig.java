@@ -22,14 +22,14 @@ import net.minecraft.world.level.block.state.properties.Property;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
-import noobanidus.mods.lootr.init.ModBlocks;
+import noobanidus.mods.lootr.init.LootrBlockInit;
 import noobanidus.mods.lootr.tags.LootrTags;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Config(name = LootrAPI.MODID)
-public class ConfigManager implements ConfigData {
+public class LootrModConfig implements ConfigData {
   private static Set<String> DECAY_MODS = null;
   private static Set<ResourceLocation> DECAY_TABLES = null;
   private static Set<String> REFRESH_MODS = null;
@@ -143,8 +143,8 @@ public class ConfigManager implements ConfigData {
     public boolean vanilla_textures = false;
   }
 
-  public static ConfigManager get() {
-    return AutoConfig.getConfigHolder(ConfigManager.class).getConfig();
+  public static LootrModConfig get() {
+    return AutoConfig.getConfigHolder(LootrModConfig.class).getConfig();
   }
 
   public static boolean isDecaying(ServerLevel level, ILootBlockEntity tile) {
@@ -324,13 +324,13 @@ public class ConfigManager implements ConfigData {
         BlockEntity be = entityBlock.newBlockEntity(BlockPos.ZERO, original);
         if (be instanceof RandomizableContainerBlockEntity) {
           if (original.is(LootrTags.Blocks.CONVERT_TRAPPED_CHESTS)) {
-            replacements.put(original.getBlock(), ModBlocks.TRAPPED_CHEST);
+            replacements.put(original.getBlock(), LootrBlockInit.TRAPPED_CHEST);
           } else if (original.is(LootrTags.Blocks.CONVERT_BARRELS)) {
-            replacements.put(original.getBlock(), ModBlocks.BARREL);
+            replacements.put(original.getBlock(), LootrBlockInit.BARREL);
           } else if (original.is(LootrTags.Blocks.CONVERT_CHESTS)) {
-            replacements.put(original.getBlock(), ModBlocks.CHEST);
+            replacements.put(original.getBlock(), LootrBlockInit.CHEST);
           } else if (original.is(LootrTags.Blocks.CONVERT_SHULKERS)) {
-            replacements.put(original.getBlock(), ModBlocks.SHULKER);
+            replacements.put(original.getBlock(), LootrBlockInit.SHULKER);
           }
         }
       }

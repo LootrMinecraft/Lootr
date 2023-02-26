@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.event.HandleChunk;
-import noobanidus.mods.lootr.config.ConfigManager;
+import noobanidus.mods.lootr.config.LootrModConfig;
 import noobanidus.mods.lootr.util.ServerAccessImpl;
 
 import java.util.HashSet;
@@ -29,7 +29,7 @@ public class TileTicker {
 
   public static void addEntry(ResourceKey<Level> dimension, BlockPos position) {
     // TODO: Dimension Blacklisting
-    if (ConfigManager.isDimensionBlacklisted(dimension)) {
+    if (LootrModConfig.isDimensionBlacklisted(dimension)) {
       return;
     }
     Entry newEntry = new Entry(dimension, position);
@@ -68,7 +68,7 @@ public class TileTicker {
           toRemove.add(entry);
           continue;
         }
-        if (be.lootTable == null || ConfigManager.isBlacklisted(be.lootTable)) {
+        if (be.lootTable == null || LootrModConfig.isBlacklisted(be.lootTable)) {
           toRemove.add(entry);
           continue;
         }
@@ -82,7 +82,7 @@ public class TileTicker {
           }*/
         // TODO: Replacement config
         BlockState stateAt = level.getBlockState(entry.getPosition());
-        BlockState replacement = ConfigManager.replacement(stateAt);
+        BlockState replacement = LootrModConfig.replacement(stateAt);
         if (replacement == null) {
           toRemove.add(entry);
           continue;

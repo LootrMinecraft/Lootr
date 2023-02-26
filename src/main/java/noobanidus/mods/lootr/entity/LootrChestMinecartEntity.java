@@ -39,9 +39,9 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.entity.ILootCart;
-import noobanidus.mods.lootr.config.ConfigManager;
+import noobanidus.mods.lootr.config.LootrModConfig;
 import noobanidus.mods.lootr.network.NetworkConstants;
-import noobanidus.mods.lootr.init.ModBlocks;
+import noobanidus.mods.lootr.init.LootrBlockInit;
 import noobanidus.mods.lootr.util.ChestUtil;
 import org.jetbrains.annotations.Nullable;
 
@@ -130,7 +130,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     return Type.CHEST;
   }
 
-  private static final BlockState cartNormal = ModBlocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
+  private static final BlockState cartNormal = LootrBlockInit.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
 
   @Override
   public BlockState getDefaultDisplayBlockState() {
@@ -210,14 +210,14 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
       LootTable loottable = this.level.getServer().getLootTables().get(overrideTable != null ? overrideTable : this.lootTable);
       if (loottable == LootTable.EMPTY) {
         LootrAPI.LOG.error("Unable to fill loot in " + level.dimension() + " at " + position() + " as the loot table '" + (overrideTable != null ? overrideTable : this.lootTable) + "' couldn't be resolved! Please search the loot table in `latest.log` to see if there are errors in loading.");
-        if (ConfigManager.get().debug.report_unresolved_tables && player != null) {
+        if (LootrModConfig.get().debug.report_unresolved_tables && player != null) {
           player.sendMessage(new TranslatableComponent("lootr.message.invalid_table", (overrideTable != null ? overrideTable : this.lootTable).toString()).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED)).withBold(true)), Util.NIL_UUID);
         }
       }
       if (player instanceof ServerPlayer) {
         CriteriaTriggers.GENERATE_LOOT.trigger((ServerPlayer) player, overrideTable != null ? overrideTable : this.lootTable);
       }
-      LootContext.Builder lootcontext$builder = (new LootContext.Builder((ServerLevel) this.level)).withParameter(LootContextParams.ORIGIN, this.position()).withOptionalRandomSeed(ConfigManager.get().seed.randomize_seed ? ThreadLocalRandom.current().nextLong() : seed == Long.MIN_VALUE ? this.lootTableSeed : seed);
+      LootContext.Builder lootcontext$builder = (new LootContext.Builder((ServerLevel) this.level)).withParameter(LootContextParams.ORIGIN, this.position()).withOptionalRandomSeed(LootrModConfig.get().seed.randomize_seed ? ThreadLocalRandom.current().nextLong() : seed == Long.MIN_VALUE ? this.lootTableSeed : seed);
       if (player != null) {
         lootcontext$builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
       }

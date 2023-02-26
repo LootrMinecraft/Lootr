@@ -21,20 +21,20 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import noobanidus.mods.lootr.block.entities.LootrChestBlockEntity;
 import noobanidus.mods.lootr.block.entities.LootrTrappedChestBlockEntity;
-import noobanidus.mods.lootr.config.ConfigManager;
-import noobanidus.mods.lootr.init.ModBlockEntities;
+import noobanidus.mods.lootr.config.LootrModConfig;
+import noobanidus.mods.lootr.init.LootrBlockEntityInit;
 import noobanidus.mods.lootr.util.ChestUtil;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("deprecation")
 public class LootrTrappedChestBlock extends ChestBlock {
   public LootrTrappedChestBlock(Properties properties) {
-    super(properties, () -> ModBlockEntities.SPECIAL_TRAPPED_LOOT_CHEST);
+    super(properties, () -> LootrBlockEntityInit.SPECIAL_TRAPPED_LOOT_CHEST);
   }
 
   @Override
   public float getExplosionResistance() {
-    if (ConfigManager.get().breaking.blast_resistant) {
+    if (LootrModConfig.get().breaking.blast_resistant) {
       return 16.0f;
     } else {
       return super.getExplosionResistance();

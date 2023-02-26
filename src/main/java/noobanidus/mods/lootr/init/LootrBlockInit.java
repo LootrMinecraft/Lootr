@@ -12,10 +12,11 @@ import net.minecraft.world.level.material.Material;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.block.*;
 import noobanidus.mods.lootr.block.entities.LootrShulkerBlockEntity;
+import noobanidus.mods.lootr.config.LootrModConfig;
 
 import java.util.Set;
 
-public class ModBlocks {
+public class LootrBlockInit {
   private static final BlockBehaviour.StatePredicate posPredicate = (state, level, pos) -> {
     BlockEntity blockEntity = level.getBlockEntity(pos);
     if (blockEntity instanceof LootrShulkerBlockEntity shulkerBlockEntity) {

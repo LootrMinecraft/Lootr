@@ -5,7 +5,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import noobanidus.mods.lootr.init.ModBlockEntities;
+import noobanidus.mods.lootr.init.LootrBlockEntityInit;
 
 public class LootrTrappedChestBlockEntity extends LootrChestBlockEntity {
   public LootrTrappedChestBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -13,7 +13,7 @@ public class LootrTrappedChestBlockEntity extends LootrChestBlockEntity {
   }
 
   public LootrTrappedChestBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
-    this(ModBlockEntities.SPECIAL_TRAPPED_LOOT_CHEST, pWorldPosition, pBlockState);
+    this(LootrBlockEntityInit.SPECIAL_TRAPPED_LOOT_CHEST, pWorldPosition, pBlockState);
   }
 
   @Override

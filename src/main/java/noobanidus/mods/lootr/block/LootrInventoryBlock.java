@@ -25,8 +25,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import noobanidus.mods.lootr.block.entities.LootrChestBlockEntity;
 import noobanidus.mods.lootr.block.entities.LootrInventoryBlockEntity;
-import noobanidus.mods.lootr.config.ConfigManager;
-import noobanidus.mods.lootr.init.ModBlockEntities;
+import noobanidus.mods.lootr.config.LootrModConfig;
+import noobanidus.mods.lootr.init.LootrBlockEntityInit;
 import noobanidus.mods.lootr.util.ChestUtil;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,12 +35,12 @@ import java.util.function.Supplier;
 
 public class LootrInventoryBlock extends ChestBlock {
   public LootrInventoryBlock(Properties properties) {
-    super(properties, () -> ModBlockEntities.SPECIAL_LOOT_INVENTORY);
+    super(properties, () -> LootrBlockEntityInit.SPECIAL_LOOT_INVENTORY);
   }
 
   @Override
   public float getExplosionResistance() {
-    if (ConfigManager.get().breaking.blast_resistant) {
+    if (LootrModConfig.get().breaking.blast_resistant) {
       return 16.0f;
     } else {
       return super.getExplosionResistance();
@@ -105,7 +105,7 @@ public class LootrInventoryBlock extends ChestBlock {
 
   @Override
   public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos) {
-    if (ConfigManager.get().breaking.power_comparators) {
+    if (LootrModConfig.get().breaking.power_comparators) {
       return 1;
     } else {
       return 0;

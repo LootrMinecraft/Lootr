@@ -47,8 +47,8 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
-import noobanidus.mods.lootr.config.ConfigManager;
-import noobanidus.mods.lootr.init.ModBlockEntities;
+import noobanidus.mods.lootr.config.LootrModConfig;
+import noobanidus.mods.lootr.init.LootrBlockEntityInit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -78,7 +78,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   public LootrShulkerBlockEntity(BlockPos pos, BlockState state) {
-    this(ModBlockEntities.SPECIAL_LOOT_SHULKER, pos, state);
+    this(LootrBlockEntityInit.SPECIAL_LOOT_SHULKER, pos, state);
   }
 
   public static void tick(Level level, BlockPos pos, BlockState state, LootrShulkerBlockEntity entity) {
@@ -348,14 +348,14 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
       LootTable loottable = this.level.getServer().getLootTables().get(overrideTable != null ? overrideTable : this.savedLootTable);
       if (loottable == LootTable.EMPTY) {
         LootrAPI.LOG.error("Unable to fill loot shulker in " + level.dimension() + " at " + worldPosition + " as the loot table '" + (overrideTable != null ? overrideTable : this.savedLootTable) + "' couldn't be resolved! Please search the loot table in `latest.log` to see if there are errors in loading.");
-        if (ConfigManager.get().debug.report_unresolved_tables) {
+        if (LootrModConfig.get().debug.report_unresolved_tables) {
           player.sendMessage(new TranslatableComponent("lootr.message.invalid_table", (overrideTable != null ? overrideTable : this.savedLootTable).toString()).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED)).withBold(true)), Util.NIL_UUID);
         }
       }
       if (player instanceof ServerPlayer) {
         CriteriaTriggers.GENERATE_LOOT.trigger((ServerPlayer) player, overrideTable != null ? overrideTable : this.lootTable);
       }
-      LootContext.Builder builder = (new LootContext.Builder((ServerLevel) this.level)).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(this.worldPosition)).withOptionalRandomSeed(ConfigManager.get().seed.randomize_seed ? ThreadLocalRandom.current().nextLong() : seed == Long.MIN_VALUE ? this.seed : seed);
+      LootContext.Builder builder = (new LootContext.Builder((ServerLevel) this.level)).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(this.worldPosition)).withOptionalRandomSeed(LootrModConfig.get().seed.randomize_seed ? ThreadLocalRandom.current().nextLong() : seed == Long.MIN_VALUE ? this.seed : seed);
       if (player != null) {
         builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
       }

@@ -7,7 +7,7 @@ import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import noobanidus.mods.lootr.init.ModBlockEntities;
+import noobanidus.mods.lootr.init.LootrBlockEntityInit;
 import org.jetbrains.annotations.Nullable;
 
 public class LootrInventoryBlockEntity extends LootrChestBlockEntity {
@@ -18,7 +18,7 @@ public class LootrInventoryBlockEntity extends LootrChestBlockEntity {
   }
 
   public LootrInventoryBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
-    super(ModBlockEntities.SPECIAL_LOOT_INVENTORY, pWorldPosition, pBlockState);
+    super(LootrBlockEntityInit.SPECIAL_LOOT_INVENTORY, pWorldPosition, pBlockState);
   }
 
   @Override
