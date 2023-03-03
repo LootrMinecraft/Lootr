@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr;
+package noobanidus.mods.lootr.tags;
 
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
