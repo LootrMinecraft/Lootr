@@ -23,7 +23,7 @@ import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModBlocks;
-import noobanidus.mods.lootr.tags.LootrTags;
+import noobanidus.mods.lootr.LootrTags;
 
 import java.util.*;
 import java.util.stream.Collectors;
