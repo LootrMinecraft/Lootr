@@ -14,7 +14,7 @@ public class ModBlockEntities {
   public static final BlockEntityType<LootrShulkerBlockEntity> SPECIAL_LOOT_SHULKER = FabricBlockEntityTypeBuilder.create(LootrShulkerBlockEntity::new, ModBlocks.SHULKER).build(null);
   public static final BlockEntityType<LootrInventoryBlockEntity> SPECIAL_LOOT_INVENTORY = FabricBlockEntityTypeBuilder.create(LootrInventoryBlockEntity::new, ModBlocks.INVENTORY).build(null);
 
-  public static void registerBlockEntities() {
+  public static void register() {
     Registry.register(Registry.BLOCK_ENTITY_TYPE, new ResourceLocation(LootrAPI.MODID, "special_loot_chest"), SPECIAL_LOOT_CHEST);
     Registry.register(Registry.BLOCK_ENTITY_TYPE, new ResourceLocation(LootrAPI.MODID, "special_trapped_loot_chest"), SPECIAL_TRAPPED_LOOT_CHEST);
     Registry.register(Registry.BLOCK_ENTITY_TYPE, new ResourceLocation(LootrAPI.MODID, "special_loot_shulker"), SPECIAL_LOOT_SHULKER);

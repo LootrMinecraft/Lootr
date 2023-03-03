@@ -1,11 +1,10 @@
-package noobanidus.mods.lootr.init;
+package noobanidus.mods.lootr.command.CommandLootr;
 
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -37,6 +36,8 @@ import noobanidus.mods.lootr.block.entities.LootrInventoryBlockEntity;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
+import noobanidus.mods.lootr.init.ModBlocks;
+import noobanidus.mods.lootr.init.ModEntities;
 import noobanidus.mods.lootr.util.ChestUtil;
 import noobanidus.mods.lootr.util.ServerAccessImpl;
 import org.jetbrains.annotations.Nullable;
@@ -44,7 +45,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class LootrCommandInit {
+public class CommandLootr {
   private static List<ResourceLocation> tables = null;
   private static List<String> tableNames = null;
 
@@ -57,7 +58,7 @@ public class LootrCommandInit {
   }
 
   private static List<String> getProfiles() {
-    return Lists.newArrayList(ServerAccessImpl.getServer().getProfileCache().profilesByName.keySet());
+    return Lists.newArrayList(Lootr.serverAccess.getServer().getProfileCache().profilesByName.keySet());
   }
 
   private static List<String> getTableNames() {
@@ -113,7 +114,7 @@ public class LootrCommandInit {
     return Commands.argument("profile", StringArgumentType.string()).suggests((c, build) -> SharedSuggestionProvider.suggest(getProfiles(), build));
   }
 
-  private static LiteralArgumentBuilder<CommandSourceStack> builder(LiteralArgumentBuilder<CommandSourceStack> builder) {
+  public static LiteralArgumentBuilder<CommandSourceStack> builder(LiteralArgumentBuilder<CommandSourceStack> builder) {
     builder.executes(c -> {
       c.getSource().sendSuccess(new TranslatableComponent("lootr.commands.usage"), false);
       return 1;
@@ -257,9 +258,5 @@ public class LootrCommandInit {
       return 1;
     })));
     return builder;
-  }
-
-  public static void registerCommands() {
-    CommandRegistrationCallback.EVENT.register(((dispatcher, dedicated) -> dispatcher.register(builder(Commands.literal("lootr").requires(p -> p.hasPermission(2))))));
   }
 }

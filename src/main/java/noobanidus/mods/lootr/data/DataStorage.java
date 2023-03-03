@@ -41,7 +41,7 @@ public class DataStorage {
   public static final String REFRESH = "lootr/" + REFRESH_OLD;
 
   public static DimensionDataStorage getDataStorage() {
-    return ServerAccessImpl.getServer().overworld().getDataStorage();
+    return Lootr.serverAccess.getServer().overworld().getDataStorage();
   }
 
   public static boolean isAwarded(UUID player, UUID tileId) {
@@ -212,7 +212,7 @@ public class DataStorage {
   }
 
   public static boolean clearInventories(UUID uuid) {
-    ServerLevel world = ServerAccessImpl.getServer().overworld();
+    ServerLevel world = Lootr.serverAccess.getServer().overworld();
     DimensionDataStorage data = world.getDataStorage();
     Path dataPath = world.getServer().getWorldPath(new LevelResource("data")).resolve("lootr");
 

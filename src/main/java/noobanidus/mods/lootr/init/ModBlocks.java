@@ -36,7 +36,7 @@ public class ModBlocks {
 
   public static Set<Block> specialLootChests = Sets.newHashSet(CHEST, TRAPPED_CHEST, SHULKER, INVENTORY, BARREL);
 
-  public static void registerBlocks() {
+  public static void register() {
     Registry.register(Registry.BLOCK, new ResourceLocation(LootrAPI.MODID, "lootr_chest"), CHEST);
     Registry.register(Registry.BLOCK, new ResourceLocation(LootrAPI.MODID, "lootr_barrel"), BARREL);
     Registry.register(Registry.BLOCK, new ResourceLocation(LootrAPI.MODID, "lootr_trapped_chest"), TRAPPED_CHEST);

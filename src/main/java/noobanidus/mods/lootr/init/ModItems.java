@@ -18,7 +18,7 @@ public class ModItems {
 
   public static final BlockItem TROPHY = new BlockItem(ModBlocks.TROPHY, new FabricItemSettings().rarity(Rarity.EPIC).group(Lootr.TAB));
 
-  public static void registerItems() {
+  public static void register() {
     Registry.register(Registry.ITEM, new ResourceLocation(LootrAPI.MODID, "lootr_chest"), CHEST);
     Registry.register(Registry.ITEM, new ResourceLocation(LootrAPI.MODID, "lootr_barrel"), BARREL);
     Registry.register(Registry.ITEM, new ResourceLocation(LootrAPI.MODID, "lootr_trapped_chest"), TRAPPED_CHEST);

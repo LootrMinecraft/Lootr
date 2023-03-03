@@ -5,7 +5,7 @@ import net.minecraft.world.entity.Entity;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
 public class Networking {
-  public static void registerClientNetwork() {
+  public static void register() {
     ClientPlayNetworking.registerGlobalReceiver(NetworkConstants.CLOSE_CART_CHANNEL, (client, handler, buf, responseSender) -> {
       int entityId = buf.readVarInt();
       client.execute(() -> {

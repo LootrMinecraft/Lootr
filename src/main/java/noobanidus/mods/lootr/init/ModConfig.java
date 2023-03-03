@@ -4,8 +4,8 @@ import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import noobanidus.mods.lootr.config.ConfigManager;
 
-public class LootrConfigInit {
-  public static void registerConfig() {
+public class ModConfig {
+  public static void register() {
     AutoConfig.register(ConfigManager.class, GsonConfigSerializer::new);
   }
 }

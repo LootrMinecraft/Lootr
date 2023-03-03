@@ -51,7 +51,7 @@ public class TileTicker {
       tickingList = false;
     }
     synchronized (worldLock) {
-      MinecraftServer server = ServerAccessImpl.getServer();
+      MinecraftServer server = Lootr.serverAccess.getServer();
       for (Entry entry : copy) {
         ServerLevel level = server.getLevel(entry.getDimension());
         if (level == null) {
@@ -137,7 +137,7 @@ public class TileTicker {
         }
       }
 
-      this.addedAt = ServerAccessImpl.getServer().getTickCount();
+      this.addedAt = Lootr.serverAccess.getServer().getTickCount();
     }
 
     public ResourceKey<Level> getDimension() {

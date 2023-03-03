@@ -13,7 +13,7 @@ import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 public class ModEntities {
   public static EntityType<LootrChestMinecartEntity> LOOTR_MINECART_ENTITY;
 
-  public static void registerEntities() {
+  public static void register() {
     LOOTR_MINECART_ENTITY = Registry.register(Registry.ENTITY_TYPE, new ResourceLocation(LootrAPI.MODID, "lootr_minecart"), FabricEntityTypeBuilder.create(MobCategory.MISC, new EntityType.EntityFactory<LootrChestMinecartEntity>() {
       @Override
       public LootrChestMinecartEntity create(EntityType<LootrChestMinecartEntity> entityType, Level level) {
