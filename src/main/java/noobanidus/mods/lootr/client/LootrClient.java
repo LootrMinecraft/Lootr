@@ -23,7 +23,7 @@ import noobanidus.mods.lootr.network.Networking;
 public class LootrClient implements ClientModInitializer {
   @Override
   public void onInitializeClient() {
-    Networking.register();
+    Networking.registerClientNetwork();
 
     BlockEntityRendererRegistry.register(ModBlockEntities.SPECIAL_LOOT_CHEST, LootrChestBlockRenderer::new);
     BuiltinItemRendererRegistry.INSTANCE.register(ModBlocks.CHEST, LootrChestItemRenderer.getInstance());

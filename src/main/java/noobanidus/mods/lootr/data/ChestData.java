@@ -140,7 +140,7 @@ public class ChestData extends SavedData {
     ServerLevel level = (ServerLevel) player.level;
     SpecialChestInventory result;
     if (level.dimension() != dimension) {
-      MinecraftServer server = Lootr.serverAccess.getServer();
+      MinecraftServer server = ServerAccessImpl.getServer();
       if (server == null) {
         return null;
       }
@@ -163,7 +163,7 @@ public class ChestData extends SavedData {
     ServerLevel level = (ServerLevel) player.level;
     SpecialChestInventory result;
     if (level.dimension() != dimension) {
-      MinecraftServer server = Lootr.serverAccess.getServer();
+      MinecraftServer server = ServerAccessImpl.getServer();
       if (server == null) {
         return null;
       }

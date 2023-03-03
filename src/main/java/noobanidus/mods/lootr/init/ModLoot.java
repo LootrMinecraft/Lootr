@@ -9,7 +9,7 @@ import noobanidus.mods.lootr.loot.conditions.LootCount;
 public class ModLoot {
   public static final LootItemConditionType LOOT_COUNT = new LootItemConditionType(new LootCount.Serializer());
 
-  public static void register() {
+  public static void registerLoot() {
     Registry.register(Registry.LOOT_CONDITION_TYPE, new ResourceLocation(LootrAPI.MODID, "loot_count"), LOOT_COUNT);
   }
 }
