@@ -21,7 +21,6 @@ import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraftforge.server.ServerLifecycleHooks;
-import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.LootFiller;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
@@ -142,7 +141,7 @@ public class ChestData extends SavedData {
     ServerLevel level = (ServerLevel) player.level;
     SpecialChestInventory result;
     if (level.dimension() != dimension) {
-      MinecraftServer server = Lootr.serverAccess.getServer();
+      MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
       if (server == null) {
         return null;
       }
@@ -166,7 +165,7 @@ public class ChestData extends SavedData {
     ServerLevel level = (ServerLevel) player.level;
     SpecialChestInventory result;
     if (level.dimension() != dimension) {
-      MinecraftServer server = Lootr.serverAccess.getServer();
+      MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
       if (server == null) {
         return null;
       }
@@ -200,7 +199,15 @@ public class ChestData extends SavedData {
       result = new SpecialChestInventory(this, items, cart.getDisplayName());
       lootTable = cart.lootTable;
     } else {
-      if (tile == null) {
+/*      if (world.dimension() != dimension) {
+        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+        if (server == null) {
+          return null;
+        }
+        world = server.getLevel(dimension);
+      }*/
+
+      if (/*world == null || */tile == null) {
         return null;
       }
 

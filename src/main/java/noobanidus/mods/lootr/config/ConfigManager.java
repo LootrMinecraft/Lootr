@@ -27,7 +27,6 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.server.ServerLifecycleHooks;
-import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
@@ -465,7 +464,7 @@ public class ConfigManager {
         }
       }
       if (!getAdditionalChests().isEmpty() || !getAdditionalTrappedChests().isEmpty()) {
-        final ServerLevel world = Lootr.serverAccess.getServer().overworld();
+        final ServerLevel world = ServerLifecycleHooks.getCurrentServer().overworld();
         getAdditionalChests().forEach(o -> addUnsafeReplacement(o, ModBlocks.CHEST, world));
         getAdditionalTrappedChests().forEach(o -> addUnsafeReplacement(o, ModBlocks.TRAPPED_CHEST, world));
       }
