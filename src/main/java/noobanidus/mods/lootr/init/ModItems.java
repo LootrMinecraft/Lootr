@@ -39,6 +39,6 @@ public class ModItems {
   @SubscribeEvent
   public static void registerItems(RegistryEvent.Register<Item> event) {
     construct();
-    event.getRegistry().registerAll(CHEST, TRAPPED_CHEST, BARREL, INVENTORY, SHULKER, TROPHY/*, CROWN*/);
+    event.getRegistry().registerAll(CHEST, TRAPPED_CHEST, BARREL, INVENTORY, SHULKER, TROPHY);
   }
 }

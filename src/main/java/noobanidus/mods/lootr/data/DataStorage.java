@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraft.world.level.storage.LevelResource;
 import net.minecraftforge.server.ServerLifecycleHooks;
+import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.LootFiller;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
@@ -41,7 +42,7 @@ public class DataStorage {
   public static final String REFRESH = "lootr/" + REFRESH_OLD;
 
   public static DimensionDataStorage getDataStorage() {
-    return ServerLifecycleHooks.getCurrentServer().overworld().getDataStorage();
+    return Lootr.serverAccess.getServer().overworld().getDataStorage();
   }
 
   public static boolean isAwarded(UUID player, UUID tileId) {
@@ -212,7 +213,7 @@ public class DataStorage {
   }
 
   public static boolean clearInventories(UUID uuid) {
-    ServerLevel world = ServerLifecycleHooks.getCurrentServer().overworld();
+    ServerLevel world = Lootr.serverAccess.getServer().overworld();
     DimensionDataStorage data = world.getDataStorage();
     Path dataPath = world.getServer().getWorldPath(new LevelResource("data")).resolve("lootr");
 

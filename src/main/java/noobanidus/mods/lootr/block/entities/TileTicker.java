@@ -15,6 +15,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.ServerLifecycleHooks;
+import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.config.ConfigManager;
@@ -58,7 +59,7 @@ public class TileTicker {
         tickingList = false;
       }
       synchronized (worldLock) {
-        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+        MinecraftServer server = Lootr.serverAccess.getServer();
         for (Entry entry : copy) {
           ServerLevel level = server.getLevel(entry.getDimension());
           if (level == null) {
@@ -139,7 +140,7 @@ public class TileTicker {
         }
       }
 
-      this.addedAt = ServerLifecycleHooks.getCurrentServer().getTickCount();
+      this.addedAt = Lootr.serverAccess.getServer().getTickCount();
     }
 
     public ResourceKey<Level> getDimension() {

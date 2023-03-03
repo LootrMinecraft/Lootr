@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr;
 
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
@@ -8,14 +9,24 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.loading.FMLPaths;
+import net.minecraftforge.server.ServerLifecycleHooks;
+import noobanidus.mods.lootr.api.IServerAccess;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.command.CommandLootr;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModAdvancements;
 import noobanidus.mods.lootr.init.ModBlocks;
+import org.jetbrains.annotations.Nullable;
 
 @Mod("lootr")
 public class Lootr {
+
+  public static IServerAccess serverAccess = new IServerAccess() {
+    @Override
+    public @Nullable MinecraftServer getServer() {
+      return ServerLifecycleHooks.getCurrentServer();
+    }
+  };
 
   static {
     ModAdvancements.load();

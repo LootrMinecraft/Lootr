@@ -30,6 +30,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraftforge.server.ServerLifecycleHooks;
+import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.block.LootrBarrelBlock;
 import noobanidus.mods.lootr.block.LootrChestBlock;
@@ -70,7 +71,7 @@ public class CommandLootr {
   }
 
   private static List<String> getProfiles() {
-    return Lists.newArrayList(ServerLifecycleHooks.getCurrentServer().getProfileCache().profilesByName.keySet());
+    return Lists.newArrayList(Lootr.serverAccess.getServer().getProfileCache().profilesByName.keySet());
   }
 
   private static List<String> getTableNames() {

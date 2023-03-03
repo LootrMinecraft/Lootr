@@ -27,7 +27,7 @@ public class GenericTrigger<T> implements CriterionTrigger<GenericTrigger.Instan
     this(new ResourceLocation(id), predicate);
   }
 
-  public GenericTrigger(ResourceLocation id, IGenericPredicate<T> predicate) { //}, IGenericPredicate basePredicate) {
+  public GenericTrigger(ResourceLocation id, IGenericPredicate<T> predicate) {
     this.id = id;
     this.predicate = predicate;
   }
