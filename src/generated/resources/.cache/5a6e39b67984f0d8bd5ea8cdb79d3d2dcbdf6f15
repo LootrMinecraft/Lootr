@@ -1,0 +1,13 @@
+// 1.19.3	2023-03-14T13:32:48.4736101	Lootr Block Tags
+3921f6b6ce3ffc2c7c96ad7c75bbfa8aa6eaee70 data/forge/tags/blocks/barrels.json
+7dc9f1e4a2bf28c54c45c4290627e5282c0685df data/forge/tags/blocks/chests/trapped.json
+119aa9ef2a57d06cf9e5dcb491fed6ef06e50afa data/forge/tags/blocks/chests/wooden.json
+3921f6b6ce3ffc2c7c96ad7c75bbfa8aa6eaee70 data/lootr/tags/blocks/barrels.json
+bb14a1e34ddbf18921eeb539ef187bc37b2204fa data/lootr/tags/blocks/chests.json
+4d0f9d567c1b22bcb35bd20742ffa6be61db7869 data/lootr/tags/blocks/containers.json
+dc58f334989d3619f69af6641ae7f69e9fe9fc34 data/lootr/tags/blocks/shulkers.json
+7dc9f1e4a2bf28c54c45c4290627e5282c0685df data/lootr/tags/blocks/trapped_chests.json
+4126de379b889d9476bc9580ef487449d1bac9d2 data/minecraft/tags/blocks/guarded_by_piglins.json
+4126de379b889d9476bc9580ef487449d1bac9d2 data/minecraft/tags/blocks/mineable/axe.json
+0e4a7e9d3f8913d4d595b1e9791c982ea0562eb7 data/minecraft/tags/blocks/mineable/pickaxe.json
+dc58f334989d3619f69af6641ae7f69e9fe9fc34 data/minecraft/tags/blocks/shulker_boxes.json
