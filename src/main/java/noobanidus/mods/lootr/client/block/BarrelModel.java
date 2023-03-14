@@ -70,7 +70,7 @@ public class BarrelModel implements IUnbakedGeometry<BarrelModel> {
         buildModel(opened, modelTransform, bakery, spriteGetter, modelLocation),
         buildModel(unopened, modelTransform, bakery, spriteGetter, modelLocation),
         buildModel(vanilla, modelTransform, bakery, spriteGetter, modelLocation),
-        context.getTransforms() /* PerspectiveMapWrapper.getTransforms(new CompositeModelState(owner.getCombinedTransform(), modelTransform)) */
+        context.getTransforms()
     );
   }
 
