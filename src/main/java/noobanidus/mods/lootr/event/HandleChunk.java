@@ -1,5 +1,7 @@
 package noobanidus.mods.lootr.event;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -16,7 +18,7 @@ import java.util.*;
 
 @Mod.EventBusSubscriber(modid = LootrAPI.MODID)
 public class HandleChunk {
-  public static final Map<ResourceKey<Level>, Set<ChunkPos>> LOADED_CHUNKS = Collections.synchronizedMap(new HashMap<>());
+  public static final Map<ResourceKey<Level>, Set<ChunkPos>> LOADED_CHUNKS = Collections.synchronizedMap(new Object2ObjectLinkedOpenHashMap<>());
 
   @SubscribeEvent
   public static void onChunkLoad(ChunkEvent.Load event) {
@@ -24,7 +26,7 @@ public class HandleChunk {
       ChunkAccess chunk = event.getChunk();
       if (chunk.getStatus().isOrAfter(ChunkStatus.FULL) && chunk instanceof LevelChunk lChunk) {
         synchronized (LOADED_CHUNKS) {
-          Set<ChunkPos> chunkSet = LOADED_CHUNKS.computeIfAbsent(lChunk.getLevel().dimension(), k -> Collections.synchronizedSet(new HashSet<>()));
+          Set<ChunkPos> chunkSet = LOADED_CHUNKS.computeIfAbsent(lChunk.getLevel().dimension(), k -> Collections.synchronizedSet(new ObjectLinkedOpenHashSet<>()));
           chunkSet.add(chunk.getPos());
         }
       }
