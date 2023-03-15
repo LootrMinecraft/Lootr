@@ -62,10 +62,11 @@ public class TileTicker {
       MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
       for (Entry entry : copy) {
         ServerLevel level = server.getLevel(entry.getDimension());
-        if (level == null || entry.age(server) > ConfigManager.MAXIMUM_AGE.get()) {
+        if (level == null || entry.age(server) > ConfigManager.MAXIMUM_AGE.get() || !level.getWorldBorder().isWithinBounds(entry.getPosition())) {
           toRemove.add(entry);
           continue;
         }
+
         boolean skip = false;
         synchronized (HandleChunk.LOADED_CHUNKS) {
           Set<ChunkPos> loadedChunks = HandleChunk.LOADED_CHUNKS.get(entry.dimension);
