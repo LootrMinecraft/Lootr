@@ -16,7 +16,7 @@ public class MixinLevelChunk {
   private void lootrAddAndRegisterBlockEntity (BlockEntity entity, CallbackInfo cir) {
     if (entity instanceof RandomizableContainerBlockEntity && !(entity instanceof ILootBlockEntity)) {
       LevelChunk levelChunk = (LevelChunk) (Object) this;
-      if (!levelChunk.getLevel().isClientSide()) {
+      if (!levelChunk.getLevel().isClientSide() && levelChunk.getLevel().getWorldBorder().isWithinBounds(entity.getBlockPos())) {
         TileTicker.addEntry(levelChunk.getLevel().dimension(), entity.getBlockPos());
       }
     }
