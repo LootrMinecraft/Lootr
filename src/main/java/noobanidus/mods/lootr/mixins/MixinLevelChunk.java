@@ -17,7 +17,7 @@ public class MixinLevelChunk {
     if (entity instanceof RandomizableContainerBlockEntity && !(entity instanceof ILootBlockEntity)) {
       LevelChunk levelChunk = (LevelChunk) (Object) this;
       if (!levelChunk.getLevel().isClientSide() && levelChunk.getLevel().getWorldBorder().isWithinBounds(entity.getBlockPos())) {
-        TileTicker.addEntry(levelChunk.getLevel().dimension(), entity.getBlockPos());
+        TileTicker.addEntry(levelChunk.getLevel(), entity.getBlockPos());
       }
     }
   }
