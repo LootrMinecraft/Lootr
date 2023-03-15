@@ -11,6 +11,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.border.WorldBorder;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -19,6 +20,7 @@ import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.event.HandleChunk;
+import org.apache.logging.log4j.core.jmx.Server;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -32,11 +34,36 @@ public class TileTicker {
   private final static Set<Entry> tileEntries = new LinkedHashSet<>();
   private final static Set<Entry> pendingEntries = new LinkedHashSet<>();
 
-  public static void addEntry(ResourceKey<Level> dimension, BlockPos position) {
+  public static void addEntry(Level level, BlockPos position) {
+    ResourceKey<Level> dimension = level.dimension();
     if (ConfigManager.isDimensionBlocked(dimension)) {
       return;
     }
-    Entry newEntry = new Entry(dimension, position);
+
+    ChunkPos chunkPos = new ChunkPos(position);
+
+    WorldBorder border = level.getWorldBorder();
+    if (!border.isWithinBounds(chunkPos)) {
+      return;
+    }
+
+    Set<ChunkPos> chunks = new ObjectLinkedOpenHashSet<>();
+    chunks.add(chunkPos);
+
+    int oX = chunkPos.x;
+    int oZ = chunkPos.z;
+    chunks.add(chunkPos);
+
+    for (int x = -2; x <= 2; x++) {
+      for (int z = -2; z <= 2; z++) {
+        ChunkPos newPos = new ChunkPos(oX + x, oZ + z);
+        if (border.isWithinBounds(newPos)) {
+          chunks.add(newPos);
+        }
+      }
+    }
+
+    Entry newEntry = new Entry(dimension, position, chunks);
     synchronized (listLock) {
       if (tickingList) {
         pendingEntries.add(newEntry);
@@ -124,25 +151,13 @@ public class TileTicker {
   public static class Entry {
     private final ResourceKey<Level> dimension;
     private final BlockPos position;
-    private final Set<ChunkPos> chunks = new HashSet<>();
+    private final Set<ChunkPos> chunks;
     private final long addedAt;
 
-    public Entry(ResourceKey<Level> dimension, BlockPos position) {
+    public Entry(ResourceKey<Level> dimension, BlockPos position, Set<ChunkPos> chunks) {
       this.dimension = dimension;
       this.position = position;
-
-      ChunkPos chunkPos = new ChunkPos(this.position);
-
-      int oX = chunkPos.x;
-      int oZ = chunkPos.z;
-      chunks.add(chunkPos);
-
-      for (int x = -2; x <= 2; x++) {
-        for (int z = -2; z <= 2; z++) {
-          chunks.add(new ChunkPos(oX + x, oZ + z));
-        }
-      }
-
+      this.chunks = chunks;
       this.addedAt = ServerLifecycleHooks.getCurrentServer().getTickCount();
     }
 

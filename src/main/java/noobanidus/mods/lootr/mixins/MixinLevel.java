@@ -20,7 +20,7 @@ public class MixinLevel {
     if (!level.isClientSide()) {
       for (BlockEntity be : entities) {
         if (be instanceof RandomizableContainerBlockEntity && !(be instanceof ILootBlockEntity)) {
-          TileTicker.addEntry(level.dimension(), be.getBlockPos());
+          TileTicker.addEntry(level, be.getBlockPos());
         }
       }
     }
