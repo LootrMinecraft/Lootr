@@ -5,7 +5,6 @@
   "refmap": "lootr.refmap.json",
   "mixins": [
     "MixinCatSitOnBlockGoal",
-    "MixinLevel",
     "MixinLevelChunk"
   ],
   "client": [
