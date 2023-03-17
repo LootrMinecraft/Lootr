@@ -20,9 +20,7 @@ import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.event.HandleChunk;
-import org.apache.logging.log4j.core.jmx.Server;
 
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
