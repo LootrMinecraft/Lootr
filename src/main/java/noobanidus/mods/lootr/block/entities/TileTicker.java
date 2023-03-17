@@ -21,7 +21,6 @@ import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.event.HandleChunk;
 
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Mod.EventBusSubscriber(modid = LootrAPI.MODID)
@@ -29,8 +28,8 @@ public class TileTicker {
   private final static Object listLock = new Object();
   private final static Object worldLock = new Object();
   private static boolean tickingList = false;
-  private final static Set<Entry> tileEntries = new LinkedHashSet<>();
-  private final static Set<Entry> pendingEntries = new LinkedHashSet<>();
+  private final static Set<Entry> tileEntries = new ObjectLinkedOpenHashSet<>();
+  private final static Set<Entry> pendingEntries = new ObjectLinkedOpenHashSet<>();
 
   public static void addEntry(Level level, BlockPos position) {
     ResourceKey<Level> dimension = level.dimension();
