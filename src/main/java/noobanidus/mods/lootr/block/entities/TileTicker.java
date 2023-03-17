@@ -63,6 +63,7 @@ public class TileTicker {
       }
     }
 
+    // TODO: Consider whether this entry already exists
     Entry newEntry = new Entry(dimension, position, chunks);
     synchronized (listLock) {
       if (tickingList) {
