@@ -100,7 +100,7 @@ public class TileTicker {
           Set<ChunkPos> loadedChunks = HandleChunk.LOADED_CHUNKS.get(entry.dimension);
           if (loadedChunks != null) {
             for (ChunkPos chunkPos : entry.getChunkPositions()) {
-              if (!loadedChunks.contains(chunkPos)) {
+              if (!loadedChunks.contains(chunkPos) || !level.getWorldBorder().isWithinBounds(chunkPos)) {
                 skip = true;
                 break;
               }
