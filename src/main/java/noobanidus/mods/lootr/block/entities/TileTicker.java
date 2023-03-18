@@ -60,8 +60,7 @@ public class TileTicker {
       }
     }
 
-    // TODO: Consider whether this entry already exists
-    Entry newEntry = new Entry(dimension, position, chunks);
+    Entry newEntry = new Entry(dimension, position, chunks, ServerLifecycleHooks.getCurrentServer().getTickCount());
     synchronized (listLock) {
       if (tickingList) {
         pendingEntries.add(newEntry);
@@ -152,11 +151,11 @@ public class TileTicker {
     private final Set<ChunkPos> chunks;
     private final long addedAt;
 
-    public Entry(ResourceKey<Level> dimension, BlockPos position, Set<ChunkPos> chunks) {
+    public Entry(ResourceKey<Level> dimension, BlockPos position, Set<ChunkPos> chunks, long addedAt) {
       this.dimension = dimension;
       this.position = position;
       this.chunks = chunks;
-      this.addedAt = ServerLifecycleHooks.getCurrentServer().getTickCount();
+      this.addedAt = addedAt;
     }
 
     public ResourceKey<Level> getDimension() {
