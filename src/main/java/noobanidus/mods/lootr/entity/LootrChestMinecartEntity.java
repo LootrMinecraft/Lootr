@@ -92,12 +92,12 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
 
   @Override
   public boolean isInvulnerableTo(DamageSource source) {
-    if (this.isInvulnerable() && source != DamageSource.OUT_OF_WORLD && !source.isCreativePlayer()) {
+    if (this.isInvulnerable() && source != DamageSource.OUT_OF_WORLD) {
       return true;
     }
 
-    if (source.getEntity() instanceof Player) {
-      if (source.getEntity().isShiftKeyDown()) {
+    if (source.getEntity() instanceof Player player) {
+      if (((ConfigManager.DISABLE_BREAK.get() && player.isCreative()) || !ConfigManager.DISABLE_BREAK.get()) && source.getEntity().isShiftKeyDown()) {
         return false;
       } else {
         ((Player) source.getEntity()).displayClientMessage(Component.translatable("lootr.message.cart_should_sneak").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))), false);
