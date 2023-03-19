@@ -80,8 +80,8 @@ public class ChestUtil {
         return;
       } else {
         int decayValue = DataStorage.getDecayValue(tileId);
-        if (decayValue > 0) {
-          player.displayClientMessage(Component.translatable("lootr.message.decay_in", decayValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), false);
+        if (decayValue > 0 && ConfigManager.shouldNotify(decayValue)) {
+          player.displayClientMessage(Component.translatable("lootr.message.decay_in", decayValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), true);
         } else if (decayValue == -1) {
           if (ConfigManager.isDecaying((ServerLevel) level, tile)) {
             startDecay(player, tileId, decayValue);
@@ -101,8 +101,8 @@ public class ChestUtil {
         notifyRefresh(player, tileId);
       }
       int refreshValue = DataStorage.getRefreshValue(tileId);
-      if (refreshValue > 0) {
-        player.displayClientMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), false);
+      if (refreshValue > 0 && ConfigManager.shouldNotify(refreshValue)) {
+        player.displayClientMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), true);
       } else if (refreshValue == -1) {
         if (ConfigManager.isRefreshing((ServerLevel) level, tile)) {
           startRefresh(player, tileId, refreshValue);
@@ -140,8 +140,8 @@ public class ChestUtil {
       return;
     } else {
       int decayValue = DataStorage.getDecayValue(tileId);
-      if (decayValue > 0) {
-        player.displayClientMessage(Component.translatable("lootr.message.decay_in", decayValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), false);
+      if (decayValue > 0 && ConfigManager.shouldNotify(decayValue)) {
+        player.displayClientMessage(Component.translatable("lootr.message.decay_in", decayValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), true);
       } else if (decayValue == -1) {
         if (ConfigManager.isDecaying((ServerLevel) level, cart)) {
           startDecay(player, tileId, decayValue);
@@ -155,8 +155,8 @@ public class ChestUtil {
       notifyRefresh(player, tileId);
     }
     int refreshValue = DataStorage.getRefreshValue(tileId);
-    if (refreshValue > 0) {
-      player.displayClientMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), false);
+    if (refreshValue > 0 && ConfigManager.shouldNotify(refreshValue)) {
+      player.displayClientMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), true);
     } else if (refreshValue == -1) {
       if (ConfigManager.isRefreshing((ServerLevel) level, cart)) {
         startRefresh(player, tileId, refreshValue);
@@ -186,8 +186,8 @@ public class ChestUtil {
         notifyRefresh(player, tileId);
       }
       int refreshValue = DataStorage.getRefreshValue(tileId);
-      if (refreshValue > 0) {
-        player.displayClientMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), false);
+      if (refreshValue > 0 && ConfigManager.shouldNotify(refreshValue)) {
+        player.displayClientMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), true);
       } else if (refreshValue == -1) {
         if (ConfigManager.isRefreshing((ServerLevel) level, tile)) {
           startRefresh(player, tileId, refreshValue);
@@ -221,22 +221,22 @@ public class ChestUtil {
   }
 
   private static void notifyDecay(Player player, UUID tileId) {
-    player.displayClientMessage(Component.translatable("lootr.message.decayed").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), false);
+    player.displayClientMessage(Component.translatable("lootr.message.decayed").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), true);
     DataStorage.removeDecayed(tileId);
   }
 
   private static void notifyRefresh(Player player, UUID tileId) {
     DataStorage.removeRefreshed(tileId);
-    player.displayClientMessage(Component.translatable("lootr.message.refreshed").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), false);
+    player.displayClientMessage(Component.translatable("lootr.message.refreshed").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), true);
   }
 
   private static void startDecay(Player player, UUID tileId, int decayValue) {
     DataStorage.setDecaying(tileId, ConfigManager.DECAY_VALUE.get());
-    player.displayClientMessage(Component.translatable("lootr.message.decay_start", ConfigManager.DECAY_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), false);
+    player.displayClientMessage(Component.translatable("lootr.message.decay_start", ConfigManager.DECAY_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), true);
   }
 
   private static void startRefresh(Player player, UUID tileId, int refreshValue) {
     DataStorage.setRefreshing(tileId, ConfigManager.REFRESH_VALUE.get());
-    player.displayClientMessage(Component.translatable("lootr.message.refresh_start", ConfigManager.REFRESH_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), false);
+    player.displayClientMessage(Component.translatable("lootr.message.refresh_start", ConfigManager.REFRESH_VALUE.get() / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), true);
   }
 }
