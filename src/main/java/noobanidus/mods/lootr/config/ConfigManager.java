@@ -94,6 +94,8 @@ public class ConfigManager {
 
   public static final ForgeConfigSpec.BooleanValue POWER_COMPARATORS;
   public static final ForgeConfigSpec.BooleanValue BLAST_RESISTANT;
+  public static final ForgeConfigSpec.IntValue NOTIFICATION_DELAY;
+  public static final ForgeConfigSpec.BooleanValue DISABLE_NOTIFICATIONS;
 
   // Client-only
   public static final ForgeConfigSpec.BooleanValue VANILLA_TEXTURES;
@@ -137,6 +139,8 @@ public class ConfigManager {
     DISABLE_BREAK = COMMON_BUILDER.comment("prevent the destruction of Lootr chests except while sneaking in creative mode").define("disable_break", false);
     POWER_COMPARATORS = COMMON_BUILDER.comment("when true, comparators on Lootr containers will give an output of 1; when false, they will give an output of 0").define("power_comparators", true);
     BLAST_RESISTANT = COMMON_BUILDER.comment("lootr chests cannot be destroyed by explosions").define("blast_resistant", false);
+    DISABLE_NOTIFICATIONS = COMMON_BUILDER.comment("prevent notifications of decaying or refreshed chests").define("disable_notifications", false);
+    NOTIFICATION_DELAY = COMMON_BUILDER.comment("maximum time (in ticks) remaining on a chest before a notification for refreshing or decaying is sent to a player (default 30 seconds, -1 for no delay)").defineInRange("notification_delay", 30 * 20, -1, Integer.MAX_VALUE);
 
     DECAY_VALUE = COMMON_BUILDER.comment("how long (in ticks) a decaying loot containers should take to decay (default 5 minutes = 5 * 60 * 20)").defineInRange("decay_value", 5 * 60 * 20, 0, Integer.MAX_VALUE);
     DECAY_LOOT_TABLES = COMMON_BUILDER.comment("list of loot tables which will decay (default blank, meaning no chests decay, in the format of (in the format of [\"modid:loot_table\", \"othermodid:other_loot_table\"])").defineList("decay_loot_tables", empty, validator);
@@ -396,6 +400,11 @@ public class ConfigManager {
       }
     }
     return isDimensionRefreshing(level.dimension());
+  }
+
+  public static boolean shouldNotify (int remaining) {
+    int delay = NOTIFICATION_DELAY.get();
+    return !DISABLE_NOTIFICATIONS.get() && (delay == -1 || remaining <= delay);
   }
 
   public static boolean isVanillaTextures () {
