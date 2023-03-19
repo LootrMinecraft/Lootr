@@ -93,6 +93,7 @@ public class ConfigManager {
 
   public static final ForgeConfigSpec.BooleanValue POWER_COMPARATORS;
   public static final ForgeConfigSpec.BooleanValue BLAST_RESISTANT;
+  public static final ForgeConfigSpec.BooleanValue BLAST_IMMUNE;
   public static final ForgeConfigSpec.IntValue NOTIFICATION_DELAY;
   public static final ForgeConfigSpec.BooleanValue DISABLE_NOTIFICATIONS;
 
@@ -137,7 +138,8 @@ public class ConfigManager {
     LOOT_STRUCTURE_BLACKLIST = COMMON_BUILDER.comment("list of structures in which contains shouldn't be converted (in the format of [\"modid:structure_name\", \"othermodid:other_structure_name\"])").defineList("loot_structure_blacklist", empty, validator);
     DISABLE_BREAK = COMMON_BUILDER.comment("prevent the destruction of Lootr chests except while sneaking in creative mode").define("disable_break", false);
     POWER_COMPARATORS = COMMON_BUILDER.comment("when true, comparators on Lootr containers will give an output of 1; when false, they will give an output of 0").define("power_comparators", true);
-    BLAST_RESISTANT = COMMON_BUILDER.comment("lootr chests cannot be destroyed by explosions").define("blast_resistant", false);
+    BLAST_RESISTANT = COMMON_BUILDER.comment("lootr chests cannot be destroyed by creeper or TNT explosions").define("blast_resistant", false);
+    BLAST_IMMUNE = COMMON_BUILDER.comment("lootr chests cannot be destroyed by any explosion").define("blast_immune", false);
     DISABLE_NOTIFICATIONS = COMMON_BUILDER.comment("prevent notifications of decaying or refreshed chests").define("disable_notifications", false);
     NOTIFICATION_DELAY = COMMON_BUILDER.comment("maximum time (in ticks) remaining on a chest before a notification for refreshing or decaying is sent to a player (default 30 seconds, -1 for no delay)").defineInRange("notification_delay", 30 * 20, -1, Integer.MAX_VALUE);
 
