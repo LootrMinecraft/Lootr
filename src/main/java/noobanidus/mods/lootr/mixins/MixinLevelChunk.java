@@ -12,12 +12,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LevelChunk.class)
 public class MixinLevelChunk {
-  @Inject(method="addAndRegisterBlockEntity", at=@At(value="RETURN"))
-  private void lootrAddAndRegisterBlockEntity (BlockEntity entity, CallbackInfo cir) {
+  @Inject(method = "updateBlockEntityTicker", at = @At(value = "HEAD"))
+  private void lootrUpdateBlockEntityTicker(BlockEntity entity, CallbackInfo cir) {
     if (entity instanceof RandomizableContainerBlockEntity && !(entity instanceof ILootBlockEntity)) {
-      LevelChunk levelChunk = (LevelChunk) (Object) this;
-      if (!levelChunk.getLevel().isClientSide() && levelChunk.getLevel().getWorldBorder().isWithinBounds(entity.getBlockPos())) {
-        TileTicker.addEntry(levelChunk.getLevel(), entity.getBlockPos());
+      LevelChunk level = (LevelChunk) (Object) this;
+      if (!level.getLevel().isClientSide() && level.getLevel().getWorldBorder().isWithinBounds(entity.getBlockPos())) {
+        TileTicker.addEntry(level.getLevel(), entity.getBlockPos());
       }
     }
   }
