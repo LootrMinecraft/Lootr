@@ -6,6 +6,7 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -22,6 +23,9 @@ public class HandleBreak {
 
     if (!event.getWorld().isClientSide()) {
       if (ModBlocks.specialLootChests.contains(event.getState().getBlock())) {
+        if (player instanceof FakePlayer && ConfigManager.ENABLE_FAKE_PLAYER_BREAK.get()) {
+          return;
+        }
         if (ConfigManager.DISABLE_BREAK.get()) {
           if (player.getAbilities().instabuild) {
             if (!player.isShiftKeyDown()) {
