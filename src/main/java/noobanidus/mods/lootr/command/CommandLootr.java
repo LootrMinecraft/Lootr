@@ -6,10 +6,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.ChestBlock;
+import net.minecraft.block.*;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.ISuggestionProvider;
@@ -19,6 +16,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootTables;
 import net.minecraft.state.EnumProperty;
+import net.minecraft.tileentity.BarrelTileEntity;
 import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -181,17 +179,30 @@ public class CommandLootr {
       BlockPos pos = new BlockPos(c.getSource().getPosition());
       World world = c.getSource().getLevel();
       BlockState state = world.getBlockState(pos);
-      if (!state.is(Blocks.CHEST)) {
+      if (!state.is(Blocks.CHEST) && !state.is(Blocks.BARREL)) {
         pos = pos.below();
         state = world.getBlockState(pos);
       }
-      if (!state.is(Blocks.CHEST)) {
+      if (!state.is(Blocks.CHEST) && !state.is(Blocks.BARREL)) {
         c.getSource().sendSuccess(new StringTextComponent("Please stand on the chest you wish to convert."), false);
       } else {
-        NonNullList<ItemStack> reference = ((ChestTileEntity) Objects.requireNonNull(world.getBlockEntity(pos))).items;
+        NonNullList<ItemStack> reference;
+        BlockState newBlock;
+        if (state.is(Blocks.CHEST)) {
+          reference = ((ChestTileEntity) Objects.requireNonNull(world.getBlockEntity(pos))).items;
+          newBlock = ModBlocks.INVENTORY.defaultBlockState().setValue(ChestBlock.FACING, state.getValue(ChestBlock.FACING)).setValue(ChestBlock.WATERLOGGED, state.getValue(ChestBlock.WATERLOGGED));
+        } else {
+          reference = ((BarrelTileEntity) Objects.requireNonNull(world.getBlockEntity(pos))).items;
+          Direction facing =  state.getValue(BarrelBlock.FACING);
+          if (facing == Direction.UP || facing == Direction.DOWN) {
+            facing = Direction.NORTH;
+          }
+          newBlock = ModBlocks.INVENTORY.defaultBlockState().setValue(ChestBlock.FACING, facing);
+        }
+
         NonNullList<ItemStack> custom = ChestUtil.copyItemList(reference);
         world.removeBlockEntity(pos);
-        world.setBlockAndUpdate(pos, ModBlocks.INVENTORY.defaultBlockState().setValue(ChestBlock.FACING, state.getValue(ChestBlock.FACING)).setValue(ChestBlock.WATERLOGGED, state.getValue(ChestBlock.WATERLOGGED)));
+        world.setBlockAndUpdate(pos, newBlock);
         TileEntity te = world.getBlockEntity(pos);
         if (!(te instanceof LootrInventoryTileEntity)) {
           c.getSource().sendSuccess(new StringTextComponent("Unable to convert chest, BlockState is not a Lootr Inventory block."), false);
