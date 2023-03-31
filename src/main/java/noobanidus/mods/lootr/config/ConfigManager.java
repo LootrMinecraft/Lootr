@@ -70,6 +70,7 @@ public class ConfigManager {
   public static final ForgeConfigSpec.BooleanValue VANILLA_TEXTURES;
   public static final ForgeConfigSpec.BooleanValue POWER_COMPARATORS;
   public static final ForgeConfigSpec.BooleanValue BLAST_RESISTANT;
+  public static final ForgeConfigSpec.IntValue MAXIMUM_AGE;
 
   private static Set<String> DECAY_MODS = null;
   private static Set<ResourceLocation> DECAY_TABLES = null;
@@ -88,6 +89,7 @@ public class ConfigManager {
 
   static {
     RANDOMISE_SEED = COMMON_BUILDER.comment("determine whether or not loot generated is the same for all players using the provided seed, or randomised per player").define("randomise_seed", true);
+    MAXIMUM_AGE = COMMON_BUILDER.comment("the maximum age for containers; entries above this age will be discarded [default: 180 * 20, 3 minutes]").defineInRange("maximum_age", 180 * 20, 0, Integer.MAX_VALUE);
     CONVERT_MINESHAFTS = COMMON_BUILDER.comment("whether or not mineshaft chest minecarts should be converted to standard loot chests").define("convert_mineshafts", true);
     CONVERT_QUARK = COMMON_BUILDER.comment("whether or not quark chests used in world generation for loot purposes should be replaced with Lootr chests").define("convert_quark", true);
     CONVERT_WOODEN_CHESTS = COMMON_BUILDER.comment("whether or not the entire forge:chests/wooden tag should be added to the conversion list for structures (if they are backed by LockableLootTileEntity)").define("convert_wooden_chests", true);
