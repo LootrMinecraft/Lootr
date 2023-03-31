@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.block.tile;
 
+import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import net.minecraft.block.BlockState;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.LockableLootTileEntity;
@@ -31,8 +32,8 @@ public class TileTicker {
   private final static Object listLock = new Object();
   private final static Object worldLock = new Object();
   private static boolean tickingList = false;
-  private final static Set<Entry> tileEntries = new LinkedHashSet<>();
-  private final static Set<Entry> pendingEntries = new LinkedHashSet<>();
+  private final static Set<Entry> tileEntries = new ObjectLinkedOpenHashSet<>();
+  private final static Set<Entry> pendingEntries = new ObjectLinkedOpenHashSet<>();
 
   public static void addEntry(World level, BlockPos position) {
     RegistryKey<World> dimension = level.dimension();
@@ -60,11 +61,11 @@ public class TileTicker {
     if (event.phase != TickEvent.Phase.END) {
       return;
     }
-    Set<Entry> toRemove = new HashSet<>();
+    Set<Entry> toRemove = new ObjectLinkedOpenHashSet<>();
     Set<Entry> copy;
     synchronized (listLock) {
       tickingList = true;
-      copy = new HashSet<>(tileEntries);
+      copy = new ObjectLinkedOpenHashSet<>(tileEntries);
       tickingList = false;
     }
     synchronized (worldLock) {
