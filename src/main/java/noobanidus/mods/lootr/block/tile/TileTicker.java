@@ -79,6 +79,7 @@ public class TileTicker {
 
         ServerChunkProvider provider = level.getChunkSource();
         ChunkPos pos = entry.getChunkPosition();
+        // TODO: On some servers this can cause chunk loading???
         Chunk chunk = (Chunk) provider.getChunk(pos.x, pos.z, ChunkStatus.FULL, false);
         if (chunk != null) {
           TileEntity tile = level.getBlockEntity(entry.getPosition());
