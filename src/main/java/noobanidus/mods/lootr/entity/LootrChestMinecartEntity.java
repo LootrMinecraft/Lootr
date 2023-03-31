@@ -40,6 +40,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.network.NetworkHooks;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.entity.ILootCart;
@@ -97,6 +98,9 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     }
 
     if (source.getEntity() instanceof Player player) {
+      if (player instanceof FakePlayer && ConfigManager.ENABLE_FAKE_PLAYER_BREAK.get()) {
+        return false;
+      }
       if (((ConfigManager.DISABLE_BREAK.get() && player.isCreative()) || !ConfigManager.DISABLE_BREAK.get()) && source.getEntity().isShiftKeyDown()) {
         return false;
       } else {
