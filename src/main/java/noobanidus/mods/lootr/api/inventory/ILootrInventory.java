@@ -21,6 +21,6 @@ public interface ILootrInventory extends IInventory, INamedContainerProvider {
   @Nullable
   BlockPos getPos();
 
-  NonNullList<ItemStack> getContents();
+  NonNullList<ItemStack> getInventoryContents();
 
 }
