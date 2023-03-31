@@ -32,11 +32,11 @@ public class LootCount implements LootItemCondition {
 
   @Override
   public boolean test(LootContext lootContext) {
-    Vec3 pos = lootContext.getParamOrNull(LootContextParams.ORIGIN);
-    if (pos == null) {
+    Vec3 incomingPos = lootContext.getParamOrNull(LootContextParams.ORIGIN);
+    if (incomingPos == null) {
       return false; // THIS SHOULD NEVER HAPPEN
     }
-    BlockPos position = new BlockPos(pos);
+    BlockPos position = new BlockPos((int) incomingPos.x, (int) incomingPos.y, (int) incomingPos.z);
     BlockEntity tileentity = lootContext.getLevel().getBlockEntity(position);
     if (tileentity instanceof ILootBlockEntity) {
       int count = ((ILootBlockEntity) tileentity).getOpeners().size() + 1; // Additional opener to include the current opener

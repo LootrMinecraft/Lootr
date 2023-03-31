@@ -14,8 +14,8 @@ import javax.annotation.Nullable;
 import java.util.concurrent.CompletableFuture;
 
 public class LootrItemTagsProvider extends ItemTagsProvider {
-  public LootrItemTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookup, TagsProvider<Block> blockTagsProvider, String modId, @org.jetbrains.annotations.Nullable net.minecraftforge.common.data.ExistingFileHelper existingFileHelper) {
-    super(output, lookup, blockTagsProvider, modId, existingFileHelper);
+  public LootrItemTagsProvider(PackOutput p_275343_, CompletableFuture<HolderLookup.Provider> p_275729_, CompletableFuture<TagsProvider.TagLookup<Block>> p_275322_, String modId, @org.jetbrains.annotations.Nullable net.minecraftforge.common.data.ExistingFileHelper existingFileHelper) {
+    super(p_275343_, p_275729_, p_275322_, modId, existingFileHelper);
   }
 
   @Override

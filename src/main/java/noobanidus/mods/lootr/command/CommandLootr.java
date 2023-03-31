@@ -16,6 +16,7 @@ import net.minecraft.commands.arguments.coordinates.Vec3Argument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -30,6 +31,7 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.block.LootrBarrelBlock;
@@ -81,7 +83,8 @@ public class CommandLootr {
 
   public static void createBlock(CommandSourceStack c, @Nullable Block block, @Nullable ResourceLocation table) {
     Level world = c.getLevel();
-    BlockPos pos = new BlockPos(c.getPosition());
+    Vec3  incomingPos = c.getPosition();
+    BlockPos pos = new BlockPos((int) incomingPos.x, (int) incomingPos.y, (int) incomingPos.z);
     if (table == null) {
       table = getTables().get(world.getRandom().nextInt(getTables().size()));
     }
@@ -182,7 +185,8 @@ public class CommandLootr {
       return 1;
     })));
     builder.then(Commands.literal("custom").executes(c -> {
-      BlockPos pos = new BlockPos(c.getSource().getPosition());
+      Vec3 incomingPos = c.getSource().getPosition();
+      BlockPos pos = new BlockPos((int) incomingPos.x, (int) incomingPos.y, (int) incomingPos.z);
       Level world = c.getSource().getLevel();
       BlockState state = world.getBlockState(pos);
       if (!state.is(Blocks.CHEST)) {
@@ -208,7 +212,8 @@ public class CommandLootr {
       return 1;
     }));
     builder.then(Commands.literal("id").executes(c -> {
-      BlockPos pos = new BlockPos(c.getSource().getPosition());
+      Vec3 incomingPos = c.getSource().getPosition();
+      BlockPos pos = new BlockPos((int) incomingPos.x, (int) incomingPos.y, (int) incomingPos.z);
       Level world = c.getSource().getLevel();
       BlockEntity te = world.getBlockEntity(pos);
       if (!(te instanceof ILootBlockEntity)) {
@@ -223,7 +228,8 @@ public class CommandLootr {
       return 1;
     }));
     builder.then(Commands.literal("refresh").executes(c -> {
-      BlockPos pos = new BlockPos(c.getSource().getPosition());
+      Vec3 incomingPos = c.getSource().getPosition();
+      BlockPos pos = new BlockPos((int) incomingPos.x, (int) incomingPos.y, (int) incomingPos.z);
       Level level = c.getSource().getLevel();
       BlockEntity be = level.getBlockEntity(pos);
       if (!(be instanceof ILootBlockEntity)) {
@@ -239,7 +245,8 @@ public class CommandLootr {
       return 1;
     }));
     builder.then(Commands.literal("decay").executes(c -> {
-      BlockPos pos = new BlockPos(c.getSource().getPosition());
+      Vec3 incomingPos = c.getSource().getPosition();
+      BlockPos pos = new BlockPos((int) incomingPos.x, (int) incomingPos.y, (int) incomingPos.z);
       Level level = c.getSource().getLevel();
       BlockEntity be = level.getBlockEntity(pos);
       if (!(be instanceof ILootBlockEntity)) {

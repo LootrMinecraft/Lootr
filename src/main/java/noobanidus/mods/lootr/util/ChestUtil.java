@@ -135,7 +135,7 @@ public class ChestUtil {
     ModAdvancements.CART_PREDICATE.trigger((ServerPlayer) player, cart.getUUID());
     UUID tileId = cart.getUUID();
     if (DataStorage.isDecayed(tileId)) {
-      cart.destroy(DamageSource.OUT_OF_WORLD);
+      cart.destroy(cart.damageSources().outOfWorld());
       notifyDecay(player, tileId);
       return;
     } else {

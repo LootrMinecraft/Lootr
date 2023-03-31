@@ -52,7 +52,7 @@ public class Lootr {
   public void onCreativeTabRegister(CreativeModeTabEvent.Register event) {
     TAB = event.registerCreativeModeTab(new ResourceLocation(LootrAPI.MODID, "tab"), builder -> builder.icon(() -> new ItemStack(ModBlocks.CHEST.get()))
             .title(Component.translatable("itemGroup.lootr"))
-            .displayItems((features, output, hasPermissions) -> {
+            .displayItems((params, output) -> {
               output.accept(new ItemStack(ModBlocks.TROPHY.get()));
             })
     );
