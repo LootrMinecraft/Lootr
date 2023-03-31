@@ -55,6 +55,8 @@ public class ConfigManager {
   public static final ForgeConfigSpec.IntValue REFRESH_VALUE;
   public static final ForgeConfigSpec.BooleanValue DECAY_ALL;
   public static final ForgeConfigSpec.BooleanValue REFRESH_ALL;
+  public static final ForgeConfigSpec.IntValue NOTIFICATION_DELAY;
+  public static final ForgeConfigSpec.BooleanValue DISABLE_NOTIFICATIONS;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> ADDITIONAL_CHESTS;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> ADDITIONAL_TRAPPED_CHESTS;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DIMENSION_WHITELIST;
@@ -119,6 +121,9 @@ public class ConfigManager {
     REFRESH_MODIDS = COMMON_BUILDER.comment("list of mod IDs whose loot tables will refresh [default blank, meaning no chests refresh, in the format of 'modid', 'modid']").defineList("refresh_modids", empty, o -> o instanceof String);
     REFRESH_DIMENSIONS = COMMON_BUILDER.comment("list of dimensions where loot chests should automatically refresh [default: blank, e.g., minecraft:overworld]").defineList("refresh_dimensions", empty, validator);
     REFRESH_ALL = COMMON_BUILDER.comment("overriding refresh_loot_tables, refresh_modids and refresh_dimensions: all chests will refresh after being opened for the first time").define("refresh_all", false);
+
+    DISABLE_NOTIFICATIONS = COMMON_BUILDER.comment("prevent notifications of decaying or refreshed chests").define("disable_notifications", false);
+    NOTIFICATION_DELAY = COMMON_BUILDER.comment("maximum time (in ticks) remaining on a chest before a notification for refreshing or decaying is sent to a player (default 30 seconds, -1 for no delay)").defineInRange("notification_delay", 30 * 20, -1, Integer.MAX_VALUE);
     COMMON_CONFIG = COMMON_BUILDER.build();
 
     VANILLA_TEXTURES = CLIENT_BUILDER.comment("set to true to use vanilla textures instead of Lootr special textures. Note: this will prevent previously opened chests from rendering differently").define("vanilla_textures", false);
@@ -427,7 +432,12 @@ public class ConfigManager {
     return state;
   }
 
-  public static boolean isVanillaTextures () {
+  public static boolean isVanillaTextures() {
     return VANILLA_TEXTURES.get();
+  }
+
+  public static boolean shouldNotify(int remaining) {
+    int delay = NOTIFICATION_DELAY.get();
+    return !DISABLE_NOTIFICATIONS.get() && (delay == -1 || remaining <= delay);
   }
 }
