@@ -5,7 +5,6 @@ import net.minecraft.world.Container;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
-import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -22,6 +21,6 @@ public interface ILootrInventory extends Container, MenuProvider {
   @Nullable
   BlockPos getPos();
 
-  NonNullList<ItemStack> getContents();
+  NonNullList<ItemStack> getInventoryContents();
 
 }

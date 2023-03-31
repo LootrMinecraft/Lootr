@@ -217,7 +217,7 @@ public class SpecialChestInventory implements ILootrInventory {
   }
 
   @Override
-  public NonNullList<ItemStack> getContents() {
+  public NonNullList<ItemStack> getInventoryContents() {
     return this.contents;
   }
 }
