@@ -51,6 +51,7 @@ public class ConfigManager {
   public static final ForgeConfigSpec.BooleanValue CONVERT_WOODEN_CHESTS;
   public static final ForgeConfigSpec.BooleanValue CONVERT_TRAPPED_CHESTS;
   public static final ForgeConfigSpec.BooleanValue DISABLE_BREAK;
+  public static final ForgeConfigSpec.BooleanValue ENABLE_FAKE_PLAYER_BREAK;
   public static final ForgeConfigSpec.IntValue DECAY_VALUE;
   public static final ForgeConfigSpec.IntValue REFRESH_VALUE;
   public static final ForgeConfigSpec.BooleanValue DECAY_ALL;
@@ -107,6 +108,8 @@ public class ConfigManager {
     LOOT_TABLE_BLACKLIST = COMMON_BUILDER.comment("list of loot tables which shouldn't be converted [in the format of modid:loot_table]").defineList("loot_table_blacklist", empty, validator);
     LOOT_MODID_BLACKLIST = COMMON_BUILDER.comment("list of modids which shouldn't be converted [in the format of modid, modid]").defineList("loot_mod_blacklist", empty, o -> o instanceof String);
     DISABLE_BREAK = COMMON_BUILDER.comment("prevent the destruction of Lootr chests except while sneaking in creative mode").define("disable_break", false);
+    ENABLE_FAKE_PLAYER_BREAK = COMMON_BUILDER.comment("allows fake players to destroy Lootr chests without having to sneak, overrides the `disable_break` option for fake players").define("enable_fake_player_break", false);
+
     POWER_COMPARATORS = COMMON_BUILDER.comment("when true, comparators on Lootr containers will give an output of 1; when false, they will give an output of 0").define("power_comparators", true);
     BLAST_RESISTANT = COMMON_BUILDER.comment("lootr chests cannot be destroyed by creeper or TNT explosions").define("blast_resistant", false);
     BLAST_IMMUNE = COMMON_BUILDER.comment("lootr chests cannot be destroyed by any explosion").define("blast_immune", false);

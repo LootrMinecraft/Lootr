@@ -5,6 +5,7 @@ import net.minecraft.util.Util;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -21,6 +22,9 @@ public class HandleBreak {
 
     if (!event.getWorld().isClientSide()) {
       if (ModBlocks.LOOT_CONTAINERS.contains(event.getState().getBlock())) {
+        if (player instanceof FakePlayer && ConfigManager.ENABLE_FAKE_PLAYER_BREAK.get()) {
+          return;
+        }
         if (ConfigManager.DISABLE_BREAK.get()) {
           if (player.abilities.instabuild) {
             if (!player.isShiftKeyDown()) {
