@@ -41,6 +41,7 @@ public class ModBlocks {
 
   private static Set<Block> specialLootChests = null;
 
+  // TODO: Migrate this to a tag
   public static Set<Block> getSpecialLootChests () {
    if (specialLootChests == null) {
     specialLootChests = Sets.newHashSet(CHEST.get(), BARREL.get(), TRAPPED_CHEST.get(), SHULKER.get(), INVENTORY.get());
