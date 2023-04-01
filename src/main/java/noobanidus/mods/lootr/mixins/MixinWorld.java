@@ -14,10 +14,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinWorld {
   @Inject(method = "addBlockEntity", at = @At(target = "Lnet/minecraft/tileentity/TileEntity;onLoad()V", value = "INVOKE", shift = At.Shift.AFTER))
   protected void lootrAddBlockEntity(TileEntity tile, CallbackInfoReturnable<Boolean> cir) {
+    World world = (World) (Object) this;
+    if (world.isClientSide()) {
+      return;
+    }
+
     if (!(tile instanceof LockableLootTileEntity) || tile instanceof ILootTile) {
       return;
     }
 
-    TileTicker.addEntry((World) (Object) this, tile.getBlockPos());
+    TileTicker.addEntry(world, tile.getBlockPos());
   }
 }
