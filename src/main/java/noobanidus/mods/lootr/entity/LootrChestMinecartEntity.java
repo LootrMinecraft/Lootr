@@ -99,7 +99,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     }
 
     if (source.getEntity() instanceof Player player) {
-      if (player instanceof FakePlayer && ConfigManager.ENABLE_FAKE_PLAYER_BREAK.get()) {
+      if ((player instanceof FakePlayer && ConfigManager.ENABLE_FAKE_PLAYER_BREAK.get()) || ConfigManager.ENABLE_BREAK.get()) {
         return false;
       }
       if (((ConfigManager.DISABLE_BREAK.get() && player.isCreative()) || !ConfigManager.DISABLE_BREAK.get()) && source.getEntity().isShiftKeyDown()) {
