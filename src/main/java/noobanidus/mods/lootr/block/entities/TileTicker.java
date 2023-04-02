@@ -40,9 +40,6 @@ public class TileTicker {
     ChunkPos chunkPos = new ChunkPos(position);
 
     WorldBorder border = level.getWorldBorder();
-    if (!border.isWithinBounds(chunkPos)) {
-      return;
-    }
 
     Set<ChunkPos> chunks = new ObjectLinkedOpenHashSet<>();
     chunks.add(chunkPos);
@@ -54,9 +51,13 @@ public class TileTicker {
     for (int x = -2; x <= 2; x++) {
       for (int z = -2; z <= 2; z++) {
         ChunkPos newPos = new ChunkPos(oX + x, oZ + z);
-        if (border.isWithinBounds(newPos)) {
-          chunks.add(newPos);
+        // This has the potential to force-load chunks on the main thread
+        // by ignoring the loading state of chunks outside the world border.
+        if (ConfigManager.CHECK_WORLD_BORDER.get() && !border.isWithinBounds(newPos)) {
+          continue;
         }
+
+        chunks.add(newPos);
       }
     }
 
@@ -86,7 +87,7 @@ public class TileTicker {
       MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
       for (Entry entry : copy) {
         ServerLevel level = server.getLevel(entry.getDimension());
-        if (level == null || entry.age(server) > ConfigManager.MAXIMUM_AGE.get() || !level.getWorldBorder().isWithinBounds(entry.getPosition())) {
+        if (level == null || entry.age(server) > ConfigManager.MAXIMUM_AGE.get() || (ConfigManager.CHECK_WORLD_BORDER.get() && !level.getWorldBorder().isWithinBounds(entry.getPosition()))) {
           toRemove.add(entry);
           continue;
         }
@@ -96,7 +97,7 @@ public class TileTicker {
           Set<ChunkPos> loadedChunks = HandleChunk.LOADED_CHUNKS.get(entry.dimension);
           if (loadedChunks != null) {
             for (ChunkPos chunkPos : entry.getChunkPositions()) {
-              if (!loadedChunks.contains(chunkPos) || !level.getWorldBorder().isWithinBounds(chunkPos)) {
+              if (!loadedChunks.contains(chunkPos)) {
                 skip = true;
                 break;
               }
