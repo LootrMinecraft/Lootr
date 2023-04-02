@@ -23,7 +23,7 @@ public class HandleBreak {
 
     if (!event.getLevel().isClientSide()) {
       if (ModBlocks.getSpecialLootChests().contains(event.getState().getBlock())) {
-        if (player instanceof FakePlayer && ConfigManager.ENABLE_FAKE_PLAYER_BREAK.get()) {
+        if ((player instanceof FakePlayer && ConfigManager.ENABLE_FAKE_PLAYER_BREAK.get()) || ConfigManager.ENABLE_BREAK.get()) {
           return;
         }
         if (ConfigManager.DISABLE_BREAK.get()) {
