@@ -7,7 +7,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.border.WorldBorder;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraftforge.common.DimensionManager;
@@ -32,11 +34,17 @@ public class TileTicker {
   private final static Set<Entry> tileEntries = new LinkedHashSet<>();
   private final static Set<Entry> pendingEntries = new LinkedHashSet<>();
 
-  public static void addEntry(int dimension, BlockPos position) {
-    if (ConfigManager.isDimensionBlocked(dimension)) {
+  public static void addEntry(World world, BlockPos position) {
+    if (ConfigManager.isDimensionBlocked(world.provider.getDimension())) {
       return;
     }
-    Entry newEntry = new Entry(dimension, position);
+
+    WorldBorder border = world.getWorldBorder();
+    if (!border.contains(position)) {
+      return;
+    }
+
+    Entry newEntry = new Entry(world.provider.getDimension(), position);
     synchronized (listLock) {
       if (tickingList) {
         pendingEntries.add(newEntry);
@@ -62,7 +70,7 @@ public class TileTicker {
           return;
         for (Entry entry : copy) {
           WorldServer level = DimensionManager.getWorld(entry.getDimension(), false);
-          if (level == null) {
+          if (level == null || !level.getWorldBorder().contains(entry.getChunkPosition())) {
             toRemove.add(entry);
             continue;
           }
@@ -131,6 +139,24 @@ public class TileTicker {
 
     public ChunkPos getChunkPosition() {
       return chunkPos;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+
+      Entry entry = (Entry) o;
+
+      if (dimension != entry.dimension) return false;
+      return position.equals(entry.position);
+    }
+
+    @Override
+    public int hashCode() {
+      int result = dimension;
+      result = 31 * result + position.hashCode();
+      return result;
     }
   }
 }
