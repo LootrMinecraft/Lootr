@@ -29,6 +29,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.FakePlayer;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.entity.ILootCart;
 import noobanidus.mods.lootr.config.ConfigManager;
@@ -81,12 +82,16 @@ public class LootrChestMinecartEntity extends EntityMinecartContainer implements
 
   @Override
   public boolean isEntityInvulnerable(DamageSource source) {
-    if (this.getIsInvulnerable() && source != DamageSource.OUT_OF_WORLD && !source.isCreativePlayer()) {
+    if (this.getIsInvulnerable() && source != DamageSource.OUT_OF_WORLD) {
       return true;
     }
 
+    if(source.getTrueSource() instanceof FakePlayer)
+      return false;
+
     if (source.getTrueSource() instanceof EntityPlayer) {
-      if (source.getTrueSource().isSneaking()) {
+      EntityPlayer player = (EntityPlayer) source.getTrueSource();
+      if (((ConfigManager.DISABLE_BREAK && player.isCreative()) || !ConfigManager.DISABLE_BREAK) && source.getTrueSource().isSneaking()) {
         return false;
       } else {
         source.getTrueSource().sendMessage(new TextComponentTranslation("lootr.message.cart_should_sneak").setStyle(new Style().setColor(TextFormatting.AQUA)));

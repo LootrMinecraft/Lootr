@@ -40,6 +40,8 @@ public class ConfigManager {
   public static boolean CONVERT_MINESHAFTS = true;
   @Config.Comment("prevent the destruction of Lootr chests except while sneaking in creative mode")
   public static boolean DISABLE_BREAK = false;
+  @Config.Comment("allows fake players to destroy Lootr chests without having to sneak, overrides the `disable_break` option for fake players")
+  public static boolean ENABLE_FAKE_PLAYER_BREAK = false;
   @Config.Comment("how long (in ticks) a decaying loot containers should take to decay [default 5 minutes = 5 * 60 * 20]")
   @Config.RangeInt(min = 0)
   public static int DECAY_VALUE = 5 * 60 * 20;
