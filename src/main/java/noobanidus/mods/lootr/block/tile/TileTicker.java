@@ -36,6 +36,9 @@ public class TileTicker {
   private final static Set<Entry> pendingEntries = new ObjectLinkedOpenHashSet<>();
 
   public static void addEntry(World world, BlockPos position) {
+    if(world.isRemote)
+      return;
+
     if (ConfigManager.isDimensionBlocked(world.provider.getDimension())) {
       return;
     }
