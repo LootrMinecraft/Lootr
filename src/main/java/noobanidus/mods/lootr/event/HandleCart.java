@@ -51,6 +51,7 @@ public class HandleCart {
           chunk.addEntity(lootr);
         }
         event.setCanceled(true);
+        chest.dropContentsWhenDead = false;
         chest.setDead();
         //EntityTicker.addEntity(lootr);
       }
