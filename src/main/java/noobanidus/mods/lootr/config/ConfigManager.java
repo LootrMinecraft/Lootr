@@ -38,10 +38,6 @@ public class ConfigManager {
   public static boolean RANDOMISE_SEED = true;
   @Config.Comment("whether or not mineshaft chest minecarts should be converted to standard loot chests")
   public static boolean CONVERT_MINESHAFTS = true;
-  @Config.Comment("list of blocks to convert when the above option is enabled [default: blank, meaning convert all, format e.g. minecraft:chest]")
-  public static String[] LOOTABLE_TE_WHITELIST = new String[0];
-  @Config.Comment("list of blocks not to convert when the above option is enabled [default: bank, meaning convert all, format e.g. minecraft:chest]")
-  public static String[] LOOTABLE_TE_BLACKLIST = new String[0];
   @Config.Comment("prevent the destruction of Lootr chests except while sneaking in creative mode")
   public static boolean DISABLE_BREAK = false;
   @Config.Comment("how long (in ticks) a decaying loot containers should take to decay [default 5 minutes = 5 * 60 * 20]")
@@ -54,7 +50,7 @@ public class ConfigManager {
   public static boolean DECAY_ALL = false;
   @Config.Comment("overriding refresh_loot_tables, refresh_modids and refresh_dimensions: all chests will refresh after being opened for the first time")
   public static boolean REFRESH_ALL = false;
-  @Config.Comment("Whether or not ADDITIONAL_CHESTS and ADDITIONAL_TRAPPED_CHESTS below are blacklists instead of whitelists")
+  @Config.Comment("Whether or not ADDITIONAL_CHESTS and ADDITIONAL_TRAPPED_CHESTS are blacklists instead of whitelists")
   public static boolean CONVERT_ALL_LOOTABLES_EXCEPT_BELOW = true;
   @Config.Comment("a list of additional chests that should/should not be converted [in the format of modid:name, must be a tile entity instance of TileEntityLockableLoot]")
   public static String[] ADDITIONAL_CHESTS = new String[] {
