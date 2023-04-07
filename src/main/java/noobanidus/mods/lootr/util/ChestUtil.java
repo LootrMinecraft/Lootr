@@ -85,7 +85,7 @@ public class ChestUtil {
         return false;
       } else {
         int decayValue = DataStorage.getDecayValue(tileId);
-        if (decayValue > 0) {
+        if (decayValue > 0 && ConfigManager.shouldNotify(decayValue)) {
           player.sendStatusMessage(new TextComponentTranslation("lootr.message.decay_in", decayValue / 20).setStyle(new Style().setColor(TextFormatting.RED).setBold(true)), true);
         } else if (decayValue == -1) {
           if (ConfigManager.isDecaying(world, (ILootTile) te)) {
@@ -101,7 +101,7 @@ public class ChestUtil {
         player.sendStatusMessage(new TextComponentTranslation("lootr.message.refreshed").setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)), true);
       }
       int refreshValue = DataStorage.getRefreshValue(tileId);
-      if (refreshValue > 0) {
+      if (refreshValue > 0 && ConfigManager.shouldNotify(refreshValue)) {
         player.sendStatusMessage(new TextComponentTranslation("lootr.message.refresh_in", refreshValue / 20).setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)), true);
       } else if (refreshValue == -1) {
         if (ConfigManager.isRefreshing(world, (ILootTile) te)) {
@@ -131,7 +131,7 @@ public class ChestUtil {
           return;
         } else {
           int decayValue = DataStorage.getDecayValue(tileId);
-          if (decayValue > 0) {
+          if (decayValue > 0 && ConfigManager.shouldNotify(decayValue)) {
             player.sendStatusMessage(new TextComponentTranslation("lootr.message.decay_in", decayValue / 20).setStyle(new Style().setColor(TextFormatting.RED).setBold(true)), true);
           } else if (decayValue == -1) {
             if (ConfigManager.isDecaying(world, cart)) {
@@ -152,7 +152,7 @@ public class ChestUtil {
           player.sendStatusMessage(new TextComponentTranslation("lootr.message.refreshed").setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)), true);
         }
         int refreshValue = DataStorage.getRefreshValue(tileId);
-        if (refreshValue > 0) {
+        if (refreshValue > 0 && ConfigManager.shouldNotify(refreshValue)) {
           player.sendStatusMessage(new TextComponentTranslation("lootr.message.refresh_in", refreshValue / 20).setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)), true);
         } else if (refreshValue == -1) {
           if (ConfigManager.isRefreshing(world, cart)) {
@@ -189,7 +189,7 @@ public class ChestUtil {
         return false;
       } else {
         int decayValue = DataStorage.getDecayValue(tileId);
-        if (decayValue > 0) {
+        if (decayValue > 0 && ConfigManager.shouldNotify(decayValue)) {
           player.sendStatusMessage(new TextComponentTranslation("lootr.message.decay_in", decayValue / 20).setStyle(new Style().setColor(TextFormatting.RED).setBold(true)), true);
         } else if (decayValue == -1) {
           if (ConfigManager.isDecaying(world, (ILootTile) te)) {
@@ -205,7 +205,7 @@ public class ChestUtil {
         player.sendStatusMessage(new TextComponentTranslation("lootr.message.refreshed").setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)), true);
       }
       int refreshValue = DataStorage.getRefreshValue(tileId);
-      if (refreshValue > 0) {
+      if (refreshValue > 0 && ConfigManager.shouldNotify(refreshValue)) {
         player.sendStatusMessage(new TextComponentTranslation("lootr.message.refresh_in", refreshValue / 20).setStyle(new Style().setColor(TextFormatting.BLUE).setBold(true)), true);
       } else if (refreshValue == -1) {
         if (ConfigManager.isRefreshing(world, (ILootTile) te)) {

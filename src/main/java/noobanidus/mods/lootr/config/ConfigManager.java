@@ -89,6 +89,13 @@ public class ConfigManager {
   @Config.Comment("when true, Lootr chests will output a comparator value of 0 instead of 1")
   public static boolean ZERO_COMPARATOR = false;
 
+  @Config.Comment("prevent notifications of decaying or refreshed chests")
+  public static boolean DISABLE_NOTIFICATIONS = false;
+
+  @Config.Comment("maximum time (in ticks) remaining on a chest before a notification for refreshing or decaying is sent to a player (default 30 seconds, -1 for no delay)")
+  @Config.RangeInt(min = -1)
+  public static int NOTIFICATION_DELAY = 30 * 20;
+
   private static Set<String> DECAY_MODS = null;
   private static Set<ResourceLocation> DECAY_TABLES = null;
   private static Set<String> REFRESH_MODS = null;
@@ -373,6 +380,11 @@ public class ConfigManager {
 
   public static boolean isVanillaTextures () {
     return VANILLA_TEXTURES;
+  }
+
+  public static boolean shouldNotify(int remaining) {
+    int delay = NOTIFICATION_DELAY;
+    return !DISABLE_NOTIFICATIONS && (delay == -1 || remaining <= delay);
   }
 
   public static int getDecayValue() {
