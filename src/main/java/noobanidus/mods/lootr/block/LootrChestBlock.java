@@ -108,7 +108,9 @@ public class LootrChestBlock extends BlockChest {
 
   @Override
   public float getExplosionResistance(World world, BlockPos pos, @Nullable Entity exploder, Explosion explosion) {
-    if(ConfigManager.BLAST_RESISTANT)
+    if(ConfigManager.BLAST_IMMUNE)
+      return Float.MAX_VALUE;
+    else if(ConfigManager.BLAST_RESISTANT)
       return 16.0f;
     else
       return super.getExplosionResistance(world, pos, exploder, explosion);
