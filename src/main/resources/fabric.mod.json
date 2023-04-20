@@ -11,7 +11,7 @@
   ],
   "contact": {
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/lootr-fabric",
-    "sources": "https://github.com/noobanidus/Lootr/tree/fabric-1.19.3",
+    "sources": "https://github.com/noobanidus/Lootr/tree/fabric-1.19.4",
     "issues": "https://github.com/noobanidus/Lootr/issues"
   },
 
@@ -37,7 +37,7 @@
   "depends": {
     "fabricloader": ">=0.12.12",
     "fabric": "*",
-    "minecraft": "~1.19.3",
+    "minecraft": "~1.19.4",
     "java": ">=17",
     "cloth-config2": ">=6.1.48"
   },

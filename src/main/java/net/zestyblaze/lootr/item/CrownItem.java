@@ -11,6 +11,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.crafting.Ingredient;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -19,29 +20,29 @@ public class CrownItem extends ArmorItem {
     private final Multimap<Attribute, AttributeModifier> modifiers;
 
     public CrownItem(Properties properties) {
-        super(CrownArmourMaterial.INSTANCE, EquipmentSlot.HEAD, properties);
+        super(CrownArmourMaterial.INSTANCE, Type.HELMET, properties);
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-        builder.put(Attributes.ARMOR, new AttributeModifier(HELM_UUID, "Armour modifier", CrownArmourMaterial.INSTANCE.getDefenseForSlot(EquipmentSlot.HEAD), AttributeModifier.Operation.ADDITION));
+        builder.put(Attributes.ARMOR, new AttributeModifier(HELM_UUID, "Armour modifier", CrownArmourMaterial.INSTANCE.getDefenseForType(Type.HELMET), AttributeModifier.Operation.ADDITION));
         builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(HELM_UUID, "Armour toughness", CrownArmourMaterial.INSTANCE.getToughness(), AttributeModifier.Operation.ADDITION));
         builder.put(Attributes.LUCK, new AttributeModifier(HELM_UUID, "Crown luck", 2, AttributeModifier.Operation.ADDITION));
         this.modifiers = builder.build();
     }
 
     @Override
-    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot pEquipmentSlot) {
-        return pEquipmentSlot == this.slot ? this.modifiers : super.getDefaultAttributeModifiers(pEquipmentSlot);
+    public @NotNull Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot pEquipmentSlot) {
+        return pEquipmentSlot == this.type.getSlot() ? this.modifiers : super.getDefaultAttributeModifiers(pEquipmentSlot);
     }
     
     public static class CrownArmourMaterial implements ArmorMaterial {
         public static final CrownArmourMaterial INSTANCE = new CrownArmourMaterial();
 
         @Override
-        public int getDurabilityForSlot(EquipmentSlot slot) {
+        public int getDurabilityForType(Type type) {
             return 0;
         }
 
         @Override
-        public int getDefenseForSlot(EquipmentSlot slot) {
+        public int getDefenseForType(Type type) {
             return 2;
         }
 
@@ -51,17 +52,17 @@ public class CrownItem extends ArmorItem {
         }
 
         @Override
-        public SoundEvent getEquipSound() {
+        public @NotNull SoundEvent getEquipSound() {
             return SoundEvents.ARMOR_EQUIP_GOLD;
         }
 
         @Override
-        public Ingredient getRepairIngredient() {
+        public @NotNull Ingredient getRepairIngredient() {
             return Ingredient.EMPTY;
         }
 
         @Override
-        public String getName() {
+        public @NotNull String getName() {
             return "crown";
         }
 

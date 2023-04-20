@@ -23,7 +23,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
@@ -72,7 +71,7 @@ public class LootrCommandInit {
 
     public static void createBlock(CommandSourceStack c, @Nullable Block block, @Nullable ResourceLocation table) {
         Level world = c.getLevel();
-        BlockPos pos = new BlockPos(c.getPosition());
+        BlockPos pos = BlockPos.containing(c.getPosition());
         if (table == null) {
             table = getTables().get(world.getRandom().nextInt(getTables().size()));
         }
@@ -173,7 +172,7 @@ public class LootrCommandInit {
             return 1;
         })));
         builder.then(Commands.literal("custom").executes(c -> {
-            BlockPos pos = new BlockPos(c.getSource().getPosition());
+            BlockPos pos = BlockPos.containing(c.getSource().getPosition());
             Level world = c.getSource().getLevel();
             BlockState state = world.getBlockState(pos);
             if (!state.is(Blocks.CHEST) && !state.is(Blocks.BARREL)) {
@@ -208,7 +207,7 @@ public class LootrCommandInit {
             return 1;
         }));
         builder.then(Commands.literal("id").executes(c -> {
-            BlockPos pos = new BlockPos(c.getSource().getPosition());
+            BlockPos pos = BlockPos.containing(c.getSource().getPosition());
             Level world = c.getSource().getLevel();
             BlockEntity te = world.getBlockEntity(pos);
             if (!(te instanceof ILootBlockEntity)) {
@@ -223,7 +222,7 @@ public class LootrCommandInit {
             return 1;
         }));
         builder.then(Commands.literal("refresh").executes(c -> {
-            BlockPos pos = new BlockPos(c.getSource().getPosition());
+            BlockPos pos = BlockPos.containing(c.getSource().getPosition());
             Level level = c.getSource().getLevel();
             BlockEntity be = level.getBlockEntity(pos);
             if (!(be instanceof ILootBlockEntity)) {
@@ -239,7 +238,7 @@ public class LootrCommandInit {
             return 1;
         }));
         builder.then(Commands.literal("decay").executes(c -> {
-            BlockPos pos = new BlockPos(c.getSource().getPosition());
+            BlockPos pos = BlockPos.containing(c.getSource().getPosition());
             Level level = c.getSource().getLevel();
             BlockEntity be = level.getBlockEntity(pos);
             if (!(be instanceof ILootBlockEntity)) {

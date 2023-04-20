@@ -12,6 +12,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraft.world.phys.Vec3;
 import net.zestyblaze.lootr.api.blockentity.ILootBlockEntity;
 import net.zestyblaze.lootr.registry.LootrLootInit;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -26,7 +27,7 @@ public class LootCount implements LootItemCondition {
     }
 
     @Override
-    public LootItemConditionType getType() {
+    public @NotNull LootItemConditionType getType() {
         return LootrLootInit.LOOT_COUNT;
     }
 
@@ -36,7 +37,7 @@ public class LootCount implements LootItemCondition {
         if (pos == null) {
             return false; // THIS SHOULD NEVER HAPPEN
         }
-        BlockPos position = new BlockPos(pos);
+        BlockPos position = BlockPos.containing(pos);
         BlockEntity tileentity = lootContext.getLevel().getBlockEntity(position);
         if (tileentity instanceof ILootBlockEntity) {
             int count = ((ILootBlockEntity) tileentity).getOpeners().size() + 1; // Additional opener to include the current opener
@@ -50,7 +51,7 @@ public class LootCount implements LootItemCondition {
     }
 
     @Override
-    public Set<LootContextParam<?>> getReferencedContextParams() {
+    public @NotNull Set<LootContextParam<?>> getReferencedContextParams() {
         return ImmutableSet.of(LootContextParams.ORIGIN);
     }
 
@@ -65,7 +66,7 @@ public class LootCount implements LootItemCondition {
         }
 
         @Override
-        public LootCount deserialize(JsonObject object, JsonDeserializationContext context) {
+        public @NotNull LootCount deserialize(JsonObject object, JsonDeserializationContext context) {
             JsonArray objects = object.get("operations").getAsJsonArray();
             List<Operation> operations = new ArrayList<>();
             for (JsonElement element : objects) {

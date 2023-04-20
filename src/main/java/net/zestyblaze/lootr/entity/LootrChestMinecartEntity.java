@@ -17,6 +17,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.piglin.PiglinAi;
@@ -91,7 +92,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
 
     @Override
     public boolean isInvulnerableTo(DamageSource source) {
-        if (this.isInvulnerable() && source != DamageSource.OUT_OF_WORLD && !source.isCreativePlayer()) {
+        if (this.isInvulnerable() && source != this.damageSources().outOfWorld() && !source.isCreativePlayer()) {
             return true;
         }
 
