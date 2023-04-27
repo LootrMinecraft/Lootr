@@ -326,12 +326,16 @@ public class ConfigManager {
     if (block != null) {
       if(replacements.containsKey(block))
         return;
-      if(!block.hasTileEntity(block.getDefaultState()))
-        return;
-      TileEntity tile = block.createTileEntity(world, block.getDefaultState());
-      if (tile instanceof TileEntityLockableLoot && !(tile instanceof ILootTile)) {
-        Lootr.LOG.info("Added " + block.getRegistryName() + " to the Lootr block replacement list.");
-        replacements.put(block, replacement);
+      try {
+        if(!block.hasTileEntity(block.getDefaultState()))
+          return;
+        TileEntity tile = block.createTileEntity(world, block.getDefaultState());
+        if (tile instanceof TileEntityLockableLoot && !(tile instanceof ILootTile)) {
+          Lootr.LOG.info("Added " + block.getRegistryName() + " to the Lootr block replacement list.");
+          replacements.put(block, replacement);
+        }
+      } catch(RuntimeException e) {
+        Lootr.LOG.warn("Unable to check if {} should be a Lootr-replaceable block: {}", location, e);
       }
     }
   }
