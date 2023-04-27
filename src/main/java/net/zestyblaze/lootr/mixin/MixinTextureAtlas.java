@@ -1,23 +1,23 @@
 package net.zestyblaze.lootr.mixin;
 
+import net.minecraft.client.renderer.texture.SpriteLoader;
 import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.zestyblaze.lootr.client.block.LootrChestBlockRenderer;
 import net.zestyblaze.lootr.client.block.LootrShulkerBlockRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import java.util.Set;
-import java.util.stream.Stream;
+import java.util.Iterator;
+import java.util.List;
 
 @SuppressWarnings("deprecation")
 @Mixin(TextureAtlas.class)
 public class MixinTextureAtlas {
+  /*
   @Inject(method = "prepareToStitch", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiling/ProfilerFiller;popPush(Ljava/lang/String;)V", shift = At.Shift.AFTER, ordinal = 0), locals = LocalCapture.CAPTURE_FAILHARD)
   private void preStitch(ResourceManager resourceManager, Stream<ResourceLocation> spriteStream, ProfilerFiller profiler, int i, CallbackInfoReturnable<TextureAtlas.Preparations> cir, Set<ResourceLocation> spriteSet) {
     TextureAtlas atlas = (TextureAtlas) (Object) this;
@@ -28,4 +28,16 @@ public class MixinTextureAtlas {
       spriteSet.add(LootrShulkerBlockRenderer.MATERIAL2.texture());
     }
   }
+  @Inject(method = "upload", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;uploadFirstFrame()V", shift = At.Shift.AFTER, ordinal = 0), locals = LocalCapture.CAPTURE_FAILHARD)
+  private void lootr_upload(SpriteLoader.Preparations preparations, CallbackInfo ci, List list, List list2, Iterator var4, TextureAtlasSprite textureAtlasSprite) {
+    TextureAtlas atlas = (TextureAtlas) (Object) this;
+    if(atlas.location().equals(TextureAtlas.LOCATION_BLOCKS)) {
+      list.add(LootrChestBlockRenderer.MATERIAL.texture());
+      list.add(LootrChestBlockRenderer.MATERIAL2.texture());
+      list.add(LootrShulkerBlockRenderer.MATERIAL.texture());
+      list.add(LootrShulkerBlockRenderer.MATERIAL2.texture());
+    }
+  }
+
+   */
 }

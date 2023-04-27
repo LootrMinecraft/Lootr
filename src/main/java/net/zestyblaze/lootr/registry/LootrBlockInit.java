@@ -2,6 +2,7 @@ package net.zestyblaze.lootr.registry;
 
 import com.google.common.collect.Sets;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -38,15 +39,11 @@ public class LootrBlockInit {
     public static Set<Block> specialLootChests = Sets.newHashSet(CHEST, TRAPPED_CHEST, SHULKER, INVENTORY, BARREL);
 
     public static void registerBlocks() {
-        Registry.register(Registry.BLOCK, new ResourceLocation(LootrAPI.MODID, "lootr_chest"), CHEST);
-        Registry.register(Registry.BLOCK, new ResourceLocation(LootrAPI.MODID, "lootr_barrel"), BARREL);
-        Registry.register(Registry.BLOCK, new ResourceLocation(LootrAPI.MODID, "lootr_trapped_chest"), TRAPPED_CHEST);
-        Registry.register(Registry.BLOCK, new ResourceLocation(LootrAPI.MODID, "lootr_shulker"), SHULKER);
-        Registry.register(Registry.BLOCK, new ResourceLocation(LootrAPI.MODID, "lootr_inventory"), INVENTORY);
-        Registry.register(Registry.BLOCK, new ResourceLocation(LootrAPI.MODID, "trophy"), TROPHY);
-
-        if(LootrModConfig.get().debug.debugMode) {
-            LootrAPI.LOG.info("Lootr: Common Registry - Blocks Registered");
-        }
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(LootrAPI.MODID, "lootr_chest"), CHEST);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(LootrAPI.MODID, "lootr_barrel"), BARREL);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(LootrAPI.MODID, "lootr_trapped_chest"), TRAPPED_CHEST);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(LootrAPI.MODID, "lootr_shulker"), SHULKER);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(LootrAPI.MODID, "lootr_inventory"), INVENTORY);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(LootrAPI.MODID, "trophy"), TROPHY);
     }
 }

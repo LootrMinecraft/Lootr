@@ -1,7 +1,6 @@
 package net.zestyblaze.lootr.client.block;
 
 import com.google.common.collect.Streams;
-import com.mojang.datafixers.util.Pair;
 import net.fabricmc.fabric.api.client.model.ModelProviderContext;
 import net.fabricmc.fabric.api.client.model.ModelProviderException;
 import net.fabricmc.fabric.api.client.model.ModelResourceProvider;
@@ -33,7 +32,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -59,20 +57,16 @@ public class BarrelModel implements UnbakedModel {
     return dependencies;
   }
 
-  private Collection<Material> materials = null;
-
   @Override
-  public Collection<Material> getMaterials(Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
-    if (materials == null) {
-      this.materials = Streams.concat(this.opened.getMaterials(modelGetter, missingTextureErrors).stream(), this.unopened.getMaterials(modelGetter, missingTextureErrors).stream(), this.vanilla.getMaterials(modelGetter, missingTextureErrors).stream()).collect(Collectors.toSet());
-    }
-
-    return materials;
+  public void resolveParents(Function<ResourceLocation, UnbakedModel> function) {
+    this.opened.resolveParents(function);
+    this.unopened.resolveParents(function);
+    this.vanilla.resolveParents(function);
   }
 
   @Nullable
   @Override
-  public BakedModel bake(ModelBakery modelBakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState transform, ResourceLocation location) {
+  public BakedModel bake(ModelBaker modelBakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState transform, ResourceLocation location) {
     return new BakedBarrelModel(opened.bake(modelBakery, spriteGetter, transform, location), unopened.bake(modelBakery, spriteGetter, transform, location), vanilla.bake(modelBakery, spriteGetter, transform, location));
   }
 

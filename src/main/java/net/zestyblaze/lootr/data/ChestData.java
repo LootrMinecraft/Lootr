@@ -3,6 +3,7 @@ package net.zestyblaze.lootr.data;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
@@ -249,7 +250,7 @@ public class ChestData extends SavedData {
             data.pos = NbtUtils.readBlockPos(compound.getCompound("position"));
         }
         if (compound.contains("dimension")) {
-            data.dimension = ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(compound.getString("dimension")));
+            data.dimension = ResourceKey.create(Registries.DIMENSION, new ResourceLocation(compound.getString("dimension")));
         }
         boolean foundNewUUID = false;
         if (compound.hasUUID("uuid")) {

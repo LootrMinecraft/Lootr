@@ -2,7 +2,6 @@ package net.zestyblaze.lootr.mixin;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -18,18 +17,19 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.EnumMap;
 import java.util.UUID;
 
 // TODO: When the crown gets implemented
 @Mixin(ArmorItem.class)
 public class MixinArmorItem {
-    @Shadow @Final private static UUID[] ARMOR_MODIFIER_UUID_PER_SLOT;
+    @Shadow @Final private static EnumMap<ArmorItem.Type, UUID> ARMOR_MODIFIER_UUID_PER_TYPE;
     @Shadow @Final @Mutable private Multimap<Attribute, AttributeModifier> defaultModifiers;
     @Shadow @Final protected float knockbackResistance;
 
     @Inject(method = "<init>", at = @At(value = "RETURN"))
-    private void constructor(ArmorMaterial material, EquipmentSlot slot, Item.Properties properties, CallbackInfo ci) {
-        UUID uuid = ARMOR_MODIFIER_UUID_PER_SLOT[slot.getIndex()];
+    private void constructor(ArmorMaterial material, ArmorItem.Type type, Item.Properties properties, CallbackInfo ci) {
+        UUID uuid = ARMOR_MODIFIER_UUID_PER_TYPE.get(type);
 
         if(material == CrownItem.CrownArmourMaterial.INSTANCE) {
             ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();

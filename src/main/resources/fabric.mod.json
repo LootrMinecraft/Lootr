@@ -6,12 +6,12 @@
   "name": "Lootr",
   "description": "A mod that makes it so nobody misses out on Loot!",
   "authors": [
-    "ZestyBlaze",
-    "Noobanidus"
+    "Noobanidus",
+    "ZestyBlaze"
   ],
   "contact": {
-    "homepage": "",
-    "sources": "https://github.com/noobanidus/Lootr/tree/fabric-1.18",
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/lootr-fabric",
+    "sources": "https://github.com/noobanidus/Lootr/tree/fabric-1.19.4",
     "issues": "https://github.com/noobanidus/Lootr/issues"
   },
 
@@ -37,7 +37,7 @@
   "depends": {
     "fabricloader": ">=0.12.12",
     "fabric": "*",
-    "minecraft": "1.19.x",
+    "minecraft": "~1.19.4",
     "java": ">=17",
     "cloth-config2": ">=6.1.48"
   },

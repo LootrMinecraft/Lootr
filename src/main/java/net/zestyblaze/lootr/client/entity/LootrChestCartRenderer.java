@@ -2,7 +2,7 @@ package net.zestyblaze.lootr.client.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -54,8 +54,8 @@ public class LootrChestCartRenderer<T extends LootrChestMinecartEntity> extends 
         }
 
         pMatrixStack.translate(0.0D, 0.375D, 0.0D);
-        pMatrixStack.mulPose(Vector3f.YP.rotationDegrees(180.0F - pEntityYaw));
-        pMatrixStack.mulPose(Vector3f.ZP.rotationDegrees(-f3));
+        pMatrixStack.mulPose(Axis.YP.rotationDegrees(180.0F - pEntityYaw));
+        pMatrixStack.mulPose(Axis.ZP.rotationDegrees(-f3));
         float f5 = (float) pEntity.getHurtTime() - pPartialTicks;
         float f6 = pEntity.getDamage() - pPartialTicks;
         if (f6 < 0.0F) {
@@ -63,14 +63,14 @@ public class LootrChestCartRenderer<T extends LootrChestMinecartEntity> extends 
         }
 
         if (f5 > 0.0F) {
-            pMatrixStack.mulPose(Vector3f.XP.rotationDegrees(Mth.sin(f5) * f5 * f6 / 10.0F * (float) pEntity.getHurtDir()));
+            pMatrixStack.mulPose(Axis.XP.rotationDegrees(Mth.sin(f5) * f5 * f6 / 10.0F * (float) pEntity.getHurtDir()));
         }
 
         int j = pEntity.getDisplayOffset();
         pMatrixStack.pushPose();
         pMatrixStack.scale(0.75F, 0.75F, 0.75F);
         pMatrixStack.translate(-0.5D, (float) (j - 8) / 16.0F, 0.5D);
-        pMatrixStack.mulPose(Vector3f.YP.rotationDegrees(90.0F));
+        pMatrixStack.mulPose(Axis.YP.rotationDegrees(90.0F));
         // TODO: Tile
         LootrChestItemRenderer.getInstance().renderByMinecart(pEntity, pMatrixStack, pBuffer, pPackedLight);
         pMatrixStack.popPose();

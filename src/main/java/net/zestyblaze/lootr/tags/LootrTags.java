@@ -1,6 +1,7 @@
 package net.zestyblaze.lootr.tags;
 
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -22,7 +23,7 @@ public class LootrTags {
         public static final TagKey<Block> CONVERT_BARRELS = tag("convert/barrels");
 
         static TagKey<Block> tag(String name) {
-            return TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(LootrAPI.MODID, name));
+            return TagKey.create(Registries.BLOCK, new ResourceLocation(LootrAPI.MODID, name));
         }
     }
 
@@ -34,7 +35,7 @@ public class LootrTags {
         public static final TagKey<Item> CONTAINERS = tag("containers");
 
         static TagKey<Item> tag(String name) {
-            return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(LootrAPI.MODID, name));
+            return TagKey.create(Registries.ITEM, new ResourceLocation(LootrAPI.MODID, name));
         }
     }
 
@@ -46,7 +47,7 @@ public class LootrTags {
         public static final TagKey<Structure> DECAY_STRUCTURES = tag("decay_structures");
 
         static TagKey<Structure> tag (String name) {
-            return TagKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(LootrAPI.MODID, name));
+            return TagKey.create(Registries.STRUCTURE, new ResourceLocation(LootrAPI.MODID, name));
         }
     }
 }

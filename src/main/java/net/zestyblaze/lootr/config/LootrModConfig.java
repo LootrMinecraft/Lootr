@@ -6,6 +6,8 @@ import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -47,8 +49,6 @@ public class LootrModConfig implements ConfigData {
   public Debug debug = new Debug();
 
   public static class Debug {
-    @ConfigEntry.Gui.RequiresRestart
-    public boolean debugMode = false;
     @ConfigEntry.Gui.RequiresRestart
     public boolean report_unresolved_tables = false;
   }
@@ -237,7 +237,7 @@ public class LootrModConfig implements ConfigData {
 
   public static Set<ResourceKey<Level>> getDecayDimensions() {
     if (DECAY_DIMS == null) {
-      DECAY_DIMS = get().decay.decay_dimensions.stream().map(o -> ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(o))).collect(Collectors.toSet());
+      DECAY_DIMS = get().decay.decay_dimensions.stream().map(o -> ResourceKey.create(Registries.DIMENSION, new ResourceLocation(o))).collect(Collectors.toSet());
     }
     return DECAY_DIMS;
   }
@@ -285,20 +285,20 @@ public class LootrModConfig implements ConfigData {
 
   public static Set<ResourceKey<Level>> getRefreshDimensions() {
     if (REFRESH_DIMS == null) {
-      REFRESH_DIMS = get().refresh.refresh_dimensions.stream().map(o -> ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(o))).collect(Collectors.toSet());
+      REFRESH_DIMS = get().refresh.refresh_dimensions.stream().map(o -> ResourceKey.create(Registries.DIMENSION, new ResourceLocation(o))).collect(Collectors.toSet());
     }
     return REFRESH_DIMS;
   }
 
   private static void addSafeReplacement(ResourceLocation location, Block replacement) {
-    Block block = Registry.BLOCK.get(location);
+    Block block = BuiltInRegistries.BLOCK.get(location);
     if (block != Blocks.AIR) {
       replacements.put(block, replacement);
     }
   }
 
   private static void addUnsafeReplacement(ResourceLocation location, Block replacement, ServerLevel world) {
-    Block block = Registry.BLOCK.get(location);
+    Block block = BuiltInRegistries.BLOCK.get(location);
     if (block instanceof EntityBlock entityBlock) {
       BlockEntity tile = entityBlock.newBlockEntity(BlockPos.ZERO, block.defaultBlockState());
       if (tile instanceof RandomizableContainerBlockEntity) {
@@ -370,7 +370,7 @@ public class LootrModConfig implements ConfigData {
 
   public static Set<ResourceKey<Level>> getDimensionWhitelist() {
     if (DIM_WHITELIST == null) {
-      DIM_WHITELIST = get().lists.dimension_whitelist.stream().map(o -> ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(o))).collect(Collectors.toSet());
+      DIM_WHITELIST = get().lists.dimension_whitelist.stream().map(o -> ResourceKey.create(Registries.DIMENSION, new ResourceLocation(o))).collect(Collectors.toSet());
     }
 
     return DIM_WHITELIST;
@@ -378,7 +378,7 @@ public class LootrModConfig implements ConfigData {
 
   public static Set<ResourceKey<Level>> getDimensionBlacklist() {
     if (DIM_BLACKLIST == null) {
-      DIM_BLACKLIST = get().lists.dimension_blacklist.stream().map(o -> ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(o))).collect(Collectors.toSet());
+      DIM_BLACKLIST = get().lists.dimension_blacklist.stream().map(o -> ResourceKey.create(Registries.DIMENSION, new ResourceLocation(o))).collect(Collectors.toSet());
     }
 
     return DIM_BLACKLIST;
