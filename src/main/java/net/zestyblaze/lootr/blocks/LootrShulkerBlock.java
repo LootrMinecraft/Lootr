@@ -52,7 +52,9 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
 
     @Override
     public float getExplosionResistance() {
-        if (LootrModConfig.get().breaking.blast_resistant) {
+        if (LootrModConfig.get().breaking.blast_immune) {
+            return Float.MAX_VALUE;
+        } else if (LootrModConfig.get().breaking.blast_resistant) {
             return 16.0f;
         } else {
             return super.getExplosionResistance();
