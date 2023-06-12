@@ -36,10 +36,10 @@ public class LootrEventsInit {
 
         ServerChunkEvents.CHUNK_LOAD.register(HandleChunk::onChunkLoad);
 
-        // TODO: Check to see if this properly cancels block breaking
         PlayerBlockBreakEvents.BEFORE.register((world, player, pos, state, blockEntity) -> {
             if (!world.isClientSide()) {
                 if (LootrBlockInit.specialLootChests.contains(state.getBlock())) {
+                    // TODO: Entity tags
                     if (LootrModConfig.get().breaking.enable_break) {
                         return true;
                     }
