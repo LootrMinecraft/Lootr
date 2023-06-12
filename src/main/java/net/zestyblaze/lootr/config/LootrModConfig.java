@@ -84,8 +84,6 @@ public class LootrModConfig implements ConfigData {
     public List<String> loot_table_blacklist = List.of();
     @ConfigEntry.Gui.RequiresRestart
     public List<String> loot_modid_blacklist = List.of();
-    @ConfigEntry.Gui.RequiresRestart
-    public List<String> loot_structure_blacklist = List.of();
   }
 
   @ConfigEntry.Gui.CollapsibleObject
@@ -100,8 +98,6 @@ public class LootrModConfig implements ConfigData {
     public List<String> decay_loot_tables = List.of();
     @ConfigEntry.Gui.RequiresRestart
     public List<String> decay_dimensions = List.of();
-    @ConfigEntry.Gui.RequiresRestart
-    public List<String> decay_structures = List.of();
   }
 
   @ConfigEntry.Gui.CollapsibleObject
@@ -116,8 +112,6 @@ public class LootrModConfig implements ConfigData {
     public List<String> refresh_loot_tables = List.of();
     @ConfigEntry.Gui.RequiresRestart
     public List<String> refresh_dimensions = List.of();
-    @ConfigEntry.Gui.RequiresRestart
-    public List<String> refresh_structures = List.of();
   }
 
   @ConfigEntry.Gui.CollapsibleObject
