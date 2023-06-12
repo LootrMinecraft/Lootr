@@ -21,7 +21,7 @@ public class MixinPersistentEntitySectionManager {
   private void LootrAddEntity(EntityAccess entityAccess, boolean bl, CallbackInfoReturnable<Boolean> cir) {
     if (entityAccess instanceof Entity entity && entity.getType() == EntityType.CHEST_MINECART) {
       MinecartChest chest = (MinecartChest) entity;
-      if (!chest.level.isClientSide && chest.lootTable != null && LootrModConfig.get().conversion.convert_mineshafts && !LootrModConfig.getLootBlacklist().contains(chest.lootTable)) {
+      if (!chest.level.isClientSide && chest.lootTable != null && !LootrModConfig.getLootBlacklist().contains(chest.lootTable)) {
         LootrChestMinecartEntity lootr = new LootrChestMinecartEntity(LootrEntityInit.LOOTR_MINECART_ENTITY, chest.getX(), chest.getY(), chest.getZ(), chest.level);
         lootr.setLootTable(chest.lootTable, chest.lootTableSeed);
         cir.setReturnValue(false);
