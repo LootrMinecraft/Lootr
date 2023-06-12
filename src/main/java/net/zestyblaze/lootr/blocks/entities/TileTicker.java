@@ -43,8 +43,6 @@ public class TileTicker {
     }
   }
 
-  private static final int MAX_AGE = 90 * 20;
-
   public static void serverTick() {
       Set<Entry> toRemove = new HashSet<>();
       Set<Entry> copy;
@@ -56,7 +54,7 @@ public class TileTicker {
       synchronized (worldLock) {
         MinecraftServer server = ServerAccessImpl.getServer();
         for (Entry entry : copy) {
-          if (entry.age(server) > MAX_AGE) {
+          if (entry.age(server) > LootrModConfig.get().conversion.maximum_entry_age) {
             toRemove.add(entry);
             continue;
           }
