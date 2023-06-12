@@ -81,17 +81,17 @@ public class ChestUtil {
             UUID tileId = tile.getTileId();
             if (DataStorage.isDecayed(tileId)) {
                 level.destroyBlock(pos, true);
-                player.sendMessage(new TranslatableComponent("lootr.message.decayed").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), Util.NIL_UUID);
+                player.displayClientMessage(new TranslatableComponent("lootr.message.decayed").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), true);
                 DataStorage.removeDecayed(tileId);
                 return false;
             } else {
                 int decayValue = DataStorage.getDecayValue(tileId);
-                if (decayValue > 0) {
-                    player.sendMessage(new TranslatableComponent("lootr.message.decay_in", decayValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), Util.NIL_UUID);
+                if (decayValue > 0 && LootrModConfig.shouldNotify(decayValue)) {
+                    player.displayClientMessage(new TranslatableComponent("lootr.message.decay_in", decayValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), true);
                 } else if (decayValue == -1) {
                     if (LootrModConfig.isDecaying((ServerLevel)level, (ILootBlockEntity)te)) {
                         DataStorage.setDecaying(tileId, LootrModConfig.get().decay.decay_value);
-                        player.sendMessage(new TranslatableComponent("lootr.message.decay_start", LootrModConfig.get().decay.decay_value / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), Util.NIL_UUID);
+                        player.displayClientMessage(new TranslatableComponent("lootr.message.decay_start", LootrModConfig.get().decay.decay_value / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), true);
                     }
                 }
             }
@@ -105,15 +105,15 @@ public class ChestUtil {
             if (DataStorage.isRefreshed(tileId)) {
                 DataStorage.refreshInventory(level, pos, ((ILootBlockEntity) te).getTileId(), (ServerPlayer) player);
                 DataStorage.removeRefreshed(tileId);
-                player.sendMessage(new TranslatableComponent("lootr.message.refreshed").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
+                player.displayClientMessage(new TranslatableComponent("lootr.message.refreshed").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), true);
             } else {
                 int refreshValue = DataStorage.getRefreshValue(tileId);
-                if (refreshValue > 0) {
-                    player.sendMessage(new TranslatableComponent("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
+                if (refreshValue > 0 && LootrModConfig.shouldNotify(refreshValue)) {
+                    player.displayClientMessage(new TranslatableComponent("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), true);
                 } else if (refreshValue == -1) {
                     if (LootrModConfig.isRefreshing((ServerLevel) level, (ILootBlockEntity) te)) {
                         DataStorage.setRefreshing(tileId, LootrModConfig.get().refresh.refresh_value);
-                        player.sendMessage(new TranslatableComponent("lootr.message.refresh_start", LootrModConfig.get().refresh.refresh_value / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
+                        player.displayClientMessage(new TranslatableComponent("lootr.message.refresh_start", LootrModConfig.get().refresh.refresh_value / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), true);
                     }
                 }
             }
@@ -144,17 +144,17 @@ public class ChestUtil {
                 UUID tileId = cart.getUUID();
                 if (DataStorage.isDecayed(tileId)) {
                     cart.destroy(DamageSource.OUT_OF_WORLD);
-                    player.sendMessage(new TranslatableComponent("lootr.message.decayed").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), Util.NIL_UUID);
+                    player.displayClientMessage(new TranslatableComponent("lootr.message.decayed").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), true);
                     DataStorage.removeDecayed(tileId);
                     return;
                 } else {
                     int decayValue = DataStorage.getDecayValue(tileId);
-                    if (decayValue > 0) {
-                        player.sendMessage(new TranslatableComponent("lootr.message.decay_in", decayValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), Util.NIL_UUID);
+                    if (decayValue > 0 && LootrModConfig.shouldNotify(decayValue)) {
+                        player.displayClientMessage(new TranslatableComponent("lootr.message.decay_in", decayValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), true);
                     } else if (decayValue == -1) {
                         if (LootrModConfig.isDecaying((ServerLevel) level, cart)) {
                             DataStorage.setDecaying(tileId, LootrModConfig.get().decay.decay_value);
-                            player.sendMessage(new TranslatableComponent("lootr.message.decay_start", LootrModConfig.get().decay.decay_value / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), Util.NIL_UUID);
+                            player.displayClientMessage(new TranslatableComponent("lootr.message.decay_start", LootrModConfig.get().decay.decay_value / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), true);
                         }
                     }
                 }
@@ -169,15 +169,15 @@ public class ChestUtil {
                 if (DataStorage.isRefreshed(tileId)) {
                     DataStorage.refreshInventory(level, cart, (ServerPlayer) player);
                     DataStorage.removeRefreshed(tileId);
-                    player.sendMessage(new TranslatableComponent("lootr.message.refreshed").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
+                    player.displayClientMessage(new TranslatableComponent("lootr.message.refreshed").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), true);
                 } else {
                     int refreshValue = DataStorage.getRefreshValue(tileId);
-                    if (refreshValue > 0) {
-                        player.sendMessage(new TranslatableComponent("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
+                    if (refreshValue > 0 && LootrModConfig.shouldNotify(refreshValue)) {
+                        player.displayClientMessage(new TranslatableComponent("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), true);
                     } else if (refreshValue == -1) {
                         if (LootrModConfig.isRefreshing((ServerLevel)level, cart)) {
                             DataStorage.setRefreshing(tileId, LootrModConfig.get().refresh.refresh_value);
-                            player.sendMessage(new TranslatableComponent("lootr.message.refresh_start", LootrModConfig.get().refresh.refresh_value / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
+                            player.displayClientMessage(new TranslatableComponent("lootr.message.refresh_start", LootrModConfig.get().refresh.refresh_value / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), true);
                         }
                     }
                 }
@@ -206,15 +206,15 @@ public class ChestUtil {
             if (DataStorage.isRefreshed(tileId)) {
                 DataStorage.refreshInventory(level, pos, ((ILootBlockEntity) te).getTileId(), stacks, (ServerPlayer) player);
                 DataStorage.removeRefreshed(tileId);
-                player.sendMessage(new TranslatableComponent("lootr.message.refreshed").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
+                player.displayClientMessage(new TranslatableComponent("lootr.message.refreshed").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), true);
             } else {
                 int refreshValue = DataStorage.getRefreshValue(tileId);
-                if (refreshValue > 0) {
-                    player.sendMessage(new TranslatableComponent("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
+                if (refreshValue > 0 && LootrModConfig.shouldNotify(refreshValue)) {
+                    player.displayClientMessage(new TranslatableComponent("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), true);
                 } else if (refreshValue == -1) {
                     if (LootrModConfig.isRefreshing((ServerLevel)level, tile)) {
                         DataStorage.setRefreshing(tileId, LootrModConfig.get().refresh.refresh_value);
-                        player.sendMessage(new TranslatableComponent("lootr.message.refresh_start", LootrModConfig.get().refresh.refresh_value / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), Util.NIL_UUID);
+                        player.displayClientMessage(new TranslatableComponent("lootr.message.refresh_start", LootrModConfig.get().refresh.refresh_value / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), true);
                     }
                 }
             }
