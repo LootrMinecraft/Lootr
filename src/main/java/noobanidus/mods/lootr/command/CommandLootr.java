@@ -191,20 +191,20 @@ public class CommandLootr {
         BlockState newState;
         if (state.is(Blocks.CHEST)) {
           reference = ((ChestBlockEntity) Objects.requireNonNull(world.getBlockEntity(pos))).items;
-          newState = ModBlocks.INVENTORY.get().defaultBlockState().setValue(ChestBlock.FACING, state.getValue(ChestBlock.FACING)).setValue(ChestBlock.WATERLOGGED, state.getValue(ChestBlock.WATERLOGGED));
+          newState = ModBlocks.INVENTORY.defaultBlockState().setValue(ChestBlock.FACING, state.getValue(ChestBlock.FACING)).setValue(ChestBlock.WATERLOGGED, state.getValue(ChestBlock.WATERLOGGED));
         } else {
           Direction facing = state.getValue(BarrelBlock.FACING);
           if (facing == Direction.UP || facing == Direction.DOWN) {
             facing = Direction.NORTH;
           }
           reference = ((BarrelBlockEntity) Objects.requireNonNull(world.getBlockEntity(pos))).items;
-          newState = ModBlocks.INVENTORY.get().defaultBlockState().setValue(ChestBlock.FACING, facing);
+          newState = ModBlocks.INVENTORY.defaultBlockState().setValue(ChestBlock.FACING, facing);
         }
         NonNullList<ItemStack> custom = ChestUtil.copyItemList(reference);
         world.removeBlockEntity(pos);
         world.setBlockAndUpdate(pos, newState);
         BlockEntity te = world.getBlockEntity(pos);
-        if (!(te instanceof LootrInventoryBlockEntity)) {
+        if (!(te instanceof LootrInventoryBlockEntity inventory)) {
           c.getSource().sendSuccess(new TextComponent("Unable to convert chest, BlockState is not a Lootr Inventory block."), false);
         } else {
           inventory.setCustomInventory(custom);
