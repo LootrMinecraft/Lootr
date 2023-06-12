@@ -12,9 +12,5 @@ public class LootrLootInit {
 
     public static void registerLoot() {
         Registry.register(Registry.LOOT_CONDITION_TYPE, new ResourceLocation(LootrAPI.MODID, "loot_count"), LOOT_COUNT);
-
-        if(LootrModConfig.get().debug.debugMode) {
-            LootrAPI.LOG.info("Lootr: Common Registry - Loot Registered");
-        }
     }
 }

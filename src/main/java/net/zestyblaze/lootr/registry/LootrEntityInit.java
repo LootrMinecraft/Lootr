@@ -22,9 +22,5 @@ public class LootrEntityInit {
                 return new LootrChestMinecartEntity(entityType, level);
             }
         }).dimensions(EntityDimensions.fixed(0.9f, 1.4f)).trackRangeBlocks(8).build());
-
-        if(LootrModConfig.get().debug.debugMode) {
-            LootrAPI.LOG.info("Lootr: Common Registry - Entities Registered");
-        }
     }
 }
