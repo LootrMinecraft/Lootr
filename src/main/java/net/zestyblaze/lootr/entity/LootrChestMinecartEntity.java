@@ -210,7 +210,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
             LootTable loottable = this.level.getServer().getLootTables().get(overrideTable != null ? overrideTable : this.lootTable);
             if (loottable == LootTable.EMPTY) {
                 LootrAPI.LOG.error("Unable to fill loot in " + level.dimension() + " at " + position() + " as the loot table '" + (overrideTable != null ? overrideTable : this.lootTable) + "' couldn't be resolved! Please search the loot table in `latest.log` to see if there are errors in loading.");
-                if (LootrModConfig.get().debug.report_unresolved_tables && player != null) {
+                if (LootrModConfig.get().debug.report_invalid_tables && player != null) {
                     player.sendMessage(new TranslatableComponent("lootr.message.invalid_table", (overrideTable != null ? overrideTable : this.lootTable).toString()).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED)).withBold(true)), Util.NIL_UUID);
                 }
             }
