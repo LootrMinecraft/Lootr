@@ -21,9 +21,5 @@ public class LootrBlockEntityInit {
         Registry.register(Registry.BLOCK_ENTITY_TYPE, new ResourceLocation(LootrAPI.MODID, "special_loot_shulker"), SPECIAL_LOOT_SHULKER);
         Registry.register(Registry.BLOCK_ENTITY_TYPE, new ResourceLocation(LootrAPI.MODID, "special_loot_barrel"), SPECIAL_LOOT_BARREL);
         Registry.register(Registry.BLOCK_ENTITY_TYPE, new ResourceLocation(LootrAPI.MODID, "special_loot_inventory"), SPECIAL_LOOT_INVENTORY);
-
-        if(LootrModConfig.get().debug.debugMode) {
-            LootrAPI.LOG.info("Lootr: Common Registry - BlockEntities Registered");
-        }
     }
 }

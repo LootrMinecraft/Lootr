@@ -68,9 +68,5 @@ public class LootrEventsInit {
                 }
             }
         });
-
-        if(LootrModConfig.get().debug.debugMode) {
-            LootrAPI.LOG.info("Lootr: Common Registry - Events Registered");
-        }
     }
 }

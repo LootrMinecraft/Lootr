@@ -32,9 +32,5 @@ public class LootrNetworkingInit {
                 }
             });
         });
-
-        if(LootrModConfig.get().debug.debugMode) {
-            LootrAPI.LOG.info("Lootr: Client Registry - Networking Registered");
-        }
     }
 }

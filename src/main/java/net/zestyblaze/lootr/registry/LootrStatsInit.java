@@ -14,9 +14,5 @@ public class LootrStatsInit {
     public static void registerStats() {
         Registry.register(Registry.CUSTOM_STAT, LOOTED_LOCATION, LOOTED_LOCATION);
         LOOTED_STAT = Stats.CUSTOM.get(LOOTED_LOCATION);
-
-        if(LootrModConfig.get().debug.debugMode) {
-            LootrAPI.LOG.info("Lootr: Common Registry - Stats Registered");
-        }
     }
 }
