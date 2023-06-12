@@ -72,6 +72,7 @@ public class LootrModConfig implements ConfigData {
     public boolean disable_break = false;
     public boolean power_comparators = true;
     public boolean blast_resistant = false;
+    public boolean blast_immune = false;
   }
 
   @ConfigEntry.Gui.CollapsibleObject
