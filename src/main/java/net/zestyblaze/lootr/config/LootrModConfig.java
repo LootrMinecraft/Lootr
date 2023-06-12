@@ -53,7 +53,6 @@ public class LootrModConfig implements ConfigData {
   public Seed seed = new Seed();
 
   public static class Seed {
-    @ConfigEntry.Gui.RequiresRestart
     public boolean randomize_seed = true;
   }
 
@@ -61,19 +60,14 @@ public class LootrModConfig implements ConfigData {
   public Conversion conversion = new Conversion();
 
   public static class Conversion {
-    @ConfigEntry.Gui.RequiresRestart
     public boolean skip_unloaded = true;
-    @ConfigEntry.Gui.RequiresRestart
-    public int maximum_age = 3600;
-    @ConfigEntry.Gui.RequiresRestart
-    public boolean convert_mineshafts = true;
+    public int maximum_entry_age = 120 * 20;
   }
 
   @ConfigEntry.Gui.CollapsibleObject
   public Breaking breaking = new Breaking();
 
   public static class Breaking {
-    @ConfigEntry.Gui.RequiresRestart
     public boolean disable_break = false;
     public boolean power_comparators = true;
     public boolean blast_resistant = false;
@@ -99,9 +93,7 @@ public class LootrModConfig implements ConfigData {
   public Decay decay = new Decay();
 
   public static class Decay {
-    @ConfigEntry.Gui.RequiresRestart
     public int decay_value = 6000;
-    @ConfigEntry.Gui.RequiresRestart
     public boolean decay_all = false;
     @ConfigEntry.Gui.RequiresRestart
     public List<String> decay_modids = List.of();
@@ -117,9 +109,7 @@ public class LootrModConfig implements ConfigData {
   public Refresh refresh = new Refresh();
 
   public static class Refresh {
-    @ConfigEntry.Gui.RequiresRestart
     public int refresh_value = 24000;
-    @ConfigEntry.Gui.RequiresRestart
     public boolean refresh_all = false;
     @ConfigEntry.Gui.RequiresRestart
     public List<String> refresh_modids = List.of();
@@ -155,14 +145,6 @@ public class LootrModConfig implements ConfigData {
         return true;
       }
     }
-/*        if (!getDecayStructures().isEmpty()) {
-            StructureFeature<?> startAt = StructureUtil.featureFor(level, tile.getPosition());
-            *//*if (startAt != null && getDecayStructures().contains(startAt.getRegistryName())) {
-                return true;
-            }
-
-             *//*
-        }*/
     return isDimensionDecaying(level.dimension());
   }
 
@@ -178,14 +160,6 @@ public class LootrModConfig implements ConfigData {
         return true;
       }
     }
-/*        if (!getDecayStructures().isEmpty()) {
-            StructureFeature<?> startAt = StructureUtil.featureFor(level, new BlockPos(entity.position()));
-            *//*if (startAt != null && getDecayStructures().contains(startAt.getRegistryName())) {
-                return true;
-            }
-
-             *//*
-        }*/
     return isDimensionDecaying(level.dimension());
   }
 
@@ -202,14 +176,6 @@ public class LootrModConfig implements ConfigData {
         return true;
       }
     }
-/*        if(!getRefreshStructures().isEmpty()) {
-            StructureFeature<?> startAt = StructureUtil.featureFor(level, new BlockPos(entity.position()));
-            *//*if(startAt != null && getRefreshStructures().contains(startAt.getRegistryName())) {
-                return true;
-            }
-
-             *//*
-        }*/
     return isDimensionRefreshing(level.dimension());
   }
 
@@ -250,14 +216,6 @@ public class LootrModConfig implements ConfigData {
         return true;
       }
     }
-/*        if (!getRefreshStructures().isEmpty()) {
-            StructureFeature<?> startAt = StructureUtil.featureFor(level, tile.getPosition());
-            *//*if (startAt != null && getRefreshStructures().contains(startAt.getRegistryName())) {
-                return true;
-            }
-            
-             *//*
-        }*/
     return isDimensionRefreshing(level.dimension());
   }
 
@@ -286,31 +244,10 @@ public class LootrModConfig implements ConfigData {
     return REFRESH_DIMS;
   }
 
-  private static void addSafeReplacement(ResourceLocation location, Block replacement) {
-    Block block = Registry.BLOCK.get(location);
-    if (block != Blocks.AIR) {
-      replacements.put(block, replacement);
-    }
-  }
-
-  private static void addUnsafeReplacement(ResourceLocation location, Block replacement, ServerLevel world) {
-    Block block = Registry.BLOCK.get(location);
-    if (block instanceof EntityBlock entityBlock) {
-      BlockEntity tile = entityBlock.newBlockEntity(BlockPos.ZERO, block.defaultBlockState());
-      if (tile instanceof RandomizableContainerBlockEntity) {
-        replacements.put(block, replacement);
-      }
-    }
-  }
-
   // TODO: Move this to the config module?
   public static BlockState replacement(BlockState original) {
     if (replacements == null) {
       replacements = new HashMap<>();
-/*            replacements.put(Blocks.CHEST, LootrBlockInit.CHEST);
-            replacements.put(Blocks.BARREL, LootrBlockInit.BARREL);
-            replacements.put(Blocks.TRAPPED_CHEST, LootrBlockInit.TRAPPED_CHEST);
-            replacements.put(Blocks.SHULKER_BOX, LootrBlockInit.SHULKER);*/
     }
 
     // TODO: Do this for Forge too
