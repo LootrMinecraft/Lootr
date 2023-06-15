@@ -22,7 +22,7 @@
     },
     {
       "type": "minecraft:single",
-      "resource": "lootr:entity/player/wide/steve"
+      "resource": "minecraft:entity/player/wide/steve"
     }
   ]
 }
