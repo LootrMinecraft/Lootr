@@ -1,0 +1,28 @@
+{
+  "sources": [
+    {
+      "type": "minecraft:single",
+      "resource": "lootr:chest"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "lootr:chest_opened"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "lootr:shulker"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "lootr:shulker_opened"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "lootr:chest_opened"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "lootr:entity/player/wide/steve"
+    }
+  ]
+}
