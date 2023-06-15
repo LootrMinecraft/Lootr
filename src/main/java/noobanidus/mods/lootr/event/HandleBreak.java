@@ -10,6 +10,7 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import noobanidus.mods.lootr.LootrTags;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlocks;
@@ -22,7 +23,7 @@ public class HandleBreak {
     Player player = event.getPlayer();
 
     if (!event.getLevel().isClientSide()) {
-      if (ModBlocks.getSpecialLootChests().contains(event.getState().getBlock())) {
+      if (event.getState().is(LootrTags.Blocks.CONTAINERS)) {
         if ((player instanceof FakePlayer && ConfigManager.ENABLE_FAKE_PLAYER_BREAK.get()) || ConfigManager.ENABLE_BREAK.get()) {
           return;
         }

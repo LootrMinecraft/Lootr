@@ -38,9 +38,11 @@ import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.network.NetworkHooks;
 import noobanidus.mods.lootr.api.LootrAPI;
@@ -59,7 +61,7 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class LootrChestMinecartEntity extends AbstractMinecartContainer implements ILootCart {
-  private Set<UUID> openers = new HashSet<>();
+  private final Set<UUID> openers = new HashSet<>();
   private boolean opened = false;
 
   public LootrChestMinecartEntity(EntityType<LootrChestMinecartEntity> type, Level world) {
@@ -118,7 +120,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   @Override
   public void destroy(DamageSource source) {
     this.remove(Entity.RemovalReason.KILLED);
-    if (this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+    if (this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
       ItemStack itemstack = new ItemStack(Items.MINECART);
       ItemStack itemstack2 = new ItemStack(Items.CHEST);
       if (this.hasCustomName()) {
@@ -204,15 +206,15 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     InteractionResult ret = InteractionResult.PASS;
     if (ret.consumesAction()) return ret;
     if (player.isShiftKeyDown()) {
-      ChestUtil.handleLootCartSneak(player.level, this, player);
-      if (!player.level.isClientSide) {
+      ChestUtil.handleLootCartSneak(player.level(), this, player);
+      if (!player.level().isClientSide) {
         return InteractionResult.CONSUME;
       } else {
         return InteractionResult.SUCCESS;
       }
     } else {
-      ChestUtil.handleLootCart(player.level, this, player);
-      if (!player.level.isClientSide) {
+      ChestUtil.handleLootCart(player.level(), this, player);
+      if (!player.level().isClientSide) {
         PiglinAi.angerNearbyPiglins(player, true);
         return InteractionResult.CONSUME;
       } else {
@@ -222,10 +224,10 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
   public void addLoot(@Nullable Player player, Container inventory, @Nullable ResourceLocation overrideTable, long seed) {
-    if (this.lootTable != null && this.level.getServer() != null) {
-      LootTable loottable = this.level.getServer().getLootTables().get(overrideTable != null ? overrideTable : this.lootTable);
+    if (this.lootTable != null && this.level().getServer() != null) {
+      LootTable loottable = this.level().getServer().getLootData().getLootTable(overrideTable != null ? overrideTable : this.lootTable);
       if (loottable == LootTable.EMPTY) {
-        LootrAPI.LOG.error("Unable to fill loot in " + level.dimension() + " at " + position() + " as the loot table '" + (overrideTable != null ? overrideTable : this.lootTable) + "' couldn't be resolved! Please search the loot table in `latest.log` to see if there are errors in loading.");
+        LootrAPI.LOG.error("Unable to fill loot in " + level().dimension() + " at " + position() + " as the loot table '" + (overrideTable != null ? overrideTable : this.lootTable) + "' couldn't be resolved! Please search the loot table in `latest.log` to see if there are errors in loading.");
         if (ConfigManager.REPORT_UNRESOLVED_TABLES.get() && player != null) {
           player.displayClientMessage(Component.translatable("lootr.message.invalid_table", (overrideTable != null ? overrideTable : this.lootTable).toString()).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED)).withBold(true)), false);
         }
@@ -233,13 +235,13 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
       if (player instanceof ServerPlayer) {
         CriteriaTriggers.GENERATE_LOOT.trigger((ServerPlayer) player, overrideTable != null ? overrideTable : this.lootTable);
       }
-      LootContext.Builder lootcontext$builder = (new LootContext.Builder((ServerLevel) this.level)).withParameter(LootContextParams.ORIGIN, this.position()).withOptionalRandomSeed(ConfigManager.RANDOMISE_SEED.get() ? ThreadLocalRandom.current().nextLong() : seed == Long.MIN_VALUE ? this.lootTableSeed : seed);
-      lootcontext$builder.withParameter(LootContextParams.KILLER_ENTITY, this);
+      LootParams.Builder builder = (new LootParams.Builder((ServerLevel)this.level())).withParameter(LootContextParams.ORIGIN, position());
+      builder.withParameter(LootContextParams.KILLER_ENTITY, this);
       if (player != null) {
-        lootcontext$builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
+        builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
       }
 
-      loottable.fill(inventory, lootcontext$builder.create(LootContextParamSets.CHEST));
+      loottable.fill(inventory, builder.create(LootContextParamSets.CHEST), ConfigManager.RANDOMISE_SEED.get() ? ThreadLocalRandom.current().nextLong() : seed == Long.MIN_VALUE ? this.lootTableSeed : seed);
     }
   }
 

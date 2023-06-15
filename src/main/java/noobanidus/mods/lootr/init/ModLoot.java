@@ -7,6 +7,7 @@ import net.minecraft.core.Registry;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.loot.conditions.LootCount;
 
+// TODO: Check where this should go
 public class ModLoot {
   public static final LootItemConditionType LOOT_COUNT = new LootItemConditionType(new LootCount.Serializer());
 

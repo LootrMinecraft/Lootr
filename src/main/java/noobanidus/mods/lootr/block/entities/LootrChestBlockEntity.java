@@ -30,6 +30,7 @@ import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -256,7 +257,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
   @Override
   public void unpackLootTable(Player player, Container inventory, ResourceLocation overrideTable, long seed) {
     if (this.level != null && this.savedLootTable != null && this.level.getServer() != null) {
-      LootTable loottable = this.level.getServer().getLootTables().get(overrideTable != null ? overrideTable : this.savedLootTable);
+      LootTable loottable = this.level.getServer().getLootData().getLootTable(overrideTable != null ? overrideTable : this.savedLootTable);
       if (loottable == LootTable.EMPTY) {
         LootrAPI.LOG.error("Unable to fill loot chest in " + level.dimension() + " at " + worldPosition + " as the loot table '" + (overrideTable != null ? overrideTable : this.savedLootTable) + "' couldn't be resolved! Please search the loot table in `latest.log` to see if there are errors in loading.");
         if (ConfigManager.REPORT_UNRESOLVED_TABLES.get()) {
@@ -264,14 +265,15 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
         }
       }
       if (player instanceof ServerPlayer) {
-        CriteriaTriggers.GENERATE_LOOT.trigger((ServerPlayer) player, overrideTable != null ? overrideTable : this.savedLootTable);
+        CriteriaTriggers.GENERATE_LOOT.trigger((ServerPlayer) player, overrideTable != null ? overrideTable : this.lootTable);
       }
-      LootContext.Builder builder = (new LootContext.Builder((ServerLevel) this.level)).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(this.worldPosition)).withOptionalRandomSeed(ConfigManager.RANDOMISE_SEED.get() ? ThreadLocalRandom.current().nextLong() : seed == Long.MIN_VALUE ? this.seed : seed);
+
+      LootParams.Builder builder = (new LootParams.Builder((ServerLevel) this.level)).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(this.worldPosition));
       if (player != null) {
         builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
       }
 
-      loottable.fill(inventory, builder.create(LootContextParamSets.CHEST));
+      loottable.fill(inventory, builder.create(LootContextParamSets.CHEST), ConfigManager.RANDOMISE_SEED.get() ? ThreadLocalRandom.current().nextLong() : seed == Long.MIN_VALUE ? this.seed : seed);
     }
   }
 

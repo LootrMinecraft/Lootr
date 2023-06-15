@@ -39,7 +39,7 @@ public class EntityTicker {
           if (entity.isAddedToWorld()) {
             continue;
           }
-          ServerLevel world = (ServerLevel) entity.level;
+          ServerLevel world = (ServerLevel) entity.level();
           ServerChunkCache provider = world.getChunkSource();
           if (provider.getChunkFuture(Mth.floor(entity.getX() / 16.0D), Mth.floor(entity.getZ() / 16.0D), ChunkStatus.FULL, false).isDone()) {
             world.addFreshEntity(entity);

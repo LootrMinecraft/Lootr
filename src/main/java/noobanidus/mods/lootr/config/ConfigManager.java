@@ -3,7 +3,6 @@ package noobanidus.mods.lootr.config;
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -31,7 +30,6 @@ import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModBlocks;
-import noobanidus.mods.lootr.util.StructureUtil;
 
 import java.nio.file.Path;
 import java.util.*;

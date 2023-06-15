@@ -8,14 +8,15 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import noobanidus.mods.lootr.LootrTags;
+import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.init.ModBlocks;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 
 public class LootrBlockTagProvider extends BlockTagsProvider {
-  public LootrBlockTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, String modId, @Nullable ExistingFileHelper existingFileHelper) {
-    super(output, lookupProvider, modId, existingFileHelper);
+  public LootrBlockTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper) {
+    super(output, lookupProvider, LootrAPI.MODID, existingFileHelper);
   }
 
   @Override

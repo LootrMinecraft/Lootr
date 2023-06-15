@@ -5,6 +5,7 @@ import net.minecraft.stats.Stats;
 import net.minecraft.resources.ResourceLocation;
 import noobanidus.mods.lootr.api.LootrAPI;
 
+// TODO: Check where this should be registered
 public class ModStats {
   public static ResourceLocation LOOTED_LOCATION = new ResourceLocation(LootrAPI.MODID, "looted_stat");
   public static Stat<ResourceLocation> LOOTED_STAT;

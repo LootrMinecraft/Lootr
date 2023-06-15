@@ -5,19 +5,19 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonObject;
 import net.minecraft.advancements.CriterionTrigger;
-import net.minecraft.server.PlayerAdvancements;
 import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
-import net.minecraft.advancements.critereon.EntityPredicate;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.DeserializationContext;
+import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.PlayerAdvancements;
+import net.minecraft.server.level.ServerPlayer;
+import noobanidus.mods.lootr.api.advancement.IGenericPredicate;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import noobanidus.mods.lootr.api.advancement.IGenericPredicate;
 
 public class GenericTrigger<T> implements CriterionTrigger<GenericTrigger.Instance<T>> {
   private final ResourceLocation id;
@@ -71,7 +71,12 @@ public class GenericTrigger<T> implements CriterionTrigger<GenericTrigger.Instan
 
   @Override
   public Instance<T> createInstance(JsonObject jsonObject, DeserializationContext conditionArrayParser) {
-    return new Instance<>(getId(), predicate.deserialize(jsonObject));
+    ContextAwarePredicate contextawarepredicate = EntityPredicate.fromJson(jsonObject, "player", conditionArrayParser);
+    return this.createInstance(jsonObject, contextawarepredicate, conditionArrayParser);
+  }
+
+  public Instance<T> createInstance(JsonObject jsonObject, ContextAwarePredicate context, DeserializationContext conditionArrayParser) {
+    return new Instance<>(getId(), context, predicate.deserialize(jsonObject));
   }
 
   public void trigger(ServerPlayer player, T condition) {
@@ -85,8 +90,8 @@ public class GenericTrigger<T> implements CriterionTrigger<GenericTrigger.Instan
   public static class Instance<T> extends AbstractCriterionTriggerInstance {
     IGenericPredicate<T> predicate;
 
-    Instance(ResourceLocation location, IGenericPredicate<T> predicate) {
-      super(location, EntityPredicate.Composite.ANY);
+    Instance(ResourceLocation location, ContextAwarePredicate contextPredicate, IGenericPredicate<T> predicate) {
+      super(location, contextPredicate);
 
       this.predicate = predicate;
     }

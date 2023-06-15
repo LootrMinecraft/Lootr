@@ -23,8 +23,8 @@ public class HandleCart {
   public static void onEntityJoin(EntityJoinLevelEvent event) {
     if (event.getEntity().getType() == EntityType.CHEST_MINECART) {
       MinecartChest chest = (MinecartChest) event.getEntity();
-      if (!chest.level.isClientSide && chest.lootTable != null && ConfigManager.CONVERT_MINESHAFTS.get() && !ConfigManager.getLootBlacklist().contains(chest.lootTable)) {
-        LootrChestMinecartEntity lootr = new LootrChestMinecartEntity(chest.level, chest.getX(), chest.getY(), chest.getZ());
+      if (!chest.level().isClientSide && chest.lootTable != null && ConfigManager.CONVERT_MINESHAFTS.get() && !ConfigManager.getLootBlacklist().contains(chest.lootTable)) {
+        LootrChestMinecartEntity lootr = new LootrChestMinecartEntity(chest.level(), chest.getX(), chest.getY(), chest.getZ());
         lootr.setLootTable(chest.lootTable, chest.lootTableSeed);
         event.setCanceled(true);
         EntityTicker.addEntity(lootr);

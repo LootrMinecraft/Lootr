@@ -84,12 +84,15 @@ public class CommandLootr {
     return tableNames;
   }
 
-  public static void createBlock(CommandSourceStack c, @Nullable Block block, @Nullable ResourceLocation table) {
+  public static void createBlock(CommandSourceStack c, @Nullable Block block, @Nullable ResourceLocation incomingTable) {
     Level world = c.getLevel();
     Vec3 incomingPos = c.getPosition();
     BlockPos pos = new BlockPos((int) incomingPos.x, (int) incomingPos.y, (int) incomingPos.z);
-    if (table == null) {
+    ResourceLocation table;
+    if (incomingTable == null) {
       table = getTables().get(world.getRandom().nextInt(getTables().size()));
+    } else {
+      table = incomingTable;
     }
     if (block == null) {
       LootrChestMinecartEntity cart = new LootrChestMinecartEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
@@ -99,7 +102,7 @@ public class CommandLootr {
       }
       cart.setLootTable(table, world.getRandom().nextLong());
       world.addFreshEntity(cart);
-      c.sendSuccess(Component.translatable("lootr.commands.summon", ComponentUtils.wrapInSquareBrackets(Component.translatable("lootr.commands.blockpos", pos.getX(), pos.getY(), pos.getZ()).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.GREEN)).withBold(true))), table.toString()), false);
+      c.sendSuccess(() -> Component.translatable("lootr.commands.summon", ComponentUtils.wrapInSquareBrackets(Component.translatable("lootr.commands.blockpos", pos.getX(), pos.getY(), pos.getZ()).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.GREEN)).withBold(true))), table.toString()), false);
     } else {
       BlockState placementState = block.defaultBlockState();
       Entity e = c.getEntity();
@@ -120,7 +123,7 @@ public class CommandLootr {
       }
       world.setBlock(pos, placementState, 2);
       RandomizableContainerBlockEntity.setLootTable(world, world.getRandom(), pos, table);
-      c.sendSuccess(Component.translatable("lootr.commands.create", Component.translatable(block.getDescriptionId()), ComponentUtils.wrapInSquareBrackets(Component.translatable("lootr.commands.blockpos", pos.getX(), pos.getY(), pos.getZ()).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.GREEN)).withBold(true))), table.toString()), false);
+      c.sendSuccess(() -> Component.translatable("lootr.commands.create", Component.translatable(block.getDescriptionId()), ComponentUtils.wrapInSquareBrackets(Component.translatable("lootr.commands.blockpos", pos.getX(), pos.getY(), pos.getZ()).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.GREEN)).withBold(true))), table.toString()), false);
     }
   }
 
@@ -135,7 +138,7 @@ public class CommandLootr {
 
   public LiteralArgumentBuilder<CommandSourceStack> builder(LiteralArgumentBuilder<CommandSourceStack> builder) {
     builder.executes(c -> {
-      c.getSource().sendSuccess(Component.translatable("lootr.commands.usage"), false);
+      c.getSource().sendSuccess(() -> Component.translatable("lootr.commands.usage"), false);
       return 1;
     });
     builder.then(Commands.literal("barrel").executes(c -> {
@@ -167,7 +170,7 @@ public class CommandLootr {
       return 1;
     })));
     builder.then(Commands.literal("clear").executes(c -> {
-      c.getSource().sendSuccess(Component.literal("Must provide player name."), true);
+      c.getSource().sendSuccess(() -> Component.literal("Must provide player name."), true);
       return 1;
     }).then(suggestProfiles().executes(c -> {
       String playerName = StringArgumentType.getString(c, "profile");
@@ -177,7 +180,7 @@ public class CommandLootr {
         return 0;
       }
       GameProfile profile = opt_profile.get();
-      c.getSource().sendSuccess(Component.literal(DataStorage.clearInventories(profile.getId()) ? "Cleared stored inventories for " + playerName : "No stored inventories for " + playerName + " to clear"), true);
+      c.getSource().sendSuccess(() -> Component.literal(DataStorage.clearInventories(profile.getId()) ? "Cleared stored inventories for " + playerName : "No stored inventories for " + playerName + " to clear"), true);
       return 1;
     })));
     builder.then(Commands.literal("cart").executes(c -> {
@@ -196,7 +199,7 @@ public class CommandLootr {
         state = world.getBlockState(pos);
       }
       if (!state.is(Blocks.CHEST) && !state.is(Blocks.BARREL)) {
-        c.getSource().sendSuccess(Component.literal("Please stand on the chest or barrel you wish to convert."), false);
+        c.getSource().sendSuccess(() -> Component.literal("Please stand on the chest or barrel you wish to convert."), false);
       } else {
         NonNullList<ItemStack> reference;
         BlockState newState;
@@ -216,7 +219,7 @@ public class CommandLootr {
         world.setBlockAndUpdate(pos, newState);
         BlockEntity te = world.getBlockEntity(pos);
         if (!(te instanceof LootrInventoryBlockEntity inventory)) {
-          c.getSource().sendSuccess(Component.literal("Unable to convert chest, BlockState is not a Lootr Inventory block."), false);
+          c.getSource().sendSuccess(() -> Component.literal("Unable to convert chest, BlockState is not a Lootr Inventory block."), false);
         } else {
           inventory.setCustomInventory(custom);
           inventory.setChanged();
@@ -232,10 +235,10 @@ public class CommandLootr {
         pos = pos.below();
         te = world.getBlockEntity(pos);
       }
-      if (!(te instanceof ILootBlockEntity)) {
-        c.getSource().sendSuccess(Component.literal("Please stand on a valid Lootr chest."), false);
+      if (!(te instanceof ILootBlockEntity ibe)) {
+        c.getSource().sendSuccess(() -> Component.literal("Please stand on a valid Lootr container."), false);
       } else {
-        c.getSource().sendSuccess(Component.literal("The ID of this inventory is: " + ((ILootBlockEntity) te).getTileId().toString()), false);
+        c.getSource().sendSuccess(() -> Component.literal("The ID of this inventory is: " + (ibe).getTileId().toString()), false);
       }
       return 1;
     }));
@@ -247,11 +250,11 @@ public class CommandLootr {
         pos = pos.below();
         be = level.getBlockEntity(pos);
       }
-      if (be instanceof ILootBlockEntity) {
+      if (be instanceof ILootBlockEntity ibe) {
         DataStorage.setRefreshing(((ILootBlockEntity) be).getTileId(), ConfigManager.REFRESH_VALUE.get());
-        c.getSource().sendSuccess(Component.literal("Container with ID " + ((ILootBlockEntity) be).getTileId() + " has been set to refresh with a delay of " + ConfigManager.REFRESH_VALUE.get()), false);
+        c.getSource().sendSuccess(() -> Component.literal("Container with ID " + (ibe).getTileId() + " has been set to refresh with a delay of " + ConfigManager.REFRESH_VALUE.get()), false);
       } else {
-        c.getSource().sendSuccess(Component.literal("Please stand on a valid Lootr container."), false);
+        c.getSource().sendSuccess(() -> Component.literal("Please stand on a valid Lootr container."), false);
       }
       return 1;
     }));
@@ -263,11 +266,11 @@ public class CommandLootr {
         pos = pos.below();
         be = level.getBlockEntity(pos);
       }
-      if (be instanceof ILootBlockEntity) {
-        DataStorage.setDecaying(((ILootBlockEntity) be).getTileId(), ConfigManager.DECAY_VALUE.get());
-        c.getSource().sendSuccess(Component.literal("Container with ID " + ((ILootBlockEntity) be).getTileId() + " has been set to decay with a delay of " + ConfigManager.DECAY_VALUE.get()), false);
+      if (be instanceof ILootBlockEntity ibe) {
+        DataStorage.setDecaying((ibe).getTileId(), ConfigManager.DECAY_VALUE.get());
+        c.getSource().sendSuccess(() -> Component.literal("Container with ID " + (ibe).getTileId() + " has been set to decay with a delay of " + ConfigManager.DECAY_VALUE.get()), false);
       } else {
-        c.getSource().sendSuccess(Component.literal("Please stand on a valid Lootr container."), false);
+        c.getSource().sendSuccess(() -> Component.literal("Please stand on a valid Lootr container."), false);
       }
       return 1;
     }));
@@ -275,15 +278,15 @@ public class CommandLootr {
       BlockPos position = Vec3Argument.getCoordinates(c, "location").getBlockPos(c.getSource());
       Level world = c.getSource().getLevel();
       BlockEntity tile = world.getBlockEntity(position);
-      if (tile instanceof ILootBlockEntity) {
+      if (tile instanceof ILootBlockEntity ibe) {
         Set<UUID> openers = ((ILootBlockEntity) tile).getOpeners();
-        c.getSource().sendSuccess(Component.literal("Tile at location " + position + " has " + openers.size() + " openers. UUIDs as follows:"), true);
+        c.getSource().sendSuccess(() -> Component.literal("Tile at location " + position + " has " + openers.size() + " openers. UUIDs as follows:"), true);
         for (UUID uuid : openers) {
           Optional<GameProfile> prof = c.getSource().getServer().getProfileCache().get(uuid);
-          c.getSource().sendSuccess(Component.literal("UUID: " + uuid.toString() + ", user profile: " + (prof.isPresent() ? prof.get().getName() : "null")), true);
+          c.getSource().sendSuccess(() -> Component.literal("UUID: " + uuid.toString() + ", user profile: " + (prof.isPresent() ? prof.get().getName() : "null")), true);
         }
       } else {
-        c.getSource().sendSuccess(Component.literal("No Lootr tile exists at location: " + position), false);
+        c.getSource().sendSuccess(() -> Component.literal("No Lootr tile exists at location: " + position), false);
       }
       return 1;
     })));

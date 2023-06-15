@@ -11,7 +11,7 @@ import noobanidus.mods.lootr.init.ModAdvancements;
 public class HandleAdvancement {
   @SubscribeEvent
   public static void onAdvancement(AdvancementEvent event) {
-    if (!event.getEntity().level.isClientSide()) {
+    if (!event.getEntity().level().isClientSide()) {
       ModAdvancements.ADVANCEMENT_PREDICATE.trigger((ServerPlayer) event.getEntity(), event.getAdvancement().getId());
     }
   }

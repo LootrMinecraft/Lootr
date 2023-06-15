@@ -1,0 +1,12 @@
+{
+  "sources": [
+    {
+      "type": "minecraft:single",
+      "resource": "lootr:shulker"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "lootr:shulker_opened"
+    }
+  ]
+}
