@@ -38,10 +38,15 @@ public class LootrEventsInit {
 
         // TODO: Check to see if this properly cancels block breaking
         PlayerBlockBreakEvents.BEFORE.register((world, player, pos, state, blockEntity) -> {
-                if(LootrBlockInit.specialLootChests.contains(state.getBlock())) {
-                    if(LootrModConfig.get().breaking.disable_break) {
-                        if(player.getAbilities().instabuild) {
-                            if(!player.isShiftKeyDown()) {
+            if (!world.isClientSide()) {
+                if (LootrBlockInit.specialLootChests.contains(state.getBlock())) {
+                    if (LootrModConfig.get().breaking.enable_break) {
+                        return true;
+                    }
+
+                    if (LootrModConfig.get().breaking.disable_break) {
+                        if (player.getAbilities().instabuild) {
+                            if (!player.isShiftKeyDown()) {
                                 player.sendSystemMessage(Component.translatable("lootr.message.cannot_break_sneak").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))));
                                 return false;
                             }
@@ -50,13 +55,14 @@ public class LootrEventsInit {
                             return false;
                         }
                     } else {
-                        if(!player.isShiftKeyDown()) {
+                        if (!player.isShiftKeyDown()) {
                             player.sendSystemMessage(Component.translatable("lootr.message.should_sneak").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))));
                             player.sendSystemMessage(Component.translatable("lootr.message.should_sneak2", Component.translatable("lootr.message.should_sneak3").setStyle(Style.EMPTY.withBold(true))).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))));
                             return false;
                         }
                     }
                 }
+            }
             return true;
         });
 

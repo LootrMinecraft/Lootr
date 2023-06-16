@@ -67,6 +67,8 @@ public class LootrModConfig implements ConfigData {
   public Breaking breaking = new Breaking();
 
   public static class Breaking {
+    // Mutually exclusive with disable_break
+    public boolean enable_break = false;
     public boolean disable_break = false;
     public boolean power_comparators = true;
     public boolean blast_resistant = false;
@@ -280,7 +282,6 @@ public class LootrModConfig implements ConfigData {
   }
 
   private static <V extends Comparable<V>> BlockState safeReplace(BlockState state, BlockState original, Property<V> property) {
-    // TODO: Bit of a dirty hack
     if (property == ChestBlock.TYPE && state.hasProperty(property)) {
       return state.setValue(ChestBlock.TYPE, ChestType.SINGLE);
     }
