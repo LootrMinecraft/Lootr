@@ -27,6 +27,10 @@ import net.zestyblaze.lootr.tags.LootrTags;
 import java.util.*;
 import java.util.stream.Collectors;
 
+// TODO:
+// - Translation keys for changed values
+// - Ignore flags for private config caches
+// - Option to refresh private values on configuration change
 @Config(name = LootrAPI.MODID)
 public class LootrModConfig implements ConfigData {
   private static Set<String> DECAY_MODS = null;
