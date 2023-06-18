@@ -15,6 +15,7 @@ import net.zestyblaze.lootr.blocks.entities.TileTicker;
 import net.zestyblaze.lootr.chunk.HandleChunk;
 import net.zestyblaze.lootr.config.LootrModConfig;
 import net.zestyblaze.lootr.entity.EntityTicker;
+import net.zestyblaze.lootr.tags.LootrTags;
 
 public class LootrEventsInit {
     public static MinecraftServer serverInstance;
@@ -38,7 +39,7 @@ public class LootrEventsInit {
 
         PlayerBlockBreakEvents.BEFORE.register((world, player, pos, state, blockEntity) -> {
             if (!world.isClientSide()) {
-                if (LootrBlockInit.specialLootChests.contains(state.getBlock())) {
+                if (state.is(LootrTags.Blocks.CONTAINERS)) {
                     // TODO: Entity tags
                     if (LootrModConfig.get().breaking.enable_break) {
                         return true;
@@ -67,7 +68,7 @@ public class LootrEventsInit {
         });
 
         PlayerBlockBreakEvents.CANCELED.register((world, player, pos, state, blockEntity) -> {
-            if(LootrBlockInit.specialLootChests.contains(state.getBlock())) {
+            if (state.is(LootrTags.Blocks.CONTAINERS)) {
                 blockEntity.setChanged();
                 if (blockEntity instanceof ILootBlockEntity lbe) {
                     lbe.updatePacketViaState();
