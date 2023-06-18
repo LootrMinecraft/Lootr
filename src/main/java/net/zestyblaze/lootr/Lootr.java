@@ -8,6 +8,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.zestyblaze.lootr.api.LootrAPI;
+import net.zestyblaze.lootr.config.LootrModConfig;
+import net.zestyblaze.lootr.impl.LootrAPIImpl;
 import net.zestyblaze.lootr.registry.*;
 
 public class Lootr implements ModInitializer {
@@ -27,5 +29,6 @@ public class Lootr implements ModInitializer {
     LootrCommandInit.registerCommands();
 
     ItemGroupEvents.modifyEntriesEvent(TAB).register(content -> content.accept(LootrItemInit.TROPHY));
+    LootrAPI.INSTANCE = new LootrAPIImpl();
   }
 }
