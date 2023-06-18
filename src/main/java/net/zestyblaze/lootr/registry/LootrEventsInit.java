@@ -44,7 +44,7 @@ public class LootrEventsInit {
                     if ((LootrAPI.isFakePlayer(player) && LootrModConfig.get().breaking.enable_fake_player_break) || LootrModConfig.get().breaking.enable_break) {
                         return true;
                     }
-                    
+
                     if (LootrModConfig.get().breaking.disable_break) {
                         if (player.getAbilities().instabuild) {
                             if (!player.isShiftKeyDown()) {

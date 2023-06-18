@@ -33,18 +33,18 @@ import java.util.stream.Collectors;
 // - Option to refresh private values on configuration change
 @Config(name = LootrAPI.MODID)
 public class LootrModConfig implements ConfigData {
-  private static Set<String> DECAY_MODS = null;
-  private static Set<ResourceLocation> DECAY_TABLES = null;
-  private static Set<String> REFRESH_MODS = null;
-  private static Set<ResourceLocation> REFRESH_TABLES = null;
+  @ConfigEntry.Gui.Excluded private static Set<String> DECAY_MODS = null;
+  @ConfigEntry.Gui.Excluded private static Set<ResourceLocation> DECAY_TABLES = null;
+  @ConfigEntry.Gui.Excluded private static Set<String> REFRESH_MODS = null;
+  @ConfigEntry.Gui.Excluded private static Set<ResourceLocation> REFRESH_TABLES = null;
 
-  private static Set<ResourceKey<Level>> DIM_WHITELIST = null;
-  private static Set<ResourceKey<Level>> DIM_BLACKLIST = null;
-  private static Set<ResourceKey<Level>> DECAY_DIMS = null;
-  private static Set<ResourceKey<Level>> REFRESH_DIMS = null;
-  private static Set<ResourceLocation> LOOT_BLACKLIST = null;
-  private static Map<Block, Block> replacements = null;
-  private static Set<String> LOOT_MODIDS = null;
+  @ConfigEntry.Gui.Excluded private static Set<ResourceKey<Level>> DIM_WHITELIST = null;
+  @ConfigEntry.Gui.Excluded private static Set<ResourceKey<Level>> DIM_BLACKLIST = null;
+  @ConfigEntry.Gui.Excluded private static Set<ResourceKey<Level>> DECAY_DIMS = null;
+  @ConfigEntry.Gui.Excluded private static Set<ResourceKey<Level>> REFRESH_DIMS = null;
+  @ConfigEntry.Gui.Excluded private static Set<ResourceLocation> LOOT_BLACKLIST = null;
+  @ConfigEntry.Gui.Excluded private static Map<Block, Block> replacements = null;
+  @ConfigEntry.Gui.Excluded private static Set<String> LOOT_MODIDS = null;
 
   @ConfigEntry.Gui.CollapsibleObject
   public Debug debug = new Debug();
