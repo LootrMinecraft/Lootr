@@ -120,6 +120,14 @@ public class LootrModConfig implements ConfigData {
   }
 
   @ConfigEntry.Gui.CollapsibleObject
+  public Notifications notifications = new Notifications();
+
+  public static class Notifications {
+    public int notification_delay = 30 * 20;
+    public boolean disable_notifications = false;
+  }
+
+  @ConfigEntry.Gui.CollapsibleObject
   public Vanilla vanilla = new Vanilla();
 
   public static class Vanilla {
@@ -340,5 +348,10 @@ public class LootrModConfig implements ConfigData {
     }
 
     return getLootModids().contains(table.getNamespace());
+  }
+
+  public static boolean shouldNotify (int remaining) {
+    int delay = get().notifications.notification_delay;
+    return !get().notifications.disable_notifications && (delay == -1 || remaining <= delay);
   }
 }
