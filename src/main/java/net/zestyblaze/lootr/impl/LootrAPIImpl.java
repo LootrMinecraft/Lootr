@@ -5,6 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.zestyblaze.lootr.api.ILootrAPI;
@@ -19,8 +20,11 @@ import java.util.function.Supplier;
 
 public class LootrAPIImpl implements ILootrAPI {
     @Override
-    public boolean isFakePlayer(ServerPlayer player) {
-        return player.connection == null || player.getClass() != ServerPlayer.class;
+    public boolean isFakePlayer(Player player) {
+        if (player instanceof ServerPlayer splayer) {
+            return splayer.connection == null || splayer.getClass() != ServerPlayer.class;
+        }
+        return false;
     }
 
     @Override

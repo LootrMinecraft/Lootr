@@ -40,11 +40,10 @@ public class LootrEventsInit {
         PlayerBlockBreakEvents.BEFORE.register((world, player, pos, state, blockEntity) -> {
             if (!world.isClientSide()) {
                 if (state.is(LootrTags.Blocks.CONTAINERS)) {
-                    // TODO: Entity tags
-                    if (LootrModConfig.get().breaking.enable_break) {
+                    if ((LootrAPI.isFakePlayer(player) && LootrModConfig.get().breaking.enable_fake_player_break) || LootrModConfig.get().breaking.enable_break) {
                         return true;
                     }
-
+                    
                     if (LootrModConfig.get().breaking.disable_break) {
                         if (player.getAbilities().instabuild) {
                             if (!player.isShiftKeyDown()) {

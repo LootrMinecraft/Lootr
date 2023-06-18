@@ -96,8 +96,11 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
             return true;
         }
 
-        if (source.getEntity() instanceof Player player) {
-            if (((LootrModConfig.get().breaking.disable_break && player.isCreative()) || LootrModConfig.get().breaking.disable_break) && player.isShiftKeyDown()) {
+        if (source.getEntity() instanceof ServerPlayer player) {
+            if (LootrAPI.isFakePlayer(player) && (LootrModConfig.get().breaking.enable_fake_player_break || LootrModConfig.get().breaking.enable_break)) {
+                return false;
+            }
+            if ((LootrModConfig.get().breaking.disable_break && player.isCreative()) || (!LootrModConfig.get().breaking.disable_break && player.isShiftKeyDown())) {
                 return false;
             } else {
                 source.getEntity().sendSystemMessage(Component.translatable("lootr.message.cart_should_sneak").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))));
