@@ -19,6 +19,11 @@ import java.util.function.Supplier;
 
 public class LootrAPIImpl implements ILootrAPI {
     @Override
+    public boolean isFakePlayer(ServerPlayer player) {
+        return player.connection == null || player.getClass() != ServerPlayer.class;
+    }
+
+    @Override
     public boolean clearPlayerLoot(UUID id) {
         return DataStorage.clearInventories(id);
     }
