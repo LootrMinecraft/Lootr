@@ -224,7 +224,6 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
                 CriteriaTriggers.GENERATE_LOOT.trigger((ServerPlayer) player, overrideTable != null ? overrideTable : this.lootTable);
             }
             LootParams.Builder builder = (new LootParams.Builder((ServerLevel) this.level())).withParameter(LootContextParams.ORIGIN, position());
-            builder.withParameter(LootContextParams.KILLER_ENTITY, this);
             if (player != null) {
                 builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
             }
