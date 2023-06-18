@@ -346,7 +346,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
             LootTable loottable = this.level.getServer().getLootTables().get(overrideTable != null ? overrideTable : this.savedLootTable);
             if (loottable == LootTable.EMPTY) {
                 LootrAPI.LOG.error("Unable to fill loot shulker in " + level.dimension() + " at " + worldPosition + " as the loot table '" + (overrideTable != null ? overrideTable : this.savedLootTable) + "' couldn't be resolved! Please search the loot table in `latest.log` to see if there are errors in loading.");
-                if (LootrModConfig.get().debug.report_unresolved_tables) {
+                if (LootrModConfig.get().debug.report_invalid_tables) {
                     player.sendSystemMessage(Component.translatable("lootr.message.invalid_table", (overrideTable != null ? overrideTable : this.savedLootTable).toString()).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED)).withBold(true)));
                 }
             }

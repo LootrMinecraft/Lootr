@@ -49,8 +49,7 @@ public class LootrModConfig implements ConfigData {
   public Debug debug = new Debug();
 
   public static class Debug {
-    @ConfigEntry.Gui.RequiresRestart
-    public boolean report_unresolved_tables = false;
+    public boolean report_invalid_tables = true;
   }
 
   @ConfigEntry.Gui.CollapsibleObject
