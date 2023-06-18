@@ -15,6 +15,8 @@ import java.util.function.LongSupplier;
 import java.util.function.Supplier;
 
 public interface ILootrAPI {
+    boolean isFakePlayer (ServerPlayer player);
+
     default boolean clearPlayerLoot(ServerPlayer entity) {
         return clearPlayerLoot(entity.getUUID());
     }
