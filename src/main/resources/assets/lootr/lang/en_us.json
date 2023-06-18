@@ -46,7 +46,6 @@
   "lootr.advancements.root.title": "Belongs in a Museum",
   "lootr.advancements.root.description": "Bring instanced, per-player Loot into your world.",
   "itemGroup.lootr.lootr": "Lootr",
-
   "text.autoconfig.lootr.title": "Lootr",
 
   "text.autoconfig.lootr.option.debug": "Debug",
@@ -80,4 +79,9 @@
   "text.autoconfig.lootr.option.refresh.refresh_modids": "Refresh ModIDs",
   "text.autoconfig.lootr.option.refresh.refresh_loot_tables": "Refresh Loot Tables",
   "text.autoconfig.lootr.option.refresh.refresh_dimensions": "Refresh Dimensions",
+  "text.autoconfig.lootr.option.notifications": "Notifications",
+  "text.autoconfig.lootr.option.notifications.notification_delay": "Delay",
+  "text.autoconfig.lootr.option.notifications.disable_notifications": "Disable Notifications",
+  "text.autoconfig.lootr.option.vanilla": "Vanilla",
+  "text.autoconfig.lootr.option.vanilla.vanilla_textures": "Vanilla Textures"
 }
