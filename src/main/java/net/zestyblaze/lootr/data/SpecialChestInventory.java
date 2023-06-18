@@ -165,7 +165,7 @@ public class SpecialChestInventory implements ILootrInventory {
 
     @Override
     public void startOpen(Player player) {
-        Level world = player.level;
+        Level world = player.level();
         BaseContainerBlockEntity tile = getTile(world);
         if (tile != null) {
             tile.startOpen(player);
@@ -181,7 +181,7 @@ public class SpecialChestInventory implements ILootrInventory {
     @Override
     public void stopOpen(Player player) {
         setChanged();
-        Level world = player.level;
+        Level world = player.level();
         if (newChestData.getPos() != null) {
             BaseContainerBlockEntity tile = getTile(world);
             if (tile != null) {

@@ -107,19 +107,6 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState pState, LootContext.Builder pBuilder) {
-        ResourceLocation resourcelocation = this.getLootTable();
-        if (resourcelocation == BuiltInLootTables.EMPTY) {
-            return Collections.emptyList();
-        } else {
-            LootContext lootcontext = pBuilder.withParameter(LootContextParams.BLOCK_STATE, pState).create(LootContextParamSets.BLOCK);
-            ServerLevel serverlevel = lootcontext.getLevel();
-            LootTable loottable = serverlevel.getServer().getLootTables().get(resourcelocation);
-            return loottable.getRandomItems(lootcontext);
-        }
-    }
-
-    @Override
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
         if (!pState.is(pNewState.getBlock())) {
             BlockEntity blockentity = pLevel.getBlockEntity(pPos);

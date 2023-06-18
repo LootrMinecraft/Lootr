@@ -138,7 +138,7 @@ public class ChestUtil {
                 LootrAdvancementsInit.CART_PREDICATE.trigger((ServerPlayer) player, cart.getUUID());
                 UUID tileId = cart.getUUID();
                 if (DataStorage.isDecayed(tileId)) {
-                    cart.destroy(cart.damageSources().outOfWorld());
+                    cart.destroy(cart.damageSources().fellOutOfWorld());
                     player.displayClientMessage(Component.translatable("lootr.message.decayed").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), true);
                     DataStorage.removeDecayed(tileId);
                     return;

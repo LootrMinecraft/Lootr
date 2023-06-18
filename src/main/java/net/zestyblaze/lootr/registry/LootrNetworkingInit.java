@@ -12,8 +12,8 @@ public class LootrNetworkingInit {
         ClientPlayNetworking.registerGlobalReceiver(NetworkConstants.CLOSE_CART_CHANNEL, (client, handler, buf, responseSender) -> {
             int entityId = buf.readVarInt();
             client.execute(() -> {
-                if (client.player != null && client.player.level != null) {
-                    Entity potential = client.player.level.getEntity(entityId);
+                if (client.player != null && client.player.level() != null) {
+                    Entity potential = client.player.level().getEntity(entityId);
                     if (potential instanceof LootrChestMinecartEntity cart) {
                         cart.setClosed();
                     }
@@ -24,8 +24,8 @@ public class LootrNetworkingInit {
         ClientPlayNetworking.registerGlobalReceiver(NetworkConstants.OPEN_CART_CHANNEL, (client, handler, buf, responseSender) -> {
             int entityId = buf.readVarInt();
             client.execute(() -> {
-                if (client.player != null && client.player.level != null) {
-                    Entity potential = client.player.level.getEntity(entityId);
+                if (client.player != null && client.player.level() != null) {
+                    Entity potential = client.player.level().getEntity(entityId);
                     if (potential instanceof LootrChestMinecartEntity cart) {
                         cart.setOpened();
                     }

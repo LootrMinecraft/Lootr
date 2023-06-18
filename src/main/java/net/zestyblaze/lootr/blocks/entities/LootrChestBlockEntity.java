@@ -27,7 +27,7 @@ import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -65,16 +65,16 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
 
         @Override
         protected void openerCountChanged(Level level, BlockPos pos, BlockState state, int i, int j) {
-            LootrChestBlockEntity.this.signalOpenCount(level, pos, state,i, j);
+            LootrChestBlockEntity.this.signalOpenCount(level, pos, state, i, j);
         }
 
         @Override
         protected boolean isOwnContainer(Player player) {
-            if(!(player.containerMenu instanceof ChestMenu)) {
+            if (!(player.containerMenu instanceof ChestMenu)) {
                 return false;
             } else {
-                Container container = ((ChestMenu)player.containerMenu).getContainer();
-                if(container instanceof SpecialChestInventory chest) {
+                Container container = ((ChestMenu) player.containerMenu).getContainer();
+                if (container instanceof SpecialChestInventory chest) {
                     return LootrChestBlockEntity.this.getTileId().equals(chest.getTileId());
                 }
                 return false;
@@ -125,27 +125,27 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
     @Override
     protected void saveAdditional(CompoundTag compound) {
         super.saveAdditional(compound);
-        if(savedLootTable != null) {
+        if (savedLootTable != null) {
             compound.putString("LootTable", savedLootTable.toString());
         }
-        if(seed != -1) {
+        if (seed != -1) {
             compound.putLong("LootTableSeed", seed);
         }
         compound.putUUID("tileId", getTileId());
         ListTag list = new ListTag();
-        for(UUID opener : this.openers) {
+        for (UUID opener : this.openers) {
             list.add(NbtUtils.createUUID(opener));
         }
         compound.put("LootrOpeners", list);
     }
 
     public static <T extends BlockEntity> void lootrLidAnimateTick(Level pLevel, BlockPos pPos, BlockState pState, T pBlockEntity) {
-        ((LootrChestBlockEntity)pBlockEntity).chestLidController.tickLid();
+        ((LootrChestBlockEntity) pBlockEntity).chestLidController.tickLid();
     }
 
     protected static void playSound(Level level, BlockPos pos, BlockState state, SoundEvent sound) {
         ChestType chestType = state.getValue(ChestBlock.TYPE);
-        if(chestType != ChestType.LEFT) {
+        if (chestType != ChestType.LEFT) {
             double d0 = (double) pos.getX() + 0.5D;
             double d1 = (double) pos.getY() + 0.5D;
             double d2 = (double) pos.getZ() + 0.5D;
@@ -160,7 +160,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
 
     @Override
     public boolean triggerEvent(int pId, int pType) {
-        if(pId == 1) {
+        if (pId == 1) {
             this.chestLidController.shouldBeOpen(pType > 0);
             return true;
         } else {
@@ -170,7 +170,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
 
     @Override
     public void startOpen(Player pPlayer) {
-        if(!this.remove && !pPlayer.isSpectator()) {
+        if (!this.remove && !pPlayer.isSpectator()) {
             this.openersCounter.incrementOpeners(pPlayer, this.getLevel(), this.getBlockPos(), this.getBlockState());
         }
 
@@ -178,14 +178,14 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
 
     @Override
     public void stopOpen(Player pPlayer) {
-        if(!this.remove && !pPlayer.isSpectator()) {
+        if (!this.remove && !pPlayer.isSpectator()) {
             this.openersCounter.decrementOpeners(pPlayer, this.getLevel(), this.getBlockPos(), this.getBlockState());
         }
     }
 
     @Override
     public void recheckOpen() {
-        if(!this.remove) {
+        if (!this.remove) {
             this.openersCounter.recheckOpeners(this.getLevel(), this.getBlockPos(), this.getBlockState());
         }
     }
@@ -197,7 +197,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
 
     @Override
     public void updatePacketViaState() {
-        if(level != null && !level.isClientSide) {
+        if (level != null && !level.isClientSide) {
             BlockState state = level.getBlockState(getBlockPos());
             level.sendBlockUpdated(getBlockPos(), state, state, 8);
         }
@@ -205,9 +205,9 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
 
     public static int getOpenCount(BlockGetter pLevel, BlockPos pPos) {
         BlockState blockstate = pLevel.getBlockState(pPos);
-        if(blockstate.hasBlockEntity()) {
+        if (blockstate.hasBlockEntity()) {
             BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-            if(blockentity instanceof LootrChestBlockEntity) {
+            if (blockentity instanceof LootrChestBlockEntity) {
                 return ((LootrChestBlockEntity) blockentity).openersCounter.getOpenerCount();
             }
         }
@@ -231,29 +231,29 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
 
     @Override
     public void unpackLootTable(Player player, Container inventory, ResourceLocation overrideTable, long seed) {
-        if(this.level != null && this.savedLootTable != null && this.level.getServer() != null) {
-            LootTable loottable = this.level.getServer().getLootTables().get(overrideTable != null ? overrideTable : this.savedLootTable);
-            if(loottable == LootTable.EMPTY) {
+        if (this.level != null && this.savedLootTable != null && this.level.getServer() != null) {
+            LootTable loottable = this.level.getServer().getLootData().getLootTable(overrideTable != null ? overrideTable : this.savedLootTable);
+            if (loottable == LootTable.EMPTY) {
                 LootrAPI.LOG.error("Unable to fill loot chest in " + level.dimension() + " at " + worldPosition + " as the loot table '" + (overrideTable != null ? overrideTable : this.savedLootTable) + "' couldn't be resolved! Please search the loot table in `latest.log` to see if there are errors in loading.");
-                if(LootrModConfig.get().debug.report_invalid_tables) {
+                if (LootrModConfig.get().debug.report_invalid_tables) {
                     player.sendSystemMessage(Component.translatable("lootr.message.invalid_table", (overrideTable != null ? overrideTable : this.savedLootTable).toString()).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED)).withBold(true)));
                 }
             }
-            if(player instanceof ServerPlayer) {
+            if (player instanceof ServerPlayer) {
                 CriteriaTriggers.GENERATE_LOOT.trigger((ServerPlayer) player, overrideTable != null ? overrideTable : this.lootTable);
             }
-            LootContext.Builder builder = (new LootContext.Builder((ServerLevel) this.level)).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(this.worldPosition)).withOptionalRandomSeed(LootrModConfig.get().seed.randomize_seed ? ThreadLocalRandom.current().nextLong() : seed == Long.MIN_VALUE ? this.seed : seed);
-            if(player != null) {
+            LootParams.Builder builder = (new LootParams.Builder((ServerLevel) this.level)).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(this.worldPosition));
+            if (player != null) {
                 builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
             }
-            loottable.fill(inventory, builder.create(LootContextParamSets.CHEST));
+            loottable.fill(inventory, builder.create(LootContextParamSets.CHEST), LootrModConfig.get().seed.randomize_seed ? ThreadLocalRandom.current().nextLong() : seed == Long.MIN_VALUE ? this.seed : seed);
         }
     }
 
     @Override
     public void unpackLootTable(Player player) {
     }
-    
+
 
     @Override
     public ResourceLocation getTable() {
@@ -277,7 +277,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
 
     @Override
     public UUID getTileId() {
-        if(this.tileId == null) {
+        if (this.tileId == null) {
             this.tileId = UUID.randomUUID();
         }
         return this.tileId;

@@ -13,13 +13,12 @@ import net.zestyblaze.lootr.impl.LootrAPIImpl;
 import net.zestyblaze.lootr.registry.*;
 
 public class Lootr implements ModInitializer {
-  private static final CreativeModeTab TAB = FabricItemGroup.builder(new ResourceLocation(LootrAPI.MODID, LootrAPI.MODID)).title(Component.translatable("itemGroup.lootr.lootr")).icon(() -> new ItemStack(LootrItemInit.CHEST)).build();
-
   @Override
   public void onInitialize() {
     LootrConfigInit.registerConfig();
     LootrItemInit.registerItems();
     LootrBlockInit.registerBlocks();
+    LootrTabInit.registerTabs();
     LootrBlockEntityInit.registerBlockEntities();
     LootrEntityInit.registerEntities();
     LootrLootInit.registerLoot();
@@ -28,7 +27,6 @@ public class Lootr implements ModInitializer {
     LootrAdvancementsInit.registerAdvancements();
     LootrCommandInit.registerCommands();
 
-    ItemGroupEvents.modifyEntriesEvent(TAB).register(content -> content.accept(LootrItemInit.TROPHY));
     LootrAPI.INSTANCE = new LootrAPIImpl();
   }
 }

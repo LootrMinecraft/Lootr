@@ -35,11 +35,11 @@
   ],
 
   "depends": {
-    "fabricloader": ">=0.12.12",
+    "fabricloader": ">=0.14.19",
     "fabric": "*",
-    "minecraft": "~1.19.4",
+    "minecraft": "~1.20",
     "java": ">=17",
-    "cloth-config2": ">=6.1.48"
+    "cloth-config2": ">=11.0.99"
   },
   "accessWidener": "lootr.accessWidener"
 }

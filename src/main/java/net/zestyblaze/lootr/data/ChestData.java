@@ -138,7 +138,7 @@ public class ChestData extends SavedData {
     }
 
     public SpecialChestInventory createInventory(ServerPlayer player, LootFiller filler, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
-        ServerLevel level = (ServerLevel) player.level;
+        ServerLevel level = (ServerLevel) player.level();
         SpecialChestInventory result;
         if (level.dimension() != dimension) {
             MinecraftServer server = ServerAccessImpl.getServer();
@@ -161,7 +161,7 @@ public class ChestData extends SavedData {
     }
 
     public SpecialChestInventory createInventory(ServerPlayer player, LootFiller filler, BaseContainerBlockEntity blockEntity, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
-        ServerLevel level = (ServerLevel) player.level;
+        ServerLevel level = (ServerLevel) player.level();
         SpecialChestInventory result;
         if (level.dimension() != dimension) {
             MinecraftServer server = ServerAccessImpl.getServer();
@@ -184,7 +184,7 @@ public class ChestData extends SavedData {
     }
 
     public SpecialChestInventory createInventory(ServerPlayer player, LootFiller filler, @Nullable RandomizableContainerBlockEntity tile) {
-        ServerLevel world = (ServerLevel) player.level;
+        ServerLevel world = (ServerLevel) player.level();
         SpecialChestInventory result;
         long seed = -1;
         ResourceLocation lootTable;
