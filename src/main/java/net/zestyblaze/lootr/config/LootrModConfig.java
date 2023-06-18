@@ -67,8 +67,8 @@ public class LootrModConfig implements ConfigData {
   public Breaking breaking = new Breaking();
 
   public static class Breaking {
-    // Mutually exclusive with disable_break
     public boolean enable_break = false;
+    public boolean enable_fake_player_break = false;
     public boolean disable_break = false;
     public boolean power_comparators = true;
     public boolean blast_resistant = false;

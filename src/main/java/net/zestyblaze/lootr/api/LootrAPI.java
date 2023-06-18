@@ -5,6 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import org.apache.logging.log4j.LogManager;
@@ -21,7 +22,7 @@ public class LootrAPI {
 
     public static ILootrAPI INSTANCE;
 
-    public static boolean isFakePlayer (ServerPlayer entity) {
+    public static boolean isFakePlayer (Player entity) {
         return INSTANCE.isFakePlayer(entity);
     }
 
