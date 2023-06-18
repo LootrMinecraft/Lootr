@@ -7,6 +7,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.zestyblaze.lootr.api.LootrAPI;
 import net.zestyblaze.lootr.config.LootrModConfig;
+import net.zestyblaze.lootr.impl.LootrAPIImpl;
 import net.zestyblaze.lootr.registry.*;
 
 public class Lootr implements ModInitializer {
@@ -24,5 +25,6 @@ public class Lootr implements ModInitializer {
     LootrStatsInit.registerStats();
     LootrAdvancementsInit.registerAdvancements();
     LootrCommandInit.registerCommands();
+    LootrAPI.INSTANCE = new LootrAPIImpl();
   }
 }
