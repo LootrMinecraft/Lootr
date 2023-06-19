@@ -69,6 +69,10 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
   @Override
+  public void unpackChestVehicleLootTable(@org.jetbrains.annotations.Nullable Player p_219950_) {
+  }
+
+  @Override
   public Set<UUID> getOpeners() {
     return openers;
   }
