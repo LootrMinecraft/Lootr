@@ -251,4 +251,8 @@ public class LootrChestMinecartEntity extends ContainerMinecartEntity implements
       addOpener(player);
     }
   }
+
+  @Override
+  public void unpackLootTable(@Nullable PlayerEntity pPlayer) {
+  }
 }
