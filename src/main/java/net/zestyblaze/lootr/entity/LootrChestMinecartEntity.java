@@ -63,6 +63,10 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     }
 
     @Override
+    public void unpackChestVehicleLootTable(@Nullable Player player) {
+    }
+
+    @Override
     public Item getDropItem() {
         return Items.CHEST_MINECART;
     }
