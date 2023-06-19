@@ -63,6 +63,10 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     }
 
     @Override
+    public void unpackLootTable(@Nullable Player player) {
+    }
+
+    @Override
     public Set<UUID> getOpeners() {
         return openers;
     }
