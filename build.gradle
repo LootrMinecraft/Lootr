@@ -66,6 +66,11 @@ jar {
 	}
 }
 
+remapJar {
+	input.set jar.archiveFile
+	dependsOn jar
+}
+
 loom {
 	accessWidenerPath = file("src/main/resources/lootr.accessWidener")
 }
@@ -73,10 +78,18 @@ loom {
 publishing {
 	publications {
 		mavenJava(MavenPublication) {
-			from components.java
+			artifact remapJar
+			artifact(sourcesJar) {
+				builtBy remapSourcesJar
+			}
+
+			artifactId = "lootr"
 		}
 	}
 
 	repositories {
+		maven {
+			url "file:///" + System.getenv("local_maven")
+		}
 	}
 }
