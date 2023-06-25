@@ -246,7 +246,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
             if (player != null) {
                 builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
             }
-            loottable.fill(inventory, builder.create(LootContextParamSets.CHEST), LootrModConfig.get().seed.randomize_seed ? ThreadLocalRandom.current().nextLong() : seed == Long.MIN_VALUE ? this.seed : seed);
+            loottable.fill(inventory, builder.create(LootContextParamSets.CHEST), LootrAPI.getLootSeed(seed == Long.MIN_VALUE ? this.seed : seed));
         }
     }
 
