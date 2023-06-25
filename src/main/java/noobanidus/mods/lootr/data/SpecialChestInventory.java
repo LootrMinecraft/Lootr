@@ -89,7 +89,7 @@ public class SpecialChestInventory implements ILootrInventory {
 
   @Override
   public int getContainerSize() {
-    return 27;
+    return this.contents.size();
   }
 
   @Override
