@@ -41,4 +41,8 @@ public class LootrAPI {
     public static MenuProvider getModdedMenu(Level level, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
         return INSTANCE.getModdedMenu(level, id, pos, player, sizeSupplier, displaySupplier, filler, tableSupplier, seedSupplier);
     }
+
+    public static long getLootSeed (long seed) {
+        return INSTANCE.getLootSeed(seed);
+    }
 }

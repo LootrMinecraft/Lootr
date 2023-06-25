@@ -10,10 +10,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.zestyblaze.lootr.api.ILootrAPI;
 import net.zestyblaze.lootr.api.LootFiller;
+import net.zestyblaze.lootr.config.LootrModConfig;
 import net.zestyblaze.lootr.data.DataStorage;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.IntSupplier;
 import java.util.function.LongSupplier;
 import java.util.function.Supplier;
@@ -40,5 +42,13 @@ public class LootrAPIImpl implements ILootrAPI {
     @Override
     public @Nullable MenuProvider getModdedMenu(Level world, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
         return DataStorage.getInventory(world, id, pos, player, sizeSupplier, displaySupplier, filler, tableSupplier, seedSupplier);
+    }
+
+    @Override
+    public long getLootSeed(long seed) {
+        if (LootrModConfig.get().seed.randomize_seed || seed == -1) {
+            return ThreadLocalRandom.current().nextLong();
+        }
+        return seed;
     }
 }
