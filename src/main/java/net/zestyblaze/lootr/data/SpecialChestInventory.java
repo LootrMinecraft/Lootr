@@ -11,10 +11,12 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.zestyblaze.lootr.api.MenuBuilder;
 import net.zestyblaze.lootr.api.inventory.ILootrInventory;
 import net.zestyblaze.lootr.entity.LootrChestMinecartEntity;
 import org.jetbrains.annotations.Nullable;
@@ -25,6 +27,7 @@ public class SpecialChestInventory implements ILootrInventory {
     private final ChestData newChestData;
     private final NonNullList<ItemStack> contents;
     private final Component name;
+    private MenuBuilder menuBuilder = null;
 
     public SpecialChestInventory(ChestData newChestData, NonNullList<ItemStack> contents, Component name) {
         this.newChestData = newChestData;
@@ -43,6 +46,9 @@ public class SpecialChestInventory implements ILootrInventory {
         ContainerHelper.loadAllItems(items, this.contents);
     }
 
+    public void setMenuBuilder (MenuBuilder builder) {
+        this.menuBuilder = builder;
+    }
 
     @Override
     @Nullable
@@ -159,8 +165,18 @@ public class SpecialChestInventory implements ILootrInventory {
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int i, Inventory inventory, Player player) {
-        return ChestMenu.threeRows(i, inventory, this);
+    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
+        if (menuBuilder != null) {
+            return menuBuilder.build(id, inventory, this, getContainerSize() / 9);
+        }
+        return switch (getContainerSize()) {
+            case 9 -> new ChestMenu(MenuType.GENERIC_9x1, id, inventory, this, 1);
+            case 18 -> new ChestMenu(MenuType.GENERIC_9x2, id, inventory, this, 2);
+            case 36 -> new ChestMenu(MenuType.GENERIC_9x4, id, inventory, this, 4);
+            case 45 -> new ChestMenu(MenuType.GENERIC_9x5, id, inventory, this, 5);
+            case 54 -> ChestMenu.sixRows(id, inventory, this);
+            default -> ChestMenu.threeRows(id, inventory, this);
+        };
     }
 
     @Override
