@@ -245,7 +245,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
         builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
       }
 
-      loottable.fill(inventory, builder.create(LootContextParamSets.CHEST), ConfigManager.RANDOMISE_SEED.get() ? ThreadLocalRandom.current().nextLong() : seed == Long.MIN_VALUE ? this.lootTableSeed : seed);
+      loottable.fill(inventory, builder.create(LootContextParamSets.CHEST), LootrAPI.getLootSeed(seed == Long.MIN_VALUE ? this.lootTableSeed : seed));
     }
   }
 
