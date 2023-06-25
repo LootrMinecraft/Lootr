@@ -1,22 +1,22 @@
 package noobanidus.mods.lootr.data;
 
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.ContainerHelper;
-import net.minecraft.world.inventory.ChestMenu;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
-import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
-import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ChestMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import noobanidus.mods.lootr.api.MenuBuilder;
 import noobanidus.mods.lootr.api.inventory.ILootrInventory;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
@@ -28,6 +28,7 @@ public class SpecialChestInventory implements ILootrInventory {
   private ChestData newChestData;
   private final NonNullList<ItemStack> contents;
   private final Component name;
+  private MenuBuilder menuBuilder = null;
 
   public SpecialChestInventory(ChestData newChestData, NonNullList<ItemStack> contents, Component name) {
     this.newChestData = newChestData;
@@ -44,6 +45,10 @@ public class SpecialChestInventory implements ILootrInventory {
     this.name = Component.Serializer.fromJson(componentAsJSON);
     this.contents = NonNullList.withSize(27, ItemStack.EMPTY);
     ContainerHelper.loadAllItems(items, this.contents);
+  }
+
+  public void setMenuBuilder(MenuBuilder builder) {
+    this.menuBuilder = builder;
   }
 
   @Override
@@ -163,7 +168,17 @@ public class SpecialChestInventory implements ILootrInventory {
   @Nullable
   @Override
   public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
-    return ChestMenu.threeRows(id, inventory, this);
+    if (menuBuilder != null) {
+      return menuBuilder.build(id, inventory, this, getContainerSize() / 9);
+    }
+    return switch (getContainerSize()) {
+      case 9 -> new ChestMenu(MenuType.GENERIC_9x1, id, inventory, this, 1);
+      case 18 -> new ChestMenu(MenuType.GENERIC_9x2, id, inventory, this, 2);
+      case 36 -> new ChestMenu(MenuType.GENERIC_9x4, id, inventory, this, 4);
+      case 45 -> new ChestMenu(MenuType.GENERIC_9x5, id, inventory, this, 5);
+      case 54 -> ChestMenu.sixRows(id, inventory, this);
+      default -> ChestMenu.threeRows(id, inventory, this);
+    };
   }
 
   @Override
@@ -200,7 +215,7 @@ public class SpecialChestInventory implements ILootrInventory {
   }
 
   @Nullable
-  public UUID getTileId () {
+  public UUID getTileId() {
     if (newChestData == null) {
       return null;
     }

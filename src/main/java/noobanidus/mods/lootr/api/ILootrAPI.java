@@ -43,6 +43,9 @@ public interface ILootrAPI {
   @Nullable
   MenuProvider getModdedMenu(Level level, UUID id, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier);
 
+  @Nullable
+  MenuProvider getModdedMenu(Level level, UUID id, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier, MenuBuilder builder);
+
   /**
    * Provides access to an instanced player container for the relevant block entity. Instead of requiring the block entity extend BaseContainerBlockEntity, this instead accepts an IntSupplier (the size of the container) and a `Supplier<Component>` equivalent to `BaseContainerBlockEntity::getDisplayName`.
    * <p>
@@ -53,8 +56,13 @@ public interface ILootrAPI {
   @Nullable
   MenuProvider getModdedMenu(Level level, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier);
 
+  @Nullable
+  MenuProvider getModdedMenu(Level level, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier, MenuBuilder builder);
+
   /**
    * Provides access to the relevant configuration for the loot seed. This is used to determine if the provided seed is randomized or not.
    */
   long getLootSeed(long seed);
+
+
 }
