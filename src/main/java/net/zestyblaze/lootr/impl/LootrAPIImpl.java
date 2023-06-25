@@ -10,8 +10,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.zestyblaze.lootr.api.ILootrAPI;
 import net.zestyblaze.lootr.api.LootFiller;
+import net.zestyblaze.lootr.api.MenuBuilder;
 import net.zestyblaze.lootr.config.LootrModConfig;
 import net.zestyblaze.lootr.data.DataStorage;
+import net.zestyblaze.lootr.data.SpecialChestInventory;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
@@ -39,9 +41,26 @@ public class LootrAPIImpl implements ILootrAPI {
         return DataStorage.getInventory(world, id, pos, player, blockEntity, filler, tableSupplier, seedSupplier);
     }
 
+    public @Nullable  MenuProvider getModdedMenu(Level world, UUID id, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier, MenuBuilder builder) {
+        SpecialChestInventory inventory = DataStorage.getInventory(world, id, pos, player, blockEntity, filler, tableSupplier, seedSupplier);
+        if (inventory != null) {
+            inventory.setMenuBuilder(builder);
+        }
+        return inventory;
+    }
+
     @Override
     public @Nullable MenuProvider getModdedMenu(Level world, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
         return DataStorage.getInventory(world, id, pos, player, sizeSupplier, displaySupplier, filler, tableSupplier, seedSupplier);
+    }
+
+    @Override
+    public @Nullable MenuProvider getModdedMenu(Level world, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier, MenuBuilder builder) {
+        SpecialChestInventory inventory = DataStorage.getInventory(world, id, pos, player, sizeSupplier, displaySupplier, filler, tableSupplier, seedSupplier);
+        if (inventory != null) {
+            inventory.setMenuBuilder(builder);
+        }
+        return inventory;
     }
 
     @Override
