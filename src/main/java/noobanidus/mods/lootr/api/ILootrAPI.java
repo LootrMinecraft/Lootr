@@ -7,6 +7,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
+import noobanidus.mods.lootr.api.inventory.ILootrInventory;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -22,7 +23,7 @@ public interface ILootrAPI {
   boolean clearPlayerLoot(UUID id);
 
   /**
-   * Provides access to a Lootr-instanced container/MenuProvider for the relevant non-Lootr and non-Vanilla container.
+   * Provides access to a Lootr-instanced inventory (and MenuProvider) for the relevant non-Lootr and non-Vanilla container.
    * <p>
    * This should be called via an integration class in the relevant `use` method of a block.
    * <p>
@@ -41,10 +42,22 @@ public interface ILootrAPI {
    * @return Either the relevant inventory (cast as a MenuProvider) or null if the function was called with a client-size Level or an instance of Level that isn't ServerLevel.
    */
   @Nullable
-  MenuProvider getModdedMenu(Level level, UUID id, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier);
+  ILootrInventory getInventory (Level level, UUID id, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier);
 
   @Nullable
-  MenuProvider getModdedMenu(Level level, UUID id, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier, MenuBuilder builder);
+  ILootrInventory getInventory (Level level, UUID id, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier, MenuBuilder builder);
+
+  @Deprecated
+  @Nullable
+  default MenuProvider getModdedMenu(Level level, UUID id, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
+    return getInventory(level, id, pos, player, blockEntity, filler, tableSupplier, seedSupplier);
+  }
+
+  @Deprecated
+  @Nullable
+  default MenuProvider getModdedMenu(Level level, UUID id, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier, MenuBuilder builder) {
+    return getInventory(level, id, pos, player, blockEntity, filler, tableSupplier, seedSupplier, builder);
+  }
 
   /**
    * Provides access to an instanced player container for the relevant block entity. Instead of requiring the block entity extend BaseContainerBlockEntity, this instead accepts an IntSupplier (the size of the container) and a `Supplier<Component>` equivalent to `BaseContainerBlockEntity::getDisplayName`.
@@ -54,10 +67,22 @@ public interface ILootrAPI {
    * See the documentation of the other `getModdedMenu` for more details.
    */
   @Nullable
-  MenuProvider getModdedMenu(Level level, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier);
+  ILootrInventory getInventory (Level level, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier);
 
   @Nullable
-  MenuProvider getModdedMenu(Level level, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier, MenuBuilder builder);
+  ILootrInventory getInventory (Level level, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier, MenuBuilder builder);
+
+  @Deprecated
+  @Nullable
+  default MenuProvider getModdedMenu(Level level, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
+    return getInventory(level, id, pos, player, sizeSupplier, displaySupplier, filler, tableSupplier, seedSupplier);
+  }
+
+  @Deprecated
+  @Nullable
+  default MenuProvider getModdedMenu(Level level, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier, MenuBuilder builder) {
+    return getInventory(level, id, pos, player, sizeSupplier, displaySupplier, filler, tableSupplier, seedSupplier, builder);
+  }
 
   /**
    * Provides access to the relevant configuration for the loot seed. This is used to determine if the provided seed is randomized or not.
