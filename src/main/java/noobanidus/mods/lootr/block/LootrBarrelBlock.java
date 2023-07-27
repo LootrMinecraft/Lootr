@@ -7,6 +7,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -18,7 +19,6 @@ import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 public class LootrBarrelBlock extends BarrelBlock {
   public static final ModelProperty<Boolean> OPENED = new ModelProperty<>();
@@ -36,6 +36,14 @@ public class LootrBarrelBlock extends BarrelBlock {
     } else {
       return super.getExplosionResistance();
     }
+  }
+
+  @Override
+  public float getDestroyProgress(BlockState pState, Player pPlayer, BlockGetter pGetter, BlockPos pPos) {
+    if (ConfigManager.DISABLE_BREAK.get()) {
+      return -1f;
+    }
+    return super.getDestroyProgress(pState, pPlayer, pGetter, pPos);
   }
 
   @Override
