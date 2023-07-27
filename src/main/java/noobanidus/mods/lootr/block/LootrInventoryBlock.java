@@ -55,14 +55,6 @@ public class LootrInventoryBlock extends ChestBlock {
   }
 
   @Override
-  public float getDestroyProgress(BlockState pState, Player pPlayer, BlockGetter pGetter, BlockPos pPos) {
-    if (ConfigManager.DISABLE_BREAK.get()) {
-      return -1f;
-    }
-    return super.getDestroyProgress(pState, pPlayer, pGetter, pPos);
-  }
-
-  @Override
   public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult trace) {
     if (player.isShiftKeyDown()) {
       ChestUtil.handleLootSneak(this, world, pos, player);

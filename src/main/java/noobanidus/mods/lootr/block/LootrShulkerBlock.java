@@ -61,14 +61,6 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
     }
   }
 
-  @Override
-  public float getDestroyProgress(BlockState pState, Player pPlayer, BlockGetter pGetter, BlockPos pPos) {
-    if (ConfigManager.DISABLE_BREAK.get()) {
-      return -1f;
-    }
-    return super.getDestroyProgress(pState, pPlayer, pGetter, pPos);
-  }
-
   private static boolean canOpen(BlockState pState, Level pLevel, BlockPos pPos, LootrShulkerBlockEntity pBlockEntity) {
     if (pBlockEntity.getAnimationStatus() != ShulkerBoxBlockEntity.AnimationStatus.CLOSED) {
       return true;
