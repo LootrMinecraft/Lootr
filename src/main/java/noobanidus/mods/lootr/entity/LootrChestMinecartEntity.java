@@ -235,4 +235,9 @@ public class LootrChestMinecartEntity extends EntityMinecartContainer implements
   {
     return "minecraft:chest";
   }
+
+  @Override
+  public void addLoot(EntityPlayer player) {
+
+  }
 }
