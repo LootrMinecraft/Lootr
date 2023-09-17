@@ -334,7 +334,7 @@ public class ConfigManager {
           Lootr.LOG.info("Added " + block.getRegistryName() + " to the Lootr block replacement list.");
           replacements.put(block, replacement);
         }
-      } catch(RuntimeException e) {
+      } catch(Throwable e) {
         Lootr.LOG.warn("Unable to check if {} should be a Lootr-replaceable block: {}", location, e);
       }
     }
