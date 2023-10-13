@@ -454,7 +454,7 @@ public class ConfigManager {
 
       if (CONVERT_WOODEN_CHESTS.get() || CONVERT_TRAPPED_CHESTS.get()) {
         if (CONVERT_TRAPPED_CHESTS.get()) {
-          Registry.BLOCK.getTag(Tags.Blocks.CHESTS_TRAPPED).get().forEach(l -> {
+          Registry.BLOCK.getTagOrEmpty(Tags.Blocks.CHESTS_TRAPPED).forEach(l -> {
             Block o = l.value();
             if (replacements.containsKey(o)) {
               return;
@@ -468,7 +468,7 @@ public class ConfigManager {
           });
         }
         if (CONVERT_WOODEN_CHESTS.get()) {
-          Registry.BLOCK.getTag(Tags.Blocks.CHESTS_WOODEN).get().forEach(l -> {
+          Registry.BLOCK.getTagOrEmpty(Tags.Blocks.CHESTS_WOODEN).forEach(l -> {
             Block o = l.value();
             if (replacements.containsKey(o)) {
               return;
