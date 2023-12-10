@@ -3,12 +3,13 @@ package noobanidus.mods.lootr.network;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.neoforged.neoforge.common.util.FakePlayer;
+import net.neoforged.neoforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.NetworkRegistry;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.PlayNetworkDirection;
+import net.neoforged.neoforge.network.simple.MessageFunctions;
+import net.neoforged.neoforge.network.simple.SimpleChannel;
 import noobanidus.mods.lootr.api.LootrAPI;
 
 import java.util.function.BiConsumer;
@@ -35,7 +36,7 @@ public class PacketHandler {
 
   public static void sendToInternal(Object msg, ServerPlayer player) {
     if (!(player instanceof FakePlayer)) {
-      HANDLER.sendTo(msg, player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+      HANDLER.sendTo(msg, player.connection.connection, PlayNetworkDirection.PLAY_TO_CLIENT);
     }
   }
 
@@ -47,7 +48,7 @@ public class PacketHandler {
     HANDLER.send(target, message);
   }
 
-  public static <MSG> void registerMessage(Class<MSG> messageType, BiConsumer<MSG, FriendlyByteBuf> encoder, Function<FriendlyByteBuf, MSG> decoder, BiConsumer<MSG, Supplier<NetworkEvent.Context>> messageConsumer) {
+  public static <MSG> void registerMessage(Class<MSG> messageType, MessageFunctions.MessageEncoder<MSG> encoder, MessageFunctions.MessageDecoder<MSG> decoder, MessageFunctions.MessageConsumer<MSG> messageConsumer) {
     HANDLER.registerMessage(index, messageType, encoder, decoder, messageConsumer);
     index++;
     if (index > 0xFF)

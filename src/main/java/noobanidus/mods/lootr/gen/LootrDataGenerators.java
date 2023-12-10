@@ -8,11 +8,10 @@ import net.minecraft.data.metadata.PackMetadataGenerator;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
-import net.minecraft.server.packs.metadata.pack.PackMetadataSectionSerializer;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 import noobanidus.mods.lootr.api.LootrAPI;
 
 import java.util.Arrays;
@@ -32,7 +31,7 @@ public class LootrDataGenerators {
     LootrBlockTagProvider blocks;
     generator.addProvider(event.includeServer(), blocks = new LootrBlockTagProvider(output, provider, helper));
     generator.addProvider(event.includeServer(), new LootrItemTagsProvider(output, provider, blocks.contentsGetter(), helper));
-    generator.addProvider(event.includeClient(), new LootrAtlasGenerator(output, helper));
+    generator.addProvider(event.includeClient(), new LootrAtlasGenerator(output, provider, helper));
     generator.addProvider(true, new PackMetadataGenerator(output).add(PackMetadataSection.TYPE, new PackMetadataSection(
         Component.literal("Resources for Lootr"),
         DetectedVersion.BUILT_IN.getPackVersion(PackType.CLIENT_RESOURCES),

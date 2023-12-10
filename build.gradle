@@ -1,5 +1,5 @@
 plugins {
-    id 'com.github.johnrengelman.shadow' version '5.2.0'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 apply plugin: 'java'
@@ -28,7 +28,7 @@ apply from: 'gradle/build_number.gradle'
 apply from: 'gradle/git_changelog.gradle'
 apply from: 'gradle/patreon.gradle'
 apply from: 'gradle/java.gradle'
-apply from: 'gradle/forge.gradle'
+apply from: 'gradle/neoforge.gradle'
 apply from: 'gradle/dependencies.gradle'
 apply from: 'gradle/aequivaleo.gradle'
 apply from: 'gradle/api.gradle'

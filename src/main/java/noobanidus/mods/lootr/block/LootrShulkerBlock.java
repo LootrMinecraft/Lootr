@@ -17,6 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -96,7 +97,7 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
   }
 
   @Override
-  public void playerWillDestroy(Level pLevel, BlockPos pPos, BlockState pState, Player pPlayer) {
+  public BlockState playerWillDestroy(Level pLevel, BlockPos pPos, BlockState pState, Player pPlayer) {
     BlockEntity blockentity = pLevel.getBlockEntity(pPos);
 /*    if (blockentity instanceof LootrShulkerBlockEntity) {
       if (!pLevel.isClientSide) {
@@ -111,6 +112,8 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
     }
 
     pLevel.gameEvent(pPlayer, GameEvent.BLOCK_DESTROY, pPos);
+
+    return pState;
   }
 
   @Override
@@ -152,7 +155,7 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
   }
 
   @Override
-  public ItemStack getCloneItemStack(BlockGetter pLevel, BlockPos pPos, BlockState pState) {
+  public ItemStack getCloneItemStack(LevelReader pLevel, BlockPos pPos, BlockState pState) {
     return new ItemStack(ModItems.SHULKER.get());
   }
 

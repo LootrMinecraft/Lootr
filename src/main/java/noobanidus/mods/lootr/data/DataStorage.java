@@ -12,9 +12,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
-import net.minecraftforge.server.ServerLifecycleHooks;
 import net.minecraft.world.level.storage.LevelResource;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.api.LootFiller;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
@@ -49,52 +50,52 @@ public class DataStorage {
 
   public static boolean isAwarded(UUID player, UUID tileId) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
-    AdvancementData data = manager.computeIfAbsent(AdvancementData::load, AdvancementData::new, ID);
+    AdvancementData data = manager.computeIfAbsent(AdvancementData.FACTORY, ID);
     return data.contains(player, tileId);
   }
 
   public static void award(UUID player, UUID tileId) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
-    AdvancementData data = manager.computeIfAbsent(AdvancementData::load, AdvancementData::new, ID);
+    AdvancementData data = manager.computeIfAbsent(AdvancementData.FACTORY, ID);
     data.add(player, tileId);
     data.setDirty();
   }
 
   public static boolean isScored(UUID player, UUID tileId) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
-    AdvancementData data = manager.computeIfAbsent(AdvancementData::load, AdvancementData::new, SCORED);
+    AdvancementData data = manager.computeIfAbsent(AdvancementData.FACTORY, SCORED);
     return data.contains(player, tileId);
   }
 
   public static void score(UUID player, UUID tileId) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
-    AdvancementData data = manager.computeIfAbsent(AdvancementData::load, AdvancementData::new, SCORED);
+    AdvancementData data = manager.computeIfAbsent(AdvancementData.FACTORY, SCORED);
     data.add(player, tileId);
     data.setDirty();
   }
 
   public static int getDecayValue (UUID id) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
-    TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, DECAY);
+    TickingData data = manager.computeIfAbsent(TickingData.FACTORY, DECAY);
     return data.getValue(id);
   }
 
   public static boolean isDecayed(UUID id) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
-    TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, DECAY);
+    TickingData data = manager.computeIfAbsent(TickingData.FACTORY, DECAY);
     return data.isComplete(id);
   }
 
   public static void setDecaying (UUID id, int decay) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
-    TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, DECAY);
+    TickingData data = manager.computeIfAbsent(TickingData.FACTORY, DECAY);
     data.setValue(id, decay);
     data.setDirty();
   }
 
   public static void removeDecayed (UUID id) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
-    TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, DECAY);
+    TickingData data = manager.computeIfAbsent(TickingData.FACTORY, DECAY);
     if (data.remove(id) != -1) {
       data.setDirty();
     }
@@ -102,7 +103,7 @@ public class DataStorage {
 
   public static void doDecay () {
     DimensionDataStorage manager = DataStorage.getDataStorage();
-    TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, DECAY);
+    TickingData data = manager.computeIfAbsent(TickingData.FACTORY, DECAY);
     if (data.tick()) {
       data.setDirty();
     }
@@ -110,26 +111,26 @@ public class DataStorage {
 
   public static int getRefreshValue (UUID id) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
-    TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, REFRESH);
+    TickingData data = manager.computeIfAbsent(TickingData.FACTORY, REFRESH);
     return data.getValue(id);
   }
 
   public static boolean isRefreshed(UUID id) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
-    TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, REFRESH);
+    TickingData data = manager.computeIfAbsent(TickingData.FACTORY, REFRESH);
     return data.isComplete(id);
   }
 
   public static void setRefreshing (UUID id, int decay) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
-    TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, REFRESH);
+    TickingData data = manager.computeIfAbsent(TickingData.FACTORY, REFRESH);
     data.setValue(id, decay);
     data.setDirty();
   }
 
   public static void removeRefreshed (UUID id) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
-    TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, REFRESH);
+    TickingData data = manager.computeIfAbsent(TickingData.FACTORY, REFRESH);
     if (data.remove(id) != -1) {
       data.setDirty();
     }
@@ -137,22 +138,22 @@ public class DataStorage {
 
   public static void doRefresh () {
     DimensionDataStorage manager = DataStorage.getDataStorage();
-    TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, REFRESH);
+    TickingData data = manager.computeIfAbsent(TickingData.FACTORY, REFRESH);
     if (data.tick()) {
       data.setDirty();
     }
   }
 
   public static ChestData getInstanceUuid(ServerLevel world, BlockPos pos, UUID id) {
-    return ChestData.unwrap(getDataStorage().computeIfAbsent(ChestData.loadWrapper(id, world.dimension(), pos), ChestData.id(world.dimension(), pos, id), ChestData.ID(id)), id, world.dimension(), pos);
+    return ChestData.unwrap(getDataStorage().computeIfAbsent(new SavedData.Factory<>(ChestData.id(world.dimension(), pos, id), ChestData.loadWrapper(id, world.dimension(), pos)), ChestData.ID(id)), id, world.dimension(), pos);
   }
 
   public static ChestData getInstance(ServerLevel world, BlockPos pos, UUID id) {
-    return ChestData.unwrap(getDataStorage().computeIfAbsent(ChestData.loadWrapper(id, world.dimension(), pos), ChestData.entity(world.dimension(), pos, id), ChestData.ID(id)), id, world.dimension(), pos);
+    return ChestData.unwrap(getDataStorage().computeIfAbsent(new SavedData.Factory<>(ChestData.entity(world.dimension(), pos, id), ChestData.loadWrapper(id, world.dimension(), pos)), ChestData.ID(id)), id, world.dimension(), pos);
   }
 
   public static ChestData getInstanceInventory(ServerLevel world, BlockPos pos, UUID id, NonNullList<ItemStack> base) {
-    return ChestData.unwrap(getDataStorage().computeIfAbsent(ChestData.loadWrapper(id, world.dimension(), pos), ChestData.ref_id(world.dimension(), pos, id, base), ChestData.ID(id)), id, world.dimension(), pos);
+    return ChestData.unwrap(getDataStorage().computeIfAbsent(new SavedData.Factory<>(ChestData.ref_id(world.dimension(), pos, id, base), ChestData.loadWrapper(id, world.dimension(), pos)), ChestData.ID(id)), id, world.dimension(), pos);
   }
 
   @Nullable
@@ -237,7 +238,9 @@ public class DataStorage {
 
     int cleared = 0;
     for (String id : ids) {
-      ChestData chestData = data.get(ChestData::load, id);
+      ChestData chestData = data.get(new SavedData.Factory<>(() -> {
+          throw new UnsupportedOperationException("Cannot create ChestData here");
+      }, ChestData::load), id);
       if (chestData != null) {
         if (chestData.clearInventory(uuid)) {
           cleared++;

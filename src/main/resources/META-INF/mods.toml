@@ -1,7 +1,11 @@
 modLoader="javafml" 
-loaderVersion="[44,)"
+loaderVersion="[1,)"
 issueTrackerURL="https://github.com/noobanidus/Lootr/issues"
 license="https://github.com/noobanidus/Lootr/blob/1.16/LICENSE"
+
+[[mixins]]
+config="lootr.mixins.json"
+
 [[mods]] 
 modId="lootr" 
 version="${version}"
@@ -11,15 +15,15 @@ authors="Noobanidus"
 description='''
 Makes loot chest loot per-user.
 '''
-[[dependencies.Lootr]] 
-    modId="forge" 
+[[dependencies.lootr]]
+    modId="neoforge"
     mandatory=true 
-    versionRange="[44.0.40,)"
+    versionRange="[20.4-beta,)"
     ordering="NONE"
     side="BOTH"
-[[dependencies.Lootr]]
+[[dependencies.lootr]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19.3,)"
+    versionRange="[1.20.4,)"
     ordering="NONE"
     side="BOTH"

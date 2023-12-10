@@ -6,13 +6,14 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.saveddata.SavedData;
-import net.minecraftforge.event.TickEvent;
 
 import java.io.File;
 import java.util.UUID;
 
 public class TickingData extends SavedData {
   private final Object2IntMap<UUID> tickMap = new Object2IntOpenHashMap<>();
+
+  public static final SavedData.Factory<TickingData> FACTORY = new Factory<>(TickingData::new, TickingData::load);
 
   public TickingData() {
     tickMap.defaultReturnValue(-1);

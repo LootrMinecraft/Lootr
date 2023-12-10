@@ -1,14 +1,14 @@
 package noobanidus.mods.lootr;
 
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLPaths;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.fml.loading.FMLPaths;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.command.CommandLootr;
 import noobanidus.mods.lootr.config.ConfigManager;
@@ -31,13 +31,15 @@ public class Lootr {
     context.registerConfig(ModConfig.Type.CLIENT, ConfigManager.CLIENT_CONFIG);
     ConfigManager.loadConfig(ConfigManager.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve(LootrAPI.MODID + "-common.toml"));
     ConfigManager.loadConfig(ConfigManager.CLIENT_CONFIG, FMLPaths.CONFIGDIR.get().resolve(LootrAPI.MODID + "-client.toml"));
-    MinecraftForge.EVENT_BUS.addListener(this::onCommands);
+    NeoForge.EVENT_BUS.addListener(this::onCommands);
     IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
     ModTabs.register(modBus);
     ModBlockEntities.register(modBus);
     ModBlocks.register(modBus);
     ModEntities.register(modBus);
     ModItems.register(modBus);
+    ModLoot.register(modBus);
+    ModStats.register(modBus);
   }
 
   public void onCommands(RegisterCommandsEvent event) {

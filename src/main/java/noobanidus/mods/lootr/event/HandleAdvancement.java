@@ -1,18 +1,27 @@
 package noobanidus.mods.lootr.event;
 
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.event.entity.player.AdvancementEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.entity.player.AdvancementEvent;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.init.ModAdvancements;
 
 @Mod.EventBusSubscriber(modid= LootrAPI.MODID)
 public class HandleAdvancement {
   @SubscribeEvent
-  public static void onAdvancement(AdvancementEvent event) {
+  public static void onAdvancement(AdvancementEvent.AdvancementEarnEvent event) {
     if (!event.getEntity().level().isClientSide()) {
-      ModAdvancements.ADVANCEMENT_PREDICATE.trigger((ServerPlayer) event.getEntity(), event.getAdvancement().getId());
+      // TODO: Neo Port
+      //ModAdvancements.ADVANCEMENT_PREDICATE.trigger((ServerPlayer) event.getEntity(), event.getAdvancement().getId());
+    }
+  }
+
+  @SubscribeEvent
+  public static void onAdvancement(AdvancementEvent.AdvancementProgressEvent event) {
+    if (!event.getEntity().level().isClientSide()) {
+      // TODO: Neo Port
+      //ModAdvancements.ADVANCEMENT_PREDICATE.trigger((ServerPlayer) event.getEntity(), event.getAdvancement().getId());
     }
   }
 }

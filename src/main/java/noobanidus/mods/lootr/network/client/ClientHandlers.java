@@ -5,7 +5,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.NetworkEvent;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
@@ -13,10 +13,9 @@ import noobanidus.mods.lootr.network.CloseCart;
 import noobanidus.mods.lootr.network.OpenCart;
 import noobanidus.mods.lootr.network.UpdateModelData;
 
-import java.util.function.Supplier;
 
 public class ClientHandlers {
-  public static void handleUpdateModel(UpdateModelData message, Supplier<NetworkEvent.Context> context) {
+  public static void handleUpdateModel(UpdateModelData message, NetworkEvent.Context context) {
     Level level = Minecraft.getInstance().level;
     if (level == null) {
       LootrAPI.LOG.info("Unable to update model data for location '" + message.pos + "' as level is null.");
@@ -40,7 +39,7 @@ public class ClientHandlers {
     }
   }
 
-  public static void handleOpenCart(OpenCart message, Supplier<NetworkEvent.Context> context) {
+  public static void handleOpenCart(OpenCart message, NetworkEvent.Context context) {
     Level level = Minecraft.getInstance().level;
     if (level == null) {
       LootrAPI.LOG.info("Unable to mark entity with id '" + message.entityId + "' as opened as level is null.");
@@ -60,7 +59,7 @@ public class ClientHandlers {
     ((LootrChestMinecartEntity) cart).setOpened();
   }
 
-  public static void handleCloseCart(CloseCart message, Supplier<NetworkEvent.Context> context) {
+  public static void handleCloseCart(CloseCart message, NetworkEvent.Context context) {
     Level level = Minecraft.getInstance().level;
     if (level == null) {
       LootrAPI.LOG.info("Unable to mark entity with id '" + message.entityId + "' as closed as level is null.");

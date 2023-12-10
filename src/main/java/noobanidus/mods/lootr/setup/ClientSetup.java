@@ -1,11 +1,12 @@
 package noobanidus.mods.lootr.setup;
 
 import net.minecraft.client.model.geom.ModelLayers;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.ModelEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.ModelEvent;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.client.block.BarrelModel;
 import noobanidus.mods.lootr.client.block.LootrChestBlockRenderer;
@@ -19,7 +20,7 @@ public class ClientSetup {
 
   @SubscribeEvent
   public static void modelRegister(ModelEvent.RegisterGeometryLoaders event) {
-    event.register("barrel", BarrelModel.Loader.INSTANCE);
+    event.register(new ResourceLocation(LootrAPI.MODID, "barrel"), BarrelModel.Loader.INSTANCE);
   }
 
   @SubscribeEvent

@@ -3,6 +3,8 @@ package noobanidus.mods.lootr.config;
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -17,15 +19,14 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
@@ -38,71 +39,71 @@ import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber(modid = LootrAPI.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ConfigManager {
-  private static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
-  private static final ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
+  private static final ModConfigSpec.Builder COMMON_BUILDER = new ModConfigSpec.Builder();
+  private static final ModConfigSpec.Builder CLIENT_BUILDER = new ModConfigSpec.Builder();
 
   private static final List<ResourceLocation> QUARK_CHESTS = Arrays.asList(new ResourceLocation("quark", "oak_chest"), new ResourceLocation("quark", "spruce_chest"), new ResourceLocation("quark", "birch_chest"), new ResourceLocation("quark", "jungle_chest"), new ResourceLocation("quark", "acacia_chest"), new ResourceLocation("quark", "dark_oak_chest"), new ResourceLocation("quark", "warped_chest"), new ResourceLocation("quark", "crimson_chest"), new ResourceLocation("quark", "nether_brick_chest"), new ResourceLocation("quark", "purpur_chest")); // Quark normal chests
   private static final List<ResourceLocation> QUARK_TRAPPED_CHESTS = Arrays.asList(new ResourceLocation("quark", "oak_trapped_chest"), new ResourceLocation("quark", "spruce_trapped_chest"), new ResourceLocation("quark", "birch_trapped_chest"), new ResourceLocation("quark", "jungle_trapped_chest"), new ResourceLocation("quark", "acacia_trapped_chest"), new ResourceLocation("quark", "dark_oak_trapped_chest"), new ResourceLocation("quark", "warped_trapped_chest"), new ResourceLocation("quark", "crimson_trapped_chest"));
   private static final List<ResourceLocation> PROBLEMATIC_CHESTS = Arrays.asList(new ResourceLocation("twilightforest", "structures/stronghold_boss"), new ResourceLocation("atum", "chests/pharaoh"));
 
-  public static ForgeConfigSpec COMMON_CONFIG;
-  public static ForgeConfigSpec CLIENT_CONFIG;
+  public static ModConfigSpec COMMON_CONFIG;
+  public static ModConfigSpec CLIENT_CONFIG;
 
   // Debug
-  public static final ForgeConfigSpec.BooleanValue REPORT_UNRESOLVED_TABLES;
+  public static final ModConfigSpec.BooleanValue REPORT_UNRESOLVED_TABLES;
 
   // Seed randomization
-  public static final ForgeConfigSpec.BooleanValue RANDOMISE_SEED;
+  public static final ModConfigSpec.BooleanValue RANDOMISE_SEED;
 
   // Conversion
-  public static final ForgeConfigSpec.BooleanValue SKIP_UNLOADED;
-  public static final ForgeConfigSpec.IntValue MAXIMUM_AGE;
-  public static final ForgeConfigSpec.BooleanValue CONVERT_MINESHAFTS;
-  public static final ForgeConfigSpec.BooleanValue CONVERT_QUARK;
-  public static final ForgeConfigSpec.BooleanValue CONVERT_WOODEN_CHESTS;
-  public static final ForgeConfigSpec.BooleanValue CONVERT_TRAPPED_CHESTS;
-  public static final ForgeConfigSpec.ConfigValue<List<? extends String>> ADDITIONAL_CHESTS;
-  public static final ForgeConfigSpec.ConfigValue<List<? extends String>> ADDITIONAL_TRAPPED_CHESTS;
+  public static final ModConfigSpec.BooleanValue SKIP_UNLOADED;
+  public static final ModConfigSpec.IntValue MAXIMUM_AGE;
+  public static final ModConfigSpec.BooleanValue CONVERT_MINESHAFTS;
+  public static final ModConfigSpec.BooleanValue CONVERT_QUARK;
+  public static final ModConfigSpec.BooleanValue CONVERT_WOODEN_CHESTS;
+  public static final ModConfigSpec.BooleanValue CONVERT_TRAPPED_CHESTS;
+  public static final ModConfigSpec.ConfigValue<List<? extends String>> ADDITIONAL_CHESTS;
+  public static final ModConfigSpec.ConfigValue<List<? extends String>> ADDITIONAL_TRAPPED_CHESTS;
 
   // Breaking
-  public static final ForgeConfigSpec.BooleanValue DISABLE_BREAK;
-  public static final ForgeConfigSpec.BooleanValue ENABLE_BREAK;
+  public static final ModConfigSpec.BooleanValue DISABLE_BREAK;
+  public static final ModConfigSpec.BooleanValue ENABLE_BREAK;
 
-  public static final ForgeConfigSpec.BooleanValue ENABLE_FAKE_PLAYER_BREAK;
+  public static final ModConfigSpec.BooleanValue ENABLE_FAKE_PLAYER_BREAK;
 
-  public static final ForgeConfigSpec.BooleanValue CHECK_WORLD_BORDER;
+  public static final ModConfigSpec.BooleanValue CHECK_WORLD_BORDER;
 
   // Whitelist/blacklist (loot table, modid, dimension)
-  public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DIMENSION_WHITELIST;
-  public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DIMENSION_BLACKLIST;
-  public static final ForgeConfigSpec.ConfigValue<List<? extends String>> LOOT_TABLE_BLACKLIST;
-  public static final ForgeConfigSpec.ConfigValue<List<? extends String>> LOOT_MODID_BLACKLIST;
-  public static final ForgeConfigSpec.ConfigValue<List<? extends String>> LOOT_STRUCTURE_BLACKLIST;
+  public static final ModConfigSpec.ConfigValue<List<? extends String>> DIMENSION_WHITELIST;
+  public static final ModConfigSpec.ConfigValue<List<? extends String>> DIMENSION_BLACKLIST;
+  public static final ModConfigSpec.ConfigValue<List<? extends String>> LOOT_TABLE_BLACKLIST;
+  public static final ModConfigSpec.ConfigValue<List<? extends String>> LOOT_MODID_BLACKLIST;
+  public static final ModConfigSpec.ConfigValue<List<? extends String>> LOOT_STRUCTURE_BLACKLIST;
 
   // Decay
-  public static final ForgeConfigSpec.IntValue DECAY_VALUE;
-  public static final ForgeConfigSpec.BooleanValue DECAY_ALL;
-  public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DECAY_MODIDS;
-  public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DECAY_LOOT_TABLES;
-  public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DECAY_DIMENSIONS;
-  public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DECAY_STRUCTURES;
+  public static final ModConfigSpec.IntValue DECAY_VALUE;
+  public static final ModConfigSpec.BooleanValue DECAY_ALL;
+  public static final ModConfigSpec.ConfigValue<List<? extends String>> DECAY_MODIDS;
+  public static final ModConfigSpec.ConfigValue<List<? extends String>> DECAY_LOOT_TABLES;
+  public static final ModConfigSpec.ConfigValue<List<? extends String>> DECAY_DIMENSIONS;
+  public static final ModConfigSpec.ConfigValue<List<? extends String>> DECAY_STRUCTURES;
 
   // Refresh
-  public static final ForgeConfigSpec.IntValue REFRESH_VALUE;
-  public static final ForgeConfigSpec.BooleanValue REFRESH_ALL;
-  public static final ForgeConfigSpec.ConfigValue<List<? extends String>> REFRESH_MODIDS;
-  public static final ForgeConfigSpec.ConfigValue<List<? extends String>> REFRESH_LOOT_TABLES;
-  public static final ForgeConfigSpec.ConfigValue<List<? extends String>> REFRESH_DIMENSIONS;
-  public static final ForgeConfigSpec.ConfigValue<List<? extends String>> REFRESH_STRUCTURES;
+  public static final ModConfigSpec.IntValue REFRESH_VALUE;
+  public static final ModConfigSpec.BooleanValue REFRESH_ALL;
+  public static final ModConfigSpec.ConfigValue<List<? extends String>> REFRESH_MODIDS;
+  public static final ModConfigSpec.ConfigValue<List<? extends String>> REFRESH_LOOT_TABLES;
+  public static final ModConfigSpec.ConfigValue<List<? extends String>> REFRESH_DIMENSIONS;
+  public static final ModConfigSpec.ConfigValue<List<? extends String>> REFRESH_STRUCTURES;
 
-  public static final ForgeConfigSpec.BooleanValue POWER_COMPARATORS;
-  public static final ForgeConfigSpec.BooleanValue BLAST_RESISTANT;
-  public static final ForgeConfigSpec.BooleanValue BLAST_IMMUNE;
-  public static final ForgeConfigSpec.IntValue NOTIFICATION_DELAY;
-  public static final ForgeConfigSpec.BooleanValue DISABLE_NOTIFICATIONS;
+  public static final ModConfigSpec.BooleanValue POWER_COMPARATORS;
+  public static final ModConfigSpec.BooleanValue BLAST_RESISTANT;
+  public static final ModConfigSpec.BooleanValue BLAST_IMMUNE;
+  public static final ModConfigSpec.IntValue NOTIFICATION_DELAY;
+  public static final ModConfigSpec.BooleanValue DISABLE_NOTIFICATIONS;
 
   // Client-only
-  public static final ForgeConfigSpec.BooleanValue VANILLA_TEXTURES;
+  public static final ModConfigSpec.BooleanValue VANILLA_TEXTURES;
 
   private static Set<String> DECAY_MODS = null;
   private static Set<ResourceLocation> DECAY_TABLES = null;
@@ -169,7 +170,7 @@ public class ConfigManager {
     CLIENT_CONFIG = CLIENT_BUILDER.build();
   }
 
-  public static void loadConfig(ForgeConfigSpec spec, Path path) {
+  public static void loadConfig(ModConfigSpec spec, Path path) {
     CommentedFileConfig configData = CommentedFileConfig.builder(path).sync().autosave().writingMode(WritingMode.REPLACE).build();
     configData.load();
     spec.setConfig(configData);
@@ -420,14 +421,14 @@ public class ConfigManager {
   }
 
   private static void addSafeReplacement(ResourceLocation location, Block replacement) {
-    Block block = ForgeRegistries.BLOCKS.getValue(location);
+    Block block = BuiltInRegistries.BLOCK.getOptional(location).orElse(null);
     if (block != null) {
       replacements.put(block, replacement);
     }
   }
 
   private static void addUnsafeReplacement(ResourceLocation location, Block replacement, ServerLevel world) {
-    Block block = ForgeRegistries.BLOCKS.getValue(location);
+    Block block = BuiltInRegistries.BLOCK.getOptional(location).orElse(null);
     if (block instanceof EntityBlock) {
       BlockEntity tile = ((EntityBlock) block).newBlockEntity(BlockPos.ZERO, block.defaultBlockState());
       if (tile instanceof RandomizableContainerBlockEntity) {
@@ -452,7 +453,7 @@ public class ConfigManager {
 
       if (CONVERT_WOODEN_CHESTS.get() || CONVERT_TRAPPED_CHESTS.get()) {
         if (CONVERT_TRAPPED_CHESTS.get()) {
-          ForgeRegistries.BLOCKS.tags().getTag(Tags.Blocks.CHESTS_TRAPPED).forEach(o -> {
+          BuiltInRegistries.BLOCK.getTag(Tags.Blocks.CHESTS_TRAPPED).orElseThrow().stream().map(Holder::value).forEach(o -> {
             if (replacements.containsKey(o)) {
               return;
             }
@@ -465,7 +466,7 @@ public class ConfigManager {
           });
         }
         if (CONVERT_WOODEN_CHESTS.get()) {
-          ForgeRegistries.BLOCKS.tags().getTag(Tags.Blocks.CHESTS_WOODEN).forEach(o -> {
+          BuiltInRegistries.BLOCK.getTag(Tags.Blocks.CHESTS_WOODEN).orElseThrow().stream().map(Holder::value).forEach(o -> {
             if (replacements.containsKey(o)) {
               return;
             }
