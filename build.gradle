@@ -1,95 +1,53 @@
 plugins {
-	id 'fabric-loom' version '1.2-SNAPSHOT'
-	id 'maven-publish'
+	id 'architectury-plugin' version '3.4-SNAPSHOT'
+	id 'dev.architectury.loom' version '1.1-SNAPSHOT' apply false
 }
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
+architectury {
+	minecraft = rootProject.minecraft_version
+}
 
-archivesBaseName = project.archives_base_name
-version = project.mod_version
-group = project.maven_group
+subprojects {
+	apply plugin: 'dev.architectury.loom'
 
-repositories {
-	maven {
-		name "Parchment"
-		url "https://maven.parchmentmc.org"
+	loom {
+		silentMojangMappingsLicense()
 	}
 
-	maven {
-		name "Cloth Config"
-		url "https://maven.shedaniel.me/"
-	}
-
-	maven {
-		name "Modmenu"
-		url "https://maven.terraformersmc.com/"
-	}
-}
-
-dependencies {
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	mappings loom.layered() {
-		officialMojangMappings()
-	}
-
-	//Cloth Config
-	modApi("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
-		exclude (group: "net.fabricmc.fabric-api") }
-
-	//Modmenu
-	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}") {
-		exclude group: "net.fabricmc.fabric-api" }
-}
-
-processResources {
-	inputs.property "version", project.version
-
-	filesMatching("fabric.mod.json") {
-		expand "version": project.version
-	}
-}
-
-tasks.withType(JavaCompile).configureEach {
-	it.options.release = 17
-}
-
-java {
-	withSourcesJar()
-}
-
-jar {
-	from("LICENSE") {
-		rename { "${it}_${project.archivesBaseName}"}
-	}
-}
-
-remapJar {
-	input.set jar.archiveFile
-	dependsOn jar
-}
-
-loom {
-	accessWidenerPath = file("src/main/resources/lootr.accessWidener")
-}
-
-publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			artifact remapJar
-			artifact(sourcesJar) {
-				builtBy remapSourcesJar
-			}
-
-			artifactId = "lootr"
+	dependencies {
+		minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+		mappings loom.layered {
+			officialMojangMappings()
 		}
 	}
+}
+
+allprojects {
+	apply plugin: 'java'
+	apply plugin: 'architectury-plugin'
+	apply plugin: 'maven-publish'
+
+	sourceCompatibility = JavaVersion.VERSION_17
+	targetCompatibility = JavaVersion.VERSION_17
+
+	archivesBaseName = "${rootProject.archives_base_name}-${project.name}-${rootProject.minecraft_version}"
+	version = rootProject.mod_version
+	group = rootProject.maven_group
 
 	repositories {
 		maven {
-			url "file:///" + System.getenv("local_maven")
+			"Parchment"
+			url "https://maven.parchmentmc.org"
+		}
+	}
+
+	java {
+		withSourcesJar()
+	}
+
+	jar {
+		from("LICENSE") {
+			rename { "${it}_${project.archivesBaseName}"}
 		}
 	}
 }
