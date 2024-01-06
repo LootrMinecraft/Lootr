@@ -21,7 +21,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.zestyblaze.lootr.Lootr"
+      "noobanidus.mods.Lootr"
     ],
     "client": [
       "net.zestyblaze.lootr.client.LootrClient"
