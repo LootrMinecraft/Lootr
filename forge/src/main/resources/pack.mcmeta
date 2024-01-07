@@ -1,0 +1,8 @@
+{
+  "pack": {
+    "description": "Chests are Chests!",
+    "pack_format": 12,
+    "forge:resource_pack_format": 10,
+    "forge:data_pack_format": 12
+  }
+}

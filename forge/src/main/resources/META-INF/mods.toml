@@ -1,0 +1,30 @@
+modLoader="javafml"
+loaderVersion="[41,)"
+license="MIT"
+issueTrackerURL="https://github.com/noobanidus/Lootr/issues"
+licenseURL="https://github.com/noobanidus/Lootr/blob/master/LICENSE"
+[[mods]]
+modId="lootr"
+version="${version}"
+displayName="Lootr"
+displayURL="https://minecraft.curseforge.com/projects/lootr"
+authors="Noobanidus"
+description='''
+Makes loot chest loot per-user.
+'''
+credits='''
+Fabric port: Zestyblade
+Architectury Loom port: Nerjal Nosk
+'''
+[[dependencies.lootr]]
+    modId="forge"
+    mandatory=true
+    versionRange="[44.0.4,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.lootr]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.19.3,)"
+    ordering="NONE"
+    side="BOTH"
