@@ -24,7 +24,6 @@ import noobanidus.mods.lootr.api.LootFiller;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
-import noobanidus.mods.lootr.util.ServerAccessImpl;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -140,7 +139,7 @@ public class ChestData extends SavedData {
         ServerLevel level = (ServerLevel) player.level();
         SpecialChestInventory result;
         if (level.dimension() != dimension) {
-            MinecraftServer server = ServerAccessImpl.getServer();
+            MinecraftServer server = level.getServer();
             if (server == null) {
                 return null;
             }
@@ -163,7 +162,7 @@ public class ChestData extends SavedData {
         ServerLevel level = (ServerLevel) player.level();
         SpecialChestInventory result;
         if (level.dimension() != dimension) {
-            MinecraftServer server = ServerAccessImpl.getServer();
+            MinecraftServer server = level.getServer();
             if (server == null) {
                 return null;
             }
