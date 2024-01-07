@@ -3,8 +3,6 @@ package noobanidus.mods.lootr.mixin;
 import net.minecraft.client.renderer.texture.SpriteLoader;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import noobanidus.mods.lootr.client.block.LootrChestBlockRenderer;
-import noobanidus.mods.lootr.client.block.LootrShulkerBlockRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
