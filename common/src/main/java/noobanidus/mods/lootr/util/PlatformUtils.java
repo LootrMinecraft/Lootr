@@ -45,7 +45,7 @@ public final class PlatformUtils {
 
     @Contract
     @ExpectPlatform
-    public static <T extends Entity> EntityType<T> createEntityType(MobCategory category, BiFunction<EntityType<T>, Level, T> factory, EntityDimensions dimensions, int trackRange) {
+    public static <T extends Entity> EntityType<T> createEntityType(MobCategory category, BiFunction<EntityType<T>, Level, T> factory, EntityDimensions dimensions, int trackRange, String name) {
         throw new UnsupportedOperationException();
     }
 
@@ -93,7 +93,7 @@ public final class PlatformUtils {
 
     @Contract
     @ExpectPlatform
-    public static void registerClientNetworkReceiver(ResourceLocation location, TetraConsumer<Minecraft, ClientPacketListener, FriendlyByteBuf, ?> callback) {
+    public static void registerClientNetworkReceiver(ResourceLocation location, TetraConsumer<Minecraft, ClientPacketListener, FriendlyByteBuf, Object  > callback) {
         throw new UnsupportedOperationException();
     }
 }

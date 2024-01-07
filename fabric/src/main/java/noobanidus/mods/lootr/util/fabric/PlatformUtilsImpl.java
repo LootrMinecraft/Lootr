@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.fabric;
+package noobanidus.mods.lootr.util.fabric;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -42,7 +42,7 @@ public class PlatformUtilsImpl {
         return FabricBlockEntityTypeBuilder.create(constructor::apply, block).build(null);
     }
 
-    public static <T extends Entity> EntityType<T> createEntityType(MobCategory category, BiFunction<EntityType<T>, Level, T> factory, EntityDimensions dimensions, int trackRange) {
+    public static <T extends Entity> EntityType<T> createEntityType(MobCategory category, BiFunction<EntityType<T>, Level, T> factory, EntityDimensions dimensions, int trackRange, String name) {
         return FabricEntityTypeBuilder.create(category, factory::apply)
                 .dimensions(dimensions)
                 .trackRangeBlocks(trackRange)
@@ -77,7 +77,7 @@ public class PlatformUtilsImpl {
         PlayerBlockBreakEvents.CANCELED.register(callback::consume);
     }
 
-    public static void registerClientNetworkReceiver(ResourceLocation location, TetraConsumer<Minecraft, ClientPacketListener, FriendlyByteBuf, ?> callback) {
-        ClientPlayNetworking.registerGlobalReceiver(location, (ClientPlayNetworking.PlayChannelHandler)callback);
+    public static void registerClientNetworkReceiver(ResourceLocation location, TetraConsumer<Minecraft, ClientPacketListener, FriendlyByteBuf, Object> callback) {
+        ClientPlayNetworking.registerGlobalReceiver(location, callback::consume);
     }
 }

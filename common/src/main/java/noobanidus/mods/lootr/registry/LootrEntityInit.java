@@ -14,7 +14,7 @@ public class LootrEntityInit {
     public static EntityType<LootrChestMinecartEntity> LOOTR_MINECART_ENTITY;
 
     public static void registerEntities() {
-        EntityType<LootrChestMinecartEntity> type = PlatformUtils.createEntityType(MobCategory.MISC, LootrChestMinecartEntity::new, EntityDimensions.fixed(0.9f, 1.4f), 8);
+        EntityType<LootrChestMinecartEntity> type = PlatformUtils.createEntityType(MobCategory.MISC, LootrChestMinecartEntity::new, EntityDimensions.fixed(0.9f, 1.4f), 8, "lootr_minecart");
         LOOTR_MINECART_ENTITY = Registry.register(BuiltInRegistries.ENTITY_TYPE, new ResourceLocation(LootrAPI.MODID, "lootr_minecart"), type);
     }
 }
