@@ -27,16 +27,16 @@ public class LootrClient implements ClientModInitializer {
         LootrNetworkingInit.registerClientNetwork();
 
         BlockEntityRenderers.register(LootrBlockEntityInit.SPECIAL_LOOT_CHEST, LootrChestBlockRenderer::new);
-        BuiltinItemRendererRegistry.INSTANCE.register(LootrBlockInit.CHEST, LootrChestItemRenderer.getInstance());
+        BuiltinItemRendererRegistry.INSTANCE.register(LootrBlockInit.CHEST.get(), LootrChestItemRenderer.getInstance());
 
         BlockEntityRenderers.register(LootrBlockEntityInit.SPECIAL_TRAPPED_LOOT_CHEST, LootrChestBlockRenderer::new);
-        BuiltinItemRendererRegistry.INSTANCE.register(LootrBlockInit.TRAPPED_CHEST, LootrChestItemRenderer.getInstance());
+        BuiltinItemRendererRegistry.INSTANCE.register(LootrBlockInit.TRAPPED_CHEST.get(), LootrChestItemRenderer.getInstance());
 
         BlockEntityRenderers.register(LootrBlockEntityInit.SPECIAL_LOOT_INVENTORY, LootrChestBlockRenderer::new);
-        BuiltinItemRendererRegistry.INSTANCE.register(LootrBlockInit.INVENTORY, LootrChestItemRenderer.getInstance());
+        BuiltinItemRendererRegistry.INSTANCE.register(LootrBlockInit.INVENTORY.get(), LootrChestItemRenderer.getInstance());
 
         BlockEntityRenderers.register(LootrBlockEntityInit.SPECIAL_LOOT_SHULKER, LootrShulkerBlockRenderer::new);
-        BuiltinItemRendererRegistry.INSTANCE.register(LootrBlockInit.SHULKER, LootrShulkerItemRenderer.getInstance());
+        BuiltinItemRendererRegistry.INSTANCE.register(LootrBlockInit.SHULKER.get(), LootrShulkerItemRenderer.getInstance());
 
         ModelLoadingRegistry.INSTANCE.registerResourceProvider(o -> new BarrelModel.BarrelModelLoader());
 

@@ -12,6 +12,8 @@ import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.blocks.*;
 import noobanidus.mods.lootr.blocks.entities.LootrShulkerBlockEntity;
 
+import java.util.function.Supplier;
+
 public class LootrBlockInit {
     private static final BlockBehaviour.StatePredicate posPredicate = (state, level, pos) -> {
         BlockEntity blockEntity = level.getBlockEntity(pos);
@@ -22,21 +24,33 @@ public class LootrBlockInit {
         }
     };
 
-    public static final LootrChestBlock CHEST = new LootrChestBlock(BlockBehaviour.Properties.copy(Blocks.CHEST).strength(2.5f));
-    public static final LootrBarrelBlock BARREL = new LootrBarrelBlock(BlockBehaviour.Properties.copy(Blocks.BARREL).strength(2.5f));
-    public static final LootrTrappedChestBlock TRAPPED_CHEST = new LootrTrappedChestBlock(BlockBehaviour.Properties.copy(Blocks.TRAPPED_CHEST).strength(2.5f));
-    public static final LootrShulkerBlock SHULKER = new LootrShulkerBlock(BlockBehaviour.Properties.of().strength(2.5f).dynamicShape().noOcclusion().isSuffocating(posPredicate).isViewBlocking(posPredicate));
+    private static LootrChestBlock chestBlock;
+    public static final Supplier<LootrChestBlock> CHEST = () -> chestBlock;
+    private static LootrBarrelBlock barrelBlock;
+    public static final Supplier<LootrBarrelBlock> BARREL = () -> barrelBlock;
+    private static LootrTrappedChestBlock trappedChestBlock;
+    public static final Supplier<LootrTrappedChestBlock> TRAPPED_CHEST = () -> trappedChestBlock;
+    private static LootrShulkerBlock shulkerBlock;
+    public static final Supplier<LootrShulkerBlock> SHULKER = () -> shulkerBlock;
 
-    public static final LootrInventoryBlock INVENTORY = new LootrInventoryBlock(BlockBehaviour.Properties.of().strength(2.5f).sound(SoundType.WOOD));
+    private static LootrInventoryBlock inventoryBlock;
+    public static final Supplier<LootrInventoryBlock> INVENTORY = () -> inventoryBlock;
 
-    public static final Block TROPHY = new TrophyBlock(BlockBehaviour.Properties.of().strength(15f).sound(SoundType.METAL).noOcclusion().lightLevel((o) -> 15));
+    private static Block trophyBlock;
+    public static final Supplier<Block> TROPHY = () -> trophyBlock;
 
     public static void registerBlocks() {
-        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(LootrAPI.MODID, "lootr_chest"), CHEST);
-        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(LootrAPI.MODID, "lootr_barrel"), BARREL);
-        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(LootrAPI.MODID, "lootr_trapped_chest"), TRAPPED_CHEST);
-        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(LootrAPI.MODID, "lootr_shulker"), SHULKER);
-        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(LootrAPI.MODID, "lootr_inventory"), INVENTORY);
-        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(LootrAPI.MODID, "trophy"), TROPHY);
+        chestBlock = new LootrChestBlock(BlockBehaviour.Properties.copy(Blocks.CHEST).strength(2.5f));
+        barrelBlock = new LootrBarrelBlock(BlockBehaviour.Properties.copy(Blocks.BARREL).strength(2.5f));
+        trappedChestBlock = new LootrTrappedChestBlock(BlockBehaviour.Properties.copy(Blocks.TRAPPED_CHEST).strength(2.5f));
+        shulkerBlock = new LootrShulkerBlock(BlockBehaviour.Properties.of().strength(2.5f).dynamicShape().noOcclusion().isSuffocating(posPredicate).isViewBlocking(posPredicate));
+        inventoryBlock = new LootrInventoryBlock(BlockBehaviour.Properties.of().strength(2.5f).sound(SoundType.WOOD));
+        trophyBlock = new TrophyBlock(BlockBehaviour.Properties.of().strength(15f).sound(SoundType.METAL).noOcclusion().lightLevel(o -> 15));
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(LootrAPI.MODID, "lootr_chest"), chestBlock);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(LootrAPI.MODID, "lootr_barrel"), barrelBlock);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(LootrAPI.MODID, "lootr_trapped_chest"), trappedChestBlock);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(LootrAPI.MODID, "lootr_shulker"), shulkerBlock);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(LootrAPI.MODID, "lootr_inventory"), inventoryBlock);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(LootrAPI.MODID, "trophy"), trophyBlock);
     }
 }

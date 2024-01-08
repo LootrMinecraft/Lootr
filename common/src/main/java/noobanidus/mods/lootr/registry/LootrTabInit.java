@@ -11,9 +11,9 @@ import noobanidus.mods.lootr.api.LootrAPI;
 public class LootrTabInit {
     public static final CreativeModeTab LOOTR_TAB = CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
             .title(Component.translatable("itemGroup.lootr.lootr"))
-            .icon(() -> new ItemStack(LootrBlockInit.TROPHY))
+            .icon(() -> new ItemStack(LootrBlockInit.TROPHY.get()))
             .displayItems((p, output) -> {
-                output.accept(LootrBlockInit.TROPHY);
+                output.accept(LootrBlockInit.TROPHY.get());
             }).build();
 
     public static void registerTabs() {

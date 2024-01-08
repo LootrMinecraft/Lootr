@@ -9,11 +9,11 @@ import noobanidus.mods.lootr.blocks.entities.*;
 import noobanidus.mods.lootr.util.PlatformUtils;
 
 public class LootrBlockEntityInit {
-    public static final BlockEntityType<LootrChestBlockEntity> SPECIAL_LOOT_CHEST = PlatformUtils.createBlockEntityType(LootrChestBlockEntity::new, LootrBlockInit.CHEST);
-    public static final BlockEntityType<LootrBarrelBlockEntity> SPECIAL_LOOT_BARREL = PlatformUtils.createBlockEntityType(LootrBarrelBlockEntity::new, LootrBlockInit.BARREL);
-    public static final BlockEntityType<LootrTrappedChestBlockEntity> SPECIAL_TRAPPED_LOOT_CHEST = PlatformUtils.createBlockEntityType(LootrTrappedChestBlockEntity::new, LootrBlockInit.TRAPPED_CHEST);
-    public static final BlockEntityType<LootrShulkerBlockEntity> SPECIAL_LOOT_SHULKER = PlatformUtils.createBlockEntityType(LootrShulkerBlockEntity::new, LootrBlockInit.SHULKER);
-    public static final BlockEntityType<LootrInventoryBlockEntity> SPECIAL_LOOT_INVENTORY = PlatformUtils.createBlockEntityType(LootrInventoryBlockEntity::new, LootrBlockInit.INVENTORY);
+    public static final BlockEntityType<LootrChestBlockEntity> SPECIAL_LOOT_CHEST = PlatformUtils.createBlockEntityType(LootrChestBlockEntity::new, LootrBlockInit.CHEST.get());
+    public static final BlockEntityType<LootrBarrelBlockEntity> SPECIAL_LOOT_BARREL = PlatformUtils.createBlockEntityType(LootrBarrelBlockEntity::new, LootrBlockInit.BARREL.get());
+    public static final BlockEntityType<LootrTrappedChestBlockEntity> SPECIAL_TRAPPED_LOOT_CHEST = PlatformUtils.createBlockEntityType(LootrTrappedChestBlockEntity::new, LootrBlockInit.TRAPPED_CHEST.get());
+    public static final BlockEntityType<LootrShulkerBlockEntity> SPECIAL_LOOT_SHULKER = PlatformUtils.createBlockEntityType(LootrShulkerBlockEntity::new, LootrBlockInit.SHULKER.get());
+    public static final BlockEntityType<LootrInventoryBlockEntity> SPECIAL_LOOT_INVENTORY = PlatformUtils.createBlockEntityType(LootrInventoryBlockEntity::new, LootrBlockInit.INVENTORY.get());
 
     public static void registerBlockEntities() {
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation(LootrAPI.MODID, "special_loot_chest"), SPECIAL_LOOT_CHEST);

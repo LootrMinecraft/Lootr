@@ -9,13 +9,13 @@ import net.minecraft.world.item.Rarity;
 import noobanidus.mods.lootr.api.LootrAPI;
 
 public class LootrItemInit {
-    public static final BlockItem CHEST = new BlockItem(LootrBlockInit.CHEST, new Item.Properties());
-    public static final BlockItem BARREL = new BlockItem(LootrBlockInit.BARREL, new Item.Properties());
-    public static final BlockItem TRAPPED_CHEST = new BlockItem(LootrBlockInit.TRAPPED_CHEST, new Item.Properties());
-    public static final BlockItem SHULKER = new BlockItem(LootrBlockInit.SHULKER, new Item.Properties());
-    public static final BlockItem INVENTORY = new BlockItem(LootrBlockInit.INVENTORY, new Item.Properties());
+    public static final BlockItem CHEST = new BlockItem(LootrBlockInit.CHEST.get(), new Item.Properties());
+    public static final BlockItem BARREL = new BlockItem(LootrBlockInit.BARREL.get(), new Item.Properties());
+    public static final BlockItem TRAPPED_CHEST = new BlockItem(LootrBlockInit.TRAPPED_CHEST.get(), new Item.Properties());
+    public static final BlockItem SHULKER = new BlockItem(LootrBlockInit.SHULKER.get(), new Item.Properties());
+    public static final BlockItem INVENTORY = new BlockItem(LootrBlockInit.INVENTORY.get(), new Item.Properties());
 
-    public static final BlockItem TROPHY = new BlockItem(LootrBlockInit.TROPHY, new Item.Properties().rarity(Rarity.EPIC));
+    public static final BlockItem TROPHY = new BlockItem(LootrBlockInit.TROPHY.get(), new Item.Properties().rarity(Rarity.EPIC));
 
     public static void registerItems() {
         Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(LootrAPI.MODID, "lootr_chest"), CHEST);

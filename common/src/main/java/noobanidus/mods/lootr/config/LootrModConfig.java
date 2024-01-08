@@ -272,13 +272,13 @@ public class LootrModConfig implements ConfigData {
                 BlockEntity be = entityBlock.newBlockEntity(BlockPos.ZERO, original);
                 if (be instanceof RandomizableContainerBlockEntity) {
                     if (original.is(LootrTags.Blocks.CONVERT_TRAPPED_CHESTS)) {
-                        replacements.put(original.getBlock(), LootrBlockInit.TRAPPED_CHEST);
+                        replacements.put(original.getBlock(), LootrBlockInit.TRAPPED_CHEST.get());
                     } else if (original.is(LootrTags.Blocks.CONVERT_BARRELS)) {
-                        replacements.put(original.getBlock(), LootrBlockInit.BARREL);
+                        replacements.put(original.getBlock(), LootrBlockInit.BARREL.get());
                     } else if (original.is(LootrTags.Blocks.CONVERT_CHESTS)) {
-                        replacements.put(original.getBlock(), LootrBlockInit.CHEST);
+                        replacements.put(original.getBlock(), LootrBlockInit.CHEST.get());
                     } else if (original.is(LootrTags.Blocks.CONVERT_SHULKERS)) {
-                        replacements.put(original.getBlock(), LootrBlockInit.SHULKER);
+                        replacements.put(original.getBlock(), LootrBlockInit.SHULKER.get());
                     }
                 }
             }

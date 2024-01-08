@@ -139,7 +139,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
         return Type.CHEST;
     }
 
-    private static final BlockState cartNormal = LootrBlockInit.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
+    private static final BlockState cartNormal = LootrBlockInit.CHEST.get().defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
 
     @Override
     public BlockState getDefaultDisplayBlockState() {

@@ -18,7 +18,7 @@ import noobanidus.mods.lootr.registry.LootrBlockInit;
 public class LootrChestItemRenderer extends BlockEntityWithoutLevelRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer {
     private static LootrChestItemRenderer INSTANCE = null;
 
-    private final LootrChestBlockEntity tile = new LootrChestBlockEntity(BlockPos.ZERO, LootrBlockInit.CHEST.defaultBlockState());
+    private final LootrChestBlockEntity tile = new LootrChestBlockEntity(BlockPos.ZERO, LootrBlockInit.CHEST.get().defaultBlockState());
 
     public LootrChestItemRenderer(BlockEntityRenderDispatcher pBlockEntityRenderDispatcher, EntityModelSet pEntityModelSet) {
         super(pBlockEntityRenderDispatcher, pEntityModelSet);

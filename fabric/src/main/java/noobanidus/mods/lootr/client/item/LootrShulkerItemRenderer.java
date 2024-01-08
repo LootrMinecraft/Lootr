@@ -17,7 +17,7 @@ public class LootrShulkerItemRenderer extends BlockEntityWithoutLevelRenderer im
     private static LootrShulkerItemRenderer INSTANCE = null;
 
     private BlockEntityRenderDispatcher blockEntityRenderDispatcher;
-    private final LootrShulkerBlockEntity tile = new LootrShulkerBlockEntity(BlockPos.ZERO, LootrBlockInit.CHEST.defaultBlockState());
+    private final LootrShulkerBlockEntity tile = new LootrShulkerBlockEntity(BlockPos.ZERO, LootrBlockInit.SHULKER.get().defaultBlockState());
 
     public LootrShulkerItemRenderer(BlockEntityRenderDispatcher pBlockEntityRenderDispatcher, EntityModelSet pEntityModelSet) {
         super(pBlockEntityRenderDispatcher, pEntityModelSet);
