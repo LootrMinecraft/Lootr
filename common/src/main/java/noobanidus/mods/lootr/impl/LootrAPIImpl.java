@@ -41,7 +41,7 @@ public class LootrAPIImpl implements ILootrAPI {
         return DataStorage.getInventory(world, id, pos, player, blockEntity, filler, tableSupplier, seedSupplier);
     }
 
-    public @Nullable  MenuProvider getModdedMenu(Level world, UUID id, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier, MenuBuilder builder) {
+    public @Nullable MenuProvider getModdedMenu(Level world, UUID id, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier, MenuBuilder builder) {
         SpecialChestInventory inventory = DataStorage.getInventory(world, id, pos, player, blockEntity, filler, tableSupplier, seedSupplier);
         if (inventory != null) {
             inventory.setMenuBuilder(builder);

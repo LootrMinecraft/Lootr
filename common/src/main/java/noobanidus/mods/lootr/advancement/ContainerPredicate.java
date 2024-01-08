@@ -11,7 +11,7 @@ import java.util.UUID;
 public class ContainerPredicate implements IGenericPredicate<UUID> {
     @Override
     public boolean test(ServerPlayer player, UUID condition) {
-        if(DataStorage.isAwarded(player.getUUID(), condition)) {
+        if (DataStorage.isAwarded(player.getUUID(), condition)) {
             return false;
         } else {
             DataStorage.award(player.getUUID(), condition);

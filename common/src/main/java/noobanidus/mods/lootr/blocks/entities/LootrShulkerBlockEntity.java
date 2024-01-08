@@ -37,7 +37,6 @@ import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.PushReaction;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
@@ -55,7 +54,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity implements ILootBlockEntity {
     public Set<UUID> openers = new HashSet<>();
@@ -86,7 +84,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
 
     private void updateAnimation(Level level, BlockPos pos, BlockState state) {
         this.progressOld = this.progress;
-        switch(this.animationStatus) {
+        switch (this.animationStatus) {
             case CLOSED -> this.progress = 0.0F;
             case OPENING -> {
                 this.progress += 0.1F;
@@ -122,8 +120,8 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
             Direction direction = pState.getValue(ShulkerBoxBlock.FACING);
             AABB aabb = Shulker.getProgressDeltaAabb(direction, this.progressOld, this.progress).move(pPos);
             List<Entity> list = pLevel.getEntities(null, aabb);
-            if(!list.isEmpty()) {
-                for(Entity entity : list) {
+            if (!list.isEmpty()) {
+                for (Entity entity : list) {
                     if (entity.getPistonPushReaction() != PushReaction.IGNORE) {
                         entity.move(MoverType.SHULKER_BOX, new Vec3((aabb.getXsize() + 0.01D) * (double) direction.getStepX(), (aabb.getYsize() + 0.01D) * (double) direction.getStepY(), (aabb.getZsize() + 0.01D) * (double) direction.getStepZ()));
                     }

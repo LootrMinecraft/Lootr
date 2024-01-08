@@ -49,7 +49,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class LootrChestMinecartEntity extends AbstractMinecartContainer implements ILootCart {
     private final Set<UUID> openers = new HashSet<>();

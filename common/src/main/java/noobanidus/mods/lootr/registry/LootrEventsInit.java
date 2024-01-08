@@ -5,13 +5,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.server.MinecraftServer;
+import noobanidus.mods.lootr.LootrTags;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.blocks.entities.TileTicker;
 import noobanidus.mods.lootr.chunk.HandleChunk;
 import noobanidus.mods.lootr.config.LootrModConfig;
 import noobanidus.mods.lootr.entity.EntityTicker;
-import noobanidus.mods.lootr.LootrTags;
 import noobanidus.mods.lootr.util.PlatformUtils;
 
 public class LootrEventsInit {

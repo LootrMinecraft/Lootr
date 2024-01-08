@@ -70,7 +70,7 @@ public class DataStorage {
         data.setDirty();
     }
 
-    public static int getDecayValue (UUID id) {
+    public static int getDecayValue(UUID id) {
         DimensionDataStorage manager = DataStorage.getDataStorage();
         TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, DECAY);
         return data.getValue(id);
@@ -82,30 +82,30 @@ public class DataStorage {
         return data.isComplete(id);
     }
 
-    public static void setDecaying (UUID id, int decay) {
+    public static void setDecaying(UUID id, int decay) {
         DimensionDataStorage manager = DataStorage.getDataStorage();
         TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, DECAY);
         data.setValue(id, decay);
         data.setDirty();
     }
 
-    public static void removeDecayed (UUID id) {
+    public static void removeDecayed(UUID id) {
         DimensionDataStorage manager = DataStorage.getDataStorage();
         TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, DECAY);
-        if(data.remove(id) != -1) {
+        if (data.remove(id) != -1) {
             data.setDirty();
         }
     }
 
-    public static void doDecay () {
+    public static void doDecay() {
         DimensionDataStorage manager = DataStorage.getDataStorage();
         TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, DECAY);
-        if(data.tick()) {
+        if (data.tick()) {
             data.setDirty();
         }
     }
 
-    public static int getRefreshValue (UUID id) {
+    public static int getRefreshValue(UUID id) {
         DimensionDataStorage manager = DataStorage.getDataStorage();
         TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, REFRESH);
         return data.getValue(id);
@@ -117,25 +117,25 @@ public class DataStorage {
         return data.isComplete(id);
     }
 
-    public static void setRefreshing (UUID id, int decay) {
+    public static void setRefreshing(UUID id, int decay) {
         DimensionDataStorage manager = DataStorage.getDataStorage();
         TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, REFRESH);
         data.setValue(id, decay);
         data.setDirty();
     }
 
-    public static void removeRefreshed (UUID id) {
+    public static void removeRefreshed(UUID id) {
         DimensionDataStorage manager = DataStorage.getDataStorage();
         TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, REFRESH);
-        if(data.remove(id) != -1) {
+        if (data.remove(id) != -1) {
             data.setDirty();
         }
     }
 
-    public static void doRefresh () {
+    public static void doRefresh() {
         DimensionDataStorage manager = DataStorage.getDataStorage();
         TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, REFRESH);
-        if(data.tick()) {
+        if (data.tick()) {
             data.setDirty();
         }
     }
@@ -153,14 +153,14 @@ public class DataStorage {
     }
 
     @Nullable
-    public static SpecialChestInventory getInventory (Level level, UUID uuid, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
-        if(level.isClientSide() || !(level instanceof ServerLevel)) {
+    public static SpecialChestInventory getInventory(Level level, UUID uuid, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
+        if (level.isClientSide() || !(level instanceof ServerLevel)) {
             return null;
         }
 
         ChestData data = getInstanceUuid((ServerLevel) level, pos, uuid);
         SpecialChestInventory inventory = data.getInventory(player);
-        if(inventory == null) {
+        if (inventory == null) {
             inventory = data.createInventory(player, filler, sizeSupplier, displaySupplier, tableSupplier, seedSupplier);
         }
 
@@ -168,14 +168,14 @@ public class DataStorage {
     }
 
     @Nullable
-    public static SpecialChestInventory getInventory (Level level, UUID uuid, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
-        if(level.isClientSide() || !(level instanceof ServerLevel)) {
+    public static SpecialChestInventory getInventory(Level level, UUID uuid, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
+        if (level.isClientSide() || !(level instanceof ServerLevel)) {
             return null;
         }
 
         ChestData data = getInstanceUuid((ServerLevel) level, pos, uuid);
         SpecialChestInventory inventory = data.getInventory(player);
-        if(inventory == null) {
+        if (inventory == null) {
             inventory = data.createInventory(player, filler, blockEntity, tableSupplier, seedSupplier);
         }
 
@@ -184,13 +184,13 @@ public class DataStorage {
 
     @Nullable
     public static SpecialChestInventory getInventory(Level world, UUID uuid, BlockPos pos, ServerPlayer player, RandomizableContainerBlockEntity tile, LootFiller filler) {
-        if(world.isClientSide || !(world instanceof ServerLevel)) {
+        if (world.isClientSide || !(world instanceof ServerLevel)) {
             return null;
         }
 
         ChestData data = getInstanceUuid((ServerLevel) world, pos, uuid);
         SpecialChestInventory inventory = data.getInventory(player);
-        if(inventory == null) {
+        if (inventory == null) {
             inventory = data.createInventory(player, filler, tile);
         }
 
@@ -199,12 +199,12 @@ public class DataStorage {
 
     @Nullable
     public static SpecialChestInventory getInventory(Level world, UUID uuid, NonNullList<ItemStack> base, ServerPlayer player, BlockPos pos, RandomizableContainerBlockEntity tile) {
-        if(world.isClientSide || !(world instanceof ServerLevel)) {
+        if (world.isClientSide || !(world instanceof ServerLevel)) {
             return null;
         }
         ChestData data = getInstanceInventory((ServerLevel) world, pos, uuid, base);
         SpecialChestInventory inventory = data.getInventory(player);
-        if(inventory == null) {
+        if (inventory == null) {
             inventory = data.createInventory(player, data.customInventory(), tile);
         }
 
@@ -218,11 +218,11 @@ public class DataStorage {
 
         // TODO: Clear
         List<String> ids = new ArrayList<>();
-        try(Stream<Path> paths = Files.walk(dataPath)) {
+        try (Stream<Path> paths = Files.walk(dataPath)) {
             paths.forEach(o -> {
-                if(Files.isRegularFile(o)) {
+                if (Files.isRegularFile(o)) {
                     String fileName = o.getFileName().toString();
-                    if(fileName.startsWith("Lootr-")) {
+                    if (fileName.startsWith("Lootr-")) {
                         return;
                     }
                     ids.add("lootr/" + fileName.charAt(0) + "/" + fileName.substring(0, 2) + "/" + fileName.replace(".dat", ""));
@@ -233,10 +233,10 @@ public class DataStorage {
         }
 
         int cleared = 0;
-        for(String id : ids) {
+        for (String id : ids) {
             ChestData chestData = data.get(ChestData::load, id);
-            if(chestData != null) {
-                if(chestData.clearInventory(uuid)) {
+            if (chestData != null) {
+                if (chestData.clearInventory(uuid)) {
                     cleared++;
                     chestData.setDirty();
                 }
@@ -248,13 +248,13 @@ public class DataStorage {
 
     @Nullable
     public static SpecialChestInventory getInventory(Level world, LootrChestMinecartEntity cart, ServerPlayer player, LootFiller filler) {
-        if(world.isClientSide || !(world instanceof ServerLevel)) {
+        if (world.isClientSide || !(world instanceof ServerLevel)) {
             return null;
         }
 
         ChestData data = getInstance((ServerLevel) world, cart.blockPosition(), cart.getUUID());
         SpecialChestInventory inventory = data.getInventory(player);
-        if(inventory == null) {
+        if (inventory == null) {
             inventory = data.createInventory(player, filler, null);
         }
 
@@ -262,7 +262,7 @@ public class DataStorage {
     }
 
     public static void refreshInventory(Level level, BlockPos pos, UUID uuid, ServerPlayer player) {
-        if(level.isClientSide() || !(level instanceof ServerLevel)) {
+        if (level.isClientSide() || !(level instanceof ServerLevel)) {
             return;
         }
 
@@ -272,7 +272,7 @@ public class DataStorage {
     }
 
     public static void refreshInventory(Level world, BlockPos pos, UUID uuid, NonNullList<ItemStack> base, ServerPlayer player) {
-        if(world.isClientSide() || !(world instanceof ServerLevel)) {
+        if (world.isClientSide() || !(world instanceof ServerLevel)) {
             return;
         }
         ChestData data = getInstanceInventory((ServerLevel) world, pos, uuid, base);
@@ -281,7 +281,7 @@ public class DataStorage {
     }
 
     public static void refreshInventory(Level world, LootrChestMinecartEntity cart, ServerPlayer player) {
-        if(world.isClientSide() || !(world instanceof ServerLevel)) {
+        if (world.isClientSide() || !(world instanceof ServerLevel)) {
             return;
         }
 

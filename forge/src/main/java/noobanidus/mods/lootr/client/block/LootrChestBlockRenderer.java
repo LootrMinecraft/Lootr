@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class LootrChestBlockRenderer <T extends LootrChestBlockEntity & ILootBlockEntity> extends ChestRenderer<T> {
+public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootBlockEntity> extends ChestRenderer<T> {
     private UUID playerId = null;
     public static final Material MATERIAL = new Material(InventoryMenu.BLOCK_ATLAS, new ResourceLocation(LootrAPI.MODID, "chest"));
     public static final Material MATERIAL2 = new Material(InventoryMenu.BLOCK_ATLAS, new ResourceLocation(LootrAPI.MODID, "chest_opened"));

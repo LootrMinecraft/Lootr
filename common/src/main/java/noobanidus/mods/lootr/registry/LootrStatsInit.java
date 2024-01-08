@@ -6,7 +6,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stat;
 import net.minecraft.stats.Stats;
 import noobanidus.mods.lootr.api.LootrAPI;
-import noobanidus.mods.lootr.config.LootrModConfig;
 
 public class LootrStatsInit {
     public static ResourceLocation LOOTED_LOCATION = new ResourceLocation(LootrAPI.MODID, "looted_stat");

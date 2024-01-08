@@ -30,7 +30,7 @@ public class LootrShulkerItemRenderer extends BlockEntityWithoutLevelRenderer im
 
     @Override
     public void renderByItem(ItemStack stack, ItemDisplayContext mode, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
-        if(this.blockEntityRenderDispatcher == null) {
+        if (this.blockEntityRenderDispatcher == null) {
             this.blockEntityRenderDispatcher = Minecraft.getInstance().getBlockEntityRenderDispatcher();
         }
         this.blockEntityRenderDispatcher.renderItem(tile, matrixStack, buffer, combinedLight, combinedOverlay);
@@ -41,7 +41,7 @@ public class LootrShulkerItemRenderer extends BlockEntityWithoutLevelRenderer im
     }
 
     public static LootrShulkerItemRenderer getInstance() {
-        if(INSTANCE == null) {
+        if (INSTANCE == null) {
             INSTANCE = new LootrShulkerItemRenderer();
         }
         return INSTANCE;

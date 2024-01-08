@@ -13,7 +13,7 @@ import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.client.item.LootrChestItemRenderer;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
-public class LootrChestCartRenderer <T extends LootrChestMinecartEntity> extends MinecartRenderer<T> {
+public class LootrChestCartRenderer<T extends LootrChestMinecartEntity> extends MinecartRenderer<T> {
     public LootrChestCartRenderer(EntityRendererProvider.Context arg, ModelLayerLocation arg2) {
         super(arg, arg2);
     }
@@ -44,7 +44,7 @@ public class LootrChestCartRenderer <T extends LootrChestMinecartEntity> extends
                 vec32 = vec3;
             }
 
-            matrixStack.translate(vec3.x - d0, (vec31.y + vec32.y) /2d - d1, vec3.z - d2);
+            matrixStack.translate(vec3.x - d0, (vec31.y + vec32.y) / 2d - d1, vec3.z - d2);
             Vec3 vec33 = vec32.add(-vec31.x, -vec31.y, -vec31.z);
             if (vec33.length() != 0.0D) {
                 vec33 = vec33.normalize();

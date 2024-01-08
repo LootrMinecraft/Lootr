@@ -35,7 +35,8 @@ import java.util.function.Consumer;
 
 @SuppressWarnings("unused")
 public final class PlatformUtils {
-    private PlatformUtils() {}
+    private PlatformUtils() {
+    }
 
     @Contract
     @ExpectPlatform
@@ -93,7 +94,7 @@ public final class PlatformUtils {
 
     @Contract
     @ExpectPlatform
-    public static void registerClientNetworkReceiver(ResourceLocation location, TetraConsumer<Minecraft, ClientPacketListener, FriendlyByteBuf, Object  > callback) {
+    public static void registerClientNetworkReceiver(ResourceLocation location, TetraConsumer<Minecraft, ClientPacketListener, FriendlyByteBuf, Object> callback) {
         throw new UnsupportedOperationException();
     }
 }

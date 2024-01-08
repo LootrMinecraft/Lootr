@@ -16,7 +16,7 @@ public class LootrTabInit {
                 output.accept(LootrBlockInit.TROPHY);
             }).build();
 
-    public static void registerTabs () {
+    public static void registerTabs() {
         Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, new ResourceLocation(LootrAPI.MODID, "lootr"), LOOTR_TAB);
     }
 }

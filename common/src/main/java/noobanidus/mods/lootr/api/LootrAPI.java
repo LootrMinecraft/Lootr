@@ -22,7 +22,7 @@ public class LootrAPI {
 
     public static ILootrAPI INSTANCE;
 
-    public static boolean isFakePlayer (Player entity) {
+    public static boolean isFakePlayer(Player entity) {
         return INSTANCE.isFakePlayer(entity);
     }
 
@@ -50,7 +50,7 @@ public class LootrAPI {
         return INSTANCE.getModdedMenu(level, id, pos, player, sizeSupplier, displaySupplier, filler, tableSupplier, seedSupplier, builder);
     }
 
-    public static long getLootSeed (long seed) {
+    public static long getLootSeed(long seed) {
         return INSTANCE.getLootSeed(seed);
     }
 }

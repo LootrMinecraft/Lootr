@@ -32,7 +32,7 @@ public class CrownItem extends ArmorItem {
     public @NotNull Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot pEquipmentSlot) {
         return pEquipmentSlot == this.type.getSlot() ? this.modifiers : super.getDefaultAttributeModifiers(pEquipmentSlot);
     }
-    
+
     public static class CrownArmourMaterial implements ArmorMaterial {
         public static final CrownArmourMaterial INSTANCE = new CrownArmourMaterial();
 

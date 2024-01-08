@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
@@ -66,9 +65,9 @@ public class LootrTrappedChestBlock extends ChestBlock {
 
     @Override
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult trace) {
-        if(player.isShiftKeyDown()) {
+        if (player.isShiftKeyDown()) {
             ChestUtil.handleLootSneak(this, world, pos, player);
-        } else if(!ChestBlock.isChestBlockedAt(world, pos)) {
+        } else if (!ChestBlock.isChestBlockedAt(world, pos)) {
             ChestUtil.handleLootChest(this, world, pos, player);
         }
         return InteractionResult.SUCCESS;
@@ -76,7 +75,7 @@ public class LootrTrappedChestBlock extends ChestBlock {
 
     @Override
     public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor world, BlockPos currentPos, BlockPos facingPos) {
-        if(state.getValue(WATERLOGGED)) {
+        if (state.getValue(WATERLOGGED)) {
             world.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
         }
         return state;

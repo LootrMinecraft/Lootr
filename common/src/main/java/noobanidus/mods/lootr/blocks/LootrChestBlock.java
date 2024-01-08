@@ -25,7 +25,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import noobanidus.mods.lootr.blocks.entities.LootrChestBlockEntity;
-import noobanidus.mods.lootr.blocks.entities.LootrShulkerBlockEntity;
 import noobanidus.mods.lootr.config.LootrModConfig;
 import noobanidus.mods.lootr.registry.LootrBlockEntityInit;
 import noobanidus.mods.lootr.util.ChestUtil;

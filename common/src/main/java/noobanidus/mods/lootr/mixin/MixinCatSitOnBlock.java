@@ -22,7 +22,7 @@ public class MixinCatSitOnBlock {
 
     @Inject(method = "isValidTarget", at = @At(target = "Lnet/minecraft/world/level/block/entity/ChestBlockEntity;getOpenCount(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;)I", value = "INVOKE"), cancellable = true)
     private void lootrPlayersUsing(LevelReader reader, BlockPos pos, CallbackInfoReturnable<Boolean> info) {
-        if(LootrChestBlockEntity.getOpenCount(reader, pos) < 1) {
+        if (LootrChestBlockEntity.getOpenCount(reader, pos) < 1) {
             info.setReturnValue(true);
             info.cancel();
         }

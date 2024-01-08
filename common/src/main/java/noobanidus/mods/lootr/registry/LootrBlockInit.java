@@ -1,6 +1,5 @@
 package noobanidus.mods.lootr.registry;
 
-import com.google.common.collect.Sets;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -12,14 +11,11 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.blocks.*;
 import noobanidus.mods.lootr.blocks.entities.LootrShulkerBlockEntity;
-import noobanidus.mods.lootr.config.LootrModConfig;
-
-import java.util.Set;
 
 public class LootrBlockInit {
     private static final BlockBehaviour.StatePredicate posPredicate = (state, level, pos) -> {
         BlockEntity blockEntity = level.getBlockEntity(pos);
-        if(blockEntity instanceof LootrShulkerBlockEntity shulkerBlockEntity) {
+        if (blockEntity instanceof LootrShulkerBlockEntity shulkerBlockEntity) {
             return shulkerBlockEntity.isClosed();
         } else {
             return false;

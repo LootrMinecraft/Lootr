@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinPiglinBrain {
     @Inject(method = "isWearingGold", at = @At("HEAD"), cancellable = true)
     private static void piglinIgnoreCrown(@NotNull LivingEntity livingEntity, @NotNull CallbackInfoReturnable<Boolean> cir) {
-        if(livingEntity.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof CrownItem) {
+        if (livingEntity.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof CrownItem) {
             cir.setReturnValue(true);
         }
     }

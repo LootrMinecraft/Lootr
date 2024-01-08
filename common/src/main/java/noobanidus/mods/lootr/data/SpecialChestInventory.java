@@ -46,7 +46,7 @@ public class SpecialChestInventory implements ILootrInventory {
         ContainerHelper.loadAllItems(items, this.contents);
     }
 
-    public void setMenuBuilder (MenuBuilder builder) {
+    public void setMenuBuilder(MenuBuilder builder) {
         this.menuBuilder = builder;
     }
 
@@ -98,8 +98,8 @@ public class SpecialChestInventory implements ILootrInventory {
 
     @Override
     public boolean isEmpty() {
-        for(ItemStack itemstack : this.contents) {
-            if(!itemstack.isEmpty()) {
+        for (ItemStack itemstack : this.contents) {
+            if (!itemstack.isEmpty()) {
                 return false;
             }
         }
@@ -115,7 +115,7 @@ public class SpecialChestInventory implements ILootrInventory {
     @Override
     public ItemStack removeItem(int index, int count) {
         ItemStack itemstack = ContainerHelper.removeItem(this.contents, index, count);
-        if(!itemstack.isEmpty()) {
+        if (!itemstack.isEmpty()) {
             this.setChanged();
             // TODO: Trigger save?
         }
@@ -125,7 +125,7 @@ public class SpecialChestInventory implements ILootrInventory {
     @Override
     public ItemStack removeItemNoUpdate(int index) {
         ItemStack result = ContainerHelper.takeItem(contents, index);
-        if(!result.isEmpty()) {
+        if (!result.isEmpty()) {
             this.setChanged();
         }
 
@@ -213,7 +213,7 @@ public class SpecialChestInventory implements ILootrInventory {
     }
 
     @Nullable
-    public UUID getTileId () {
+    public UUID getTileId() {
         if (newChestData == null) {
             return null;
         }

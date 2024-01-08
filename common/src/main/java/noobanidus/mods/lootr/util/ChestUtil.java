@@ -9,7 +9,6 @@ import net.minecraft.network.chat.TextColor;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -61,7 +60,7 @@ public class ChestUtil {
         }
 
         cart.getOpeners().remove(player.getUUID());
-        NetworkConstants.sendCloseCart(cart.getId(), (ServerPlayer)player);
+        NetworkConstants.sendCloseCart(cart.getId(), (ServerPlayer) player);
     }
 
     public static boolean handleLootChest(Block block, Level level, BlockPos pos, Player player) {
@@ -85,7 +84,7 @@ public class ChestUtil {
                 if (decayValue > 0 && LootrModConfig.shouldNotify(decayValue)) {
                     player.displayClientMessage(Component.translatable("lootr.message.decay_in", decayValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), true);
                 } else if (decayValue == -1) {
-                    if (LootrModConfig.isDecaying((ServerLevel)level, (ILootBlockEntity)te)) {
+                    if (LootrModConfig.isDecaying((ServerLevel) level, (ILootBlockEntity) te)) {
                         DataStorage.setDecaying(tileId, LootrModConfig.get().decay.decay_value);
                         player.displayClientMessage(Component.translatable("lootr.message.decay_start", LootrModConfig.get().decay.decay_value / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), true);
                     }
@@ -113,7 +112,7 @@ public class ChestUtil {
                 }
             }
             MenuProvider provider = DataStorage.getInventory(level, ((ILootBlockEntity) te).getTileId(), pos, (ServerPlayer) player, (RandomizableContainerBlockEntity) te, ((ILootBlockEntity) te)::unpackLootTable);
-            if (!DataStorage.isScored(player.getUUID(), ((ILootBlockEntity)te).getTileId())) {
+            if (!DataStorage.isScored(player.getUUID(), ((ILootBlockEntity) te).getTileId())) {
                 player.awardStat(LootrStatsInit.LOOTED_STAT);
                 LootrAdvancementsInit.SCORE_PREDICATE.trigger((ServerPlayer) player, null);
                 DataStorage.score(player.getUUID(), ((ILootBlockEntity) te).getTileId());
@@ -170,7 +169,7 @@ public class ChestUtil {
                 if (refreshValue > 0 && LootrModConfig.shouldNotify(refreshValue)) {
                     player.displayClientMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), true);
                 } else if (refreshValue == -1) {
-                    if (LootrModConfig.isRefreshing((ServerLevel)level, cart)) {
+                    if (LootrModConfig.isRefreshing((ServerLevel) level, cart)) {
                         DataStorage.setRefreshing(tileId, LootrModConfig.get().refresh.refresh_value);
                         player.displayClientMessage(Component.translatable("lootr.message.refresh_start", LootrModConfig.get().refresh.refresh_value / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), true);
                     }
@@ -206,13 +205,13 @@ public class ChestUtil {
             if (refreshValue > 0 && LootrModConfig.shouldNotify(refreshValue)) {
                 player.displayClientMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), true);
             } else if (refreshValue == -1) {
-                if (LootrModConfig.isRefreshing((ServerLevel)level, tile)) {
+                if (LootrModConfig.isRefreshing((ServerLevel) level, tile)) {
                     DataStorage.setRefreshing(tileId, LootrModConfig.get().refresh.refresh_value);
                     player.displayClientMessage(Component.translatable("lootr.message.refresh_start", LootrModConfig.get().refresh.refresh_value / 20).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true)), true);
                 }
             }
             MenuProvider provider = DataStorage.getInventory(level, tile.getTileId(), stacks, (ServerPlayer) player, pos, tile);
-            if (!DataStorage.isScored(player.getUUID(), ((ILootBlockEntity)te).getTileId())) {
+            if (!DataStorage.isScored(player.getUUID(), ((ILootBlockEntity) te).getTileId())) {
                 player.awardStat(LootrStatsInit.LOOTED_STAT);
                 LootrAdvancementsInit.SCORE_PREDICATE.trigger((ServerPlayer) player, null);
                 DataStorage.score(player.getUUID(), ((ILootBlockEntity) te).getTileId());

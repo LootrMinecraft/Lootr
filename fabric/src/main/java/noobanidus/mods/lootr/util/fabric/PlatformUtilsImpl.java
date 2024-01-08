@@ -30,7 +30,10 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
-import noobanidus.mods.lootr.util.functions.*;
+import noobanidus.mods.lootr.util.functions.PentaConsumer;
+import noobanidus.mods.lootr.util.functions.PentaFunction;
+import noobanidus.mods.lootr.util.functions.TetraConsumer;
+import noobanidus.mods.lootr.util.functions.TriConsumer;
 
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;

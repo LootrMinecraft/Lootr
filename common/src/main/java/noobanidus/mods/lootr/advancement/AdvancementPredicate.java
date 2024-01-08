@@ -23,7 +23,7 @@ public class AdvancementPredicate implements IGenericPredicate<ResourceLocation>
 
     @Override
     public IGenericPredicate<ResourceLocation> deserialize(@Nullable JsonObject element) {
-        if(element == null) {
+        if (element == null) {
             throw new IllegalArgumentException("AdvancementPredicate requires an object");
         }
         ResourceLocation rl = new ResourceLocation(element.getAsJsonPrimitive("advancement").getAsString());

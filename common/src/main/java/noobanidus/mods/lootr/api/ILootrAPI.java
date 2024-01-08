@@ -16,7 +16,7 @@ import java.util.function.LongSupplier;
 import java.util.function.Supplier;
 
 public interface ILootrAPI {
-    boolean isFakePlayer (Player player);
+    boolean isFakePlayer(Player player);
 
     default boolean clearPlayerLoot(ServerPlayer entity) {
         return clearPlayerLoot(entity.getUUID());
@@ -26,7 +26,7 @@ public interface ILootrAPI {
 
     @Nullable MenuProvider getModdedMenu(Level world, UUID id, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier);
 
-     @Nullable MenuProvider getModdedMenu(Level world, UUID id, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier, MenuBuilder builder);
+    @Nullable MenuProvider getModdedMenu(Level world, UUID id, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier, MenuBuilder builder);
 
     @Nullable MenuProvider getModdedMenu(Level world, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier);
 

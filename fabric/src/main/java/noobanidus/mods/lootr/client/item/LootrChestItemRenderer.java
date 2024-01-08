@@ -16,40 +16,40 @@ import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.registry.LootrBlockInit;
 
 public class LootrChestItemRenderer extends BlockEntityWithoutLevelRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer {
-  private static LootrChestItemRenderer INSTANCE = null;
+    private static LootrChestItemRenderer INSTANCE = null;
 
-  private final LootrChestBlockEntity tile = new LootrChestBlockEntity(BlockPos.ZERO, LootrBlockInit.CHEST.defaultBlockState());
+    private final LootrChestBlockEntity tile = new LootrChestBlockEntity(BlockPos.ZERO, LootrBlockInit.CHEST.defaultBlockState());
 
-  public LootrChestItemRenderer(BlockEntityRenderDispatcher pBlockEntityRenderDispatcher, EntityModelSet pEntityModelSet) {
-    super(pBlockEntityRenderDispatcher, pEntityModelSet);
-  }
-
-  public LootrChestItemRenderer() {
-    this(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
-  }
-
-  @Override
-  public void renderByItem(ItemStack stack, ItemDisplayContext mode, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
-    Minecraft.getInstance().getBlockEntityRenderDispatcher().renderItem(tile, matrixStack, buffer, combinedLight, combinedOverlay);
-  }
-
-  public void render(ItemStack stack, ItemDisplayContext mode, PoseStack matrices, MultiBufferSource vertexConsumers, int light, int overlay) {
-    renderByItem(stack, mode, matrices, vertexConsumers, light, overlay);
-  }
-
-  public void renderByMinecart (LootrChestMinecartEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight) {
-    boolean open = tile.isOpened();
-    tile.setOpened(entity.isOpened());
-
-    Minecraft.getInstance().getBlockEntityRenderDispatcher().renderItem(tile, matrixStack, buffer, combinedLight, OverlayTexture.NO_OVERLAY);
-    tile.setOpened(open);
-  }
-
-  public static LootrChestItemRenderer getInstance() {
-    if (INSTANCE == null) {
-      INSTANCE = new LootrChestItemRenderer();
+    public LootrChestItemRenderer(BlockEntityRenderDispatcher pBlockEntityRenderDispatcher, EntityModelSet pEntityModelSet) {
+        super(pBlockEntityRenderDispatcher, pEntityModelSet);
     }
 
-    return INSTANCE;
-  }
+    public LootrChestItemRenderer() {
+        this(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
+    }
+
+    @Override
+    public void renderByItem(ItemStack stack, ItemDisplayContext mode, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
+        Minecraft.getInstance().getBlockEntityRenderDispatcher().renderItem(tile, matrixStack, buffer, combinedLight, combinedOverlay);
+    }
+
+    public void render(ItemStack stack, ItemDisplayContext mode, PoseStack matrices, MultiBufferSource vertexConsumers, int light, int overlay) {
+        renderByItem(stack, mode, matrices, vertexConsumers, light, overlay);
+    }
+
+    public void renderByMinecart(LootrChestMinecartEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight) {
+        boolean open = tile.isOpened();
+        tile.setOpened(entity.isOpened());
+
+        Minecraft.getInstance().getBlockEntityRenderDispatcher().renderItem(tile, matrixStack, buffer, combinedLight, OverlayTexture.NO_OVERLAY);
+        tile.setOpened(open);
+    }
+
+    public static LootrChestItemRenderer getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new LootrChestItemRenderer();
+        }
+
+        return INSTANCE;
+    }
 }

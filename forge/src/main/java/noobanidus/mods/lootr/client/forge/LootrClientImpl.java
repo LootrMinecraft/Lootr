@@ -26,5 +26,6 @@ public class LootrClientImpl {
         event.registerBlockEntityRenderer(LootrBlockEntityInit.SPECIAL_LOOT_SHULKER, LootrShulkerBlockRenderer::new);
     }
 
-    public static void initModels() {}
+    public static void initModels() {
+    }
 }

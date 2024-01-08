@@ -1,11 +1,9 @@
 package noobanidus.mods.lootr.forge;
 
-import net.minecraft.commands.Commands;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import noobanidus.mods.lootr.Lootr;
-import noobanidus.mods.lootr.registry.LootrCommandInit;
 import noobanidus.mods.lootr.util.forge.PlatformUtilsImpl;
 
 @Mod("lootr")

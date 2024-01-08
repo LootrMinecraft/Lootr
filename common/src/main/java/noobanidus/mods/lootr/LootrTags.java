@@ -1,6 +1,5 @@
 package noobanidus.mods.lootr;
 
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -46,7 +45,7 @@ public class LootrTags {
         public static final TagKey<Structure> REFRESH_STRUCTURES = tag("refresh_structures");
         public static final TagKey<Structure> DECAY_STRUCTURES = tag("decay_structures");
 
-        static TagKey<Structure> tag (String name) {
+        static TagKey<Structure> tag(String name) {
             return TagKey.create(Registries.STRUCTURE, new ResourceLocation(LootrAPI.MODID, name));
         }
     }
