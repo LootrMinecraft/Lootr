@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.client.forge;
+package noobanidus.mods.lootr.client;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -12,7 +12,7 @@ import noobanidus.mods.lootr.client.block.LootrShulkerBlockRenderer;
 import noobanidus.mods.lootr.registry.LootrBlockEntityInit;
 
 @Mod.EventBusSubscriber(modid = LootrAPI.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class LootrClientImpl {
+public class LootrClient {
     @SubscribeEvent
     public static void modelRegister(ModelEvent.RegisterGeometryLoaders event) {
         event.register("barrel", BarrelModel.Loader.INSTANCE);
@@ -24,8 +24,5 @@ public class LootrClientImpl {
         event.registerBlockEntityRenderer(LootrBlockEntityInit.SPECIAL_TRAPPED_LOOT_CHEST, LootrChestBlockRenderer::new);
         event.registerBlockEntityRenderer(LootrBlockEntityInit.SPECIAL_LOOT_INVENTORY, LootrChestBlockRenderer::new);
         event.registerBlockEntityRenderer(LootrBlockEntityInit.SPECIAL_LOOT_SHULKER, LootrShulkerBlockRenderer::new);
-    }
-
-    public static void initModels() {
     }
 }

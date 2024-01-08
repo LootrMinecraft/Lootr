@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.client.fabric;
+package noobanidus.mods.lootr.client;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
@@ -17,7 +17,7 @@ import noobanidus.mods.lootr.registry.LootrBlockInit;
 import noobanidus.mods.lootr.registry.LootrEntityInit;
 import noobanidus.mods.lootr.registry.LootrNetworkingInit;
 
-public class LootrClientImpl implements ClientModInitializer {
+public class LootrClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         initModels();
