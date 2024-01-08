@@ -28,3 +28,9 @@ Architectury Loom port: Nerjal Nosk
     versionRange="[1.19.3,)"
     ordering="NONE"
     side="BOTH"
+[[dependencies.lootr]]
+    modId="cloth_config"
+    mandatory=true
+    versionRange="[${cloth_config},)"
+    ordering="NONE"
+    side="BOTH"

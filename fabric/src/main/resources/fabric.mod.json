@@ -2,16 +2,40 @@
   "schemaVersion": 1,
   "id": "lootr",
   "version": "${version}",
-
   "name": "Lootr",
   "description": "A mod that makes it so nobody misses out on Loot!",
   "authors": [
-    "Noobanidus",
-    "ZestyBlaze"
+    {
+      "name": "Noobanidus",
+      "contact": {
+        "homepage": "https://github.com/noobanidus"
+      },
+      "custom": {
+        "role": "owner"
+      }
+    },
+    {
+      "name": "ZestiBlaze",
+      "contact": {
+        "homepage": "https://github.com/ZestyBlaze"
+      },
+      "custom": {
+        "role": "fabric porter"
+      }
+    },
+    {
+      "name": "Nerjal Nosk",
+      "contact": {
+        "homepage": "https://github.com/NerjalNosk"
+      },
+      "custom": {
+        "role": "Architectury porter"
+      }
+    }
   ],
   "contact": {
-    "homepage": "https://www.curseforge.com/minecraft/mc-mods/lootr-fabric",
-    "sources": "https://github.com/noobanidus/Lootr/tree/fabric-1.19.4",
+    "homepage": "https://github.com/noobanidus/Lootr",
+    "sources": "https://github.com/noobanidus/Lootr",
     "issues": "https://github.com/noobanidus/Lootr/issues"
   },
 
@@ -38,7 +62,8 @@
     "fabricloader": ">=0.14.19",
     "fabric": "*",
     "minecraft": "~1.20",
-    "java": ">=17"
+    "java": ">=17",
+    "cloth-config": ">=${cloth_config}"
   },
   "accessWidener": "lootr.accesswidener"
 }

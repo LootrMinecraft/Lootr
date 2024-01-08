@@ -30,9 +30,10 @@ dependencies {
 
 processResources {
     inputs.property "version", project.version
+    inputs.property "cloth_config", "${rootProject.properties.get 'cloth_config_version'}"
 
     filesMatching("META-INF/mods.toml") {
-        expand "version": project.version
+        expand inputs.properties
     }
 }
 
