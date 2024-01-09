@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "id": "lootr",
+  "version": "${version}",
+  "name": "Lootr",
+  "description": "A mod that makes it so nobody misses out on Loot!",
+  "authors": [
+    {
+      "name": "Noobanidus",
+      "contact": {
+        "homepage": "https://github.com/noobanidus"
+      },
+      "custom": {
+        "role": "owner"
+      }
+    },
+    {
+      "name": "ZestiBlaze",
+      "contact": {
+        "homepage": "https://github.com/ZestyBlaze"
+      },
+      "custom": {
+        "role": "fabric porter"
+      }
+    },
+    {
+      "name": "Nerjal Nosk",
+      "contact": {
+        "homepage": "https://github.com/NerjalNosk"
+      },
+      "custom": {
+        "role": "Architectury porter"
+      }
+    }
+  ],
+  "contact": {
+    "homepage": "https://github.com/noobanidus/Lootr",
+    "sources": "https://github.com/noobanidus/Lootr",
+    "issues": "https://github.com/noobanidus/Lootr/issues"
+  },
+
+  "license": "MIT License",
+  "icon": "icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "noobanidus.mods.lootr.LootrFabric"
+    ],
+    "client": [
+      "noobanidus.mods.lootr.client.LootrClient"
+    ],
+    "modmenu": [
+      "noobanidus.mods.lootr.integration.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "lootr.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.14.19",
+    "fabric": "*",
+    "minecraft": "~1.20",
+    "java": ">=17",
+    "cloth-config": ">=${cloth_config}"
+  },
+  "accessWidener": "lootr.accesswidener"
+}

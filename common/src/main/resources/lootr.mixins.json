@@ -1,0 +1,18 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "noobanidus.mods.lootr.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "MixinCatSitOnBlock",
+    "MixinLevelChunk",
+    "MixinPersistentEntitySectionManager",
+    "MixinPlayerAdvancements"
+  ],
+  "client": [
+    "MixinTextureAtlas"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
