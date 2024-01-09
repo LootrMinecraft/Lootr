@@ -20,9 +20,9 @@ public class LootrClient {
 
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerBlockEntityRenderer(LootrBlockEntityInit.SPECIAL_LOOT_CHEST, LootrChestBlockRenderer::new);
-        event.registerBlockEntityRenderer(LootrBlockEntityInit.SPECIAL_TRAPPED_LOOT_CHEST, LootrChestBlockRenderer::new);
-        event.registerBlockEntityRenderer(LootrBlockEntityInit.SPECIAL_LOOT_INVENTORY, LootrChestBlockRenderer::new);
-        event.registerBlockEntityRenderer(LootrBlockEntityInit.SPECIAL_LOOT_SHULKER, LootrShulkerBlockRenderer::new);
+        event.registerBlockEntityRenderer(LootrBlockEntityInit.LOOT_CHEST_ENTITY_PROVIDER.get(), LootrChestBlockRenderer::new);
+        event.registerBlockEntityRenderer(LootrBlockEntityInit.TRAPPED_LOOT_CHEST_ENTITY_PROVIDER.get(), LootrChestBlockRenderer::new);
+        event.registerBlockEntityRenderer(LootrBlockEntityInit.LOOT_SHULKER_ENTITY_PROVIDER.get(), LootrShulkerBlockRenderer::new);
+        event.registerBlockEntityRenderer(LootrBlockEntityInit.LOOT_INVENTORY_ENTITY_PROVIDER.get(), LootrChestBlockRenderer::new);
     }
 }

@@ -75,7 +75,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
     }
 
     public LootrShulkerBlockEntity(BlockPos pos, BlockState state) {
-        this(LootrBlockEntityInit.SPECIAL_LOOT_SHULKER, pos, state);
+        this(LootrBlockEntityInit.LOOT_SHULKER_ENTITY_PROVIDER.get(), pos, state);
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, LootrShulkerBlockEntity entity) {

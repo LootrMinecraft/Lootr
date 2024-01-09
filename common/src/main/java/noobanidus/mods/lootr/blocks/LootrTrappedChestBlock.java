@@ -29,7 +29,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("deprecation")
 public class LootrTrappedChestBlock extends ChestBlock {
     public LootrTrappedChestBlock(Properties properties) {
-        super(properties, () -> LootrBlockEntityInit.SPECIAL_TRAPPED_LOOT_CHEST);
+        super(properties, LootrBlockEntityInit.TRAPPED_LOOT_CHEST_ENTITY_PROVIDER::get);
     }
 
     @Override

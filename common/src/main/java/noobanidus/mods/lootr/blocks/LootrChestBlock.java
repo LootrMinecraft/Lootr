@@ -34,7 +34,7 @@ import java.util.function.Supplier;
 
 public class LootrChestBlock extends ChestBlock {
     public LootrChestBlock(Properties properties) {
-        super(properties, () -> LootrBlockEntityInit.SPECIAL_LOOT_CHEST);
+        super(properties, LootrBlockEntityInit.LOOT_CHEST_ENTITY_PROVIDER::get);
     }
 
     @Override

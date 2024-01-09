@@ -87,7 +87,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
     }
 
     public LootrChestBlockEntity(BlockPos pos, BlockState state) {
-        this(LootrBlockEntityInit.SPECIAL_LOOT_CHEST, pos, state);
+        this(LootrBlockEntityInit.LOOT_CHEST_ENTITY_PROVIDER.get(), pos, state);
     }
 
     @Override

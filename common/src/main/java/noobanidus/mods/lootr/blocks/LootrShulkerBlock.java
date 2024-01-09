@@ -149,12 +149,12 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-        return new LootrShulkerBlockEntity(LootrBlockEntityInit.SPECIAL_LOOT_SHULKER, pPos, pState);
+        return new LootrShulkerBlockEntity(LootrBlockEntityInit.LOOT_SHULKER_ENTITY_PROVIDER.get(), pPos, pState);
     }
 
     @Override
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-        return createTickerHelper(pBlockEntityType, LootrBlockEntityInit.SPECIAL_LOOT_SHULKER, LootrShulkerBlockEntity::tick);
+        return createTickerHelper(pBlockEntityType, LootrBlockEntityInit.LOOT_SHULKER_ENTITY_PROVIDER.get(), LootrShulkerBlockEntity::tick);
     }
 }

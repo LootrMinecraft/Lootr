@@ -81,7 +81,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
 
     // TODO
     public LootrBarrelBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
-        super(LootrBlockEntityInit.SPECIAL_LOOT_BARREL, pWorldPosition, pBlockState);
+        super(LootrBlockEntityInit.LOOT_BARREL_ENTITY_PROVIDER.get(), pWorldPosition, pBlockState);
     }
 
     @Override
