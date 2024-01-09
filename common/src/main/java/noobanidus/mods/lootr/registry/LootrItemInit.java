@@ -8,22 +8,37 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import noobanidus.mods.lootr.api.LootrAPI;
 
-public class LootrItemInit {
-    public static final BlockItem CHEST = new BlockItem(LootrBlockInit.CHEST.get(), new Item.Properties());
-    public static final BlockItem BARREL = new BlockItem(LootrBlockInit.BARREL.get(), new Item.Properties());
-    public static final BlockItem TRAPPED_CHEST = new BlockItem(LootrBlockInit.TRAPPED_CHEST.get(), new Item.Properties());
-    public static final BlockItem SHULKER = new BlockItem(LootrBlockInit.SHULKER.get(), new Item.Properties());
-    public static final BlockItem INVENTORY = new BlockItem(LootrBlockInit.INVENTORY.get(), new Item.Properties());
+import java.util.function.Supplier;
 
-    public static final BlockItem TROPHY = new BlockItem(LootrBlockInit.TROPHY.get(), new Item.Properties().rarity(Rarity.EPIC));
+@SuppressWarnings("unused")
+public class LootrItemInit {
+    private static BlockItem chestItem;
+    public static final Supplier<BlockItem> CHEST_ITEM_PROVIDER = () -> chestItem;
+    private static BlockItem trappedChestItem;
+    public static final Supplier<BlockItem> TRAPPED_CHEST_ITEM_PROVIDER = () -> trappedChestItem;
+    private static BlockItem barrelItem;
+    public static final Supplier<BlockItem> BARREL_ITEM_PROVIDER = () -> barrelItem;
+    private static BlockItem shulkerItem;
+    public static final Supplier<BlockItem> SHULKER_ITEM_PROVIDER = () -> shulkerItem;
+    private static BlockItem inventoryItem;
+    public static final Supplier<BlockItem> INVENTORY_ITEM_PROVIDER = () -> inventoryItem;
+
+    private static BlockItem trophyItem;
+    public static final Supplier<BlockItem> TROPHY_ITEM_PROVIDER = () -> trophyItem;
 
     public static void registerItems() {
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(LootrAPI.MODID, "lootr_chest"), CHEST);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(LootrAPI.MODID, "lootr_barrel"), BARREL);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(LootrAPI.MODID, "lootr_trapped_chest"), TRAPPED_CHEST);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(LootrAPI.MODID, "lootr_shulker"), SHULKER);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(LootrAPI.MODID, "lootr_inventory"), INVENTORY);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(LootrAPI.MODID, "trophy"), TROPHY);
+        chestItem = new BlockItem(LootrBlockInit.CHEST.get(), new Item.Properties());
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(LootrAPI.MODID, "lootr_chest"), chestItem);
+        trappedChestItem = new BlockItem(LootrBlockInit.TRAPPED_CHEST.get(), new Item.Properties());
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(LootrAPI.MODID, "lootr_trapped_chest"), trappedChestItem);
+        barrelItem = new BlockItem(LootrBlockInit.BARREL.get(), new Item.Properties());
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(LootrAPI.MODID, "lootr_barrel"), barrelItem);
+        shulkerItem = new BlockItem(LootrBlockInit.SHULKER.get(), new Item.Properties());
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(LootrAPI.MODID, "lootr_shulker"), shulkerItem);
+        inventoryItem = new BlockItem(LootrBlockInit.INVENTORY.get(), new Item.Properties());
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(LootrAPI.MODID, "lootr_inventory"), inventoryItem);
+        trophyItem = new BlockItem(LootrBlockInit.TROPHY.get(), new Item.Properties().rarity(Rarity.EPIC));
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(LootrAPI.MODID, "trophy"), trophyItem);
         //Registry.register(Registry.ITEM, new ResourceLocation(LootrAPI.MODID, "crown"), CROWN);
     }
 }

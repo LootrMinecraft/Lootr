@@ -138,7 +138,7 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
 
     @Override
     public ItemStack getCloneItemStack(BlockGetter pLevel, BlockPos pPos, BlockState pState) {
-        return new ItemStack(LootrItemInit.SHULKER);
+        return new ItemStack(LootrItemInit.SHULKER_ITEM_PROVIDER.get());
     }
 
     @Override
