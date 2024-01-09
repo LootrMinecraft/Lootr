@@ -7,10 +7,14 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.conditions.LootCount;
 
+import java.util.function.Supplier;
+
 public class LootrLootInit {
-    public static final LootItemConditionType LOOT_COUNT = new LootItemConditionType(new LootCount.Serializer());
+    private static LootItemConditionType lootCount;
+    public static final Supplier<LootItemConditionType> LOOT_COUNT_PROVIDER = () -> lootCount;
 
     public static void registerLoot() {
-        Registry.register(BuiltInRegistries.LOOT_CONDITION_TYPE, new ResourceLocation(LootrAPI.MODID, "loot_count"), LOOT_COUNT);
+        lootCount = new LootItemConditionType(new LootCount.Serializer());
+        Registry.register(BuiltInRegistries.LOOT_CONDITION_TYPE, new ResourceLocation(LootrAPI.MODID, "loot_count"), lootCount);
     }
 }

@@ -40,6 +40,6 @@ public class LootrClient implements ClientModInitializer {
 
         ModelLoadingRegistry.INSTANCE.registerResourceProvider(o -> new BarrelModel.BarrelModelLoader());
 
-        EntityRendererRegistry.register(LootrEntityInit.LOOTR_MINECART_ENTITY, (context) -> new LootrChestCartRenderer<>(context, ModelLayers.CHEST_MINECART));
+        EntityRendererRegistry.register(LootrEntityInit.LOOTR_MINECART_ENTITY_PROVIDER.get(), (context) -> new LootrChestCartRenderer<>(context, ModelLayers.CHEST_MINECART));
     }
 }

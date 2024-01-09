@@ -83,7 +83,7 @@ public class LootrCommandInit {
             table = incomingTable;
         }
         if (block == null) {
-            LootrChestMinecartEntity cart = new LootrChestMinecartEntity(LootrEntityInit.LOOTR_MINECART_ENTITY, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, world);
+            LootrChestMinecartEntity cart = new LootrChestMinecartEntity(LootrEntityInit.LOOTR_MINECART_ENTITY_PROVIDER.get(), pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, world);
             Entity e = c.getEntity();
             if (e != null) {
                 cart.setYRot(e.getYRot());
