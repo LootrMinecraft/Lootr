@@ -1,27 +1,28 @@
 package noobanidus.mods.lootr.init;
 
+import net.minecraft.advancements.CriterionTrigger;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import noobanidus.mods.lootr.advancement.AdvancementTrigger;
+import noobanidus.mods.lootr.advancement.ContainerTrigger;
+import noobanidus.mods.lootr.advancement.LootedStatTrigger;
 import noobanidus.mods.lootr.api.LootrAPI;
 
-import java.util.UUID;
-
 public class ModAdvancements {
-  public static final ResourceLocation CHEST_LOCATION = new ResourceLocation(LootrAPI.MODID, "chest_opened");
-  public static final ResourceLocation BARREL_LOCATION = new ResourceLocation(LootrAPI.MODID, "barrel_opened");
-  public static final ResourceLocation CART_LOCATION = new ResourceLocation(LootrAPI.MODID, "cart_opened");
-  public static final ResourceLocation SHULKER_LOCATION = new ResourceLocation(LootrAPI.MODID, "shulker_opened");
-  public static final ResourceLocation ADVANCEMENT_LOCATION = new ResourceLocation(LootrAPI.MODID, "advancement");
-  public static final ResourceLocation SCORE_LOCATION = new ResourceLocation(LootrAPI.MODID, "score");
-  /*
-  public static GenericTrigger<UUID> CHEST_PREDICATE = null;
-  public static GenericTrigger<UUID> BARREL_PREDICATE = null;
-  public static GenericTrigger<UUID> CART_PREDICATE = null;
-  public static GenericTrigger<UUID> SHULKER_PREDICATE = null;
-  public static GenericTrigger<Void> SCORE_PREDICATE = null;
-  public static GenericTrigger<ResourceLocation> ADVANCEMENT_PREDICATE = null;
+  private static final DeferredRegister<CriterionTrigger<?>> REGISTER = DeferredRegister.create(BuiltInRegistries.TRIGGER_TYPES, LootrAPI.MODID);
 
-   */
+  public static final DeferredHolder<CriterionTrigger<?>, AdvancementTrigger> ADVANCEMENT = REGISTER.register("advancement", () -> new AdvancementTrigger());
+  public static final DeferredHolder<CriterionTrigger<?>, ContainerTrigger> CHEST = REGISTER.register("chest_opened", () -> new ContainerTrigger());
+  public static final DeferredHolder<CriterionTrigger<?>, ContainerTrigger> BARREL = REGISTER.register("barrel_opened", () -> new ContainerTrigger());
+  public static final DeferredHolder<CriterionTrigger<?>, ContainerTrigger> CART = REGISTER.register("cart_opened", () -> new ContainerTrigger());
+  public static final DeferredHolder<CriterionTrigger<?>, ContainerTrigger> SHULKER = REGISTER.register("shulker_opened", () -> new ContainerTrigger());
+  public static final DeferredHolder<CriterionTrigger<?>, LootedStatTrigger> STAT = REGISTER.register("score", () -> new LootedStatTrigger());
 
-  public static void load () {
+
+  public static void register (IEventBus bus) {
+    REGISTER.register(bus);
   }
 }

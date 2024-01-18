@@ -1,18 +1,10 @@
 package noobanidus.mods.lootr.setup;
 
-import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import noobanidus.mods.lootr.advancement.AdvancementPredicate;
-import noobanidus.mods.lootr.advancement.ContainerPredicate;
-import noobanidus.mods.lootr.advancement.LootedStatPredicate;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.impl.LootrAPIImpl;
-import noobanidus.mods.lootr.init.ModAdvancements;
-import noobanidus.mods.lootr.init.ModLoot;
 import noobanidus.mods.lootr.init.ModStats;
 import noobanidus.mods.lootr.network.PacketHandler;
 

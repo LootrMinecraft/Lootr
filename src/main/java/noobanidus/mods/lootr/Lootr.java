@@ -17,10 +17,6 @@ import noobanidus.mods.lootr.init.*;
 @Mod("lootr")
 public class Lootr {
 
-  static {
-    ModAdvancements.load();
-  }
-
   public CommandLootr COMMAND_LOOTR;
 
   public CreativeModeTab TAB;
@@ -40,6 +36,7 @@ public class Lootr {
     ModItems.register(modBus);
     ModLoot.register(modBus);
     ModStats.register(modBus);
+    ModAdvancements.register(modBus);
   }
 
   public void onCommands(RegisterCommandsEvent event) {

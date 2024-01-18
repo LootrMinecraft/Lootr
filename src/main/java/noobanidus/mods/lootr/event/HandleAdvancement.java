@@ -12,16 +12,14 @@ public class HandleAdvancement {
   @SubscribeEvent
   public static void onAdvancement(AdvancementEvent.AdvancementEarnEvent event) {
     if (!event.getEntity().level().isClientSide()) {
-      // TODO: Neo Port
-      //ModAdvancements.ADVANCEMENT_PREDICATE.trigger((ServerPlayer) event.getEntity(), event.getAdvancement().getId());
+      ModAdvancements.ADVANCEMENT.get().trigger((ServerPlayer) event.getEntity(), event.getAdvancement().id());
     }
   }
 
   @SubscribeEvent
   public static void onAdvancement(AdvancementEvent.AdvancementProgressEvent event) {
     if (!event.getEntity().level().isClientSide()) {
-      // TODO: Neo Port
-      //ModAdvancements.ADVANCEMENT_PREDICATE.trigger((ServerPlayer) event.getEntity(), event.getAdvancement().getId());
+      ModAdvancements.ADVANCEMENT.get().trigger((ServerPlayer) event.getEntity(), event.getAdvancement().id());
     }
   }
 }
