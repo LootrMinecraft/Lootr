@@ -45,6 +45,7 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootBloc
     if (tile.getOpeners().contains(playerId)) {
       return MATERIAL2;
     } else {
+      // TODO: When block event has been canceled, this never synchronizes from server.
       return MATERIAL;
     }
   }
