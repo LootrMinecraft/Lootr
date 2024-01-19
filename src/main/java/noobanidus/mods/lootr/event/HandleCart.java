@@ -1,19 +1,13 @@
 package noobanidus.mods.lootr.event;
 
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.vehicle.MinecartChest;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
-import noobanidus.mods.lootr.init.ModEntities;
-import noobanidus.mods.lootr.network.OpenCart;
-import noobanidus.mods.lootr.network.PacketHandler;
 import noobanidus.mods.lootr.entity.EntityTicker;
 
 @Mod.EventBusSubscriber(modid= LootrAPI.MODID)

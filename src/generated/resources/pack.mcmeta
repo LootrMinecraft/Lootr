@@ -1,8 +1,10 @@
 {
   "pack": {
-    "description": {
-      "text": "Resources for Lootr"
-    },
-    "pack_format": 15
+    "description": "Resources for Lootr",
+    "pack_format": 22,
+    "supported_formats": [
+      0,
+      2147483647
+    ]
   }
 }

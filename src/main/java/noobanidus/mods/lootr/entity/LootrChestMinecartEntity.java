@@ -10,8 +10,6 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -37,21 +35,19 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.util.FakePlayer;
-import net.neoforged.neoforge.network.NetworkHooks;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.entity.ILootCart;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.init.ModEntities;
-import noobanidus.mods.lootr.network.OpenCart;
 import noobanidus.mods.lootr.network.PacketHandler;
+import noobanidus.mods.lootr.network.PacketUtils;
+import noobanidus.mods.lootr.network.to_client.PacketOpenCart;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;
@@ -239,7 +235,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
       if (player instanceof ServerPlayer) {
         CriteriaTriggers.GENERATE_LOOT.trigger((ServerPlayer) player, overrideTable != null ? overrideTable : this.lootTable);
       }
-      LootParams.Builder builder = (new LootParams.Builder((ServerLevel)this.level())).withParameter(LootContextParams.ORIGIN, position());
+      LootParams.Builder builder = (new LootParams.Builder((ServerLevel) this.level())).withParameter(LootContextParams.ORIGIN, position());
       builder.withParameter(LootContextParams.KILLER_ENTITY, this);
       if (player != null) {
         builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
@@ -250,15 +246,9 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
   @Override
-  public Packet<ClientGamePacketListener> getAddEntityPacket() {
-    return NetworkHooks.getEntitySpawningPacket(this);
-  }
-
-  @Override
   public void startOpen(Player player) {
     if (!player.isSpectator()) {
-      OpenCart cart = new OpenCart(this.getId());
-      PacketHandler.sendToInternal(cart, (ServerPlayer) player);
+      PacketUtils.sendTo(new PacketOpenCart(this.getId()), (ServerPlayer) player);
     }
   }
 
@@ -274,8 +264,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     super.startSeenByPlayer(pPlayer);
 
     if (getOpeners().contains(pPlayer.getUUID())) {
-      OpenCart cart = new OpenCart(getId());
-      PacketHandler.sendToInternal(cart, pPlayer);
+      PacketUtils.sendTo(new PacketOpenCart(getId()), pPlayer);
     }
   }
 

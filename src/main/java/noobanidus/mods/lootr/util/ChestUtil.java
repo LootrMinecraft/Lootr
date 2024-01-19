@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.neoforged.neoforge.network.PacketDistributor;
+import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.advancement.ContainerTrigger;
 import noobanidus.mods.lootr.api.IHasOpeners;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
@@ -28,9 +29,10 @@ import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModAdvancements;
 import noobanidus.mods.lootr.init.ModStats;
-import noobanidus.mods.lootr.network.CloseCart;
 import noobanidus.mods.lootr.network.PacketHandler;
-import noobanidus.mods.lootr.network.UpdateModelData;
+import noobanidus.mods.lootr.network.PacketUtils;
+import noobanidus.mods.lootr.network.to_client.PacketCloseCart;
+import noobanidus.mods.lootr.network.to_client.PacketCloseContainer;
 
 import java.util.UUID;
 
@@ -46,8 +48,7 @@ public class ChestUtil {
       if (tile.getOpeners().remove(player.getUUID())) {
         te.setChanged();
         tile.updatePacketViaState();
-        UpdateModelData message = new UpdateModelData(te.getBlockPos());
-        PacketHandler.sendToInternal(message, (ServerPlayer) player);
+        PacketUtils.sendTo(new PacketCloseContainer(te.getBlockPos()), (ServerPlayer) player);
       }
     }
 
@@ -59,8 +60,7 @@ public class ChestUtil {
     }
 
     cart.getOpeners().remove(player.getUUID());
-    CloseCart open = new CloseCart(cart.getId());
-    PacketHandler.sendInternal(PacketDistributor.TRACKING_ENTITY.with(() -> cart), open);
+    PacketUtils.sendToAllTracking(new PacketCloseCart(cart.getId()), cart);
   }
 
   public static void handleLootChest(Block block, Level level, BlockPos pos, Player player) {

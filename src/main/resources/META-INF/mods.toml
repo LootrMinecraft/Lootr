@@ -17,13 +17,13 @@ Makes loot chest loot per-user.
 '''
 [[dependencies.lootr]]
     modId="neoforge"
-    mandatory=true 
+    type="required"
     versionRange="[20.4-beta,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.lootr]]
     modId="minecraft"
-    mandatory=true
+    type="required"
     versionRange="[1.20.4,)"
     ordering="NONE"
     side="BOTH"

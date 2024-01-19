@@ -8,6 +8,7 @@ import net.minecraft.data.metadata.PackMetadataGenerator;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
+import net.minecraft.util.InclusiveRange;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
@@ -15,6 +16,7 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import noobanidus.mods.lootr.api.LootrAPI;
 
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -35,6 +37,6 @@ public class LootrDataGenerators {
     generator.addProvider(true, new PackMetadataGenerator(output).add(PackMetadataSection.TYPE, new PackMetadataSection(
         Component.literal("Resources for Lootr"),
         DetectedVersion.BUILT_IN.getPackVersion(PackType.CLIENT_RESOURCES),
-        Arrays.stream(PackType.values()).collect(Collectors.toMap(Function.identity(), DetectedVersion.BUILT_IN::getPackVersion)))));
+        Optional.of(new InclusiveRange<>(0, Integer.MAX_VALUE)))));
   }
 }
