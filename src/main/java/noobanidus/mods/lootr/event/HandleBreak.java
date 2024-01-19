@@ -4,7 +4,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
@@ -12,13 +11,10 @@ import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import noobanidus.mods.lootr.LootrTags;
 import noobanidus.mods.lootr.api.LootrAPI;
-import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlocks;
-import noobanidus.mods.lootr.network.PacketHandler;
-import noobanidus.mods.lootr.network.UpdateModelData;
 
-@Mod.EventBusSubscriber(modid = LootrAPI.MODID)
+@Mod.EventBusSubscriber(modid= LootrAPI.MODID)
 public class HandleBreak {
 
   @SubscribeEvent
@@ -27,32 +23,25 @@ public class HandleBreak {
 
     if (!event.getLevel().isClientSide()) {
       if (event.getState().is(LootrTags.Blocks.CONTAINERS)) {
-        if ((!(player instanceof FakePlayer) || !ConfigManager.ENABLE_FAKE_PLAYER_BREAK.get()) && !ConfigManager.ENABLE_BREAK.get()) {
-          if (ConfigManager.DISABLE_BREAK.get()) {
-            if (player.getAbilities().instabuild) {
-              if (!player.isShiftKeyDown()) {
-                event.setCanceled(true);
-                player.displayClientMessage(Component.translatable("lootr.message.cannot_break_sneak").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))), false);
-              }
-            } else {
+        if ((player instanceof FakePlayer && ConfigManager.ENABLE_FAKE_PLAYER_BREAK.get()) || ConfigManager.ENABLE_BREAK.get()) {
+          return;
+        }
+        if (ConfigManager.DISABLE_BREAK.get()) {
+          if (player.getAbilities().instabuild) {
+            if (!player.isShiftKeyDown()) {
               event.setCanceled(true);
-              player.displayClientMessage(Component.translatable("lootr.message.cannot_break").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))), false);
+              player.displayClientMessage(Component.translatable("lootr.message.cannot_break_sneak").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))), false);
             }
           } else {
-            if (!event.getPlayer().isShiftKeyDown()) {
-              event.setCanceled(true);
-              event.getPlayer().displayClientMessage(Component.translatable("lootr.message.should_sneak").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))), false);
-              event.getPlayer().displayClientMessage(Component.translatable("lootr.message.should_sneak2", Component.translatable("lootr.message.should_sneak3").setStyle(Style.EMPTY.withBold(true))).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))), false);
-            }
+            event.setCanceled(true);
+            player.displayClientMessage(Component.translatable("lootr.message.cannot_break").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))), false);
           }
-        }
-
-        if (event.isCanceled()) {
-          // TODO: CommonHooks::484-488 doesn't properly handle resending openers.
-          // This isn't enough.
-          /* if (event.getLevel().getBlockEntity(event.getPos()) instanceof ILootBlockEntity block) {
-            block.updatePacketViaState();
-          } */
+        } else {
+          if (!event.getPlayer().isShiftKeyDown()) {
+            event.setCanceled(true);
+            event.getPlayer().displayClientMessage(Component.translatable("lootr.message.should_sneak").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))), false);
+            event.getPlayer().displayClientMessage(Component.translatable("lootr.message.should_sneak2", Component.translatable("lootr.message.should_sneak3").setStyle(Style.EMPTY.withBold(true))).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))), false);
+          }
         }
       }
     }
