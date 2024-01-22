@@ -298,12 +298,12 @@ public class DataStorage {
     return inventory;
   }
 
+  // TODO: This is non-optimal and can result in poorly loaded containers.
   public static boolean clearInventories(UUID uuid) {
     ServerLevel world = ServerLifecycleHooks.getCurrentServer().overworld();
     DimensionDataStorage data = world.getDataStorage();
     Path dataPath = world.getServer().getWorldPath(new LevelResource("data")).resolve("lootr");
 
-    // TODO: Clear
     List<String> ids = new ArrayList<>();
     try (Stream<Path> paths = Files.walk(dataPath)) {
       paths.forEach(o -> {
