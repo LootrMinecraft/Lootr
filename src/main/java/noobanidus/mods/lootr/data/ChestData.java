@@ -308,6 +308,8 @@ public class ChestData extends SavedData {
 
   @Override
   public CompoundTag save(CompoundTag compound) {
+    // These values should always be updated before there is a potential for them to be saved; that said, it's possible that they have been manually loaded, ala with the `/lootr clear` command.
+
     if (key != null) {
       compound.putString("key", this.key);
     } else {
@@ -316,7 +318,6 @@ public class ChestData extends SavedData {
     if (pos != null) {
       compound.put("position", NbtUtils.writeBlockPos(pos));
     } else {
-      // TODO: Block position is not stored if there was no block position
       LootrAPI.LOG.error("Attempted to save a data file with no `position`: '" + key + "'");
     }
     if (dimension != null) {
