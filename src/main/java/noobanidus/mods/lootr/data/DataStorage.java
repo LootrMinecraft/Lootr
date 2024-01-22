@@ -2,9 +2,7 @@ package noobanidus.mods.lootr.data;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -27,7 +25,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Function;
 import java.util.function.IntSupplier;
 import java.util.function.LongSupplier;
 import java.util.function.Supplier;
@@ -206,33 +203,50 @@ public class DataStorage {
       return;
     }
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, REFRESH);
-    if (data.tick()) {
-      data.setDirty();
-    }
+    data.tick();
   }
 
+  private static ChestData fetch(DimensionDataStorage manager, Supplier<ChestData> supplier, UUID id) {
+    return manager.computeIfAbsent(ChestData::load, supplier, ChestData.ID(id));
+  }
+
+  @Deprecated
   public static ChestData getInstanceUuid(ServerLevel world, BlockPos pos, UUID id) {
+    return getEntityData(world, pos, id);
+  }
+
+  public static ChestData getEntityData(ServerLevel world, BlockPos pos, UUID id) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot fetch chest data for " + world.dimension() + " at " + pos.toString() + " with ID " + id.toString() + " and cannot continue.");
     }
-    return ChestData.unwrap(manager.computeIfAbsent(ChestData.loadWrapper(id, world.dimension(), pos), ChestData.id(world.dimension(), pos, id), ChestData.ID(id)), id, world.dimension(), pos);
+    return ChestData.update(fetch(manager, () -> new ChestData(id), id), id, world.dimension(), pos);
   }
 
+  @Deprecated
   public static ChestData getInstance(ServerLevel world, BlockPos pos, UUID id) {
-    DimensionDataStorage manager = DataStorage.getDataStorage();
-    if (manager == null) {
-      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot fetch chest data for " + world.dimension() + " at " + pos.toString() + " with ID " + id.toString() + " and cannot continue.");
-    }
-    return ChestData.unwrap(manager.computeIfAbsent(ChestData.loadWrapper(id, world.dimension(), pos), ChestData.entity(world.dimension(), pos, id), ChestData.ID(id)), id, world.dimension(), pos);
+    return getContainerData(world, pos, id);
   }
 
-  public static ChestData getInstanceInventory(ServerLevel world, BlockPos pos, UUID id, NonNullList<ItemStack> base) {
+  public static ChestData getContainerData(ServerLevel world, BlockPos pos, UUID id) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot fetch chest data for " + world.dimension() + " at " + pos.toString() + " with ID " + id.toString() + " and cannot continue.");
     }
-    return ChestData.unwrap(manager.computeIfAbsent(ChestData.loadWrapper(id, world.dimension(), pos), ChestData.ref_id(world.dimension(), pos, id, base), ChestData.ID(id)), id, world.dimension(), pos);
+    return ChestData.update(fetch(manager, () -> new ChestData(id, true), id), id, world.dimension(), pos);
+  }
+
+  @Deprecated
+  public static ChestData getInstanceInventory(ServerLevel world, BlockPos pos, UUID id, NonNullList<ItemStack> base) {
+    return getReferenceContainerData(world, pos, id, base);
+  }
+
+  public static ChestData getReferenceContainerData(ServerLevel world, BlockPos pos, UUID id, NonNullList<ItemStack> base) {
+    DimensionDataStorage manager = DataStorage.getDataStorage();
+    if (manager == null) {
+      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot fetch chest data for " + world.dimension() + " at " + pos.toString() + " with ID " + id.toString() + " and cannot continue.");
+    }
+    return ChestData.update(fetch(manager, () -> new ChestData(id, base), id), id, world.dimension(), pos);
   }
 
   @Nullable
@@ -241,7 +255,7 @@ public class DataStorage {
       return null;
     }
 
-    ChestData data = getInstanceUuid((ServerLevel) level, pos, uuid);
+    ChestData data = getEntityData((ServerLevel) level, pos, uuid);
     SpecialChestInventory inventory = data.getInventory(player);
     if (inventory == null) {
       inventory = data.createInventory(player, filler, sizeSupplier, displaySupplier, tableSupplier, seedSupplier);
@@ -256,7 +270,7 @@ public class DataStorage {
       return null;
     }
 
-    ChestData data = getInstanceUuid((ServerLevel) level, pos, uuid);
+    ChestData data = getEntityData((ServerLevel) level, pos, uuid);
     SpecialChestInventory inventory = data.getInventory(player);
     if (inventory == null) {
       inventory = data.createInventory(player, filler, blockEntity, tableSupplier, seedSupplier);
@@ -271,7 +285,7 @@ public class DataStorage {
       return null;
     }
 
-    ChestData data = getInstanceUuid((ServerLevel) world, pos, uuid);
+    ChestData data = getEntityData((ServerLevel) world, pos, uuid);
     SpecialChestInventory inventory = data.getInventory(player);
     if (inventory == null) {
       inventory = data.createInventory(player, filler, tile);
@@ -285,7 +299,7 @@ public class DataStorage {
     if (world.isClientSide || !(world instanceof ServerLevel)) {
       return null;
     }
-    ChestData data = getInstanceInventory((ServerLevel) world, pos, uuid, base);
+    ChestData data = getReferenceContainerData((ServerLevel) world, pos, uuid, base);
     SpecialChestInventory inventory = data.getInventory(player);
     if (inventory == null) {
       inventory = data.createInventory(player, data.customInventory(), tile);
@@ -335,7 +349,7 @@ public class DataStorage {
       return null;
     }
 
-    ChestData data = getInstance((ServerLevel) world, cart.blockPosition(), cart.getUUID());
+    ChestData data = getContainerData((ServerLevel) world, cart.blockPosition(), cart.getUUID());
     SpecialChestInventory inventory = data.getInventory(player);
     if (inventory == null) {
       inventory = data.createInventory(player, filler, null);
@@ -349,7 +363,7 @@ public class DataStorage {
       return;
     }
 
-    ChestData data = getInstanceUuid((ServerLevel) level, pos, uuid);
+    ChestData data = getEntityData((ServerLevel) level, pos, uuid);
     data.clear();
     data.setDirty();
   }
@@ -358,7 +372,7 @@ public class DataStorage {
     if (world.isClientSide() || !(world instanceof ServerLevel)) {
       return;
     }
-    ChestData data = getInstanceInventory((ServerLevel) world, pos, uuid, base);
+    ChestData data = getReferenceContainerData((ServerLevel) world, pos, uuid, base);
     data.clear();
     data.setDirty();
   }
@@ -368,7 +382,7 @@ public class DataStorage {
       return;
     }
 
-    ChestData data = getInstance((ServerLevel) world, cart.blockPosition(), cart.getUUID());
+    ChestData data = getContainerData((ServerLevel) world, cart.blockPosition(), cart.getUUID());
     data.clear();
     data.setDirty();
   }
