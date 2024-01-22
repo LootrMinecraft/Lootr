@@ -126,7 +126,7 @@ public class ConfigManager {
 
   static {
     RANDOMISE_SEED = COMMON_BUILDER.comment("determine whether or not loot generated is the same for all players using the provided seed, or randomised per player").define("randomise_seed", true);
-    MAXIMUM_AGE = COMMON_BUILDER.comment("the maximum age for containers; entries above this age will be discarded [default: 180 * 20, 3 minutes]").defineInRange("maximum_age", 180 * 20, 0, Integer.MAX_VALUE);
+    MAXIMUM_AGE = COMMON_BUILDER.comment("the maximum age for containers; entries above this age will be discarded [default: 180 * 20, 3 minutes]").defineInRange("max_age", 60 * 10 * 10, 0, Integer.MAX_VALUE);
     SKIP_UNLOADED = COMMON_BUILDER.comment("skip unloaded block entities that are eligible for conversion, set to false to potentially resolve issues with containers that aren't being converted [default: true]").define("skip_unloaded", true);
     CONVERT_MINESHAFTS = COMMON_BUILDER.comment("whether or not mineshaft chest minecarts should be converted to standard loot chests").define("convert_mineshafts", true);
     CONVERT_QUARK = COMMON_BUILDER.comment("whether or not quark chests used in world generation for loot purposes should be replaced with Lootr chests").define("convert_quark", true);
