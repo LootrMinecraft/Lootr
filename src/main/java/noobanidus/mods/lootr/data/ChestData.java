@@ -300,40 +300,8 @@ public class ChestData extends SavedData {
       CompoundTag thisTag = compounds.getCompound(i);
       CompoundTag items = thisTag.getCompound("chest");
       String name = thisTag.getString("name");
-      int size;
-      if (thisTag.contains("size")) {
-        size = thisTag.getInt("size");
-      } else {
-        // No listed size, we'll have to guess
-        ListTag itemList = items.getList("Items", 10);
-        int maxSlot = 0;
-        for (int j = 0; j < itemList.size(); j++) {
-          CompoundTag item = itemList.getCompound(j);
-          int slot = item.getByte("Slot") & 255;
-          if (slot > maxSlot) {
-            maxSlot = slot;
-          }
-        }
-        if (maxSlot == 0) {
-          size = 27;
-        } else {
-          if (maxSlot < 9) {
-            size = 9;
-          } else if (maxSlot < 18) {
-            size = 18;
-          } else if (maxSlot < 27) {
-            size = 27;
-          } else if (maxSlot < 36) {
-            size = 36;
-          } else if (maxSlot < 45) {
-            size = 45;
-          } else {
-            size = 54;
-          }
-        }
-      }
       UUID uuid = thisTag.getUUID("uuid");
-      data.inventories.put(uuid, new SpecialChestInventory(data, size, items, name));
+      data.inventories.put(uuid, new SpecialChestInventory(data, items, name));
     }
     return data;
   }
@@ -369,7 +337,6 @@ public class ChestData extends SavedData {
       CompoundTag thisTag = new CompoundTag();
       thisTag.putUUID("uuid", entry.getKey());
       thisTag.put("chest", entry.getValue().writeItems());
-      thisTag.putInt("size", entry.getValue().getContainerSize());
       thisTag.putString("name", entry.getValue().writeName());
       compounds.add(thisTag);
     }

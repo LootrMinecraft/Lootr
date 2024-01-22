@@ -26,7 +26,7 @@ import java.util.UUID;
 @SuppressWarnings("NullableProblems")
 public class SpecialChestInventory implements ILootrInventory {
   private ChestData newChestData;
-  private NonNullList<ItemStack> contents;
+  private final NonNullList<ItemStack> contents;
   private final Component name;
   private MenuBuilder menuBuilder = null;
 
@@ -40,10 +40,10 @@ public class SpecialChestInventory implements ILootrInventory {
     this.name = name;
   }
 
-  public SpecialChestInventory(ChestData newChestData, int size, CompoundTag items, String componentAsJSON) {
+  public SpecialChestInventory(ChestData newChestData, CompoundTag items, String componentAsJSON) {
     this.newChestData = newChestData;
     this.name = Component.Serializer.fromJson(componentAsJSON);
-    this.contents = NonNullList.withSize(size, ItemStack.EMPTY);
+    this.contents = NonNullList.withSize(27, ItemStack.EMPTY);
     ContainerHelper.loadAllItems(items, this.contents);
   }
 
@@ -168,7 +168,6 @@ public class SpecialChestInventory implements ILootrInventory {
   @Nullable
   @Override
   public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
-    // TODO: Enforce the size of `contents`
     if (menuBuilder != null) {
       return menuBuilder.build(id, inventory, this, getContainerSize() / 9);
     }
