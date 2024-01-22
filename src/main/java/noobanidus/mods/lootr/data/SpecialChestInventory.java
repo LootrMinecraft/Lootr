@@ -16,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.MenuBuilder;
 import noobanidus.mods.lootr.api.inventory.ILootrInventory;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
@@ -235,5 +236,22 @@ public class SpecialChestInventory implements ILootrInventory {
   @Override
   public NonNullList<ItemStack> getInventoryContents() {
     return this.contents;
+  }
+
+  public void setSize (int size) {
+    if (size < getContainerSize()) {
+      LootrAPI.LOG.error("Tried to reduce container size from {} to {}", getContainerSize(), size);
+      return;
+    }
+    if (size == getContainerSize()) {
+      return;
+    }
+
+    NonNullList<ItemStack> newContents = NonNullList.withSize(size, ItemStack.EMPTY);
+    for (int i = 0; i < contents.size(); i++) {
+      newContents.set(i, contents.get(i));
+    }
+    this.contents = newContents;
+    setChanged();
   }
 }
