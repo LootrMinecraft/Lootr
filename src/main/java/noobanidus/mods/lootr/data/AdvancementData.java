@@ -28,7 +28,6 @@ public class AdvancementData extends SavedData {
 
   public void add(UUID first, UUID second) {
     add(new UUIDPair(first, second));
-    setDirty();
   }
 
   public void add(UUIDPair pair) {
