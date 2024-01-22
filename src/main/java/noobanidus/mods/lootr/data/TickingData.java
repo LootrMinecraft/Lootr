@@ -26,17 +26,20 @@ public class TickingData extends SavedData {
     return tickMap.getInt(id);
   }
 
-  public boolean setValue(UUID id, int decayAmount) {
-    return tickMap.put(id, decayAmount) == -1;
+  public void setValue(UUID id, int decayAmount) {
+    tickMap.put(id, decayAmount);
+    setDirty();
   }
 
-  public int remove(UUID id) {
-    return tickMap.removeInt(id);
+  public void remove(UUID id) {
+    if (tickMap.removeInt(id) != -1) {
+      setDirty();
+    }
   }
 
-  public boolean tick() {
+  public void tick() {
     if (tickMap.isEmpty()) {
-      return false;
+      return;
     }
 
     Object2IntMap<UUID> newMap = new Object2IntOpenHashMap<>();
@@ -56,10 +59,10 @@ public class TickingData extends SavedData {
     if (changed) {
       tickMap.clear();
       tickMap.putAll(newMap);
-      return true;
+      setDirty();
     }
 
-    return false;
+    return;
   }
 
   public static TickingData load(CompoundTag pCompound) {

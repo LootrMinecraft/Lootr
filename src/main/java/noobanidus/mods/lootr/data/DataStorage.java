@@ -74,7 +74,6 @@ public class DataStorage {
     }
     AdvancementData data = manager.computeIfAbsent(AdvancementData::load, AdvancementData::new, ID);
     data.add(player, tileId);
-    data.setDirty();
   }
 
   public static boolean isScored(UUID player, UUID tileId) {
@@ -95,7 +94,6 @@ public class DataStorage {
     }
     AdvancementData data = manager.computeIfAbsent(AdvancementData::load, AdvancementData::new, SCORED);
     data.add(player, tileId);
-    data.setDirty();
   }
 
   public static int getDecayValue(UUID id) {
@@ -126,7 +124,6 @@ public class DataStorage {
     }
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, DECAY);
     data.setValue(id, decay);
-    data.setDirty();
   }
 
   public static void removeDecayed(UUID id) {
@@ -136,9 +133,7 @@ public class DataStorage {
       return;
     }
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, DECAY);
-    if (data.remove(id) != -1) {
-      data.setDirty();
-    }
+    data.remove(id);
   }
 
   public static void doDecay() {
@@ -148,9 +143,7 @@ public class DataStorage {
       return;
     }
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, DECAY);
-    if (data.tick()) {
-      data.setDirty();
-    }
+    data.tick();
   }
 
   public static int getRefreshValue(UUID id) {
@@ -181,7 +174,6 @@ public class DataStorage {
     }
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, REFRESH);
     data.setValue(id, decay);
-    data.setDirty();
   }
 
   public static void removeRefreshed(UUID id) {
@@ -191,9 +183,7 @@ public class DataStorage {
       return;
     }
     TickingData data = manager.computeIfAbsent(TickingData::load, TickingData::new, REFRESH);
-    if (data.remove(id) != -1) {
-      data.setDirty();
-    }
+    data.remove(id);
   }
 
   public static void doRefresh() {
@@ -365,7 +355,6 @@ public class DataStorage {
 
     ChestData data = getEntityData((ServerLevel) level, pos, uuid);
     data.clear();
-    data.setDirty();
   }
 
   public static void refreshInventory(Level world, BlockPos pos, UUID uuid, NonNullList<ItemStack> base, ServerPlayer player) {
@@ -374,7 +363,6 @@ public class DataStorage {
     }
     ChestData data = getReferenceContainerData((ServerLevel) world, pos, uuid, base);
     data.clear();
-    data.setDirty();
   }
 
   public static void refreshInventory(Level world, LootrChestMinecartEntity cart, ServerPlayer player) {
@@ -384,6 +372,5 @@ public class DataStorage {
 
     ChestData data = getContainerData((ServerLevel) world, cart.blockPosition(), cart.getUUID());
     data.clear();
-    data.setDirty();
   }
 }

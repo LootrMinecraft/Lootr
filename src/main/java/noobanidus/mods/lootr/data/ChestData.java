@@ -342,6 +342,7 @@ public class ChestData extends SavedData {
 
   public void clear() {
     inventories.clear();
+    setDirty();
   }
 
   @Override
