@@ -307,7 +307,6 @@ public class ChestData extends SavedData {
         // No listed size, we'll have to guess
         ListTag itemList = items.getList("Items", 10);
         int maxSlot = 0;
-        // Only non-empty slots are stored, so we can't work off the size of the list
         for (int j = 0; j < itemList.size(); j++) {
           CompoundTag item = itemList.getCompound(j);
           int slot = item.getByte("Slot") & 255;
@@ -315,7 +314,6 @@ public class ChestData extends SavedData {
             maxSlot = slot;
           }
         }
-        // If there's no information we have to guess based on the maximum slot number.
         if (maxSlot == 0) {
           size = 27;
         } else {
@@ -330,7 +328,6 @@ public class ChestData extends SavedData {
           } else if (maxSlot < 45) {
             size = 45;
           } else {
-            // This is the maximum size that it can go to.
             size = 54;
           }
         }
