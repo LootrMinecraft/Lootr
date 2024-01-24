@@ -337,7 +337,8 @@ public class ChestData extends SavedData {
       CompoundTag thisTag = new CompoundTag();
       thisTag.putUUID("uuid", entry.getKey());
       thisTag.put("chest", entry.getValue().writeItems());
-      thisTag.putInt("size", entry.getValue().getContainerSize());
+      // TODO: Improve this.
+      // thisTag.putInt("size", entry.getValue().getContainerSize());
       thisTag.putString("name", entry.getValue().writeName());
       compounds.add(thisTag);
     }
