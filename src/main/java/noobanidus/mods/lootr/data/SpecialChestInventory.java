@@ -149,6 +149,7 @@ public class SpecialChestInventory implements ILootrInventory {
     newChestData.setDirty();
   }
 
+  // TODO: The expectation in vanilla is that all instances of `Container` are also block entities. This is not the case for `SpecialChestInventory`; ergo, upon construction, some reference to the `ChestData` needs to be stored to allow for validity checks.
   @Override
   public boolean stillValid(Player player) {
     return true;
