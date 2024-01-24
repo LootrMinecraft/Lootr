@@ -32,6 +32,10 @@ public class TileTicker {
   private final static Set<Entry> pendingEntries = new ObjectLinkedOpenHashSet<>();
 
   public static void addEntry(Level level, BlockPos position) {
+    if (ConfigManager.DISABLE.get()) {
+      return;
+    }
+
     ResourceKey<Level> dimension = level.dimension();
     if (ConfigManager.isDimensionBlocked(dimension)) {
       return;
@@ -74,6 +78,9 @@ public class TileTicker {
   @SubscribeEvent
   public static void serverTick(TickEvent.ServerTickEvent event) {
     if (event.phase != TickEvent.Phase.END) {
+      return;
+    }
+    if (ConfigManager.DISABLE.get()) {
       return;
     }
     Set<Entry> toRemove = new ObjectLinkedOpenHashSet<>();
