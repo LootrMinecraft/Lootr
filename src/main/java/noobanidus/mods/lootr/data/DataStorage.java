@@ -2,9 +2,7 @@ package noobanidus.mods.lootr.data;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -28,7 +26,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Function;
 import java.util.function.IntSupplier;
 import java.util.function.LongSupplier;
 import java.util.function.Supplier;
@@ -212,26 +209,47 @@ public class DataStorage {
     }
   }
 
+  // Deprecated: use getContainerData instead.
+  @Deprecated(since="1.20.0", forRemoval = true)
   public static ChestData getInstanceUuid(ServerLevel world, BlockPos pos, UUID id) {
+    return getContainerData(world, pos, id);
+  }
+
+  public static ChestData getContainerData (ServerLevel world, BlockPos pos, UUID id) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot fetch chest data for " + world.dimension() + " at " + pos.toString() + " with ID " + id.toString() + " and cannot continue.");
+      return null;
     }
     return ChestData.unwrap(manager.computeIfAbsent(new SavedData.Factory<>(ChestData.id(world.dimension(), pos, id), ChestData.loadWrapper(id, world.dimension(), pos)), ChestData.ID(id)), id, world.dimension(), pos);
   }
 
+  // Deprecated: use getEntityData instead.
+  @Deprecated(since="1.20.0", forRemoval=true)
   public static ChestData getInstance(ServerLevel world, BlockPos pos, UUID id) {
+    return getEntityData(world, pos, id);
+  }
+
+  public static ChestData getEntityData (ServerLevel world, BlockPos pos, UUID id) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot fetch chest data for " + world.dimension() + " at " + pos.toString() + " with ID " + id.toString() + " and cannot continue.");
+      return null;
     }
     return ChestData.unwrap(manager.computeIfAbsent(new SavedData.Factory<>(ChestData.entity(world.dimension(), pos, id), ChestData.loadWrapper(id, world.dimension(), pos)), ChestData.ID(id)), id, world.dimension(), pos);
   }
 
+  // Deprecated: use getReferenceContainerData instead.
+  @Deprecated(since="1.20.0", forRemoval=true)
   public static ChestData getInstanceInventory(ServerLevel world, BlockPos pos, UUID id, NonNullList<ItemStack> base) {
+    return getReferenceContainerData(world, pos, id, base);
+  }
+
+  public static ChestData getReferenceContainerData(ServerLevel world, BlockPos pos, UUID id, NonNullList<ItemStack> base) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot fetch chest data for " + world.dimension() + " at " + pos.toString() + " with ID " + id.toString() + " and cannot continue.");
+      return null;
     }
     return ChestData.unwrap(manager.computeIfAbsent(new SavedData.Factory<>(ChestData.ref_id(world.dimension(), pos, id, base), ChestData.loadWrapper(id, world.dimension(), pos)), ChestData.ID(id)), id, world.dimension(), pos);
   }
