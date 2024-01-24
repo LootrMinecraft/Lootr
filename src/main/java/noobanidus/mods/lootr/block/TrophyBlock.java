@@ -55,4 +55,14 @@ public class TrophyBlock extends Block {
       return NORTH_SOUTH;
     }
   }
+
+  @Override
+  public BlockState rotate(BlockState p_60530_, Rotation p_60531_) {
+    return p_60530_.setValue(HorizontalDirectionalBlock.FACING, p_60531_.rotate(p_60530_.getValue(HorizontalDirectionalBlock.FACING)));
+  }
+
+  @Override
+  public BlockState mirror(BlockState p_60528_, Mirror p_60529_) {
+    return p_60528_.rotate(p_60529_.getRotation(p_60528_.getValue(HorizontalDirectionalBlock.FACING)));
+  }
 }
