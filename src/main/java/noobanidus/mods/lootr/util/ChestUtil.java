@@ -97,6 +97,7 @@ public class ChestUtil {
       // Generalize refresh check
       if (DataStorage.isRefreshed(tileId)) {
         DataStorage.refreshInventory(level, pos, tileId, (ServerPlayer) player);
+        tile.clearOpeners();
         notifyRefresh(player, tileId);
       }
       int refreshValue = DataStorage.getRefreshValue(tileId);

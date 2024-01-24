@@ -302,6 +302,12 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
   }
 
   @Override
+  public void clearOpeners() {
+    this.openers.clear();
+    setChanged();
+  }
+
+  @Override
   public UUID getTileId() {
     if (this.tileId == null) {
       this.tileId = UUID.randomUUID();
