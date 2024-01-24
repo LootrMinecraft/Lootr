@@ -75,7 +75,9 @@ public class ConfigManager {
   public static final ForgeConfigSpec.BooleanValue CHECK_WORLD_BORDER;
 
   // Whitelist/blacklist (loot table, modid, dimension)
+  public static final ForgeConfigSpec.ConfigValue<List<? extends String>> MODID_DIMENSION_WHITELIST;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DIMENSION_WHITELIST;
+  public static final ForgeConfigSpec.ConfigValue<List<? extends String>> MODID_DIMENSION_BLACKLIST;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DIMENSION_BLACKLIST;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> LOOT_TABLE_BLACKLIST;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> LOOT_MODID_BLACKLIST;
@@ -112,7 +114,9 @@ public class ConfigManager {
   private static Set<ResourceLocation> REFRESH_TABLES = null;
 
   private static Set<ResourceKey<Level>> DIM_WHITELIST = null;
+  private static Set<String> MODID_DIM_WHITELIST = null;
   private static Set<ResourceKey<Level>> DIM_BLACKLIST = null;
+  private static Set<String> MODID_DIM_BLACKLIST = null;
   private static Set<ResourceKey<Level>> DECAY_DIMS = null;
   private static Set<ResourceKey<Level>> REFRESH_DIMS = null;
   private static Set<ResourceLocation> LOOT_BLACKLIST = null;
@@ -134,13 +138,17 @@ public class ConfigManager {
     CONVERT_TRAPPED_CHESTS = COMMON_BUILDER.comment("whether or not the entire forge:chests/trapped tag should be added to the conversion list for structures (if they are backed by RandomizableContainerBlockEntity").define("convert_trapped_chests", true);
     List<? extends String> empty = Collections.emptyList();
     Predicate<Object> validator = o -> o instanceof String && ((String) o).contains(":");
+    Predicate<Object> modidValidator = o -> o instanceof String && !((String) o).contains(":");
     REPORT_UNRESOLVED_TABLES = COMMON_BUILDER.comment("lootr will automatically log all unresolved tables (i.e., for containers that have a loot table associated with them but, for whatever reason, the lookup for this table returns empty). setting this option to true additionally informs players when they open containers.").define("report_unresolved_tables", false);
     ADDITIONAL_CHESTS = COMMON_BUILDER.comment("a list of additional chests that should be converted (in the format of [\"modid:name\", \"modid:other_name\"], must be a tile entity instance of RandomizableContainerBlockEntity)").defineList("additional_chests", empty, validator);
     ADDITIONAL_TRAPPED_CHESTS = COMMON_BUILDER.comment("a list of additional trapped chests that should be converted (in the format of [\"modid:name\", \"modid:other_name\"], must be a tile entity instance of RandomizableContainerBlockEntity)").defineList("additional_trapped_chests", empty, validator);
     DIMENSION_WHITELIST = COMMON_BUILDER.comment("list of dimensions (to the exclusion of all others) that loot chest should be replaced in (default: blank, allowing all dimensions, e.g., [\"minecraft:overworld\", \"minecraft:the_end\"])").defineList("dimension_whitelist", empty, validator);
     DIMENSION_BLACKLIST = COMMON_BUILDER.comment("list of dimensions that loot chests should not be replaced in (default: blank, allowing all dimensions, format e.g., [\"minecraft:overworld\", \"minecraft:the_end\"])").defineList("dimension_blacklist", empty, validator);
+    MODID_DIMENSION_BLACKLIST = COMMON_BUILDER.comment("list of dimensions by modid that loot chests should not be replaced in (default: blank, allowing all modids, format e.g., [\"minecraft", "othermod\"])").defineList("modid_dimension_blacklist", empty, modidValidator);
+    MODID_DIMENSION_WHITELIST = COMMON_BUILDER.comment("list of dimensions by modid that loot chest should be replaced in (default: blank, allowing all modids, format e.g., [\"minecraft", "othermod\"])").defineList("modid_dimension_whitelist", empty, modidValidator);
     LOOT_TABLE_BLACKLIST = COMMON_BUILDER.comment("list of loot tables which shouldn't be converted (in the format of [\"modid:loot_table\", \"othermodid:other_loot_table\"])").defineList("loot_table_blacklist", empty, validator);
-    LOOT_MODID_BLACKLIST = COMMON_BUILDER.comment("list of modids whose loot tables shouldn't be converted (in the format of [\"modid\", \"other_modid\"])").defineList("loot_modid_blacklist", empty, (s) -> s instanceof String);
+    LOOT_MODID_BLACKLIST = COMMON_BUILDER.comment("list of modids whose loot tables shouldn't be converted (in the format of [\"modid\", \"other_modid\"])").defineList("loot_modid_blacklist", empty, modidValidator);
+    // TODO: Structure blacklisting is non-functional
     LOOT_STRUCTURE_BLACKLIST = COMMON_BUILDER.comment("list of structures in which contains shouldn't be converted (in the format of [\"modid:structure_name\", \"othermodid:other_structure_name\"])").defineList("loot_structure_blacklist", empty, validator);
     DISABLE_BREAK = COMMON_BUILDER.comment("prevent the destruction of Lootr chests except while sneaking in creative mode").define("disable_break", false);
     ENABLE_BREAK = COMMON_BUILDER.comment("allow the destruction of Lootr chests regardless. overrides `disable_break`").define("enable_break", false);
@@ -182,6 +190,8 @@ public class ConfigManager {
     if (event.getConfig().getType() == ModConfig.Type.COMMON) {
       COMMON_CONFIG.setConfig(event.getConfig().getConfigData());
       replacements = null;
+      MODID_DIM_WHITELIST = null;
+      MODID_DIM_BLACKLIST = null;
       DIM_WHITELIST = null;
       DIM_BLACKLIST = null;
       LOOT_BLACKLIST = null;
@@ -207,11 +217,25 @@ public class ConfigManager {
     return DIM_WHITELIST;
   }
 
+  public static Set<String> getDimensionModidWhitelist() {
+    if (MODID_DIM_WHITELIST == null) {
+      MODID_DIM_WHITELIST = MODID_DIMENSION_WHITELIST.get().stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
+    }
+    return MODID_DIM_WHITELIST;
+  }
+
   public static Set<ResourceKey<Level>> getDimensionBlacklist() {
     if (DIM_BLACKLIST == null) {
       DIM_BLACKLIST = DIMENSION_BLACKLIST.get().stream().map(o -> ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(o))).collect(Collectors.toSet());
     }
     return DIM_BLACKLIST;
+  }
+
+  public static Set<String> getDimensionModidBlacklist() {
+    if (MODID_DIM_BLACKLIST == null) {
+      MODID_DIM_BLACKLIST = MODID_DIMENSION_BLACKLIST.get().stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
+    }
+    return MODID_DIM_BLACKLIST;
   }
 
   public static Set<ResourceKey<Level>> getDecayDimensions() {
@@ -316,6 +340,10 @@ public class ConfigManager {
   }
 
   public static boolean isDimensionBlocked(ResourceKey<Level> key) {
+    if (!getDimensionModidWhitelist().isEmpty() && !getDimensionModidWhitelist().contains(key.location().getNamespace()) || getDimensionModidBlacklist().contains(key.location().getNamespace())) {
+      return true;
+    }
+
     return (!getDimensionWhitelist().isEmpty() && !getDimensionWhitelist().contains(key)) || getDimensionBlacklist().contains(key);
   }
 
