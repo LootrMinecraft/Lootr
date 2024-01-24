@@ -185,12 +185,6 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     return openers;
   }
 
-  @Override
-  public void clearOpeners () {
-    this.openers.clear();
-    setChanged();
-  }
-
   @SuppressWarnings("Duplicates")
   @Override
   public void load(CompoundTag compound) {

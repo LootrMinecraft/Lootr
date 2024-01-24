@@ -308,12 +308,6 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   @Override
-  public void clearOpeners() {
-    this.openers.clear();
-    setChanged();
-  }
-
-  @Override
   public UUID getTileId() {
     if (this.tileId == null) {
       this.tileId = UUID.randomUUID();

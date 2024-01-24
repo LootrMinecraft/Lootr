@@ -37,10 +37,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.network.NetworkHooks;
 import noobanidus.mods.lootr.api.LootrAPI;
@@ -56,6 +58,7 @@ import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class LootrChestMinecartEntity extends AbstractMinecartContainer implements ILootCart {
   private final Set<UUID> openers = new HashSet<>();
@@ -76,12 +79,6 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   @Override
   public Set<UUID> getOpeners() {
     return openers;
-  }
-
-  @Override
-  public void clearOpeners () {
-    this.openers.clear();
-    setChanged();
   }
 
   public void addOpener(Player player) {
