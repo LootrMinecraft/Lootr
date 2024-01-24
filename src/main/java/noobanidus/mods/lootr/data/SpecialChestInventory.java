@@ -26,7 +26,7 @@ import java.util.UUID;
 @SuppressWarnings("NullableProblems")
 public class SpecialChestInventory implements ILootrInventory {
   private ChestData newChestData;
-  private final NonNullList<ItemStack> contents;
+  private NonNullList<ItemStack> contents;
   private final Component name;
   private MenuBuilder menuBuilder = null;
 
@@ -168,6 +168,7 @@ public class SpecialChestInventory implements ILootrInventory {
   @Nullable
   @Override
   public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
+    // TODO: Enforce the size of `contents`
     if (menuBuilder != null) {
       return menuBuilder.build(id, inventory, this, getContainerSize() / 9);
     }

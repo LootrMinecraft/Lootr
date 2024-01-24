@@ -6,6 +6,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
@@ -44,18 +45,37 @@ public class DataStorage {
   public static final String DECAY = "lootr/" + DECAY_OLD;
   public static final String REFRESH = "lootr/" + REFRESH_OLD;
 
-  public static DimensionDataStorage getDataStorage () {
-    return ServerLifecycleHooks.getCurrentServer().overworld().getDataStorage();
+  @Nullable
+  public static DimensionDataStorage getDataStorage() {
+    MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+    if (server == null) {
+      LootrAPI.LOG.error("MinecraftServer is null at this stage; Lootr cannot fetch data storage.");
+      return null;
+    }
+    ServerLevel overworld = server.overworld();
+    if (overworld == null) {
+      LootrAPI.LOG.error("The Overworld is null at this stage; Lootr cannot fetch data storage.");
+      return null;
+    }
+    return overworld.getDataStorage();
   }
 
   public static boolean isAwarded(UUID player, UUID tileId) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
+    if (manager == null) {
+      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot determine if advancement has been awarded.");
+      return false;
+    }
     AdvancementData data = manager.computeIfAbsent(AdvancementData.FACTORY, ID);
     return data.contains(player, tileId);
   }
 
   public static void award(UUID player, UUID tileId) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
+    if (manager == null) {
+      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot award advancement.");
+      return;
+    }
     AdvancementData data = manager.computeIfAbsent(AdvancementData.FACTORY, ID);
     data.add(player, tileId);
     data.setDirty();
@@ -63,81 +83,129 @@ public class DataStorage {
 
   public static boolean isScored(UUID player, UUID tileId) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
+    if (manager == null) {
+      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot determine if block entity has been scored.");
+      return false;
+    }
     AdvancementData data = manager.computeIfAbsent(AdvancementData.FACTORY, SCORED);
     return data.contains(player, tileId);
   }
 
   public static void score(UUID player, UUID tileId) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
+    if (manager == null) {
+      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot score block entities at this time.");
+      return;
+    }
     AdvancementData data = manager.computeIfAbsent(AdvancementData.FACTORY, SCORED);
     data.add(player, tileId);
     data.setDirty();
   }
 
-  public static int getDecayValue (UUID id) {
+  public static int getDecayValue(UUID id) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
+    if (manager == null) {
+      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot determine the decay value for " + id.toString() + ".");
+      return -1;
+    }
     TickingData data = manager.computeIfAbsent(TickingData.FACTORY, DECAY);
     return data.getValue(id);
   }
 
   public static boolean isDecayed(UUID id) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
+    if (manager == null) {
+      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot determine the decay value for " + id.toString() + ".");
+      return false;
+    }
     TickingData data = manager.computeIfAbsent(TickingData.FACTORY, DECAY);
     return data.isComplete(id);
   }
 
-  public static void setDecaying (UUID id, int decay) {
+  public static void setDecaying(UUID id, int decay) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
+    if (manager == null) {
+      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot set the decay value for " + id.toString() + ".");
+      return;
+    }
     TickingData data = manager.computeIfAbsent(TickingData.FACTORY, DECAY);
     data.setValue(id, decay);
     data.setDirty();
   }
 
-  public static void removeDecayed (UUID id) {
+  public static void removeDecayed(UUID id) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
+    if (manager == null) {
+      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr remove the decay value for " + id.toString() + ".");
+      return;
+    }
     TickingData data = manager.computeIfAbsent(TickingData.FACTORY, DECAY);
     if (data.remove(id) != -1) {
       data.setDirty();
     }
   }
 
-  public static void doDecay () {
+  public static void doDecay() {
     DimensionDataStorage manager = DataStorage.getDataStorage();
+    if (manager == null) {
+      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot iterate and tick decay.");
+      return;
+    }
     TickingData data = manager.computeIfAbsent(TickingData.FACTORY, DECAY);
     if (data.tick()) {
       data.setDirty();
     }
   }
 
-  public static int getRefreshValue (UUID id) {
+  public static int getRefreshValue(UUID id) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
+    if (manager == null) {
+      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot determine the refresh value for " + id.toString() + ".");
+      return -1;
+    }
     TickingData data = manager.computeIfAbsent(TickingData.FACTORY, REFRESH);
     return data.getValue(id);
   }
 
   public static boolean isRefreshed(UUID id) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
+    if (manager == null) {
+      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot determine the refresh value for " + id.toString() + ".");
+      return false;
+    }
     TickingData data = manager.computeIfAbsent(TickingData.FACTORY, REFRESH);
     return data.isComplete(id);
   }
 
-  public static void setRefreshing (UUID id, int decay) {
+  public static void setRefreshing(UUID id, int decay) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
+    if (manager == null) {
+      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot set the refresh value for " + id.toString() + ".");
+      return;
+    }
     TickingData data = manager.computeIfAbsent(TickingData.FACTORY, REFRESH);
     data.setValue(id, decay);
     data.setDirty();
   }
 
-  public static void removeRefreshed (UUID id) {
+  public static void removeRefreshed(UUID id) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
+    if (manager == null) {
+      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr remove the refresh value for " + id.toString() + ".");
+      return;
+    }
     TickingData data = manager.computeIfAbsent(TickingData.FACTORY, REFRESH);
     if (data.remove(id) != -1) {
       data.setDirty();
     }
   }
 
-  public static void doRefresh () {
+  public static void doRefresh() {
     DimensionDataStorage manager = DataStorage.getDataStorage();
+    if (manager == null) {
+      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot iterate and tick refresh.");
+      return;
+    }
     TickingData data = manager.computeIfAbsent(TickingData.FACTORY, REFRESH);
     if (data.tick()) {
       data.setDirty();
@@ -145,19 +213,31 @@ public class DataStorage {
   }
 
   public static ChestData getInstanceUuid(ServerLevel world, BlockPos pos, UUID id) {
-    return ChestData.unwrap(getDataStorage().computeIfAbsent(new SavedData.Factory<>(ChestData.id(world.dimension(), pos, id), ChestData.loadWrapper(id, world.dimension(), pos)), ChestData.ID(id)), id, world.dimension(), pos);
+    DimensionDataStorage manager = DataStorage.getDataStorage();
+    if (manager == null) {
+      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot fetch chest data for " + world.dimension() + " at " + pos.toString() + " with ID " + id.toString() + " and cannot continue.");
+    }
+    return ChestData.unwrap(manager.computeIfAbsent(new SavedData.Factory<>(ChestData.id(world.dimension(), pos, id), ChestData.loadWrapper(id, world.dimension(), pos)), ChestData.ID(id)), id, world.dimension(), pos);
   }
 
   public static ChestData getInstance(ServerLevel world, BlockPos pos, UUID id) {
-    return ChestData.unwrap(getDataStorage().computeIfAbsent(new SavedData.Factory<>(ChestData.entity(world.dimension(), pos, id), ChestData.loadWrapper(id, world.dimension(), pos)), ChestData.ID(id)), id, world.dimension(), pos);
+    DimensionDataStorage manager = DataStorage.getDataStorage();
+    if (manager == null) {
+      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot fetch chest data for " + world.dimension() + " at " + pos.toString() + " with ID " + id.toString() + " and cannot continue.");
+    }
+    return ChestData.unwrap(manager.computeIfAbsent(new SavedData.Factory<>(ChestData.entity(world.dimension(), pos, id), ChestData.loadWrapper(id, world.dimension(), pos)), ChestData.ID(id)), id, world.dimension(), pos);
   }
 
   public static ChestData getInstanceInventory(ServerLevel world, BlockPos pos, UUID id, NonNullList<ItemStack> base) {
-    return ChestData.unwrap(getDataStorage().computeIfAbsent(new SavedData.Factory<>(ChestData.ref_id(world.dimension(), pos, id, base), ChestData.loadWrapper(id, world.dimension(), pos)), ChestData.ID(id)), id, world.dimension(), pos);
+    DimensionDataStorage manager = DataStorage.getDataStorage();
+    if (manager == null) {
+      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot fetch chest data for " + world.dimension() + " at " + pos.toString() + " with ID " + id.toString() + " and cannot continue.");
+    }
+    return ChestData.unwrap(manager.computeIfAbsent(new SavedData.Factory<>(ChestData.ref_id(world.dimension(), pos, id, base), ChestData.loadWrapper(id, world.dimension(), pos)), ChestData.ID(id)), id, world.dimension(), pos);
   }
 
   @Nullable
-  public static SpecialChestInventory getInventory (Level level, UUID uuid, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
+  public static SpecialChestInventory getInventory(Level level, UUID uuid, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
     if (level.isClientSide() || !(level instanceof ServerLevel)) {
       return null;
     }
@@ -172,7 +252,7 @@ public class DataStorage {
   }
 
   @Nullable
-  public static SpecialChestInventory getInventory (Level level, UUID uuid, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
+  public static SpecialChestInventory getInventory(Level level, UUID uuid, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
     if (level.isClientSide() || !(level instanceof ServerLevel)) {
       return null;
     }
@@ -239,7 +319,7 @@ public class DataStorage {
     int cleared = 0;
     for (String id : ids) {
       ChestData chestData = data.get(new SavedData.Factory<>(() -> {
-          throw new UnsupportedOperationException("Cannot create ChestData here");
+        throw new UnsupportedOperationException("Cannot create ChestData here");
       }, ChestData::load), id);
       if (chestData != null) {
         if (chestData.clearInventory(uuid)) {
