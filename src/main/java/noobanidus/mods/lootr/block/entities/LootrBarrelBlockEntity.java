@@ -79,6 +79,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     protected void openerCountChanged(Level level, BlockPos pos, BlockState state, int p_155069_, int p_155070_) {
     }
 
+    // TODO: Potentially related to #228, this implementation is searching for `ChestMenu` instances whereas our MenuProvider is theoretically `SpecialChestInventory`.
     @Override
     protected boolean isOwnContainer(Player player) {
       if (player.containerMenu instanceof ChestMenu) {
