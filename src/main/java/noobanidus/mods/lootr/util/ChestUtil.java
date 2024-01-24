@@ -9,7 +9,6 @@ import net.minecraft.network.chat.TextColor;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -110,6 +109,10 @@ public class ChestUtil {
       }
       // Check if it already refreshed
       MenuProvider provider = DataStorage.getInventory(level, tileId, pos, (ServerPlayer) player, (RandomizableContainerBlockEntity) te, tile::unpackLootTable);
+      if (provider == null) {
+        // Error messages are already handled by nested methods in `getInventory`
+        return;
+      }
       checkScore((ServerPlayer) player, tileId);
       if (addOpener(tile, player)) {
         te.setChanged();
@@ -163,6 +166,10 @@ public class ChestUtil {
       }
     }
     MenuProvider provider = DataStorage.getInventory(level, cart, (ServerPlayer) player, cart::addLoot);
+    if (provider == null) {
+      // Error messages are already handled by nested methods in `getInventory`
+      return;
+    }
     player.openMenu(provider);
   }
 
@@ -194,6 +201,10 @@ public class ChestUtil {
         }
       }
       MenuProvider provider = DataStorage.getInventory(level, tile.getTileId(), stacks, (ServerPlayer) player, pos, tile);
+      if (provider == null) {
+        // Error messages are already handled by nested methods in `getInventory`
+        return;
+      }
       checkScore((ServerPlayer) player, tile.getTileId());
       if (addOpener(tile, player)) {
         te.setChanged();
