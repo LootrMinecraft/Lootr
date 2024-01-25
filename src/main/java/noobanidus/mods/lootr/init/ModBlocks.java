@@ -16,7 +16,7 @@ import noobanidus.mods.lootr.block.entities.LootrShulkerBlockEntity;
 
 import java.util.Set;
 
-@Mod.EventBusSubscriber(modid= LootrAPI.MODID, bus= Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = LootrAPI.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModBlocks {
   public static LootrBarrelBlock BARREL;
   public static LootrChestBlock CHEST;
@@ -27,7 +27,7 @@ public class ModBlocks {
 
   public static Set<Block> specialLootChests;
 
-  public static void construct () {
+  public static void construct() {
     BARREL = new LootrBarrelBlock(BlockBehaviour.Properties.copy(Blocks.CHEST).strength(2.5f));
     CHEST = new LootrChestBlock(BlockBehaviour.Properties.copy(Blocks.BARREL).strength(2.5f));
     TRAPPED_CHEST = new LootrTrappedChestBlock(BlockBehaviour.Properties.copy(Blocks.TRAPPED_CHEST).strength(2.5f));
