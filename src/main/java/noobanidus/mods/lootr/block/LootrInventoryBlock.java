@@ -3,6 +3,7 @@ package noobanidus.mods.lootr.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -114,6 +115,30 @@ public class LootrInventoryBlock extends ChestBlock {
       return 0;
     }
   }
+
+  @Override
+  public boolean isSignalSource(BlockState pState) {
+    return ConfigManager.TRAPPED_CUSTOM.get();
+  }
+
+  @Override
+  public int getSignal(BlockState pBlockState, BlockGetter pBlockAccess, BlockPos pPos, Direction pSide) {
+    if (ConfigManager.TRAPPED_CUSTOM.get()) {
+      return Mth.clamp(LootrChestBlockEntity.getOpenCount(pBlockAccess, pPos), 0, 15);
+    } else {
+      return 0;
+    }
+  }
+
+  @Override
+  public int getDirectSignal(BlockState pBlockState, BlockGetter pBlockAccess, BlockPos pPos, Direction pSide) {
+    if (ConfigManager.TRAPPED_CUSTOM.get()) {
+      return pSide == Direction.UP ? pBlockState.getSignal(pBlockAccess, pPos, pSide) : 0;
+    } else {
+      return 0;
+    }
+  }
+
 
   @Override
   @Nullable
