@@ -75,15 +75,13 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
 
     @Override
     protected boolean isOwnContainer(Player player) {
-      if (!(player.containerMenu instanceof ChestMenu)) {
-        return false;
-      } else {
-        Container container = ((ChestMenu) player.containerMenu).getContainer();
-        if (container instanceof SpecialChestInventory chest) {
+      if ((player.containerMenu instanceof ChestMenu menu)) {
+        if (menu.getContainer() instanceof SpecialChestInventory chest) {
           return LootrChestBlockEntity.this.getTileId().equals(chest.getTileId());
         }
-        return false;
       }
+
+      return false;
     }
   };
   private final ChestLidController chestLidController = new ChestLidController();
