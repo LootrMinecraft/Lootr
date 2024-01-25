@@ -48,6 +48,8 @@ import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.block.LootrBarrelBlock;
 import noobanidus.mods.lootr.config.ConfigManager;
+import noobanidus.mods.lootr.data.ChestData;
+import noobanidus.mods.lootr.data.SpecialChestInventory;
 import noobanidus.mods.lootr.init.ModBlockEntities;
 import noobanidus.mods.lootr.util.Getter;
 
@@ -85,11 +87,11 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     @Override
     protected boolean isOwnContainer(Player player) {
       if (player.containerMenu instanceof ChestMenu) {
-        Container container = ((ChestMenu) player.containerMenu).getContainer();
-        return container == LootrBarrelBlockEntity.this;
-      } else {
-        return false;
+        if (((ChestMenu) player.containerMenu).getContainer() instanceof SpecialChestInventory data) {
+          return data.getTileId().equals(LootrBarrelBlockEntity.this.getTileId());
+        }
       }
+      return false;
     }
   };
 
