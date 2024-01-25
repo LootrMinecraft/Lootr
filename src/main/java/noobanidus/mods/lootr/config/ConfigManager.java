@@ -105,6 +105,7 @@ public class ConfigManager {
   public static final ForgeConfigSpec.BooleanValue BLAST_IMMUNE;
   public static final ForgeConfigSpec.IntValue NOTIFICATION_DELAY;
   public static final ForgeConfigSpec.BooleanValue DISABLE_NOTIFICATIONS;
+  public static final ForgeConfigSpec.BooleanValue TRAPPED_CUSTOM;
 
   // Client-only
   public static final ForgeConfigSpec.BooleanValue VANILLA_TEXTURES;
@@ -157,6 +158,7 @@ public class ConfigManager {
     CHECK_WORLD_BORDER = COMMON_BUILDER.comment("disregard chests and chunks that are outside of the world border; enable this option if you are using a world border and are suffering consistent TPS issues; if you change the world border, you will need to restart your client").define("check_world_border", false);
     ENABLE_FAKE_PLAYER_BREAK = COMMON_BUILDER.comment("allows fake players to destroy Lootr chests without having to sneak, overrides the `disable_break` option for fake players").define("enable_fake_player_break", false);
     POWER_COMPARATORS = COMMON_BUILDER.comment("when true, comparators on Lootr containers will give an output of 1; when false, they will give an output of 0").define("power_comparators", true);
+    TRAPPED_CUSTOM = COMMON_BUILDER.comment("when true, custom inventories will act like trapped chests when opened").define("trapped_custom", false);
     BLAST_RESISTANT = COMMON_BUILDER.comment("lootr chests cannot be destroyed by creeper or TNT explosions").define("blast_resistant", false);
     BLAST_IMMUNE = COMMON_BUILDER.comment("lootr chests cannot be destroyed by any explosion").define("blast_immune", false);
     DISABLE_NOTIFICATIONS = COMMON_BUILDER.comment("prevent notifications of decaying or refreshed chests").define("disable_notifications", false);
