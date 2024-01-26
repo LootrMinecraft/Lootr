@@ -32,7 +32,7 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootBloc
 
   @Override
   protected Material getMaterial(T tile, ChestType type) {
-    boolean trapped = tile.getType() == ModBlockEntities.LOOTR_TRAPPED_CHEST.get();
+    boolean trapped = tile.getType() == ModBlockEntities.SPECIAL_TRAPPED_LOOT_CHEST;
     if (ConfigManager.isVanillaTextures()) {
       return trapped ? Sheets.CHEST_TRAP_LOCATION : Sheets.CHEST_LOCATION;
     }
