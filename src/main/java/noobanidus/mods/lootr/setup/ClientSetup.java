@@ -26,8 +26,6 @@ public class ClientSetup {
       event.addSprite(LootrChestBlockRenderer.MATERIAL2.texture());
       event.addSprite(LootrShulkerBlockRenderer.MATERIAL.texture());
       event.addSprite(LootrShulkerBlockRenderer.MATERIAL2.texture());
-      event.addSprite(LootrChestBlockRenderer.MATERIAL3.texture());
-      event.addSprite(LootrChestBlockRenderer.MATERIAL4.texture());
     }
   }
 
