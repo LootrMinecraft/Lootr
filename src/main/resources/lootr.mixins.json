@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "lootr.refmap.json",
   "mixins": [
+    "MixinBlockStateBase",
     "MixinCatSitOnBlockGoal",
     "MixinLevelChunk"
   ],
