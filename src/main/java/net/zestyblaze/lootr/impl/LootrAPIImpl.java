@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.zestyblaze.lootr.api.ILootrAPI;
 import net.zestyblaze.lootr.api.LootFiller;
 import net.zestyblaze.lootr.api.MenuBuilder;
+import net.zestyblaze.lootr.api.inventory.ILootrInventory;
 import net.zestyblaze.lootr.config.LootrModConfig;
 import net.zestyblaze.lootr.data.DataStorage;
 import net.zestyblaze.lootr.data.SpecialChestInventory;
@@ -23,51 +24,56 @@ import java.util.function.LongSupplier;
 import java.util.function.Supplier;
 
 public class LootrAPIImpl implements ILootrAPI {
-    @Override
-    public boolean isFakePlayer(Player player) {
-        if (player instanceof ServerPlayer splayer) {
-            return splayer.connection == null || splayer.getClass() != ServerPlayer.class;
-        }
-        return false;
+  @Override
+  public boolean isFakePlayer(Player player) {
+    if (player instanceof ServerPlayer splayer) {
+      return splayer.connection == null || splayer.getClass() != ServerPlayer.class;
     }
+    return false;
+  }
 
-    @Override
-    public boolean clearPlayerLoot(UUID id) {
-        return DataStorage.clearInventories(id);
-    }
+  @Override
+  public boolean clearPlayerLoot(UUID id) {
+    return DataStorage.clearInventories(id);
+  }
 
-    @Override
-    public @Nullable MenuProvider getModdedMenu(Level world, UUID id, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
-        return DataStorage.getInventory(world, id, pos, player, blockEntity, filler, tableSupplier, seedSupplier);
-    }
+  @Nullable
+  @Override
+  public ILootrInventory getInventory(Level level, UUID id, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
+    return DataStorage.getInventory(level, id, pos, player, blockEntity, filler, tableSupplier, seedSupplier);
+  }
 
-    public @Nullable  MenuProvider getModdedMenu(Level world, UUID id, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier, MenuBuilder builder) {
-        SpecialChestInventory inventory = DataStorage.getInventory(world, id, pos, player, blockEntity, filler, tableSupplier, seedSupplier);
-        if (inventory != null) {
-            inventory.setMenuBuilder(builder);
-        }
-        return inventory;
+  @Nullable
+  @Override
+  public ILootrInventory getInventory(Level level, UUID id, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier, MenuBuilder menuBuilder) {
+    SpecialChestInventory inventory = DataStorage.getInventory(level, id, pos, player, blockEntity, filler, tableSupplier, seedSupplier);
+    if (inventory != null) {
+      inventory.setMenuBuilder(menuBuilder);
     }
+    return inventory;
+  }
 
-    @Override
-    public @Nullable MenuProvider getModdedMenu(Level world, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
-        return DataStorage.getInventory(world, id, pos, player, sizeSupplier, displaySupplier, filler, tableSupplier, seedSupplier);
-    }
+  @Nullable
+  @Override
+  public ILootrInventory getInventory(Level level, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
+    return DataStorage.getInventory(level, id, pos, player, sizeSupplier, displaySupplier, filler, tableSupplier, seedSupplier);
+  }
 
-    @Override
-    public @Nullable MenuProvider getModdedMenu(Level world, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier, MenuBuilder builder) {
-        SpecialChestInventory inventory = DataStorage.getInventory(world, id, pos, player, sizeSupplier, displaySupplier, filler, tableSupplier, seedSupplier);
-        if (inventory != null) {
-            inventory.setMenuBuilder(builder);
-        }
-        return inventory;
+  @Nullable
+  @Override
+  public ILootrInventory getInventory(Level level, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier, MenuBuilder menuBuilder) {
+    SpecialChestInventory inventory = DataStorage.getInventory(level, id, pos, player, sizeSupplier, displaySupplier, filler, tableSupplier, seedSupplier);
+    if (inventory != null) {
+      inventory.setMenuBuilder(menuBuilder);
     }
+    return inventory;
+  }
 
-    @Override
-    public long getLootSeed(long seed) {
-        if (LootrModConfig.get().seed.randomize_seed || seed == -1) {
-            return ThreadLocalRandom.current().nextLong();
-        }
-        return seed;
+  @Override
+  public long getLootSeed(long seed) {
+    if (LootrModConfig.get().seed.randomize_seed || seed == -1) {
+      return ThreadLocalRandom.current().nextLong();
     }
+    return seed;
+  }
 }
