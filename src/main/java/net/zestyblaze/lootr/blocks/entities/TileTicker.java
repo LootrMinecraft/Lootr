@@ -54,7 +54,7 @@ public class TileTicker {
       synchronized (worldLock) {
         MinecraftServer server = ServerAccessImpl.getServer();
         for (Entry entry : copy) {
-          if (entry.age(server) > LootrModConfig.get().conversion.maximum_entry_age) {
+          if (entry.age(server) > LootrModConfig.get().conversion.max_entry_age) {
             toRemove.add(entry);
             continue;
           }
