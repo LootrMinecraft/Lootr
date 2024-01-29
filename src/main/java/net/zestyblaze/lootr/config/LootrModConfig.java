@@ -37,7 +37,9 @@ public class LootrModConfig implements ConfigData {
   @ConfigEntry.Gui.Excluded private static Set<ResourceLocation> REFRESH_TABLES = null;
 
   @ConfigEntry.Gui.Excluded private static Set<ResourceKey<Level>> DIM_WHITELIST = null;
+  @ConfigEntry.Gui.Excluded private static Set<String> DIM_MODID_WHITELIST = null;
   @ConfigEntry.Gui.Excluded private static Set<ResourceKey<Level>> DIM_BLACKLIST = null;
+  @ConfigEntry.Gui.Excluded private static Set<String> DIM_MODID_BLACKLIST = null;
   @ConfigEntry.Gui.Excluded private static Set<ResourceKey<Level>> DECAY_DIMS = null;
   @ConfigEntry.Gui.Excluded private static Set<ResourceKey<Level>> REFRESH_DIMS = null;
   @ConfigEntry.Gui.Excluded private static Set<ResourceLocation> LOOT_BLACKLIST = null;

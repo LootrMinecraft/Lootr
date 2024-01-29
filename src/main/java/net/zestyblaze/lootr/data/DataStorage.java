@@ -140,15 +140,30 @@ public class DataStorage {
         }
     }
 
+    @Deprecated
     public static ChestData getInstanceUuid(ServerLevel world, BlockPos pos, UUID id) {
+        return getContainerData(world, pos, id);
+    }
+
+    public static ChestData getContainerData (ServerLevel world, BlockPos pos, UUID id) {
         return ChestData.unwrap(getDataStorage().computeIfAbsent(ChestData.loadWrapper(id, world.dimension(), pos), ChestData.id(world.dimension(), pos, id), ChestData.ID(id)), id, world.dimension(), pos);
     }
 
+    @Deprecated
     public static ChestData getInstance(ServerLevel world, BlockPos pos, UUID id) {
+        return getEntityData(world, pos, id);
+    }
+
+    public static ChestData getEntityData (ServerLevel world, BlockPos pos, UUID id) {
         return ChestData.unwrap(getDataStorage().computeIfAbsent(ChestData.loadWrapper(id, world.dimension(), pos), ChestData.entity(world.dimension(), pos, id), ChestData.ID(id)), id, world.dimension(), pos);
     }
 
+    @Deprecated
     public static ChestData getInstanceInventory(ServerLevel world, BlockPos pos, UUID id, NonNullList<ItemStack> base) {
+        return getReferenceContainerData(world, pos, id, base);
+    }
+
+    public static ChestData getReferenceContainerData (ServerLevel world, BlockPos pos, UUID id, NonNullList<ItemStack> base) {
         return ChestData.unwrap(getDataStorage().computeIfAbsent(ChestData.loadWrapper(id, world.dimension(), pos), ChestData.ref_id(world.dimension(), pos, id, base), ChestData.ID(id)), id, world.dimension(), pos);
     }
 
@@ -158,7 +173,7 @@ public class DataStorage {
             return null;
         }
 
-        ChestData data = getInstanceUuid((ServerLevel) level, pos, uuid);
+        ChestData data = getContainerData((ServerLevel) level, pos, uuid);
         SpecialChestInventory inventory = data.getInventory(player);
         if(inventory == null) {
             inventory = data.createInventory(player, filler, sizeSupplier, displaySupplier, tableSupplier, seedSupplier);
@@ -173,7 +188,7 @@ public class DataStorage {
             return null;
         }
 
-        ChestData data = getInstanceUuid((ServerLevel) level, pos, uuid);
+        ChestData data = getContainerData((ServerLevel) level, pos, uuid);
         SpecialChestInventory inventory = data.getInventory(player);
         if(inventory == null) {
             inventory = data.createInventory(player, filler, blockEntity, tableSupplier, seedSupplier);
@@ -188,7 +203,7 @@ public class DataStorage {
             return null;
         }
 
-        ChestData data = getInstanceUuid((ServerLevel) world, pos, uuid);
+        ChestData data = getContainerData((ServerLevel) world, pos, uuid);
         SpecialChestInventory inventory = data.getInventory(player);
         if(inventory == null) {
             inventory = data.createInventory(player, filler, tile);
@@ -202,7 +217,7 @@ public class DataStorage {
         if(world.isClientSide || !(world instanceof ServerLevel)) {
             return null;
         }
-        ChestData data = getInstanceInventory((ServerLevel) world, pos, uuid, base);
+        ChestData data = getReferenceContainerData((ServerLevel) world, pos, uuid, base);
         SpecialChestInventory inventory = data.getInventory(player);
         if(inventory == null) {
             inventory = data.createInventory(player, data.customInventory(), tile);
@@ -252,7 +267,7 @@ public class DataStorage {
             return null;
         }
 
-        ChestData data = getInstance((ServerLevel) world, cart.blockPosition(), cart.getUUID());
+        ChestData data = getEntityData((ServerLevel) world, cart.blockPosition(), cart.getUUID());
         SpecialChestInventory inventory = data.getInventory(player);
         if(inventory == null) {
             inventory = data.createInventory(player, filler, null);
@@ -266,7 +281,7 @@ public class DataStorage {
             return;
         }
 
-        ChestData data = getInstanceUuid((ServerLevel) level, pos, uuid);
+        ChestData data = getContainerData((ServerLevel) level, pos, uuid);
         data.clear();
         data.setDirty();
     }
@@ -275,7 +290,7 @@ public class DataStorage {
         if(world.isClientSide() || !(world instanceof ServerLevel)) {
             return;
         }
-        ChestData data = getInstanceInventory((ServerLevel) world, pos, uuid, base);
+        ChestData data = getReferenceContainerData((ServerLevel) world, pos, uuid, base);
         data.clear();
         data.setDirty();
     }
@@ -285,7 +300,7 @@ public class DataStorage {
             return;
         }
 
-        ChestData data = getInstance((ServerLevel) world, cart.blockPosition(), cart.getUUID());
+        ChestData data = getEntityData((ServerLevel) world, cart.blockPosition(), cart.getUUID());
         data.clear();
         data.setDirty();
     }
