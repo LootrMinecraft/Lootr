@@ -113,6 +113,9 @@ public class ChestUtil {
                 }
             }
             MenuProvider provider = DataStorage.getInventory(level, ((ILootBlockEntity) te).getTileId(), pos, (ServerPlayer) player, (RandomizableContainerBlockEntity) te, ((ILootBlockEntity) te)::unpackLootTable);
+            if (provider == null) {
+                return true;
+            }
             if (!DataStorage.isScored(player.getUUID(), ((ILootBlockEntity)te).getTileId())) {
                 player.awardStat(LootrStatsInit.LOOTED_STAT);
                 LootrAdvancementsInit.SCORE_PREDICATE.trigger((ServerPlayer) player, null);
@@ -176,6 +179,9 @@ public class ChestUtil {
                     }
                 }
                 MenuProvider provider = DataStorage.getInventory(level, cart, (ServerPlayer) player, cart::addLoot);
+                if (provider == null) {
+                    return;
+                }
                 player.openMenu(provider);
             }
         }
@@ -212,6 +218,9 @@ public class ChestUtil {
                 }
             }
             MenuProvider provider = DataStorage.getInventory(level, tile.getTileId(), stacks, (ServerPlayer) player, pos, tile);
+            if (provider == null) {
+                return true;
+            }
             if (!DataStorage.isScored(player.getUUID(), ((ILootBlockEntity)te).getTileId())) {
                 player.awardStat(LootrStatsInit.LOOTED_STAT);
                 LootrAdvancementsInit.SCORE_PREDICATE.trigger((ServerPlayer) player, null);
