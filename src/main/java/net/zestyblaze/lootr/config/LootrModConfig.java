@@ -62,7 +62,7 @@ public class LootrModConfig implements ConfigData {
   public Conversion conversion = new Conversion();
 
   public static class Conversion {
-    public int maximum_entry_age = 90 * 20;
+    public int max_entry_age = 60 * 10 * 20;
   }
 
   @ConfigEntry.Gui.CollapsibleObject
