@@ -306,12 +306,28 @@ public class LootrModConfig implements ConfigData {
     return get().vanilla.vanilla_textures;
   }
 
+  public static Set<String> getDimensionModidWhitelist () {
+    if (DIM_MODID_WHITELIST == null) {
+      DIM_MODID_WHITELIST = get().lists.dimension_whitelist.stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
+    }
+
+    return DIM_MODID_WHITELIST;
+  }
+
   public static Set<ResourceKey<Level>> getDimensionWhitelist() {
     if (DIM_WHITELIST == null) {
       DIM_WHITELIST = get().lists.dimension_whitelist.stream().map(o -> ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(o))).collect(Collectors.toSet());
     }
 
     return DIM_WHITELIST;
+  }
+
+  public static Set<String> getDimensionModidBlacklist () {
+    if (DIM_MODID_BLACKLIST == null) {
+      DIM_MODID_BLACKLIST = get().lists.dimension_blacklist.stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
+    }
+
+    return DIM_MODID_BLACKLIST;
   }
 
   public static Set<ResourceKey<Level>> getDimensionBlacklist() {
@@ -339,6 +355,10 @@ public class LootrModConfig implements ConfigData {
   }
 
   public static boolean isDimensionBlacklisted(ResourceKey<Level> key) {
+    if (!getDimensionModidWhitelist().isEmpty() && !getDimensionModidWhitelist().contains(key.location().getNamespace()) || getDimensionModidBlacklist().contains(key.location().getNamespace())) {
+      return true;
+    }
+
     return (!getDimensionWhitelist().isEmpty() && !getDimensionWhitelist().contains(key)) || getDimensionBlacklist().contains(key);
   }
 
