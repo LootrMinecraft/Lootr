@@ -4,6 +4,7 @@ import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.chunk.ChunkStatus;
+import net.zestyblaze.lootr.config.LootrModConfig;
 import net.zestyblaze.lootr.data.DataStorage;
 
 import java.util.ArrayList;
@@ -17,33 +18,31 @@ public class EntityTicker {
   private static boolean tickingList = false;
 
   public static void serverTick() {
-    List<LootrChestMinecartEntity> completed = new ArrayList<>();
-    List<LootrChestMinecartEntity> copy;
-    synchronized (listLock) {
-      tickingList = true;
-      copy = new ArrayList<>(entities);
-      tickingList = false;
-    }
-    synchronized (worldLock) {
-      for (LootrChestMinecartEntity entity : copy) {
-        // TODO: Replace this?
-/*      if (entity.isAddedToWorld()) {
-          continue;
-        }*/
-        ServerLevel world = (ServerLevel) entity.level;
-        ServerChunkCache provider = world.getChunkSource();
-        if (provider.getChunkFuture(Mth.floor(entity.getX() / 16.0D), Mth.floor(entity.getZ() / 16.0D), ChunkStatus.FULL, false).isDone()) {
-          world.addFreshEntity(entity);
-          completed.add(entity);
+    if (!LootrModConfig.get().conversion.disable) {
+      List<LootrChestMinecartEntity> completed = new ArrayList<>();
+      List<LootrChestMinecartEntity> copy;
+      synchronized (listLock) {
+        tickingList = true;
+        copy = new ArrayList<>(entities);
+        tickingList = false;
+      }
+      synchronized (worldLock) {
+        for (LootrChestMinecartEntity entity : copy) {
+          ServerLevel world = (ServerLevel) entity.level;
+          ServerChunkCache provider = world.getChunkSource();
+          if (provider.getChunkFuture(Mth.floor(entity.getX() / 16.0D), Mth.floor(entity.getZ() / 16.0D), ChunkStatus.FULL, false).isDone()) {
+            world.addFreshEntity(entity);
+            completed.add(entity);
+          }
         }
       }
-    }
-    synchronized (listLock) {
-      tickingList = true;
-      entities.removeAll(completed);
-      entities.addAll(pendingEntities);
-      tickingList = false;
-      pendingEntities.clear();
+      synchronized (listLock) {
+        tickingList = true;
+        entities.removeAll(completed);
+        entities.addAll(pendingEntities);
+        tickingList = false;
+        pendingEntities.clear();
+      }
     }
     DataStorage.doDecay();
     DataStorage.doRefresh();
@@ -51,6 +50,9 @@ public class EntityTicker {
 
 
   public static void addEntity(LootrChestMinecartEntity entity) {
+    if (LootrModConfig.get().conversion.disable) {
+      return;
+    }
     synchronized (listLock) {
       if(tickingList)
         pendingEntities.add(entity);
