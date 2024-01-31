@@ -10,7 +10,6 @@
     "MixinPlayerAdvancements"
   ],
   "client": [
-    "MixinTextureAtlas"
   ],
   "injectors": {
     "defaultRequire": 1
