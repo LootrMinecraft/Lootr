@@ -19,6 +19,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinPersistentEntitySectionManager {
   @Inject(method = "addEntity", at = @At("HEAD"), cancellable = true)
   private void LootrAddEntity(EntityAccess entityAccess, boolean bl, CallbackInfoReturnable<Boolean> cir) {
+    if (LootrModConfig.get().conversion.disable) {
+      return;
+    }
     if (entityAccess instanceof Entity entity && entity.getType() == EntityType.CHEST_MINECART) {
       MinecartChest chest = (MinecartChest) entity;
       if (!chest.level().isClientSide && chest.lootTable != null && !LootrModConfig.getLootBlacklist().contains(chest.lootTable)) {

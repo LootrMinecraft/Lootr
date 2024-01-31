@@ -29,8 +29,7 @@ public class TileTicker {
   private final static Set<Entry> pendingEntries = new ObjectLinkedOpenHashSet<>();
 
   public static void addEntry(ResourceKey<Level> dimension, BlockPos position) {
-    // TODO: Dimension Blacklisting
-    if (LootrModConfig.isDimensionBlacklisted(dimension)) {
+    if (LootrModConfig.isDimensionBlacklisted(dimension) || LootrModConfig.get().conversion.disable) {
       return;
     }
     Entry newEntry = new Entry(dimension, position);
@@ -44,6 +43,9 @@ public class TileTicker {
   }
 
   public static void serverTick() {
+      if (LootrModConfig.get().conversion.disable) {
+        return;
+      }
       Set<Entry> toRemove = new HashSet<>();
       Set<Entry> copy;
       synchronized (listLock) {
