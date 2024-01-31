@@ -97,7 +97,7 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
 
     @Override
     public void playerWillDestroy(Level pLevel, BlockPos pPos, BlockState pState, Player pPlayer) {
-        BlockEntity blockentity = pLevel.getBlockEntity(pPos);
+        this.spawnDestroyParticles(pLevel, pPlayer, pPos, pState);
 
         if (pState.is(BlockTags.GUARDED_BY_PIGLINS)) {
             PiglinAi.angerNearbyPiglins(pPlayer, false);
