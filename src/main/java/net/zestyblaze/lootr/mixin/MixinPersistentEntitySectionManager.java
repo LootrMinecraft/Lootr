@@ -23,6 +23,9 @@ public class MixinPersistentEntitySectionManager {
       return;
     }
     if (entityAccess instanceof Entity entity && entity.getType() == EntityType.CHEST_MINECART) {
+      if (LootrModConfig.isDimensionBlacklisted(entity.level().dimension())) {
+        return;
+      }
       MinecartChest chest = (MinecartChest) entity;
       if (!chest.level().isClientSide && chest.lootTable != null && !LootrModConfig.getLootBlacklist().contains(chest.lootTable)) {
         LootrChestMinecartEntity lootr = new LootrChestMinecartEntity(LootrEntityInit.LOOTR_MINECART_ENTITY, chest.getX(), chest.getY(), chest.getZ(), chest.level());
