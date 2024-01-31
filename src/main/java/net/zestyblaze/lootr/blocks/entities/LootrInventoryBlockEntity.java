@@ -5,8 +5,11 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.zestyblaze.lootr.config.LootrModConfig;
 import net.zestyblaze.lootr.registry.LootrBlockEntityInit;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,6 +43,16 @@ public class LootrInventoryBlockEntity extends LootrChestBlockEntity {
         }
     }
 
+    @Override
+    protected void signalOpenCount(Level level, BlockPos blockPos, BlockState blockState, int i, int j) {
+        super.signalOpenCount(level, blockPos, blockState, i, j);
+        if (LootrModConfig.get().breaking.trapped_custom) {
+            Block block = blockState.getBlock();
+            level.updateNeighborsAt(blockPos, block);
+            level.updateNeighborsAt(blockPos.below(), block);
+        }
+    }
+
     @Nullable
     public NonNullList<ItemStack> getCustomInventory() {
         return customInventory;
@@ -48,11 +61,4 @@ public class LootrInventoryBlockEntity extends LootrChestBlockEntity {
     public void setCustomInventory(NonNullList<ItemStack> customInventory) {
         this.customInventory = customInventory;
     }
-    /*
-    @Override
-    public void onDataPacket(@NotNull Connection net, @NotNull ClientboundBlockEntityDataPacket pkt) {
-        load(pkt.getTag());
-    }
-
-     */
 }

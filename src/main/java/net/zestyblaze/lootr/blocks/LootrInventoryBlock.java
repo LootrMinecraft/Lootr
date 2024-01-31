@@ -3,6 +3,7 @@ package net.zestyblaze.lootr.blocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -125,6 +126,29 @@ public class LootrInventoryBlock extends ChestBlock {
         BlockEntity blockentity = pLevel.getBlockEntity(pPos);
         if (blockentity instanceof LootrInventoryBlockEntity) {
             ((LootrInventoryBlockEntity) blockentity).recheckOpen();
+        }
+    }
+
+    @Override
+    public boolean isSignalSource(BlockState blockState) {
+        return LootrModConfig.get().breaking.trapped_custom;
+    }
+
+    @Override
+    public int getSignal(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, Direction direction) {
+        if (LootrModConfig.get().breaking.trapped_custom) {
+            return Mth.clamp(LootrChestBlockEntity.getOpenCount(blockGetter, blockPos), 0, 15);
+        } else {
+            return super.getSignal(blockState, blockGetter, blockPos, direction);
+        }
+    }
+
+    @Override
+    public int getDirectSignal(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, Direction direction) {
+        if (LootrModConfig.get().breaking.trapped_custom) {
+            return direction == Direction.UP ? blockState.getSignal(blockGetter, blockPos, direction) : 0;
+        } else {
+            return super.getDirectSignal(blockState, blockGetter, blockPos, direction);
         }
     }
 }
