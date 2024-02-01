@@ -88,6 +88,10 @@ public class LootrModConfig implements ConfigData {
     @ConfigEntry.Gui.RequiresRestart
     public List<String> dimension_blacklist = List.of();
     @ConfigEntry.Gui.RequiresRestart
+    public List<String> dimension_modid_blacklist = List.of();
+    @ConfigEntry.Gui.RequiresRestart
+    public List<String> dimension_modid_whitelist = List.of();
+    @ConfigEntry.Gui.RequiresRestart
     public List<String> loot_table_blacklist = List.of();
     @ConfigEntry.Gui.RequiresRestart
     public List<String> loot_modid_blacklist = List.of();
@@ -310,7 +314,7 @@ public class LootrModConfig implements ConfigData {
 
   public static Set<String> getDimensionModidWhitelist () {
     if (DIM_MODID_WHITELIST == null) {
-      DIM_MODID_WHITELIST = get().lists.dimension_whitelist.stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
+      DIM_MODID_WHITELIST = get().lists.dimension_modid_whitelist.stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
     }
 
     return DIM_MODID_WHITELIST;
@@ -326,7 +330,7 @@ public class LootrModConfig implements ConfigData {
 
   public static Set<String> getDimensionModidBlacklist () {
     if (DIM_MODID_BLACKLIST == null) {
-      DIM_MODID_BLACKLIST = get().lists.dimension_blacklist.stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
+      DIM_MODID_BLACKLIST = get().lists.dimension_modid_blacklist.stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
     }
 
     return DIM_MODID_BLACKLIST;
