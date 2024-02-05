@@ -51,14 +51,16 @@ public class SpecialChestInventory implements ILootrInventory {
     this.menuBuilder = builder;
   }
 
+
+
   @Override
   @Nullable
-  public BaseContainerBlockEntity getTile(Level world) {
-    if (world == null || world.isClientSide() || newChestData.getPos() == null) {
+  public BaseContainerBlockEntity getBlockEntity(Level level) {
+    if (level == null || level.isClientSide() || newChestData.getPos() == null) {
       return null;
     }
 
-    BlockEntity te = world.getBlockEntity(newChestData.getPos());
+    BlockEntity te = level.getBlockEntity(newChestData.getPos());
     if (te instanceof BaseContainerBlockEntity be) {
       return be;
     }
@@ -186,7 +188,7 @@ public class SpecialChestInventory implements ILootrInventory {
   @Override
   public void startOpen(Player player) {
     Level world = player.level();
-    BaseContainerBlockEntity tile = getTile(world);
+    BaseContainerBlockEntity tile = getBlockEntity(world);
     if (tile != null) {
       tile.startOpen(player);
     }
@@ -203,7 +205,7 @@ public class SpecialChestInventory implements ILootrInventory {
     setChanged();
     Level world = player.level();
     if (newChestData.getPos() != null) {
-      BaseContainerBlockEntity tile = getTile(world);
+      BaseContainerBlockEntity tile = getBlockEntity(world);
       if (tile != null) {
         tile.stopOpen(player);
       }
