@@ -50,7 +50,7 @@
   "text.autoconfig.lootr.option.debug": "Debug",
   "text.autoconfig.lootr.option.debug.report_invalid_tables": "Uitgenodigde tabellen melden",
   "text.autoconfig.lootr.option.seed": "Startwaarde",
-  "text.autoconfig.lootr.option.seed.randomize_seed": "Willekeurige startwaarde",
+  "text.autoconfig.lootr.option.seed.randomize_seed": "Willekeurige seed",
   "text.autoconfig.lootr.option.conversion": "Conversie",
   "text.autoconfig.lootr.option.conversion.maximum_entry_age": "Maximale Blok Entiteit Leeftijd",
   "text.autoconfig.lootr.option.breaking": "Breaking",
