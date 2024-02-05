@@ -30,6 +30,7 @@ import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BarrelBlock;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
@@ -87,7 +88,11 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     protected boolean isOwnContainer(Player player) {
       if (player.containerMenu instanceof ChestMenu) {
         if (((ChestMenu) player.containerMenu).getContainer() instanceof SpecialChestInventory data) {
-          return data.getTileId().equals(LootrBarrelBlockEntity.this.getTileId());
+          if (data.getTileId() == null) {
+            return data.getBlockEntity(LootrBarrelBlockEntity.this.getLevel()) == LootrBarrelBlockEntity.this;
+          } else {
+            return data.getTileId().equals(LootrBarrelBlockEntity.this.getTileId());
+          }
         }
       }
       return false;
