@@ -12,8 +12,14 @@ import net.minecraft.world.level.Level;
 import javax.annotation.Nullable;
 
 public interface ILootrInventory extends Container, MenuProvider {
+
+  BaseContainerBlockEntity getBlockEntity (Level level);
+
+  @Deprecated
   @Nullable
-  BaseContainerBlockEntity getTile(Level world);
+  default BaseContainerBlockEntity getTile(Level level) {
+    return getBlockEntity(level);
+  }
 
   @Nullable
   AbstractMinecartContainer getEntity(Level world);
