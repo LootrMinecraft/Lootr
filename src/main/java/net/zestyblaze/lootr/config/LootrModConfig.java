@@ -44,9 +44,7 @@ public class LootrModConfig implements ConfigData {
   @ConfigEntry.Gui.Excluded private static Map<Block, Block> replacements = null;
   @ConfigEntry.Gui.Excluded private static Set<String> LOOT_MODIDS = null;
 
-  @Override
-  public void validatePostLoad() throws ValidationException {
-    ConfigData.super.validatePostLoad();
+  public static void reset () {
     DECAY_MODS = null;
     DECAY_TABLES = null;
     REFRESH_MODS = null;
