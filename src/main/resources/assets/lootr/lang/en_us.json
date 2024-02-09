@@ -47,14 +47,13 @@
   "lootr.advancements.root.description": "Bring instanced, per-player Loot into your world.",
   "itemGroup.lootr.lootr": "Lootr",
   "text.autoconfig.lootr.title": "Lootr",
-
   "text.autoconfig.lootr.option.debug": "Debug",
   "text.autoconfig.lootr.option.debug.report_invalid_tables": "Report Invaild Tables",
   "text.autoconfig.lootr.option.seed": "Seed",
   "text.autoconfig.lootr.option.seed.randomize_seed": "Randomize Seed",
-
   "text.autoconfig.lootr.option.conversion": "Conversion",
-  "text.autoconfig.lootr.option.conversion.maximum_entry_age": "Maximum Block Entity Age",
+  "text.autoconfig.lootr.option.conversion.max_entry_age": "Maximum Block Entity Age",
+  "text.autoconfig.lootr.option.conversion.disable": "Disable Conversion",
   "text.autoconfig.lootr.option.breaking": "Breaking",
   "text.autoconfig.lootr.option.breaking.enable_break": "Enable All Breaking",
   "text.autoconfig.lootr.option.breaking.enable_fake_player_break": "Enable Fake Player Breaking",

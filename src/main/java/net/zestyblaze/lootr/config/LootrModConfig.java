@@ -46,6 +46,22 @@ public class LootrModConfig implements ConfigData {
   @ConfigEntry.Gui.Excluded private static Map<Block, Block> replacements = null;
   @ConfigEntry.Gui.Excluded private static Set<String> LOOT_MODIDS = null;
 
+  @Override
+  public void validatePostLoad() throws ValidationException {
+    ConfigData.super.validatePostLoad();
+    DECAY_MODS = null;
+    DECAY_TABLES = null;
+    REFRESH_MODS = null;
+    DIM_WHITELIST = null;
+    DIM_MODID_WHITELIST = null;
+    DIM_BLACKLIST = null;
+    DIM_MODID_BLACKLIST = null;
+    DECAY_DIMS = null;
+    REFRESH_DIMS = null;
+    LOOT_BLACKLIST = null;
+    LOOT_MODIDS = null;
+  }
+
   @ConfigEntry.Gui.CollapsibleObject
   public Debug debug = new Debug();
 
@@ -85,17 +101,11 @@ public class LootrModConfig implements ConfigData {
   public Lists lists = new Lists();
 
   public static class Lists {
-    @ConfigEntry.Gui.RequiresRestart
     public List<String> dimension_whitelist = List.of();
-    @ConfigEntry.Gui.RequiresRestart
     public List<String> dimension_blacklist = List.of();
-    @ConfigEntry.Gui.RequiresRestart
     public List<String> dimension_modid_blacklist = List.of();
-    @ConfigEntry.Gui.RequiresRestart
     public List<String> dimension_modid_whitelist = List.of();
-    @ConfigEntry.Gui.RequiresRestart
     public List<String> loot_table_blacklist = List.of();
-    @ConfigEntry.Gui.RequiresRestart
     public List<String> loot_modid_blacklist = List.of();
   }
 
@@ -105,11 +115,8 @@ public class LootrModConfig implements ConfigData {
   public static class Decay {
     public int decay_value = 6000;
     public boolean decay_all = false;
-    @ConfigEntry.Gui.RequiresRestart
     public List<String> decay_modids = List.of();
-    @ConfigEntry.Gui.RequiresRestart
     public List<String> decay_loot_tables = List.of();
-    @ConfigEntry.Gui.RequiresRestart
     public List<String> decay_dimensions = List.of();
   }
 
@@ -119,11 +126,8 @@ public class LootrModConfig implements ConfigData {
   public static class Refresh {
     public int refresh_value = 24000;
     public boolean refresh_all = false;
-    @ConfigEntry.Gui.RequiresRestart
     public List<String> refresh_modids = List.of();
-    @ConfigEntry.Gui.RequiresRestart
     public List<String> refresh_loot_tables = List.of();
-    @ConfigEntry.Gui.RequiresRestart
     public List<String> refresh_dimensions = List.of();
   }
 
@@ -139,7 +143,6 @@ public class LootrModConfig implements ConfigData {
   public Vanilla vanilla = new Vanilla();
 
   public static class Vanilla {
-    @ConfigEntry.Gui.RequiresRestart
     public boolean vanilla_textures = false;
   }
 
