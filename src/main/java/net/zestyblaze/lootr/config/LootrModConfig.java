@@ -5,8 +5,6 @@ import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -27,26 +25,38 @@ import net.zestyblaze.lootr.registry.LootrBlockInit;
 import net.zestyblaze.lootr.tags.LootrTags;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Config(name = LootrAPI.MODID)
 public class LootrModConfig implements ConfigData {
-  @ConfigEntry.Gui.Excluded private static Set<String> DECAY_MODS = null;
-  @ConfigEntry.Gui.Excluded private static Set<ResourceLocation> DECAY_TABLES = null;
-  @ConfigEntry.Gui.Excluded private static Set<String> REFRESH_MODS = null;
-  @ConfigEntry.Gui.Excluded private static Set<ResourceLocation> REFRESH_TABLES = null;
+  @ConfigEntry.Gui.Excluded
+  private static Set<String> DECAY_MODS = null;
+  @ConfigEntry.Gui.Excluded
+  private static Set<ResourceLocation> DECAY_TABLES = null;
+  @ConfigEntry.Gui.Excluded
+  private static Set<String> REFRESH_MODS = null;
+  @ConfigEntry.Gui.Excluded
+  private static Set<ResourceLocation> REFRESH_TABLES = null;
 
-  @ConfigEntry.Gui.Excluded private static Set<ResourceKey<Level>> DIM_WHITELIST = null;
-  @ConfigEntry.Gui.Excluded private static Set<String> DIM_MODID_WHITELIST = null;
-  @ConfigEntry.Gui.Excluded private static Set<ResourceKey<Level>> DIM_BLACKLIST = null;
-  @ConfigEntry.Gui.Excluded private static Set<String> DIM_MODID_BLACKLIST = null;
-  @ConfigEntry.Gui.Excluded private static Set<ResourceKey<Level>> DECAY_DIMS = null;
-  @ConfigEntry.Gui.Excluded private static Set<ResourceKey<Level>> REFRESH_DIMS = null;
-  @ConfigEntry.Gui.Excluded private static Set<ResourceLocation> LOOT_BLACKLIST = null;
-  @ConfigEntry.Gui.Excluded private static Map<Block, Block> replacements = null;
-  @ConfigEntry.Gui.Excluded private static Set<String> LOOT_MODIDS = null;
+  @ConfigEntry.Gui.Excluded
+  private static Set<ResourceKey<Level>> DIM_WHITELIST = null;
+  @ConfigEntry.Gui.Excluded
+  private static Set<String> DIM_MODID_WHITELIST = null;
+  @ConfigEntry.Gui.Excluded
+  private static Set<ResourceKey<Level>> DIM_BLACKLIST = null;
+  @ConfigEntry.Gui.Excluded
+  private static Set<String> DIM_MODID_BLACKLIST = null;
+  @ConfigEntry.Gui.Excluded
+  private static Set<ResourceKey<Level>> DECAY_DIMS = null;
+  @ConfigEntry.Gui.Excluded
+  private static Set<ResourceKey<Level>> REFRESH_DIMS = null;
+  @ConfigEntry.Gui.Excluded
+  private static Set<ResourceLocation> LOOT_BLACKLIST = null;
+  @ConfigEntry.Gui.Excluded
+  private static Map<Block, Block> replacements = null;
+  @ConfigEntry.Gui.Excluded
+  private static Set<String> LOOT_MODIDS = null;
 
-  public static void reset () {
+  public static void reset() {
     DECAY_MODS = null;
     DECAY_TABLES = null;
     REFRESH_MODS = null;
@@ -144,6 +154,52 @@ public class LootrModConfig implements ConfigData {
     public boolean vanilla_textures = false;
   }
 
+  private static Set<String> validateStringList(List<String> incomingList, String listKey) {
+    Set<String> validatedList = new HashSet<>();
+    for (String entry : incomingList) {
+      if (entry == null || entry.isEmpty()) {
+        LootrAPI.LOG.error("Error found when validating a configuration list for '" + listKey + "'. One of the entries is null or empty and cannot be converted to a String.");
+        continue;
+      }
+      validatedList.add(entry);
+    }
+    return validatedList;
+  }
+
+  private static Set<ResourceKey<Level>> validateDimensions (List<String> incomingList, String listKey) {
+    Set<ResourceKey<Level>> validatedList = new HashSet<>();
+    for (String entry : incomingList) {
+      if (entry == null || entry.isEmpty()) {
+        LootrAPI.LOG.error("Error found when validating a configuration list for '" + listKey + "'. One of the entries is null or empty and cannot be converted to a dimension identifier.");
+        continue;
+      }
+      try {
+        validatedList.add(ResourceKey.create(Registries.DIMENSION, new ResourceLocation(entry)));
+      } catch (Exception e) {
+        LootrAPI.LOG.error("Error found when validating a configuration list for '" + listKey + "'. The value found in the list, '" + entry + "', is not a valid dimension identifier.");
+        throw (e);
+      }
+    }
+    return validatedList;
+  }
+
+  private static Set<ResourceLocation> validateResourceLocationList(List<String> incomingList, String listKey) {
+    Set<ResourceLocation> validatedList = new HashSet<>();
+    for (String entry : incomingList) {
+      if (entry == null || entry.isEmpty()) {
+        LootrAPI.LOG.error("Error found when validating a configuration list for '" + listKey + "'. One of the entries is null or empty and cannot be converted to a ResourceLocation.");
+        continue;
+      }
+      try {
+        validatedList.add(new ResourceLocation(entry));
+      } catch (Exception e) {
+        LootrAPI.LOG.error("Error found when validating a configuration list for '" + listKey + "'. The value found in the list, '" + entry + "', is not a valid ResourceLocation.");
+        throw (e);
+      }
+    }
+    return validatedList;
+  }
+
   public static LootrModConfig get() {
     return AutoConfig.getConfigHolder(LootrModConfig.class).getConfig();
   }
@@ -196,14 +252,14 @@ public class LootrModConfig implements ConfigData {
 
   public static Set<ResourceLocation> getDecayingTables() {
     if (DECAY_TABLES == null) {
-      DECAY_TABLES = get().decay.decay_loot_tables.stream().map(ResourceLocation::new).collect(Collectors.toSet());
+      DECAY_TABLES = validateResourceLocationList(get().decay.decay_loot_tables, "decay_loot_tables");
     }
     return DECAY_TABLES;
   }
 
   public static Set<String> getDecayMods() {
     if (DECAY_MODS == null) {
-      DECAY_MODS = get().decay.decay_modids.stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
+      DECAY_MODS = validateStringList(get().decay.decay_modids, "decay_modids");
     }
     return DECAY_MODS;
   }
@@ -214,7 +270,7 @@ public class LootrModConfig implements ConfigData {
 
   public static Set<ResourceKey<Level>> getDecayDimensions() {
     if (DECAY_DIMS == null) {
-      DECAY_DIMS = get().decay.decay_dimensions.stream().map(o -> ResourceKey.create(Registries.DIMENSION, new ResourceLocation(o))).collect(Collectors.toSet());
+      DECAY_DIMS = validateDimensions(get().decay.decay_dimensions, "decay_dimensions");
     }
     return DECAY_DIMS;
   }
@@ -236,14 +292,14 @@ public class LootrModConfig implements ConfigData {
 
   public static Set<ResourceLocation> getRefreshingTables() {
     if (REFRESH_TABLES == null) {
-      REFRESH_TABLES = get().refresh.refresh_loot_tables.stream().map(ResourceLocation::new).collect(Collectors.toSet());
+      REFRESH_TABLES = validateResourceLocationList(get().refresh.refresh_loot_tables, "refresh_loot_tables");
     }
     return REFRESH_TABLES;
   }
 
   public static Set<String> getRefreshMods() {
     if (REFRESH_MODS == null) {
-      REFRESH_MODS = get().refresh.refresh_modids.stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
+      REFRESH_MODS = validateStringList(get().refresh.refresh_modids, "refresh_modids");
     }
     return REFRESH_MODS;
   }
@@ -254,7 +310,7 @@ public class LootrModConfig implements ConfigData {
 
   public static Set<ResourceKey<Level>> getRefreshDimensions() {
     if (REFRESH_DIMS == null) {
-      REFRESH_DIMS = get().refresh.refresh_dimensions.stream().map(o -> ResourceKey.create(Registries.DIMENSION, new ResourceLocation(o))).collect(Collectors.toSet());
+      REFRESH_DIMS = validateDimensions(get().refresh.refresh_dimensions, "refresh_dimensions");
     }
     return REFRESH_DIMS;
   }
@@ -315,9 +371,9 @@ public class LootrModConfig implements ConfigData {
     return get().vanilla.vanilla_textures;
   }
 
-  public static Set<String> getDimensionModidWhitelist () {
+  public static Set<String> getDimensionModidWhitelist() {
     if (DIM_MODID_WHITELIST == null) {
-      DIM_MODID_WHITELIST = get().lists.dimension_modid_whitelist.stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
+      DIM_MODID_WHITELIST = validateStringList(get().lists.dimension_modid_whitelist, "dimension_modid_whitelist");
     }
 
     return DIM_MODID_WHITELIST;
@@ -325,15 +381,15 @@ public class LootrModConfig implements ConfigData {
 
   public static Set<ResourceKey<Level>> getDimensionWhitelist() {
     if (DIM_WHITELIST == null) {
-      DIM_WHITELIST = get().lists.dimension_whitelist.stream().map(o -> ResourceKey.create(Registries.DIMENSION, new ResourceLocation(o))).collect(Collectors.toSet());
+      DIM_WHITELIST = validateDimensions(get().lists.dimension_whitelist, "dimension_whitelist");
     }
 
     return DIM_WHITELIST;
   }
 
-  public static Set<String> getDimensionModidBlacklist () {
+  public static Set<String> getDimensionModidBlacklist() {
     if (DIM_MODID_BLACKLIST == null) {
-      DIM_MODID_BLACKLIST = get().lists.dimension_modid_blacklist.stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
+      DIM_MODID_BLACKLIST = validateStringList(get().lists.dimension_modid_blacklist, "dimension_modid_blacklist");
     }
 
     return DIM_MODID_BLACKLIST;
@@ -341,7 +397,7 @@ public class LootrModConfig implements ConfigData {
 
   public static Set<ResourceKey<Level>> getDimensionBlacklist() {
     if (DIM_BLACKLIST == null) {
-      DIM_BLACKLIST = get().lists.dimension_blacklist.stream().map(o -> ResourceKey.create(Registries.DIMENSION, new ResourceLocation(o))).collect(Collectors.toSet());
+      DIM_BLACKLIST = validateDimensions(get().lists.dimension_blacklist, "dimension_blacklist");
     }
 
     return DIM_BLACKLIST;
@@ -349,7 +405,7 @@ public class LootrModConfig implements ConfigData {
 
   public static Set<String> getLootModids() {
     if (LOOT_MODIDS == null) {
-      LOOT_MODIDS = get().lists.loot_modid_blacklist.stream().map(String::toLowerCase).collect(Collectors.toSet());
+      LOOT_MODIDS = validateStringList(get().lists.loot_modid_blacklist, "loot_modid_blacklist");
     }
 
     return LOOT_MODIDS;
@@ -357,7 +413,7 @@ public class LootrModConfig implements ConfigData {
 
   public static Set<ResourceLocation> getLootBlacklist() {
     if (LOOT_BLACKLIST == null) {
-      LOOT_BLACKLIST = get().lists.loot_table_blacklist.stream().map(ResourceLocation::new).collect(Collectors.toSet());
+      LOOT_BLACKLIST = validateResourceLocationList(get().lists.loot_table_blacklist, "loot_table_blacklist");
     }
 
     return LOOT_BLACKLIST;
@@ -379,7 +435,7 @@ public class LootrModConfig implements ConfigData {
     return getLootModids().contains(table.getNamespace());
   }
 
-  public static boolean shouldNotify (int remaining) {
+  public static boolean shouldNotify(int remaining) {
     int delay = get().notifications.notification_delay;
     return !get().notifications.disable_notifications && (delay == -1 || remaining <= delay);
   }
