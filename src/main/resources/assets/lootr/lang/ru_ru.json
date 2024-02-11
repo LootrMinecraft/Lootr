@@ -12,7 +12,7 @@
   "lootr.message.refreshed": "The contents of the container are refreshed at your touch!",
   "lootr.message.refresh_in": "This container will refresh its contents in %s seconds.",
   "lootr.message.refresh_start": "The container will refresh with new contents in %s seconds!",
-  "lootr.message.invalid_table": "The loot table for this container [%s] resolved to empty and loot could not be generated. Check your `latest.log` for errors.",
+  "lootr.message.invalid_table": "Таблица добычи для этого контейнера [%s] стала пустой, и добыча не могла быть сгенерирована. Проверьте `latest.log` на наличие ошибок.",
   "block.lootr.lootr_chest": "Loot Chest",
   "block.lootr.lootr_trapped_chest": "Loot Chest",
   "block.lootr.lootr_barrel": "Loot Barrel",
@@ -46,7 +46,7 @@
   "lootr.advancements.root.title": "Belongs in a Museum",
   "lootr.advancements.root.description": "Bring instanced, per-player Loot into your world.",
   "lootr.advancements.1337loot.title": "/\\/\\4$73R 10073R",
-  "lootr.advancements.1337loot.description": "Open a total of 1337 containers! Wow!",
+  "lootr.advancements.1337loot.description": "Откройте 1337 контейнеров! Ого!",
   "itemGroup.lootr": "Lootr",
-  "item.lootr.crown": "Crown of the Master Looter"
+  "item.lootr.crown": "Корона мастера-добытчика"
 }
