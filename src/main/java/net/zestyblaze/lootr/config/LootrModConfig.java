@@ -166,18 +166,16 @@ public class LootrModConfig implements ConfigData {
     return validatedList;
   }
 
-  private static Set<ResourceKey<Level>> validateDimensions (List<String> incomingList, String listKey) {
+  private static Set<ResourceKey<Level>> validateDimensions(List<String> incomingList, String listKey) {
     Set<ResourceKey<Level>> validatedList = new HashSet<>();
     for (String entry : incomingList) {
       if (entry == null || entry.isEmpty()) {
-        LootrAPI.LOG.error("Error found when validating a configuration list for '" + listKey + "'. One of the entries is null or empty and cannot be converted to a dimension identifier.");
-        continue;
+        throw new RuntimeException("Error found when validating a configuration list for '" + listKey + "'. One of the entries is null or empty and cannot be converted to a dimension identifier.");
       }
       try {
         validatedList.add(ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(entry)));
       } catch (Exception e) {
-        LootrAPI.LOG.error("Error found when validating a configuration list for '" + listKey + "'. The value found in the list, '" + entry + "', is not a valid dimension identifier.");
-        throw (e);
+        throw new RuntimeException("Error found when validating a configuration list for '" + listKey + "'. The value found in the list, '" + entry + "', is not a valid dimension identifier.", e);
       }
     }
     return validatedList;
@@ -187,14 +185,12 @@ public class LootrModConfig implements ConfigData {
     Set<ResourceLocation> validatedList = new HashSet<>();
     for (String entry : incomingList) {
       if (entry == null || entry.isEmpty()) {
-        LootrAPI.LOG.error("Error found when validating a configuration list for '" + listKey + "'. One of the entries is null or empty and cannot be converted to a ResourceLocation.");
-        continue;
+        throw new RuntimeException("Error found when validating a configuration list for '" + listKey + "'. One of the entries is null or empty and cannot be converted to a ResourceLocation.");
       }
       try {
         validatedList.add(new ResourceLocation(entry));
       } catch (Exception e) {
-        LootrAPI.LOG.error("Error found when validating a configuration list for '" + listKey + "'. The value found in the list, '" + entry + "', is not a valid ResourceLocation.");
-        throw (e);
+        throw new RuntimeException("Error found when validating a configuration list for '" + listKey + "'. The value found in the list, '" + entry + "', is not a valid ResourceLocation.", e);
       }
     }
     return validatedList;
