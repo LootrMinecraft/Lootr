@@ -1,5 +1,6 @@
 package net.zestyblaze.lootr.blocks.entities;
 
+import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachmentBlockEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -42,13 +43,14 @@ import net.zestyblaze.lootr.api.blockentity.ILootBlockEntity;
 import net.zestyblaze.lootr.config.LootrModConfig;
 import net.zestyblaze.lootr.data.SpecialChestInventory;
 import net.zestyblaze.lootr.registry.LootrBlockEntityInit;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity implements ILootBlockEntity {
+public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity implements ILootBlockEntity, RenderAttachmentBlockEntity {
   public Set<UUID> openers = new HashSet<>();
   protected ResourceLocation savedLootTable = null;
   protected long seed = -1;
@@ -282,5 +284,10 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   @Override
   public ClientboundBlockEntityDataPacket getUpdatePacket() {
     return ClientboundBlockEntityDataPacket.create(this, BlockEntity::getUpdateTag);
+  }
+
+  @Override
+  public @Nullable Object getRenderAttachmentData() {
+    return null;
   }
 }

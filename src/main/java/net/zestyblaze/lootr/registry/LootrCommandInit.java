@@ -110,7 +110,9 @@ public class LootrCommandInit {
                 }
             }
             world.setBlock(pos, placementState, 2);
-            RandomizableContainerBlockEntity.setLootTable(world, world.getRandom(), pos, table);
+            if (world.getBlockEntity(pos) instanceof RandomizableContainerBlockEntity te) {
+                te.setLootTable(table, world.getRandom().nextLong());
+            }
             c.sendSuccess(() -> Component.translatable("lootr.commands.create", Component.translatable(block.getDescriptionId()), ComponentUtils.wrapInSquareBrackets(Component.translatable("lootr.commands.blockpos", pos.getX(), pos.getY(), pos.getZ()).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.GREEN)).withBold(true))), table.toString()), false);
         }
     }

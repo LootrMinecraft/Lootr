@@ -8,9 +8,8 @@ import net.zestyblaze.lootr.api.LootrAPI;
 import net.zestyblaze.lootr.loot.conditions.LootCount;
 
 public class LootrLootInit {
-    public static final LootItemConditionType LOOT_COUNT = new LootItemConditionType(new LootCount.Serializer());
+    public static final LootItemConditionType LOOT_COUNT = Registry.register(BuiltInRegistries.LOOT_CONDITION_TYPE, new ResourceLocation(LootrAPI.MODID, "loot_count"), new LootItemConditionType(LootCount.CODEC));
 
     public static void registerLoot() {
-        Registry.register(BuiltInRegistries.LOOT_CONDITION_TYPE, new ResourceLocation(LootrAPI.MODID, "loot_count"), LOOT_COUNT);
     }
 }

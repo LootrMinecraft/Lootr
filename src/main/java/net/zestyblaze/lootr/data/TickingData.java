@@ -5,21 +5,24 @@ import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.world.level.saveddata.SavedData;
 
 import java.io.File;
 import java.util.UUID;
 
+
 public class TickingData extends SavedData {
     private final Object2IntMap<UUID> tickMap = new Object2IntOpenHashMap<>();
+
+    public static final SavedData.Factory<TickingData> FACTORY = new Factory<>(TickingData::new, TickingData::load, (DataFixTypes) null);
 
     public TickingData() {
         tickMap.defaultReturnValue(-1);
     }
 
     public boolean isComplete(UUID id) {
-        int tickVal = tickMap.getInt(id);
-        return tickVal == 0 || tickVal == 1;
+        return tickMap.getInt(id) == 0 || tickMap.getInt(id) == 1;
     }
 
     public int getValue(UUID id) {
@@ -75,7 +78,7 @@ public class TickingData extends SavedData {
     }
 
     @Override
-    public CompoundTag save(CompoundTag compound) {
+    public CompoundTag save(CompoundTag pCompound) {
         ListTag decayList = new ListTag();
         for (Object2IntMap.Entry<UUID> entry : tickMap.object2IntEntrySet()) {
             CompoundTag thisTag = new CompoundTag();
@@ -83,8 +86,8 @@ public class TickingData extends SavedData {
             thisTag.putInt("value", entry.getIntValue());
             decayList.add(thisTag);
         }
-        compound.put("result", decayList);
-        return compound;
+        pCompound.put("result", decayList);
+        return pCompound;
     }
 
     @Override

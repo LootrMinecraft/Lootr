@@ -118,7 +118,7 @@ public class ChestUtil {
             }
             if (!DataStorage.isScored(player.getUUID(), ((ILootBlockEntity)te).getTileId())) {
                 player.awardStat(LootrStatsInit.LOOTED_STAT);
-                LootrAdvancementsInit.SCORE_PREDICATE.trigger((ServerPlayer) player, null);
+                LootrAdvancementsInit.SCORE_PREDICATE.trigger((ServerPlayer) player);
                 DataStorage.score(player.getUUID(), ((ILootBlockEntity) te).getTileId());
             }
             if (tile.getOpeners().add(player.getUUID())) {
@@ -161,7 +161,7 @@ public class ChestUtil {
                 }
                 if (!DataStorage.isScored(player.getUUID(), cart.getUUID())) {
                     player.awardStat(LootrStatsInit.LOOTED_STAT);
-                    LootrAdvancementsInit.SCORE_PREDICATE.trigger((ServerPlayer) player, null);
+                    LootrAdvancementsInit.SCORE_PREDICATE.trigger((ServerPlayer) player);
                     DataStorage.score(player.getUUID(), cart.getUUID());
                 }
                 if (DataStorage.isRefreshed(tileId)) {
@@ -223,7 +223,7 @@ public class ChestUtil {
             }
             if (!DataStorage.isScored(player.getUUID(), ((ILootBlockEntity)te).getTileId())) {
                 player.awardStat(LootrStatsInit.LOOTED_STAT);
-                LootrAdvancementsInit.SCORE_PREDICATE.trigger((ServerPlayer) player, null);
+                LootrAdvancementsInit.SCORE_PREDICATE.trigger((ServerPlayer) player);
                 DataStorage.score(player.getUUID(), ((ILootBlockEntity) te).getTileId());
             }
             if (tile.getOpeners().add(player.getUUID())) {
