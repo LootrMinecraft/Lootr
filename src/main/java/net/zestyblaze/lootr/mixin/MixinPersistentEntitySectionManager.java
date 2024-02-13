@@ -23,7 +23,7 @@ public class MixinPersistentEntitySectionManager {
       return;
     }
     if (entityAccess instanceof Entity entity && entity.getType() == EntityType.CHEST_MINECART) {
-      if (LootrModConfig.isDimensionBlacklisted(entity.level().dimension())) {
+      if (LootrModConfig.isDimensionBlacklisted(entity.level.dimension())) {
         return;
       }
       MinecartChest chest = (MinecartChest) entity;
