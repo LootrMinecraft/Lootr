@@ -19,7 +19,10 @@
     "loot_stat": {
       "trigger": "lootr:score",
       "conditions": {
-        "score": 10
+        "score": {
+          "min": 10,
+          "max": 10
+        }
       }
     }
   }
