@@ -5,7 +5,6 @@ accessible method net/minecraft/world/entity/vehicle/VehicleEntity getDropItem (
 accessible method net/minecraft/world/level/storage/LevelResource <init> (Ljava/lang/String;)V
 accessible field net/minecraft/world/level/block/entity/RandomizableContainerBlockEntity lootTable Lnet/minecraft/resources/ResourceLocation;
 accessible field net/minecraft/world/level/block/entity/RandomizableContainerBlockEntity lootTableSeed J
-accessible method net/minecraft/advancements/CriteriaTriggers register (Lnet/minecraft/advancements/CriterionTrigger;)Lnet/minecraft/advancements/CriterionTrigger;
 accessible field net/minecraft/server/players/GameProfileCache profilesByName Ljava/util/Map;
 accessible field net/minecraft/world/level/block/entity/ChestBlockEntity items Lnet/minecraft/core/NonNullList;
 accessible field net/minecraft/server/PlayerAdvancements player Lnet/minecraft/server/level/ServerPlayer;
