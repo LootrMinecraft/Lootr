@@ -53,7 +53,7 @@
   "text.autoconfig.lootr.option.seed.randomize_seed": "Slumpa frö",
   "text.autoconfig.lootr.option.conversion": "Omvandling",
   "text.autoconfig.lootr.option.conversion.max_entry_age": "Maximal ålder för blockentiteter",
-  "text.autoconfig.lootr.option.conversion.disable": "Disable Conversion",
+  "text.autoconfig.lootr.option.conversion.disable": "Inaktivera omvandling",
   "text.autoconfig.lootr.option.breaking": "Förstörelse",
   "text.autoconfig.lootr.option.breaking.enable_break": "Gör alla behållare förstörbara",
   "text.autoconfig.lootr.option.breaking.enable_fake_player_break": "Låt låtsasspelare förstöra behållare",
