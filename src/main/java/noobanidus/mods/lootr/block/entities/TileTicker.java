@@ -19,7 +19,6 @@ import net.minecraftforge.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.config.ConfigManager;
-import noobanidus.mods.lootr.event.HandleChunk;
 
 import java.util.Set;
 
