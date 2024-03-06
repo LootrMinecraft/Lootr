@@ -99,16 +99,17 @@ public class TileTicker {
           continue;
         }
 
+        if (!level.getChunkSource().hasChunk(entry.getPosition().getX() >> 4, entry.getPosition().getZ() >> 4)) {
+          toRemove.add(entry);
+          continue;
+        }
+
+
         boolean skip = false;
-        synchronized (HandleChunk.LOADED_CHUNKS) {
-          Set<ChunkPos> loadedChunks = HandleChunk.LOADED_CHUNKS.get(entry.dimension);
-          if (loadedChunks != null) {
-            for (ChunkPos chunkPos : entry.getChunkPositions()) {
-              if (!loadedChunks.contains(chunkPos)) {
-                skip = true;
-                break;
-              }
-            }
+        for (ChunkPos chunkPos : entry.getChunkPositions()) {
+          if (!level.getChunkSource().hasChunk(chunkPos.x, chunkPos.z)) {
+            skip = true;
+            break;
           }
         }
         if (skip) {
