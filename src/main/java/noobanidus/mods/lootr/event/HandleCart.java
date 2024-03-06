@@ -22,7 +22,7 @@ public class HandleCart {
         LootrChestMinecartEntity lootr = new LootrChestMinecartEntity(chest.level(), chest.getX(), chest.getY(), chest.getZ());
         lootr.setLootTable(chest.lootTable, chest.lootTableSeed);
         event.setCanceled(true);
-        EntityTicker.addEntity(lootr);
+        event.getWorld().addFreshEntity(lootr);
       }
     }
   }
