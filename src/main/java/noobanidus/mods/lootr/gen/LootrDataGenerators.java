@@ -38,5 +38,6 @@ public class LootrDataGenerators {
         Component.literal("Resources for Lootr"),
         DetectedVersion.BUILT_IN.getPackVersion(PackType.CLIENT_RESOURCES),
         Optional.of(new InclusiveRange<>(0, Integer.MAX_VALUE)))));
+    generator.addProvider(true, LootrLootTableProvider.create(output));
   }
 }
