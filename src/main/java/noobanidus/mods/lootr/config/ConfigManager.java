@@ -59,6 +59,7 @@ public class ConfigManager {
   public static final ForgeConfigSpec.BooleanValue SKIP_UNLOADED;
   public static final ForgeConfigSpec.IntValue MAXIMUM_AGE;
   public static final ForgeConfigSpec.BooleanValue CONVERT_MINESHAFTS;
+  public static final ForgeConfigSpec.BooleanValue CONVERT_ELYTRAS;
   public static final ForgeConfigSpec.BooleanValue CONVERT_QUARK;
   public static final ForgeConfigSpec.BooleanValue CONVERT_WOODEN_CHESTS;
   public static final ForgeConfigSpec.BooleanValue CONVERT_TRAPPED_CHESTS;
@@ -134,6 +135,7 @@ public class ConfigManager {
     DISABLE = COMMON_BUILDER.comment("if true, no chests will be converted").define("disable", false);
     SKIP_UNLOADED = COMMON_BUILDER.comment("skip unloaded block entities that are eligible for conversion, set to false to potentially resolve issues with containers that aren't being converted [default: true]").define("skip_unloaded", true);
     CONVERT_MINESHAFTS = COMMON_BUILDER.comment("whether or not mineshaft chest minecarts should be converted to standard loot chests").define("convert_mineshafts", true);
+    CONVERT_ELYTRAS = COMMON_BUILDER.comment("whether or not the Elytra item frame should be converted into a standard loot chest with a guaranteed elytra").define("convert_elytras", true);
     CONVERT_QUARK = COMMON_BUILDER.comment("whether or not quark chests used in world generation for loot purposes should be replaced with Lootr chests").define("convert_quark", true);
     CONVERT_WOODEN_CHESTS = COMMON_BUILDER.comment("whether or not the entire forge:chests/wooden tag should be added to the conversion list for structures (if they are backed by RandomizableContainerBlockEntity)").define("convert_wooden_chests", true);
     CONVERT_TRAPPED_CHESTS = COMMON_BUILDER.comment("whether or not the entire forge:chests/trapped tag should be added to the conversion list for structures (if they are backed by RandomizableContainerBlockEntity").define("convert_trapped_chests", true);
