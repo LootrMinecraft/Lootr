@@ -15,6 +15,7 @@ public class LootrDataGenerators {
       LootrBlockTagProvider blocks;
       event.getGenerator().addProvider(true, blocks = new LootrBlockTagProvider(event.getGenerator(), LootrAPI.MODID, helper));
       event.getGenerator().addProvider(true, new LootrItemTagsProvider(event.getGenerator(), blocks, LootrAPI.MODID, helper));
+      event.getGenerator().addProvider(true, new LootrLootTableProvider(event.getGenerator()));
     }
   }
 }
