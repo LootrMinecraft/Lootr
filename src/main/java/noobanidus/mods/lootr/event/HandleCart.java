@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.event;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.vehicle.MinecartChest;
@@ -26,10 +27,17 @@ public class HandleCart {
     }
     if (event.getEntity().getType() == EntityType.CHEST_MINECART && event.getEntity() instanceof MinecartChest chest) {
       if (!chest.level.isClientSide && chest.lootTable != null && ConfigManager.CONVERT_MINESHAFTS.get() && !ConfigManager.getLootBlacklist().contains(chest.lootTable)) {
-        LootrChestMinecartEntity lootr = new LootrChestMinecartEntity(chest.level, chest.getX(), chest.getY(), chest.getZ());
-        lootr.setLootTable(chest.lootTable, chest.lootTableSeed);
-        event.setCanceled(true);
-        event.getWorld().addFreshEntity(lootr);
+        if (chest.level instanceof ServerLevel level) {
+          LootrChestMinecartEntity lootr = new LootrChestMinecartEntity(chest.level, chest.getX(), chest.getY(), chest.getZ());
+          lootr.setLootTable(chest.lootTable, chest.lootTableSeed);
+          event.setCanceled(true);
+          if (!level.getServer().isSameThread()) {
+            LootrAPI.LOG.error("Minecart with Loot table created off main thread. Falling back on EntityTicker.");
+            EntityTicker.addEntity(lootr);
+           } else {
+            level.addFreshEntity(lootr);
+            }
+        }
       }
     }
   }
