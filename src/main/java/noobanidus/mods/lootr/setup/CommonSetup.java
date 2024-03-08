@@ -53,9 +53,9 @@ public class CommonSetup {
 
       PoiType fisherman = ForgeRegistries.POI_TYPES.getValue(new ResourceLocation("minecraft", "fisherman"));
       Set<BlockState> states = new HashSet<>(fisherman.matchingStates);
-      states.addAll(ModBlocks.BARREL.getStateDefinition().getPossibleStates());
+      states.addAll(ModBlocks.BARREL.get().getStateDefinition().getPossibleStates());
       fisherman.matchingStates = ImmutableSet.copyOf(states);
-      for (BlockState state : ModBlocks.BARREL.getStateDefinition().getPossibleStates()) {
+      for (BlockState state : ModBlocks.BARREL.get().getStateDefinition().getPossibleStates()) {
         GameData.getBlockStatePointOfInterestTypeMap().put(state, fisherman);
       }
     });
