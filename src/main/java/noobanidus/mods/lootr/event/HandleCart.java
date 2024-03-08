@@ -29,6 +29,7 @@ public class HandleCart {
           lootr.setLootTable(chest.lootTable, chest.lootTableSeed);
           event.setCanceled(true);
           if (!level.getServer().isSameThread()) {
+            // TODO: If this is actually triggering, we need to ticket the chunk.
             LootrAPI.LOG.error("Minecart with Loot table created off main thread. Falling back on EntityTicker.");
             EntityTicker.addEntity(lootr);
            } else {
