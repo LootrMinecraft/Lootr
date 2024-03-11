@@ -1,9 +1,9 @@
 package noobanidus.mods.lootr.mixins;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.ai.village.poi.PoiTypes;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.registries.ForgeRegistries;
 import noobanidus.mods.lootr.init.ModBlocks;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -22,7 +22,7 @@ public class MixinPoiType {
     PoiType thisPoi = (PoiType) (Object) this;
     if (!fishermanCheck) {
       fishermanCheck = true;
-      isFisherman = ForgeRegistries.POI_TYPES.getKey(thisPoi).equals(PoiTypes.FISHERMAN);
+      isFisherman = PoiTypes.FISHERMAN.location().equals(BuiltInRegistries.POINT_OF_INTEREST_TYPE.getKey(thisPoi));
     }
     if (isFisherman) {
       if (state.is(ModBlocks.BARREL.get())) {
