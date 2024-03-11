@@ -6,9 +6,8 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.impl.LootrAPIImpl;
 import noobanidus.mods.lootr.init.ModStats;
-import noobanidus.mods.lootr.network.PacketHandler;
 
-@Mod.EventBusSubscriber(modid= LootrAPI.MODID, bus= Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = LootrAPI.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CommonSetup {
   @SubscribeEvent
   public static void init(FMLCommonSetupEvent event) {
