@@ -2,12 +2,13 @@ package noobanidus.mods.lootr.mixins;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraft.world.level.levelgen.structure.EndCityPieces;
+import net.minecraft.world.level.levelgen.structure.structures.EndCityPieces;
 import noobanidus.mods.lootr.LootrTags;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.config.ConfigManager;
@@ -21,7 +22,7 @@ import java.util.Random;
 @Mixin(EndCityPieces.EndCityPiece.class)
 public class MixinEndCityPieces$EndCityPiece {
   @Inject(method = "handleDataMarker", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/ServerLevelAccessor;addFreshEntity(Lnet/minecraft/world/entity/Entity;)Z"), cancellable = true)
-  private void LootrHandleDataMarker(String marker, BlockPos position, ServerLevelAccessor level, Random random, BoundingBox boundingBox, CallbackInfo ci) {
+  private void LootrHandleDataMarker(String marker, BlockPos position, ServerLevelAccessor level, RandomSource random, BoundingBox boundingBox, CallbackInfo ci) {
     if (!ConfigManager.CONVERT_ELYTRAS.get()) {
       return;
     }
