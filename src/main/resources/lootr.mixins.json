@@ -6,7 +6,9 @@
   "mixins": [
     "MixinCatSitOnBlockGoal",
     "MixinEndCityPieces$EndCityPiece",
-    "MixinLevelChunk"
+    "MixinLevelChunk",
+    "MixinPoiType",
+    "MixinPoiTypes"
   ],
   "client": [
   ],
