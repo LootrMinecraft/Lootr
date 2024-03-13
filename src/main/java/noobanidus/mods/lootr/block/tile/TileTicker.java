@@ -36,7 +36,7 @@ public class TileTicker {
   private final static Set<Entry> pendingEntries = new ObjectLinkedOpenHashSet<>();
 
   public static void addEntry(World level, BlockPos position) {
-    if (level.isClientSide()) {
+    if (level.isClientSide() || ServerLifecycleHooks.getCurrentServer() == null) {
       return;
     }
 
