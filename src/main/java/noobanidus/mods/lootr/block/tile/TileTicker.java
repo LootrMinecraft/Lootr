@@ -40,6 +40,10 @@ public class TileTicker {
       return;
     }
 
+    if (ServerLifecycleHooks.getCurrentServer() == null) {
+      return;
+    }
+
     RegistryKey<World> dimension = level.dimension();
     if (ConfigManager.isDimensionBlocked(dimension)) {
       return;
