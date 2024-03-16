@@ -9,6 +9,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import noobanidus.mods.lootr.api.ILootrAPI;
 import noobanidus.mods.lootr.api.LootFiller;
+import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.MenuBuilder;
 import noobanidus.mods.lootr.api.inventory.ILootrInventory;
 import noobanidus.mods.lootr.config.ConfigManager;
@@ -23,6 +24,7 @@ import java.util.function.LongSupplier;
 import java.util.function.Supplier;
 
 public class LootrAPIImpl implements ILootrAPI {
+
   @Override
   public boolean clearPlayerLoot(UUID id) {
     return DataStorage.clearInventories(id);
@@ -65,5 +67,10 @@ public class LootrAPIImpl implements ILootrAPI {
       return ThreadLocalRandom.current().nextLong();
     }
     return seed;
+  }
+
+  @Override
+  public boolean isSavingStructure() {
+    return LootrAPI.isSavingStructure;
   }
 }
