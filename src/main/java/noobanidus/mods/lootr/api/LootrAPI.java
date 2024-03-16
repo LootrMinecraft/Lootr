@@ -22,6 +22,8 @@ public class LootrAPI {
 
   public static ILootrAPI INSTANCE;
 
+  public static boolean isSavingStructure;
+
   public static boolean clearPlayerLoot(ServerPlayer entity) {
     return INSTANCE.clearPlayerLoot(entity);
   }
@@ -48,5 +50,9 @@ public class LootrAPI {
 
   public static long getLootSeed (long seed) {
     return INSTANCE.getLootSeed(seed);
+  }
+
+  public static boolean isSavingStructure() {
+    return INSTANCE.isSavingStructure();
   }
 }

@@ -64,5 +64,5 @@ public interface ILootrAPI {
    */
   long getLootSeed(long seed);
 
-
+  boolean isSavingStructure ();
 }
