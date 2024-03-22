@@ -230,7 +230,8 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
     }
     if (compound.hasUUID("tileId")) {
       this.tileId = compound.getUUID("tileId");
-    } else if (this.tileId == null) {
+    }
+    if (this.tileId == null) {
       getTileId();
     }
     if (compound.contains("LootrOpeners")) {
