@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.event;
 
+import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -25,11 +26,24 @@ public class HandleBreak {
       return true;
     }
 
-    if (ConfigManager.get().breaking.disable_break) {
-      if (player.getAbilities().instabuild) {
-        if (!player.isShiftKeyDown()) {
-          player.displayClientMessage(Component.translatable("lootr.message.cannot_break_sneak").setStyle(getChatStyle()), false);
-          return false;
+    if (!world.isClientSide()) {
+      if (state.is(LootrTags.Blocks.CONTAINERS)) {
+        if ((player instanceof FakePlayer && ConfigManager.get().breaking.enable_fake_player_break) || ConfigManager.get().breaking.enable_break) {
+          return true;
+        }
+        if (ConfigManager.get().breaking.disable_break) {
+          if (player.getAbilities().instabuild) {
+            if (!player.isShiftKeyDown()) {
+              player.displayClientMessage(Component.translatable("lootr.message.cannot_break_sneak").setStyle(getChatStyle()), false);
+            }
+          } else {
+            player.displayClientMessage(Component.translatable("lootr.message.cannot_break").setStyle(getChatStyle()), false);
+          }
+        } else {
+          if (!player.isShiftKeyDown()) {
+            player.displayClientMessage(Component.translatable("lootr.message.should_sneak").setStyle(getChatStyle()), false);
+            player.displayClientMessage(Component.translatable("lootr.message.should_sneak2", Component.translatable("lootr.message.should_sneak3").setStyle(Style.EMPTY.withBold(true))).setStyle(getChatStyle()), false);
+          }
         }
       } else {
         player.displayClientMessage(Component.translatable("lootr.message.cannot_break").setStyle(getChatStyle()), false);
