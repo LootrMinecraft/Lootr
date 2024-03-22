@@ -71,6 +71,18 @@ public class ChestUtil {
     return ConfigManager.get().notifications.disable_message_styles ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true);
   }
 
+  public static Style getInvalidStyle () {
+    return ConfigManager.DISABLE_MESSAGE_STYLES.get() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true);
+  }
+
+  public static Style getDecayStyle () {
+    return ConfigManager.DISABLE_MESSAGE_STYLES.get() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true);
+  }
+
+  public static Style getRefreshStyle () {
+    return ConfigManager.DISABLE_MESSAGE_STYLES.get() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true));
+  }
+
   public static void handleLootChest(Block block, Level level, BlockPos pos, Player player) {
     if (level.isClientSide() || player.isSpectator()) {
       if (player.isSpectator()) {
