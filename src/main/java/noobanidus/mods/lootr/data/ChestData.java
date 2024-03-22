@@ -78,6 +78,9 @@ public class ChestData extends SavedData {
   }
 
   public static Supplier<ChestData> ref_id(ResourceKey<Level> dimension, BlockPos pos, UUID id, NonNullList<ItemStack> base) {
+    if (id == null) {
+      throw new IllegalArgumentException("Can't create ChestData for custom container in dimension '" + dimension + "' at '" + pos + "' with a null id.");
+    }
     return () -> {
       ChestData data = new ChestData(ID(id));
       data.pos = pos;
@@ -94,6 +97,9 @@ public class ChestData extends SavedData {
   }
 
   public static Supplier<ChestData> id(ResourceKey<Level> dimension, BlockPos pos, UUID id) {
+    if (id == null) {
+      throw new IllegalArgumentException("Can't create ChestData for container in dimension '" + dimension + "' at '" + pos + "' with a null id.");
+    }
     return () -> {
       ChestData data = new ChestData(ID(id));
       data.pos = pos;
@@ -107,6 +113,9 @@ public class ChestData extends SavedData {
   }
 
   public static Supplier<ChestData> entity(ResourceKey<Level> dimension, BlockPos pos, UUID entityId) {
+    if (entityId == null) {
+      throw new IllegalArgumentException("Can't create ChestData for minecart in dimension '" + dimension + "' at '" + pos + "' with a null entityId.");
+    }
     return () -> {
       ChestData data = new ChestData(ID(entityId));
       data.pos = pos;
@@ -196,15 +205,7 @@ public class ChestData extends SavedData {
       result = new SpecialChestInventory(this, items, cart.getDisplayName());
       lootTable = cart.lootTable;
     } else {
-/*      if (world.dimension() != dimension) {
-        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-        if (server == null) {
-          return null;
-        }
-        world = server.getLevel(dimension);
-      }*/
-
-      if (/*world == null || */tile == null) {
+      if (tile == null) {
         return null;
       }
 
@@ -324,7 +325,11 @@ public class ChestData extends SavedData {
     } else {
       LootrAPI.LOG.error("Attempted to save a data file with no `dimension`: '" + key + "'");
     }
-    compound.putUUID("uuid", uuid);
+    if (uuid != null) {
+      compound.putUUID("uuid", uuid);
+    } else {
+      throw new IllegalStateException("Attempted to save a data file with no `uuid`: '" + key + "'. Located in dimension '" + dimension + "' at '" + pos + "'. This is an unrecoverable error.");
+    }
     compound.putBoolean("custom", custom);
     compound.putBoolean("entity", entity);
     if (reference != null) {
