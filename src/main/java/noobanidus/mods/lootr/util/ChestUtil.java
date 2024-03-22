@@ -78,6 +78,10 @@ public class ChestUtil {
     BlockEntity te = level.getBlockEntity(pos);
     if (te instanceof ILootBlockEntity tile) {
       UUID tileId = tile.getTileId();
+      if (tileId == null) {
+        player.displayClientMessage(Component.translatable("lootr.message.invalid_block").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true)), true);
+        return;
+      }
       if (DataStorage.isDecayed(tileId)) {
         level.destroyBlock(pos, true);
         notifyDecay(player, tileId);
