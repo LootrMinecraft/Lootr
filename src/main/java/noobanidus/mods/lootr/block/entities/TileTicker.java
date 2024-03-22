@@ -19,6 +19,7 @@ import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.config.ConfigManager;
+import noobanidus.mods.lootr.event.HandleChunk;
 
 import java.util.Set;
 
@@ -103,12 +104,22 @@ public class TileTicker {
           continue;
         }
 
-
         boolean skip = false;
         for (ChunkPos chunkPos : entry.getChunkPositions()) {
           if (!level.getChunkSource().hasChunk(chunkPos.x, chunkPos.z)) {
             skip = true;
             break;
+          }
+        }
+        synchronized (HandleChunk.LOADED_CHUNKS) {
+          Set<ChunkPos> loadedChunks = HandleChunk.LOADED_CHUNKS.get(entry.dimension);
+          if (loadedChunks != null) {
+            for (ChunkPos chunkPos : entry.getChunkPositions()) {
+              if (!loadedChunks.contains(chunkPos)) {
+                skip = true;
+                break;
+              }
+            }
           }
         }
         if (skip) {
