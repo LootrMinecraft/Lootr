@@ -104,6 +104,7 @@ public class ConfigManager {
   public static final ForgeConfigSpec.BooleanValue BLAST_IMMUNE;
   public static final ForgeConfigSpec.IntValue NOTIFICATION_DELAY;
   public static final ForgeConfigSpec.BooleanValue DISABLE_NOTIFICATIONS;
+  public static final ForgeConfigSpec.BooleanValue DISABLE_MESSAGE_STYLES;
   public static final ForgeConfigSpec.BooleanValue TRAPPED_CUSTOM;
 
   // Client-only
@@ -163,6 +164,7 @@ public class ConfigManager {
     BLAST_IMMUNE = COMMON_BUILDER.comment("lootr chests cannot be destroyed by any explosion").define("blast_immune", false);
     DISABLE_NOTIFICATIONS = COMMON_BUILDER.comment("prevent notifications of decaying or refreshed chests").define("disable_notifications", false);
     NOTIFICATION_DELAY = COMMON_BUILDER.comment("maximum time (in ticks) remaining on a chest before a notification for refreshing or decaying is sent to a player (default 30 seconds, -1 for no delay)").defineInRange("notification_delay", 30 * 20, -1, Integer.MAX_VALUE);
+    DISABLE_MESSAGE_STYLES = COMMON_BUILDER.comment("disables styling of breaking, decaying and refreshing messages sent to players").define("disable_message_styles", false);
 
     DECAY_VALUE = COMMON_BUILDER.comment("how long (in ticks) a decaying loot containers should take to decay (default 5 minutes = 5 * 60 * 20)").defineInRange("decay_value", 5 * 60 * 20, 0, Integer.MAX_VALUE);
     DECAY_LOOT_TABLES = COMMON_BUILDER.comment("list of loot tables which will decay (default blank, meaning no chests decay, in the format of (in the format of [\"modid:loot_table\", \"othermodid:other_loot_table\"])").defineList("decay_loot_tables", empty, validator);
