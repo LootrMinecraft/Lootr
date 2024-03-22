@@ -72,7 +72,7 @@ public class ChestUtil {
   }
 
   public static Style getRefreshStyle () {
-    return ConfigManager.DISABLE_MESSAGE_STYLES.get() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true));
+    return ConfigManager.DISABLE_MESSAGE_STYLES.get() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true);
   }
 
   public static void handleLootChest(Block block, Level level, BlockPos pos, Player player) {
