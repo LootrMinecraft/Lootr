@@ -16,6 +16,13 @@ public class LootrTags {
     public static TagKey<Block> BARRELS = tag("barrels");
     public static TagKey<Block> CONTAINERS = tag("containers");
 
+    public static final TagKey<Block> CONVERT_CHESTS = tag("convert/chests");
+    public static final TagKey<Block> CONVERT_TRAPPED_CHESTS = tag("convert/trapped_chests");
+    public static final TagKey<Block> CONVERT_SHULKERS = tag("convert/shulkers");
+    public static final TagKey<Block> CONVERT_BARRELS = tag("convert/barrels");
+
+    public static final TagKey<Block> CONVERT_BLOCK = tag("convert/blocks");
+
     static TagKey<Block> tag(String name) {
       return BlockTags.create(new ResourceLocation(LootrAPI.MODID, name));
     }
