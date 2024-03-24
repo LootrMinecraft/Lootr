@@ -45,7 +45,7 @@ public class ChestData extends SavedData {
   private NonNullList<ItemStack> reference;
   private boolean custom;
   private boolean entity;
-  private int size = -1;
+  private int size;
 
   protected ChestData(String key) {
     this.key = key;
@@ -121,7 +121,7 @@ public class ChestData extends SavedData {
     data.key = ID(id);
     data.dimension = dimension;
     data.pos = position;
-    data.setSize(size);
+    data.size = size;
     return data;
   }
 
@@ -187,7 +187,7 @@ public class ChestData extends SavedData {
     if (compound.contains("size", Tag.TAG_INT)) {
       data.size = compound.getInt("size");
     } else if (!compound.contains("referenceSize")) {
-      LootrAPI.LOG.error("Loaded a data file with no size: '" + data.key + "' located in dimension '" + data.dimension + "' at '" + data.pos + "'. Sizes will be guessed and updated in future. This message will only appear once; if it occurs multiple times for the same location, please report on GitHub.");
+      // The unwrapper should really be filling this in, anyway.
     }
     ListTag compounds = compound.getList("inventories", Tag.TAG_COMPOUND);
 

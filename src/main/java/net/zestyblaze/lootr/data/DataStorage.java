@@ -14,6 +14,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraft.world.level.storage.LevelResource;
 import net.zestyblaze.lootr.api.LootFiller;
@@ -239,7 +240,7 @@ public class DataStorage {
       LootrAPI.LOG.error("We have no heuristic to determine the size of '" + id.toString() + "' in '" + world.dimension() + "' at '" + pos + "'. Defaulting to 27.");
       size = 27;
     }
-    return ChestData.unwrap(manager.computeIfAbsent(ChestData.loadWrapper(id, world.dimension(), pos), ChestData.id(world.dimension(), pos, id), ChestData.ID(id)), id, world.dimension(), pos, size);
+    return ChestData.unwrap(manager.computeIfAbsent(new SavedData.Factory<>(ChestData.id(world.dimension(), pos, id), ChestData.loadWrapper(id, world.dimension(), pos)), ChestData.ID(id)), id, world.dimension(), pos, size);
   }
 
   @Nullable
@@ -266,8 +267,7 @@ public class DataStorage {
       LootrAPI.LOG.error("We have no heuristic to determine the size of entity '" + id + "' in '" + world.dimension() + "' at '" + pos + "'. Defaulting to 27.");
       size = 27;
     }
-
-    return ChestData.unwrap(manager.computeIfAbsent(ChestData.loadWrapper(id, world.dimension(), pos), ChestData.entity(world.dimension(), pos, id), ChestData.ID(id)), id, world.dimension(), pos, size);
+    return ChestData.unwrap(manager.computeIfAbsent(new SavedData.Factory<>(ChestData.entity(world.dimension(), pos, id), ChestData.loadWrapper(id, world.dimension(), pos)), ChestData.ID(id)), id, world.dimension(), pos, size);
   }
 
   @Deprecated
@@ -283,7 +283,7 @@ public class DataStorage {
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot fetch chest data for " + world.dimension() + " at " + pos.toString() + " with ID " + id.toString() + " and cannot continue.");
       return null;
     }
-    return ChestData.unwrap(manager.computeIfAbsent(ChestData.loadWrapper(id, world.dimension(), pos), ChestData.ref_id(world.dimension(), pos, id, base), ChestData.ID(id)), id, world.dimension(), pos, base.size());
+    return ChestData.unwrap(manager.computeIfAbsent(new SavedData.Factory<>(ChestData.ref_id(world.dimension(), pos, id, base), ChestData.loadWrapper(id, world.dimension(), pos)), ChestData.ID(id)), id, world.dimension(), pos, base.size());
   }
 
   @Nullable
