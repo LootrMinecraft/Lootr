@@ -45,6 +45,7 @@ public class ChestData extends SavedData {
   private NonNullList<ItemStack> reference;
   private boolean custom;
   private boolean entity;
+  private int size;
 
   protected ChestData(String key) {
     this.key = key;
@@ -230,10 +231,11 @@ public class ChestData extends SavedData {
     };
   }
 
-  public static ChestData unwrap(ChestData data, UUID id, ResourceKey<Level> dimension, BlockPos position) {
+  public static ChestData unwrap(ChestData data, UUID id, ResourceKey<Level> dimension, BlockPos position, int size) {
     data.key = ID(id);
     data.dimension = dimension;
     data.pos = position;
+    data.size = size;
     return data;
   }
 
@@ -292,8 +294,14 @@ public class ChestData extends SavedData {
     }
     if (compound.contains("reference") && compound.contains("referenceSize")) {
       int size = compound.getInt("referenceSize");
-      data.reference = NonNullList.withSize(size, ItemStack.EMPTY);
+      data.size = size;
+      data.reference = NonNullList.withSize(data.size, ItemStack.EMPTY);
       ContainerHelper.loadAllItems(compound.getCompound("reference"), data.reference);
+    }
+    if (compound.contains("size", Tag.TAG_INT)) {
+      data.size = compound.getInt("size");
+    } else if (!compound.contains("referenceSize")) {
+      // The unwrapper should really be filling this in, anyway.
     }
     ListTag compounds = compound.getList("inventories", Tag.TAG_COMPOUND);
     for (int i = 0; i < compounds.size(); i++) {
