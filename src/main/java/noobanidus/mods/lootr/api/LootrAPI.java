@@ -53,11 +53,11 @@ public class LootrAPI {
     }
 
     public static boolean isSavingStructure() {
-        return INSTANCE.isSavingStructure();
-    }
+    return INSTANCE.isSavingStructure();
+  }
 
     // TODO: Consider if this is really needed
     public static boolean hasCapacity (String capacity) {
-        return INSTANCE.hasCapacity(capacity);
-    }
+    return INSTANCE.hasCapacity(capacity);
+  }
 }
