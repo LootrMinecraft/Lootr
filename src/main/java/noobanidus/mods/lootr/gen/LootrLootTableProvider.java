@@ -3,6 +3,7 @@ package noobanidus.mods.lootr.gen;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.data.loot.LootTableSubProvider;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -24,8 +25,8 @@ public class LootrLootTableProvider {
 
   public static class ChestLootTables implements LootTableSubProvider {
     @Override
-    public void generate(BiConsumer<ResourceLocation, LootTable.Builder> p_249643_) {
-      p_249643_.accept(
+    public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> biConsumer) {
+      biConsumer.accept(
           LootrAPI.ELYTRA_CHEST,
           LootTable.lootTable()
               .withPool(
