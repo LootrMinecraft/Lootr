@@ -42,10 +42,10 @@ public interface ILootrAPI {
    * @return Either the relevant inventory (cast as a MenuProvider) or null if the function was called with a client-size Level or an instance of Level that isn't ServerLevel.
    */
   @Nullable
-  ILootrInventory getInventory (Level level, UUID id, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier);
+  ILootrInventory getInventory(Level level, UUID id, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier);
 
   @Nullable
-  ILootrInventory getInventory (Level level, UUID id, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier, MenuBuilder builder);
+  ILootrInventory getInventory(Level level, UUID id, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier, MenuBuilder builder);
 
   @Deprecated
   @Nullable
@@ -67,10 +67,10 @@ public interface ILootrAPI {
    * See the documentation of the other `getModdedMenu` for more details.
    */
   @Nullable
-  ILootrInventory getInventory (Level level, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier);
+  ILootrInventory getInventory(Level level, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier);
 
   @Nullable
-  ILootrInventory getInventory (Level level, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier, MenuBuilder builder);
+  ILootrInventory getInventory(Level level, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier, MenuBuilder builder);
 
   @Deprecated
   @Nullable
@@ -89,5 +89,14 @@ public interface ILootrAPI {
    */
   long getLootSeed(long seed);
 
-  boolean isSavingStructure ();
+  boolean isSavingStructure();
+
+  // TODO: Think on this.
+  default boolean hasCapacity(String capacity) {
+    return switch (capacity) {
+      case LootrCapacities.STRUCTURE_SAVING -> true;
+      case LootrCapacities.CAPACITIES -> true;
+      default -> false;
+    };
+  }
 }
