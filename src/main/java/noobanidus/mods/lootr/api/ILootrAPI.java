@@ -92,5 +92,14 @@ public interface ILootrAPI {
    */
   long getLootSeed(long seed);
 
-  boolean isSavingStructure ();
+  boolean isSavingStructure();
+
+  // TODO: Think on this.
+  default boolean hasCapacity(String capacity) {
+    return switch (capacity) {
+      case LootrCapacities.STRUCTURE_SAVING -> true;
+      case LootrCapacities.CAPACITIES -> true;
+      default -> false;
+    };
+  }
 }
