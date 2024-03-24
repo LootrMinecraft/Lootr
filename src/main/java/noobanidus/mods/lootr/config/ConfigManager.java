@@ -27,6 +27,7 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.server.ServerLifecycleHooks;
+import noobanidus.mods.lootr.LootrTags;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
@@ -478,10 +479,11 @@ public class ConfigManager {
   public static BlockState replacement(BlockState original) {
     if (replacements == null) {
       replacements = new HashMap<>();
-      replacements.put(Blocks.CHEST, ModBlocks.CHEST);
-      replacements.put(Blocks.BARREL, ModBlocks.BARREL);
-      replacements.put(Blocks.TRAPPED_CHEST, ModBlocks.TRAPPED_CHEST);
-      replacements.put(Blocks.SHULKER_BOX, ModBlocks.SHULKER);
+      // These are handled in the tag.
+/*      replacements.put(Blocks.CHEST, ModBlocks.CHEST.get());
+      replacements.put(Blocks.BARREL, ModBlocks.BARREL.get());
+      replacements.put(Blocks.TRAPPED_CHEST, ModBlocks.TRAPPED_CHEST.get());
+      replacements.put(Blocks.SHULKER_BOX, ModBlocks.SHULKER.get());*/
       if (CONVERT_QUARK.get() && ModList.get().isLoaded("quark")) {
         QUARK_CHESTS.forEach(o -> addSafeReplacement(o, ModBlocks.CHEST));
         QUARK_TRAPPED_CHESTS.forEach(o -> addSafeReplacement(o, ModBlocks.TRAPPED_CHEST));
@@ -495,8 +497,8 @@ public class ConfigManager {
             if (replacements.containsKey(o)) {
               return;
             }
-            if (o instanceof EntityBlock) {
-              BlockEntity tile = ((EntityBlock) o).newBlockEntity(BlockPos.ZERO, o.defaultBlockState());
+            if (o instanceof EntityBlock eb) {
+              BlockEntity tile = eb.newBlockEntity(BlockPos.ZERO, o.defaultBlockState());
               if (tile instanceof RandomizableContainerBlockEntity) {
                 replacements.put(o, ModBlocks.TRAPPED_CHEST);
               }
@@ -509,8 +511,8 @@ public class ConfigManager {
             if (replacements.containsKey(o)) {
               return;
             }
-            if (o instanceof EntityBlock) {
-              BlockEntity tile = ((EntityBlock) o).newBlockEntity(BlockPos.ZERO, o.defaultBlockState());
+            if (o instanceof EntityBlock eb) {
+              BlockEntity tile = eb.newBlockEntity(BlockPos.ZERO, o.defaultBlockState());
               if (tile instanceof RandomizableContainerBlockEntity) {
                 replacements.put(o, ModBlocks.TRAPPED_CHEST);
               }
@@ -526,11 +528,29 @@ public class ConfigManager {
     }
 
     Block replacement = replacements.get(original.getBlock());
-    if (replacement == null) {
-      return null;
+    if (replacement == null && original.is(LootrTags.Blocks.CONVERT_BLOCK)) {
+      if (original.getBlock() instanceof EntityBlock entityBlock) {
+        BlockEntity be = entityBlock.newBlockEntity(BlockPos.ZERO, original);
+        if (be instanceof RandomizableContainerBlockEntity) {
+          if (original.is(LootrTags.Blocks.CONVERT_TRAPPED_CHESTS)) {
+            replacements.put(original.getBlock(), ModBlocks.TRAPPED_CHEST);
+          } else if (original.is(LootrTags.Blocks.CONVERT_BARRELS)) {
+            replacements.put(original.getBlock(), ModBlocks.BARREL);
+          } else if (original.is(LootrTags.Blocks.CONVERT_CHESTS)) {
+            replacements.put(original.getBlock(), ModBlocks.CHEST);
+          } else if (original.is(LootrTags.Blocks.CONVERT_SHULKERS)) {
+            replacements.put(original.getBlock(), ModBlocks.SHULKER);
+          }
+        }
+      }
+      replacement = replacements.get(original.getBlock());
     }
 
-    return copyProperties(replacement.defaultBlockState(), original);
+    if (replacement != null) {
+      return copyProperties(replacement.defaultBlockState(), original);
+    }
+
+    return null;
   }
 
   private static BlockState copyProperties(BlockState state, BlockState original) {
