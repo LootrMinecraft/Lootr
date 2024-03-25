@@ -139,7 +139,6 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
 
   @Override
   public void unpackLootTable(@Nullable Player player) {
-    // TODO: Override
   }
 
   @Override
