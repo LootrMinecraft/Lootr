@@ -83,7 +83,6 @@ public class ConfigManager {
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DIMENSION_BLACKLIST;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> LOOT_TABLE_BLACKLIST;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> LOOT_MODID_BLACKLIST;
-  public static final ForgeConfigSpec.ConfigValue<List<? extends String>> LOOT_STRUCTURE_BLACKLIST;
 
   // Decay
   public static final ForgeConfigSpec.IntValue DECAY_VALUE;
@@ -154,8 +153,6 @@ public class ConfigManager {
     MODID_DIMENSION_WHITELIST = COMMON_BUILDER.comment("list of dimensions by modid that loot chest should be replaced in (default: blank, allowing all modids, format e.g., [\"minecraft", "othermod\"])").defineList("modid_dimension_whitelist", empty, modidValidator);
     LOOT_TABLE_BLACKLIST = COMMON_BUILDER.comment("list of loot tables which shouldn't be converted (in the format of [\"modid:loot_table\", \"othermodid:other_loot_table\"])").defineList("loot_table_blacklist", empty, validator);
     LOOT_MODID_BLACKLIST = COMMON_BUILDER.comment("list of modids whose loot tables shouldn't be converted (in the format of [\"modid\", \"other_modid\"])").defineList("loot_modid_blacklist", empty, modidValidator);
-    // TODO: Structure blacklisting is non-functional
-    LOOT_STRUCTURE_BLACKLIST = COMMON_BUILDER.comment("list of structures in which contains shouldn't be converted (in the format of [\"modid:structure_name\", \"othermodid:other_structure_name\"])").defineList("loot_structure_blacklist", empty, validator);
     DISABLE_BREAK = COMMON_BUILDER.comment("prevent the destruction of Lootr chests except while sneaking in creative mode").define("disable_break", false);
     ENABLE_BREAK = COMMON_BUILDER.comment("allow the destruction of Lootr chests regardless. overrides `disable_break`").define("enable_break", false);
     CHECK_WORLD_BORDER = COMMON_BUILDER.comment("disregard chests and chunks that are outside of the world border; enable this option if you are using a world border and are suffering consistent TPS issues; if you change the world border, you will need to restart your client").define("check_world_border", false);
@@ -288,13 +285,6 @@ public class ConfigManager {
       LOOT_MODIDS = LOOT_MODID_BLACKLIST.get().stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
     }
     return LOOT_MODIDS;
-  }
-
-  public static Set<ResourceLocation> getLootStructureBlacklist() {
-    if (STRUCTURE_BLACKLIST == null) {
-      STRUCTURE_BLACKLIST = LOOT_STRUCTURE_BLACKLIST.get().stream().map(ResourceLocation::new).collect(Collectors.toSet());
-    }
-    return STRUCTURE_BLACKLIST;
   }
 
   public static boolean isBlacklisted(ResourceLocation table) {
