@@ -154,7 +154,6 @@ public class BarrelModel implements IUnbakedGeometry<BarrelModel> {
       }
     }
 
-    /* TODO: 1.19 breaking changes */
     @Override
     public ItemTransforms getTransforms() {
       return cameraTransforms;
@@ -164,12 +163,6 @@ public class BarrelModel implements IUnbakedGeometry<BarrelModel> {
     public ItemOverrides getOverrides() {
       return ItemOverrides.EMPTY;
     }
-    /*
-    @Override
-    public boolean isLayered() {
-      return false;
-    }
-     */
   }
 
   public static final class Loader implements IGeometryLoader<BarrelModel> {
