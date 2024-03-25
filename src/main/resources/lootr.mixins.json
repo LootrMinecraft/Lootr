@@ -12,7 +12,7 @@
     "MixinStructureTemplate"
   ],
   "client": [
-    "MixinMinecraft"
+    "client.MixinMinecraft"
   ],
   "injectors": {
     "defaultRequire": 1
