@@ -27,7 +27,7 @@ public class LootCount implements LootItemCondition {
 
   @Override
   public LootItemConditionType getType() {
-    return ModLoot.LOOT_COUNT;
+    return ModLoot.LOOT_COUNT.get();
   }
 
   @Override

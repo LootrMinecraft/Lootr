@@ -38,6 +38,7 @@ public class Lootr {
     ModBlocks.register(modBus);
     ModEntities.register(modBus);
     ModItems.register(modBus);
+    ModLoot.register(modBus);
   }
 
   public void onCommands(RegisterCommandsEvent event) {
