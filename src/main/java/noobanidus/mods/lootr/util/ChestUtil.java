@@ -36,6 +36,7 @@ import java.util.UUID;
 
 @SuppressWarnings("unused")
 public class ChestUtil {
+  // TODO: The code for handling this should probably go into the API.
   public static void handleLootSneak(Block block, Level level, BlockPos pos, Player player) {
     if (level.isClientSide() || player.isSpectator()) {
       return;
@@ -53,6 +54,7 @@ public class ChestUtil {
 
   }
 
+  // TODO: Move to API?
   public static void handleLootCartSneak(Level level, LootrChestMinecartEntity cart, Player player) {
     if (level.isClientSide() || player.isSpectator()) {
       return;
@@ -135,6 +137,7 @@ public class ChestUtil {
         tile.updatePacketViaState();
       }
       player.openMenu(provider);
+      // TODO: Instances using this check the block tags first.
       PiglinAi.angerNearbyPiglins(player, true);
     }
   }
