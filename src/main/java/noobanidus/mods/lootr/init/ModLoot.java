@@ -14,7 +14,6 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.loot.conditions.LootCount;
 
-// TODO: Check where this should go
 public class ModLoot {
 
   private static final DeferredRegister<LootItemConditionType> REGISTER = DeferredRegister.create(BuiltInRegistries.LOOT_CONDITION_TYPE, LootrAPI.MODID);
