@@ -241,6 +241,15 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
     super.load(compound);
   }
 
+  private boolean savingToItem = false;
+
+  @Override
+  public void saveToItem(ItemStack itemstack) {
+    savingToItem = true;
+    super.saveToItem(itemstack);
+    savingToItem = false;
+  }
+
   @Override
   protected void saveAdditional(CompoundTag compound) {
     super.saveAdditional(compound);
@@ -252,7 +261,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
       compound.putLong("specialLootChest_seed", seed);
       compound.putLong("LootTableSeed", seed);
     }
-    if (!LootrAPI.shouldDiscard()) {
+    if (!LootrAPI.shouldDiscard() && !savingToItem) {
       compound.putUUID("tileId", getTileId());
       ListTag list = new ListTag();
       for (UUID opener : this.openers) {
