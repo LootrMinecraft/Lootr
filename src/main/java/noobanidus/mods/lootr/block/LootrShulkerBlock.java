@@ -35,6 +35,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.block.entities.LootrShulkerBlockEntity;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlockEntities;
@@ -53,13 +54,7 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
 
   @Override
   public float getExplosionResistance() {
-    if (ConfigManager.BLAST_IMMUNE.get()) {
-      return Float.MAX_VALUE;
-    } else if (ConfigManager.BLAST_RESISTANT.get()) {
-      return 16.0f;
-    } else {
-      return super.getExplosionResistance();
-    }
+    return LootrAPI.getExplosionResistance(this, super.getExplosionResistance());
   }
 
   private static boolean canOpen(BlockState pState, Level pLevel, BlockPos pPos, LootrShulkerBlockEntity pBlockEntity) {

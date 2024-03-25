@@ -6,6 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import noobanidus.mods.lootr.api.ILootrAPI;
 import noobanidus.mods.lootr.api.LootFiller;
@@ -77,5 +78,16 @@ public class LootrAPIImpl implements ILootrAPI {
   @Override
   public boolean shouldDiscard() {
     return LootrAPI.shouldDiscardIdAndOpeners;
+  }
+
+  @Override
+  public float getExplosionResistance(Block block, float defaultResistance) {
+    if (ConfigManager.BLAST_RESISTANT.get()) {
+      return 16.0f;
+    } else if (ConfigManager.BLAST_IMMUNE.get()) {
+      return Float.MAX_VALUE;
+    } else {
+      return defaultResistance;
+    }
   }
 }
