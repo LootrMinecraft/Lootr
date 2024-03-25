@@ -114,6 +114,14 @@ public class LootrChestBlock extends ChestBlock {
   }
 
   @Override
+  public float getDestroyProgress(BlockState p_60466_, Player p_60467_, BlockGetter p_60468_, BlockPos p_60469_) {
+    if (ConfigManager.DISABLE_BREAK.get()) {
+      return 0f;
+    }
+    return super.getDestroyProgress(p_60466_, p_60467_, p_60468_, p_60469_);
+  }
+
+  @Override
   @Nullable
   public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
     return pLevel.isClientSide ? LootrChestBlockEntity::lootrLidAnimateTick : null;

@@ -6,6 +6,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -86,6 +87,14 @@ public class LootrBarrelBlock extends BarrelBlock {
   @Override
   public boolean hasAnalogOutputSignal(BlockState pState) {
     return true;
+  }
+
+  @Override
+  public float getDestroyProgress(BlockState p_60466_, Player p_60467_, BlockGetter p_60468_, BlockPos p_60469_) {
+    if (ConfigManager.DISABLE_BREAK.get()) {
+      return 0f;
+    }
+    return super.getDestroyProgress(p_60466_, p_60467_, p_60468_, p_60469_);
   }
 
   @Override
