@@ -13,7 +13,6 @@ import net.minecraftforge.registries.RegistryObject;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.loot.conditions.LootCount;
 
-// TODO: Check where this should go
 public class ModLoot {
   private static final DeferredRegister<LootItemConditionType> REGISTER = DeferredRegister.create(Registries.LOOT_CONDITION_TYPE, LootrAPI.MODID);
 
