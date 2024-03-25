@@ -93,12 +93,17 @@ public interface ILootrAPI {
   @Nullable
   ILootrInventory getInventory(Level level, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier);
 
-  boolean isSavingStructure();
+  default boolean isSavingStructure() {
+    return shouldDiscard();
+  }
+
+  boolean shouldDiscard ();
 
   // TODO: Think on this.
   default boolean hasCapacity(String capacity) {
     return switch (capacity) {
       case LootrCapacities.STRUCTURE_SAVING -> true;
+      case LootrCapacities.SHOULD_DISCARD -> true;
       case LootrCapacities.CAPACITIES -> true;
       default -> false;
     };

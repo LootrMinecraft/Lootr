@@ -90,31 +90,4 @@ public class LootrAPIImpl implements ILootrAPI {
   public boolean shouldDiscard() {
     return LootrAPI.shouldDiscardIdAndOpeners;
   }
-
-  @Override
-  public float getExplosionResistance(Block block, float defaultResistance) {
-    if (ConfigManager.get().breaking.blast_resistant) {
-      return 16.0f;
-    } else if (ConfigManager.get().breaking.blast_immune) {
-      return Float.MAX_VALUE;
-    } else {
-      return defaultResistance;
-    }
-  }
-
-  @Override
-  public float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos position, float defaultProgress) {
-    if (ConfigManager.get().breaking.disable_break) {
-      return 0f;
-    }
-    return defaultProgress;
-  }
-
-  @Override
-  public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos, int defaultSignal) {
-    if (ConfigManager.get().breaking.power_comparators) {
-      return 1;
-    }
-    return defaultSignal;
-  }
 }
