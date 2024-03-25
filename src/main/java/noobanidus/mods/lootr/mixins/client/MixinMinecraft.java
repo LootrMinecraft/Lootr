@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.mixins;
+package noobanidus.mods.lootr.mixins.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.ItemStack;
