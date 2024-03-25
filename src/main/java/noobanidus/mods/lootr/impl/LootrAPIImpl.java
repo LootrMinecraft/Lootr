@@ -4,7 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import noobanidus.mods.lootr.api.ILootrAPI;
@@ -71,6 +70,11 @@ public class LootrAPIImpl implements ILootrAPI {
 
   @Override
   public boolean isSavingStructure() {
-    return LootrAPI.isSavingStructure;
+    return shouldDiscard();
+  }
+
+  @Override
+  public boolean shouldDiscard() {
+    return LootrAPI.shouldDiscardIdAndOpeners;
   }
 }
