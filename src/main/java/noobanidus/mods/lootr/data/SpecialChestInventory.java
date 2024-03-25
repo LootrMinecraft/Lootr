@@ -120,7 +120,6 @@ public class SpecialChestInventory implements ILootrInventory {
     ItemStack itemstack = ContainerHelper.removeItem(this.contents, index, count);
     if (!itemstack.isEmpty()) {
       this.setChanged();
-      // TODO: Trigger save?
     }
 
     return itemstack;
