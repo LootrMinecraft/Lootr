@@ -42,8 +42,6 @@ public class ConfigManager {
   private static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
   private static final ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
 
-  private static final List<ResourceLocation> QUARK_CHESTS = Arrays.asList(new ResourceLocation("quark", "oak_chest"), new ResourceLocation("quark", "spruce_chest"), new ResourceLocation("quark", "birch_chest"), new ResourceLocation("quark", "jungle_chest"), new ResourceLocation("quark", "acacia_chest"), new ResourceLocation("quark", "dark_oak_chest"), new ResourceLocation("quark", "warped_chest"), new ResourceLocation("quark", "crimson_chest"), new ResourceLocation("quark", "nether_brick_chest"), new ResourceLocation("quark", "purpur_chest")); // Quark normal chests
-  private static final List<ResourceLocation> QUARK_TRAPPED_CHESTS = Arrays.asList(new ResourceLocation("quark", "oak_trapped_chest"), new ResourceLocation("quark", "spruce_trapped_chest"), new ResourceLocation("quark", "birch_trapped_chest"), new ResourceLocation("quark", "jungle_trapped_chest"), new ResourceLocation("quark", "acacia_trapped_chest"), new ResourceLocation("quark", "dark_oak_trapped_chest"), new ResourceLocation("quark", "warped_trapped_chest"), new ResourceLocation("quark", "crimson_trapped_chest"));
   private static final List<ResourceLocation> PROBLEMATIC_CHESTS = Arrays.asList(new ResourceLocation("twilightforest", "structures/stronghold_boss"), new ResourceLocation("atum", "chests/pharaoh"));
 
   public static ForgeConfigSpec COMMON_CONFIG;
@@ -61,7 +59,6 @@ public class ConfigManager {
   public static final ForgeConfigSpec.IntValue MAXIMUM_AGE;
   public static final ForgeConfigSpec.BooleanValue CONVERT_MINESHAFTS;
   public static final ForgeConfigSpec.BooleanValue CONVERT_ELYTRAS;
-  public static final ForgeConfigSpec.BooleanValue CONVERT_QUARK;
   public static final ForgeConfigSpec.BooleanValue CONVERT_WOODEN_CHESTS;
   public static final ForgeConfigSpec.BooleanValue CONVERT_TRAPPED_CHESTS;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> ADDITIONAL_CHESTS;
@@ -137,7 +134,6 @@ public class ConfigManager {
     SKIP_UNLOADED = COMMON_BUILDER.comment("skip unloaded block entities that are eligible for conversion, set to false to potentially resolve issues with containers that aren't being converted [default: true]").define("skip_unloaded", true);
     CONVERT_MINESHAFTS = COMMON_BUILDER.comment("whether or not mineshaft chest minecarts should be converted to standard loot chests").define("convert_mineshafts", true);
     CONVERT_ELYTRAS = COMMON_BUILDER.comment("whether or not the Elytra item frame should be converted into a standard loot chest with a guaranteed elytra").define("convert_elytras", true);
-    CONVERT_QUARK = COMMON_BUILDER.comment("whether or not quark chests used in world generation for loot purposes should be replaced with Lootr chests").define("convert_quark", true);
     CONVERT_WOODEN_CHESTS = COMMON_BUILDER.comment("whether or not the entire forge:chests/wooden tag should be added to the conversion list for structures (if they are backed by RandomizableContainerBlockEntity)").define("convert_wooden_chests", true);
     CONVERT_TRAPPED_CHESTS = COMMON_BUILDER.comment("whether or not the entire forge:chests/trapped tag should be added to the conversion list for structures (if they are backed by RandomizableContainerBlockEntity").define("convert_trapped_chests", true);
     List<? extends String> empty = Collections.emptyList();
@@ -467,17 +463,6 @@ public class ConfigManager {
   public static BlockState replacement(BlockState original) {
     if (replacements == null) {
       replacements = new HashMap<>();
-      // These are handled in the tag.
-/*      replacements.put(Blocks.CHEST, ModBlocks.CHEST.get());
-      replacements.put(Blocks.BARREL, ModBlocks.BARREL.get());
-      replacements.put(Blocks.TRAPPED_CHEST, ModBlocks.TRAPPED_CHEST.get());
-      replacements.put(Blocks.SHULKER_BOX, ModBlocks.SHULKER.get());*/
-      if (CONVERT_QUARK.get() && ModList.get().isLoaded("quark")) {
-        QUARK_CHESTS.forEach(o -> addSafeReplacement(o, ModBlocks.CHEST.get()));
-        QUARK_TRAPPED_CHESTS.forEach(o -> addSafeReplacement(o, ModBlocks.TRAPPED_CHEST.get()));
-      }
-
-
       if (CONVERT_WOODEN_CHESTS.get() || CONVERT_TRAPPED_CHESTS.get()) {
         if (CONVERT_TRAPPED_CHESTS.get()) {
           ForgeRegistries.BLOCKS.tags().getTag(Tags.Blocks.CHESTS_TRAPPED).forEach(o -> {
@@ -486,7 +471,7 @@ public class ConfigManager {
             }
             if (o instanceof EntityBlock eb) {
               BlockEntity tile = eb.newBlockEntity(BlockPos.ZERO, o.defaultBlockState());
-              if (tile instanceof RandomizableContainerBlockEntity) {
+              if (tile instanceof RandomizableContainerBlockEntity && !(tile instanceof ILootBlockEntity)) {
                 replacements.put(o, ModBlocks.TRAPPED_CHEST.get());
               }
             }
@@ -499,7 +484,7 @@ public class ConfigManager {
             }
             if (o instanceof EntityBlock eb) {
               BlockEntity tile = eb.newBlockEntity(BlockPos.ZERO, o.defaultBlockState());
-              if (tile instanceof RandomizableContainerBlockEntity) {
+              if (tile instanceof RandomizableContainerBlockEntity && !(tile instanceof ILootBlockEntity)) {
                 replacements.put(o, ModBlocks.CHEST.get());
               }
             }
