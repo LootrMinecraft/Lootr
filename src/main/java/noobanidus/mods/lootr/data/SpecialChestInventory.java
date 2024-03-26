@@ -35,7 +35,7 @@ public class SpecialChestInventory implements ILootrInventory {
     if (!contents.isEmpty()) {
       this.contents = contents;
     } else {
-      this.contents = NonNullList.withSize(27, ItemStack.EMPTY);
+      this.contents = NonNullList.withSize(newChestData.getSize(), ItemStack.EMPTY);
     }
     this.name = name;
   }
@@ -43,7 +43,7 @@ public class SpecialChestInventory implements ILootrInventory {
   public SpecialChestInventory(ChestData newChestData, CompoundTag items, String componentAsJSON) {
     this.newChestData = newChestData;
     this.name = Component.Serializer.fromJson(componentAsJSON);
-    this.contents = NonNullList.withSize(27, ItemStack.EMPTY);
+    this.contents = NonNullList.withSize(newChestData.getSize(), ItemStack.EMPTY);
     ContainerHelper.loadAllItems(items, this.contents);
   }
 
@@ -170,7 +170,6 @@ public class SpecialChestInventory implements ILootrInventory {
   @Nullable
   @Override
   public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
-    // TODO: Enforce the size of `contents`
     if (menuBuilder != null) {
       return menuBuilder.build(id, inventory, this, getContainerSize() / 9);
     }
