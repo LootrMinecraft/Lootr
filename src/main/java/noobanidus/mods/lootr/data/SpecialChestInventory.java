@@ -34,7 +34,7 @@ public class SpecialChestInventory implements ILootrInventory {
     if (!contents.isEmpty()) {
       this.contents = contents;
     } else {
-      this.contents = NonNullList.withSize(27, ItemStack.EMPTY);
+      this.contents = NonNullList.withSize(newChestData.getSize(), ItemStack.EMPTY);
     }
     this.name = name;
   }
@@ -42,7 +42,7 @@ public class SpecialChestInventory implements ILootrInventory {
   public SpecialChestInventory(ChestData newChestData, CompoundTag items, String componentAsJSON) {
     this.newChestData = newChestData;
     this.name = Component.Serializer.fromJson(componentAsJSON);
-    this.contents = NonNullList.withSize(27, ItemStack.EMPTY);
+    this.contents = NonNullList.withSize(newChestData.getSize(), ItemStack.EMPTY);
     ContainerHelper.loadAllItems(items, this.contents);
   }
 
