@@ -11,7 +11,6 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.loot.conditions.LootCount;
 
-// TODO: Check where this should be registered
 public class ModStats {
   public static Stat<ResourceLocation> LOOTED_STAT;
 

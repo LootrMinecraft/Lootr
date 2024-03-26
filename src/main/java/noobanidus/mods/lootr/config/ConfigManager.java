@@ -529,7 +529,6 @@ public class ConfigManager {
   }
 
   private static <V extends Comparable<V>> BlockState safeReplace(BlockState state, BlockState original, Property<V> property) {
-    // TODO: Bit of a dirty hack
     if (property == ChestBlock.TYPE && state.hasProperty(property)) {
       return state.setValue(ChestBlock.TYPE, ChestType.SINGLE);
     }

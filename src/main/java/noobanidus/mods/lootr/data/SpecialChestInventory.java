@@ -16,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.MenuBuilder;
 import noobanidus.mods.lootr.api.inventory.ILootrInventory;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
@@ -96,6 +97,7 @@ public class SpecialChestInventory implements ILootrInventory {
 
   @Override
   public int getContainerSize() {
+    // This should always synchronize to newChestData.size()
     return this.contents.size();
   }
 
@@ -236,5 +238,19 @@ public class SpecialChestInventory implements ILootrInventory {
   @Override
   public NonNullList<ItemStack> getInventoryContents() {
     return this.contents;
+  }
+
+  public void resizeInventory (int newSize) {
+    if (newSize > this.contents.size()) {
+      NonNullList<ItemStack> oldContents = this.contents;
+      this.contents = NonNullList.withSize(newSize, ItemStack.EMPTY);
+      for (int i = 0; i < oldContents.size(); i++) {
+        this.contents.set(i, oldContents.get(i));
+      }
+      // TODO: Remove this once we confirm it works
+      LootrAPI.LOG.info("Resized inventory with key '" + newChestData.getKey() + "' in dimension '" + newChestData.getDimension() + "' at location '" + newChestData.getPos() + "' from " + oldContents.size() + " slots to " + newSize + " slots.");
+    } else if (newSize < this.contents.size()) {
+      throw new IllegalArgumentException("Cannot resize inventory associated with '" + newChestData.getKey() + "' in dimension '" + newChestData.getDimension() + "' at location '" + newChestData.getPos() + "' to a smaller size.");
+    }
   }
 }
