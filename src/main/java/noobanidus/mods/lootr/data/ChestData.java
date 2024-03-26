@@ -383,6 +383,7 @@ public class ChestData extends SavedData {
     }
     compound.putBoolean("custom", custom);
     compound.putBoolean("entity", entity);
+    compound.putInt("size", size);
     if (reference != null) {
       compound.putInt("referenceSize", reference.size());
       compound.put("reference", ContainerHelper.saveAllItems(new CompoundTag(), reference, true));
