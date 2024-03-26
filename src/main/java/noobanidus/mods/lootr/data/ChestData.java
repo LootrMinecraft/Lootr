@@ -45,7 +45,7 @@ public class ChestData extends SavedData {
   private NonNullList<ItemStack> reference;
   private boolean custom;
   private boolean entity;
-  private int size;
+  private int size = -1;
 
   protected ChestData(String key) {
     this.key = key;
@@ -55,8 +55,29 @@ public class ChestData extends SavedData {
     return pos;
   }
 
-  public int getSize () {
+  public String getKey() {
+    return key;
+  }
+
+  public ResourceKey<Level> getDimension() {
+    return dimension;
+  }
+
+  public int getSize() {
     return size;
+  }
+
+  private void setSize(int size) {
+    if (this.size == size) {
+      return;
+    }
+    if (size < this.size) {
+      throw new IllegalArgumentException("Cannot resize inventory associated with '" + getKey() + "' in dimension '" + getDimension() + "' at location '" + getPos() + "' to a smaller size.");
+    }
+    this.size = size;
+    for (SpecialChestInventory inventory : inventories.values()) {
+      inventory.resizeInventory(size);
+    }
   }
 
   @Nullable
@@ -239,7 +260,7 @@ public class ChestData extends SavedData {
     data.key = ID(id);
     data.dimension = dimension;
     data.pos = position;
-    data.size = size;
+    data.setSize(size);
     return data;
   }
 
@@ -305,9 +326,28 @@ public class ChestData extends SavedData {
     if (compound.contains("size", Tag.TAG_INT)) {
       data.size = compound.getInt("size");
     } else if (!compound.contains("referenceSize")) {
+      LootrAPI.LOG.error("Loaded a data file with no size: '" + data.key + "' located in dimension '" + data.dimension + "' at '" + data.pos + "'. Sizes will be guessed and updated in future.");
       // The unwrapper should really be filling this in, anyway.
     }
     ListTag compounds = compound.getList("inventories", Tag.TAG_COMPOUND);
+
+    if (data.size == -1) {
+      // We have no size saved and the unwrapper will only provide the correct size once the inventories have been deserialized. Thus, we need to make our best guess (the highest slot number of any contained inventory raised to the next highest power of 9) to safely deserialize now.
+      int maxSlot = -1;
+      for (int i = 0; i < compounds.size(); i++) {
+        CompoundTag thisTag = compounds.getCompound(i);
+        ListTag items = thisTag.getCompound("chest").getList("Items", 10);
+        for (int j = 0; j < items.size(); j++) {
+          CompoundTag itemTag = items.getCompound(j);
+          int slot = itemTag.getByte("Slot") & 255;
+          if (slot > maxSlot) {
+            maxSlot = slot;
+          }
+        }
+      }
+      data.size = maxSlot % 9 == 0 ? maxSlot : maxSlot + (9 - (maxSlot % 9));
+    }
+
     for (int i = 0; i < compounds.size(); i++) {
       CompoundTag thisTag = compounds.getCompound(i);
       CompoundTag items = thisTag.getCompound("chest");

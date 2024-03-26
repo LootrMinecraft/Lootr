@@ -71,7 +71,6 @@ public class LootrChestCartRenderer<T extends LootrChestMinecartEntity> extends 
     pMatrixStack.scale(0.75F, 0.75F, 0.75F);
     pMatrixStack.translate(-0.5D, (float) (j - 8) / 16.0F, 0.5D);
     pMatrixStack.mulPose(Axis.YP.rotationDegrees(90.0F));
-    // TODO: Tile
     LootrChestItemRenderer.getInstance().renderByMinecart(pEntity, pMatrixStack, pBuffer, pPackedLight);
     pMatrixStack.popPose();
 
