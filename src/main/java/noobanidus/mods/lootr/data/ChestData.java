@@ -327,7 +327,6 @@ public class ChestData extends SavedData {
       data.size = compound.getInt("size");
     } else if (!compound.contains("referenceSize")) {
       LootrAPI.LOG.error("Loaded a data file with no size: '" + data.key + "' located in dimension '" + data.dimension + "' at '" + data.pos + "'. Sizes will be guessed and updated in future. This message will only appear once; if it occurs multiple times for the same location, please report on GitHub.");
-      // The unwrapper should really be filling this in, anyway.
     }
     ListTag compounds = compound.getList("inventories", Tag.TAG_COMPOUND);
 
