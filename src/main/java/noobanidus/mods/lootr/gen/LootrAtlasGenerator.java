@@ -18,11 +18,10 @@ public class LootrAtlasGenerator extends SpriteSourceProvider {
 
   @Override
   protected void addSources() {
-    // TODO: Move these to the proper atlas locatiosn
-    this.atlas(BLOCKS_ATLAS).addSource(new SingleFile(LootrChestBlockRenderer.MATERIAL.texture(), Optional.empty()));
-    this.atlas(BLOCKS_ATLAS).addSource(new SingleFile(LootrChestBlockRenderer.MATERIAL2.texture(), Optional.empty()));
-    this.atlas(BLOCKS_ATLAS).addSource(new SingleFile(LootrShulkerBlockRenderer.MATERIAL.texture(), Optional.empty()));
-    this.atlas(BLOCKS_ATLAS).addSource(new SingleFile(LootrShulkerBlockRenderer.MATERIAL2.texture(), Optional.empty()));
+    this.atlas(CHESTS_ATLAS).addSource(new SingleFile(LootrChestBlockRenderer.MATERIAL.texture(), Optional.empty()));
+    this.atlas(CHESTS_ATLAS).addSource(new SingleFile(LootrChestBlockRenderer.MATERIAL2.texture(), Optional.empty()));
+    this.atlas(SHULKER_BOXES_ATLAS).addSource(new SingleFile(LootrShulkerBlockRenderer.MATERIAL.texture(), Optional.empty()));
+    this.atlas(SHULKER_BOXES_ATLAS).addSource(new SingleFile(LootrShulkerBlockRenderer.MATERIAL2.texture(), Optional.empty()));
     this.atlas(BLOCKS_ATLAS).addSource(new SingleFile(new ResourceLocation(LootrAPI.MODID, "chest_opened"), Optional.empty()));
     this.atlas(BLOCKS_ATLAS).addSource(new SingleFile(new ResourceLocation("minecraft", "entity/player/wide/steve"), Optional.empty()));
   }

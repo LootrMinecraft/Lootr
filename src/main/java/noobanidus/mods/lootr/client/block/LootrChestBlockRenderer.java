@@ -19,8 +19,8 @@ import java.util.UUID;
 @SuppressWarnings({"NullableProblems", "deprecation"})
 public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootBlockEntity> extends ChestRenderer<T> {
   private UUID playerId = null;
-  public static final Material MATERIAL = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(LootrAPI.MODID, "chest"));
-  public static final Material MATERIAL2 = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(LootrAPI.MODID, "chest_opened"));
+  public static final Material MATERIAL = new Material(Sheets.CHEST_SHEET, new ResourceLocation(LootrAPI.MODID, "chest"));
+  public static final Material MATERIAL2 = new Material(Sheets.CHEST_SHEET, new ResourceLocation(LootrAPI.MODID, "chest_opened"));
 
   public LootrChestBlockRenderer(BlockEntityRendererProvider.Context p_173607_) {
     super(p_173607_);
