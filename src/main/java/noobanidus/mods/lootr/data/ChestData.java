@@ -56,6 +56,10 @@ public class ChestData extends SavedData {
     return pos;
   }
 
+  public int getSize () {
+    return size;
+  }
+
   @Nullable
   public UUID getEntityId() {
     if (entity) {
