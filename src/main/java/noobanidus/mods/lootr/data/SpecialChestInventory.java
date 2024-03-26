@@ -5,6 +5,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
@@ -16,6 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.MenuBuilder;
 import noobanidus.mods.lootr.api.inventory.ILootrInventory;
@@ -152,10 +154,13 @@ public class SpecialChestInventory implements ILootrInventory {
     newChestData.setDirty();
   }
 
-  // TODO: The expectation in vanilla is that all instances of `Container` are also block entities. This is not the case for `SpecialChestInventory`; ergo, upon construction, some reference to the `ChestData` needs to be stored to allow for validity checks.
   @Override
   public boolean stillValid(Player player) {
-    return true;
+    if (!player.level().dimension().equals(newChestData.getDimension())) {
+      return false;
+    }
+    BlockEntity be = player.level().getBlockEntity(newChestData.getPos());
+    return Container.stillValidBlockEntity(be, player);
   }
 
   @Override
