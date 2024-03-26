@@ -160,6 +160,9 @@ public class SpecialChestInventory implements ILootrInventory {
       return false;
     }
     BlockEntity be = player.level().getBlockEntity(newChestData.getPos());
+    if (be == null) {
+      return false;
+    }
     return Container.stillValidBlockEntity(be, player);
   }
 
