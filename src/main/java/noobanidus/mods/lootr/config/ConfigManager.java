@@ -424,12 +424,6 @@ public class ConfigManager {
         return true;
       }
     }
-/*    if (!ConfigManager.getRefreshStructures().isEmpty()) {
-      StructureFeature<?> startAt = StructureUtil.featureFor(level, new BlockPos(entity.position()));
-      if (startAt != null && ConfigManager.getRefreshStructures().contains(startAt.getRegistryName())) {
-        return true;
-      }
-    }*/
     return isDimensionRefreshing(level.dimension());
   }
 
