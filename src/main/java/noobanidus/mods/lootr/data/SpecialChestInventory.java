@@ -10,6 +10,8 @@ import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.ContainerEntity;
+import net.minecraft.world.entity.vehicle.MinecartChest;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.MenuType;
@@ -159,11 +161,27 @@ public class SpecialChestInventory implements ILootrInventory {
     if (!player.level().dimension().equals(newChestData.getDimension())) {
       return false;
     }
-    BlockEntity be = player.level().getBlockEntity(newChestData.getPos());
-    if (be == null) {
-      return false;
+    if (newChestData.isEntity()) {
+      if (newChestData.getEntityId() == null) {
+        return false;
+      }
+      if (player.level() instanceof ServerLevel serverLevel) {
+        Entity entity = serverLevel.getEntity(newChestData.getEntityId());
+        if (entity instanceof ContainerEntity container) {
+          return container.isChestVehicleStillValid(player);
+        } else {
+          return false;
+        }
+      } else {
+        return true; // I'm not sure if this happens on the client or not.
+      }
+    } else {
+      BlockEntity be = player.level().getBlockEntity(newChestData.getPos());
+      if (be == null) {
+        return false;
+      }
+      return Container.stillValidBlockEntity(be, player);
     }
-    return Container.stillValidBlockEntity(be, player);
   }
 
   @Override
