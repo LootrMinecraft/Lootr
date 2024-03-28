@@ -22,6 +22,8 @@ public class LootrAPI {
 
   public static ILootrAPI INSTANCE;
 
+  public static boolean isSavingStructure;
+
   public static boolean clearPlayerLoot(ServerPlayer entity) {
     return INSTANCE.clearPlayerLoot(entity);
   }
@@ -36,5 +38,8 @@ public class LootrAPI {
 
   public static MenuProvider getModdedMenu(Level level, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
     return INSTANCE.getModdedMenu(level, id, pos, player, sizeSupplier, displaySupplier, filler, tableSupplier, seedSupplier);
+  }
+  public static boolean isSavingStructure() {
+    return INSTANCE.isSavingStructure();
   }
 }

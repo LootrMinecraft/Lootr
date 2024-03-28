@@ -9,7 +9,8 @@
     "MixinEndCityPieces$EndCityPiece",
     "MixinLevelChunk",
     "MixinPoiType",
-    "MixinPoiTypes"
+    "MixinPoiTypes",
+    "MixinStructureTemplate"
   ],
   "client": [
   ],
