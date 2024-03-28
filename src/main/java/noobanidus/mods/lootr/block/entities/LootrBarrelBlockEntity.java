@@ -1,7 +1,6 @@
 package noobanidus.mods.lootr.block.entities;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -30,7 +29,6 @@ import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BarrelBlock;
-import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
@@ -47,7 +45,6 @@ import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.block.LootrBarrelBlock;
 import noobanidus.mods.lootr.config.ConfigManager;
-import noobanidus.mods.lootr.data.ChestData;
 import noobanidus.mods.lootr.data.SpecialChestInventory;
 import noobanidus.mods.lootr.init.ModBlockEntities;
 import noobanidus.mods.lootr.util.Getter;
@@ -57,7 +54,6 @@ import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity implements ILootBlockEntity {
   public Set<UUID> openers = new HashSet<>();
@@ -235,7 +231,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
       compound.putLong("specialLootBarrel_seed", seed);
       compound.putLong("LootTableSeed", seed);
     }
-    if (!LootrAPI.isSavingStructure()) {
+    if (!LootrAPI.shouldDiscard()) {
       compound.putUUID("tileId", getTileId());
       ListTag list = new ListTag();
       for (UUID opener : this.openers) {

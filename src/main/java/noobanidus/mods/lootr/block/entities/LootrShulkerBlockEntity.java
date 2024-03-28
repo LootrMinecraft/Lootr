@@ -1,7 +1,6 @@
 package noobanidus.mods.lootr.block.entities;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -58,7 +57,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity implements ILootBlockEntity {
   public Set<UUID> openers = new HashSet<>();
@@ -256,7 +254,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
       compound.putLong("specialLootChest_seed", seed);
       compound.putLong("LootTableSeed", seed);
     }
-    if (!LootrAPI.isSavingStructure()) {
+    if (!LootrAPI.shouldDiscard()) {
       compound.putUUID("tileId", getTileId());
       ListTag list = new ListTag();
       for (UUID opener : this.openers) {
