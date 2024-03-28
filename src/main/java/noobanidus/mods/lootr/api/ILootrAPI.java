@@ -53,5 +53,10 @@ public interface ILootrAPI {
   @Nullable
   MenuProvider getModdedMenu(Level level, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier);
 
-  boolean isSavingStructure ();
+
+  default boolean isSavingStructure() {
+    return shouldDiscard();
+  }
+
+  boolean shouldDiscard ();
 }
