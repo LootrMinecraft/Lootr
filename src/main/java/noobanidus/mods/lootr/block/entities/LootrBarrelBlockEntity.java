@@ -237,12 +237,14 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
       compound.putLong("specialLootBarrel_seed", seed);
       compound.putLong("LootTableSeed", seed);
     }
-    compound.putUUID("tileId", getTileId());
-    ListTag list = new ListTag();
-    for (UUID opener : this.openers) {
-      list.add(NbtUtils.createUUID(opener));
+    if (!LootrAPI.isSavingStructure()) {
+      compound.putUUID("tileId", getTileId());
+      ListTag list = new ListTag();
+      for (UUID opener : this.openers) {
+        list.add(NbtUtils.createUUID(opener));
+      }
+      compound.put("LootrOpeners", list);
     }
-    compound.put("LootrOpeners", list);
   }
 
   @Override

@@ -10,6 +10,9 @@ import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import noobanidus.mods.lootr.api.ILootrAPI;
 import noobanidus.mods.lootr.api.LootFiller;
+import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.MenuBuilder;
+import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.data.DataStorage;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,6 +22,7 @@ import java.util.function.LongSupplier;
 import java.util.function.Supplier;
 
 public class LootrAPIImpl implements ILootrAPI {
+
   @Override
   public boolean clearPlayerLoot(UUID id) {
     return DataStorage.clearInventories(id);
@@ -33,5 +37,10 @@ public class LootrAPIImpl implements ILootrAPI {
   @Override
   public MenuProvider getModdedMenu(Level level, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
     return DataStorage.getInventory(level, id, pos, player, sizeSupplier, displaySupplier, filler, tableSupplier, seedSupplier);
+  }
+
+  @Override
+  public boolean isSavingStructure() {
+    return LootrAPI.isSavingStructure;
   }
 }
