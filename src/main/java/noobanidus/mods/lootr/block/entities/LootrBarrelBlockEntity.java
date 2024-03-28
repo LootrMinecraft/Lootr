@@ -54,6 +54,7 @@ import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity implements ILootBlockEntity {
   public Set<UUID> openers = new HashSet<>();
