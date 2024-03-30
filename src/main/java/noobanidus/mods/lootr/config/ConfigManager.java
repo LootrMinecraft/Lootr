@@ -56,7 +56,6 @@ public class ConfigManager {
 
   // Conversion
   public static final ModConfigSpec.BooleanValue DISABLE;
-  public static final ModConfigSpec.BooleanValue SKIP_UNLOADED;
   public static final ModConfigSpec.IntValue MAXIMUM_AGE;
   public static final ModConfigSpec.BooleanValue CONVERT_MINESHAFTS;
   public static final ModConfigSpec.BooleanValue CONVERT_ELYTRAS;
@@ -64,6 +63,7 @@ public class ConfigManager {
   public static final ModConfigSpec.BooleanValue CONVERT_TRAPPED_CHESTS;
   public static final ModConfigSpec.ConfigValue<List<? extends String>> ADDITIONAL_CHESTS;
   public static final ModConfigSpec.ConfigValue<List<? extends String>> ADDITIONAL_TRAPPED_CHESTS;
+  public static final int OLD_MAX_AGE = 60 * 10 * 10;
 
   // Breaking
   public static final ModConfigSpec.BooleanValue DISABLE_BREAK;
@@ -130,9 +130,8 @@ public class ConfigManager {
 
   static {
     RANDOMISE_SEED = COMMON_BUILDER.comment("determine whether or not loot generated is the same for all players using the provided seed, or randomised per player").define("randomise_seed", true);
-    MAXIMUM_AGE = COMMON_BUILDER.comment("the maximum age for containers; entries above this age will be discarded [default: 180 * 20, 3 minutes]").defineInRange("max_age", 60 * 10 * 10, 0, Integer.MAX_VALUE);
+    MAXIMUM_AGE = COMMON_BUILDER.comment("the maximum age for containers; entries above this age will be discarded [default: 60 * 20 * 15, fifteen minutes] [note: the value 6000 will be corrected to 18000. if you wish to use 6000, please use 6001 or 5999.]").defineInRange("max_age", 60 * 20 * 15, 0, Integer.MAX_VALUE);
     DISABLE = COMMON_BUILDER.comment("if true, no chests will be converted").define("disable", false);
-    SKIP_UNLOADED = COMMON_BUILDER.comment("skip unloaded block entities that are eligible for conversion, set to false to potentially resolve issues with containers that aren't being converted [default: true]").define("skip_unloaded", true);
     CONVERT_MINESHAFTS = COMMON_BUILDER.comment("whether or not mineshaft chest minecarts should be converted to standard loot chests").define("convert_mineshafts", true);
     CONVERT_ELYTRAS = COMMON_BUILDER.comment("whether or not the Elytra item frame should be converted into a standard loot chest with a guaranteed elytra").define("convert_elytras", true);
     CONVERT_WOODEN_CHESTS = COMMON_BUILDER.comment("whether or not the entire forge:chests/wooden tag should be added to the conversion list for structures (if they are backed by RandomizableContainerBlockEntity)").define("convert_wooden_chests", true);

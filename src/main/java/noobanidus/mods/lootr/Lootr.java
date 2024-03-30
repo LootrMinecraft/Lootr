@@ -38,6 +38,10 @@ public class Lootr {
     context.registerConfig(ModConfig.Type.COMMON, ConfigManager.COMMON_CONFIG);
     context.registerConfig(ModConfig.Type.CLIENT, ConfigManager.CLIENT_CONFIG);
     ConfigManager.loadConfig(ConfigManager.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve(LootrAPI.MODID + "-common.toml"));
+    if (ConfigManager.MAXIMUM_AGE.get() == ConfigManager.OLD_MAX_AGE) {
+      ConfigManager.MAXIMUM_AGE.set(60 * 20 * 15);
+      ConfigManager.COMMON_CONFIG.save();
+    }
     ConfigManager.loadConfig(ConfigManager.CLIENT_CONFIG, FMLPaths.CONFIGDIR.get().resolve(LootrAPI.MODID + "-client.toml"));
     NeoForge.EVENT_BUS.addListener(this::onCommands);
     ModTabs.register(modBus);
