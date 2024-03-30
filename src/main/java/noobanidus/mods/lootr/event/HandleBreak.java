@@ -30,20 +30,28 @@ public class HandleBreak {
           if (player.getAbilities().instabuild) {
             if (!player.isShiftKeyDown()) {
               event.setCanceled(true);
-              player.sendMessage(new TranslatableComponent("lootr.message.cannot_break_sneak").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))), Util.NIL_UUID);
+              player.sendMessage(new TranslatableComponent("lootr.message.cannot_break_sneak").setStyle(getChatStyle()), Util.NIL_UUID);
             }
           } else {
             event.setCanceled(true);
-            player.sendMessage(new TranslatableComponent("lootr.message.cannot_break").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))), Util.NIL_UUID);
+            player.sendMessage(new TranslatableComponent("lootr.message.cannot_break").setStyle(getChatStyle()), Util.NIL_UUID);
           }
         } else {
           if (!event.getPlayer().isShiftKeyDown()) {
             event.setCanceled(true);
-            event.getPlayer().sendMessage(new TranslatableComponent("lootr.message.should_sneak").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))), Util.NIL_UUID);
-            event.getPlayer().sendMessage(new TranslatableComponent("lootr.message.should_sneak2", new TranslatableComponent("lootr.message.should_sneak3").setStyle(Style.EMPTY.withBold(true))).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))), Util.NIL_UUID);
+            event.getPlayer().sendMessage(new TranslatableComponent("lootr.message.should_sneak").setStyle(getChatStyle()), Util.NIL_UUID);
+            event.getPlayer().sendMessage(new TranslatableComponent("lootr.message.should_sneak2", new TranslatableComponent("lootr.message.should_sneak3").setStyle(Style.EMPTY.withBold(true))).setStyle(getChatStyle()), Util.NIL_UUID);
           }
         }
       }
     }
+  }
+
+  public static Style getChatStyle () {
+    if (ConfigManager.DISABLE_MESSAGE_STYLES.get()) {
+      return Style.EMPTY;
+    }
+
+    return Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA));
   }
 }

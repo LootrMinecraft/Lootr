@@ -44,6 +44,7 @@ import net.minecraftforge.network.NetworkHooks;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.entity.ILootCart;
 import noobanidus.mods.lootr.config.ConfigManager;
+import noobanidus.mods.lootr.event.HandleBreak;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.init.ModEntities;
 import noobanidus.mods.lootr.network.OpenCart;
@@ -107,14 +108,14 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
       if (ConfigManager.DISABLE_BREAK.get()) {
         if (player.getAbilities().instabuild) {
           if (!player.isShiftKeyDown()) {
-            player.displayClientMessage(new TranslatableComponent("lootr.message.cannot_break_sneak").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))), true);
+            player.displayClientMessage(new TranslatableComponent("lootr.message.cannot_break_sneak").setStyle(HandleBreak.getChatStyle()), true);
           }
         } else {
           return false;
         }
       } else if (!source.getEntity().isShiftKeyDown()) {
-        source.getEntity().sendMessage(new TranslatableComponent("lootr.message.cart_should_sneak").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))), Util.NIL_UUID);
-        source.getEntity().sendMessage(new TranslatableComponent("lootr.message.should_sneak2", new TranslatableComponent("lootr.message.cart_should_sneak3").setStyle(Style.EMPTY.withBold(true))).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))), Util.NIL_UUID);
+        source.getEntity().sendMessage(new TranslatableComponent("lootr.message.cart_should_sneak").setStyle(HandleBreak.getChatStyle()), Util.NIL_UUID);
+        source.getEntity().sendMessage(new TranslatableComponent("lootr.message.should_sneak2", new TranslatableComponent("lootr.message.cart_should_sneak3").setStyle(Style.EMPTY.withBold(true))).setStyle(HandleBreak.getChatStyle()), Util.NIL_UUID);
       }
     } else {
       return true;
@@ -232,7 +233,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
       if (loottable == LootTable.EMPTY) {
         LootrAPI.LOG.error("Unable to fill loot in " + level.dimension() + " at " + position() + " as the loot table '" + (overrideTable != null ? overrideTable : this.lootTable) + "' couldn't be resolved! Please search the loot table in `latest.log` to see if there are errors in loading.");
         if (ConfigManager.REPORT_UNRESOLVED_TABLES.get() && player != null) {
-          player.sendMessage(new TranslatableComponent("lootr.message.invalid_table", (overrideTable != null ? overrideTable : this.lootTable).toString()).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED)).withBold(true)), Util.NIL_UUID);
+          player.sendMessage(new TranslatableComponent("lootr.message.invalid_table", (overrideTable != null ? overrideTable : this.lootTable).toString()).setStyle(ConfigManager.DISABLE_MESSAGE_STYLES.get() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED)).withBold(true)), Util.NIL_UUID);
         }
       }
       if (player instanceof ServerPlayer) {

@@ -8,8 +8,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraft.world.level.chunk.LevelChunk;
-import net.minecraftforge.event.level.ChunkEvent;
 import net.minecraftforge.event.server.*;
+import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import noobanidus.mods.lootr.api.LootrAPI;
@@ -22,7 +22,7 @@ public class HandleChunk {
 
   @SubscribeEvent
   public static void onChunkLoad(ChunkEvent.Load event) {
-    if (!event.getLevel().isClientSide()) {
+    if (!event.getWorld().isClientSide()) {
       ChunkAccess chunk = event.getChunk();
       if (chunk.getStatus().isOrAfter(ChunkStatus.FULL) && chunk instanceof LevelChunk lChunk) {
         synchronized (LOADED_CHUNKS) {
