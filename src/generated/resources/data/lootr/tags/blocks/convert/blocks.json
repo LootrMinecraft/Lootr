@@ -1,4 +1,5 @@
 {
+  "replace": false,
   "values": [
     "#lootr:convert/barrels",
     "#lootr:convert/chests",

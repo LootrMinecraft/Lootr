@@ -5,6 +5,11 @@ e247396a80390c473ec6c9fd3020f0afcc8e1083 data/lootr/loot_tables/chests/elytra.js
 18c47337dfb46828c56b6031d8d86a55c861dca3 data/lootr/tags/blocks/barrels.json
 734e49aa39f5bd0070a54d27fb207e914924e45f data/lootr/tags/blocks/chests.json
 46e11c3fc4c62059da1662577421bf90bfd54689 data/lootr/tags/blocks/containers.json
+bc203f09dd7f48965d146d0bd035fb904cb75e7d data/lootr/tags/blocks/convert/barrels.json
+add2b9a995ee536970ee82387f962c7ee9e47fe6 data/lootr/tags/blocks/convert/blocks.json
+74ffee7bfef188af031e479f80ba50b3f83e7d7f data/lootr/tags/blocks/convert/chests.json
+2fb4bd13f39b0957f79ed75a8c6d5020bfcac377 data/lootr/tags/blocks/convert/shulkers.json
+4d36af13634c91392813709de6688705ba66b46f data/lootr/tags/blocks/convert/trapped_chests.json
 9efb16735427690b8c68c4907694188a39e71aff data/lootr/tags/blocks/shulkers.json
 cf71f28e404bf52385782fbeb459ba2a55bbc304 data/lootr/tags/blocks/trapped_chests.json
 18c47337dfb46828c56b6031d8d86a55c861dca3 data/lootr/tags/items/barrels.json
