@@ -104,9 +104,15 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
       if ((player instanceof FakePlayer && ConfigManager.ENABLE_FAKE_PLAYER_BREAK.get()) || ConfigManager.ENABLE_BREAK.get()) {
         return false;
       }
-      if (((ConfigManager.DISABLE_BREAK.get() && player.isCreative()) || !ConfigManager.DISABLE_BREAK.get()) && source.getEntity().isShiftKeyDown()) {
-        return false;
-      } else {
+      if (ConfigManager.DISABLE_BREAK.get()) {
+        if (player.getAbilities().instabuild) {
+          if (!player.isShiftKeyDown()) {
+            player.displayClientMessage(new TranslatableComponent("lootr.message.cannot_break_sneak").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))), true);
+          }
+        } else {
+          return false;
+        }
+      } else if (!source.getEntity().isShiftKeyDown()) {
         source.getEntity().sendMessage(new TranslatableComponent("lootr.message.cart_should_sneak").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))), Util.NIL_UUID);
         source.getEntity().sendMessage(new TranslatableComponent("lootr.message.should_sneak2", new TranslatableComponent("lootr.message.cart_should_sneak3").setStyle(Style.EMPTY.withBold(true))).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))), Util.NIL_UUID);
       }
