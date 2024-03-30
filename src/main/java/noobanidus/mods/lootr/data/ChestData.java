@@ -54,6 +54,10 @@ public class ChestData extends SavedData {
     return pos;
   }
 
+  public ResourceKey<Level> getDimension () {
+    return dimension;
+  }
+
   @Nullable
   public UUID getEntityId() {
     if (entity) {
@@ -61,6 +65,10 @@ public class ChestData extends SavedData {
     }
 
     return null;
+  }
+
+  public boolean isEntity () {
+    return entity;
   }
 
   @Nullable

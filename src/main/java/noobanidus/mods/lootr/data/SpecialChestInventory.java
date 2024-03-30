@@ -11,16 +11,17 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.entity.vehicle.ContainerEntity;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import noobanidus.mods.lootr.api.LootrAPI;
-import noobanidus.mods.lootr.api.MenuBuilder;
 import noobanidus.mods.lootr.api.inventory.ILootrInventory;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
@@ -150,11 +151,42 @@ public class SpecialChestInventory implements ILootrInventory {
 
   @Override
   public boolean stillValid(Player player) {
-    if (!player.level().dimension().equals(newChestData.getDimension())) {
+    if (!player.level.dimension().equals(newChestData.getDimension())) {
       return false;
     }
-    BlockEntity be = player.level().getBlockEntity(newChestData.getPos());
-    return Container.stillValidBlockEntity(be, player);
+    if (newChestData.isEntity()) {
+      if (newChestData.getEntityId() == null) {
+        return false;
+      }
+      if (player.level instanceof ServerLevel serverLevel) {
+        Entity entity = serverLevel.getEntity(newChestData.getEntityId());
+        if (entity instanceof ContainerEntity container) {
+          return container.isChestVehicleStillValid(player);
+        } else {
+          return false;
+        }
+      } else {
+        return true; // I'm not sure if this happens on the client or not.
+      }
+    } else {
+      BlockEntity be = player.level.getBlockEntity(newChestData.getPos());
+      if (be == null) {
+        return false;
+      }
+      return stillValidBlockEntity(be, player, 8);
+    }
+  }
+
+  private static boolean stillValidBlockEntity(BlockEntity p_272877_, Player p_272670_, int p_273411_) {
+    Level level = p_272877_.getLevel();
+    BlockPos blockpos = p_272877_.getBlockPos();
+    if (level == null) {
+      return false;
+    } else if (level.getBlockEntity(blockpos) != p_272877_) {
+      return false;
+    } else {
+      return p_272670_.distanceToSqr((double)blockpos.getX() + 0.5D, (double)blockpos.getY() + 0.5D, (double)blockpos.getZ() + 0.5D) <= (double)(p_273411_ * p_273411_);
+    }
   }
 
   @Override
