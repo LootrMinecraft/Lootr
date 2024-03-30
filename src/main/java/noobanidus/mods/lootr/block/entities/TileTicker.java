@@ -104,7 +104,6 @@ public class TileTicker {
         }
 
         if (!level.getChunkSource().hasChunk(entry.getPosition().getX() >> 4, entry.getPosition().getZ() >> 4)) {
-          toRemove.add(entry);
           continue;
         }
 
