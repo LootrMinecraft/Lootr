@@ -59,7 +59,7 @@ public class ConfigManager {
 
   // Conversion
   public static final ForgeConfigSpec.BooleanValue DISABLE;
-  public static final ForgeConfigSpec.BooleanValue SKIP_UNLOADED;
+  public static final int OLD_MAX_AGE = 60 * 10 * 10;
   public static final ForgeConfigSpec.IntValue MAXIMUM_AGE;
   public static final ForgeConfigSpec.BooleanValue CONVERT_MINESHAFTS;
   public static final ForgeConfigSpec.BooleanValue CONVERT_ELYTRAS;
@@ -134,9 +134,8 @@ public class ConfigManager {
 
   static {
     RANDOMISE_SEED = COMMON_BUILDER.comment("determine whether or not loot generated is the same for all players using the provided seed, or randomised per player").define("randomise_seed", true);
-    MAXIMUM_AGE = COMMON_BUILDER.comment("the maximum age for containers; entries above this age will be discarded [default: 180 * 20, 3 minutes]").defineInRange("max_age", 60 * 10 * 10, 0, Integer.MAX_VALUE);
+    MAXIMUM_AGE = COMMON_BUILDER.comment("the maximum age for containers; entries above this age will be discarded [default: 60 * 20 * 15, fifteen minutes] [note: the value 6000 will be corrected to 18000. if you wish to use 6000, please use 6001 or 5999.]").defineInRange("max_age", 60 * 20 * 15, 0, Integer.MAX_VALUE);
     DISABLE = COMMON_BUILDER.comment("if true, no chests will be converted").define("disable", false);
-    SKIP_UNLOADED = COMMON_BUILDER.comment("skip unloaded block entities that are eligible for conversion, set to false to potentially resolve issues with containers that aren't being converted [default: true]").define("skip_unloaded", true);
     CONVERT_MINESHAFTS = COMMON_BUILDER.comment("whether or not mineshaft chest minecarts should be converted to standard loot chests").define("convert_mineshafts", true);
     CONVERT_ELYTRAS = COMMON_BUILDER.comment("whether or not the Elytra item frame should be converted into a standard loot chest with a guaranteed elytra").define("convert_elytras", true);
     CONVERT_QUARK = COMMON_BUILDER.comment("whether or not quark chests used in world generation for loot purposes should be replaced with Lootr chests").define("convert_quark", true);
