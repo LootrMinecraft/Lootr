@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.block.entities;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -56,6 +57,7 @@ import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity implements ILootBlockEntity {
   public Set<UUID> openers = new HashSet<>();
