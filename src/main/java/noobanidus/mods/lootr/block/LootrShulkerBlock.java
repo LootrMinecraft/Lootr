@@ -158,11 +158,6 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
   }
 
   @Override
-  public ItemStack getCloneItemStack(BlockGetter pLevel, BlockPos pPos, BlockState pState) {
-    return new ItemStack(ModItems.SHULKER);
-  }
-
-  @Override
   @Nullable
   public DyeColor getColor() {
     return DyeColor.YELLOW;
