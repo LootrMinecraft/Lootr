@@ -13,6 +13,7 @@
   "lootr.message.refresh_in": "This container will refresh its contents in %s seconds.",
   "lootr.message.refresh_start": "The container will refresh with new contents in %s seconds!",
   "lootr.message.invalid_table": "The loot table for this container [%s] resolved to empty and loot could not be generated. Check your `latest.log` for errors.",
+  "lootr.message.invalid_block": "The container that you have tried to open is invalid as it has not generated its identifier.",
   "block.lootr.lootr_chest": "Loot Chest",
   "block.lootr.lootr_trapped_chest": "Loot Chest",
   "block.lootr.lootr_barrel": "Loot Barrel",
