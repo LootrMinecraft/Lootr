@@ -32,7 +32,7 @@ public class MixinPersistentEntitySectionManager {
         lootr.setLootTable(chest.lootTable, chest.lootTableSeed);
         cir.setReturnValue(false);
         cir.cancel();
-        EntityTicker.addEntity(lootr);
+        chest.level().addFreshEntity(lootr);
       }
     }
   }

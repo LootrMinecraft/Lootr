@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -64,7 +65,16 @@ public class TileTicker {
           toRemove.add(entry);
           continue;
         }
+        if (!level.getChunkSource().hasChunk(entry.getPosition().getX() >> 4, entry.getPosition().getZ() >> 4)) {
+          continue;
+        }
         boolean skip = false;
+        for (ChunkPos chunkPos : entry.getChunkPositions()) {
+          if (!level.getChunkSource().hasChunk(chunkPos.x, chunkPos.z)) {
+            skip = true;
+            break;
+          }
+        }
         synchronized (HandleChunk.LOADED_CHUNKS) {
           Set<ChunkPos> loadedChunks = HandleChunk.LOADED_CHUNKS.get(entry.dimension);
           if (loadedChunks != null) {
@@ -88,15 +98,6 @@ public class TileTicker {
           toRemove.add(entry);
           continue;
         }
-        // TODO: Structure blacklisting
-/*          if (!ConfigManager.getLootStructureBlacklist().isEmpty()) {
-            StructureFeature<?> startAt = StructureUtil.featureFor(level, entry.getPosition());
-            if (startAt != null && ConfigManager.getLootStructureBlacklist().contains(startAt.getRegistryName())) {
-              toRemove.add(entry);
-              continue;
-            }
-          }*/
-        // TODO: Replacement config
         BlockState stateAt = level.getBlockState(entry.getPosition());
         BlockState replacement = ConfigManager.replacement(stateAt);
         if (replacement == null) {
