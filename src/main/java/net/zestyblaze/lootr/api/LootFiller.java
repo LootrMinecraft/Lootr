@@ -7,5 +7,5 @@ import org.jetbrains.annotations.NotNull;
 
 @FunctionalInterface
 public interface LootFiller {
-    void unpackLootTable(@NotNull Player player, Container container, ResourceLocation table, long seed);
+  void unpackLootTable(@NotNull Player player, Container container, ResourceLocation table, long seed);
 }

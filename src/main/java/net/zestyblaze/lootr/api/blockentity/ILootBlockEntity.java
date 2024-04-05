@@ -6,21 +6,20 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.zestyblaze.lootr.api.IHasOpeners;
 
-import java.util.Set;
 import java.util.UUID;
 
 public interface ILootBlockEntity extends IHasOpeners {
-    void unpackLootTable(Player player, Container inventory, ResourceLocation table, long seed);
+  void unpackLootTable(Player player, Container inventory, ResourceLocation table, long seed);
 
-    ResourceLocation getTable();
+  ResourceLocation getTable();
 
-    BlockPos getPosition();
+  BlockPos getPosition();
 
-    long getSeed();
+  long getSeed();
 
-    UUID getTileId();
+  UUID getTileId();
 
-    void updatePacketViaState();
+  void updatePacketViaState();
 
-    void setOpened(boolean opened);
+  void setOpened(boolean opened);
 }

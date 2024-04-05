@@ -17,13 +17,13 @@ import java.util.function.LongSupplier;
 import java.util.function.Supplier;
 
 public interface ILootrAPI {
-    boolean isFakePlayer (Player player);
+  boolean isFakePlayer(Player player);
 
-    default boolean clearPlayerLoot(ServerPlayer entity) {
-        return clearPlayerLoot(entity.getUUID());
-    }
+  default boolean clearPlayerLoot(ServerPlayer entity) {
+    return clearPlayerLoot(entity.getUUID());
+  }
 
-    boolean clearPlayerLoot(UUID id);
+  boolean clearPlayerLoot(UUID id);
 
   /**
    * Provides access to a Lootr-instanced inventory (and MenuProvider) for the relevant non-Lootr and non-Vanilla container.
@@ -45,10 +45,10 @@ public interface ILootrAPI {
    * @return Either the relevant inventory (cast as a MenuProvider) or null if the function was called with a client-size Level or an instance of Level that isn't ServerLevel.
    */
   @Nullable
-  ILootrInventory getInventory (Level level, UUID id, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier);
+  ILootrInventory getInventory(Level level, UUID id, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier);
 
   @Nullable
-  ILootrInventory getInventory (Level level, UUID id, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier, MenuBuilder builder);
+  ILootrInventory getInventory(Level level, UUID id, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier, MenuBuilder builder);
 
   @Deprecated
   @Nullable
@@ -70,10 +70,10 @@ public interface ILootrAPI {
    * See the documentation of the other `getModdedMenu` for more details.
    */
   @Nullable
-  ILootrInventory getInventory (Level level, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier);
+  ILootrInventory getInventory(Level level, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier);
 
   @Nullable
-  ILootrInventory getInventory (Level level, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier, MenuBuilder builder);
+  ILootrInventory getInventory(Level level, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier, MenuBuilder builder);
 
   @Deprecated
   @Nullable
@@ -87,8 +87,8 @@ public interface ILootrAPI {
     return getInventory(level, id, pos, player, sizeSupplier, displaySupplier, filler, tableSupplier, seedSupplier, builder);
   }
 
-    /**
-     * Provides access to the relevant configuration for the loot seed. This is used to determine if the provided seed is randomized or not.
-     */
-    long getLootSeed(long seed);
+  /**
+   * Provides access to the relevant configuration for the loot seed. This is used to determine if the provided seed is randomized or not.
+   */
+  long getLootSeed(long seed);
 }

@@ -5,7 +5,7 @@ import net.minecraft.server.level.ServerPlayer;
 import org.jetbrains.annotations.Nullable;
 
 public interface IGenericPredicate<T> {
-    boolean test(ServerPlayer player, T condition);
+  boolean test(ServerPlayer player, T condition);
 
-    IGenericPredicate<T> deserialize(@Nullable JsonObject element);
+  IGenericPredicate<T> deserialize(@Nullable JsonObject element);
 }

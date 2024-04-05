@@ -11,11 +11,11 @@ import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
 public interface ILootrInventory extends Container, MenuProvider {
-    @Nullable BaseContainerBlockEntity getTile(Level world);
+  @Nullable BaseContainerBlockEntity getTile(Level world);
 
-    @Nullable AbstractMinecartContainer getEntity(Level world);
+  @Nullable AbstractMinecartContainer getEntity(Level world);
 
-    @Nullable BlockPos getPos();
+  @Nullable BlockPos getPos();
 
-    NonNullList<ItemStack> getContents();
+  NonNullList<ItemStack> getContents();
 }
