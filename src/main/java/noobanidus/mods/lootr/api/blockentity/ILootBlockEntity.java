@@ -1,10 +1,10 @@
-package net.zestyblaze.lootr.api.blockentity;
+package noobanidus.mods.lootr.api.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
-import net.zestyblaze.lootr.api.IHasOpeners;
+import noobanidus.mods.lootr.api.IHasOpeners;
 
 import java.util.UUID;
 

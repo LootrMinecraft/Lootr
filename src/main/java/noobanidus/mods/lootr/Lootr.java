@@ -1,7 +1,7 @@
 package noobanidus.mods.lootr;
 
 import net.fabricmc.api.ModInitializer;
-import net.zestyblaze.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.command.CommandLootr;
 import noobanidus.mods.lootr.config.LootrConfigInit;
 import noobanidus.mods.lootr.event.LootrEventsInit;

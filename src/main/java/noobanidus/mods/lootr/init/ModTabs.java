@@ -6,7 +6,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-import net.zestyblaze.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.LootrAPI;
 
 public class ModTabs {
   public static final CreativeModeTab LOOTR_TAB = CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)

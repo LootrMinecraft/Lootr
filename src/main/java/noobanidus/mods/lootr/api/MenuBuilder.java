@@ -1,4 +1,4 @@
-package net.zestyblaze.lootr.api;
+package noobanidus.mods.lootr.api;
 
 
 import net.minecraft.world.Container;

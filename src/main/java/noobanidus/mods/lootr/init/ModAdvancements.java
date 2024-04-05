@@ -2,7 +2,7 @@ package noobanidus.mods.lootr.init;
 
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.resources.ResourceLocation;
-import net.zestyblaze.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.advancement.AdvancementPredicate;
 import noobanidus.mods.lootr.advancement.ContainerPredicate;
 import noobanidus.mods.lootr.advancement.GenericTrigger;

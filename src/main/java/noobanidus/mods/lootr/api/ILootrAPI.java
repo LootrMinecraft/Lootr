@@ -1,4 +1,4 @@
-package net.zestyblaze.lootr.api;
+package noobanidus.mods.lootr.api;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -8,7 +8,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
-import net.zestyblaze.lootr.api.inventory.ILootrInventory;
+import noobanidus.mods.lootr.api.inventory.ILootrInventory;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;

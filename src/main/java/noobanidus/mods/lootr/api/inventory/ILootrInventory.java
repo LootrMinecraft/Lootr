@@ -1,4 +1,4 @@
-package net.zestyblaze.lootr.api.inventory;
+package noobanidus.mods.lootr.api.inventory;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
