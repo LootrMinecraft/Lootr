@@ -10,14 +10,14 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import noobanidus.mods.lootr.blocks.entities.LootrShulkerBlockEntity;
-import noobanidus.mods.lootr.registry.LootrBlockInit;
+import noobanidus.mods.lootr.block.entities.LootrShulkerBlockEntity;
+import noobanidus.mods.lootr.init.ModBlocks;
 
 public class LootrShulkerItemRenderer extends BlockEntityWithoutLevelRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer {
   private static LootrShulkerItemRenderer INSTANCE = null;
 
   private BlockEntityRenderDispatcher blockEntityRenderDispatcher;
-  private final LootrShulkerBlockEntity tile = new LootrShulkerBlockEntity(BlockPos.ZERO, LootrBlockInit.CHEST.defaultBlockState());
+  private final LootrShulkerBlockEntity tile = new LootrShulkerBlockEntity(BlockPos.ZERO, ModBlocks.CHEST.defaultBlockState());
 
   public LootrShulkerItemRenderer(BlockEntityRenderDispatcher pBlockEntityRenderDispatcher, EntityModelSet pEntityModelSet) {
     super(pBlockEntityRenderDispatcher, pEntityModelSet);

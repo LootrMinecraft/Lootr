@@ -11,7 +11,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraft.world.phys.Vec3;
 import net.zestyblaze.lootr.api.blockentity.ILootBlockEntity;
-import noobanidus.mods.lootr.registry.LootrLootInit;
+import noobanidus.mods.lootr.init.ModLoot;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,7 +28,7 @@ public class LootCount implements LootItemCondition {
 
   @Override
   public @NotNull LootItemConditionType getType() {
-    return LootrLootInit.LOOT_COUNT;
+    return ModLoot.LOOT_COUNT;
   }
 
   @Override

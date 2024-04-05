@@ -14,10 +14,10 @@ import noobanidus.mods.lootr.client.block.LootrShulkerBlockRenderer;
 import noobanidus.mods.lootr.client.entity.LootrChestCartRenderer;
 import noobanidus.mods.lootr.client.item.LootrChestItemRenderer;
 import noobanidus.mods.lootr.client.item.LootrShulkerItemRenderer;
-import noobanidus.mods.lootr.registry.LootrBlockEntityInit;
-import noobanidus.mods.lootr.registry.LootrBlockInit;
-import noobanidus.mods.lootr.registry.LootrEntityInit;
-import noobanidus.mods.lootr.registry.LootrNetworkingInit;
+import noobanidus.mods.lootr.init.ModBlockEntities;
+import noobanidus.mods.lootr.init.ModBlocks;
+import noobanidus.mods.lootr.init.ModEntities;
+import noobanidus.mods.lootr.network.LootrNetworkingInit;
 
 @Environment(EnvType.CLIENT)
 public class LootrClient implements ClientModInitializer {
@@ -25,20 +25,20 @@ public class LootrClient implements ClientModInitializer {
   public void onInitializeClient() {
     LootrNetworkingInit.registerClientNetwork();
 
-    BlockEntityRenderers.register(LootrBlockEntityInit.SPECIAL_LOOT_CHEST, LootrChestBlockRenderer::new);
-    BuiltinItemRendererRegistry.INSTANCE.register(LootrBlockInit.CHEST, LootrChestItemRenderer.getInstance());
+    BlockEntityRenderers.register(ModBlockEntities.SPECIAL_LOOT_CHEST, LootrChestBlockRenderer::new);
+    BuiltinItemRendererRegistry.INSTANCE.register(ModBlocks.CHEST, LootrChestItemRenderer.getInstance());
 
-    BlockEntityRenderers.register(LootrBlockEntityInit.SPECIAL_TRAPPED_LOOT_CHEST, LootrChestBlockRenderer::new);
-    BuiltinItemRendererRegistry.INSTANCE.register(LootrBlockInit.TRAPPED_CHEST, LootrChestItemRenderer.getInstance());
+    BlockEntityRenderers.register(ModBlockEntities.SPECIAL_TRAPPED_LOOT_CHEST, LootrChestBlockRenderer::new);
+    BuiltinItemRendererRegistry.INSTANCE.register(ModBlocks.TRAPPED_CHEST, LootrChestItemRenderer.getInstance());
 
-    BlockEntityRenderers.register(LootrBlockEntityInit.SPECIAL_LOOT_INVENTORY, LootrChestBlockRenderer::new);
-    BuiltinItemRendererRegistry.INSTANCE.register(LootrBlockInit.INVENTORY, LootrChestItemRenderer.getInstance());
+    BlockEntityRenderers.register(ModBlockEntities.SPECIAL_LOOT_INVENTORY, LootrChestBlockRenderer::new);
+    BuiltinItemRendererRegistry.INSTANCE.register(ModBlocks.INVENTORY, LootrChestItemRenderer.getInstance());
 
-    BlockEntityRenderers.register(LootrBlockEntityInit.SPECIAL_LOOT_SHULKER, LootrShulkerBlockRenderer::new);
-    BuiltinItemRendererRegistry.INSTANCE.register(LootrBlockInit.SHULKER, LootrShulkerItemRenderer.getInstance());
+    BlockEntityRenderers.register(ModBlockEntities.SPECIAL_LOOT_SHULKER, LootrShulkerBlockRenderer::new);
+    BuiltinItemRendererRegistry.INSTANCE.register(ModBlocks.SHULKER, LootrShulkerItemRenderer.getInstance());
 
     ModelLoadingRegistry.INSTANCE.registerResourceProvider(o -> new BarrelModel.BarrelModelLoader());
 
-    EntityRendererRegistry.register(LootrEntityInit.LOOTR_MINECART_ENTITY, (context) -> new LootrChestCartRenderer<>(context, ModelLayers.CHEST_MINECART));
+    EntityRendererRegistry.register(ModEntities.LOOTR_MINECART_ENTITY, (context) -> new LootrChestCartRenderer<>(context, ModelLayers.CHEST_MINECART));
   }
 }

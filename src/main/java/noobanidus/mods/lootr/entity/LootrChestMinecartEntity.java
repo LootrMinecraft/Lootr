@@ -40,9 +40,9 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.zestyblaze.lootr.api.LootrAPI;
 import net.zestyblaze.lootr.api.entity.ILootCart;
-import noobanidus.mods.lootr.config.LootrModConfig;
+import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.network.NetworkConstants;
-import noobanidus.mods.lootr.registry.LootrBlockInit;
+import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.util.ChestUtil;
 import org.jetbrains.annotations.Nullable;
 
@@ -100,10 +100,10 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     }
 
     if (source.getEntity() instanceof ServerPlayer player) {
-      if (LootrAPI.isFakePlayer(player) && (LootrModConfig.get().breaking.enable_fake_player_break || LootrModConfig.get().breaking.enable_break)) {
+      if (LootrAPI.isFakePlayer(player) && (ConfigManager.get().breaking.enable_fake_player_break || ConfigManager.get().breaking.enable_break)) {
         return false;
       }
-      if ((LootrModConfig.get().breaking.disable_break && player.isCreative()) || (!LootrModConfig.get().breaking.disable_break && player.isShiftKeyDown())) {
+      if ((ConfigManager.get().breaking.disable_break && player.isCreative()) || (!ConfigManager.get().breaking.disable_break && player.isShiftKeyDown())) {
         return false;
       } else {
         source.getEntity().sendSystemMessage(Component.translatable("lootr.message.cart_should_sneak").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))));
@@ -139,7 +139,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     return Type.CHEST;
   }
 
-  private static final BlockState cartNormal = LootrBlockInit.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
+  private static final BlockState cartNormal = ModBlocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
 
   @Override
   public BlockState getDefaultDisplayBlockState() {
@@ -219,7 +219,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
       LootTable loottable = this.level().getServer().getLootData().getLootTable(overrideTable != null ? overrideTable : this.lootTable);
       if (loottable == LootTable.EMPTY) {
         LootrAPI.LOG.error("Unable to fill loot in " + level().dimension() + " at " + position() + " as the loot table '" + (overrideTable != null ? overrideTable : this.lootTable) + "' couldn't be resolved! Please search the loot table in `latest.log` to see if there are errors in loading.");
-        if (LootrModConfig.get().debug.report_invalid_tables && player != null) {
+        if (ConfigManager.get().debug.report_invalid_tables && player != null) {
           player.sendSystemMessage(Component.translatable("lootr.message.invalid_table", (overrideTable != null ? overrideTable : this.lootTable).toString()).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED)).withBold(true)));
         }
       }

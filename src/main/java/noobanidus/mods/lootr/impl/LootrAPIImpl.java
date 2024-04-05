@@ -11,7 +11,7 @@ import net.zestyblaze.lootr.api.ILootrAPI;
 import net.zestyblaze.lootr.api.LootFiller;
 import net.zestyblaze.lootr.api.MenuBuilder;
 import net.zestyblaze.lootr.api.inventory.ILootrInventory;
-import noobanidus.mods.lootr.config.LootrModConfig;
+import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.data.SpecialChestInventory;
 import org.jetbrains.annotations.Nullable;
@@ -70,7 +70,7 @@ public class LootrAPIImpl implements ILootrAPI {
 
   @Override
   public long getLootSeed(long seed) {
-    if (LootrModConfig.get().seed.randomize_seed || seed == -1) {
+    if (ConfigManager.get().seed.randomize_seed || seed == -1) {
       return ThreadLocalRandom.current().nextLong();
     }
     return seed;

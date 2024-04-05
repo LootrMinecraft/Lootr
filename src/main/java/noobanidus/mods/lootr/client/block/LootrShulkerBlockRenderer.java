@@ -18,8 +18,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.zestyblaze.lootr.api.LootrAPI;
-import noobanidus.mods.lootr.blocks.entities.LootrShulkerBlockEntity;
-import noobanidus.mods.lootr.config.LootrModConfig;
+import noobanidus.mods.lootr.block.entities.LootrShulkerBlockEntity;
+import noobanidus.mods.lootr.config.ConfigManager;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -37,7 +37,7 @@ public class LootrShulkerBlockRenderer implements BlockEntityRenderer<LootrShulk
   }
 
   protected Material getMaterial(LootrShulkerBlockEntity tile) {
-    if (LootrModConfig.get().vanilla.vanilla_textures) {
+    if (ConfigManager.get().vanilla.vanilla_textures) {
       return Sheets.DEFAULT_SHULKER_TEXTURE_LOCATION;
     }
     if (playerId == null) {

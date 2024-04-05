@@ -3,7 +3,7 @@ package noobanidus.mods.lootr.advancement;
 import com.google.gson.JsonObject;
 import net.minecraft.server.level.ServerPlayer;
 import net.zestyblaze.lootr.api.advancement.IGenericPredicate;
-import noobanidus.mods.lootr.registry.LootrStatsInit;
+import noobanidus.mods.lootr.init.ModStats;
 import org.jetbrains.annotations.Nullable;
 
 public class LootedStatPredicate implements IGenericPredicate<Void> {
@@ -18,7 +18,7 @@ public class LootedStatPredicate implements IGenericPredicate<Void> {
 
   @Override
   public boolean test(ServerPlayer player, Void condition) {
-    return player.getStats().getValue(LootrStatsInit.LOOTED_STAT) >= score;
+    return player.getStats().getValue(ModStats.LOOTED_STAT) >= score;
   }
 
   @Override
