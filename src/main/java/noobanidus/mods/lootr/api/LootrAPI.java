@@ -20,6 +20,7 @@ import java.util.function.Supplier;
 public class LootrAPI {
   public static final Logger LOG = LogManager.getLogger();
   public static final String MODID = "lootr";
+  public static final ResourceLocation ELYTRA_CHEST = new ResourceLocation(MODID, "chests/elytra");
 
   public static ILootrAPI INSTANCE;
 

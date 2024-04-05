@@ -90,6 +90,7 @@ public class ConfigManager implements ConfigData {
   public static class Conversion {
     public int max_entry_age = 60 * 10 * 20;
     public boolean disable = false;
+    public boolean elytra = true;
   }
 
   @ConfigEntry.Gui.CollapsibleObject
