@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.mixins;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.vehicle.MinecartChest;
@@ -28,11 +29,17 @@ public class MixinPersistentEntitySectionManager {
       }
       MinecartChest chest = (MinecartChest) entity;
       if (!chest.level().isClientSide && chest.lootTable != null && !ConfigManager.getLootBlacklist().contains(chest.lootTable)) {
-        LootrChestMinecartEntity lootr = new LootrChestMinecartEntity(ModEntities.LOOTR_MINECART_ENTITY, chest.getX(), chest.getY(), chest.getZ(), chest.level());
-        lootr.setLootTable(chest.lootTable, chest.lootTableSeed);
-        cir.setReturnValue(false);
-        cir.cancel();
-        chest.level().addFreshEntity(lootr);
+        if (chest.level() instanceof ServerLevel level) {
+          LootrChestMinecartEntity lootr = new LootrChestMinecartEntity(ModEntities.LOOTR_MINECART_ENTITY, chest.getX(), chest.getY(), chest.getZ(), chest.level());
+          lootr.setLootTable(chest.lootTable, chest.lootTableSeed);
+          cir.setReturnValue(false);
+          cir.cancel();
+          if (level.getServer().isSameThread()) {
+            chest.level().addFreshEntity(lootr);
+          } else {
+            EntityTicker.addEntity(lootr);
+          }
+        }
       }
     }
   }
