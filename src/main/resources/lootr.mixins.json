@@ -9,6 +9,8 @@
     "MixinPersistentEntitySectionManager",
     "MixinPlayerAdvancements"
     "MixinEndCityPieces$EndCityPiece",
+    "MixinPoiType",
+    "MixinPoiTypes"
   ],
   "client": [
   ],
