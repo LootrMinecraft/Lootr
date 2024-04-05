@@ -174,7 +174,8 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     }
     if (compound.hasUUID("tileId")) {
       this.tileId = compound.getUUID("tileId");
-    } else if (this.tileId == null) {
+    }
+    if (this.tileId == null) {
       getTileId();
     }
     if (compound.contains("LootrOpeners")) {
