@@ -92,12 +92,17 @@ public interface ILootrAPI {
    */
   long getLootSeed(long seed);
 
-  boolean isSavingStructure();
+  default boolean isSavingStructure() {
+    return shouldDiscard();
+  }
+
+  boolean shouldDiscard ();
 
   // TODO: Think on this.
   default boolean hasCapacity(String capacity) {
     return switch (capacity) {
       case LootrCapacities.STRUCTURE_SAVING -> true;
+      case LootrCapacities.SHOULD_DISCARD -> true;
       case LootrCapacities.CAPACITIES -> true;
       default -> false;
     };

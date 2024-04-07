@@ -80,6 +80,11 @@ public class LootrAPIImpl implements ILootrAPI {
 
   @Override
   public boolean isSavingStructure() {
-    return LootrAPI.isSavingStructure;
+    return shouldDiscard();
+  }
+
+  @Override
+  public boolean shouldDiscard() {
+    return LootrAPI.shouldDiscardIdAndOpeners;
   }
 }

@@ -131,7 +131,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
     if (seed != -1) {
       compound.putLong("LootTableSeed", seed);
     }
-    if (!LootrAPI.isSavingStructure()) {
+    if (!LootrAPI.shouldDiscard()) {
       compound.putUUID("tileId", getTileId());
       ListTag list = new ListTag();
       for (UUID opener : this.openers) {

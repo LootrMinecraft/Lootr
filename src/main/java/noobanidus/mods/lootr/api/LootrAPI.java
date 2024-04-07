@@ -28,7 +28,7 @@ public class LootrAPI {
     return INSTANCE.isFakePlayer(entity);
   }
 
-  public static boolean isSavingStructure;
+  public static boolean shouldDiscardIdAndOpeners;
 
   public static boolean clearPlayerLoot(ServerPlayer entity) {
     return INSTANCE.clearPlayerLoot(entity);
@@ -78,7 +78,11 @@ public class LootrAPI {
     return INSTANCE.getLootSeed(seed);
   }
 
-  public static boolean isSavingStructure() {
+  public static boolean isSavingStructure () {
+    return shouldDiscard();
+  }
+
+  public static boolean shouldDiscard() {
     return INSTANCE.isSavingStructure();
   }
 

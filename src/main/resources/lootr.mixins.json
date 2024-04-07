@@ -14,6 +14,7 @@
     "MixinStructureTemplate"
   ],
   "client": [
+    "MixinMinecraft"
   ],
   "injectors": {
     "defaultRequire": 1
