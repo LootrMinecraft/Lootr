@@ -21,6 +21,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ChestMenu;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.ChestBlock;
@@ -122,6 +123,15 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
     super.load(compound);
   }
 
+  private boolean savingToItem = false;
+
+  @Override
+  public void saveToItem(ItemStack itemstack) {
+    savingToItem = true;
+    super.saveToItem(itemstack);
+    savingToItem = false;
+  }
+
   @Override
   protected void saveAdditional(CompoundTag compound) {
     super.saveAdditional(compound);
@@ -131,7 +141,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
     if (seed != -1) {
       compound.putLong("LootTableSeed", seed);
     }
-    if (!LootrAPI.shouldDiscard()) {
+    if (!LootrAPI.shouldDiscard() && !savingToItem) {
       compound.putUUID("tileId", getTileId());
       ListTag list = new ListTag();
       for (UUID opener : this.openers) {
