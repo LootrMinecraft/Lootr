@@ -146,6 +146,7 @@ public class ConfigManager implements ConfigData {
   public static class Notifications {
     public int notification_delay = 30 * 20;
     public boolean disable_notifications = false;
+    public boolean disable_message_styles = false;
   }
 
   @ConfigEntry.Gui.CollapsibleObject
