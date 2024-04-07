@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.block.entities.LootrBarrelBlockEntity;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.util.ChestUtil;
@@ -23,13 +24,7 @@ public class LootrBarrelBlock extends BarrelBlock {
 
   @Override
   public float getExplosionResistance() {
-    if (ConfigManager.get().breaking.blast_immune) {
-      return Float.MAX_VALUE;
-    } else if (ConfigManager.get().breaking.blast_resistant) {
-      return 16.0f;
-    } else {
-      return super.getExplosionResistance();
-    }
+    return LootrAPI.getExplosionResistance(this, super.getExplosionResistance());
   }
 
   @Override

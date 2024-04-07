@@ -7,6 +7,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import noobanidus.mods.lootr.api.inventory.ILootrInventory;
 import org.apache.logging.log4j.LogManager;
@@ -78,7 +79,7 @@ public class LootrAPI {
     return INSTANCE.getLootSeed(seed);
   }
 
-  public static boolean isSavingStructure () {
+  public static boolean isSavingStructure() {
     return shouldDiscard();
   }
 
@@ -86,8 +87,12 @@ public class LootrAPI {
     return INSTANCE.isSavingStructure();
   }
 
+  public static float getExplosionResistance(Block block, float defaultResistance) {
+    return INSTANCE.getExplosionResistance(block, defaultResistance);
+  }
+
   // TODO: Consider if this is really needed
-  public static boolean hasCapacity (String capacity) {
+  public static boolean hasCapacity(String capacity) {
     return INSTANCE.hasCapacity(capacity);
   }
 }

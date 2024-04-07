@@ -1,7 +1,7 @@
 package noobanidus.mods.lootr.api;
 
 public interface LootrCapacities {
-  int VERSION = 2;
+  int VERSION = 3;
 
   // Available from: 1
   // Description: The initial capacities command.
@@ -17,4 +17,9 @@ public interface LootrCapacities {
   // such as during getCloneItemStack.
   // Provides: ILootrAPI::shouldDiscard
   String SHOULD_DISCARD = "should_discard_id_and_openers";
+  // Available from: 3
+  // Description: Returns a float value for the explosion resistance of a block
+  // depending on the configuration.
+  // Provides: ILootrAPI::getExplosionResistance
+  String EXPLOSION_RESISTANCE = "explosion_resistance";
 }

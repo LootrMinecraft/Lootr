@@ -7,6 +7,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import noobanidus.mods.lootr.api.inventory.ILootrInventory;
 import org.jetbrains.annotations.Nullable;
@@ -98,12 +99,15 @@ public interface ILootrAPI {
 
   boolean shouldDiscard ();
 
+  float getExplosionResistance (Block block, float defaultResistance);
+
   // TODO: Think on this.
   default boolean hasCapacity(String capacity) {
     return switch (capacity) {
       case LootrCapacities.STRUCTURE_SAVING -> true;
       case LootrCapacities.SHOULD_DISCARD -> true;
       case LootrCapacities.CAPACITIES -> true;
+      case LootrCapacities.EXPLOSION_RESISTANCE -> true;
       default -> false;
     };
   }

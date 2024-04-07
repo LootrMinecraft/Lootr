@@ -24,6 +24,7 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.block.entities.LootrChestBlockEntity;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlockEntities;
@@ -39,13 +40,7 @@ public class LootrChestBlock extends ChestBlock {
 
   @Override
   public float getExplosionResistance() {
-    if (ConfigManager.get().breaking.blast_immune) {
-      return Float.MAX_VALUE;
-    } else if (ConfigManager.get().breaking.blast_resistant) {
-      return 16.0f;
-    } else {
-      return super.getExplosionResistance();
-    }
+    return LootrAPI.getExplosionResistance(this, super.getExplosionResistance());
   }
 
   public LootrChestBlock(Properties properties, Supplier<BlockEntityType<? extends ChestBlockEntity>> supplier) {
