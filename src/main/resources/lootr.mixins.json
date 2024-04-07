@@ -10,7 +10,8 @@
     "MixinPlayerAdvancements",
     "MixinEndCityPieces$EndCityPiece",
     "MixinPoiType",
-    "MixinPoiTypes"
+    "MixinPoiTypes",
+    "MixinStructureTemplate"
   ],
   "client": [
   ],

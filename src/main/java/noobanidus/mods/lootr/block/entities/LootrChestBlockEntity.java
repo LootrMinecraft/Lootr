@@ -131,12 +131,14 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
     if (seed != -1) {
       compound.putLong("LootTableSeed", seed);
     }
-    compound.putUUID("tileId", getTileId());
-    ListTag list = new ListTag();
-    for (UUID opener : this.openers) {
-      list.add(NbtUtils.createUUID(opener));
+    if (!LootrAPI.isSavingStructure()) {
+      compound.putUUID("tileId", getTileId());
+      ListTag list = new ListTag();
+      for (UUID opener : this.openers) {
+        list.add(NbtUtils.createUUID(opener));
+      }
+      compound.put("LootrOpeners", list);
     }
-    compound.put("LootrOpeners", list);
   }
 
   public static <T extends BlockEntity> void lootrLidAnimateTick(Level pLevel, BlockPos pPos, BlockState pState, T pBlockEntity) {

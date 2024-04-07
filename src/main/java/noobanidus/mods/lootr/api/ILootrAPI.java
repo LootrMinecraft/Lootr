@@ -91,4 +91,6 @@ public interface ILootrAPI {
    * Provides access to the relevant configuration for the loot seed. This is used to determine if the provided seed is randomized or not.
    */
   long getLootSeed(long seed);
+
+  boolean isSavingStructure ();
 }
