@@ -22,4 +22,10 @@ public interface LootrCapacities {
   // depending on the configuration.
   // Provides: ILootrAPI::getExplosionResistance
   String EXPLOSION_RESISTANCE = "explosion_resistance";
+  // Available from: 3
+  // Description: Returns a float value for the destruction progress of a block
+  // depending on configuration.
+  // Provides: ILootrAPI::getDestructionProgress
+  String DESTRUCTION_PROGRESS = "destruction_progress";
+
 }

@@ -29,12 +29,12 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.block.entities.LootrShulkerBlockEntity;
-import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlockEntities;
 import noobanidus.mods.lootr.init.ModItems;
 import noobanidus.mods.lootr.util.ChestUtil;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class LootrShulkerBlock extends ShulkerBoxBlock {
@@ -123,15 +123,6 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
   }
 
   @Override
-  public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos) {
-    if (ConfigManager.get().breaking.power_comparators) {
-      return 1;
-    } else {
-      return 0;
-    }
-  }
-
-  @Override
   public ItemStack getCloneItemStack(BlockGetter pLevel, BlockPos pPos, BlockState pState) {
     return new ItemStack(ModItems.SHULKER);
   }
@@ -140,6 +131,16 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
   @Nullable
   public DyeColor getColor() {
     return DyeColor.YELLOW;
+  }
+
+  @Override
+  public float getDestroyProgress(BlockState p_60466_, Player p_60467_, BlockGetter p_60468_, BlockPos p_60469_) {
+    return LootrAPI.getDestroyProgress(p_60466_, p_60467_, p_60468_, p_60469_, super.getDestroyProgress(p_60466_, p_60467_, p_60468_, p_60469_));
+  }
+
+  @Override
+  public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos) {
+    return LootrAPI.getAnalogOutputSignal(pBlockState, pLevel, pPos, 0);
   }
 
   @Override

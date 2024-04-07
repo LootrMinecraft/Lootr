@@ -6,9 +6,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import noobanidus.mods.lootr.api.inventory.ILootrInventory;
 import org.jetbrains.annotations.Nullable;
 
@@ -97,9 +100,13 @@ public interface ILootrAPI {
     return shouldDiscard();
   }
 
-  boolean shouldDiscard ();
+  boolean shouldDiscard();
 
-  float getExplosionResistance (Block block, float defaultResistance);
+  float getExplosionResistance(Block block, float defaultResistance);
+
+  float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos position, float defaultProgress);
+
+  int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos, int defaultSignal);
 
   // TODO: Think on this.
   default boolean hasCapacity(String capacity) {
@@ -108,6 +115,7 @@ public interface ILootrAPI {
       case LootrCapacities.SHOULD_DISCARD -> true;
       case LootrCapacities.CAPACITIES -> true;
       case LootrCapacities.EXPLOSION_RESISTANCE -> true;
+      case LootrCapacities.DESTRUCTION_PROGRESS -> true;
       default -> false;
     };
   }

@@ -5,9 +5,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import noobanidus.mods.lootr.api.ILootrAPI;
 import noobanidus.mods.lootr.api.LootFiller;
 import noobanidus.mods.lootr.api.LootrAPI;
@@ -98,5 +101,21 @@ public class LootrAPIImpl implements ILootrAPI {
     } else {
       return defaultResistance;
     }
+  }
+
+  @Override
+  public float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos position, float defaultProgress) {
+    if (ConfigManager.DISABLE_BREAK.get()) {
+      return 0f;
+    }
+    return defaultProgress;
+  }
+
+  @Override
+  public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos, int defaultSignal) {
+    if (ConfigManager.POWER_COMPARATORS.get()) {
+      return 1;
+    }
+    return defaultSignal;
   }
 }
