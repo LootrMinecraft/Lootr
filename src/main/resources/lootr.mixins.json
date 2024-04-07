@@ -7,7 +7,7 @@
     "MixinCatSitOnBlock",
     "MixinLevelChunk",
     "MixinPersistentEntitySectionManager",
-    "MixinPlayerAdvancements"
+    "MixinPlayerAdvancements",
     "MixinEndCityPieces$EndCityPiece",
     "MixinPoiType",
     "MixinPoiTypes"
