@@ -94,9 +94,9 @@ public class LootrAPIImpl implements ILootrAPI {
 
   @Override
   public float getExplosionResistance(Block block, float defaultResistance) {
-    if (ConfigManager.BLAST_RESISTANT.get()) {
+    if (ConfigManager.get().breaking.blast_resistant) {
       return 16.0f;
-    } else if (ConfigManager.BLAST_IMMUNE.get()) {
+    } else if (ConfigManager.get().breaking.blast_immune) {
       return Float.MAX_VALUE;
     } else {
       return defaultResistance;
@@ -105,7 +105,7 @@ public class LootrAPIImpl implements ILootrAPI {
 
   @Override
   public float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos position, float defaultProgress) {
-    if (ConfigManager.DISABLE_BREAK.get()) {
+    if (ConfigManager.get().breaking.disable_break) {
       return 0f;
     }
     return defaultProgress;
@@ -113,7 +113,7 @@ public class LootrAPIImpl implements ILootrAPI {
 
   @Override
   public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos, int defaultSignal) {
-    if (ConfigManager.POWER_COMPARATORS.get()) {
+    if (ConfigManager.get().breaking.power_comparators) {
       return 1;
     }
     return defaultSignal;
