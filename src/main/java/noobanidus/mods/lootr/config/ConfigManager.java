@@ -382,6 +382,7 @@ public class ConfigManager implements ConfigData {
     public int max_entry_age = 60 * 10 * 20;
     public boolean disable = false;
     public boolean elytra = true;
+    public boolean world_border = false;
   }
 
   public static class Breaking {

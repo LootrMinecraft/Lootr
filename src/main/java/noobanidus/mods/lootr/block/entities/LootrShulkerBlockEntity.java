@@ -26,7 +26,6 @@ import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
@@ -56,8 +55,6 @@ import java.util.Set;
 import java.util.UUID;
 
 public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity implements ILootBlockEntity {
-  @Nullable
-  private final DyeColor color;
   public Set<UUID> openers = new HashSet<>();
   protected ResourceLocation savedLootTable = null;
   protected long seed = -1;
@@ -70,24 +67,23 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   private float progressOld;
   private boolean savingToItem = false;
 
-  public LootrShulkerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-    super(type, pos, state);
-    color = DyeColor.YELLOW;
+  public LootrShulkerBlockEntity(BlockEntityType<?> pType, BlockPos pPos, BlockState pState) {
+    super(pType, pPos, pState);
   }
 
-  public LootrShulkerBlockEntity(BlockPos pos, BlockState state) {
-    this(ModBlockEntities.SPECIAL_LOOT_SHULKER, pos, state);
+  public LootrShulkerBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
+    this(ModBlockEntities.SPECIAL_LOOT_SHULKER, pWorldPosition, pBlockState);
   }
 
-  public static void tick(Level level, BlockPos pos, BlockState state, LootrShulkerBlockEntity entity) {
-    entity.updateAnimation(level, pos, state);
+  public static void tick(Level pLevel, BlockPos pPos, BlockState pState, LootrShulkerBlockEntity pBlockEntity) {
+    pBlockEntity.updateAnimation(pLevel, pPos, pState);
   }
 
   private static void doNeighborUpdates(Level pLevel, BlockPos pPos, BlockState pState) {
     pState.updateNeighbourShapes(pLevel, pPos, 3);
   }
 
-  private void updateAnimation(Level level, BlockPos pos, BlockState state) {
+  private void updateAnimation(Level pLevel, BlockPos pPos, BlockState pState) {
     this.progressOld = this.progress;
     switch (this.animationStatus) {
       case CLOSED -> this.progress = 0.0F;
@@ -96,16 +92,16 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
         if (this.progress >= 1.0F) {
           this.animationStatus = ShulkerBoxBlockEntity.AnimationStatus.OPENED;
           this.progress = 1.0F;
-          doNeighborUpdates(level, pos, state);
+          doNeighborUpdates(pLevel, pPos, pState);
         }
-        this.moveCollidedEntities(level, pos, state);
+        this.moveCollidedEntities(pLevel, pPos, pState);
       }
       case CLOSING -> {
         this.progress -= 0.1F;
         if (this.progress <= 0.0F) {
           this.animationStatus = ShulkerBoxBlockEntity.AnimationStatus.CLOSED;
           this.progress = 0.0F;
-          doNeighborUpdates(level, pos, state);
+          doNeighborUpdates(pLevel, pPos, pState);
         }
       }
       case OPENED -> this.progress = 1.0F;
@@ -131,11 +127,13 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
             entity.move(MoverType.SHULKER_BOX, new Vec3((aabb.getXsize() + 0.01D) * (double) direction.getStepX(), (aabb.getYsize() + 0.01D) * (double) direction.getStepY(), (aabb.getZsize() + 0.01D) * (double) direction.getStepZ()));
           }
         }
-
       }
     }
   }
 
+  /**
+   * Returns the number of slots in the inventory.
+   */
   @Override
   public int getContainerSize() {
     return this.itemStacks.size();
@@ -169,7 +167,6 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
       }
 
       ++this.openCount;
-      assert this.level != null;
       this.level.blockEvent(this.worldPosition, this.getBlockState().getBlock(), 1, this.openCount);
       if (this.openCount == 1) {
         this.level.gameEvent(pPlayer, GameEvent.CONTAINER_OPEN, this.worldPosition);
@@ -182,7 +179,6 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   public void stopOpen(Player pPlayer) {
     if (!pPlayer.isSpectator()) {
       --this.openCount;
-      assert this.level != null;
       this.level.blockEvent(this.worldPosition, this.getBlockState().getBlock(), 1, this.openCount);
       if (this.openCount <= 0) {
         this.level.gameEvent(pPlayer, GameEvent.CONTAINER_CLOSE, this.worldPosition);
@@ -334,17 +330,6 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   public ClientboundBlockEntityDataPacket getUpdatePacket() {
     return ClientboundBlockEntityDataPacket.create(this, BlockEntity::getUpdateTag);
   }
-
-  //TODO: I've forgotten how we do these lol
-    /*
-    @Override
-    public void onDataPacket(@NotNull Connection net, @NotNull ClientboundBlockEntityDataPacket pkt) {
-        if (pkt.getTag() != null) {
-            load(pkt.getTag());
-        }
-    }
-
-     */
 
   @Override
   public void unpackLootTable(@Nullable Player player) {

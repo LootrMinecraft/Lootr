@@ -16,10 +16,6 @@ import org.jetbrains.annotations.Nullable;
 public class LootrInventoryBlockEntity extends LootrChestBlockEntity {
   private NonNullList<ItemStack> customInventory;
 
-  protected LootrInventoryBlockEntity(BlockEntityType<?> entity, BlockPos pos, BlockState state) {
-    super(entity, pos, state);
-  }
-
   public LootrInventoryBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
     super(ModBlockEntities.SPECIAL_LOOT_INVENTORY, pWorldPosition, pBlockState);
   }
@@ -43,6 +39,15 @@ public class LootrInventoryBlockEntity extends LootrChestBlockEntity {
     }
   }
 
+  @Nullable
+  public NonNullList<ItemStack> getCustomInventory() {
+    return customInventory;
+  }
+
+  public void setCustomInventory(NonNullList<ItemStack> customInventory) {
+    this.customInventory = customInventory;
+  }
+
   @Override
   protected void signalOpenCount(Level level, BlockPos blockPos, BlockState blockState, int i, int j) {
     super.signalOpenCount(level, blockPos, blockState, i, j);
@@ -51,14 +56,5 @@ public class LootrInventoryBlockEntity extends LootrChestBlockEntity {
       level.updateNeighborsAt(blockPos, block);
       level.updateNeighborsAt(blockPos.below(), block);
     }
-  }
-
-  @Nullable
-  public NonNullList<ItemStack> getCustomInventory() {
-    return customInventory;
-  }
-
-  public void setCustomInventory(NonNullList<ItemStack> customInventory) {
-    this.customInventory = customInventory;
   }
 }

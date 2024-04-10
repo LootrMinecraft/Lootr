@@ -11,6 +11,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.border.WorldBorder;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.config.ConfigManager;
@@ -27,11 +28,45 @@ public class TileTicker {
   private final static Set<Entry> pendingEntries = new ObjectLinkedOpenHashSet<>();
   private static boolean tickingList = false;
 
-  public static void addEntry(ResourceKey<Level> dimension, BlockPos position) {
-    if (ConfigManager.isDimensionBlacklisted(dimension) || ConfigManager.get().conversion.disable) {
+  public static void addEntry(Level level, BlockPos position) {
+    if (ConfigManager.get().conversion.disable) {
       return;
     }
-    Entry newEntry = new Entry(dimension, position);
+
+    if (ServerAccessImpl.getServer() == null) {
+      return;
+    }
+
+    ResourceKey<Level> dimension = level.dimension();
+    if (ConfigManager.isDimensionBlacklisted(dimension)) {
+      return;
+    }
+
+    ChunkPos chunkPos = new ChunkPos(position);
+
+    WorldBorder border = level.getWorldBorder();
+
+    Set<ChunkPos> chunks = new ObjectLinkedOpenHashSet<>();
+    chunks.add(chunkPos);
+
+    int oX = chunkPos.x;
+    int oZ = chunkPos.z;
+    chunks.add(chunkPos);
+
+    for (int x = -2; x <= 2; x++) {
+      for (int z = -2; z <= 2; z++) {
+        ChunkPos newPos = new ChunkPos(oX + x, oZ + z);
+        // This has the potential to force-load chunks on the main thread
+        // by ignoring the loading state of chunks outside the world border.
+        if (ConfigManager.get().conversion.world_border && !border.isWithinBounds(newPos)) {
+          continue;
+        }
+
+        chunks.add(newPos);
+      }
+    }
+
+    Entry newEntry = new Entry(dimension, position, chunks, ServerAccessImpl.getServer().getTickCount());
     synchronized (listLock) {
       if (tickingList) {
         pendingEntries.add(newEntry);
@@ -134,26 +169,14 @@ public class TileTicker {
   public static class Entry {
     private final ResourceKey<Level> dimension;
     private final BlockPos position;
-    private final Set<ChunkPos> chunks = new HashSet<>();
+    private final Set<ChunkPos> chunks;
     private final long addedAt;
 
-    public Entry(ResourceKey<Level> dimension, BlockPos position) {
+    public Entry(ResourceKey<Level> dimension, BlockPos position, Set<ChunkPos> chunks, long addedAt) {
       this.dimension = dimension;
       this.position = position;
-
-      ChunkPos chunkPos = new ChunkPos(this.position);
-
-      int oX = chunkPos.x;
-      int oZ = chunkPos.z;
-      chunks.add(chunkPos);
-
-      for (int x = -2; x <= 2; x++) {
-        for (int z = -2; z <= 2; z++) {
-          chunks.add(new ChunkPos(oX + x, oZ + z));
-        }
-      }
-
-      this.addedAt = ServerAccessImpl.getServer().getTickCount();
+      this.chunks = chunks;
+      this.addedAt = addedAt;
     }
 
     public ResourceKey<Level> getDimension() {
@@ -188,14 +211,6 @@ public class TileTicker {
       int result = dimension.hashCode();
       result = 31 * result + position.hashCode();
       return result;
-    }
-
-    @Override
-    public String toString() {
-      return "Entry{" +
-          "dimension=" + dimension +
-          ", position=" + position +
-          '}';
     }
   }
 }

@@ -48,13 +48,13 @@ public class LootrTrappedChestBlock extends ChestBlock {
   }
 
   @Override
-  public int getSignal(BlockState pState, BlockGetter pBlockAccess, BlockPos pPos, Direction pSide) {
+  public int getSignal(BlockState pBlockState, BlockGetter pBlockAccess, BlockPos pPos, Direction pSide) {
     return Mth.clamp(LootrChestBlockEntity.getOpenCount(pBlockAccess, pPos), 0, 15);
   }
 
   @Override
-  public int getDirectSignal(BlockState pState, BlockGetter pBlockAccess, BlockPos pPos, Direction pSide) {
-    return pSide == Direction.UP ? pState.getSignal(pBlockAccess, pPos, pSide) : 0;
+  public int getDirectSignal(BlockState pBlockState, BlockGetter pBlockAccess, BlockPos pPos, Direction pSide) {
+    return pSide == Direction.UP ? pBlockState.getSignal(pBlockAccess, pPos, pSide) : 0;
   }
 
   @Override
@@ -85,7 +85,6 @@ public class LootrTrappedChestBlock extends ChestBlock {
     return LootrAPI.getDestroyProgress(p_60466_, p_60467_, p_60468_, p_60469_, super.getDestroyProgress(p_60466_, p_60467_, p_60468_, p_60469_));
   }
 
-  // TODO: Check if this is needed
   @Override
   public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos) {
     return LootrAPI.getAnalogOutputSignal(pBlockState, pLevel, pPos, 0);

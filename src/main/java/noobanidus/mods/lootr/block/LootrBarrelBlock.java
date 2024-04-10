@@ -65,7 +65,7 @@ public class LootrBarrelBlock extends BarrelBlock {
   }
 
   @Override
-  public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource source) {
+  public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
     BlockEntity blockentity = pLevel.getBlockEntity(pPos);
     if (blockentity instanceof LootrBarrelBlockEntity barrel) {
       barrel.recheckOpen();

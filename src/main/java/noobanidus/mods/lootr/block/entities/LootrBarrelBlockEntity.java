@@ -41,6 +41,7 @@ import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.data.SpecialChestInventory;
 import noobanidus.mods.lootr.init.ModBlockEntities;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -51,6 +52,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   protected ResourceLocation savedLootTable = null;
   protected long seed = -1;
   protected UUID tileId = null;
+  private boolean opened = false;
   private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
     @Override
     protected void onOpen(Level leve, BlockPos pos, BlockState state) {
@@ -70,14 +72,18 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
 
     @Override
     protected boolean isOwnContainer(Player player) {
-      if (player.containerMenu instanceof ChestMenu menu && menu.getContainer() instanceof SpecialChestInventory chestInventory && chestInventory.getTileId() != null) {
-        return chestInventory.getTileId().equals(LootrBarrelBlockEntity.this.getTileId());
-      } else {
-        return false;
+      if (player.containerMenu instanceof ChestMenu) {
+        if (((ChestMenu) player.containerMenu).getContainer() instanceof SpecialChestInventory data) {
+          if (data.getTileId() == null) {
+            return data.getBlockEntity(LootrBarrelBlockEntity.this.getLevel()) == LootrBarrelBlockEntity.this;
+          } else {
+            return data.getTileId().equals(LootrBarrelBlockEntity.this.getTileId());
+          }
+        }
       }
+      return false;
     }
   };
-  protected boolean opened = false;
   private NonNullList<ItemStack> items = NonNullList.withSize(27, ItemStack.EMPTY);
   private boolean savingToItem = false;
 
@@ -111,12 +117,12 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   }
 
   @Override
-  public void unpackLootTable(Player player) {
+  public void unpackLootTable(@Nullable Player player) {
   }
 
   @Override
   @SuppressWarnings({"unused", "Duplicates"})
-  public void unpackLootTable(Player player, Container inventory, ResourceLocation overrideTable, long seed) {
+  public void unpackLootTable(Player player, Container inventory, @Nullable ResourceLocation overrideTable, long seed) {
     if (this.level != null && this.savedLootTable != null && this.level.getServer() != null) {
       LootTable loottable = this.level.getServer().getLootData().getLootTable(overrideTable != null ? overrideTable : this.savedLootTable);
       if (loottable == LootTable.EMPTY) {
@@ -185,6 +191,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
         this.openers.add(NbtUtils.loadUUID(item));
       }
     }
+    // TODO: Update model data here somewhere
     super.load(compound);
   }
 
@@ -199,11 +206,9 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   protected void saveAdditional(CompoundTag compound) {
     super.saveAdditional(compound);
     if (savedLootTable != null) {
-      compound.putString("specialLootBarrel_table", savedLootTable.toString());
       compound.putString("LootTable", savedLootTable.toString());
     }
     if (seed != -1) {
-      compound.putLong("specialLootBarrel_seed", seed);
       compound.putLong("LootTableSeed", seed);
     }
     if (!LootrAPI.shouldDiscard() && !savingToItem) {

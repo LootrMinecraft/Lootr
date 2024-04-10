@@ -70,15 +70,13 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
 
     @Override
     protected boolean isOwnContainer(Player player) {
-      if (!(player.containerMenu instanceof ChestMenu)) {
-        return false;
-      } else {
-        Container container = ((ChestMenu) player.containerMenu).getContainer();
-        if (container instanceof SpecialChestInventory chest) {
+      if (player.containerMenu instanceof ChestMenu menu) {
+        if (menu.getContainer() instanceof SpecialChestInventory chest) {
           return LootrChestBlockEntity.this.getTileId().equals(chest.getTileId());
         }
-        return false;
       }
+
+      return false;
     }
   };
   private boolean savingToItem = false;
@@ -95,18 +93,18 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
     ((LootrChestBlockEntity) pBlockEntity).chestLidController.tickLid();
   }
 
-  protected static void playSound(Level level, BlockPos pos, BlockState state, SoundEvent sound) {
-    ChestType chestType = state.getValue(ChestBlock.TYPE);
+  protected static void playSound(Level pLevel, BlockPos pPos, BlockState pState, SoundEvent pSound) {
+    ChestType chestType = pState.getValue(ChestBlock.TYPE);
     if (chestType != ChestType.LEFT) {
-      double d0 = (double) pos.getX() + 0.5D;
-      double d1 = (double) pos.getY() + 0.5D;
-      double d2 = (double) pos.getZ() + 0.5D;
+      double d0 = (double) pPos.getX() + 0.5D;
+      double d1 = (double) pPos.getY() + 0.5D;
+      double d2 = (double) pPos.getZ() + 0.5D;
       if (chestType == ChestType.RIGHT) {
-        Direction direction = ChestBlock.getConnectedDirection(state);
+        Direction direction = ChestBlock.getConnectedDirection(pState);
         d0 += (double) direction.getStepX() * 0.5D;
         d2 += (double) direction.getStepZ() * 0.5D;
       }
-      level.playSound(null, d0, d1, d2, sound, SoundSource.BLOCKS, 0.5F, level.random.nextFloat() * 0.1F + 0.9F);
+      pLevel.playSound(null, d0, d1, d2, pSound, SoundSource.BLOCKS, 0.5F, pLevel.random.nextFloat() * 0.1F + 0.9F);
     }
   }
 
@@ -240,6 +238,10 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
   }
 
   @Override
+  public void unpackLootTable(@Nullable Player player) {
+  }
+
+  @Override
   public void unpackLootTable(Player player, Container inventory, ResourceLocation overrideTable, long seed) {
     if (this.level != null && this.savedLootTable != null && this.level.getServer() != null) {
       LootTable loottable = this.level.getServer().getLootData().getLootTable(overrideTable != null ? overrideTable : this.savedLootTable);
@@ -259,11 +261,6 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
       loottable.fill(inventory, builder.create(LootContextParamSets.CHEST), LootrAPI.getLootSeed(seed == Long.MIN_VALUE ? this.seed : seed));
     }
   }
-
-  @Override
-  public void unpackLootTable(Player player) {
-  }
-
 
   @Override
   public ResourceLocation getTable() {
