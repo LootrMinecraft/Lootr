@@ -37,7 +37,7 @@ public class LootrShulkerItemRenderer extends BlockEntityWithoutLevelRenderer {
   }
 
   @Override
-  public void renderByItem(ItemStack p_108830_, ItemDisplayContext p_270899_, PoseStack p_108832_, MultiBufferSource p_108833_, int p_108834_, int p_108835_) {
-    this.blockEntityRenderDispatcher.renderItem(tile, p_108832_, p_108833_, p_108834_, p_108835_);
+  public void renderByItem(ItemStack stack, ItemDisplayContext mode, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
+    this.blockEntityRenderDispatcher.renderItem(tile, matrixStack, buffer, combinedLight, combinedOverlay);
   }
 }

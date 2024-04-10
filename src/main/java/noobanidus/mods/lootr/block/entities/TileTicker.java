@@ -143,6 +143,10 @@ public class TileTicker {
           toRemove.add(entry);
           continue;
         }
+        // Set loot table to null to prevent items dropping
+        // Don't use Clearable.tryClear because otherwise some
+        // chests that generate maps will cause massive amounts
+        // of lag.
         ResourceLocation table = be.lootTable;
         long seed = be.lootTableSeed;
         be.lootTable = null;

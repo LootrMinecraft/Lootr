@@ -29,7 +29,7 @@ import java.util.UUID;
 @SuppressWarnings("NullableProblems")
 public class SpecialChestInventory implements ILootrInventory {
   private final Component name;
-  private ChestData newChestData;
+  private final ChestData newChestData;
   private NonNullList<ItemStack> contents;
   private MenuBuilder menuBuilder = null;
 

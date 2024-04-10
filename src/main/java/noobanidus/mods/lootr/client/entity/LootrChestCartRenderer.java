@@ -14,8 +14,8 @@ import noobanidus.mods.lootr.client.item.LootrChestItemRenderer;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
 public class LootrChestCartRenderer<T extends LootrChestMinecartEntity> extends MinecartRenderer<T> {
-  public LootrChestCartRenderer(EntityRendererProvider.Context p_174300_, ModelLayerLocation p_174301_) {
-    super(p_174300_, p_174301_);
+  public LootrChestCartRenderer(EntityRendererProvider.Context context, ModelLayerLocation modelLayerLocation) {
+    super(context, modelLayerLocation);
   }
 
   @Override
