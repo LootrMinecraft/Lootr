@@ -4,7 +4,7 @@
   "package": "noobanidus.mods.lootr.mixins",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "MixinCatSitOnBlock",
+    "MixinCatSitOnBlockGoal",
     "MixinLevelChunk",
     "MixinPersistentEntitySectionManager",
     "MixinPlayerAdvancements",

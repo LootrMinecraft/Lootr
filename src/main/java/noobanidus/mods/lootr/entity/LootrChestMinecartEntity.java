@@ -52,7 +52,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class LootrChestMinecartEntity extends AbstractMinecartContainer implements ILootCart {
-  private static final BlockState cartNormal = ModBlocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
+  private static BlockState cartNormal = null; //ModBlocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
   private final Set<UUID> openers = new HashSet<>();
   private boolean opened = false;
 
@@ -120,6 +120,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
       } else if (!source.getEntity().isShiftKeyDown()) {
         ((Player) source.getEntity()).displayClientMessage(Component.translatable("lootr.message.cart_should_sneak").setStyle(HandleBreak.getChatStyle()), false);
         ((Player) source.getEntity()).displayClientMessage(Component.translatable("lootr.message.should_sneak2", Component.translatable("lootr.message.cart_should_sneak3").setStyle(Style.EMPTY.withBold(true))).setStyle(HandleBreak.getChatStyle()), false);
+        // TODO: Confirm this is broken
       }
     } else {
       return true;
@@ -153,6 +154,9 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
 
   @Override
   public BlockState getDefaultDisplayBlockState() {
+    if (cartNormal == null) {
+      cartNormal = ModBlocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
+    }
     return cartNormal;
   }
 
