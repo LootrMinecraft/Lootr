@@ -42,10 +42,6 @@ public class LootrChestBlock extends ChestBlock {
     return LootrAPI.getExplosionResistance(this, super.getExplosionResistance());
   }
 
-  public LootrChestBlock(Properties properties, Supplier<BlockEntityType<? extends ChestBlockEntity>> supplier) {
-    super(properties, supplier);
-  }
-
   @Override
   public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult trace) {
     if (player.isShiftKeyDown()) {
@@ -119,20 +115,6 @@ public class LootrChestBlock extends ChestBlock {
     BlockEntity blockentity = pLevel.getBlockEntity(pPos);
     if (blockentity instanceof LootrChestBlockEntity) {
       ((LootrChestBlockEntity) blockentity).recheckOpen();
-    }
-  }
-
-  @Override
-  public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
-    if (!pState.is(pNewState.getBlock())) {
-      BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-      if (blockentity instanceof LootrChestBlockEntity) {
-        pLevel.updateNeighbourForOutputSignal(pPos, pState.getBlock());
-      }
-
-      if (pState.hasBlockEntity() && (!pState.is(pNewState.getBlock()) || !pNewState.hasBlockEntity())) {
-        pLevel.removeBlockEntity(pPos);
-      }
     }
   }
 }

@@ -28,20 +28,6 @@ public class LootrBarrelBlock extends BarrelBlock {
   }
 
   @Override
-  public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
-    if (!pState.is(pNewState.getBlock())) {
-      BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-      if (blockentity instanceof Container) {
-        pLevel.updateNeighbourForOutputSignal(pPos, this);
-      }
-
-      if (pState.hasBlockEntity() && (!pState.is(pNewState.getBlock()) || !pNewState.hasBlockEntity())) {
-        pLevel.removeBlockEntity(pPos);
-      }
-    }
-  }
-
-  @Override
   public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult trace) {
     if (player.isShiftKeyDown()) {
       ChestUtil.handleLootSneak(this, world, pos, player);

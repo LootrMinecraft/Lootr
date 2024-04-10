@@ -28,8 +28,8 @@ import java.util.UUID;
 
 public class SpecialChestInventory implements ILootrInventory {
   private final ChestData newChestData;
-  private final NonNullList<ItemStack> contents;
   private final Component name;
+  private NonNullList<ItemStack> contents;
   private MenuBuilder menuBuilder = null;
 
   public SpecialChestInventory(ChestData newChestData, NonNullList<ItemStack> contents, Component name) {
@@ -160,6 +160,7 @@ public class SpecialChestInventory implements ILootrInventory {
     if (be == null) {
       return false;
     }
+    // TODO: Fix for minecarts
     return Container.stillValidBlockEntity(be, player);
   }
 

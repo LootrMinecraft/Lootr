@@ -30,15 +30,14 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.block.entities.LootrShulkerBlockEntity;
 import noobanidus.mods.lootr.init.ModBlockEntities;
-import noobanidus.mods.lootr.init.ModItems;
 import noobanidus.mods.lootr.util.ChestUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class LootrShulkerBlock extends ShulkerBoxBlock {
-  public LootrShulkerBlock(Properties properties) {
-    super(DyeColor.YELLOW, properties);
+  public LootrShulkerBlock(Properties pProperties) {
+    super(DyeColor.YELLOW, pProperties);
     this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.UP));
   }
 
@@ -47,12 +46,12 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
     return LootrAPI.getExplosionResistance(this, super.getExplosionResistance());
   }
 
-  private static boolean canOpen(BlockState state, Level level, BlockPos pos, LootrShulkerBlockEntity blockEntity) {
-    if (blockEntity.getAnimationStatus() != ShulkerBoxBlockEntity.AnimationStatus.CLOSED) {
+  private static boolean canOpen(BlockState pState, Level pLevel, BlockPos pPos, LootrShulkerBlockEntity pBlockEntity) {
+    if (pBlockEntity.getAnimationStatus() != ShulkerBoxBlockEntity.AnimationStatus.CLOSED) {
       return true;
     } else {
-      AABB aabb = Shulker.getProgressDeltaAabb(state.getValue(FACING), 0.0F, 0.5F).move(pos).deflate(1.0E-6D);
-      return level.noCollision(aabb);
+      AABB aabb = Shulker.getProgressDeltaAabb(pState.getValue(FACING), 0.0F, 0.5F).move(pPos).deflate(1.0E-6D);
+      return pLevel.noCollision(aabb);
     }
   }
 
@@ -64,8 +63,8 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
       return InteractionResult.CONSUME;
     } else {
       BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-      if (blockentity instanceof LootrShulkerBlockEntity lootrShulkerBox) {
-        if (canOpen(pState, pLevel, pPos, lootrShulkerBox)) {
+      if (blockentity instanceof LootrShulkerBlockEntity shulkerboxblockentity) {
+        if (canOpen(pState, pLevel, pPos, shulkerboxblockentity)) {
           if (pPlayer.isShiftKeyDown()) {
             ChestUtil.handleLootSneak(this, pLevel, pPos, pPlayer);
           } else {

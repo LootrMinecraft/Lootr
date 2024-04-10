@@ -38,23 +38,23 @@ public class LootrTrappedChestBlock extends ChestBlock {
   }
 
   @Override
-  public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-    return new LootrTrappedChestBlockEntity(pos, state);
+  public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
+    return new LootrTrappedChestBlockEntity(pPos, pState);
   }
 
   @Override
-  public boolean isSignalSource(BlockState state) {
+  public boolean isSignalSource(BlockState pState) {
     return true;
   }
 
   @Override
-  public int getSignal(BlockState state, BlockGetter block, BlockPos pos, Direction direction) {
-    return Mth.clamp(LootrChestBlockEntity.getOpenCount(block, pos), 0, 15);
+  public int getSignal(BlockState pState, BlockGetter pBlockAccess, BlockPos pPos, Direction pSide) {
+    return Mth.clamp(LootrChestBlockEntity.getOpenCount(pBlockAccess, pPos), 0, 15);
   }
 
   @Override
-  public int getDirectSignal(BlockState state, BlockGetter block, BlockPos pos, Direction direction) {
-    return direction == Direction.UP ? state.getSignal(block, pos, direction) : 0;
+  public int getDirectSignal(BlockState pState, BlockGetter pBlockAccess, BlockPos pPos, Direction pSide) {
+    return pSide == Direction.UP ? pState.getSignal(pBlockAccess, pPos, pSide) : 0;
   }
 
   @Override
@@ -68,15 +68,15 @@ public class LootrTrappedChestBlock extends ChestBlock {
   }
 
   @Override
-  public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor world, BlockPos currentPos, BlockPos facingPos) {
-    if (state.getValue(WATERLOGGED)) {
-      world.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
+  public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
+    if (stateIn.getValue(WATERLOGGED)) {
+      worldIn.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
     }
-    return state;
+    return stateIn;
   }
 
   @Override
-  public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+  public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
     return AABB;
   }
 
@@ -93,13 +93,13 @@ public class LootrTrappedChestBlock extends ChestBlock {
 
   @Override
   @Nullable
-  public MenuProvider getMenuProvider(BlockState state, Level world, BlockPos pos) {
+  public MenuProvider getMenuProvider(BlockState state, Level worldIn, BlockPos pos) {
     return null;
   }
 
   @Override
   @Nullable
-  public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> type) {
+  public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
     return pLevel.isClientSide ? LootrChestBlockEntity::lootrLidAnimateTick : null;
   }
 }

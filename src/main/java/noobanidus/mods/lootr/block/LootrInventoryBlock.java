@@ -45,10 +45,6 @@ public class LootrInventoryBlock extends ChestBlock {
     return LootrAPI.getExplosionResistance(this, super.getExplosionResistance());
   }
 
-  protected LootrInventoryBlock(Properties properties, Supplier<BlockEntityType<? extends ChestBlockEntity>> supplier) {
-    super(properties, supplier);
-  }
-
   @Override
   public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult trace) {
     if (player.isShiftKeyDown()) {
