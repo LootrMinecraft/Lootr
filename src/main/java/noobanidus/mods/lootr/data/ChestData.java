@@ -265,6 +265,10 @@ public class ChestData extends SavedData {
     return null;
   }
 
+  public boolean isEntity () {
+    return entity;
+  }
+
   public LootFiller customInventory() {
     return (player, inventory, table, seed) -> {
       for (int i = 0; i < reference.size(); i++) {

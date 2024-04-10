@@ -44,13 +44,13 @@ public class AdvancementData extends SavedData {
   }
 
   @Override
-  public CompoundTag save(CompoundTag compoundTag) {
+  public CompoundTag save(CompoundTag pCompound) {
     ListTag result = new ListTag();
     for (UUIDPair pair : this.data) {
       result.add(pair.serializeNBT());
     }
-    compoundTag.put("data", result);
-    return compoundTag;
+    pCompound.put("data", result);
+    return pCompound;
   }
 
   @Override

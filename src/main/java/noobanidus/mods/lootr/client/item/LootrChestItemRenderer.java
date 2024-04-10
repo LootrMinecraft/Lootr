@@ -18,10 +18,13 @@ import noobanidus.mods.lootr.init.ModBlocks;
 public class LootrChestItemRenderer extends BlockEntityWithoutLevelRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer {
   private static LootrChestItemRenderer INSTANCE = null;
 
-  private final LootrChestBlockEntity tile = new LootrChestBlockEntity(BlockPos.ZERO, ModBlocks.CHEST.defaultBlockState());
+  private final BlockEntityRenderDispatcher blockEntityRenderDispatcher;
+  private final LootrChestBlockEntity tile;
 
   public LootrChestItemRenderer(BlockEntityRenderDispatcher pBlockEntityRenderDispatcher, EntityModelSet pEntityModelSet) {
     super(pBlockEntityRenderDispatcher, pEntityModelSet);
+    this.blockEntityRenderDispatcher = pBlockEntityRenderDispatcher;
+    this.tile = new LootrChestBlockEntity(BlockPos.ZERO, ModBlocks.CHEST.defaultBlockState());
   }
 
   public LootrChestItemRenderer() {
@@ -38,7 +41,7 @@ public class LootrChestItemRenderer extends BlockEntityWithoutLevelRenderer impl
 
   @Override
   public void renderByItem(ItemStack stack, ItemDisplayContext mode, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
-    Minecraft.getInstance().getBlockEntityRenderDispatcher().renderItem(tile, matrixStack, buffer, combinedLight, combinedOverlay);
+    this.blockEntityRenderDispatcher.renderItem(tile, matrixStack, buffer, combinedLight, combinedOverlay);
   }
 
   public void render(ItemStack stack, ItemDisplayContext mode, PoseStack matrices, MultiBufferSource vertexConsumers, int light, int overlay) {
@@ -48,8 +51,7 @@ public class LootrChestItemRenderer extends BlockEntityWithoutLevelRenderer impl
   public void renderByMinecart(LootrChestMinecartEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight) {
     boolean open = tile.isOpened();
     tile.setOpened(entity.isOpened());
-
-    Minecraft.getInstance().getBlockEntityRenderDispatcher().renderItem(tile, matrixStack, buffer, combinedLight, OverlayTexture.NO_OVERLAY);
+   this.blockEntityRenderDispatcher.renderItem(tile, matrixStack, buffer, combinedLight, OverlayTexture.NO_OVERLAY);
     tile.setOpened(open);
   }
 }

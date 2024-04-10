@@ -52,7 +52,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   protected ResourceLocation savedLootTable = null;
   protected long seed = -1;
   protected UUID tileId = null;
-  private boolean opened = false;
+  protected boolean opened = false;
   private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
     @Override
     protected void onOpen(Level leve, BlockPos pos, BlockState state) {

@@ -15,12 +15,14 @@ import noobanidus.mods.lootr.init.ModBlocks;
 
 public class LootrShulkerItemRenderer extends BlockEntityWithoutLevelRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer {
   private static LootrShulkerItemRenderer INSTANCE = null;
-  private final LootrShulkerBlockEntity tile = new LootrShulkerBlockEntity(BlockPos.ZERO, ModBlocks.CHEST.defaultBlockState());
+
   private BlockEntityRenderDispatcher blockEntityRenderDispatcher;
+  private final LootrShulkerBlockEntity tile;
 
   public LootrShulkerItemRenderer(BlockEntityRenderDispatcher pBlockEntityRenderDispatcher, EntityModelSet pEntityModelSet) {
     super(pBlockEntityRenderDispatcher, pEntityModelSet);
     this.blockEntityRenderDispatcher = pBlockEntityRenderDispatcher;
+    this.tile = new LootrShulkerBlockEntity(BlockPos.ZERO, ModBlocks.CHEST.defaultBlockState());
   }
 
   public LootrShulkerItemRenderer() {
@@ -36,12 +38,10 @@ public class LootrShulkerItemRenderer extends BlockEntityWithoutLevelRenderer im
 
   @Override
   public void renderByItem(ItemStack stack, ItemDisplayContext mode, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
-    if (this.blockEntityRenderDispatcher == null) {
-      this.blockEntityRenderDispatcher = Minecraft.getInstance().getBlockEntityRenderDispatcher();
-    }
     this.blockEntityRenderDispatcher.renderItem(tile, matrixStack, buffer, combinedLight, combinedOverlay);
   }
 
+  @Override
   public void render(ItemStack stack, ItemDisplayContext mode, PoseStack matrices, MultiBufferSource vertexConsumers, int light, int overlay) {
     renderByItem(stack, mode, matrices, vertexConsumers, light, overlay);
   }

@@ -75,7 +75,7 @@ public class TickingData extends SavedData {
   }
 
   @Override
-  public CompoundTag save(CompoundTag compound) {
+  public CompoundTag save(CompoundTag pCompound) {
     ListTag decayList = new ListTag();
     for (Object2IntMap.Entry<UUID> entry : tickMap.object2IntEntrySet()) {
       CompoundTag thisTag = new CompoundTag();
@@ -83,8 +83,8 @@ public class TickingData extends SavedData {
       thisTag.putInt("value", entry.getIntValue());
       decayList.add(thisTag);
     }
-    compound.put("result", decayList);
-    return compound;
+    pCompound.put("result", decayList);
+    return pCompound;
   }
 
   @Override

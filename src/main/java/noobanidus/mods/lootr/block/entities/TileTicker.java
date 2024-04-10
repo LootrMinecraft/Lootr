@@ -90,12 +90,8 @@ public class TileTicker {
     synchronized (worldLock) {
       MinecraftServer server = ServerAccessImpl.getServer();
       for (Entry entry : copy) {
-        if (entry.age(server) > ConfigManager.get().conversion.max_entry_age) {
-          toRemove.add(entry);
-          continue;
-        }
         ServerLevel level = server.getLevel(entry.getDimension());
-        if (level == null) {
+        if (level == null || entry.age(server) > ConfigManager.get().conversion.max_entry_age || (ConfigManager.get().conversion.world_border && !level.getWorldBorder().isWithinBounds(entry.getPosition()))) {
           toRemove.add(entry);
           continue;
         }

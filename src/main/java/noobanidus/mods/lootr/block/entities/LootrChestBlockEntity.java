@@ -85,8 +85,8 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
     super(type, pos, state);
   }
 
-  public LootrChestBlockEntity(BlockPos pos, BlockState state) {
-    this(ModBlockEntities.SPECIAL_LOOT_CHEST, pos, state);
+  public LootrChestBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
+    this(ModBlockEntities.SPECIAL_LOOT_CHEST, pWorldPosition, pBlockState);
   }
 
   public static <T extends BlockEntity> void lootrLidAnimateTick(Level pLevel, BlockPos pPos, BlockState pState, T pBlockEntity) {
@@ -94,12 +94,12 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
   }
 
   protected static void playSound(Level pLevel, BlockPos pPos, BlockState pState, SoundEvent pSound) {
-    ChestType chestType = pState.getValue(ChestBlock.TYPE);
-    if (chestType != ChestType.LEFT) {
+    ChestType chesttype = pState.getValue(ChestBlock.TYPE);
+    if (chesttype != ChestType.LEFT) {
       double d0 = (double) pPos.getX() + 0.5D;
       double d1 = (double) pPos.getY() + 0.5D;
       double d2 = (double) pPos.getZ() + 0.5D;
-      if (chestType == ChestType.RIGHT) {
+      if (chesttype == ChestType.RIGHT) {
         Direction direction = ChestBlock.getConnectedDirection(pState);
         d0 += (double) direction.getStepX() * 0.5D;
         d2 += (double) direction.getStepZ() * 0.5D;

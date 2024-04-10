@@ -10,6 +10,7 @@ import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.ContainerEntity;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.MenuType;
@@ -54,12 +55,12 @@ public class SpecialChestInventory implements ILootrInventory {
 
   @Override
   @Nullable
-  public BaseContainerBlockEntity getBlockEntity(Level world) {
-    if (world == null || world.isClientSide() || newChestData.getPos() == null) {
+  public BaseContainerBlockEntity getBlockEntity(Level level) {
+    if (level == null || level.isClientSide() || newChestData.getPos() == null) {
       return null;
     }
 
-    BlockEntity te = world.getBlockEntity(newChestData.getPos());
+    BlockEntity te = level.getBlockEntity(newChestData.getPos());
     if (te instanceof BaseContainerBlockEntity be) {
       return be;
     }
@@ -155,12 +156,27 @@ public class SpecialChestInventory implements ILootrInventory {
     if (!player.level().dimension().equals(newChestData.getDimension())) {
       return false;
     }
-    BlockEntity be = player.level().getBlockEntity(newChestData.getPos());
-    if (be == null) {
-      return false;
+    if (newChestData.isEntity()) {
+      if (newChestData.getEntityId() == null) {
+        return false;
+      }
+      if (player.level() instanceof ServerLevel level) {
+        Entity entity = level.getEntity(newChestData.getEntityId());
+        if (entity instanceof ContainerEntity container) {
+          return container.isChestVehicleStillValid(player);
+        } else {
+          return false;
+        }
+      } else {
+        return true;
+      }
+    } else {
+      BlockEntity be = player.level().getBlockEntity(newChestData.getPos());
+      if (be == null) {
+        return false;
+      }
+      return Container.stillValidBlockEntity(be, player);
     }
-    // TODO: Fix for minecarts
-    return Container.stillValidBlockEntity(be, player);
   }
 
   @Override
@@ -193,7 +209,7 @@ public class SpecialChestInventory implements ILootrInventory {
   @Override
   public void startOpen(Player player) {
     Level world = player.level();
-    BaseContainerBlockEntity tile = getTile(world);
+    BaseContainerBlockEntity tile = getBlockEntity(world);
     if (tile != null) {
       tile.startOpen(player);
     }
@@ -210,7 +226,7 @@ public class SpecialChestInventory implements ILootrInventory {
     setChanged();
     Level world = player.level();
     if (newChestData.getPos() != null) {
-      BaseContainerBlockEntity tile = getTile(world);
+      BaseContainerBlockEntity tile = getBlockEntity(world);
       if (tile != null) {
         tile.stopOpen(player);
       }

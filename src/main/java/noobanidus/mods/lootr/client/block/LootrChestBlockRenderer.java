@@ -72,6 +72,7 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootBloc
 
   protected Material getMaterial(T tile) {
     if (ConfigManager.isVanillaTextures()) {
+      // TODO: This will break with Christmas chests
       return Sheets.CHEST_LOCATION;
     }
     if (playerId == null) {

@@ -57,7 +57,7 @@ public class LootrShulkerBlockRenderer implements BlockEntityRenderer<LootrShulk
   public void render(LootrShulkerBlockEntity pBlockEntity, float pPartialTicks, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pCombinedLight, int pCombinedOverlay) {
     Direction direction = Direction.UP;
     if (pBlockEntity.hasLevel()) {
-      BlockState blockstate = Objects.requireNonNull(pBlockEntity.getLevel()).getBlockState(pBlockEntity.getBlockPos());
+      BlockState blockstate = pBlockEntity.getLevel().getBlockState(pBlockEntity.getBlockPos());
       if (blockstate.getBlock() instanceof ShulkerBoxBlock) {
         direction = blockstate.getValue(ShulkerBoxBlock.FACING);
       }
