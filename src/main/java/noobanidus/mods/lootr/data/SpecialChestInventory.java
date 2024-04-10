@@ -54,7 +54,7 @@ public class SpecialChestInventory implements ILootrInventory {
 
   @Override
   @Nullable
-  public BaseContainerBlockEntity getTile(Level world) {
+  public BaseContainerBlockEntity getBlockEntity(Level world) {
     if (world == null || world.isClientSide() || newChestData.getPos() == null) {
       return null;
     }
@@ -241,7 +241,7 @@ public class SpecialChestInventory implements ILootrInventory {
   }
 
   @Override
-  public NonNullList<ItemStack> getContents() {
+  public NonNullList<ItemStack> getInventoryContents() {
     return this.contents;
   }
 

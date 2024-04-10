@@ -108,10 +108,10 @@ public class LootrChestBlock extends ChestBlock {
   }
 
   @Override
-  public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource source) {
+  public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
     BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-    if (blockentity instanceof LootrChestBlockEntity) {
-      ((LootrChestBlockEntity) blockentity).recheckOpen();
+    if (blockentity instanceof LootrChestBlockEntity chest) {
+      chest.recheckOpen();
     }
   }
 }

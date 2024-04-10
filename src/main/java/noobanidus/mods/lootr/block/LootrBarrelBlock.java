@@ -3,6 +3,7 @@ package noobanidus.mods.lootr.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -24,6 +25,20 @@ public class LootrBarrelBlock extends BarrelBlock {
   @Override
   public float getExplosionResistance() {
     return LootrAPI.getExplosionResistance(this, super.getExplosionResistance());
+  }
+
+  @Override
+  public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
+    if (!pState.is(pNewState.getBlock())) {
+      BlockEntity blockentity = pLevel.getBlockEntity(pPos);
+      if (blockentity instanceof Container) {
+        pLevel.updateNeighbourForOutputSignal(pPos, this);
+      }
+
+      if (pState.hasBlockEntity() && (!pState.is(pNewState.getBlock()) || !pNewState.hasBlockEntity())) {
+        pLevel.removeBlockEntity(pPos);
+      }
+    }
   }
 
   @Override

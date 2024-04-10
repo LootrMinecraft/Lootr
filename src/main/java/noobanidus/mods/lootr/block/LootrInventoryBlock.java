@@ -105,39 +105,39 @@ public class LootrInventoryBlock extends ChestBlock {
   }
 
   @Override
+  public boolean isSignalSource(BlockState pState) {
+    return ConfigManager.get().breaking.trapped_custom;
+  }
+
+  @Override
+  public int getSignal(BlockState pBlockState, BlockGetter pBlockAccess, BlockPos pPos, Direction pSide) {
+    if (ConfigManager.get().breaking.trapped_custom) {
+      return Mth.clamp(LootrChestBlockEntity.getOpenCount(pBlockAccess, pPos), 0, 15);
+    } else {
+      return 0;
+    }
+  }
+
+  @Override
+  public int getDirectSignal(BlockState pBlockState, BlockGetter pBlockAccess, BlockPos pPos, Direction pSide) {
+    if (ConfigManager.get().breaking.trapped_custom) {
+      return pSide == Direction.UP ? pBlockState.getSignal(pBlockAccess, pPos, pSide) : 0;
+    } else {
+      return 0;
+    }
+  }
+
+  @Override
   @Nullable
   public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
     return pLevel.isClientSide ? LootrChestBlockEntity::lootrLidAnimateTick : null;
   }
 
   @Override
-  public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource source) {
+  public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
     BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-    if (blockentity instanceof LootrInventoryBlockEntity) {
-      ((LootrInventoryBlockEntity) blockentity).recheckOpen();
-    }
-  }
-
-  @Override
-  public boolean isSignalSource(BlockState blockState) {
-    return ConfigManager.get().breaking.trapped_custom;
-  }
-
-  @Override
-  public int getSignal(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, Direction direction) {
-    if (ConfigManager.get().breaking.trapped_custom) {
-      return Mth.clamp(LootrChestBlockEntity.getOpenCount(blockGetter, blockPos), 0, 15);
-    } else {
-      return super.getSignal(blockState, blockGetter, blockPos, direction);
-    }
-  }
-
-  @Override
-  public int getDirectSignal(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, Direction direction) {
-    if (ConfigManager.get().breaking.trapped_custom) {
-      return direction == Direction.UP ? blockState.getSignal(blockGetter, blockPos, direction) : 0;
-    } else {
-      return super.getDirectSignal(blockState, blockGetter, blockPos, direction);
+    if (blockentity instanceof LootrInventoryBlockEntity inventory)  {
+      inventory.recheckOpen();
     }
   }
 }
