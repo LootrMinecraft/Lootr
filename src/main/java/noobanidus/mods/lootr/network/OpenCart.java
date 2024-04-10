@@ -20,6 +20,11 @@ public class OpenCart {
     this.entityId = entityId;
   }
 
+  @OnlyIn(Dist.CLIENT)
+  private static void handle(OpenCart message, Supplier<NetworkEvent.Context> context) {
+    ClientHandlers.handleOpenCart(message, context);
+  }
+
   public void encode(FriendlyByteBuf buf) {
     buf.writeInt(this.entityId);
   }
@@ -27,11 +32,6 @@ public class OpenCart {
   public void handle(Supplier<NetworkEvent.Context> context) {
     context.get().enqueueWork(() -> handle(this, context));
     context.get().setPacketHandled(true);
-  }
-
-  @OnlyIn(Dist.CLIENT)
-  private static void handle(OpenCart message, Supplier<NetworkEvent.Context> context) {
-    ClientHandlers.handleOpenCart(message, context);
   }
 }
 

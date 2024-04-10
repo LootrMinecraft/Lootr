@@ -1,13 +1,8 @@
 package noobanidus.mods.lootr.client.block;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.datafixers.util.Pair;
-import com.mojang.math.Transformation;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockModel;
@@ -17,7 +12,6 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.*;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
@@ -28,14 +22,10 @@ import net.minecraftforge.client.model.geometry.IGeometryLoader;
 import net.minecraftforge.client.model.geometry.IUnbakedGeometry;
 import noobanidus.mods.lootr.block.LootrBarrelBlock;
 import noobanidus.mods.lootr.config.ConfigManager;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collection;
 import java.util.List;
-import java.util.Random;
-import java.util.Set;
 import java.util.function.Function;
 
 public class BarrelModel implements IUnbakedGeometry<BarrelModel> {
@@ -72,15 +62,15 @@ public class BarrelModel implements IUnbakedGeometry<BarrelModel> {
   }
 
   private static final class BarrelBakedModel implements IDynamicBakedModel {
-    private final BakedModel opened;
-    private final BakedModel unopened;
-    private final BakedModel vanilla;
-    private final ItemTransforms cameraTransforms;
     protected final boolean ambientOcclusion;
     protected final boolean gui3d;
     protected final boolean isSideLit;
     protected final TextureAtlasSprite particle;
     protected final ItemOverrides overrides;
+    private final BakedModel opened;
+    private final BakedModel unopened;
+    private final BakedModel vanilla;
+    private final ItemTransforms cameraTransforms;
 
     public BarrelBakedModel(boolean ambientOcclusion, boolean isGui3d, boolean isSideLit, TextureAtlasSprite particle, ItemOverrides overrides, BakedModel opened, BakedModel unopened, BakedModel vanilla, ItemTransforms cameraTransforms) {
       this.isSideLit = isSideLit;

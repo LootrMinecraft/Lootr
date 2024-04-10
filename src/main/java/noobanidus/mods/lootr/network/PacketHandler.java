@@ -18,14 +18,13 @@ import java.util.function.Supplier;
 public class PacketHandler {
 
   private static final String PROTOCOL_VERSION = Integer.toString(2);
-  private static short index = 0;
-
   public static final SimpleChannel HANDLER = NetworkRegistry.ChannelBuilder
       .named(new ResourceLocation(LootrAPI.MODID, "main_network_channel"))
       .clientAcceptedVersions(PROTOCOL_VERSION::equals)
       .serverAcceptedVersions(PROTOCOL_VERSION::equals)
       .networkProtocolVersion(() -> PROTOCOL_VERSION)
       .simpleChannel();
+  private static short index = 0;
 
   public static void registerMessages() {
     registerMessage(OpenCart.class, OpenCart::encode, OpenCart::new, OpenCart::handle);

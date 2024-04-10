@@ -49,12 +49,11 @@ import java.util.Set;
 import java.util.UUID;
 
 public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBlockEntity {
+  private final ChestLidController chestLidController = new ChestLidController();
   public Set<UUID> openers = new HashSet<>();
   protected ResourceLocation savedLootTable = null;
   protected long seed = -1;
   protected UUID tileId;
-  protected boolean opened;
-
   private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
     @Override
     protected void onOpen(Level level, BlockPos pos, BlockState state) {
@@ -82,7 +81,8 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
       return false;
     }
   };
-  private final ChestLidController chestLidController = new ChestLidController();
+  protected boolean opened;
+  private boolean savingToItem = false;
 
   protected LootrChestBlockEntity(BlockEntityType<?> p_155327_, BlockPos p_155328_, BlockState p_155329_) {
     super(p_155327_, p_155328_, p_155329_);
@@ -90,6 +90,38 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
 
   public LootrChestBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
     this(ModBlockEntities.LOOTR_CHEST.get(), pWorldPosition, pBlockState);
+  }
+
+  public static <T extends BlockEntity> void lootrLidAnimateTick(Level pLevel, BlockPos pPos, BlockState pState, T pBlockEntity) {
+    ((LootrChestBlockEntity) pBlockEntity).chestLidController.tickLid();
+  }
+
+  protected static void playSound(Level pLevel, BlockPos pPos, BlockState pState, SoundEvent pSound) {
+    ChestType chesttype = pState.getValue(ChestBlock.TYPE);
+    if (chesttype != ChestType.LEFT) {
+      double d0 = (double) pPos.getX() + 0.5D;
+      double d1 = (double) pPos.getY() + 0.5D;
+      double d2 = (double) pPos.getZ() + 0.5D;
+      if (chesttype == ChestType.RIGHT) {
+        Direction direction = ChestBlock.getConnectedDirection(pState);
+        d0 += (double) direction.getStepX() * 0.5D;
+        d2 += (double) direction.getStepZ() * 0.5D;
+      }
+
+      pLevel.playSound(null, d0, d1, d2, pSound, SoundSource.BLOCKS, 0.5F, pLevel.random.nextFloat() * 0.1F + 0.9F);
+    }
+  }
+
+  public static int getOpenCount(BlockGetter pLevel, BlockPos pPos) {
+    BlockState blockstate = pLevel.getBlockState(pPos);
+    if (blockstate.hasBlockEntity()) {
+      BlockEntity blockentity = pLevel.getBlockEntity(pPos);
+      if (blockentity instanceof LootrChestBlockEntity) {
+        return ((LootrChestBlockEntity) blockentity).openersCounter.getOpenerCount();
+      }
+    }
+
+    return 0;
   }
 
   @Override
@@ -129,8 +161,6 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
     super.load(compound);
   }
 
-  private boolean savingToItem = false;
-
   @Override
   public void saveToItem(ItemStack itemstack) {
     savingToItem = true;
@@ -156,26 +186,6 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
         list.add(NbtUtils.createUUID(opener));
       }
       compound.put("LootrOpeners", list);
-    }
-  }
-
-  public static <T extends BlockEntity> void lootrLidAnimateTick(Level pLevel, BlockPos pPos, BlockState pState, T pBlockEntity) {
-    ((LootrChestBlockEntity) pBlockEntity).chestLidController.tickLid();
-  }
-
-  protected static void playSound(Level pLevel, BlockPos pPos, BlockState pState, SoundEvent pSound) {
-    ChestType chesttype = pState.getValue(ChestBlock.TYPE);
-    if (chesttype != ChestType.LEFT) {
-      double d0 = (double) pPos.getX() + 0.5D;
-      double d1 = (double) pPos.getY() + 0.5D;
-      double d2 = (double) pPos.getZ() + 0.5D;
-      if (chesttype == ChestType.RIGHT) {
-        Direction direction = ChestBlock.getConnectedDirection(pState);
-        d0 += (double) direction.getStepX() * 0.5D;
-        d2 += (double) direction.getStepZ() * 0.5D;
-      }
-
-      pLevel.playSound(null, d0, d1, d2, pSound, SoundSource.BLOCKS, 0.5F, pLevel.random.nextFloat() * 0.1F + 0.9F);
     }
   }
 
@@ -222,18 +232,6 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
       BlockState state = level.getBlockState(getBlockPos());
       level.sendBlockUpdated(getBlockPos(), state, state, 8);
     }
-  }
-
-  public static int getOpenCount(BlockGetter pLevel, BlockPos pPos) {
-    BlockState blockstate = pLevel.getBlockState(pPos);
-    if (blockstate.hasBlockEntity()) {
-      BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-      if (blockentity instanceof LootrChestBlockEntity) {
-        return ((LootrChestBlockEntity) blockentity).openersCounter.getOpenerCount();
-      }
-    }
-
-    return 0;
   }
 
   @Override

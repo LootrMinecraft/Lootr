@@ -54,6 +54,44 @@ public class LootCount implements LootItemCondition {
     return ImmutableSet.of(LootContextParams.ORIGIN);
   }
 
+  public enum Operand implements BiPredicate<Integer, Integer> {
+    EQUALS(Integer::equals, 0),
+    NOT_EQUALS((a, b) -> !a.equals(b), 0),
+    LESS_THAN((a, b) -> (a < b), 1),
+    GREATER_THAN((a, b) -> (a > b), 1),
+    LESS_THAN_EQUALS((a, b) -> (a <= b), 1),
+    GREATER_THAN_EQUALS((a, b) -> (a >= b), 1);
+
+    private final BiPredicate<Integer, Integer> predicate;
+    private final int precedence;
+
+    Operand(BiPredicate<Integer, Integer> predicate, int precedence) {
+      this.predicate = predicate;
+      this.precedence = precedence;
+    }
+
+    @Nullable
+    public static Operand fromString(String name) {
+      name = name.toUpperCase(Locale.ROOT);
+      for (Operand o : values()) {
+        if (name.equals(o.name())) {
+          return o;
+        }
+      }
+
+      return null;
+    }
+
+    @Override
+    public boolean test(Integer integer, Integer integer2) {
+      return predicate.test(integer, integer2);
+    }
+
+    public int getPrecedence() {
+      return precedence;
+    }
+  }
+
   public static class Serializer implements net.minecraft.world.level.storage.loot.Serializer<LootCount> {
     @Override
     public void serialize(JsonObject object, LootCount count, JsonSerializationContext context) {
@@ -79,44 +117,6 @@ public class LootCount implements LootItemCondition {
     }
   }
 
-  public enum Operand implements BiPredicate<Integer, Integer> {
-    EQUALS(Integer::equals, 0),
-    NOT_EQUALS((a, b) -> !a.equals(b), 0),
-    LESS_THAN((a, b) -> (a < b), 1),
-    GREATER_THAN((a, b) -> (a > b), 1),
-    LESS_THAN_EQUALS((a, b) -> (a <= b), 1),
-    GREATER_THAN_EQUALS((a, b) -> (a >= b), 1);
-
-    private final BiPredicate<Integer, Integer> predicate;
-    private final int precedence;
-
-    Operand(BiPredicate<Integer, Integer> predicate, int precedence) {
-      this.predicate = predicate;
-      this.precedence = precedence;
-    }
-
-    @Override
-    public boolean test(Integer integer, Integer integer2) {
-      return predicate.test(integer, integer2);
-    }
-
-    public int getPrecedence() {
-      return precedence;
-    }
-
-    @Nullable
-    public static Operand fromString(String name) {
-      name = name.toUpperCase(Locale.ROOT);
-      for (Operand o : values()) {
-        if (name.equals(o.name())) {
-          return o;
-        }
-      }
-
-      return null;
-    }
-  }
-
   public static class Operation implements Predicate<Integer> {
     private final Operand operand;
     private final int value;
@@ -124,6 +124,15 @@ public class LootCount implements LootItemCondition {
     public Operation(Operand operand, int value) {
       this.operand = operand;
       this.value = value;
+    }
+
+    public static Operation deserialize(JsonObject object) {
+      String operand = object.get("type").getAsString();
+      Operand op = Operand.fromString(operand);
+      if (op == null) {
+        throw new IllegalArgumentException("invalid operand for operation: " + operand);
+      }
+      return new Operation(op, object.get("value").getAsInt());
     }
 
     public int getPrecedence() {
@@ -140,15 +149,6 @@ public class LootCount implements LootItemCondition {
       result.addProperty("type", operand.name().toLowerCase(Locale.ROOT));
       result.addProperty("value", value);
       return result;
-    }
-
-    public static Operation deserialize(JsonObject object) {
-      String operand = object.get("type").getAsString();
-      Operand op = Operand.fromString(operand);
-      if (op == null) {
-        throw new IllegalArgumentException("invalid operand for operation: " + operand);
-      }
-      return new Operation(op, object.get("value").getAsInt());
     }
   }
 }

@@ -20,6 +20,11 @@ public class CloseCart {
     this.entityId = entityId;
   }
 
+  @OnlyIn(Dist.CLIENT)
+  private static void handle(CloseCart message, Supplier<NetworkEvent.Context> context) {
+    ClientHandlers.handleCloseCart(message, context);
+  }
+
   public void encode(FriendlyByteBuf buf) {
     buf.writeInt(this.entityId);
   }
@@ -27,11 +32,6 @@ public class CloseCart {
   public void handle(Supplier<NetworkEvent.Context> context) {
     context.get().enqueueWork(() -> handle(this, context));
     context.get().setPacketHandled(true);
-  }
-
-  @OnlyIn(Dist.CLIENT)
-  private static void handle(CloseCart message, Supplier<NetworkEvent.Context> context) {
-    ClientHandlers.handleCloseCart(message, context);
   }
 }
 

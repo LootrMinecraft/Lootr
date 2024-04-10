@@ -2,7 +2,6 @@ package noobanidus.mods.lootr.util;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import noobanidus.mods.lootr.client.impl.ClientGetter;
 import noobanidus.mods.lootr.impl.ServerGetter;

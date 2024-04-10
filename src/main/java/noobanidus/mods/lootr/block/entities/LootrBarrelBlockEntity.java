@@ -92,12 +92,13 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
       return false;
     }
   };
+  private ModelData modelData = null;
+  private NonNullList<ItemStack> items = NonNullList.withSize(27, ItemStack.EMPTY);
+  private boolean savingToItem = false;
 
   public LootrBarrelBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
     super(ModBlockEntities.LOOTR_BARREL.get(), pWorldPosition, pBlockState);
   }
-
-  private ModelData modelData = null;
 
   @Nonnull
   @Override
@@ -126,8 +127,6 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     this.seed = seedIn;
     super.setLootTable(lootTableIn, seedIn);
   }
-
-  private NonNullList<ItemStack> items = NonNullList.withSize(27, ItemStack.EMPTY);
 
   @Override
   protected NonNullList<ItemStack> getItems() {
@@ -218,8 +217,6 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     requestModelDataUpdate();
     super.load(compound);
   }
-
-  private boolean savingToItem = false;
 
   @Override
   public void saveToItem(ItemStack itemstack) {

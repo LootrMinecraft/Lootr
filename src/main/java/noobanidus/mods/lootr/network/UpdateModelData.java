@@ -21,6 +21,11 @@ public class UpdateModelData {
     this.pos = pos;
   }
 
+  @OnlyIn(Dist.CLIENT)
+  private static void handle(UpdateModelData message, Supplier<NetworkEvent.Context> context) {
+    ClientHandlers.handleUpdateModel(message, context);
+  }
+
   public void encode(FriendlyByteBuf buf) {
     buf.writeBlockPos(pos);
   }
@@ -28,11 +33,6 @@ public class UpdateModelData {
   public void handle(Supplier<NetworkEvent.Context> context) {
     context.get().enqueueWork(() -> handle(this, context));
     context.get().setPacketHandled(true);
-  }
-
-  @OnlyIn(Dist.CLIENT)
-  private static void handle(UpdateModelData message, Supplier<NetworkEvent.Context> context) {
-    ClientHandlers.handleUpdateModel(message, context);
   }
 }
 

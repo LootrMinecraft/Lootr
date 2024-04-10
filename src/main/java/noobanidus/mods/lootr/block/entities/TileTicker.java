@@ -27,9 +27,9 @@ import java.util.Set;
 public class TileTicker {
   private final static Object listLock = new Object();
   private final static Object worldLock = new Object();
-  private static boolean tickingList = false;
   private final static Set<Entry> tileEntries = new ObjectLinkedOpenHashSet<>();
   private final static Set<Entry> pendingEntries = new ObjectLinkedOpenHashSet<>();
+  private static boolean tickingList = false;
 
   public static void addEntry(Level level, BlockPos position) {
     if (ConfigManager.DISABLE.get()) {

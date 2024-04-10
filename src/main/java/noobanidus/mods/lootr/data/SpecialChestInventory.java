@@ -11,7 +11,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.ContainerEntity;
-import net.minecraft.world.entity.vehicle.MinecartChest;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.MenuType;
@@ -19,7 +18,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.MenuBuilder;
 import noobanidus.mods.lootr.api.inventory.ILootrInventory;
@@ -30,9 +28,9 @@ import java.util.UUID;
 
 @SuppressWarnings("NullableProblems")
 public class SpecialChestInventory implements ILootrInventory {
+  private final Component name;
   private ChestData newChestData;
   private NonNullList<ItemStack> contents;
-  private final Component name;
   private MenuBuilder menuBuilder = null;
 
   public SpecialChestInventory(ChestData newChestData, NonNullList<ItemStack> contents, Component name) {
@@ -55,7 +53,6 @@ public class SpecialChestInventory implements ILootrInventory {
   public void setMenuBuilder(MenuBuilder builder) {
     this.menuBuilder = builder;
   }
-
 
 
   @Override
@@ -266,7 +263,7 @@ public class SpecialChestInventory implements ILootrInventory {
     return this.contents;
   }
 
-  public void resizeInventory (int newSize) {
+  public void resizeInventory(int newSize) {
     if (newSize > this.contents.size()) {
       NonNullList<ItemStack> oldContents = this.contents;
       this.contents = NonNullList.withSize(newSize, ItemStack.EMPTY);

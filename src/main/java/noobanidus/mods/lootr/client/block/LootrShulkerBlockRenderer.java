@@ -11,7 +11,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -27,9 +26,8 @@ import java.util.UUID;
 public class LootrShulkerBlockRenderer implements BlockEntityRenderer<LootrShulkerBlockEntity> {
   public static final Material MATERIAL = new Material(Sheets.SHULKER_SHEET, new ResourceLocation(LootrAPI.MODID, "shulker"));
   public static final Material MATERIAL2 = new Material(Sheets.SHULKER_SHEET, new ResourceLocation(LootrAPI.MODID, "shulker_opened"));
-  private UUID playerId;
-
   private final ShulkerModel<?> model;
+  private UUID playerId;
 
   public LootrShulkerBlockRenderer(BlockEntityRendererProvider.Context context) {
     this.model = new ShulkerModel<>(context.bakeLayer(ModelLayers.SHULKER));
@@ -75,7 +73,7 @@ public class LootrShulkerBlockRenderer implements BlockEntityRenderer<LootrShulk
     pMatrixStack.translate(0.0D, -1.0D, 0.0D);
     ModelPart modelpart = this.model.getLid();
     modelpart.setPos(0.0F, 24.0F - pBlockEntity.getProgress(pPartialTicks) * 0.5F * 16.0F, 0.0F);
-    modelpart.yRot = 270.0F * pBlockEntity.getProgress(pPartialTicks) * ((float)Math.PI / 180F);
+    modelpart.yRot = 270.0F * pBlockEntity.getProgress(pPartialTicks) * ((float) Math.PI / 180F);
     VertexConsumer vertexconsumer = material.buffer(pBuffer, RenderType::entityCutoutNoCull);
     this.model.renderToBuffer(pMatrixStack, vertexconsumer, pCombinedLight, pCombinedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
     pMatrixStack.popPose();

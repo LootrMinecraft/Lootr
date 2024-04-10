@@ -9,12 +9,12 @@ import net.minecraftforge.fml.common.Mod;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.client.block.BarrelModel;
 import noobanidus.mods.lootr.client.block.LootrChestBlockRenderer;
-import noobanidus.mods.lootr.client.entity.LootrChestCartRenderer;
 import noobanidus.mods.lootr.client.block.LootrShulkerBlockRenderer;
+import noobanidus.mods.lootr.client.entity.LootrChestCartRenderer;
 import noobanidus.mods.lootr.init.ModBlockEntities;
 import noobanidus.mods.lootr.init.ModEntities;
 
-@Mod.EventBusSubscriber(modid= LootrAPI.MODID, value= Dist.CLIENT, bus= Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = LootrAPI.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientSetup {
 
   @SubscribeEvent
@@ -23,7 +23,7 @@ public class ClientSetup {
   }
 
   @SubscribeEvent
-  public static void registerRenderers (EntityRenderersEvent.RegisterRenderers event) {
+  public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
     event.registerBlockEntityRenderer(ModBlockEntities.LOOTR_CHEST.get(), LootrChestBlockRenderer::new);
     event.registerBlockEntityRenderer(ModBlockEntities.LOOTR_TRAPPED_CHEST.get(), LootrChestBlockRenderer::new);
     event.registerBlockEntityRenderer(ModBlockEntities.LOOTR_INVENTORY.get(), LootrChestBlockRenderer::new);

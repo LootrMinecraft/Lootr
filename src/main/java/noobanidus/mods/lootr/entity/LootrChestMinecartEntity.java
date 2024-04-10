@@ -59,6 +59,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class LootrChestMinecartEntity extends AbstractMinecartContainer implements ILootCart {
+  private static BlockState cartNormal = null;
   private final Set<UUID> openers = new HashSet<>();
   private boolean opened = false;
 
@@ -121,6 +122,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
       } else if (!source.getEntity().isShiftKeyDown()) {
         ((Player) source.getEntity()).displayClientMessage(Component.translatable("lootr.message.cart_should_sneak").setStyle(HandleBreak.getChatStyle()), false);
         ((Player) source.getEntity()).displayClientMessage(Component.translatable("lootr.message.should_sneak2", Component.translatable("lootr.message.cart_should_sneak3").setStyle(Style.EMPTY.withBold(true))).setStyle(HandleBreak.getChatStyle()), false);
+        // TODO: I think this is broken
       }
     } else {
       return true;
@@ -145,7 +147,6 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     }
   }
 
-
   @Override
   public int getContainerSize() {
     return 27;
@@ -155,8 +156,6 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   public AbstractMinecart.Type getMinecartType() {
     return AbstractMinecart.Type.CHEST;
   }
-
-  private static BlockState cartNormal = null;
 
   @Override
   public BlockState getDefaultDisplayBlockState() {
@@ -247,7 +246,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
       if (player instanceof ServerPlayer) {
         CriteriaTriggers.GENERATE_LOOT.trigger((ServerPlayer) player, overrideTable != null ? overrideTable : this.lootTable);
       }
-      LootParams.Builder builder = (new LootParams.Builder((ServerLevel)this.level())).withParameter(LootContextParams.ORIGIN, position());
+      LootParams.Builder builder = (new LootParams.Builder((ServerLevel) this.level())).withParameter(LootContextParams.ORIGIN, position());
       builder.withParameter(LootContextParams.KILLER_ENTITY, this);
       if (player != null) {
         builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);

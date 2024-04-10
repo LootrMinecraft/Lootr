@@ -8,7 +8,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.item.LootrChestBlockItem;
 import noobanidus.mods.lootr.item.LootrShulkerBlockItem;
@@ -24,7 +23,7 @@ public class ModItems {
   public static final RegistryObject<BlockItem> SHULKER = REGISTER.register("lootr_shulker", () -> new LootrShulkerBlockItem(ModBlocks.SHULKER.get(), new BlockItem.Properties()));
   public static final RegistryObject<BlockItem> TROPHY = REGISTER.register("trophy", () -> new BlockItem(ModBlocks.TROPHY.get(), new Item.Properties().rarity(Rarity.EPIC)));
 
-  public static void register (IEventBus bus) {
+  public static void register(IEventBus bus) {
     REGISTER.register(bus);
   }
 }

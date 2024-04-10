@@ -59,6 +59,8 @@ import java.util.Set;
 import java.util.UUID;
 
 public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity implements ILootBlockEntity {
+  @Nullable
+  private final DyeColor color;
   public Set<UUID> openers = new HashSet<>();
   protected ResourceLocation savedLootTable = null;
   protected long seed = -1;
@@ -69,8 +71,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   private ShulkerBoxBlockEntity.AnimationStatus animationStatus = ShulkerBoxBlockEntity.AnimationStatus.CLOSED;
   private float progress;
   private float progressOld;
-  @Nullable
-  private final DyeColor color;
+  private boolean savingToItem = false;
 
   public LootrShulkerBlockEntity(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState) {
     super(pType, pWorldPosition, pBlockState);
@@ -83,6 +84,10 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
 
   public static void tick(Level pLevel, BlockPos pPos, BlockState pState, LootrShulkerBlockEntity pBlockEntity) {
     pBlockEntity.updateAnimation(pLevel, pPos, pState);
+  }
+
+  private static void doNeighborUpdates(Level pLevel, BlockPos pPos, BlockState pState) {
+    pState.updateNeighbourShapes(pLevel, pPos, 3);
   }
 
   private void updateAnimation(Level pLevel, BlockPos pPos, BlockState pState) {
@@ -168,10 +173,6 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
     }
   }
 
-  private static void doNeighborUpdates(Level pLevel, BlockPos pPos, BlockState pState) {
-    pState.updateNeighbourShapes(pLevel, pPos, 3);
-  }
-
   @Override
   public void startOpen(Player pPlayer) {
     if (!pPlayer.isSpectator()) {
@@ -242,8 +243,6 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
     }
     super.load(compound);
   }
-
-  private boolean savingToItem = false;
 
   @Override
   public void saveToItem(ItemStack itemstack) {

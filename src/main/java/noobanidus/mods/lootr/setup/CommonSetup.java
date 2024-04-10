@@ -13,7 +13,6 @@ import noobanidus.mods.lootr.advancement.LootedStatPredicate;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.impl.LootrAPIImpl;
 import noobanidus.mods.lootr.init.ModAdvancements;
-import noobanidus.mods.lootr.init.ModLoot;
 import noobanidus.mods.lootr.init.ModStats;
 import noobanidus.mods.lootr.network.PacketHandler;
 

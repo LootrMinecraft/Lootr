@@ -65,15 +65,15 @@ public class ChestUtil {
     PacketHandler.sendInternal(PacketDistributor.TRACKING_ENTITY.with(() -> cart), open);
   }
 
-  public static Style getInvalidStyle () {
+  public static Style getInvalidStyle() {
     return ConfigManager.DISABLE_MESSAGE_STYLES.get() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true);
   }
 
-  public static Style getDecayStyle () {
+  public static Style getDecayStyle() {
     return ConfigManager.DISABLE_MESSAGE_STYLES.get() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true);
   }
 
-  public static Style getRefreshStyle () {
+  public static Style getRefreshStyle() {
     return ConfigManager.DISABLE_MESSAGE_STYLES.get() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true);
   }
 

@@ -3,7 +3,6 @@ package noobanidus.mods.lootr.entity;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
-import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -14,7 +13,7 @@ import noobanidus.mods.lootr.data.DataStorage;
 import java.util.ArrayList;
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid= LootrAPI.MODID)
+@Mod.EventBusSubscriber(modid = LootrAPI.MODID)
 public class EntityTicker {
   private static final List<LootrChestMinecartEntity> entities = new ArrayList<>();
   private static final List<LootrChestMinecartEntity> pendingEntities = new ArrayList<>();
@@ -67,7 +66,7 @@ public class EntityTicker {
       return;
     }
     synchronized (listLock) {
-      if(tickingList)
+      if (tickingList)
         pendingEntities.add(entity);
       else
         entities.add(entity);

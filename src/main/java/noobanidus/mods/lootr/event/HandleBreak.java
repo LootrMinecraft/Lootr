@@ -1,7 +1,6 @@
 package noobanidus.mods.lootr.event;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
@@ -13,9 +12,8 @@ import net.minecraftforge.fml.common.Mod;
 import noobanidus.mods.lootr.LootrTags;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.config.ConfigManager;
-import noobanidus.mods.lootr.init.ModBlocks;
 
-@Mod.EventBusSubscriber(modid= LootrAPI.MODID)
+@Mod.EventBusSubscriber(modid = LootrAPI.MODID)
 public class HandleBreak {
 
   @SubscribeEvent
@@ -48,7 +46,7 @@ public class HandleBreak {
     }
   }
 
-  public static Style getChatStyle () {
+  public static Style getChatStyle() {
     if (ConfigManager.DISABLE_MESSAGE_STYLES.get()) {
       return Style.EMPTY;
     }
