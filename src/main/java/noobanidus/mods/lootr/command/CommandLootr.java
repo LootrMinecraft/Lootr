@@ -53,9 +53,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class CommandLootr {
+  private static final Map<String, UUID> profileMap = new HashMap<>();
   private static List<ResourceLocation> tables = null;
   private static List<String> tableNames = null;
-  private static final Map<String, UUID> profileMap = new HashMap<>();
 
   private static List<ResourceLocation> getTables() {
     if (tables == null) {

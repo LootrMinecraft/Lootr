@@ -51,53 +51,6 @@ public class ChestData extends SavedData {
     this.key = key;
   }
 
-  public BlockPos getPos() {
-    return pos;
-  }
-
-  public String getKey() {
-    return key;
-  }
-
-  public ResourceKey<Level> getDimension() {
-    return dimension;
-  }
-
-  public int getSize() {
-    return size;
-  }
-
-  private void setSize(int size) {
-    if (this.size == size) {
-      return;
-    }
-    if (size < this.size) {
-      throw new IllegalArgumentException("Cannot resize inventory associated with '" + getKey() + "' in dimension '" + getDimension() + "' at location '" + getPos() + "' to a smaller size.");
-    }
-    this.size = size;
-    for (SpecialChestInventory inventory : inventories.values()) {
-      inventory.resizeInventory(size);
-    }
-  }
-
-  @Nullable
-  public UUID getEntityId() {
-    if (entity) {
-      return uuid;
-    }
-
-    return null;
-  }
-
-  @Nullable
-  public UUID getTileId() {
-    if (!entity) {
-      return uuid;
-    }
-
-    return null;
-  }
-
   public static String ID(UUID id) {
     String idString = id.toString();
     return "lootr/" + idString.charAt(0) + "/" + idString.substring(0, 2) + "/" + idString;
@@ -152,98 +105,6 @@ public class ChestData extends SavedData {
       data.custom = false;
       return data;
     };
-  }
-
-  public LootFiller customInventory() {
-    return (player, inventory, table, seed) -> {
-      for (int i = 0; i < reference.size(); i++) {
-        inventory.setItem(i, reference.get(i).copy());
-      }
-    };
-  }
-
-  public boolean clearInventory(UUID uuid) {
-    return inventories.remove(uuid) != null;
-  }
-
-  @Nullable
-  public SpecialChestInventory getInventory(ServerPlayer player) {
-    return inventories.get(player.getUUID());
-  }
-
-  public SpecialChestInventory createInventory(ServerPlayer player, LootFiller filler, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
-    ServerLevel level = (ServerLevel) player.level();
-    SpecialChestInventory result;
-    if (level.dimension() != dimension) {
-      MinecraftServer server = ServerAccessImpl.getServer();
-      if (server == null) {
-        return null;
-      }
-      level = server.getLevel(dimension);
-    }
-
-    if (level == null) {
-      return null;
-    }
-
-    NonNullList<ItemStack> items = NonNullList.withSize(sizeSupplier.getAsInt(), ItemStack.EMPTY);
-    result = new SpecialChestInventory(this, items, displaySupplier.get());
-    filler.unpackLootTable(player, result, tableSupplier.get(), seedSupplier.getAsLong());
-    inventories.put(player.getUUID(), result);
-    setDirty();
-    return result;
-  }
-
-  public SpecialChestInventory createInventory(ServerPlayer player, LootFiller filler, BaseContainerBlockEntity blockEntity, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
-    ServerLevel level = (ServerLevel) player.level();
-    SpecialChestInventory result;
-    if (level.dimension() != dimension) {
-      MinecraftServer server = ServerAccessImpl.getServer();
-      if (server == null) {
-        return null;
-      }
-      level = server.getLevel(dimension);
-    }
-
-    if (level == null) {
-      return null;
-    }
-
-    NonNullList<ItemStack> items = NonNullList.withSize(blockEntity.getContainerSize(), ItemStack.EMPTY);
-    result = new SpecialChestInventory(this, items, blockEntity.getDisplayName());
-    filler.unpackLootTable(player, result, tableSupplier.get(), seedSupplier.getAsLong());
-    inventories.put(player.getUUID(), result);
-    setDirty();
-    return result;
-  }
-
-  public SpecialChestInventory createInventory(ServerPlayer player, LootFiller filler, @Nullable RandomizableContainerBlockEntity tile) {
-    ServerLevel world = (ServerLevel) player.level();
-    SpecialChestInventory result;
-    long seed = -1;
-    ResourceLocation lootTable;
-    if (entity) {
-      Entity initial = world.getEntity(uuid);
-      if (!(initial instanceof LootrChestMinecartEntity cart)) {
-        return null;
-      }
-      NonNullList<ItemStack> items = NonNullList.withSize(cart.getContainerSize(), ItemStack.EMPTY);
-      result = new SpecialChestInventory(this, items, cart.getDisplayName());
-      lootTable = cart.lootTable;
-    } else {
-      if (tile == null) {
-        return null;
-      }
-
-      lootTable = ((ILootBlockEntity) tile).getTable();
-
-      NonNullList<ItemStack> items = NonNullList.withSize(tile.getContainerSize(), ItemStack.EMPTY);
-      result = new SpecialChestInventory(this, items, tile.getDisplayName());
-    }
-    filler.unpackLootTable(player, result, lootTable, seed);
-    inventories.put(player.getUUID(), result);
-    setDirty();
-    return result;
   }
 
   public static Function<CompoundTag, ChestData> loadWrapper(UUID id, ResourceKey<Level> dimension, BlockPos position) {
@@ -355,6 +216,145 @@ public class ChestData extends SavedData {
       data.inventories.put(uuid, new SpecialChestInventory(data, items, name));
     }
     return data;
+  }
+
+  public BlockPos getPos() {
+    return pos;
+  }
+
+  public String getKey() {
+    return key;
+  }
+
+  public ResourceKey<Level> getDimension() {
+    return dimension;
+  }
+
+  public int getSize() {
+    return size;
+  }
+
+  private void setSize(int size) {
+    if (this.size == size) {
+      return;
+    }
+    if (size < this.size) {
+      throw new IllegalArgumentException("Cannot resize inventory associated with '" + getKey() + "' in dimension '" + getDimension() + "' at location '" + getPos() + "' to a smaller size.");
+    }
+    this.size = size;
+    for (SpecialChestInventory inventory : inventories.values()) {
+      inventory.resizeInventory(size);
+    }
+  }
+
+  @Nullable
+  public UUID getEntityId() {
+    if (entity) {
+      return uuid;
+    }
+
+    return null;
+  }
+
+  @Nullable
+  public UUID getTileId() {
+    if (!entity) {
+      return uuid;
+    }
+
+    return null;
+  }
+
+  public LootFiller customInventory() {
+    return (player, inventory, table, seed) -> {
+      for (int i = 0; i < reference.size(); i++) {
+        inventory.setItem(i, reference.get(i).copy());
+      }
+    };
+  }
+
+  public boolean clearInventory(UUID uuid) {
+    return inventories.remove(uuid) != null;
+  }
+
+  @Nullable
+  public SpecialChestInventory getInventory(ServerPlayer player) {
+    return inventories.get(player.getUUID());
+  }
+
+  public SpecialChestInventory createInventory(ServerPlayer player, LootFiller filler, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
+    ServerLevel level = (ServerLevel) player.level();
+    SpecialChestInventory result;
+    if (level.dimension() != dimension) {
+      MinecraftServer server = ServerAccessImpl.getServer();
+      if (server == null) {
+        return null;
+      }
+      level = server.getLevel(dimension);
+    }
+
+    if (level == null) {
+      return null;
+    }
+
+    NonNullList<ItemStack> items = NonNullList.withSize(sizeSupplier.getAsInt(), ItemStack.EMPTY);
+    result = new SpecialChestInventory(this, items, displaySupplier.get());
+    filler.unpackLootTable(player, result, tableSupplier.get(), seedSupplier.getAsLong());
+    inventories.put(player.getUUID(), result);
+    setDirty();
+    return result;
+  }
+
+  public SpecialChestInventory createInventory(ServerPlayer player, LootFiller filler, BaseContainerBlockEntity blockEntity, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
+    ServerLevel level = (ServerLevel) player.level();
+    SpecialChestInventory result;
+    if (level.dimension() != dimension) {
+      MinecraftServer server = ServerAccessImpl.getServer();
+      if (server == null) {
+        return null;
+      }
+      level = server.getLevel(dimension);
+    }
+
+    if (level == null) {
+      return null;
+    }
+
+    NonNullList<ItemStack> items = NonNullList.withSize(blockEntity.getContainerSize(), ItemStack.EMPTY);
+    result = new SpecialChestInventory(this, items, blockEntity.getDisplayName());
+    filler.unpackLootTable(player, result, tableSupplier.get(), seedSupplier.getAsLong());
+    inventories.put(player.getUUID(), result);
+    setDirty();
+    return result;
+  }
+
+  public SpecialChestInventory createInventory(ServerPlayer player, LootFiller filler, @Nullable RandomizableContainerBlockEntity tile) {
+    ServerLevel world = (ServerLevel) player.level();
+    SpecialChestInventory result;
+    long seed = -1;
+    ResourceLocation lootTable;
+    if (entity) {
+      Entity initial = world.getEntity(uuid);
+      if (!(initial instanceof LootrChestMinecartEntity cart)) {
+        return null;
+      }
+      NonNullList<ItemStack> items = NonNullList.withSize(cart.getContainerSize(), ItemStack.EMPTY);
+      result = new SpecialChestInventory(this, items, cart.getDisplayName());
+      lootTable = cart.lootTable;
+    } else {
+      if (tile == null) {
+        return null;
+      }
+
+      lootTable = ((ILootBlockEntity) tile).getTable();
+
+      NonNullList<ItemStack> items = NonNullList.withSize(tile.getContainerSize(), ItemStack.EMPTY);
+      result = new SpecialChestInventory(this, items, tile.getDisplayName());
+    }
+    filler.unpackLootTable(player, result, lootTable, seed);
+    inventories.put(player.getUUID(), result);
+    setDirty();
+    return result;
   }
 
   @Override

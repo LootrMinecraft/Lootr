@@ -4,17 +4,9 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextColor;
 import net.minecraft.server.MinecraftServer;
-import noobanidus.mods.lootr.api.LootrAPI;
-import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.block.entities.TileTicker;
-import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.entity.EntityTicker;
-import noobanidus.mods.lootr.LootrTags;
 
 public class LootrEventsInit {
   public static MinecraftServer serverInstance;

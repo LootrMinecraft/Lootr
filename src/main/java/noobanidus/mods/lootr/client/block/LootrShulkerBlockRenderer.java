@@ -11,7 +11,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -28,9 +27,8 @@ import java.util.UUID;
 public class LootrShulkerBlockRenderer implements BlockEntityRenderer<LootrShulkerBlockEntity> {
   public static final Material MATERIAL = new Material(Sheets.SHULKER_SHEET, new ResourceLocation(LootrAPI.MODID, "shulker"));
   public static final Material MATERIAL2 = new Material(Sheets.SHULKER_SHEET, new ResourceLocation(LootrAPI.MODID, "shulker_opened"));
-  private UUID playerId;
-
   private final ShulkerModel<?> model;
+  private UUID playerId;
 
   public LootrShulkerBlockRenderer(BlockEntityRendererProvider.Context context) {
     this.model = new ShulkerModel<>(context.bakeLayer(ModelLayers.SHULKER));

@@ -40,14 +40,13 @@ public class BarrelModel implements UnbakedModel {
   private final UnbakedModel opened;
   private final UnbakedModel unopened;
   private final UnbakedModel vanilla;
+  private Collection<ResourceLocation> dependencies = null;
 
   public BarrelModel(UnbakedModel opened, UnbakedModel unopened, UnbakedModel vanilla) {
     this.opened = opened;
     this.unopened = unopened;
     this.vanilla = vanilla;
   }
-
-  private Collection<ResourceLocation> dependencies = null;
 
   @Override
   public Collection<ResourceLocation> getDependencies() {

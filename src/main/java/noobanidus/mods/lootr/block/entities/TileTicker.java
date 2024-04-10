@@ -5,7 +5,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -14,8 +13,8 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
-import noobanidus.mods.lootr.event.HandleChunk;
 import noobanidus.mods.lootr.config.ConfigManager;
+import noobanidus.mods.lootr.event.HandleChunk;
 import noobanidus.mods.lootr.util.ServerAccessImpl;
 
 import java.util.HashSet;
@@ -24,9 +23,9 @@ import java.util.Set;
 public class TileTicker {
   private final static Object listLock = new Object();
   private final static Object worldLock = new Object();
-  private static boolean tickingList = false;
   private final static Set<Entry> tileEntries = new ObjectLinkedOpenHashSet<>();
   private final static Set<Entry> pendingEntries = new ObjectLinkedOpenHashSet<>();
+  private static boolean tickingList = false;
 
   public static void addEntry(ResourceKey<Level> dimension, BlockPos position) {
     if (ConfigManager.isDimensionBlacklisted(dimension) || ConfigManager.get().conversion.disable) {

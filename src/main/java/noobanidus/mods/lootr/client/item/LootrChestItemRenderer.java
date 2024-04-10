@@ -28,6 +28,14 @@ public class LootrChestItemRenderer extends BlockEntityWithoutLevelRenderer impl
     this(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
   }
 
+  public static LootrChestItemRenderer getInstance() {
+    if (INSTANCE == null) {
+      INSTANCE = new LootrChestItemRenderer();
+    }
+
+    return INSTANCE;
+  }
+
   @Override
   public void renderByItem(ItemStack stack, ItemDisplayContext mode, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
     Minecraft.getInstance().getBlockEntityRenderDispatcher().renderItem(tile, matrixStack, buffer, combinedLight, combinedOverlay);
@@ -43,13 +51,5 @@ public class LootrChestItemRenderer extends BlockEntityWithoutLevelRenderer impl
 
     Minecraft.getInstance().getBlockEntityRenderDispatcher().renderItem(tile, matrixStack, buffer, combinedLight, OverlayTexture.NO_OVERLAY);
     tile.setOpened(open);
-  }
-
-  public static LootrChestItemRenderer getInstance() {
-    if (INSTANCE == null) {
-      INSTANCE = new LootrChestItemRenderer();
-    }
-
-    return INSTANCE;
   }
 }

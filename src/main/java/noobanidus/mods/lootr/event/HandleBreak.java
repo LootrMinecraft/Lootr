@@ -15,7 +15,7 @@ import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.config.ConfigManager;
 import org.jetbrains.annotations.Nullable;
 
-public class HandleBreak{
+public class HandleBreak {
   public static boolean beforeBlockBreak(Level world, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity) {
     if (world.isClientSide() || !state.is(LootrTags.Blocks.CONTAINERS)) {
       return true;
@@ -55,7 +55,7 @@ public class HandleBreak{
     }
   }
 
-  public static Style getChatStyle () {
+  public static Style getChatStyle() {
     if (ConfigManager.get().notifications.disable_message_styles) {
       return Style.EMPTY;
     }

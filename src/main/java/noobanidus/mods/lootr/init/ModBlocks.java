@@ -13,6 +13,11 @@ import noobanidus.mods.lootr.block.*;
 import noobanidus.mods.lootr.block.entities.LootrShulkerBlockEntity;
 
 public class ModBlocks {
+  public static final LootrChestBlock CHEST = new LootrChestBlock(BlockBehaviour.Properties.copy(Blocks.CHEST).strength(2.5f));
+  public static final LootrBarrelBlock BARREL = new LootrBarrelBlock(BlockBehaviour.Properties.copy(Blocks.BARREL).strength(2.5f));
+  public static final LootrTrappedChestBlock TRAPPED_CHEST = new LootrTrappedChestBlock(BlockBehaviour.Properties.copy(Blocks.TRAPPED_CHEST).strength(2.5f));
+  public static final LootrInventoryBlock INVENTORY = new LootrInventoryBlock(BlockBehaviour.Properties.of().strength(2.5f).sound(SoundType.WOOD));
+  public static final Block TROPHY = new TrophyBlock(BlockBehaviour.Properties.of().strength(15f).sound(SoundType.METAL).noOcclusion().lightLevel((o) -> 15));
   private static final BlockBehaviour.StatePredicate posPredicate = (state, level, pos) -> {
     BlockEntity blockEntity = level.getBlockEntity(pos);
     if (blockEntity instanceof LootrShulkerBlockEntity shulkerBlockEntity) {
@@ -21,15 +26,7 @@ public class ModBlocks {
       return false;
     }
   };
-
-  public static final LootrChestBlock CHEST = new LootrChestBlock(BlockBehaviour.Properties.copy(Blocks.CHEST).strength(2.5f));
-  public static final LootrBarrelBlock BARREL = new LootrBarrelBlock(BlockBehaviour.Properties.copy(Blocks.BARREL).strength(2.5f));
-  public static final LootrTrappedChestBlock TRAPPED_CHEST = new LootrTrappedChestBlock(BlockBehaviour.Properties.copy(Blocks.TRAPPED_CHEST).strength(2.5f));
   public static final LootrShulkerBlock SHULKER = new LootrShulkerBlock(BlockBehaviour.Properties.of().strength(2.5f).dynamicShape().noOcclusion().isSuffocating(posPredicate).isViewBlocking(posPredicate));
-
-  public static final LootrInventoryBlock INVENTORY = new LootrInventoryBlock(BlockBehaviour.Properties.of().strength(2.5f).sound(SoundType.WOOD));
-
-  public static final Block TROPHY = new TrophyBlock(BlockBehaviour.Properties.of().strength(15f).sound(SoundType.METAL).noOcclusion().lightLevel((o) -> 15));
 
   public static void registerBlocks() {
     Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(LootrAPI.MODID, "lootr_chest"), CHEST);

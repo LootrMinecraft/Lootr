@@ -17,6 +17,18 @@ public class TickingData extends SavedData {
     tickMap.defaultReturnValue(-1);
   }
 
+  public static TickingData load(CompoundTag pCompound) {
+    TickingData data = new TickingData();
+    data.tickMap.clear();
+    data.tickMap.defaultReturnValue(-1);
+    ListTag decayList = pCompound.getList("result", Tag.TAG_COMPOUND);
+    for (int i = 0; i < decayList.size(); i++) {
+      CompoundTag thisTag = decayList.getCompound(i);
+      data.tickMap.put(thisTag.getUUID("id"), thisTag.getInt("value"));
+    }
+    return data;
+  }
+
   public boolean isComplete(UUID id) {
     int tickVal = tickMap.getInt(id);
     return tickVal == 0 || tickVal == 1;
@@ -60,18 +72,6 @@ public class TickingData extends SavedData {
     }
 
     return false;
-  }
-
-  public static TickingData load(CompoundTag pCompound) {
-    TickingData data = new TickingData();
-    data.tickMap.clear();
-    data.tickMap.defaultReturnValue(-1);
-    ListTag decayList = pCompound.getList("result", Tag.TAG_COMPOUND);
-    for (int i = 0; i < decayList.size(); i++) {
-      CompoundTag thisTag = decayList.getCompound(i);
-      data.tickMap.put(thisTag.getUUID("id"), thisTag.getInt("value"));
-    }
-    return data;
   }
 
   @Override

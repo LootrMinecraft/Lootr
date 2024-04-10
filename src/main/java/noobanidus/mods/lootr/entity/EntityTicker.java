@@ -3,7 +3,6 @@ package noobanidus.mods.lootr.entity;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
-import net.minecraft.world.level.chunk.ChunkStatus;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.data.DataStorage;
 

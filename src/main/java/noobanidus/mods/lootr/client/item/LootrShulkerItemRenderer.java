@@ -15,9 +15,8 @@ import noobanidus.mods.lootr.init.ModBlocks;
 
 public class LootrShulkerItemRenderer extends BlockEntityWithoutLevelRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer {
   private static LootrShulkerItemRenderer INSTANCE = null;
-
-  private BlockEntityRenderDispatcher blockEntityRenderDispatcher;
   private final LootrShulkerBlockEntity tile = new LootrShulkerBlockEntity(BlockPos.ZERO, ModBlocks.CHEST.defaultBlockState());
+  private BlockEntityRenderDispatcher blockEntityRenderDispatcher;
 
   public LootrShulkerItemRenderer(BlockEntityRenderDispatcher pBlockEntityRenderDispatcher, EntityModelSet pEntityModelSet) {
     super(pBlockEntityRenderDispatcher, pEntityModelSet);
@@ -26,6 +25,13 @@ public class LootrShulkerItemRenderer extends BlockEntityWithoutLevelRenderer im
 
   public LootrShulkerItemRenderer() {
     this(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
+  }
+
+  public static LootrShulkerItemRenderer getInstance() {
+    if (INSTANCE == null) {
+      INSTANCE = new LootrShulkerItemRenderer();
+    }
+    return INSTANCE;
   }
 
   @Override
@@ -38,12 +44,5 @@ public class LootrShulkerItemRenderer extends BlockEntityWithoutLevelRenderer im
 
   public void render(ItemStack stack, ItemDisplayContext mode, PoseStack matrices, MultiBufferSource vertexConsumers, int light, int overlay) {
     renderByItem(stack, mode, matrices, vertexConsumers, light, overlay);
-  }
-
-  public static LootrShulkerItemRenderer getInstance() {
-    if (INSTANCE == null) {
-      INSTANCE = new LootrShulkerItemRenderer();
-    }
-    return INSTANCE;
   }
 }

@@ -2,11 +2,11 @@ package noobanidus.mods.lootr.init;
 
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.resources.ResourceLocation;
-import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.advancement.AdvancementPredicate;
 import noobanidus.mods.lootr.advancement.ContainerPredicate;
 import noobanidus.mods.lootr.advancement.GenericTrigger;
 import noobanidus.mods.lootr.advancement.LootedStatPredicate;
+import noobanidus.mods.lootr.api.LootrAPI;
 
 import java.util.UUID;
 

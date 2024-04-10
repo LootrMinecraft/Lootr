@@ -16,7 +16,6 @@ import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.material.FluidState;
@@ -29,8 +28,6 @@ import noobanidus.mods.lootr.block.entities.LootrChestBlockEntity;
 import noobanidus.mods.lootr.init.ModBlockEntities;
 import noobanidus.mods.lootr.util.ChestUtil;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.function.Supplier;
 
 public class LootrChestBlock extends ChestBlock {
   public LootrChestBlock(Properties properties) {

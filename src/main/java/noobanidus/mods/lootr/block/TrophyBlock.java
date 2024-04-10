@@ -14,6 +14,9 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class TrophyBlock extends Block {
+  private static final VoxelShape EAST_WEST = Block.box(1.5, 0, 4, 14.5, 14.5, 12);
+  private static final VoxelShape NORTH_SOUTH = Block.box(4, 0, 1.5, 12, 14.5, 14.5);
+
   public TrophyBlock(Properties properties) {
     super(properties);
   }
@@ -28,9 +31,6 @@ public class TrophyBlock extends Block {
     super.createBlockStateDefinition(builder);
     builder.add(HorizontalDirectionalBlock.FACING);
   }
-
-  private static final VoxelShape EAST_WEST = Block.box(1.5, 0, 4, 14.5, 14.5, 12);
-  private static final VoxelShape NORTH_SOUTH = Block.box(4, 0, 1.5, 12, 14.5, 14.5);
 
   @Override
   @SuppressWarnings("deprecation")

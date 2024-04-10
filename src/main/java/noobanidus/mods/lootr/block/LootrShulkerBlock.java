@@ -41,11 +41,6 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
     this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.UP));
   }
 
-  @Override
-  public float getExplosionResistance() {
-    return LootrAPI.getExplosionResistance(this, super.getExplosionResistance());
-  }
-
   private static boolean canOpen(BlockState pState, Level pLevel, BlockPos pPos, LootrShulkerBlockEntity pBlockEntity) {
     if (pBlockEntity.getAnimationStatus() != ShulkerBoxBlockEntity.AnimationStatus.CLOSED) {
       return true;
@@ -53,6 +48,11 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
       AABB aabb = Shulker.getProgressDeltaAabb(pState.getValue(FACING), 0.0F, 0.5F).move(pPos).deflate(1.0E-6D);
       return pLevel.noCollision(aabb);
     }
+  }
+
+  @Override
+  public float getExplosionResistance() {
+    return LootrAPI.getExplosionResistance(this, super.getExplosionResistance());
   }
 
   @Override

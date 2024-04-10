@@ -42,8 +42,8 @@ import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.entity.ILootCart;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.event.HandleBreak;
-import noobanidus.mods.lootr.network.NetworkConstants;
 import noobanidus.mods.lootr.init.ModBlocks;
+import noobanidus.mods.lootr.network.NetworkConstants;
 import noobanidus.mods.lootr.util.ChestUtil;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,6 +52,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class LootrChestMinecartEntity extends AbstractMinecartContainer implements ILootCart {
+  private static final BlockState cartNormal = ModBlocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
   private final Set<UUID> openers = new HashSet<>();
   private boolean opened = false;
 
@@ -149,8 +150,6 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   public Type getMinecartType() {
     return Type.CHEST;
   }
-
-  private static final BlockState cartNormal = ModBlocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
 
   @Override
   public BlockState getDefaultDisplayBlockState() {

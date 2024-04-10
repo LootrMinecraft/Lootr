@@ -18,11 +18,11 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.block.state.properties.Property;
+import noobanidus.mods.lootr.LootrTags;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModBlocks;
-import noobanidus.mods.lootr.LootrTags;
 
 import java.util.*;
 
@@ -55,6 +55,24 @@ public class ConfigManager implements ConfigData {
   private static Map<Block, Block> replacements = null;
   @ConfigEntry.Gui.Excluded
   private static Set<String> LOOT_MODIDS = null;
+  @ConfigEntry.Gui.CollapsibleObject
+  public Debug debug = new Debug();
+  @ConfigEntry.Gui.CollapsibleObject
+  public Seed seed = new Seed();
+  @ConfigEntry.Gui.CollapsibleObject
+  public Conversion conversion = new Conversion();
+  @ConfigEntry.Gui.CollapsibleObject
+  public Breaking breaking = new Breaking();
+  @ConfigEntry.Gui.CollapsibleObject
+  public Lists lists = new Lists();
+  @ConfigEntry.Gui.CollapsibleObject
+  public Decay decay = new Decay();
+  @ConfigEntry.Gui.CollapsibleObject
+  public Refresh refresh = new Refresh();
+  @ConfigEntry.Gui.CollapsibleObject
+  public Notifications notifications = new Notifications();
+  @ConfigEntry.Gui.CollapsibleObject
+  public Vanilla vanilla = new Vanilla();
 
   public static void reset() {
     DECAY_MODS = null;
@@ -68,92 +86,6 @@ public class ConfigManager implements ConfigData {
     REFRESH_DIMS = null;
     LOOT_BLACKLIST = null;
     LOOT_MODIDS = null;
-  }
-
-  @ConfigEntry.Gui.CollapsibleObject
-  public Debug debug = new Debug();
-
-  public static class Debug {
-    public boolean report_invalid_tables = true;
-  }
-
-  @ConfigEntry.Gui.CollapsibleObject
-  public Seed seed = new Seed();
-
-  public static class Seed {
-    public boolean randomize_seed = true;
-  }
-
-  @ConfigEntry.Gui.CollapsibleObject
-  public Conversion conversion = new Conversion();
-
-  public static class Conversion {
-    public int max_entry_age = 60 * 10 * 20;
-    public boolean disable = false;
-    public boolean elytra = true;
-  }
-
-  @ConfigEntry.Gui.CollapsibleObject
-  public Breaking breaking = new Breaking();
-
-  public static class Breaking {
-    public boolean enable_break = false;
-    public boolean enable_fake_player_break = false;
-    public boolean disable_break = false;
-    public boolean power_comparators = true;
-    public boolean blast_resistant = false;
-    public boolean blast_immune = false;
-    public boolean trapped_custom = false;
-  }
-
-  @ConfigEntry.Gui.CollapsibleObject
-  public Lists lists = new Lists();
-
-  public static class Lists {
-    public List<String> dimension_whitelist = List.of();
-    public List<String> dimension_blacklist = List.of();
-    public List<String> dimension_modid_blacklist = List.of();
-    public List<String> dimension_modid_whitelist = List.of();
-    public List<String> loot_table_blacklist = List.of();
-    public List<String> loot_modid_blacklist = List.of();
-  }
-
-  @ConfigEntry.Gui.CollapsibleObject
-  public Decay decay = new Decay();
-
-  public static class Decay {
-    public int decay_value = 6000;
-    public boolean decay_all = false;
-    public List<String> decay_modids = List.of();
-    public List<String> decay_loot_tables = List.of();
-    public List<String> decay_dimensions = List.of();
-  }
-
-  @ConfigEntry.Gui.CollapsibleObject
-  public Refresh refresh = new Refresh();
-
-  public static class Refresh {
-    public int refresh_value = 24000;
-    public boolean refresh_all = false;
-    public List<String> refresh_modids = List.of();
-    public List<String> refresh_loot_tables = List.of();
-    public List<String> refresh_dimensions = List.of();
-  }
-
-  @ConfigEntry.Gui.CollapsibleObject
-  public Notifications notifications = new Notifications();
-
-  public static class Notifications {
-    public int notification_delay = 30 * 20;
-    public boolean disable_notifications = false;
-    public boolean disable_message_styles = false;
-  }
-
-  @ConfigEntry.Gui.CollapsibleObject
-  public Vanilla vanilla = new Vanilla();
-
-  public static class Vanilla {
-    public boolean vanilla_textures = false;
   }
 
   private static Set<String> validateStringList(List<String> incomingList, String listKey) {
@@ -436,5 +368,64 @@ public class ConfigManager implements ConfigData {
   public static boolean shouldNotify(int remaining) {
     int delay = get().notifications.notification_delay;
     return !get().notifications.disable_notifications && (delay == -1 || remaining <= delay);
+  }
+
+  public static class Debug {
+    public boolean report_invalid_tables = true;
+  }
+
+  public static class Seed {
+    public boolean randomize_seed = true;
+  }
+
+  public static class Conversion {
+    public int max_entry_age = 60 * 10 * 20;
+    public boolean disable = false;
+    public boolean elytra = true;
+  }
+
+  public static class Breaking {
+    public boolean enable_break = false;
+    public boolean enable_fake_player_break = false;
+    public boolean disable_break = false;
+    public boolean power_comparators = true;
+    public boolean blast_resistant = false;
+    public boolean blast_immune = false;
+    public boolean trapped_custom = false;
+  }
+
+  public static class Lists {
+    public List<String> dimension_whitelist = List.of();
+    public List<String> dimension_blacklist = List.of();
+    public List<String> dimension_modid_blacklist = List.of();
+    public List<String> dimension_modid_whitelist = List.of();
+    public List<String> loot_table_blacklist = List.of();
+    public List<String> loot_modid_blacklist = List.of();
+  }
+
+  public static class Decay {
+    public int decay_value = 6000;
+    public boolean decay_all = false;
+    public List<String> decay_modids = List.of();
+    public List<String> decay_loot_tables = List.of();
+    public List<String> decay_dimensions = List.of();
+  }
+
+  public static class Refresh {
+    public int refresh_value = 24000;
+    public boolean refresh_all = false;
+    public List<String> refresh_modids = List.of();
+    public List<String> refresh_loot_tables = List.of();
+    public List<String> refresh_dimensions = List.of();
+  }
+
+  public static class Notifications {
+    public int notification_delay = 30 * 20;
+    public boolean disable_notifications = false;
+    public boolean disable_message_styles = false;
+  }
+
+  public static class Vanilla {
+    public boolean vanilla_textures = false;
   }
 }

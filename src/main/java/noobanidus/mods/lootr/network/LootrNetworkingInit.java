@@ -3,7 +3,6 @@ package noobanidus.mods.lootr.network;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.world.entity.Entity;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
-import noobanidus.mods.lootr.network.NetworkConstants;
 
 public class LootrNetworkingInit {
   public static void registerClientNetwork() {

@@ -17,6 +17,16 @@ public class AdvancementData extends SavedData {
   public AdvancementData() {
   }
 
+  public static AdvancementData load(CompoundTag compound) {
+    AdvancementData data = new AdvancementData();
+    data.data.clear();
+    ListTag incoming = compound.getList("data", Tag.TAG_COMPOUND);
+    for (int i = 0; i < incoming.size(); i++) {
+      data.data.add(UUIDPair.fromNBT(incoming.getCompound(i)));
+    }
+    return data;
+  }
+
   public boolean contains(UUID first, UUID second) {
     return contains(new UUIDPair(first, second));
   }
@@ -31,16 +41,6 @@ public class AdvancementData extends SavedData {
 
   public void add(UUIDPair pair) {
     data.add(pair);
-  }
-
-  public static AdvancementData load(CompoundTag compound) {
-    AdvancementData data = new AdvancementData();
-    data.data.clear();
-    ListTag incoming = compound.getList("data", Tag.TAG_COMPOUND);
-    for (int i = 0; i < incoming.size(); i++) {
-      data.data.add(UUIDPair.fromNBT(incoming.getCompound(i)));
-    }
-    return data;
   }
 
   @Override
@@ -71,6 +71,12 @@ public class AdvancementData extends SavedData {
     public UUIDPair(@NotNull UUID first, @NotNull UUID second) {
       this.first = first;
       this.second = second;
+    }
+
+    public static UUIDPair fromNBT(CompoundTag tag) {
+      UUIDPair pair = new UUIDPair();
+      pair.deserializeNBT(tag);
+      return pair;
     }
 
     @NotNull
@@ -111,12 +117,6 @@ public class AdvancementData extends SavedData {
     public void deserializeNBT(CompoundTag nbt) {
       this.first = nbt.getUUID("first");
       this.second = nbt.getUUID("second");
-    }
-
-    public static UUIDPair fromNBT(CompoundTag tag) {
-      UUIDPair pair = new UUIDPair();
-      pair.deserializeNBT(tag);
-      return pair;
     }
   }
 }

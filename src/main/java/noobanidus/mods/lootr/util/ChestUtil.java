@@ -20,16 +20,14 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import noobanidus.mods.lootr.advancement.GenericTrigger;
 import noobanidus.mods.lootr.api.IHasOpeners;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
-import noobanidus.mods.lootr.block.LootrBarrelBlock;
-import noobanidus.mods.lootr.block.LootrChestBlock;
 import noobanidus.mods.lootr.block.LootrShulkerBlock;
 import noobanidus.mods.lootr.block.entities.LootrInventoryBlockEntity;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
-import noobanidus.mods.lootr.network.NetworkConstants;
 import noobanidus.mods.lootr.init.ModAdvancements;
 import noobanidus.mods.lootr.init.ModStats;
+import noobanidus.mods.lootr.network.NetworkConstants;
 
 import java.util.UUID;
 
@@ -61,15 +59,15 @@ public class ChestUtil {
     NetworkConstants.sendCloseCart(cart.getId(), (ServerPlayer) player);
   }
 
-  public static Style getInvalidStyle () {
+  public static Style getInvalidStyle() {
     return ConfigManager.get().notifications.disable_message_styles ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true);
   }
 
-  public static Style getDecayStyle () {
+  public static Style getDecayStyle() {
     return ConfigManager.get().notifications.disable_message_styles ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true);
   }
 
-  public static Style getRefreshStyle () {
+  public static Style getRefreshStyle() {
     return ConfigManager.get().notifications.disable_message_styles ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true);
   }
 

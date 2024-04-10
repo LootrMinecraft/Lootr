@@ -51,7 +51,6 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   protected ResourceLocation savedLootTable = null;
   protected long seed = -1;
   protected UUID tileId = null;
-  protected boolean opened = false;
   private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
     @Override
     protected void onOpen(Level leve, BlockPos pos, BlockState state) {
@@ -78,6 +77,9 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
       }
     }
   };
+  protected boolean opened = false;
+  private NonNullList<ItemStack> items = NonNullList.withSize(27, ItemStack.EMPTY);
+  private boolean savingToItem = false;
 
   // TODO
   public LootrBarrelBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
@@ -98,8 +100,6 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     this.seed = seedIn;
     super.setLootTable(lootTableIn, seedIn);
   }
-
-  private NonNullList<ItemStack> items = NonNullList.withSize(27, ItemStack.EMPTY);
 
   @Override
   protected NonNullList<ItemStack> getItems() {
@@ -187,8 +187,6 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     }
     super.load(compound);
   }
-
-  private boolean savingToItem = false;
 
   @Override
   public void saveToItem(ItemStack itemstack) {
