@@ -25,7 +25,7 @@ public class LootedStatPredicate implements IGenericPredicate<Void> {
   @Override
   public IGenericPredicate<Void> deserialize(@Nullable JsonObject element) {
     if (element == null) {
-      throw new IllegalArgumentException("element cannot be null");
+      throw new IllegalArgumentException("Element cannot be null");
     }
 
     int score = element.getAsJsonPrimitive("score").getAsInt();

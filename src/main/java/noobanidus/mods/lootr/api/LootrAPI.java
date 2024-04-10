@@ -26,8 +26,11 @@ public class LootrAPI {
   public static final ResourceLocation ELYTRA_CHEST = new ResourceLocation(MODID, "chests/elytra");
 
   public static ILootrAPI INSTANCE;
-
   public static boolean shouldDiscardIdAndOpeners;
+
+  public static boolean isFakePlayer(Player entity) {
+    return INSTANCE.isFakePlayer(entity);
+  }
 
   public static boolean clearPlayerLoot(ServerPlayer entity) {
     return INSTANCE.clearPlayerLoot(entity);
