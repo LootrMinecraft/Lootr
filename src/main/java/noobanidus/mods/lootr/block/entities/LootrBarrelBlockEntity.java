@@ -61,7 +61,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   protected long seed = -1;
   protected UUID tileId = null;
   protected boolean opened = false;
-  private ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
+  private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
     @Override
     protected void onOpen(Level leve, BlockPos pos, BlockState state) {
       LootrBarrelBlockEntity.this.playSound(state, SoundEvents.BARREL_OPEN);
@@ -229,11 +229,9 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   protected void saveAdditional(CompoundTag compound) {
     super.saveAdditional(compound);
     if (savedLootTable != null) {
-      compound.putString("specialLootBarrel_table", savedLootTable.toString());
       compound.putString("LootTable", savedLootTable.toString());
     }
     if (seed != -1) {
-      compound.putLong("specialLootBarrel_seed", seed);
       compound.putLong("LootTableSeed", seed);
     }
     if (!LootrAPI.shouldDiscard() && !savingToItem) {

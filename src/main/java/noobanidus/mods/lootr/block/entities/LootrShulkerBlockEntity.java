@@ -59,8 +59,6 @@ import java.util.Set;
 import java.util.UUID;
 
 public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity implements ILootBlockEntity {
-  @Nullable
-  private final DyeColor color;
   public Set<UUID> openers = new HashSet<>();
   protected ResourceLocation savedLootTable = null;
   protected long seed = -1;
@@ -75,7 +73,6 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
 
   public LootrShulkerBlockEntity(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState) {
     super(pType, pWorldPosition, pBlockState);
-    color = DyeColor.YELLOW;
   }
 
   public LootrShulkerBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
@@ -93,10 +90,8 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   private void updateAnimation(Level pLevel, BlockPos pPos, BlockState pState) {
     this.progressOld = this.progress;
     switch (this.animationStatus) {
-      case CLOSED:
-        this.progress = 0.0F;
-        break;
-      case OPENING:
+      case CLOSED -> this.progress = 0.0F;
+      case OPENING -> {
         this.progress += 0.1F;
         if (this.progress >= 1.0F) {
           this.animationStatus = ShulkerBoxBlockEntity.AnimationStatus.OPENED;
@@ -105,19 +100,17 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
         }
 
         this.moveCollidedEntities(pLevel, pPos, pState);
-        break;
-      case CLOSING:
+      }
+      case CLOSING -> {
         this.progress -= 0.1F;
         if (this.progress <= 0.0F) {
           this.animationStatus = ShulkerBoxBlockEntity.AnimationStatus.CLOSED;
           this.progress = 0.0F;
           doNeighborUpdates(pLevel, pPos, pState);
         }
-        break;
-      case OPENED:
-        this.progress = 1.0F;
+      }
+      case OPENED -> this.progress = 1.0F;
     }
-
   }
 
   public ShulkerBoxBlockEntity.AnimationStatus getAnimationStatus() {
@@ -134,13 +127,11 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
       AABB aabb = Shulker.getProgressDeltaAabb(direction, this.progressOld, this.progress).move(pPos);
       List<Entity> list = pLevel.getEntities(null, aabb);
       if (!list.isEmpty()) {
-        for (int i = 0; i < list.size(); ++i) {
-          Entity entity = list.get(i);
+        for (Entity entity : list) {
           if (entity.getPistonPushReaction() != PushReaction.IGNORE) {
             entity.move(MoverType.SHULKER_BOX, new Vec3((aabb.getXsize() + 0.01D) * (double) direction.getStepX(), (aabb.getYsize() + 0.01D) * (double) direction.getStepY(), (aabb.getZsize() + 0.01D) * (double) direction.getStepZ()));
           }
         }
-
       }
     }
   }

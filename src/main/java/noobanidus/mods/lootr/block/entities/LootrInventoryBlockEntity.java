@@ -20,10 +20,6 @@ import javax.annotation.Nullable;
 public class LootrInventoryBlockEntity extends LootrChestBlockEntity {
   private NonNullList<ItemStack> customInventory;
 
-  protected LootrInventoryBlockEntity(BlockEntityType<?> p_155327_, BlockPos p_155328_, BlockState p_155329_) {
-    super(p_155327_, p_155328_, p_155329_);
-  }
-
   public LootrInventoryBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
     super(ModBlockEntities.LOOTR_INVENTORY.get(), pWorldPosition, pBlockState);
   }

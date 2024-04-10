@@ -53,6 +53,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
   public Set<UUID> openers = new HashSet<>();
   protected ResourceLocation savedLootTable = null;
   protected long seed = -1;
+  protected boolean opened;
   protected UUID tileId;
   private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
     @Override
@@ -66,8 +67,8 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
     }
 
     @Override
-    protected void openerCountChanged(Level level, BlockPos pos, BlockState state, int p_155364_, int p_155365_) {
-      LootrChestBlockEntity.this.signalOpenCount(level, pos, state, p_155364_, p_155365_);
+    protected void openerCountChanged(Level level, BlockPos pos, BlockState state, int i, int j) {
+      LootrChestBlockEntity.this.signalOpenCount(level, pos, state, i, j);
     }
 
     @Override
@@ -81,11 +82,10 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
       return false;
     }
   };
-  protected boolean opened;
   private boolean savingToItem = false;
 
-  protected LootrChestBlockEntity(BlockEntityType<?> p_155327_, BlockPos p_155328_, BlockState p_155329_) {
-    super(p_155327_, p_155328_, p_155329_);
+  protected LootrChestBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+    super(type, pos, state);
   }
 
   public LootrChestBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
@@ -172,11 +172,9 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
   protected void saveAdditional(CompoundTag compound) {
     super.saveAdditional(compound);
     if (savedLootTable != null) {
-      compound.putString("specialLootChest_table", savedLootTable.toString());
       compound.putString("LootTable", savedLootTable.toString());
     }
     if (seed != -1) {
-      compound.putLong("specialLootChest_seed", seed);
       compound.putLong("LootTableSeed", seed);
     }
     if (!LootrAPI.shouldDiscard() && !savingToItem) {

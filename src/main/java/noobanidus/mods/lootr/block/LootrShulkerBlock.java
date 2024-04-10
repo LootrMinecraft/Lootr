@@ -38,7 +38,7 @@ import java.util.List;
 public class LootrShulkerBlock extends ShulkerBoxBlock {
   public LootrShulkerBlock(Properties pProperties) {
     super(DyeColor.YELLOW, pProperties);
-    this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.UP));
+    this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.UP));
   }
 
   private static boolean canOpen(BlockState pState, Level pLevel, BlockPos pPos, LootrShulkerBlockEntity pBlockEntity) {
