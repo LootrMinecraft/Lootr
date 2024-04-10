@@ -13,7 +13,9 @@ public class ModBlockEntities {
 
   public static void register(IEventBus bus) {
     REGISTER.register(bus);
-  }  public static final RegistryObject<BlockEntityType<LootrChestBlockEntity>> LOOTR_CHEST = REGISTER.register("lootr_chest", () -> BlockEntityType.Builder.of(LootrChestBlockEntity::new, ModBlocks.CHEST.get()).build(null));
+  }
+
+  public static final RegistryObject<BlockEntityType<LootrChestBlockEntity>> LOOTR_CHEST = REGISTER.register("lootr_chest", () -> BlockEntityType.Builder.of(LootrChestBlockEntity::new, ModBlocks.CHEST.get()).build(null));
   public static final RegistryObject<BlockEntityType<LootrTrappedChestBlockEntity>> LOOTR_TRAPPED_CHEST = REGISTER.register("lootr_trapped_chest", () -> BlockEntityType.Builder.of(LootrTrappedChestBlockEntity::new, ModBlocks.TRAPPED_CHEST.get()).build(null));
   public static final RegistryObject<BlockEntityType<LootrBarrelBlockEntity>> LOOTR_BARREL = REGISTER.register("lootr_barrel", () -> BlockEntityType.Builder.of(LootrBarrelBlockEntity::new, ModBlocks.BARREL.get()).build(null));
   public static final RegistryObject<BlockEntityType<LootrInventoryBlockEntity>> LOOTR_INVENTORY = REGISTER.register("lootr_inventory", () -> BlockEntityType.Builder.of(LootrInventoryBlockEntity::new, ModBlocks.INVENTORY.get()).build(null));

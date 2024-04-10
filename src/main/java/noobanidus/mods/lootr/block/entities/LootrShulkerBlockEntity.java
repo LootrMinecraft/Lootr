@@ -50,8 +50,8 @@ import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlockEntities;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.List;
@@ -337,7 +337,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   @Override
-  @Nonnull
+  @NotNull
   public CompoundTag getUpdateTag() {
     CompoundTag result = super.getUpdateTag();
     saveAdditional(result);
@@ -351,7 +351,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   @Override
-  public void onDataPacket(@Nonnull Connection net, @Nonnull ClientboundBlockEntityDataPacket pkt) {
+  public void onDataPacket(@NotNull Connection net, @NotNull ClientboundBlockEntityDataPacket pkt) {
     if (pkt.getTag() != null) {
       load(pkt.getTag());
     }

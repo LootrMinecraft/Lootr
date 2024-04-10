@@ -23,7 +23,6 @@ import net.minecraftforge.client.model.geometry.IUnbakedGeometry;
 import noobanidus.mods.lootr.block.LootrBarrelBlock;
 import noobanidus.mods.lootr.config.ConfigManager;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Function;
@@ -85,9 +84,9 @@ public class BarrelModel implements IUnbakedGeometry<BarrelModel> {
     }
 
 
-    @Nonnull
+    @NotNull
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull RandomSource rand, @Nonnull ModelData extraData, @Nonnull RenderType renderType) {
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand, @NotNull ModelData extraData, @NotNull RenderType renderType) {
       BakedModel model;
       if (ConfigManager.isVanillaTextures()) {
         model = vanilla;
@@ -133,7 +132,7 @@ public class BarrelModel implements IUnbakedGeometry<BarrelModel> {
     }
 
     @Override
-    public TextureAtlasSprite getParticleIcon(@Nonnull ModelData data) {
+    public TextureAtlasSprite getParticleIcon(@NotNull ModelData data) {
       if (ConfigManager.isVanillaTextures()) {
         return vanilla.getParticleIcon();
       }

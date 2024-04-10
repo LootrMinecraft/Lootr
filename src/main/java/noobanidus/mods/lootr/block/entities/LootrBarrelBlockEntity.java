@@ -49,7 +49,6 @@ import noobanidus.mods.lootr.data.SpecialChestInventory;
 import noobanidus.mods.lootr.init.ModBlockEntities;
 import noobanidus.mods.lootr.util.Getter;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
@@ -100,7 +99,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     super(ModBlockEntities.LOOTR_BARREL.get(), pWorldPosition, pBlockState);
   }
 
-  @Nonnull
+  @NotNull
   @Override
   public ModelData getModelData() {
     if (modelData == null) {
@@ -316,7 +315,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
 
 
   @Override
-  @Nonnull
+  @NotNull
   public CompoundTag getUpdateTag() {
     CompoundTag result = super.getUpdateTag();
     saveAdditional(result);
@@ -330,7 +329,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   }
 
   @Override
-  public void onDataPacket(@Nonnull Connection net, @Nonnull ClientboundBlockEntityDataPacket pkt) {
+  public void onDataPacket(@NotNull Connection net, @NotNull ClientboundBlockEntityDataPacket pkt) {
     if (pkt.getTag() != null) {
       load(pkt.getTag());
     }

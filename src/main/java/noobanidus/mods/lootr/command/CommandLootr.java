@@ -56,6 +56,7 @@ public class CommandLootr {
   private static List<ResourceLocation> tables = null;
   private static List<String> tableNames = null;
   private final CommandDispatcher<CommandSourceStack> dispatcher;
+
   public CommandLootr(CommandDispatcher<CommandSourceStack> dispatcher) {
     this.dispatcher = dispatcher;
   }

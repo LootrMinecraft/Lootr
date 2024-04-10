@@ -6,7 +6,6 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraftforge.common.util.INBTSerializable;
 
-import javax.annotation.Nonnull;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
@@ -63,14 +62,14 @@ public class AdvancementData extends SavedData {
   }
 
   public static class UUIDPair implements INBTSerializable<CompoundTag> {
-    @Nonnull
+    @NotNull
     private UUID first;
     private UUID second;
 
     protected UUIDPair() {
     }
 
-    public UUIDPair(@Nonnull UUID first, @Nonnull UUID second) {
+    public UUIDPair(@NotNull UUID first, @NotNull UUID second) {
       this.first = first;
       this.second = second;
     }
@@ -81,12 +80,12 @@ public class AdvancementData extends SavedData {
       return pair;
     }
 
-    @Nonnull
+    @NotNull
     public UUID getFirst() {
       return first;
     }
 
-    @Nonnull
+    @NotNull
     public UUID getSecond() {
       return second;
     }

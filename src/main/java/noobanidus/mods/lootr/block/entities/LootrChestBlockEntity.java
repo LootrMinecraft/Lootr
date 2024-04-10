@@ -42,7 +42,6 @@ import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.data.SpecialChestInventory;
 import noobanidus.mods.lootr.init.ModBlockEntities;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
@@ -235,7 +234,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
   }
 
   @Override
-  @Nonnull
+  @NotNull
   public CompoundTag getUpdateTag() {
     CompoundTag result = super.getUpdateTag();
     saveAdditional(result);
@@ -249,7 +248,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
   }
 
   @Override
-  public void onDataPacket(@Nonnull Connection net, @Nonnull ClientboundBlockEntityDataPacket pkt) {
+  public void onDataPacket(@NotNull Connection net, @NotNull ClientboundBlockEntityDataPacket pkt) {
     if (pkt.getTag() != null) {
       load(pkt.getTag());
     }
