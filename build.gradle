@@ -93,3 +93,11 @@ publishing {
 		}
 	}
 }
+
+idea {
+	// Tell IDEA to always download sources/javadoc artifacts from maven.
+	module {
+		downloadJavadoc = true
+		downloadSources = true
+	}
+}
