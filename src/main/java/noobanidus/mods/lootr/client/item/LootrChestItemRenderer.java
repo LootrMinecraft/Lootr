@@ -18,7 +18,7 @@ import noobanidus.mods.lootr.init.ModBlocks;
 public class LootrChestItemRenderer extends BlockEntityWithoutLevelRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer {
   private static LootrChestItemRenderer INSTANCE = null;
 
-  private final BlockEntityRenderDispatcher blockEntityRenderDispatcher;
+  private BlockEntityRenderDispatcher blockEntityRenderDispatcher;
   private final LootrChestBlockEntity tile;
 
   public LootrChestItemRenderer(BlockEntityRenderDispatcher pBlockEntityRenderDispatcher, EntityModelSet pEntityModelSet) {
@@ -41,7 +41,7 @@ public class LootrChestItemRenderer extends BlockEntityWithoutLevelRenderer impl
 
   @Override
   public void renderByItem(ItemStack stack, ItemDisplayContext mode, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
-    this.blockEntityRenderDispatcher.renderItem(tile, matrixStack, buffer, combinedLight, combinedOverlay);
+    getBlockEntityRenderDispatcher().renderItem(tile, matrixStack, buffer, combinedLight, combinedOverlay);
   }
 
   public void render(ItemStack stack, ItemDisplayContext mode, PoseStack matrices, MultiBufferSource vertexConsumers, int light, int overlay) {
@@ -51,7 +51,15 @@ public class LootrChestItemRenderer extends BlockEntityWithoutLevelRenderer impl
   public void renderByMinecart(LootrChestMinecartEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight) {
     boolean open = tile.isOpened();
     tile.setOpened(entity.isOpened());
-   this.blockEntityRenderDispatcher.renderItem(tile, matrixStack, buffer, combinedLight, OverlayTexture.NO_OVERLAY);
+    getBlockEntityRenderDispatcher().renderItem(tile, matrixStack, buffer, combinedLight, OverlayTexture.NO_OVERLAY);
     tile.setOpened(open);
+  }
+
+  private BlockEntityRenderDispatcher getBlockEntityRenderDispatcher () {
+    if (this.blockEntityRenderDispatcher == null) {
+      this.blockEntityRenderDispatcher = Minecraft.getInstance().getBlockEntityRenderDispatcher();
+    }
+
+    return this.blockEntityRenderDispatcher;
   }
 }
