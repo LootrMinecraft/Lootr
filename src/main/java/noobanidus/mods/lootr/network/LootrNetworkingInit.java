@@ -1,6 +1,8 @@
 package noobanidus.mods.lootr.network;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.SectionPos;
 import net.minecraft.world.entity.Entity;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 

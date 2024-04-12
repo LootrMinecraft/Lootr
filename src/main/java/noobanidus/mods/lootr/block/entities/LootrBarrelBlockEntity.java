@@ -1,5 +1,7 @@
 package noobanidus.mods.lootr.block.entities;
 
+import com.google.common.collect.Sets;
+import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachmentBlockEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -38,6 +40,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
+import noobanidus.mods.lootr.client.ClientHooks;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.data.SpecialChestInventory;
 import noobanidus.mods.lootr.init.ModBlockEntities;
@@ -47,7 +50,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity implements ILootBlockEntity {
+public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity implements ILootBlockEntity, RenderAttachmentBlockEntity {
   public Set<UUID> openers = new HashSet<>();
   protected ResourceLocation savedLootTable = null;
   protected long seed = -1;
@@ -185,13 +188,18 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
       getTileId();
     }
     if (compound.contains("LootrOpeners")) {
+      Set<UUID> newOpeners = new HashSet<>();
       ListTag openers = compound.getList("LootrOpeners", Tag.TAG_INT_ARRAY);
-      this.openers.clear();
       for (Tag item : openers) {
-        this.openers.add(NbtUtils.loadUUID(item));
+        newOpeners.add(NbtUtils.loadUUID(item));
+      }
+      if (!Sets.symmetricDifference(this.openers, newOpeners).isEmpty()) {
+        this.openers = newOpeners;
+        if (this.getLevel() != null && this.getLevel().isClientSide()) {
+          ClientHooks.clearCache(this.getBlockPos());
+        }
       }
     }
-    // TODO: Update model data here somewhere
     super.load(compound);
   }
 
@@ -295,5 +303,14 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   @Override
   public ClientboundBlockEntityDataPacket getUpdatePacket() {
     return ClientboundBlockEntityDataPacket.create(this, BlockEntity::getUpdateTag);
+  }
+
+  @Override
+  public @Nullable Object getRenderAttachmentData() {
+    Player player = ClientHooks.getPlayer();
+    if (player == null) {
+      return null;
+    }
+    return getOpeners().contains(player.getUUID());
   }
 }

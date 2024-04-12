@@ -10,6 +10,7 @@ import net.fabricmc.fabric.api.renderer.v1.material.RenderMaterial;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
+import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachedBlockView;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -87,17 +88,12 @@ public class BarrelModel implements UnbakedModel {
 
     @Override
     public void emitBlockQuads(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context) {
-      BlockEntity blockEntity = blockView.getBlockEntity(pos);
-      BakedModel model = opened;
+      Object data = ((RenderAttachedBlockView) blockView).getBlockEntityRenderAttachment(pos);
+      BakedModel model = unopened;
       if (ConfigManager.isVanillaTextures()) {
         model = vanilla;
-      } else {
-        if (blockEntity instanceof ILootBlockEntity lootContainer) {
-          LocalPlayer player = Minecraft.getInstance().player;
-          if (player == null || !lootContainer.getOpeners().contains(player.getUUID())) {
-            model = unopened;
-          }
-        }
+      } else if (data == Boolean.TRUE) {
+        model = opened;
       }
 
       if (model != null) {
