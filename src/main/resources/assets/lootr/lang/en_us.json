@@ -55,6 +55,8 @@
   "text.autoconfig.lootr.option.conversion": "Conversion",
   "text.autoconfig.lootr.option.conversion.max_entry_age": "Maximum Block Entity Age",
   "text.autoconfig.lootr.option.conversion.disable": "Disable Conversion",
+  "text.autoconfig.lootr.option.conversion.elytra": "Convert Elytra Item Frames",
+  "text.autoconfig.lootr.option.conversion.world_border": "Disable Conversion Outside World Border",
   "text.autoconfig.lootr.option.breaking": "Breaking",
   "text.autoconfig.lootr.option.breaking.enable_break": "Enable All Breaking",
   "text.autoconfig.lootr.option.breaking.enable_fake_player_break": "Enable Fake Player Breaking",
@@ -85,6 +87,7 @@
   "text.autoconfig.lootr.option.notifications": "Notifications",
   "text.autoconfig.lootr.option.notifications.notification_delay": "Delay",
   "text.autoconfig.lootr.option.notifications.disable_notifications": "Disable Notifications",
+  "text.autoconfig.lootr.option.notifications.disable_message_styles": "Disable Style And Formatting In Notifications",
   "text.autoconfig.lootr.option.vanilla": "Vanilla",
   "text.autoconfig.lootr.option.vanilla.vanilla_textures": "Vanilla Textures"
 }
