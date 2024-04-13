@@ -5,7 +5,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import noobanidus.mods.lootr.api.LootrAPI;
+import net.zestyblaze.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.block.entities.*;
 
 public class ModBlockEntities {

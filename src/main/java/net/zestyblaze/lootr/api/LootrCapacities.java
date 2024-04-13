@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.api;
+package net.zestyblaze.lootr.api;
 
 public interface LootrCapacities {
   int VERSION = 3;

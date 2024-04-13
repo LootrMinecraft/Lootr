@@ -12,7 +12,7 @@ import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.PlayerAdvancements;
 import net.minecraft.server.level.ServerPlayer;
-import noobanidus.mods.lootr.api.advancement.IGenericPredicate;
+import net.zestyblaze.lootr.api.advancement.IGenericPredicate;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

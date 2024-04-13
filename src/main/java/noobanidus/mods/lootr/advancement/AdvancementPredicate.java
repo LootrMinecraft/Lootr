@@ -3,7 +3,7 @@ package noobanidus.mods.lootr.advancement;
 import com.google.gson.JsonObject;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import noobanidus.mods.lootr.api.advancement.IGenericPredicate;
+import net.zestyblaze.lootr.api.advancement.IGenericPredicate;
 import org.jetbrains.annotations.Nullable;
 
 public class AdvancementPredicate implements IGenericPredicate<ResourceLocation> {

@@ -4,7 +4,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
-import noobanidus.mods.lootr.api.LootrAPI;
+import net.zestyblaze.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.loot.conditions.LootCount;
 
 public class ModLoot {

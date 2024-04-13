@@ -20,8 +20,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
-import noobanidus.mods.lootr.api.LootrAPI;
-import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
+import net.zestyblaze.lootr.api.LootrAPI;
+import net.zestyblaze.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.block.entities.LootrChestBlockEntity;
 import noobanidus.mods.lootr.config.ConfigManager;
 

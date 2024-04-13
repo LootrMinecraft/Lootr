@@ -10,7 +10,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraft.world.phys.Vec3;
-import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
+import net.zestyblaze.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.init.ModLoot;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

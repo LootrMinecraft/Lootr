@@ -6,7 +6,7 @@ import noobanidus.mods.lootr.advancement.AdvancementPredicate;
 import noobanidus.mods.lootr.advancement.ContainerPredicate;
 import noobanidus.mods.lootr.advancement.GenericTrigger;
 import noobanidus.mods.lootr.advancement.LootedStatPredicate;
-import noobanidus.mods.lootr.api.LootrAPI;
+import net.zestyblaze.lootr.api.LootrAPI;
 
 import java.util.UUID;
 

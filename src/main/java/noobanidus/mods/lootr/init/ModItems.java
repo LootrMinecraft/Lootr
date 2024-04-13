@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
-import noobanidus.mods.lootr.api.LootrAPI;
+import net.zestyblaze.lootr.api.LootrAPI;
 
 public class ModItems {
   public static final BlockItem CHEST = new BlockItem(ModBlocks.CHEST, new Item.Properties());

@@ -2,11 +2,10 @@ package noobanidus.mods.lootr.network;
 
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import noobanidus.mods.lootr.api.LootrAPI;
+import net.zestyblaze.lootr.api.LootrAPI;
 
 public class NetworkConstants {
   public static final ResourceLocation CLOSE_CART_CHANNEL = new ResourceLocation(LootrAPI.MODID, "close_cart_packet");

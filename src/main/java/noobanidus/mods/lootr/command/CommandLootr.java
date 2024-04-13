@@ -35,7 +35,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.phys.Vec3;
-import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
+import net.zestyblaze.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.block.LootrBarrelBlock;
 import noobanidus.mods.lootr.block.LootrChestBlock;
 import noobanidus.mods.lootr.block.LootrShulkerBlock;
