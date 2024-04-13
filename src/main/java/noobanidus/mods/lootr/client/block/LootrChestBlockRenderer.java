@@ -19,6 +19,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.ChestType;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.block.entities.LootrChestBlockEntity;
@@ -72,8 +73,7 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootBloc
 
   protected Material getMaterial(T tile) {
     if (ConfigManager.isVanillaTextures()) {
-      // TODO: This will break with Christmas chests
-      return Sheets.CHEST_LOCATION;
+      return Sheets.chooseMaterial(tile, ChestType.SINGLE, false);
     }
     if (playerId == null) {
       Player player = Minecraft.getInstance().player;
