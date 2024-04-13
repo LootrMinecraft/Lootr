@@ -371,7 +371,6 @@ public class ChestData extends SavedData {
     if (pos != null) {
       compound.put("position", NbtUtils.writeBlockPos(pos));
     } else {
-      // TODO: Block position is not stored if there was no block position
       LootrAPI.LOG.error("Attempted to save a data file with no `position`: '" + key + "'");
     }
     if (dimension != null) {

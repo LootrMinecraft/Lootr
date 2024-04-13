@@ -121,7 +121,6 @@ public class SpecialChestInventory implements ILootrInventory {
     ItemStack itemstack = ContainerHelper.removeItem(this.contents, index, count);
     if (!itemstack.isEmpty()) {
       this.setChanged();
-      // TODO: Trigger save?
     }
     return itemstack;
   }
@@ -268,7 +267,6 @@ public class SpecialChestInventory implements ILootrInventory {
       for (int i = 0; i < oldContents.size(); i++) {
         this.contents.set(i, oldContents.get(i));
       }
-      // TODO: Remove this once we confirm it works
       LootrAPI.LOG.info("Resized inventory with key '" + newChestData.getKey() + "' in dimension '" + newChestData.getDimension() + "' at location '" + newChestData.getPos() + "' from " + oldContents.size() + " slots to " + newSize + " slots.");
     } else if (newSize < this.contents.size()) {
       throw new IllegalArgumentException("Cannot resize inventory associated with '" + newChestData.getKey() + "' in dimension '" + newChestData.getDimension() + "' at location '" + newChestData.getPos() + "' to a smaller size.");

@@ -245,13 +245,11 @@ public class ConfigManager implements ConfigData {
     return REFRESH_DIMS;
   }
 
-  // TODO: Move this to the config module?
   public static BlockState replacement(BlockState original) {
     if (replacements == null) {
       replacements = new HashMap<>();
     }
 
-    // TODO: Do this for Forge too
     Block replacement = replacements.get(original.getBlock());
     if (replacement == null && (original.is(LootrTags.Blocks.CONVERT_BARRELS) || original.is(LootrTags.Blocks.CONVERT_CHESTS) || original.is(LootrTags.Blocks.CONVERT_CHESTS) || original.is(LootrTags.Blocks.CONVERT_SHULKERS) || original.is(LootrTags.Blocks.CONVERT_TRAPPED_CHESTS))) {
       if (original.getBlock() instanceof EntityBlock entityBlock) {
