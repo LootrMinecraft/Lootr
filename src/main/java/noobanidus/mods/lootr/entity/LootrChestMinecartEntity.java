@@ -102,7 +102,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     }
 
     if (source.getEntity() instanceof ServerPlayer player) {
-      if (LootrAPI.isFakePlayer(player) && (ConfigManager.get().breaking.enable_fake_player_break || ConfigManager.get().breaking.enable_break)) {
+      if ((LootrAPI.isFakePlayer(player) && (ConfigManager.get().breaking.enable_fake_player_break)) || ConfigManager.get().breaking.enable_break) {
         return false;
       }
       if (ConfigManager.get().breaking.disable_break) {
@@ -120,7 +120,8 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
       } else if (!source.getEntity().isShiftKeyDown()) {
         ((Player) source.getEntity()).displayClientMessage(Component.translatable("lootr.message.cart_should_sneak").setStyle(HandleBreak.getChatStyle()), false);
         ((Player) source.getEntity()).displayClientMessage(Component.translatable("lootr.message.should_sneak2", Component.translatable("lootr.message.cart_should_sneak3").setStyle(Style.EMPTY.withBold(true))).setStyle(HandleBreak.getChatStyle()), false);
-        // TODO: Confirm this is broken
+      } else {
+        return !source.getEntity().isShiftKeyDown();
       }
     } else {
       return true;
