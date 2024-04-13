@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinCatSitOnBlockGoal {
   @Redirect(method = "isValidTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;is(Lnet/minecraft/world/level/block/Block;)Z"))
   private boolean lootrIsIn(BlockState state, Block block) {
-    return state.is(block) || state.is(ModBlocks.CHEST); // TODO: Trapped chests?
+    return state.is(block) || state.is(ModBlocks.CHEST); // Don't do trapped chests.
   }
 
   @Inject(method = "isValidTarget", at = @At(target = "Lnet/minecraft/world/level/block/entity/ChestBlockEntity;getOpenCount(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;)I", value = "INVOKE"), cancellable = true)

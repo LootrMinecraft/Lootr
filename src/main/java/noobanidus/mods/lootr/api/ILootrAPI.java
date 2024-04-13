@@ -20,6 +20,7 @@ import java.util.function.LongSupplier;
 import java.util.function.Supplier;
 
 public interface ILootrAPI {
+  // TODO: Parity for this on Forge
   boolean isFakePlayer(Player player);
 
   default boolean clearPlayerLoot(ServerPlayer entity) {
@@ -107,7 +108,6 @@ public interface ILootrAPI {
 
   int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos, int defaultSignal);
 
-  // TODO: Think on this.
   default boolean hasCapacity(String capacity) {
     return switch (capacity) {
       case LootrCapacities.STRUCTURE_SAVING -> true;

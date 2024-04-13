@@ -90,7 +90,6 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   private NonNullList<ItemStack> items = NonNullList.withSize(27, ItemStack.EMPTY);
   private boolean savingToItem = false;
 
-  // TODO
   public LootrBarrelBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
     super(ModBlockEntities.SPECIAL_LOOT_BARREL, pWorldPosition, pBlockState);
   }

@@ -100,7 +100,6 @@ public class LootrAPI {
     return INSTANCE.getAnalogOutputSignal(pBlockState, pLevel, pPos, defaultSignal);
   }
 
-  // TODO: Consider if this is really needed
   public static boolean hasCapacity(String capacity) {
     return INSTANCE.hasCapacity(capacity);
   }

@@ -131,7 +131,7 @@ public class ChestUtil {
         tile.updatePacketViaState();
       }
       player.openMenu(provider);
-      // TODO: Instances using this check the block tags first.
+      // BlockTag is only checked when the block is broken.
       PiglinAi.angerNearbyPiglins(player, true);
     }
   }

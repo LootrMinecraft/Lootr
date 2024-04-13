@@ -126,7 +126,6 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
     this.seed = seedIn;
   }
 
-  // TODO: Clean this up dramatically
   @Override
   public void load(CompoundTag compound) {
     if (compound.contains("LootTable", Tag.TAG_STRING)) {
