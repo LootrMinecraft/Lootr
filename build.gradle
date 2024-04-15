@@ -101,3 +101,5 @@ idea {
 		downloadSources = true
 	}
 }
+
+apply from: 'curseforge.gradle'
