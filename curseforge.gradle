@@ -58,6 +58,18 @@ import com.diluv.schoomp.message.embed.Footer
 apply from: 'gradle/property_helper.gradle'
 apply plugin: com.matthewprenger.cursegradle.CurseGradlePlugin
 
+ext.modName = getRequiredString('mod_name')
+ext.modAuthor = getRequiredString('mod_author')
+ext.modId = getRequiredString('mod_id')
+ext.modCredits = getDefaultString('mod_credits', ext.modAuthor)
+ext.modDescription = getOptionalString('mod_description')
+ext.modChangelog = getOptionalString('mod_changelog')
+ext.modHomepage = getOptionalString('mod_homepage')
+ext.modSource = getOptionalString('mod_source')
+ext.modIssues = getOptionalString('mod_issues')
+ext.modLicense = getOptionalString('mod_license')
+ext.mcVersion = getRequiredString('minecraft_version')
+
 def projectPage = project.findProperty('curse_page')
             
 if (!projectPage && project.ext.modHomepage && project.ext.modHomepage.startsWith('https://www.curseforge.com/minecraft/mc-mods/')) {
@@ -88,8 +100,7 @@ curseforge {
                 }
             }
 
-            if (project.hasProperty("registrate_version") || project.hasProperty("noobutil_version") || project.hasProperty("shoulders_version")) {
-                mainArtifact(shadowJar) {
+                mainArtifact(remapJar) {
 
                     if (project.hasProperty('curse_requirements') || project.hasProperty('curse_optionals')) {
 
@@ -113,32 +124,6 @@ curseforge {
                         }
                     }
                 }
-            } else {
-                mainArtifact(jar) {
-
-                    if (project.hasProperty('curse_requirements') || project.hasProperty('curse_optionals')) {
-
-                        relations {
-
-                            if (project.hasProperty('curse_requirements')) {
-
-                                for (String req : project.findProperty('curse_requirements').split(', ')) {
-
-                                    requiredLibrary req
-                                }
-                            }
-
-                            if (project.hasProperty('curse_optionals')) {
-
-                                for (String req : project.findProperty('curse_optionals').split(', ')) {
-
-                                    optionalLibrary req
-                                }
-                            }
-                        }
-                    }
-                }
-            }
         }
     }
     
@@ -158,7 +143,7 @@ if (project.hasProperty('curse_discord_webhook')) {
             def newFileId = tasks.getByName("curseforge${curse_project}").property('mainArtifact').fileID
     
             // Create a new webhook instance for Discord
-            def webhook = new Webhook(findProperty('curse_discord_webhook'), "${project.ext.modName} CurseForge Gradle Upload")
+            def webhook = new Webhook(findProperty('curse_discord_webhook'), "${project.modName} CurseForge Gradle Upload")
         
             // Craft a message to send to Discord using the webhook.
             def message = new Message()      
