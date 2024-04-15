@@ -13,6 +13,7 @@
   "lootr.message.refresh_in": "Этот контейнер обновит своё содержимое через %s секунд.",
   "lootr.message.refresh_start": "Контейнер обновится с новым содержимым через %s секунд!",
   "lootr.message.invalid_table": "Таблица добычи для этого контейнера [%s] стала пустой, и добыча не могла быть сгенерирована. Проверьте `latest.log` на наличие ошибок.",
+  "lootr.message.invalid_block": "The container that you have tried to open is invalid as it has not generated its identifier.",
   "block.lootr.lootr_chest": "Сундук с добычей",
   "block.lootr.lootr_trapped_chest": "Сундук с добычей",
   "block.lootr.lootr_barrel": "Бочка с добычей",
@@ -54,6 +55,8 @@
   "text.autoconfig.lootr.option.conversion": "Преобразование",
   "text.autoconfig.lootr.option.conversion.max_entry_age": "Максимальный возраст блочной сущности",
   "text.autoconfig.lootr.option.conversion.disable": "Отключить преобразование",
+  "text.autoconfig.lootr.option.conversion.elytra": "Convert Elytra Item Frames",
+  "text.autoconfig.lootr.option.conversion.world_border": "Disable Conversion Outside World Border",
   "text.autoconfig.lootr.option.breaking": "Разрушение",
   "text.autoconfig.lootr.option.breaking.enable_break": "Разрешить все виды разрушения",
   "text.autoconfig.lootr.option.breaking.enable_fake_player_break": "Разрешить разрушение фальшивыми игроками",
@@ -84,6 +87,7 @@
   "text.autoconfig.lootr.option.notifications": "Уведомления",
   "text.autoconfig.lootr.option.notifications.notification_delay": "Задержка",
   "text.autoconfig.lootr.option.notifications.disable_notifications": "Отключить уведомления",
+  "text.autoconfig.lootr.option.notifications.disable_message_styles": "Disable Style And Formatting In Notifications",
   "text.autoconfig.lootr.option.vanilla": "Ванилла",
   "text.autoconfig.lootr.option.vanilla.vanilla_textures": "Ванильные текстуры"
 }
