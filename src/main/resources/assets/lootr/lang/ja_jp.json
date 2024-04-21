@@ -64,7 +64,7 @@
   "text.autoconfig.lootr.option.breaking.power_comparators": "コンパレーターの出力",
   "text.autoconfig.lootr.option.breaking.blast_resistant": "爆発耐性",
   "text.autoconfig.lootr.option.breaking.blast_immune": "爆発を無効化",
-  "text.autoconfig.lootr.option.breaking.trapped_custom": "Custom Inventories Are Trapped",
+  "text.autoconfig.lootr.option.breaking.trapped_custom": "カスタムインベントリのトラップ化",
   "text.autoconfig.lootr.option.lists": "リスト",
   "text.autoconfig.lootr.option.lists.dimension_whitelist": "ディメンションのホワイトリスト",
   "text.autoconfig.lootr.option.lists.dimension_blacklist": "ディメンションのブラックリスト",
@@ -87,7 +87,7 @@
   "text.autoconfig.lootr.option.notifications": "通知",
   "text.autoconfig.lootr.option.notifications.notification_delay": "崩壊",
   "text.autoconfig.lootr.option.notifications.disable_notifications": "通知を無効化",
-  "text.autoconfig.lootr.option.notifications.disable_message_styles": "Disable Style And Formatting In Notifications",
+  "text.autoconfig.lootr.option.notifications.disable_message_styles": "通知のフォーマットと書式設定を無効化",
   "text.autoconfig.lootr.option.vanilla": "バニラ",
   "text.autoconfig.lootr.option.vanilla.vanilla_textures": "バニラのテクスチャを使用"
 }
