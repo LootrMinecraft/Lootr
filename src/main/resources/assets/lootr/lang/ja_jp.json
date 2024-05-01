@@ -89,5 +89,6 @@
   "text.autoconfig.lootr.option.notifications.disable_notifications": "通知を無効化",
   "text.autoconfig.lootr.option.notifications.disable_message_styles": "通知のフォーマットと書式設定を無効化",
   "text.autoconfig.lootr.option.vanilla": "バニラ",
-  "text.autoconfig.lootr.option.vanilla.vanilla_textures": "バニラのテクスチャを使用"
+  "text.autoconfig.lootr.option.vanilla.vanilla_textures": "バニラのテクスチャを使用",
+  "text.autoconfig.lootr.option.vanilla.old_textures": "Classic Textures"
 }
