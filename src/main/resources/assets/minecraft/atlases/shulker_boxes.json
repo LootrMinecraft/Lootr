@@ -7,6 +7,14 @@
     {
       "type": "minecraft:single",
       "resource": "lootr:shulker_opened"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "lootr:old_shulker"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "lootr:old_shulker_opened"
     }
   ]
 }
