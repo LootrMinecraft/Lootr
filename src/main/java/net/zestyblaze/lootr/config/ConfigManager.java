@@ -426,6 +426,6 @@ public class ConfigManager implements ConfigData {
 
   public static class Vanilla {
     public boolean vanilla_textures = false;
-    public boolean old_textures = false;
+    public boolean old_textures = true;
   }
 }
