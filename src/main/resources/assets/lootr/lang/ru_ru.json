@@ -89,5 +89,6 @@
   "text.autoconfig.lootr.option.notifications.disable_notifications": "Отключить уведомления",
   "text.autoconfig.lootr.option.notifications.disable_message_styles": "Disable Style And Formatting In Notifications",
   "text.autoconfig.lootr.option.vanilla": "Ванилла",
-  "text.autoconfig.lootr.option.vanilla.vanilla_textures": "Ванильные текстуры"
+  "text.autoconfig.lootr.option.vanilla.vanilla_textures": "Ванильные текстуры",
+  "text.autoconfig.lootr.option.vanilla.old_textures": "Classic Textures"
 }
