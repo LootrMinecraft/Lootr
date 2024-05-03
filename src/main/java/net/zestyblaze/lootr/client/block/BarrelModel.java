@@ -113,6 +113,10 @@ public class BarrelModel implements UnbakedModel {
               emitter.emit();
             }
           }
+          for (BakedQuad quad : model.getQuads(state, null, randomSupplier.get())) {
+            emitter.fromVanilla(quad, material, null);
+            emitter.emit();
+          }
         }
       }
     }
@@ -123,6 +127,7 @@ public class BarrelModel implements UnbakedModel {
 
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand) {
+      // TODO: I don't think is ever being called
       if (ConfigManager.isVanillaTextures()) {
         return vanilla.getQuads(state, side, rand);
       } else if (ConfigManager.get().client.old_textures) {
