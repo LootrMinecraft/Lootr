@@ -95,11 +95,11 @@ public class BarrelModel implements UnbakedModel {
     @Override
     public void emitBlockQuads(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context) {
       Object data = ((RenderAttachedBlockView) blockView).getBlockEntityRenderAttachment(pos);
-      BakedModel model = ConfigManager.get().vanilla.old_textures ? old_unopened : unopened;
+      BakedModel model = ConfigManager.get().client.old_textures ? old_unopened : unopened;
       if (ConfigManager.isVanillaTextures()) {
         model = vanilla;
       } else if (data == Boolean.TRUE) {
-        model = ConfigManager.get().vanilla.old_textures ? old_opened : opened;
+        model = ConfigManager.get().client.old_textures ? old_opened : opened;
       }
 
       if (model != null) {
@@ -125,7 +125,7 @@ public class BarrelModel implements UnbakedModel {
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand) {
       if (ConfigManager.isVanillaTextures()) {
         return vanilla.getQuads(state, side, rand);
-      } else if (ConfigManager.get().vanilla.old_textures) {
+      } else if (ConfigManager.get().client.old_textures) {
         return old_unopened.getQuads(state, side, rand);
       } else {
         return unopened.getQuads(state, side, rand);

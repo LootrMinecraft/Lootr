@@ -84,7 +84,7 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootBloc
         return Sheets.chooseMaterial(tile, ChestType.SINGLE, false);
       }
     }
-    if (ConfigManager.get().vanilla.old_textures) {
+    if (ConfigManager.get().client.old_textures) {
       if (playerId == null) {
         Player player = Minecraft.getInstance().player;
         if (player != null) {

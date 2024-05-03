@@ -72,7 +72,7 @@ public class ConfigManager implements ConfigData {
   @ConfigEntry.Gui.CollapsibleObject
   public Notifications notifications = new Notifications();
   @ConfigEntry.Gui.CollapsibleObject
-  public Vanilla vanilla = new Vanilla();
+  public Client client = new Client();
 
   public static void reset() {
     DECAY_MODS = null;
@@ -296,7 +296,7 @@ public class ConfigManager implements ConfigData {
   }
 
   public static boolean isVanillaTextures() {
-    return get().vanilla.vanilla_textures;
+    return get().client.vanilla_textures;
   }
 
   public static Set<String> getDimensionModidWhitelist() {
@@ -424,8 +424,8 @@ public class ConfigManager implements ConfigData {
     public boolean disable_message_styles = false;
   }
 
-  public static class Vanilla {
+  public static class Client {
     public boolean vanilla_textures = false;
-    public boolean old_textures = true;
+    public boolean old_textures = false;
   }
 }

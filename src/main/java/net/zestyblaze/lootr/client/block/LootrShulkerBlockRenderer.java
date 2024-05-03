@@ -36,10 +36,10 @@ public class LootrShulkerBlockRenderer implements BlockEntityRenderer<LootrShulk
   }
 
   protected Material getMaterial(LootrShulkerBlockEntity tile) {
-    if (ConfigManager.get().vanilla.vanilla_textures) {
+    if (ConfigManager.get().client.vanilla_textures) {
       return Sheets.DEFAULT_SHULKER_TEXTURE_LOCATION;
     }
-    if (ConfigManager.get().vanilla.old_textures) {
+    if (ConfigManager.get().client.old_textures) {
       if (playerId == null) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) {
