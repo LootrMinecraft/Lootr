@@ -118,6 +118,10 @@ public class BarrelModel implements UnbakedModel {
               emitter.emit();
             }
           }
+          for (BakedQuad quad : model.getQuads(state, null, randomSupplier.get())) {
+            emitter.fromVanilla(quad, material, null);
+            emitter.emit();
+          }
         }
       }
     }
