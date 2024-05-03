@@ -3,11 +3,14 @@ package net.zestyblaze.lootr.client;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.zestyblaze.lootr.client.block.BarrelModel;
 import net.zestyblaze.lootr.client.block.LootrChestBlockRenderer;
 import net.zestyblaze.lootr.client.block.LootrShulkerBlockRenderer;
@@ -24,6 +27,8 @@ public class LootrClient implements ClientModInitializer {
   @Override
   public void onInitializeClient() {
     LootrNetworkingInit.registerClientNetwork();
+
+    BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.BARREL, RenderType.cutoutMipped());
 
     BlockEntityRenderers.register(ModBlockEntities.SPECIAL_LOOT_CHEST, LootrChestBlockRenderer::new);
     BuiltinItemRendererRegistry.INSTANCE.register(ModBlocks.CHEST, LootrChestItemRenderer.getInstance());
