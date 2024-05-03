@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.12-SNAPSHOT'
+	id 'fabric-loom' version '1.2-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -12,6 +12,11 @@ group = project.maven_group
 
 repositories {
 	maven {
+		name "Parchment"
+		url "https://maven.parchmentmc.org"
+	}
+
+	maven {
 		name "Cloth Config"
 		url "https://maven.shedaniel.me/"
 	}
@@ -19,11 +24,6 @@ repositories {
 	maven {
 		name "Modmenu"
 		url "https://maven.terraformersmc.com/"
-	}
-
-	maven {
-		name "Parchment"
-		url "https://maven.parchmentmc.org"
 	}
 }
 
@@ -42,6 +42,10 @@ dependencies {
 	//Modmenu
 	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}") {
 		exclude group: "net.fabricmc.fabric-api" }
+}
+
+sourceSets.main.resources {
+	srcDir 'src/generated/resources'
 }
 
 processResources {
@@ -66,6 +70,11 @@ jar {
 	}
 }
 
+remapJar {
+	input.set jar.archiveFile
+	dependsOn jar
+}
+
 loom {
 	accessWidenerPath = file("src/main/resources/lootr.accessWidener")
 }
@@ -73,10 +82,28 @@ loom {
 publishing {
 	publications {
 		mavenJava(MavenPublication) {
-			from components.java
+			artifact remapJar
+			artifact(sourcesJar) {
+				builtBy remapSourcesJar
+			}
+
+			artifactId = "lootr"
 		}
 	}
 
 	repositories {
+		maven {
+			url "file:///" + System.getenv("local_maven")
+		}
 	}
 }
+
+idea {
+	// Tell IDEA to always download sources/javadoc artifacts from maven.
+	module {
+		downloadJavadoc = true
+		downloadSources = true
+	}
+}
+
+apply from: 'curseforge.gradle'
