@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.network.client;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.SectionPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -29,15 +30,8 @@ public class ClientHandlers {
       return;
     }
 
-    BlockEntity be = level.getBlockEntity(message.pos);
-    if (be instanceof ILootBlockEntity tile) {
-      tile.getOpeners().remove(player.getUUID());
-      be.setChanged();
-      if (level.isClientSide)
-        level.getModelDataManager().requestRefresh(be);
-    } else {
-      LootrAPI.LOG.info("Unable to update model data for location '" + message.pos + "' as block entity is null or not a Lootr block entity.");
-    }
+    SectionPos pos = SectionPos.of(message.pos);
+    Minecraft.getInstance().levelRenderer.setSectionDirty(pos.x(), pos.y(), pos.z());
   }
 
   public static void handleOpenCart(OpenCart message, Supplier<NetworkEvent.Context> context) {
