@@ -13,7 +13,7 @@
   "lootr.message.refresh_in": "Este contenedor actualizará su contenido en %s segundos.",
   "lootr.message.refresh_start": "¡El contenedor se actualizará con nuevos contenidos en %s segundos!",
   "lootr.message.invalid_table": "La tabla de botín para este contenedor [%s] se resolvió como vacía y no se pudo generar botín. Verifica tu `latest.log` para ver errores.",
-  "lootr.message.invalid_block": "The container that you have tried to open is invalid as it has not generated its identifier.",
+  "lootr.message.invalid_block": "El contenedor que ha intentado abrir no es válido ya que no ha generado su identificador.",
   "block.lootr.lootr_chest": "Cofre de Botín",
   "block.lootr.lootr_trapped_chest": "Cofre de Botín",
   "block.lootr.lootr_barrel": "Barril de Botín",
@@ -47,7 +47,7 @@
   "lootr.advancements.root.title": "Pertenece a un Museo",
   "lootr.advancements.root.description": "Trae botín por jugador a tu mundo.",
   "lootr.advancements.1337loot.title": "/\\/\\4$73R 10073R",
-  "lootr.advancements.1337loot.description": "Open a total of 1337 containers! Wow!",
+  "lootr.advancements.1337loot.description": "¡Abre un total de 1337 contenedores! ¡Wow!",
   "itemGroup.lootr": "Lootr",
-  "item.lootr.crown": "Crown of the Master Looter"
+  "item.lootr.crown": "Corona del Saqueador Maestro"
 }
