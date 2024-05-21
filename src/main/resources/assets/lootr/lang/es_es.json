@@ -52,7 +52,7 @@
   "text.autoconfig.lootr.option.seed": "Semilla",
   "text.autoconfig.lootr.option.seed.randomize_seed": "Aleatorizar Semilla",
   "text.autoconfig.lootr.option.conversion": "Conversión",
-  "text.autoconfig.lootr.option.conversion.max_entry_age": "Maximum Block Entity Age",
+  "text.autoconfig.lootr.option.conversion.max_entry_age": "Edad máxima de la entidad de bloque",
   "text.autoconfig.lootr.option.conversion.disable": "Desactivar conversión",
   "text.autoconfig.lootr.option.breaking": "Romper",
   "text.autoconfig.lootr.option.breaking.enable_break": "Habilitar Romper Todo",
