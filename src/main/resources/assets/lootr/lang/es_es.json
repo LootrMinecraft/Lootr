@@ -12,7 +12,7 @@
   "lootr.message.refreshed": "¡El contenido del contenedor se actualiza al tocarlo!",
   "lootr.message.refresh_in": "Este contenedor actualizará su contenido en %s segundos.",
   "lootr.message.refresh_start": "¡El contenedor se actualizará con nuevos contenidos en %s segundos!",
-  "lootr.message.invalid_table": "The loot table for this container [%s] resolved to empty and loot could not be generated. Check your `latest.log` for errors.",
+  "lootr.message.invalid_table": "La tabla de botín para este contenedor [%s] se resolvió como vacía y no se pudo generar botín. Verifica tu `latest.log` para ver errores.",
   "block.lootr.lootr_chest": "Cofre de Botín",
   "block.lootr.lootr_trapped_chest": "Cofre de Botín",
   "block.lootr.lootr_barrel": "Barril de Botín",
