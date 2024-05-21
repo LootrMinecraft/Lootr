@@ -54,8 +54,8 @@
   "text.autoconfig.lootr.option.seed.randomize_seed": "Randomize Seed",
   "text.autoconfig.lootr.option.conversion": "Conversion",
   "text.autoconfig.lootr.option.conversion.max_entry_age": "Maximum Block Entity Age",
-  "text.autoconfig.lootr.option.conversion.disable": "Disable Conversion",
-  "text.autoconfig.lootr.option.conversion.elytra": "Convert Elytra Item Frames",
+  "text.autoconfig.lootr.option.conversion.disable": "Desactivar conversión",
+  "text.autoconfig.lootr.option.conversion.elytra": "Convertir marcos de Elytra",
   "text.autoconfig.lootr.option.conversion.world_border": "Disable Conversion Outside World Border",
   "text.autoconfig.lootr.option.breaking": "Breaking",
   "text.autoconfig.lootr.option.breaking.enable_break": "Enable All Breaking",
@@ -88,7 +88,7 @@
   "text.autoconfig.lootr.option.notifications.notification_delay": "Delay",
   "text.autoconfig.lootr.option.notifications.disable_notifications": "Disable Notifications",
   "text.autoconfig.lootr.option.notifications.disable_message_styles": "Disable Style And Formatting In Notifications",
-  "text.autoconfig.lootr.option.client": "Client",
+  "text.autoconfig.lootr.option.client": "Cliente",
   "text.autoconfig.lootr.option.client.vanilla_textures": "Vanilla Textures",
-  "text.autoconfig.lootr.option.client.old_textures": "Classic Textures"
+  "text.autoconfig.lootr.option.client.old_textures": "Texturas clásicas"
 }
