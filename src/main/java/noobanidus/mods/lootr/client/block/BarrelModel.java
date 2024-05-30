@@ -42,11 +42,15 @@ public class BarrelModel implements IUnbakedGeometry<BarrelModel> {
   private final UnbakedModel opened;
   private final UnbakedModel unopened;
   private final UnbakedModel vanilla;
+  private final UnbakedModel old_opened;
+  private final UnbakedModel old_unopened;
 
-  public BarrelModel(UnbakedModel opened, UnbakedModel unopened, UnbakedModel vanilla) {
+  public BarrelModel(UnbakedModel opened, UnbakedModel unopened, UnbakedModel vanilla, UnbakedModel old_unopened, UnbakedModel old_opened) {
     this.opened = opened;
     this.unopened = unopened;
     this.vanilla = vanilla;
+    this.old_opened = old_opened;
+    this.old_unopened = old_unopened;
   }
 
   @Override
@@ -70,22 +74,26 @@ public class BarrelModel implements IUnbakedGeometry<BarrelModel> {
         buildModel(opened, modelTransform, bakery, spriteGetter, modelLocation),
         buildModel(unopened, modelTransform, bakery, spriteGetter, modelLocation),
         buildModel(vanilla, modelTransform, bakery, spriteGetter, modelLocation),
+        buildModel(old_opened, modelTransform, bakery, spriteGetter, modelLocation),
+        buildModel(old_unopened, modelTransform, bakery, spriteGetter, modelLocation),
         context.getTransforms()
     );
   }
 
   private static final class BarrelBakedModel implements IDynamicBakedModel {
+    private final boolean ambientOcclusion;
+    private final boolean gui3d;
+    private final boolean isSideLit;
+    private final TextureAtlasSprite particle;
+    private final ItemOverrides overrides;
     private final BakedModel opened;
     private final BakedModel unopened;
     private final BakedModel vanilla;
+    private final BakedModel old_opened;
+    private final BakedModel old_unopened;
     private final ItemTransforms cameraTransforms;
-    protected final boolean ambientOcclusion;
-    protected final boolean gui3d;
-    protected final boolean isSideLit;
-    protected final TextureAtlasSprite particle;
-    protected final ItemOverrides overrides;
 
-    public BarrelBakedModel(boolean ambientOcclusion, boolean isGui3d, boolean isSideLit, TextureAtlasSprite particle, ItemOverrides overrides, BakedModel opened, BakedModel unopened, BakedModel vanilla, ItemTransforms cameraTransforms) {
+    public BarrelBakedModel(boolean ambientOcclusion, boolean isGui3d, boolean isSideLit, TextureAtlasSprite particle, ItemOverrides overrides, BakedModel opened, BakedModel unopened, BakedModel vanilla, BakedModel old_opened, BakedModel old_unopened, ItemTransforms cameraTransforms) {
       this.isSideLit = isSideLit;
       this.cameraTransforms = cameraTransforms;
       this.ambientOcclusion = ambientOcclusion;
@@ -95,6 +103,8 @@ public class BarrelModel implements IUnbakedGeometry<BarrelModel> {
       this.opened = opened;
       this.unopened = unopened;
       this.vanilla = vanilla;
+      this.old_opened = old_opened;
+      this.old_unopened = old_unopened;
     }
 
 
@@ -107,17 +117,15 @@ public class BarrelModel implements IUnbakedGeometry<BarrelModel> {
       } else {
         if (extraData.has(LootrBarrelBlock.OPENED)) {
           if (extraData.get(LootrBarrelBlock.OPENED) == Boolean.TRUE) {
-            model = opened;
+            model = ConfigManager.isOldTextures() ? old_opened : opened;
           } else {
-            model = unopened;
+            model = ConfigManager.isOldTextures() ? old_unopened : unopened;
           }
         } else {
-          model = unopened;
+          model = ConfigManager.isOldTextures() ? old_unopened : unopened;
         }
       }
-      ImmutableList.Builder<BakedQuad> builder = ImmutableList.builder();
-      builder.addAll(model.getQuads(state, side, rand, extraData, renderType));
-      return builder.build();
+      return model.getQuads(state, side, rand, extraData, renderType);
     }
 
     @Override
@@ -151,9 +159,9 @@ public class BarrelModel implements IUnbakedGeometry<BarrelModel> {
         return vanilla.getParticleIcon();
       }
       if (data.get(LootrBarrelBlock.OPENED) == Boolean.TRUE) {
-        return opened.getParticleIcon();
+        return ConfigManager.isOldTextures() ? old_opened.getParticleIcon() : opened.getParticleIcon();
       } else {
-        return unopened.getParticleIcon();
+        return ConfigManager.isOldTextures() ? old_unopened.getParticleIcon() : unopened.getParticleIcon();
       }
     }
 
@@ -165,7 +173,7 @@ public class BarrelModel implements IUnbakedGeometry<BarrelModel> {
 
     @Override
     public ItemOverrides getOverrides() {
-      return ItemOverrides.EMPTY;
+      return overrides;
     }
     /*
     @Override
@@ -186,7 +194,9 @@ public class BarrelModel implements IUnbakedGeometry<BarrelModel> {
       UnbakedModel unopened = deserializationContext.deserialize(GsonHelper.getAsJsonObject(modelContents, "unopened"), BlockModel.class);
       UnbakedModel opened = deserializationContext.deserialize(GsonHelper.getAsJsonObject(modelContents, "opened"), BlockModel.class);
       UnbakedModel vanilla = deserializationContext.deserialize(GsonHelper.getAsJsonObject(modelContents, "vanilla"), BlockModel.class);
-      return new BarrelModel(opened, unopened, vanilla);
+      UnbakedModel old_unopened = deserializationContext.deserialize(GsonHelper.getAsJsonObject(modelContents, "old_unopened"), BlockModel.class);
+      UnbakedModel old_opened = deserializationContext.deserialize(GsonHelper.getAsJsonObject(modelContents, "old_opened"), BlockModel.class);
+      return new BarrelModel(opened, unopened, vanilla, old_unopened, old_opened);
     }
   }
 }

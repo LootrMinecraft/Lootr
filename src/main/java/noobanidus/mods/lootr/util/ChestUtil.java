@@ -46,9 +46,9 @@ public class ChestUtil {
     if (te instanceof ILootBlockEntity tile) {
       if (tile.getOpeners().remove(player.getUUID())) {
         te.setChanged();
-        tile.updatePacketViaState();
-        UpdateModelData message = new UpdateModelData(te.getBlockPos());
-        PacketHandler.sendToInternal(message, (ServerPlayer) player);
+        tile.updatePacketViaForce(te);
+        UpdateModelData packet = new UpdateModelData(pos);
+        PacketHandler.sendToInternal(packet, (ServerPlayer) player);
       }
     }
 

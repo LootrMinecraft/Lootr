@@ -109,7 +109,12 @@ public class ConfigManager {
 
   // Client-only
   public static final ForgeConfigSpec.BooleanValue VANILLA_TEXTURES;
-
+  public static final ForgeConfigSpec.BooleanValue OLD_TEXTURES;
+  private static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
+  private static final ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
+  private static final List<ResourceLocation> PROBLEMATIC_CHESTS = Arrays.asList(new ResourceLocation("twilightforest", "structures/stronghold_boss"), new ResourceLocation("atum", "chests/pharaoh"));
+  public static ForgeConfigSpec COMMON_CONFIG;
+  public static ForgeConfigSpec CLIENT_CONFIG;
   private static Set<String> DECAY_MODS = null;
   private static Set<ResourceLocation> DECAY_TABLES = null;
   private static Set<String> REFRESH_MODS = null;
@@ -179,6 +184,7 @@ public class ConfigManager {
 
     COMMON_CONFIG = COMMON_BUILDER.build();
     VANILLA_TEXTURES = CLIENT_BUILDER.comment("set to true to use vanilla textures instead of Lootr special textures. Note: this will prevent previously opened chests from rendering differently").define("vanilla_textures", false);
+    OLD_TEXTURES = CLIENT_BUILDER.comment("set to true to use the old Lootr textures").define("old_textures", false);
     CLIENT_CONFIG = CLIENT_BUILDER.build();
   }
 
@@ -443,6 +449,10 @@ public class ConfigManager {
 
   public static boolean isVanillaTextures () {
     return VANILLA_TEXTURES.get();
+  }
+
+  public static boolean isOldTextures () {
+    return OLD_TEXTURES.get();
   }
 
   private static void addSafeReplacement(ResourceLocation location, Block replacement) {

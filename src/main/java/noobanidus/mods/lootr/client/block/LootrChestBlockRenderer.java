@@ -14,12 +14,19 @@ import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.block.entities.LootrChestBlockEntity;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlockEntities;
+import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.util.Getter;
 
 import java.util.UUID;
 
 @SuppressWarnings({"NullableProblems", "deprecation"})
 public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootBlockEntity> extends ChestRenderer<T> {
+  public static final Material MATERIAL = new Material(Sheets.CHEST_SHEET, new ResourceLocation(LootrAPI.MODID, "chest"));
+  public static final Material MATERIAL2 = new Material(Sheets.CHEST_SHEET, new ResourceLocation(LootrAPI.MODID, "chest_opened"));
+  public static final Material MATERIAL3 = new Material(Sheets.CHEST_SHEET, new ResourceLocation(LootrAPI.MODID, "chest_trapped"));
+  public static final Material MATERIAL4 = new Material(Sheets.CHEST_SHEET, new ResourceLocation(LootrAPI.MODID, "chest_trapped_opened"));
+  public static final Material OLD_MATERIAL = new Material(Sheets.CHEST_SHEET, new ResourceLocation(LootrAPI.MODID, "old_chest"));
+  public static final Material OLD_MATERIAL2 = new Material(Sheets.CHEST_SHEET, new ResourceLocation(LootrAPI.MODID, "old_chest_opened"));
   private UUID playerId = null;
   public static final Material MATERIAL = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(LootrAPI.MODID, "chest"));
   public static final Material MATERIAL2 = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(LootrAPI.MODID, "chest_opened"));
@@ -36,21 +43,34 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootBloc
     if (ConfigManager.isVanillaTextures()) {
       return trapped ? Sheets.CHEST_TRAP_LOCATION : Sheets.CHEST_LOCATION;
     }
+    boolean trapped = tile.getType().equals(ModBlockEntities.LOOTR_TRAPPED_CHEST.get());
     if (playerId == null) {
       Player player = Getter.getPlayer();
       if (player != null) {
         playerId = player.getUUID();
       } else {
+        if (ConfigManager.isOldTextures()) {
+          return OLD_MATERIAL;
+        }
         return trapped ? MATERIAL3 : MATERIAL;
       }
     }
     if (tile.isOpened()) {
+      if (ConfigManager.isOldTextures()) {
+        return OLD_MATERIAL2;
+      }
       return trapped ? MATERIAL4 : MATERIAL2;
     }
     if (tile.getOpeners().contains(playerId)) {
+      if (ConfigManager.isOldTextures()) {
+        return OLD_MATERIAL2;
+      }
       return trapped ? MATERIAL4 : MATERIAL2;
     } else {
-      return trapped ? MATERIAL3 : MATERIAL;
+        if (ConfigManager.isOldTextures()) {
+          return OLD_MATERIAL;
+        }
+        return trapped ? MATERIAL3 : MATERIAL;
     }
   }
 }
