@@ -23,6 +23,7 @@ public class HandleCart {
         if (chest.level() instanceof ServerLevel level) {
           LootrChestMinecartEntity lootr = new LootrChestMinecartEntity(chest.level(), chest.getX(), chest.getY(), chest.getZ());
           lootr.setLootTable(chest.lootTable, chest.lootTableSeed);
+          lootr.getPersistentData().merge(chest.getPersistentData());
           event.setCanceled(true);
           if (!level.getServer().isSameThread()) {
             // TODO: If this is actually triggering, we need to ticket the chunk. The only instance I can think of this happening is if a mod is manually creating this event, as the Forge defaults only fire it in the main thread.
