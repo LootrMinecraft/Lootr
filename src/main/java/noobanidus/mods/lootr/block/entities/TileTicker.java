@@ -152,7 +152,9 @@ public class TileTicker {
         level.destroyBlock(entry.getPosition(), false);
         level.setBlock(entry.getPosition(), replacement, 2);
         blockEntity = level.getBlockEntity(entry.getPosition());
-        blockEntity.getPersistentData().merge(oldData);
+        if (blockEntity != null) {
+          blockEntity.getPersistentData().merge(oldData);
+        }
         if (blockEntity instanceof ILootBlockEntity) {
           ((RandomizableContainerBlockEntity) blockEntity).setLootTable(table, seed);
         } else {
