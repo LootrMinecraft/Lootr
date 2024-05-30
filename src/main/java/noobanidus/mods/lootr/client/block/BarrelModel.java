@@ -60,6 +60,8 @@ public class BarrelModel implements IUnbakedGeometry<BarrelModel> {
     materials.addAll(unopened.getMaterials(modelGetter, missingTextureErrors));
     materials.addAll(opened.getMaterials(modelGetter, missingTextureErrors));
     materials.addAll(vanilla.getMaterials(modelGetter, missingTextureErrors));
+    materials.addAll(old_opened.getMaterials(modelGetter, missingTextureErrors));
+    materials.addAll(old_unopened.getMaterials(modelGetter, missingTextureErrors));
     return materials;
   }
 
@@ -175,12 +177,6 @@ public class BarrelModel implements IUnbakedGeometry<BarrelModel> {
     public ItemOverrides getOverrides() {
       return overrides;
     }
-    /*
-    @Override
-    public boolean isLayered() {
-      return false;
-    }
-     */
   }
 
   public static final class Loader implements IGeometryLoader<BarrelModel> {
