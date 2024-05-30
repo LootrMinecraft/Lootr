@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.setup;
 
 import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -22,13 +23,19 @@ import noobanidus.mods.lootr.init.ModEntities;
 public class ClientSetup {
   @SubscribeEvent
   public static void stitch(TextureStitchEvent.Pre event) {
-    if (event.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS)) {
+    ResourceLocation atlas = event.getAtlas().location();
+    if (atlas.equals(Sheets.CHEST_SHEET)) {
       event.addSprite(LootrChestBlockRenderer.MATERIAL.texture());
       event.addSprite(LootrChestBlockRenderer.MATERIAL2.texture());
-      event.addSprite(LootrShulkerBlockRenderer.MATERIAL.texture());
-      event.addSprite(LootrShulkerBlockRenderer.MATERIAL2.texture());
       event.addSprite(LootrChestBlockRenderer.MATERIAL3.texture());
       event.addSprite(LootrChestBlockRenderer.MATERIAL4.texture());
+      event.addSprite(LootrChestBlockRenderer.OLD_MATERIAL.texture());
+      event.addSprite(LootrChestBlockRenderer.OLD_MATERIAL2.texture());
+    } else if (atlas.equals(Sheets.SHULKER_SHEET)) {
+      event.addSprite(LootrShulkerBlockRenderer.MATERIAL.texture());
+      event.addSprite(LootrShulkerBlockRenderer.MATERIAL2.texture());
+      event.addSprite(LootrShulkerBlockRenderer.MATERIAL3.texture());
+      event.addSprite(LootrShulkerBlockRenderer.MATERIAL4.texture());
     }
   }
 

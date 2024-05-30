@@ -59,6 +59,8 @@ public class BarrelModel implements IModelGeometry<BarrelModel> {
     materials.addAll(unopened.getMaterials(modelGetter, missingTextureErrors));
     materials.addAll(opened.getMaterials(modelGetter, missingTextureErrors));
     materials.addAll(vanilla.getMaterials(modelGetter, missingTextureErrors));
+    materials.addAll(old_opened.getMaterials(modelGetter, missingTextureErrors));
+    materials.addAll(old_unopened.getMaterials(modelGetter, missingTextureErrors));
     return materials;
   }
 
