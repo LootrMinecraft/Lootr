@@ -28,10 +28,6 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootBloc
   public static final Material OLD_MATERIAL = new Material(Sheets.CHEST_SHEET, new ResourceLocation(LootrAPI.MODID, "old_chest"));
   public static final Material OLD_MATERIAL2 = new Material(Sheets.CHEST_SHEET, new ResourceLocation(LootrAPI.MODID, "old_chest_opened"));
   private UUID playerId = null;
-  public static final Material MATERIAL = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(LootrAPI.MODID, "chest"));
-  public static final Material MATERIAL2 = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(LootrAPI.MODID, "chest_opened"));
-  public static final Material MATERIAL3 = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(LootrAPI.MODID, "trapped_chest"));
-  public static final Material MATERIAL4 = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(LootrAPI.MODID, "trapped_chest_opened"));
 
   public LootrChestBlockRenderer(BlockEntityRendererProvider.Context p_173607_) {
     super(p_173607_);
@@ -43,7 +39,6 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootBloc
     if (ConfigManager.isVanillaTextures()) {
       return trapped ? Sheets.CHEST_TRAP_LOCATION : Sheets.CHEST_LOCATION;
     }
-    boolean trapped = tile.getType().equals(ModBlockEntities.LOOTR_TRAPPED_CHEST.get());
     if (playerId == null) {
       Player player = Getter.getPlayer();
       if (player != null) {

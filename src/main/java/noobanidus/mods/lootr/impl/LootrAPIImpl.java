@@ -19,12 +19,6 @@ import java.util.function.LongSupplier;
 import java.util.function.Supplier;
 
 public class LootrAPIImpl implements ILootrAPI {
-
-  @Override
-  public boolean isFakePlayer(Player player) {
-    return player instanceof FakePlayer;
-  }
-
   @Override
   public boolean clearPlayerLoot(UUID id) {
     return DataStorage.clearInventories(id);

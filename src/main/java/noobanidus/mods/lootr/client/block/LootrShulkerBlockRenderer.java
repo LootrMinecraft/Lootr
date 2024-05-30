@@ -32,8 +32,6 @@ public class LootrShulkerBlockRenderer implements BlockEntityRenderer<LootrShulk
   private final ShulkerModel<?> model;
   private UUID playerId;
 
-  private final ShulkerModel<?> model;
-
   public LootrShulkerBlockRenderer(BlockEntityRendererProvider.Context context) {
     this.model = new ShulkerModel<>(context.bakeLayer(ModelLayers.SHULKER));
   }

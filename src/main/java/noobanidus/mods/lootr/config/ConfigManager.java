@@ -110,11 +110,7 @@ public class ConfigManager {
   // Client-only
   public static final ForgeConfigSpec.BooleanValue VANILLA_TEXTURES;
   public static final ForgeConfigSpec.BooleanValue OLD_TEXTURES;
-  private static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
-  private static final ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
-  private static final List<ResourceLocation> PROBLEMATIC_CHESTS = Arrays.asList(new ResourceLocation("twilightforest", "structures/stronghold_boss"), new ResourceLocation("atum", "chests/pharaoh"));
-  public static ForgeConfigSpec COMMON_CONFIG;
-  public static ForgeConfigSpec CLIENT_CONFIG;
+
   private static Set<String> DECAY_MODS = null;
   private static Set<ResourceLocation> DECAY_TABLES = null;
   private static Set<String> REFRESH_MODS = null;

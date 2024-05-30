@@ -102,7 +102,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     }
 
     if (source.getEntity() instanceof Player player) {
-      if ((LootrAPI.isFakePlayer(player) && ConfigManager.ENABLE_FAKE_PLAYER_BREAK.get()) || ConfigManager.ENABLE_BREAK.get()) {
+      if ((player instanceof FakePlayer && ConfigManager.ENABLE_FAKE_PLAYER_BREAK.get()) || ConfigManager.ENABLE_BREAK.get()) {
         return false;
       }
       if (ConfigManager.DISABLE_BREAK.get()) {
@@ -238,7 +238,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     if (this.lootTable != null && this.level.getServer() != null) {
       LootTable loottable = this.level.getServer().getLootTables().get(overrideTable != null ? overrideTable : this.lootTable);
       if (loottable == LootTable.EMPTY) {
-        LootrAPI.LOG.error("Unable to fill loot in " + level().dimension().location() + " at " + position() + " as the loot table '" + (overrideTable != null ? overrideTable : this.lootTable) + "' couldn't be resolved! Please search the loot table in `latest.log` to see if there are errors in loading.");
+        LootrAPI.LOG.error("Unable to fill loot in " + level.dimension().location() + " at " + position() + " as the loot table '" + (overrideTable != null ? overrideTable : this.lootTable) + "' couldn't be resolved! Please search the loot table in `latest.log` to see if there are errors in loading.");
         if (ConfigManager.REPORT_UNRESOLVED_TABLES.get() && player != null) {
           player.displayClientMessage(ChestUtil.getInvalidTable(overrideTable != null ? overrideTable : this.lootTable), false);
         }
