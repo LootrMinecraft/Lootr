@@ -41,6 +41,7 @@ import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.data.SpecialChestInventory;
 import noobanidus.mods.lootr.init.ModBlockEntities;
+import noobanidus.mods.lootr.util.ChestUtil;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -262,9 +263,9 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
     if (this.level != null && this.savedLootTable != null && this.level.getServer() != null) {
       LootTable loottable = this.level.getServer().getLootData().getLootTable(overrideTable != null ? overrideTable : this.savedLootTable);
       if (loottable == LootTable.EMPTY) {
-        LootrAPI.LOG.error("Unable to fill loot chest in " + level.dimension() + " at " + worldPosition + " as the loot table '" + (overrideTable != null ? overrideTable : this.savedLootTable) + "' couldn't be resolved! Please search the loot table in `latest.log` to see if there are errors in loading.");
+        LootrAPI.LOG.error("Unable to fill loot chest in " + level.dimension().location() + " at " + worldPosition + " as the loot table '" + (overrideTable != null ? overrideTable : this.savedLootTable) + "' couldn't be resolved! Please search the loot table in `latest.log` to see if there are errors in loading.");
         if (ConfigManager.REPORT_UNRESOLVED_TABLES.get()) {
-          player.displayClientMessage(Component.translatable("lootr.message.invalid_table", (overrideTable != null ? overrideTable : this.savedLootTable).toString()).setStyle(ConfigManager.DISABLE_MESSAGE_STYLES.get() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED)).withBold(true)), false);
+          player.displayClientMessage(ChestUtil.getInvalidTable(overrideTable != null ? overrideTable : this.savedLootTable), false);
         }
       }
       if (player instanceof ServerPlayer) {
