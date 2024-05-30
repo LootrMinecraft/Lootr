@@ -2,6 +2,7 @@ package noobanidus.mods.lootr.block.entities;
 
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -146,9 +147,12 @@ public class TileTicker {
         ResourceLocation table = be.lootTable;
         long seed = be.lootTableSeed;
         be.lootTable = null;
+        CompoundTag oldData = be.getPersistentData();
+
         level.destroyBlock(entry.getPosition(), false);
         level.setBlock(entry.getPosition(), replacement, 2);
         blockEntity = level.getBlockEntity(entry.getPosition());
+        blockEntity.getPersistentData().merge(oldData);
         if (blockEntity instanceof ILootBlockEntity) {
           ((RandomizableContainerBlockEntity) blockEntity).setLootTable(table, seed);
         } else {
