@@ -12,7 +12,7 @@
   "lootr.message.refreshed": "この宝箱に触ると、中身が再生成されます！",
   "lootr.message.refresh_in": "この宝箱は、%s秒後に中身を再生成します。",
   "lootr.message.refresh_start": "この宝箱は、%s秒後に中身が新しく再生成されます！",
-  "lootr.message.invalid_table": "この宝箱[%s]の中身のアイテムを空のまま生成してしまいました。エラーの内容は「latest.log」を参照してください。",
+  "lootr.message.invalid_table": "Error with mod [%s]! The loot table for this container [%s] could not be found and loot was not generated. Please check your `latest.log` for loading errors.",
   "lootr.message.invalid_block": "開こうとした宝箱は、識別子が生成されていないため開くことができません。",
   "block.lootr.lootr_chest": "お宝チェスト",
   "block.lootr.lootr_trapped_chest": "お宝チェスト",
