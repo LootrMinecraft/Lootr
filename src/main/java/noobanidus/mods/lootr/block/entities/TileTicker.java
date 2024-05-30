@@ -147,13 +147,13 @@ public class TileTicker {
         ResourceLocation table = be.lootTable;
         long seed = be.lootTableSeed;
         be.lootTable = null;
-        CompoundTag oldData = be.getPersistentData();
+        CompoundTag oldData = be.getTileData();
 
         level.destroyBlock(entry.getPosition(), false);
         level.setBlock(entry.getPosition(), replacement, 2);
         blockEntity = level.getBlockEntity(entry.getPosition());
         if (blockEntity != null) {
-          blockEntity.getPersistentData().merge(oldData);
+          blockEntity.getTileData().merge(oldData);
         }
         if (blockEntity instanceof ILootBlockEntity) {
           ((RandomizableContainerBlockEntity) blockEntity).setLootTable(table, seed);
