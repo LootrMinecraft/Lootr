@@ -111,6 +111,7 @@ public class ConfigManager {
   // Client-only
   public static final ForgeConfigSpec.BooleanValue VANILLA_TEXTURES;
   public static final ForgeConfigSpec.BooleanValue OLD_TEXTURES;
+
   private static Set<String> DECAY_MODS = null;
   private static Set<ResourceLocation> DECAY_TABLES = null;
   private static Set<String> REFRESH_MODS = null;
