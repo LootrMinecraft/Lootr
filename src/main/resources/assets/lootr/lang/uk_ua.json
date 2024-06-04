@@ -12,7 +12,7 @@
   "lootr.message.refreshed": "Вміст контейнера оновився від вашого дотику!",
   "lootr.message.refresh_in": "Цей контейнер оновить свій вміст через %s с.",
   "lootr.message.refresh_start": "Контейнер оновиться новим вмістом через %s с.",
-  "lootr.message.invalid_table": "The loot table for this container [%s] resolved to empty and loot could not be generated. Check your `latest.log` for errors.",
+  "lootr.message.invalid_table": "Error with mod [%s]! The loot table for this container [%s] could not be found and loot was not generated. Please check your `latest.log` for loading errors.",
   "lootr.message.invalid_block": "The container that you have tried to open is invalid as it has not generated its identifier.",
   "block.lootr.lootr_chest": "Скриня зі здобиччю",
   "block.lootr.lootr_trapped_chest": "Скриня зі здобиччю",
