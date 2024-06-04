@@ -14,7 +14,7 @@
     "parent": "minecraft:block/barrel_open"
   },
   "old_opened": {
-    "parent": "lootr:block/old_lootr_barrel_opened_open"
+    "parent": "lootr:block/old_lootr_opened_barrel_open"
   },
   "old_unopened": {
     "parent": "lootr:block/old_lootr_barrel_unopened_open"
