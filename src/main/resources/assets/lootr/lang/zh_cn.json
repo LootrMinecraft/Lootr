@@ -12,7 +12,7 @@
   "lootr.message.refreshed": "容器中的物品在你接触后被刷新！",
   "lootr.message.refresh_in": "这个容器将在%s秒内刷新里面的物品。",
   "lootr.message.refresh_start": "容器将在%s秒后用新的物品进行刷新！",
-  "lootr.message.invalid_table": "这个容器的战利品表[%s]为空，战利品无法生成。检查你的 `latest.log` 中是否有报错。",
+  "lootr.message.invalid_table": "模组[%s]错误！找不到这个容器的战利品表[%s]，战利品无法生成。检查你的 `latest.log` 中是否有报错。",
   "lootr.message.invalid_block": "你试图打开的容器无效，因为它没有生成标识符。",
   "block.lootr.lootr_chest": "战利品箱子",
   "block.lootr.lootr_trapped_chest": "战利品箱子",
