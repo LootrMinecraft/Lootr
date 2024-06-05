@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.LockCode;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -152,17 +153,19 @@ public class TileTicker {
         long seed = be.lootTableSeed;
         be.lootTable = null;
         CompoundTag oldData = be.getPersistentData();
+        LockCode oldCode = be.lockKey;
 
         level.destroyBlock(entry.getPosition(), false);
         level.setBlock(entry.getPosition(), replacement, 2);
         blockEntity = level.getBlockEntity(entry.getPosition());
-        if (blockEntity != null) {
+        if (blockEntity instanceof RandomizableContainerBlockEntity baseEntity) {
           blockEntity.getPersistentData().merge(oldData);
-        }
-        if (blockEntity instanceof ILootBlockEntity) {
-          ((RandomizableContainerBlockEntity) blockEntity).setLootTable(table, seed);
-        } else {
-          LootrAPI.LOG.error("replacement " + replacement + " is not an ILootTile " + entry.getDimension() + " at " + entry.getPosition());
+          baseEntity.lockKey = oldCode;
+          if (blockEntity instanceof ILootBlockEntity) {
+            baseEntity.setLootTable(table, seed);
+          } else {
+            LootrAPI.LOG.error("replacement " + replacement + " is not an ILootTile " + entry.getDimension() + " at " + entry.getPosition());
+          }
         }
 
         toRemove.add(entry);

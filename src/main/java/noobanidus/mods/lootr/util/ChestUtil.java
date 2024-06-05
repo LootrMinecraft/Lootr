@@ -16,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraftforge.network.PacketDistributor;
@@ -96,6 +97,13 @@ public class ChestUtil {
         player.displayClientMessage(Component.translatable("lootr.message.invalid_block").setStyle(getInvalidStyle()), true);
         return;
       }
+
+      if (te instanceof BaseContainerBlockEntity bce) {
+        if (!bce.canOpen(player)) {
+          return;
+        }
+      }
+
       if (DataStorage.isDecayed(tileId)) {
         level.destroyBlock(pos, true);
         notifyDecay(player, tileId);
