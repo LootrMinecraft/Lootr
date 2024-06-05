@@ -12,7 +12,7 @@
   "lootr.message.refreshed": "Innehållet i behållaren uppdateras när du nuddar den!",
   "lootr.message.refresh_in": "Denna behållare kommer uppdatera sitt innehåll om %s sekunder.",
   "lootr.message.refresh_start": "Behållaren kommer uppdateras med nytt innehåll om %s sekunder!",
-  "lootr.message.invalid_table": "Skattabellen för denna behållare [%s] blev tom och inga föremål kunde genereras. Se i din `latest.log` efter felmeddelanden.",
+  "lootr.message.invalid_table": "Error with mod [%s]! The loot table for this container [%s] could not be found and loot was not generated. Please check your `latest.log` for loading errors.",
   "lootr.message.invalid_block": "Behållaren du försökte öppna är ogiltig eftersom den inte har genererat sitt ID.",
   "block.lootr.lootr_chest": "Skattkista",
   "block.lootr.lootr_trapped_chest": "Skattkista",
