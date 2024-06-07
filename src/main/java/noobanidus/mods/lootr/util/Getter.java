@@ -6,7 +6,7 @@ import net.neoforged.fml.loading.FMLEnvironment;
 import noobanidus.mods.lootr.client.impl.ClientGetter;
 import noobanidus.mods.lootr.impl.ServerGetter;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class Getter {
   @Nullable

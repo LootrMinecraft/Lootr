@@ -18,7 +18,7 @@ import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.block.entities.LootrBarrelBlockEntity;
 import noobanidus.mods.lootr.util.ChestUtil;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class LootrBarrelBlock extends BarrelBlock {
   public static final ModelProperty<Boolean> OPENED = new ModelProperty<>();

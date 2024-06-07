@@ -50,7 +50,7 @@ import noobanidus.mods.lootr.network.PacketUtils;
 import noobanidus.mods.lootr.network.to_client.PacketOpenCart;
 import noobanidus.mods.lootr.util.ChestUtil;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;

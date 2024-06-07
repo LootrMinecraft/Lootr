@@ -25,7 +25,7 @@ import noobanidus.mods.lootr.block.entities.LootrTrappedChestBlockEntity;
 import noobanidus.mods.lootr.init.ModBlockEntities;
 import noobanidus.mods.lootr.util.ChestUtil;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class LootrTrappedChestBlock extends ChestBlock {
   public LootrTrappedChestBlock(Properties properties) {
