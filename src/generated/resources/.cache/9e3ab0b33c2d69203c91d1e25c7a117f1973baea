@@ -1,9 +1,4 @@
-<<<<<<< HEAD
-// 1.20.4	2024-01-19T15:20:13.6981778	atlases generator for lootr
-9b5af2b1243decf8ba469475408ec90adb940e28 assets/minecraft/atlases/blocks.json
-=======
-// 1.20	2024-03-26T14:31:37.4890743	atlases generator for lootr
+// 1.20.4	2024-06-07T14:11:52.5135072	atlases generator for lootr
 a4b9ac0f2a119f133b83f9f04c97a496b6aab3f7 assets/minecraft/atlases/blocks.json
 48c5ee9912b850dad751117280765f84ea43bc30 assets/minecraft/atlases/chests.json
 78cfe56adfab3dd38ebe3538112d9ae2e3bd9e93 assets/minecraft/atlases/shulker_boxes.json
->>>>>>> 2e84e521 (Move textures to correct atlases.)
