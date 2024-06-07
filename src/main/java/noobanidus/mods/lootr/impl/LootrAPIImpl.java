@@ -10,6 +10,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.common.util.FakePlayer;
 import noobanidus.mods.lootr.api.ILootrAPI;
 import noobanidus.mods.lootr.api.LootFiller;
 import noobanidus.mods.lootr.api.LootrAPI;
@@ -27,6 +28,18 @@ import java.util.function.LongSupplier;
 import java.util.function.Supplier;
 
 public class LootrAPIImpl implements ILootrAPI {
+
+
+  @Override
+  public boolean isFakePlayer(Player player) {
+    if (player instanceof ServerPlayer sPlayer) {
+      //noinspection ConstantValue
+      if (sPlayer.connection == null) {
+        return true;
+      }
+    }
+    return player instanceof FakePlayer;
+  }
 
   @Override
   public boolean clearPlayerLoot(UUID id) {

@@ -37,10 +37,6 @@ public class LootrChestBlock extends ChestBlock {
     super(properties, ModBlockEntities.LOOTR_CHEST::get);
   }
 
-  public LootrChestBlock(Properties properties, Supplier<BlockEntityType<? extends ChestBlockEntity>> type) {
-    super(properties, type);
-  }
-
   @Override
   public float getExplosionResistance() {
     return LootrAPI.getExplosionResistance(this, super.getExplosionResistance());
@@ -117,9 +113,8 @@ public class LootrChestBlock extends ChestBlock {
   @Override
   public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
     BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-    if (blockentity instanceof LootrChestBlockEntity) {
-      ((LootrChestBlockEntity) blockentity).recheckOpen();
+    if (blockentity instanceof LootrChestBlockEntity chest) {
+      chest.recheckOpen();
     }
-
   }
 }

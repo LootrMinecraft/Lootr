@@ -20,6 +20,8 @@ import java.util.function.LongSupplier;
 import java.util.function.Supplier;
 
 public interface ILootrAPI {
+  boolean isFakePlayer (Player player);
+
   default boolean clearPlayerLoot(ServerPlayer entity) {
     return clearPlayerLoot(entity.getUUID());
   }
