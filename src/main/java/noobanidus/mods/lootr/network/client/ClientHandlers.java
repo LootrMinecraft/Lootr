@@ -1,11 +1,8 @@
 package noobanidus.mods.lootr.network.client;
 
 import net.minecraft.client.Minecraft;
-<<<<<<< HEAD
 import net.minecraft.core.BlockPos;
-=======
 import net.minecraft.core.SectionPos;
->>>>>>> 00feaf8d (New textures; fix sneak-right-click barrels.)
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
