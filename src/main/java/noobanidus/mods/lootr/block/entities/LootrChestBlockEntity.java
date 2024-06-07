@@ -114,8 +114,8 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
     BlockState blockstate = pLevel.getBlockState(pPos);
     if (blockstate.hasBlockEntity()) {
       BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-      if (blockentity instanceof LootrChestBlockEntity) {
-        return ((LootrChestBlockEntity) blockentity).openersCounter.getOpenerCount();
+      if (blockentity instanceof LootrChestBlockEntity chest) {
+        return chest.openersCounter.getOpenerCount();
       }
     }
 
@@ -131,15 +131,9 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
 
   @Override
   public void load(CompoundTag compound) {
-    if (compound.contains("specialLootChest_table", Tag.TAG_STRING)) {
-      savedLootTable = new ResourceLocation(compound.getString("specialLootChest_table"));
-    }
-    if (compound.contains("specialLootChest_seed", Tag.TAG_LONG)) {
-      seed = compound.getLong("specialLootChest_seed");
-    }
-    if (savedLootTable == null && compound.contains("LootTable", Tag.TAG_STRING)) {
+    if (compound.contains("LootTable", Tag.TAG_STRING)) {
       savedLootTable = new ResourceLocation(compound.getString("LootTable"));
-      if (seed == 0L && compound.contains("LootTableSeed", Tag.TAG_LONG)) {
+      if (compound.contains("LootTableSeed", Tag.TAG_LONG)) {
         seed = compound.getLong("LootTableSeed");
       }
     }
@@ -170,11 +164,9 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
   protected void saveAdditional(CompoundTag compound) {
     super.saveAdditional(compound);
     if (savedLootTable != null) {
-      compound.putString("specialLootChest_table", savedLootTable.toString());
       compound.putString("LootTable", savedLootTable.toString());
     }
     if (seed != -1) {
-      compound.putLong("specialLootChest_seed", seed);
       compound.putLong("LootTableSeed", seed);
     }
     if (!LootrAPI.shouldDiscard() && !savingToItem) {

@@ -66,7 +66,6 @@ public class LootrShulkerBlockRenderer implements BlockEntityRenderer<LootrShulk
 
     pMatrixStack.pushPose();
     pMatrixStack.translate(0.5D, 0.5D, 0.5D);
-    float f = 0.9995F;
     pMatrixStack.scale(0.9995F, 0.9995F, 0.9995F);
     pMatrixStack.mulPose(direction.getRotation());
     pMatrixStack.scale(1.0F, -1.0F, -1.0F);

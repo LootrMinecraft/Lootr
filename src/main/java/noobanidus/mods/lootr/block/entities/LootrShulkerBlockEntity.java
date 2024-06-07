@@ -91,10 +91,8 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   private void updateAnimation(Level pLevel, BlockPos pPos, BlockState pState) {
     this.progressOld = this.progress;
     switch (this.animationStatus) {
-      case CLOSED:
-        this.progress = 0.0F;
-        break;
-      case OPENING:
+      case CLOSED -> this.progress = 0.0F;
+      case OPENING -> {
         this.progress += 0.1F;
         if (this.progress >= 1.0F) {
           this.animationStatus = ShulkerBoxBlockEntity.AnimationStatus.OPENED;
@@ -103,17 +101,16 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
         }
 
         this.moveCollidedEntities(pLevel, pPos, pState);
-        break;
-      case CLOSING:
+      }
+      case CLOSING -> {
         this.progress -= 0.1F;
         if (this.progress <= 0.0F) {
           this.animationStatus = ShulkerBoxBlockEntity.AnimationStatus.CLOSED;
           this.progress = 0.0F;
           doNeighborUpdates(pLevel, pPos, pState);
         }
-        break;
-      case OPENED:
-        this.progress = 1.0F;
+      }
+      case OPENED -> this.progress = 1.0F;
     }
 
   }
@@ -132,8 +129,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
       AABB aabb = Shulker.getProgressDeltaAabb(direction, this.progressOld, this.progress).move(pPos);
       List<Entity> list = pLevel.getEntities(null, aabb);
       if (!list.isEmpty()) {
-        for (int i = 0; i < list.size(); ++i) {
-          Entity entity = list.get(i);
+        for (Entity entity : list) {
           if (entity.getPistonPushReaction() != PushReaction.IGNORE) {
             entity.move(MoverType.SHULKER_BOX, new Vec3((aabb.getXsize() + 0.01D) * (double) direction.getStepX(), (aabb.getYsize() + 0.01D) * (double) direction.getStepY(), (aabb.getZsize() + 0.01D) * (double) direction.getStepZ()));
           }
@@ -214,15 +210,9 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
 
   @Override
   public void load(CompoundTag compound) {
-    if (compound.contains("specialLootChest_table", Tag.TAG_STRING)) {
-      savedLootTable = new ResourceLocation(compound.getString("specialLootChest_table"));
-    }
-    if (compound.contains("specialLootChest_seed", Tag.TAG_LONG)) {
-      seed = compound.getLong("specialLootChest_seed");
-    }
-    if (savedLootTable == null && compound.contains("LootTable", Tag.TAG_STRING)) {
+    if (compound.contains("LootTable", Tag.TAG_STRING)) {
       savedLootTable = new ResourceLocation(compound.getString("LootTable"));
-      if (seed == 0L && compound.contains("LootTableSeed", Tag.TAG_LONG)) {
+      if (compound.contains("LootTableSeed", Tag.TAG_LONG)) {
         seed = compound.getLong("LootTableSeed");
       }
     }
@@ -253,11 +243,9 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   protected void saveAdditional(CompoundTag compound) {
     super.saveAdditional(compound);
     if (savedLootTable != null) {
-      compound.putString("specialLootChest_table", savedLootTable.toString());
       compound.putString("LootTable", savedLootTable.toString());
     }
     if (seed != -1) {
-      compound.putLong("specialLootChest_seed", seed);
       compound.putLong("LootTableSeed", seed);
     }
     if (!LootrAPI.shouldDiscard() && !savingToItem) {

@@ -26,39 +26,41 @@ public class EntityTicker {
 
   @SubscribeEvent
   public static void onServerTick(TickEvent.ServerTickEvent event) {
-    if (event.phase == TickEvent.Phase.END) {
-      if (!ConfigManager.DISABLE.get()) {
-        List<LootrChestMinecartEntity> completed = new ArrayList<>();
-        List<LootrChestMinecartEntity> copy;
-        synchronized (listLock) {
-          tickingList = true;
-          copy = new ArrayList<>(entities);
-          tickingList = false;
-        }
-        synchronized (worldLock) {
-          for (LootrChestMinecartEntity entity : copy) {
-            if (entity.isAddedToWorld()) {
-              continue;
-            }
-            ServerLevel world = (ServerLevel) entity.level();
-            ServerChunkCache provider = world.getChunkSource();
-            if (provider.hasChunk(Mth.floor(entity.getX() / 16.0D), Mth.floor(entity.getZ() / 16.0D))) {
-              world.addFreshEntity(entity);
-              completed.add(entity);
-            }
+    if (event.phase != TickEvent.Phase.END) {
+      return;
+    }
+
+    if (!ConfigManager.DISABLE.get()) {
+      List<LootrChestMinecartEntity> completed = new ArrayList<>();
+      List<LootrChestMinecartEntity> copy;
+      synchronized (listLock) {
+        tickingList = true;
+        copy = new ArrayList<>(entities);
+        tickingList = false;
+      }
+      synchronized (worldLock) {
+        for (LootrChestMinecartEntity entity : copy) {
+          if (entity.isAddedToWorld()) {
+            continue;
+          }
+          ServerLevel world = (ServerLevel) entity.level();
+          ServerChunkCache provider = world.getChunkSource();
+          if (provider.hasChunk(Mth.floor(entity.getX() / 16.0D), Mth.floor(entity.getZ() / 16.0D))) {
+            world.addFreshEntity(entity);
+            completed.add(entity);
           }
         }
-        synchronized (listLock) {
-          tickingList = true;
-          entities.removeAll(completed);
-          entities.addAll(pendingEntities);
-          tickingList = false;
-          pendingEntities.clear();
-        }
       }
-      DataStorage.doDecay();
-      DataStorage.doRefresh();
+      synchronized (listLock) {
+        tickingList = true;
+        entities.removeAll(completed);
+        entities.addAll(pendingEntities);
+        tickingList = false;
+        pendingEntities.clear();
+      }
     }
+    DataStorage.doDecay();
+    DataStorage.doRefresh();
   }
 
   public static void addEntity(LootrChestMinecartEntity entity) {

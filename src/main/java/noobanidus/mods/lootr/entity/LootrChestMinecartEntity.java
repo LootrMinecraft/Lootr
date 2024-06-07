@@ -132,15 +132,12 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   public void destroy(DamageSource source) {
     this.remove(Entity.RemovalReason.KILLED);
     if (this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
-      ItemStack itemstack = new ItemStack(Items.MINECART);
-      ItemStack itemstack2 = new ItemStack(Items.CHEST);
+      ItemStack itemstack = new ItemStack(Items.CHEST_MINECART);
       if (this.hasCustomName()) {
         itemstack.setHoverName(this.getCustomName());
-        itemstack2.setHoverName(this.getCustomName());
       }
 
       this.spawnAtLocation(itemstack);
-      this.spawnAtLocation(itemstack2);
     }
   }
 
@@ -245,7 +242,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
         CriteriaTriggers.GENERATE_LOOT.trigger((ServerPlayer) player, overrideTable != null ? overrideTable : this.lootTable);
       }
       LootParams.Builder builder = (new LootParams.Builder((ServerLevel) this.level())).withParameter(LootContextParams.ORIGIN, position());
-      builder.withParameter(LootContextParams.KILLER_ENTITY, this);
+      builder.withParameter(LootContextParams.KILLER_ENTITY, this); // TODO: Keep an eye on this, it's only for Forge
       if (player != null) {
         builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
       }
@@ -275,10 +272,5 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     if (getOpeners().contains(pPlayer.getUUID())) {
       PacketUtils.sendTo(new PacketOpenCart(getId()), pPlayer);
     }
-  }
-
-  @Override
-  public Item getDropItem() {
-    return Items.CHEST_MINECART;
   }
 }
