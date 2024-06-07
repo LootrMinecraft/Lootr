@@ -99,6 +99,10 @@ public class ChestData extends SavedData {
     return null;
   }
 
+  public boolean isEntity () {
+    return entity;
+  }
+
   public static String ID(UUID id) {
     String idString = id.toString();
     return "lootr/" + idString.charAt(0) + "/" + idString.substring(0, 2) + "/" + idString;
