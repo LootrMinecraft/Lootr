@@ -17,8 +17,6 @@ import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
-import net.neoforged.neoforge.network.PacketDistributor;
-import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.advancement.ContainerTrigger;
 import noobanidus.mods.lootr.api.IHasOpeners;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
@@ -29,7 +27,6 @@ import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModAdvancements;
 import noobanidus.mods.lootr.init.ModStats;
-import noobanidus.mods.lootr.network.PacketHandler;
 import noobanidus.mods.lootr.network.PacketUtils;
 import noobanidus.mods.lootr.network.to_client.PacketCloseCart;
 import noobanidus.mods.lootr.network.to_client.PacketCloseContainer;
@@ -65,15 +62,15 @@ public class ChestUtil {
     PacketUtils.sendToAllTracking(new PacketCloseCart(cart.getId()), cart);
   }
 
-  public static Style getInvalidStyle () {
+  public static Style getInvalidStyle() {
     return ConfigManager.DISABLE_MESSAGE_STYLES.get() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true);
   }
 
-  public static Style getDecayStyle () {
+  public static Style getDecayStyle() {
     return ConfigManager.DISABLE_MESSAGE_STYLES.get() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true);
   }
 
-  public static Style getRefreshStyle () {
+  public static Style getRefreshStyle() {
     return ConfigManager.DISABLE_MESSAGE_STYLES.get() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true);
   }
 

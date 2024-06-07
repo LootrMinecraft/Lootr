@@ -18,19 +18,13 @@ import noobanidus.mods.lootr.network.PacketHandler;
 
 @Mod("lootr")
 public class Lootr {
-  public static Lootr instance;
-
   public static final String VERSION = "0.8";
-
+  public static Lootr instance;
   private final PacketHandler packetHandler;
 
   public CommandLootr COMMAND_LOOTR;
 
   public CreativeModeTab TAB;
-
-  public static ResourceLocation rl (String path) {
-    return new ResourceLocation(LootrAPI.MODID, path);
-  }
 
   public Lootr(ModContainer modContainer, IEventBus modBus) {
     instance = this;
@@ -55,12 +49,16 @@ public class Lootr {
     this.packetHandler = new PacketHandler(modBus, LootrAPI.MODID, VERSION);
   }
 
+  public static ResourceLocation rl(String path) {
+    return new ResourceLocation(LootrAPI.MODID, path);
+  }
+
+  public static PacketHandler getPacketHandler() {
+    return instance.packetHandler;
+  }
+
   public void onCommands(RegisterCommandsEvent event) {
     COMMAND_LOOTR = new CommandLootr(event.getDispatcher());
     COMMAND_LOOTR.register();
-  }
-
-  public static PacketHandler getPacketHandler () {
-    return instance.packetHandler;
   }
 }

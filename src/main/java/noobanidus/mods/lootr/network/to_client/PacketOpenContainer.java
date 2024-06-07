@@ -8,10 +8,10 @@ import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.network.ILootrPacket;
 import noobanidus.mods.lootr.network.client.ClientHandlers;
 
-public record PacketOpenContainer (BlockPos position) implements ILootrPacket<PlayPayloadContext> {
+public record PacketOpenContainer(BlockPos position) implements ILootrPacket<PlayPayloadContext> {
   public static final ResourceLocation ID = Lootr.rl("open_container");
 
-  public PacketOpenContainer (FriendlyByteBuf buffer) {
+  public PacketOpenContainer(FriendlyByteBuf buffer) {
     this(buffer.readBlockPos());
   }
 

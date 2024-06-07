@@ -14,8 +14,8 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /* Shamelessly crib from Mekanism until it works
-* Original source: https://github.com/mekanism/Mekanism/blob/1.20.4/src/main/java/mekanism/common/network/BasePacketHandler.java
-* */
+ * Original source: https://github.com/mekanism/Mekanism/blob/1.20.4/src/main/java/mekanism/common/network/BasePacketHandler.java
+ * */
 
 public abstract class BasePacketHandler {
   protected BasePacketHandler(IEventBus modEventBus, String modid, String version) {

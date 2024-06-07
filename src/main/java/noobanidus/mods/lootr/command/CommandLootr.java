@@ -52,20 +52,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class CommandLootr {
+  private static final Map<String, UUID> profileMap = new HashMap<>();
+  private static List<ResourceLocation> tables = null;
+  private static List<String> tableNames = null;
   private final CommandDispatcher<CommandSourceStack> dispatcher;
-
   public CommandLootr(CommandDispatcher<CommandSourceStack> dispatcher) {
     this.dispatcher = dispatcher;
   }
-
-  public CommandLootr register() {
-    this.dispatcher.register(builder(Commands.literal("lootr").requires(p -> p.hasPermission(2))));
-    return this;
-  }
-
-  private static List<ResourceLocation> tables = null;
-  private static List<String> tableNames = null;
-  private static final Map<String, UUID> profileMap = new HashMap<>();
 
   private static List<ResourceLocation> getTables() {
     if (tables == null) {
@@ -122,11 +115,16 @@ public class CommandLootr {
         }
       }
       world.setBlock(pos, placementState, 2);
-      if(world.getBlockEntity(pos) instanceof RandomizableContainerBlockEntity randomizableBe) {
+      if (world.getBlockEntity(pos) instanceof RandomizableContainerBlockEntity randomizableBe) {
         randomizableBe.setLootTable(table, world.getRandom().nextLong());
       }
       c.sendSuccess(() -> Component.translatable("lootr.commands.create", Component.translatable(block.getDescriptionId()), ComponentUtils.wrapInSquareBrackets(Component.translatable("lootr.commands.blockpos", pos.getX(), pos.getY(), pos.getZ()).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.GREEN)).withBold(true))), table.toString()), false);
     }
+  }
+
+  public CommandLootr register() {
+    this.dispatcher.register(builder(Commands.literal("lootr").requires(p -> p.hasPermission(2))));
+    return this;
   }
 
   private RequiredArgumentBuilder<CommandSourceStack, ResourceLocation> suggestTables() {
@@ -285,7 +283,7 @@ public class CommandLootr {
         c.getSource().sendSuccess(() -> Component.literal("Tile at location " + position + " has " + openers.size() + " openers. UUIDs as follows:"), true);
         for (UUID uuid : openers) {
           Optional<GameProfile> prof = c.getSource().getServer().getProfileCache().get(uuid);
-          c.getSource().sendSuccess(() -> Component.literal("UUID: " + uuid.toString() + ", user profile: " + (prof.isPresent() ? prof.get().getName() : "null")), true);
+          c.getSource().sendSuccess(() -> Component.literal("UUID: " + uuid + ", user profile: " + (prof.isPresent() ? prof.get().getName() : "null")), true);
         }
       } else {
         c.getSource().sendSuccess(() -> Component.literal("No Lootr tile exists at location: " + position), false);

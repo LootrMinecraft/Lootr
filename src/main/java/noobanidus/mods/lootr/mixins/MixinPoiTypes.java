@@ -23,8 +23,8 @@ public class MixinPoiTypes {
     }
   }
 
-  @Inject(method="hasPoi", at=@At("RETURN"), cancellable=true)
-  private static void LootrHasPoi (BlockState state, CallbackInfoReturnable<Boolean> cir) {
+  @Inject(method = "hasPoi", at = @At("RETURN"), cancellable = true)
+  private static void LootrHasPoi(BlockState state, CallbackInfoReturnable<Boolean> cir) {
     if (state.is(ModBlocks.BARREL.get())) {
       cir.setReturnValue(true);
       cir.cancel();

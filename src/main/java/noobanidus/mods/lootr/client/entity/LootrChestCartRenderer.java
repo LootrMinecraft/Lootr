@@ -12,7 +12,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.client.item.LootrChestItemRenderer;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
-import org.joml.Vector3f;
 
 public class LootrChestCartRenderer<T extends LootrChestMinecartEntity> extends MinecartRenderer<T> {
   public LootrChestCartRenderer(EntityRendererProvider.Context p_174300_, ModelLayerLocation p_174301_) {

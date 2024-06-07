@@ -4,14 +4,13 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 import noobanidus.mods.lootr.Lootr;
-import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.network.ILootrPacket;
 import noobanidus.mods.lootr.network.client.ClientHandlers;
 
-public record PacketOpenCart (int entityId) implements ILootrPacket<PlayPayloadContext> {
+public record PacketOpenCart(int entityId) implements ILootrPacket<PlayPayloadContext> {
   public static final ResourceLocation ID = Lootr.rl("open_cart");
 
-  public PacketOpenCart (FriendlyByteBuf buffer) {
+  public PacketOpenCart(FriendlyByteBuf buffer) {
     this(buffer.readVarInt());
   }
 

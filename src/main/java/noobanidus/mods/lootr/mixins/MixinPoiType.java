@@ -17,6 +17,7 @@ public class MixinPoiType {
   private boolean fishermanCheck;
   @Unique
   private boolean isFisherman;
+
   @Inject(method = "is", at = @At(value = "RETURN"), cancellable = true)
   private void LootrGetBlockStates(BlockState state, CallbackInfoReturnable<Boolean> cir) {
     PoiType thisPoi = (PoiType) (Object) this;

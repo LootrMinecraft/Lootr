@@ -3,7 +3,6 @@ package noobanidus.mods.lootr.client.block;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.ChestRenderer;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -18,9 +17,9 @@ import java.util.UUID;
 
 @SuppressWarnings({"NullableProblems", "deprecation"})
 public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootBlockEntity> extends ChestRenderer<T> {
-  private UUID playerId = null;
   public static final Material MATERIAL = new Material(Sheets.CHEST_SHEET, new ResourceLocation(LootrAPI.MODID, "chest"));
   public static final Material MATERIAL2 = new Material(Sheets.CHEST_SHEET, new ResourceLocation(LootrAPI.MODID, "chest_opened"));
+  private UUID playerId = null;
 
   public LootrChestBlockRenderer(BlockEntityRendererProvider.Context p_173607_) {
     super(p_173607_);

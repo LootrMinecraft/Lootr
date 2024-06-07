@@ -1,12 +1,11 @@
 package noobanidus.mods.lootr.api.blockentity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.Container;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
 import noobanidus.mods.lootr.api.IHasOpeners;
 
-import java.util.Set;
 import java.util.UUID;
 
 public interface ILootBlockEntity extends IHasOpeners {
@@ -14,7 +13,7 @@ public interface ILootBlockEntity extends IHasOpeners {
 
   ResourceLocation getTable();
 
-  BlockPos getPosition ();
+  BlockPos getPosition();
 
   long getSeed();
 
@@ -22,5 +21,5 @@ public interface ILootBlockEntity extends IHasOpeners {
 
   void updatePacketViaState();
 
-  void setOpened (boolean opened);
+  void setOpened(boolean opened);
 }

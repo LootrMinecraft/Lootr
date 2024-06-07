@@ -46,7 +46,6 @@ import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.event.HandleBreak;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.init.ModEntities;
-import noobanidus.mods.lootr.network.PacketHandler;
 import noobanidus.mods.lootr.network.PacketUtils;
 import noobanidus.mods.lootr.network.to_client.PacketOpenCart;
 import noobanidus.mods.lootr.util.ChestUtil;
@@ -57,6 +56,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class LootrChestMinecartEntity extends AbstractMinecartContainer implements ILootCart {
+  private static BlockState cartNormal = null;
   private final Set<UUID> openers = new HashSet<>();
   private boolean opened = false;
 
@@ -119,6 +119,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
       } else if (!source.getEntity().isShiftKeyDown()) {
         ((Player) source.getEntity()).displayClientMessage(Component.translatable("lootr.message.cart_should_sneak").setStyle(HandleBreak.getChatStyle()), false);
         ((Player) source.getEntity()).displayClientMessage(Component.translatable("lootr.message.should_sneak2", Component.translatable("lootr.message.cart_should_sneak3").setStyle(Style.EMPTY.withBold(true))).setStyle(HandleBreak.getChatStyle()), false);
+        // TODO: I think this is broken
       }
     } else {
       return true;
@@ -143,7 +144,6 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     }
   }
 
-
   @Override
   public int getContainerSize() {
     return 27;
@@ -153,8 +153,6 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   public AbstractMinecart.Type getMinecartType() {
     return AbstractMinecart.Type.CHEST;
   }
-
-  private static BlockState cartNormal = null;
 
   @Override
   public BlockState getDefaultDisplayBlockState() {

@@ -3,7 +3,6 @@ package noobanidus.mods.lootr.block.entities;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
@@ -59,7 +58,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   protected long seed = -1;
   protected UUID tileId = null;
   protected boolean opened = false;
-  private ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
+  private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
     @Override
     protected void onOpen(Level leve, BlockPos pos, BlockState state) {
       LootrBarrelBlockEntity.this.playSound(state, SoundEvents.BARREL_OPEN);
@@ -90,12 +89,13 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
       return false;
     }
   };
+  private ModelData modelData = null;
+  private final NonNullList<ItemStack> items = NonNullList.withSize(27, ItemStack.EMPTY);
+  private boolean savingToItem = false;
 
   public LootrBarrelBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
     super(ModBlockEntities.LOOTR_BARREL.get(), pWorldPosition, pBlockState);
   }
-
-  private ModelData modelData = null;
 
   @Nonnull
   @Override
@@ -124,8 +124,6 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     this.seed = seedIn;
     super.setLootTable(lootTableIn, seedIn);
   }
-
-  private NonNullList<ItemStack> items = NonNullList.withSize(27, ItemStack.EMPTY);
 
   @Override
   protected NonNullList<ItemStack> getItems() {
@@ -216,8 +214,6 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     requestModelDataUpdate();
     super.load(compound);
   }
-
-  private boolean savingToItem = false;
 
   @Override
   public void saveToItem(ItemStack itemstack) {

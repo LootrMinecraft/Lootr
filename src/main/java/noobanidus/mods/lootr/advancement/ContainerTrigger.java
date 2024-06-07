@@ -20,10 +20,11 @@ public class ContainerTrigger extends SimpleCriterionTrigger<ContainerTrigger.Tr
     return TriggerInstance.CODEC;
   }
 
-  public static record TriggerInstance(Optional<ContextAwarePredicate> player) implements SimpleCriterionTrigger.SimpleInstance {
+  public record TriggerInstance(
+      Optional<ContextAwarePredicate> player) implements SimpleCriterionTrigger.SimpleInstance {
     public static final Codec<TriggerInstance> CODEC = RecordCodecBuilder.create(codec -> codec.group(ContextAwarePredicate.CODEC.optionalFieldOf("player").forGetter(TriggerInstance::player)).apply(codec, TriggerInstance::new));
 
-    public boolean test (ServerPlayer player, UUID container) {
+    public boolean test(ServerPlayer player, UUID container) {
       if (DataStorage.isAwarded(player.getUUID(), container)) {
         return false;
       } else {

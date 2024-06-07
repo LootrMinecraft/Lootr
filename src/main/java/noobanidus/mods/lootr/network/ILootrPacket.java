@@ -8,9 +8,9 @@ Original source: https://github.com/mekanism/Mekanism/blob/1.20.4/src/main/java/
  */
 public interface ILootrPacket<CONTEXT extends IPayloadContext> extends CustomPacketPayload {
 
-    void handle(CONTEXT context);
+  void handle(CONTEXT context);
 
-    default void handleMainThread(CONTEXT context) {
-        context.workHandler().execute(() -> handle(context));
-    }
+  default void handleMainThread(CONTEXT context) {
+    context.workHandler().execute(() -> handle(context));
+  }
 }

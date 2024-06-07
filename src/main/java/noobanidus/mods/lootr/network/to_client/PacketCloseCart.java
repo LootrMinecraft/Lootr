@@ -7,10 +7,10 @@ import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.network.ILootrPacket;
 import noobanidus.mods.lootr.network.client.ClientHandlers;
 
-public record PacketCloseCart (int entityId) implements ILootrPacket<PlayPayloadContext> {
+public record PacketCloseCart(int entityId) implements ILootrPacket<PlayPayloadContext> {
   public static final ResourceLocation ID = Lootr.rl("close_cart");
 
-  public PacketCloseCart (FriendlyByteBuf buffer) {
+  public PacketCloseCart(FriendlyByteBuf buffer) {
     this(buffer.readVarInt());
   }
 

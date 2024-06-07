@@ -11,12 +11,23 @@ import java.io.File;
 import java.util.UUID;
 
 public class TickingData extends SavedData {
-  private final Object2IntMap<UUID> tickMap = new Object2IntOpenHashMap<>();
-
   public static final SavedData.Factory<TickingData> FACTORY = new Factory<>(TickingData::new, TickingData::load);
+  private final Object2IntMap<UUID> tickMap = new Object2IntOpenHashMap<>();
 
   public TickingData() {
     tickMap.defaultReturnValue(-1);
+  }
+
+  public static TickingData load(CompoundTag pCompound) {
+    TickingData data = new TickingData();
+    data.tickMap.clear();
+    data.tickMap.defaultReturnValue(-1);
+    ListTag decayList = pCompound.getList("result", Tag.TAG_COMPOUND);
+    for (int i = 0; i < decayList.size(); i++) {
+      CompoundTag thisTag = decayList.getCompound(i);
+      data.tickMap.put(thisTag.getUUID("id"), thisTag.getInt("value"));
+    }
+    return data;
   }
 
   public boolean isComplete(UUID id) {
@@ -61,18 +72,6 @@ public class TickingData extends SavedData {
     }
 
     return false;
-  }
-
-  public static TickingData load(CompoundTag pCompound) {
-    TickingData data = new TickingData();
-    data.tickMap.clear();
-    data.tickMap.defaultReturnValue(-1);
-    ListTag decayList = pCompound.getList("result", Tag.TAG_COMPOUND);
-    for (int i = 0; i < decayList.size(); i++) {
-      CompoundTag thisTag = decayList.getCompound(i);
-      data.tickMap.put(thisTag.getUUID("id"), thisTag.getInt("value"));
-    }
-    return data;
   }
 
   @Override

@@ -27,8 +27,8 @@ import java.util.function.Predicate;
 public record LootCount(List<Operation> operations) implements LootItemCondition {
 
   public static final Codec<LootCount> CODEC = RecordCodecBuilder.create(
-          builder -> builder.group(
-                  Operation.CODEC.listOf().xmap(operationList -> operationList.stream().sorted(Comparator.comparingInt(Operation::getPrecedence)).toList(), Function.identity()).fieldOf("operations").forGetter(LootCount::operations)
+      builder -> builder.group(
+              Operation.CODEC.listOf().xmap(operationList -> operationList.stream().sorted(Comparator.comparingInt(Operation::getPrecedence)).toList(), Function.identity()).fieldOf("operations").forGetter(LootCount::operations)
           )
           .apply(builder, LootCount::new)
   );
@@ -98,10 +98,10 @@ public record LootCount(List<Operation> operations) implements LootItemCondition
   public record Operation(Operand operand, int value) implements Predicate<Integer> {
 
     public static final Codec<Operation> CODEC = RecordCodecBuilder.create(
-            instance -> instance.group(
-                    Operand.CODEC.fieldOf("type").forGetter(Operation::operand),
-                    PrimitiveCodec.INT.fieldOf("value").forGetter(Operation::value)
-            ).apply(instance, Operation::new)
+        instance -> instance.group(
+            Operand.CODEC.fieldOf("type").forGetter(Operation::operand),
+            PrimitiveCodec.INT.fieldOf("value").forGetter(Operation::value)
+        ).apply(instance, Operation::new)
     );
 
     public int getPrecedence() {

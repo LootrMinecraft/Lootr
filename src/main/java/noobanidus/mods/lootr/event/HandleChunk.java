@@ -15,7 +15,9 @@ import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import noobanidus.mods.lootr.api.LootrAPI;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
 
 @Mod.EventBusSubscriber(modid = LootrAPI.MODID)
 public class HandleChunk {

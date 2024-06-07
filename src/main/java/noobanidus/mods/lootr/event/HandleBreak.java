@@ -12,9 +12,8 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 import noobanidus.mods.lootr.LootrTags;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.config.ConfigManager;
-import noobanidus.mods.lootr.init.ModBlocks;
 
-@Mod.EventBusSubscriber(modid= LootrAPI.MODID)
+@Mod.EventBusSubscriber(modid = LootrAPI.MODID)
 public class HandleBreak {
 
   @SubscribeEvent
@@ -47,7 +46,7 @@ public class HandleBreak {
     }
   }
 
-  public static Style getChatStyle () {
+  public static Style getChatStyle() {
     if (ConfigManager.DISABLE_MESSAGE_STYLES.get()) {
       return Style.EMPTY;
     }

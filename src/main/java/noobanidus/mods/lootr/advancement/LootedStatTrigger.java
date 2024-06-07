@@ -21,11 +21,11 @@ public class LootedStatTrigger extends SimpleCriterionTrigger<LootedStatTrigger.
     return TriggerInstance.CODEC;
   }
 
-  public static record TriggerInstance(Optional<ContextAwarePredicate> player,
-                                       MinMaxBounds.Ints score) implements SimpleCriterionTrigger.SimpleInstance {
+  public record TriggerInstance(Optional<ContextAwarePredicate> player,
+                                MinMaxBounds.Ints score) implements SimpleCriterionTrigger.SimpleInstance {
     public static final Codec<TriggerInstance> CODEC = RecordCodecBuilder.create(codec -> codec.group(ContextAwarePredicate.CODEC.optionalFieldOf("player").forGetter(LootedStatTrigger.TriggerInstance::player), ExtraCodecs.strictOptionalField(MinMaxBounds.Ints.CODEC, "score", MinMaxBounds.Ints.ANY).forGetter(LootedStatTrigger.TriggerInstance::score)).apply(codec, LootedStatTrigger.TriggerInstance::new));
 
-    public boolean test (ServerPlayer player) {
+    public boolean test(ServerPlayer player) {
       return this.score.matches(player.getStats().getValue(ModStats.LOOTED_STAT));
     }
   }

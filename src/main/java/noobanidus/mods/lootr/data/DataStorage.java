@@ -20,8 +20,6 @@ import net.minecraft.world.level.storage.LevelResource;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.api.LootFiller;
 import noobanidus.mods.lootr.api.LootrAPI;
-import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
-import noobanidus.mods.lootr.api.inventory.ILootrInventory;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
 import javax.annotation.Nullable;
@@ -218,12 +216,12 @@ public class DataStorage {
   }
 
   // Deprecated: use getContainerData instead.
-  @Deprecated(since="1.20.0", forRemoval = true)
+  @Deprecated(since = "1.20.0", forRemoval = true)
   public static ChestData getInstanceUuid(ServerLevel world, BlockPos pos, UUID id) {
     return getContainerData(world, pos, id);
   }
 
-  public static ChestData getContainerData (ServerLevel world, BlockPos pos, UUID id) {
+  public static ChestData getContainerData(ServerLevel world, BlockPos pos, UUID id) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot fetch chest data for " + world.dimension() + " at " + pos.toString() + " with ID " + id.toString() + " and cannot continue.");
@@ -244,12 +242,12 @@ public class DataStorage {
   }
 
   // Deprecated: use getEntityData instead.
-  @Deprecated(since="1.20.0", forRemoval=true)
+  @Deprecated(since = "1.20.0", forRemoval = true)
   public static ChestData getInstance(ServerLevel world, BlockPos pos, UUID id) {
     return getEntityData(world, pos, id);
   }
 
-  public static ChestData getEntityData (ServerLevel world, BlockPos pos, UUID id) {
+  public static ChestData getEntityData(ServerLevel world, BlockPos pos, UUID id) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot fetch chest data for " + world.dimension() + " at " + pos.toString() + " with ID " + id.toString() + " and cannot continue.");
@@ -270,7 +268,7 @@ public class DataStorage {
   }
 
   // Deprecated: use getReferenceContainerData instead.
-  @Deprecated(since="1.20.0", forRemoval=true)
+  @Deprecated(since = "1.20.0", forRemoval = true)
   public static ChestData getInstanceInventory(ServerLevel world, BlockPos pos, UUID id, NonNullList<ItemStack> base) {
     return getReferenceContainerData(world, pos, id, base);
   }

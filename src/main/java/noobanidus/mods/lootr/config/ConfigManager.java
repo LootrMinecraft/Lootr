@@ -19,7 +19,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
@@ -39,20 +38,10 @@ import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber(modid = LootrAPI.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ConfigManager {
-  private static final ModConfigSpec.Builder COMMON_BUILDER = new ModConfigSpec.Builder();
-  private static final ModConfigSpec.Builder CLIENT_BUILDER = new ModConfigSpec.Builder();
-
-  private static final List<ResourceLocation> PROBLEMATIC_CHESTS = Arrays.asList(new ResourceLocation("twilightforest", "structures/stronghold_boss"), new ResourceLocation("atum", "chests/pharaoh"));
-
-  public static ModConfigSpec COMMON_CONFIG;
-  public static ModConfigSpec CLIENT_CONFIG;
-
   // Debug
   public static final ModConfigSpec.BooleanValue REPORT_UNRESOLVED_TABLES;
-
   // Seed randomization
   public static final ModConfigSpec.BooleanValue RANDOMISE_SEED;
-
   // Conversion
   public static final ModConfigSpec.BooleanValue DISABLE;
   public static final ModConfigSpec.IntValue MAXIMUM_AGE;
@@ -63,15 +52,11 @@ public class ConfigManager {
   public static final ModConfigSpec.ConfigValue<List<? extends String>> ADDITIONAL_CHESTS;
   public static final ModConfigSpec.ConfigValue<List<? extends String>> ADDITIONAL_TRAPPED_CHESTS;
   public static final int OLD_MAX_AGE = 60 * 10 * 10;
-
   // Breaking
   public static final ModConfigSpec.BooleanValue DISABLE_BREAK;
   public static final ModConfigSpec.BooleanValue ENABLE_BREAK;
-
   public static final ModConfigSpec.BooleanValue ENABLE_FAKE_PLAYER_BREAK;
-
   public static final ModConfigSpec.BooleanValue CHECK_WORLD_BORDER;
-
   // Whitelist/blacklist (loot table, modid, dimension)
   public static final ModConfigSpec.ConfigValue<List<? extends String>> DIMENSION_WHITELIST;
   public static final ModConfigSpec.ConfigValue<List<? extends String>> DIMENSION_BLACKLIST;
@@ -79,7 +64,6 @@ public class ConfigManager {
   public static final ModConfigSpec.ConfigValue<List<? extends String>> LOOT_MODID_BLACKLIST;
   public static final ModConfigSpec.ConfigValue<List<? extends String>> MODID_DIMENSION_WHITELIST;
   public static final ModConfigSpec.ConfigValue<List<? extends String>> MODID_DIMENSION_BLACKLIST;
-
   // Decay
   public static final ModConfigSpec.IntValue DECAY_VALUE;
   public static final ModConfigSpec.BooleanValue DECAY_ALL;
@@ -87,7 +71,6 @@ public class ConfigManager {
   public static final ModConfigSpec.ConfigValue<List<? extends String>> DECAY_LOOT_TABLES;
   public static final ModConfigSpec.ConfigValue<List<? extends String>> DECAY_DIMENSIONS;
   public static final ModConfigSpec.ConfigValue<List<? extends String>> DECAY_STRUCTURES;
-
   // Refresh
   public static final ModConfigSpec.IntValue REFRESH_VALUE;
   public static final ModConfigSpec.BooleanValue REFRESH_ALL;
@@ -95,7 +78,6 @@ public class ConfigManager {
   public static final ModConfigSpec.ConfigValue<List<? extends String>> REFRESH_LOOT_TABLES;
   public static final ModConfigSpec.ConfigValue<List<? extends String>> REFRESH_DIMENSIONS;
   public static final ModConfigSpec.ConfigValue<List<? extends String>> REFRESH_STRUCTURES;
-
   public static final ModConfigSpec.BooleanValue POWER_COMPARATORS;
   public static final ModConfigSpec.BooleanValue BLAST_RESISTANT;
   public static final ModConfigSpec.BooleanValue BLAST_IMMUNE;
@@ -103,10 +85,13 @@ public class ConfigManager {
   public static final ModConfigSpec.BooleanValue DISABLE_NOTIFICATIONS;
   public static final ModConfigSpec.BooleanValue DISABLE_MESSAGE_STYLES;
   public static final ModConfigSpec.BooleanValue TRAPPED_CUSTOM;
-
   // Client-only
   public static final ModConfigSpec.BooleanValue VANILLA_TEXTURES;
-
+  private static final ModConfigSpec.Builder COMMON_BUILDER = new ModConfigSpec.Builder();
+  private static final ModConfigSpec.Builder CLIENT_BUILDER = new ModConfigSpec.Builder();
+  private static final List<ResourceLocation> PROBLEMATIC_CHESTS = Arrays.asList(new ResourceLocation("twilightforest", "structures/stronghold_boss"), new ResourceLocation("atum", "chests/pharaoh"));
+  public static ModConfigSpec COMMON_CONFIG;
+  public static ModConfigSpec CLIENT_CONFIG;
   private static Set<String> DECAY_MODS = null;
   private static Set<ResourceLocation> DECAY_TABLES = null;
   private static Set<String> REFRESH_MODS = null;
@@ -251,14 +236,14 @@ public class ConfigManager {
     return REFRESH_DIMS;
   }
 
-  public static Set<ResourceLocation> getRefreshStructures () {
+  public static Set<ResourceLocation> getRefreshStructures() {
     if (REFRESH_STRUCTS == null) {
       REFRESH_STRUCTS = REFRESH_STRUCTURES.get().stream().map(ResourceLocation::new).collect(Collectors.toSet());
     }
     return REFRESH_STRUCTS;
   }
 
-  public static Set<ResourceLocation> getDecayStructures () {
+  public static Set<ResourceLocation> getDecayStructures() {
     if (DECAY_STRUCTS == null) {
       DECAY_STRUCTS = DECAY_STRUCTURES.get().stream().map(ResourceLocation::new).collect(Collectors.toSet());
     }
@@ -303,14 +288,14 @@ public class ConfigManager {
     return DECAY_MODS;
   }
 
-  public static Set<ResourceLocation> getRefreshingTables () {
+  public static Set<ResourceLocation> getRefreshingTables() {
     if (REFRESH_TABLES == null) {
       REFRESH_TABLES = REFRESH_LOOT_TABLES.get().stream().map(ResourceLocation::new).collect(Collectors.toSet());
     }
     return REFRESH_TABLES;
   }
 
-  public static Set<String> getRefreshMods () {
+  public static Set<String> getRefreshMods() {
     if (REFRESH_MODS == null) {
       REFRESH_MODS = REFRESH_MODIDS.get().stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
     }
@@ -368,7 +353,7 @@ public class ConfigManager {
     return isDimensionDecaying(level.dimension());
   }
 
-  public static boolean isRefreshing (ServerLevel level, ILootBlockEntity tile) {
+  public static boolean isRefreshing(ServerLevel level, ILootBlockEntity tile) {
     if (REFRESH_ALL.get()) {
       return true;
     }
@@ -410,7 +395,7 @@ public class ConfigManager {
     return isDimensionDecaying(level.dimension());
   }
 
-  public static boolean isRefreshing (ServerLevel level, LootrChestMinecartEntity entity) {
+  public static boolean isRefreshing(ServerLevel level, LootrChestMinecartEntity entity) {
     if (REFRESH_ALL.get()) {
       return true;
     }
@@ -426,12 +411,12 @@ public class ConfigManager {
     return isDimensionRefreshing(level.dimension());
   }
 
-  public static boolean shouldNotify (int remaining) {
+  public static boolean shouldNotify(int remaining) {
     int delay = NOTIFICATION_DELAY.get();
     return !DISABLE_NOTIFICATIONS.get() && (delay == -1 || remaining <= delay);
   }
 
-  public static boolean isVanillaTextures () {
+  public static boolean isVanillaTextures() {
     return VANILLA_TEXTURES.get();
   }
 

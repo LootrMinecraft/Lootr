@@ -19,8 +19,8 @@ public class AdvancementTrigger extends SimpleCriterionTrigger<AdvancementTrigge
     this.trigger(player, (instance) -> instance.test(advancementId));
   }
 
-  public static record TriggerInstance(Optional<ContextAwarePredicate> player,
-                                       Optional<ResourceLocation> advancement) implements SimpleCriterionTrigger.SimpleInstance {
+  public record TriggerInstance(Optional<ContextAwarePredicate> player,
+                                Optional<ResourceLocation> advancement) implements SimpleCriterionTrigger.SimpleInstance {
     public static final Codec<AdvancementTrigger.TriggerInstance> CODEC = RecordCodecBuilder.create(codec -> codec.group(ContextAwarePredicate.CODEC.optionalFieldOf("player").forGetter(TriggerInstance::player), ResourceLocation.CODEC.optionalFieldOf("advancement").forGetter(TriggerInstance::advancement)).apply(codec, AdvancementTrigger.TriggerInstance::new));
 
     public boolean test(ResourceLocation advancementId) {
