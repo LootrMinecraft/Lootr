@@ -3,8 +3,6 @@ package noobanidus.mods.lootr.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
@@ -25,11 +23,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.level.storage.loot.BuiltInLootTables;
-import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -43,7 +36,6 @@ import noobanidus.mods.lootr.init.ModItems;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
 import java.util.List;
 
 public class LootrShulkerBlock extends ShulkerBoxBlock {
@@ -133,16 +125,8 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
   }
 
   @Override
-  public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos) {
-    if (ConfigManager.POWER_COMPARATORS.get()) {
-      return 1;
-    } else {
-      return 0;
-    }
-  }
-
-  @Override
   public ItemStack getCloneItemStack(LevelReader pLevel, BlockPos pPos, BlockState pState) {
+    // TODO: This becomes slightly problematic.
     return new ItemStack(ModItems.SHULKER.get());
   }
 
@@ -154,10 +138,12 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
 
   @Override
   public float getDestroyProgress(BlockState p_60466_, Player p_60467_, BlockGetter p_60468_, BlockPos p_60469_) {
-    if (ConfigManager.DISABLE_BREAK.get()) {
-      return 0f;
-    }
-    return super.getDestroyProgress(p_60466_, p_60467_, p_60468_, p_60469_);
+    return LootrAPI.getDestroyProgress(p_60466_, p_60467_, p_60468_, p_60469_, super.getDestroyProgress(p_60466_, p_60467_, p_60468_, p_60469_));
+  }
+
+  @Override
+  public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos) {
+    return LootrAPI.getAnalogOutputSignal(pBlockState, pLevel, pPos, 0);
   }
 
   @Override

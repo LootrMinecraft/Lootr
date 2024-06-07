@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
@@ -23,7 +22,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.block.entities.LootrChestBlockEntity;
 import noobanidus.mods.lootr.block.entities.LootrTrappedChestBlockEntity;
-import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlockEntities;
 import noobanidus.mods.lootr.util.ChestUtil;
 
@@ -85,10 +83,13 @@ public class LootrTrappedChestBlock extends ChestBlock {
 
   @Override
   public float getDestroyProgress(BlockState p_60466_, Player p_60467_, BlockGetter p_60468_, BlockPos p_60469_) {
-    if (ConfigManager.DISABLE_BREAK.get()) {
-      return 0f;
-    }
-    return super.getDestroyProgress(p_60466_, p_60467_, p_60468_, p_60469_);
+    return LootrAPI.getDestroyProgress(p_60466_, p_60467_, p_60468_, p_60469_, super.getDestroyProgress(p_60466_, p_60467_, p_60468_, p_60469_));
+  }
+
+  // TODO: Check if this is needed
+  @Override
+  public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos) {
+    return LootrAPI.getAnalogOutputSignal(pBlockState, pLevel, pPos, 0);
   }
 
   @Override

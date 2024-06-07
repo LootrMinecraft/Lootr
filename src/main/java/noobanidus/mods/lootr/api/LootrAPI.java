@@ -5,9 +5,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import noobanidus.mods.lootr.api.inventory.ILootrInventory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -63,6 +67,14 @@ public class LootrAPI {
 
   public static float getExplosionResistance(Block block, float defaultResistance) {
     return INSTANCE.getExplosionResistance(block, defaultResistance);
+  }
+
+  public static float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos position, float defaultProgress) {
+    return INSTANCE.getDestroyProgress(state, player, level, position, defaultProgress);
+  }
+
+  public static int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos, int defaultSignal) {
+    return INSTANCE.getAnalogOutputSignal(pBlockState, pLevel, pPos, defaultSignal);
   }
 
   // TODO: Consider if this is really needed

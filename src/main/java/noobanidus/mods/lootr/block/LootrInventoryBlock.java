@@ -33,7 +33,6 @@ import noobanidus.mods.lootr.init.ModBlockEntities;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 import java.util.function.Supplier;
 
 public class LootrInventoryBlock extends ChestBlock {
@@ -103,12 +102,13 @@ public class LootrInventoryBlock extends ChestBlock {
   }
 
   @Override
+  public float getDestroyProgress(BlockState p_60466_, Player p_60467_, BlockGetter p_60468_, BlockPos p_60469_) {
+    return LootrAPI.getDestroyProgress(p_60466_, p_60467_, p_60468_, p_60469_, super.getDestroyProgress(p_60466_, p_60467_, p_60468_, p_60469_));
+  }
+
+  @Override
   public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos) {
-    if (ConfigManager.POWER_COMPARATORS.get()) {
-      return 1;
-    } else {
-      return 0;
-    }
+    return LootrAPI.getAnalogOutputSignal(pBlockState, pLevel, pPos, 0);
   }
 
   @Override
