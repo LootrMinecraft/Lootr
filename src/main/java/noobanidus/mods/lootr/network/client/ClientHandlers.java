@@ -1,7 +1,11 @@
 package noobanidus.mods.lootr.network.client;
 
 import net.minecraft.client.Minecraft;
+<<<<<<< HEAD
 import net.minecraft.core.BlockPos;
+=======
+import net.minecraft.core.SectionPos;
+>>>>>>> 00feaf8d (New textures; fix sneak-right-click barrels.)
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -65,14 +69,8 @@ public class ClientHandlers {
       return;
     }
 
-    BlockEntity be = level.getBlockEntity(pos);
-    if (be instanceof ILootBlockEntity tile) {
-      tile.getOpeners().remove(player.getUUID());
-      be.setChanged();
-      level.getModelDataManager().requestRefresh(be);
-    } else {
-      LootrAPI.LOG.info("Unable to mark container open for location '" + pos + "' as block entity is null or not a Lootr block entity.");
-    }
+    SectionPos sPos = SectionPos.of(pos);
+    Minecraft.getInstance().levelRenderer.setSectionDirty(sPos.x(), sPos.y(), sPos.z());
   }
 
   public static void handleCloseContainer(BlockPos pos) {
@@ -88,13 +86,7 @@ public class ClientHandlers {
       return;
     }
 
-    BlockEntity be = level.getBlockEntity(pos);
-    if (be instanceof ILootBlockEntity tile) {
-      tile.getOpeners().add(player.getUUID());
-      be.setChanged();
-      level.getModelDataManager().requestRefresh(be);
-    } else {
-      LootrAPI.LOG.info("Unable to mark container closed for location '" + pos + "' as block entity is null or not a Lootr block entity.");
-    }
+    SectionPos sPos = SectionPos.of(pos);
+    Minecraft.getInstance().levelRenderer.setSectionDirty(sPos.x(), sPos.y(), sPos.z());
   }
 }

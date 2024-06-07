@@ -12,5 +12,11 @@
   },
   "vanilla": {
     "parent": "minecraft:block/barrel"
+  },
+  "old_opened": {
+    "parent": "lootr:block/old_lootr_opened_barrel"
+  },
+  "old_unopened": {
+    "parent": "lootr:block/old_lootr_barrel_unopened"
   }
 }

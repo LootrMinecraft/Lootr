@@ -10,7 +10,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+<<<<<<< HEAD
 import net.neoforged.neoforge.common.util.FakePlayer;
+=======
+import net.minecraftforge.common.util.FakePlayer;
+>>>>>>> 00feaf8d (New textures; fix sneak-right-click barrels.)
 import noobanidus.mods.lootr.api.ILootrAPI;
 import noobanidus.mods.lootr.api.LootFiller;
 import noobanidus.mods.lootr.api.LootrAPI;
@@ -38,6 +42,11 @@ public class LootrAPIImpl implements ILootrAPI {
         return true;
       }
     }
+    return player instanceof FakePlayer;
+  }
+
+  @Override
+  public boolean isFakePlayer(Player player) {
     return player instanceof FakePlayer;
   }
 

@@ -28,6 +28,10 @@ public class LootrAPI {
 
   public static boolean shouldDiscardIdAndOpeners;
 
+  public static boolean isFakePlayer (Player player) {
+    return INSTANCE.isFakePlayer(player);
+  }
+
   public static boolean clearPlayerLoot(ServerPlayer entity) {
     return INSTANCE.clearPlayerLoot(entity);
   }

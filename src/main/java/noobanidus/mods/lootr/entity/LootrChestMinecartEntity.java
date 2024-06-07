@@ -101,7 +101,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     }
 
     if (source.getEntity() instanceof Player player) {
-      if ((player instanceof FakePlayer && ConfigManager.ENABLE_FAKE_PLAYER_BREAK.get()) || ConfigManager.ENABLE_BREAK.get()) {
+      if ((LootrAPI.isFakePlayer(player) && ConfigManager.ENABLE_FAKE_PLAYER_BREAK.get()) || ConfigManager.ENABLE_BREAK.get()) {
         return false;
       }
       if (ConfigManager.DISABLE_BREAK.get()) {
@@ -129,16 +129,8 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
   @Override
-  public void destroy(DamageSource source) {
-    this.remove(Entity.RemovalReason.KILLED);
-    if (this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
-      ItemStack itemstack = new ItemStack(Items.CHEST_MINECART);
-      if (this.hasCustomName()) {
-        itemstack.setHoverName(this.getCustomName());
-      }
-
-      this.spawnAtLocation(itemstack);
-    }
+  public Item getDropItem() {
+    return Items.CHEST_MINECART;
   }
 
   @Override
