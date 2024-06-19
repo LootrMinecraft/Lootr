@@ -60,7 +60,7 @@
   "text.autoconfig.lootr.option.breaking": "Kırma",
   "text.autoconfig.lootr.option.breaking.enable_break": "Her Türlü Kırmayı Aç",
   "text.autoconfig.lootr.option.breaking.enable_fake_player_break": "Sahte Oyuncu Kırmasını Aç",
-  "text.autoconfig.lootr.option.breaking.disable_break": "Disable Break",
+  "text.autoconfig.lootr.option.breaking.disable_break": "Kırmayı Kapat",
   "text.autoconfig.lootr.option.breaking.power_comparators": "Karşılaştırıcılara Güç Ver",
   "text.autoconfig.lootr.option.breaking.blast_resistant": "Patlama Direnci",
   "text.autoconfig.lootr.option.breaking.blast_immune": "Patlama Koruması",
