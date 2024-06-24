@@ -11,19 +11,21 @@ import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
 public interface ILootrInventory extends Container, MenuProvider {
-  BaseContainerBlockEntity getBlockEntity(Level level);
 
-  @Deprecated
-  @Nullable
-  default BaseContainerBlockEntity getTile(Level level) {
-    return getBlockEntity(level);
-  }
+    BaseContainerBlockEntity getBlockEntity(Level level);
 
-  @Nullable
-  AbstractMinecartContainer getEntity(Level world);
+    @Deprecated
+    @Nullable
+    default BaseContainerBlockEntity getTile(Level level) {
+        return getBlockEntity(level);
+    }
 
-  @Nullable
-  BlockPos getPos();
+    @Nullable
+    AbstractMinecartContainer getEntity(Level world);
 
-  NonNullList<ItemStack> getInventoryContents();
+    @Nullable
+    BlockPos getPos();
+
+    NonNullList<ItemStack> getInventoryContents();
+
 }

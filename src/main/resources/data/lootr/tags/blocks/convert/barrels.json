@@ -1,6 +1,6 @@
 {
-    "replace": false,
-    "values": [
-        "minecraft:barrel"
-    ]
+  "replace": false,
+  "values": [
+    "minecraft:barrel"
+  ]
 }

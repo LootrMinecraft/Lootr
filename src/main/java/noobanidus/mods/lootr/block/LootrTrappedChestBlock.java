@@ -3,7 +3,6 @@ package noobanidus.mods.lootr.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
@@ -26,79 +25,79 @@ import noobanidus.mods.lootr.init.ModBlockEntities;
 import noobanidus.mods.lootr.util.ChestUtil;
 import org.jetbrains.annotations.Nullable;
 
-@SuppressWarnings("deprecation")
 public class LootrTrappedChestBlock extends ChestBlock {
-  public LootrTrappedChestBlock(Properties properties) {
-    super(properties, () -> ModBlockEntities.SPECIAL_TRAPPED_LOOT_CHEST);
-  }
-
-  @Override
-  public float getExplosionResistance() {
-    return LootrAPI.getExplosionResistance(this, super.getExplosionResistance());
-  }
-
-  @Override
-  public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-    return new LootrTrappedChestBlockEntity(pPos, pState);
-  }
-
-  @Override
-  public boolean isSignalSource(BlockState pState) {
-    return true;
-  }
-
-  @Override
-  public int getSignal(BlockState pBlockState, BlockGetter pBlockAccess, BlockPos pPos, Direction pSide) {
-    return Mth.clamp(LootrChestBlockEntity.getOpenCount(pBlockAccess, pPos), 0, 15);
-  }
-
-  @Override
-  public int getDirectSignal(BlockState pBlockState, BlockGetter pBlockAccess, BlockPos pPos, Direction pSide) {
-    return pSide == Direction.UP ? pBlockState.getSignal(pBlockAccess, pPos, pSide) : 0;
-  }
-
-  @Override
-  public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult trace) {
-    if (player.isShiftKeyDown()) {
-      ChestUtil.handleLootSneak(this, world, pos, player);
-    } else if (!ChestBlock.isChestBlockedAt(world, pos)) {
-      ChestUtil.handleLootChest(this, world, pos, player);
+    public LootrTrappedChestBlock(Properties properties) {
+        super(properties, ModBlockEntities.LOOTR_TRAPPED_CHEST::get);
     }
-    return InteractionResult.SUCCESS;
-  }
 
-  @Override
-  public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
-    if (stateIn.getValue(WATERLOGGED)) {
-      worldIn.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
+    @Override
+    public float getExplosionResistance() {
+        return LootrAPI.getExplosionResistance(this, super.getExplosionResistance());
     }
-    return stateIn;
-  }
 
-  @Override
-  public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
-    return AABB;
-  }
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
+        return new LootrTrappedChestBlockEntity(pPos, pState);
+    }
 
-  @Override
-  public float getDestroyProgress(BlockState p_60466_, Player p_60467_, BlockGetter p_60468_, BlockPos p_60469_) {
-    return LootrAPI.getDestroyProgress(p_60466_, p_60467_, p_60468_, p_60469_, super.getDestroyProgress(p_60466_, p_60467_, p_60468_, p_60469_));
-  }
+    @Override
+    public boolean isSignalSource(BlockState pState) {
+        return true;
+    }
 
-  @Override
-  public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos) {
-    return LootrAPI.getAnalogOutputSignal(pBlockState, pLevel, pPos, 0);
-  }
+    @Override
+    public int getSignal(BlockState pBlockState, BlockGetter pBlockAccess, BlockPos pPos, Direction pSide) {
+        return Mth.clamp(LootrChestBlockEntity.getOpenCount(pBlockAccess, pPos), 0, 15);
+    }
 
-  @Override
-  @Nullable
-  public MenuProvider getMenuProvider(BlockState state, Level worldIn, BlockPos pos) {
-    return null;
-  }
+    @Override
+    public int getDirectSignal(BlockState pBlockState, BlockGetter pBlockAccess, BlockPos pPos, Direction pSide) {
+        return pSide == Direction.UP ? pBlockState.getSignal(pBlockAccess, pPos, pSide) : 0;
+    }
 
-  @Override
-  @Nullable
-  public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-    return pLevel.isClientSide ? LootrChestBlockEntity::lootrLidAnimateTick : null;
-  }
+    @Override
+    public InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult trace) {
+        if (player.isShiftKeyDown()) {
+            ChestUtil.handleLootSneak(this, world, pos, player);
+        } else if (!ChestBlock.isChestBlockedAt(world, pos)) {
+            ChestUtil.handleLootChest(this, world, pos, player);
+        }
+        return InteractionResult.SUCCESS;
+    }
+
+    @Override
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
+        if (stateIn.getValue(WATERLOGGED)) {
+            worldIn.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
+        }
+
+        return stateIn;
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+        return AABB;
+    }
+
+    @Override
+    public float getDestroyProgress(BlockState p_60466_, Player p_60467_, BlockGetter p_60468_, BlockPos p_60469_) {
+        return LootrAPI.getDestroyProgress(p_60466_, p_60467_, p_60468_, p_60469_, super.getDestroyProgress(p_60466_, p_60467_, p_60468_, p_60469_));
+    }
+
+    @Override
+    public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos) {
+        return LootrAPI.getAnalogOutputSignal(pBlockState, pLevel, pPos, 0);
+    }
+
+    @Override
+    @Nullable
+    public MenuProvider getMenuProvider(BlockState state, Level worldIn, BlockPos pos) {
+        return null;
+    }
+
+    @Override
+    @Nullable
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+        return pLevel.isClientSide ? LootrChestBlockEntity::lootrLidAnimateTick : null;
+    }
 }

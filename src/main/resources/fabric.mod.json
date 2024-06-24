@@ -2,7 +2,6 @@
   "schemaVersion": 1,
   "id": "lootr",
   "version": "${version}",
-
   "name": "Lootr",
   "description": "A mod that makes it so nobody misses out on Loot!",
   "authors": [
@@ -15,31 +14,31 @@
     "sources": "https://github.com/noobanidus/Lootr/tree/fabric-1.19.4",
     "issues": "https://github.com/noobanidus/Lootr/issues"
   },
-
   "license": "MIT License",
   "icon": "icon.png",
-
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.zestyblaze.lootr.Lootr"
+      "noobanidus.mods.lootr.Lootr"
     ],
     "client": [
-      "net.zestyblaze.lootr.client.LootrClient"
+      "noobanidus.mods.lootr.client.LootrClient"
     ],
     "modmenu": [
-      "net.zestyblaze.lootr.integration.ModMenuIntegration"
+      "noobanidus.mods.lootr.integration.ModMenuIntegration"
+    ],
+    "fabric-datagen": [
+      "noobanidus.mods.lootr.gen.LootrDataGenerators"
     ]
   },
   "mixins": [
     "lootr.mixins.json"
   ],
-
   "depends": {
-    "fabricloader": ">=0.14.19",
+    "fabricloader": ">=0.15.11",
     "fabric": "*",
-    "minecraft": "~1.20",
-    "java": ">=17"
+    "minecraft": "~1.21",
+    "java": ">=21"
   },
   "accessWidener": "lootr.accessWidener"
 }

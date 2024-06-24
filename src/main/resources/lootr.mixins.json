@@ -1,20 +1,15 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "net.mods.lootr.mixins",
+  "package": "noobanidus.mods.lootr.mixins",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "noobanidus.mods.lootr.mixins.MixinCatSitOnBlockGoal",
-    "noobanidus.mods.lootr.mixins.MixinLevelChunk",
-    "noobanidus.mods.lootr.mixins.MixinPersistentEntitySectionManager",
-    "noobanidus.mods.lootr.mixins.MixinPlayerAdvancements",
-    "noobanidus.mods.lootr.mixins.MixinEndCityPieces$EndCityPiece",
-    "noobanidus.mods.lootr.mixins.MixinPoiType",
-    "noobanidus.mods.lootr.mixins.MixinPoiTypes",
-    "noobanidus.mods.lootr.mixins.MixinStructureTemplate"
-  ],
-  "client": [
-    "noobanidus.mods.lootr.mixins.MixinMinecraft"
+    "MixinCatSitOnBlockGoal",
+    "MixinEndCityPieces$EndCityPiece",
+    "MixinLevelChunk",
+    "MixinPoiType",
+    "MixinPoiTypes",
+    "MixinStructureTemplate"
   ],
   "injectors": {
     "defaultRequire": 1

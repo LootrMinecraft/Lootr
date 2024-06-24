@@ -18,18 +18,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(EndCityPieces.EndCityPiece.class)
 public class MixinEndCityPieces$EndCityPiece {
-  @Inject(method = "handleDataMarker", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/ServerLevelAccessor;addFreshEntity(Lnet/minecraft/world/entity/Entity;)Z"), cancellable = true)
-  private void LootrHandleDataMarker(String marker, BlockPos position, ServerLevelAccessor level, RandomSource random, BoundingBox boundingBox, CallbackInfo ci) {
-    if (!ConfigManager.get().conversion.elytra) {
-      return;
+    @Inject(method = "handleDataMarker", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/ServerLevelAccessor;addFreshEntity(Lnet/minecraft/world/entity/Entity;)Z"), cancellable = true)
+    private void LootrHandleDataMarker(String marker, BlockPos position, ServerLevelAccessor level, RandomSource random, BoundingBox boundingBox, CallbackInfo ci) {
+        if (!ConfigManager.get().conversion.convert_elytras) {
+            return;
+        }
+        if (marker.startsWith("Elytra")) {
+            EndCityPieces.EndCityPiece piece = (EndCityPieces.EndCityPiece) (Object) this;
+            level.setBlock(position.below(), Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, piece.getRotation().rotate(Direction.SOUTH)), 3);
+            if (level.getBlockEntity(position.below()) instanceof RandomizableContainerBlockEntity chest) {
+                chest.setLootTable(LootrAPI.ELYTRA_CHEST, random.nextLong());
+            }
+            ci.cancel();
+        }
     }
-    if (marker.startsWith("Elytra")) {
-      EndCityPieces.EndCityPiece piece = (EndCityPieces.EndCityPiece) (Object) this;
-      level.setBlock(position.below(), Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, piece.getRotation().rotate(Direction.SOUTH)), 3);
-      if (level.getBlockEntity(position.below()) instanceof RandomizableContainerBlockEntity chest) {
-        chest.setLootTable(LootrAPI.ELYTRA_CHEST, random.nextLong());
-      }
-      ci.cancel();
-    }
-  }
 }
