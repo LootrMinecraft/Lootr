@@ -280,7 +280,7 @@ public class DataStorage {
   }
 
   @Nullable
-  public static SpecialChestInventory getInventory(Level level, UUID uuid, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceKey<LootTable>> tableSupplier, LongSupplier seedSupplier) {
+  public static SpecialChestInventory getInventory(Level level, UUID uuid, BlockPos pos, ServerPlayer player, Supplier<BlockPos> posSupplier, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceKey<LootTable>> tableSupplier, LongSupplier seedSupplier) {
     if (level.isClientSide() || !(level instanceof ServerLevel)) {
       return null;
     }
@@ -292,7 +292,7 @@ public class DataStorage {
     }
     SpecialChestInventory inventory = data.getInventory(player);
     if (inventory == null) {
-      inventory = data.createInventory(player, filler, sizeSupplier, displaySupplier, tableSupplier, seedSupplier);
+      inventory = data.createInventory(player, filler, posSupplier, sizeSupplier, displaySupplier, tableSupplier, seedSupplier);
     }
 
     return inventory;

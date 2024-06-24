@@ -1,5 +1,5 @@
 modLoader="javafml" 
-loaderVersion="[1,)"
+loaderVersion="[3,)"
 issueTrackerURL="https://github.com/noobanidus/Lootr/issues"
 license="https://github.com/noobanidus/Lootr/blob/1.16/LICENSE"
 
@@ -17,15 +17,3 @@ Makes loot chest loot per-user.
 '''
 [[accessTransformers]]
 file="META-INF/accesstransformer.cfg"
-[[dependencies.lootr]]
-    modId="neoforge"
-    type="required"
-    versionRange="[20.4-beta,)"
-    ordering="NONE"
-    side="BOTH"
-[[dependencies.lootr]]
-    modId="minecraft"
-    type="required"
-    versionRange="[1.20.4,)"
-    ordering="NONE"
-    side="BOTH"

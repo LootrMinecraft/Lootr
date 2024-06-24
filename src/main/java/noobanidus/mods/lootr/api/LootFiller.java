@@ -6,6 +6,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @FunctionalInterface
 public interface LootFiller {
@@ -23,5 +24,5 @@ public interface LootFiller {
    *                  <p>
    *                  Example implementations can be found in `LootrChestblockEntity::unpackLootTable`.
    */
-  void unpackLootTable(@NotNull Player player, Container inventory, ResourceKey<LootTable> table, long seed);
+  void unpackLootTable(@NotNull ILootInfoProvider provider, @NotNull Player player, Container inventory, @Nullable ResourceKey<LootTable> table, long seed);
 }

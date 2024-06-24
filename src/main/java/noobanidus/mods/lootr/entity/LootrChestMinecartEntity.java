@@ -208,10 +208,6 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     }
   }
 
-  public void addLoot(@Nullable Player player, Container inventory, @Nullable ResourceKey<LootTable> overrideTable, long seed) {
-    unpackLootTable(this, player, inventory, overrideTable, seed);
-  }
-
   @Override
   public void startOpen(Player player) {
     if (!player.isSpectator()) {

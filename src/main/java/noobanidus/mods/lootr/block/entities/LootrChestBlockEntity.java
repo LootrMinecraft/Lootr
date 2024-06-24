@@ -210,11 +210,6 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
   }
 
   @Override
-  public void unpackLootTable(Player player, Container inventory, ResourceKey<LootTable> overrideTable, long seed) {
-    unpackLootTable(this, player, inventory, overrideTable, seed);
-  }
-
-  @Override
   public Set<UUID> getOpeners() {
     return openers;
   }
@@ -239,21 +234,21 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
 
   @Override
   public BlockPos getInfoPos() {
-    return null;
+    return getBlockPos();
   }
 
   @Override
   public ResourceKey<LootTable> getInfoLootTable() {
-    return null;
+    return getLootTable();
   }
 
   @Override
   public long getInfoLootSeed() {
-    return 0;
+    return getLootTableSeed();
   }
 
   @Override
   public Level getInfoLevel() {
-    return null;
+    return getLevel();
   }
 }

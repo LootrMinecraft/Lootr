@@ -121,12 +121,6 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   }
 
   @Override
-  @SuppressWarnings({"unused", "Duplicates"})
-  public void unpackLootTable(Player player, Container inventory, @Nullable ResourceKey<LootTable> overrideTable, long overrideSeed) {
-    unpackLootTable(this, player, inventory, overrideTable, overrideSeed);
-  }
-
-  @Override
   public Set<UUID> getOpeners() {
     return openers;
   }

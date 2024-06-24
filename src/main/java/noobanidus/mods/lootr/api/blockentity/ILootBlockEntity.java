@@ -13,8 +13,6 @@ import noobanidus.mods.lootr.api.ILootInfoProvider;
 import org.jetbrains.annotations.Nullable;
 
 public interface ILootBlockEntity extends IHasOpeners, ILootInfoProvider {
-  void unpackLootTable(Player player, Container inventory, @Nullable ResourceKey<LootTable> overrideTable, long overrideSeed);
-
   default void updatePacketViaForce (BlockEntity entity) {
     if (entity.getLevel() instanceof ServerLevel level) {
       Packet<?> packet = entity.getUpdatePacket();

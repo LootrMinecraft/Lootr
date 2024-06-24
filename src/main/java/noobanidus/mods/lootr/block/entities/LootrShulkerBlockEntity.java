@@ -292,11 +292,6 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   @Override
-  public void unpackLootTable(Player player, Container inventory, @Nullable ResourceKey<LootTable> overrideTable, long overrideSeed) {
-    unpackLootTable(this, player, inventory, overrideTable, overrideSeed);
-  }
-
-  @Override
   public boolean isClientOpened() {
     return clientOpened;
   }

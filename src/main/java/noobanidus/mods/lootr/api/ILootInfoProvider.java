@@ -21,6 +21,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.LongSupplier;
+import java.util.function.Supplier;
 
 public interface ILootInfoProvider {
   default LootInfoType getInfoType() {
@@ -99,6 +101,37 @@ public interface ILootInfoProvider {
       return provider;
     }
     return new AbstractMinecartContainerLootInfoProvider(minecart);
+  }
+
+  static ILootInfoProvider of (Supplier<BlockPos> pos, Supplier<ResourceKey<LootTable>> lootTable, LongSupplier lootSeed, Level level) {
+    return new CustomLootInfoProvider(pos, lootTable, lootSeed, level);
+  }
+
+  record CustomLootInfoProvider (
+      Supplier<BlockPos> pos,
+      Supplier<ResourceKey<LootTable>> lootTable,
+      LongSupplier lootSeed,
+      Level level) implements ILootInfoProvider {
+
+    @Override
+    public BlockPos getInfoPos() {
+      return pos.get();
+    }
+
+    @Override
+    public ResourceKey<LootTable> getInfoLootTable() {
+      return lootTable.get();
+    }
+
+    @Override
+    public long getInfoLootSeed() {
+      return lootSeed.getAsLong();
+    }
+
+    @Override
+    public Level getInfoLevel() {
+      return level;
+    }
   }
 
   record AbstractMinecartContainerLootInfoProvider (

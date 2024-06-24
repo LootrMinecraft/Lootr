@@ -189,7 +189,7 @@ public class ChestUtil {
         startRefresh(player, tileId, refreshValue);
       }
     }
-    MenuProvider provider = DataStorage.getInventory(level, cart, (ServerPlayer) player, cart::addLoot);
+    MenuProvider provider = DataStorage.getInventory(level, cart, (ServerPlayer) player, cart::unpackLootTable);
     if (provider == null) {
       // Error messages are already handled by nested methods in `getInventory`
       return;

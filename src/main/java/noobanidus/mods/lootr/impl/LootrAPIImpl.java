@@ -65,13 +65,13 @@ public class LootrAPIImpl implements ILootrAPI {
   @Nullable
   @Override
   public ILootrInventory getInventory(Level level, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceKey<LootTable>> tableSupplier, LongSupplier seedSupplier) {
-    return DataStorage.getInventory(level, id, pos, player, sizeSupplier, displaySupplier, filler, tableSupplier, seedSupplier);
+    return DataStorage.getInventory(level, id, pos, player, () -> pos, sizeSupplier, displaySupplier, filler, tableSupplier, seedSupplier);
   }
 
   @Nullable
   @Override
   public ILootrInventory getInventory(Level level, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceKey<LootTable>> tableSupplier, LongSupplier seedSupplier, MenuBuilder menuBuilder) {
-    SpecialChestInventory inventory = DataStorage.getInventory(level, id, pos, player, sizeSupplier, displaySupplier, filler, tableSupplier, seedSupplier);
+    SpecialChestInventory inventory = DataStorage.getInventory(level, id, pos, player, () -> pos, sizeSupplier, displaySupplier, filler, tableSupplier, seedSupplier);
     if (inventory != null) {
       inventory.setMenuBuilder(menuBuilder);
     }
