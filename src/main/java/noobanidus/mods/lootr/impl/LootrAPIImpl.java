@@ -1,4 +1,4 @@
-package net.zestyblaze.lootr.impl;
+package noobanidus.mods.lootr.impl;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -10,14 +10,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.zestyblaze.lootr.api.ILootrAPI;
-import net.zestyblaze.lootr.api.LootFiller;
-import net.zestyblaze.lootr.api.LootrAPI;
-import net.zestyblaze.lootr.api.MenuBuilder;
-import net.zestyblaze.lootr.api.inventory.ILootrInventory;
-import net.zestyblaze.lootr.config.ConfigManager;
-import net.zestyblaze.lootr.data.DataStorage;
-import net.zestyblaze.lootr.data.SpecialChestInventory;
+import noobanidus.mods.lootr.api.ILootrAPI;
+import noobanidus.mods.lootr.api.LootFiller;
+import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.MenuBuilder;
+import noobanidus.mods.lootr.api.inventory.ILootrInventory;
+import noobanidus.mods.lootr.config.ConfigManager;
+import noobanidus.mods.lootr.data.DataStorage;
+import noobanidus.mods.lootr.data.SpecialChestInventory;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;

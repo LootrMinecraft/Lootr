@@ -1,4 +1,4 @@
-package net.zestyblaze.lootr.api;
+package noobanidus.mods.lootr.api;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;

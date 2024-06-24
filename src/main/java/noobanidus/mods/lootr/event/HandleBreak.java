@@ -1,4 +1,4 @@
-package net.zestyblaze.lootr.event;
+package noobanidus.mods.lootr.event;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -9,10 +9,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.zestyblaze.lootr.LootrTags;
-import net.zestyblaze.lootr.api.LootrAPI;
-import net.zestyblaze.lootr.api.blockentity.ILootBlockEntity;
-import net.zestyblaze.lootr.config.ConfigManager;
+import noobanidus.mods.lootr.LootrTags;
+import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
+import noobanidus.mods.lootr.config.ConfigManager;
 import org.jetbrains.annotations.Nullable;
 
 public class HandleBreak {

@@ -1,4 +1,4 @@
-package net.zestyblaze.lootr.event;
+package noobanidus.mods.lootr.event;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;

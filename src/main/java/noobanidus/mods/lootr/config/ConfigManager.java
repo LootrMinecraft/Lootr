@@ -1,4 +1,4 @@
-package net.zestyblaze.lootr.config;
+package noobanidus.mods.lootr.config;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
@@ -18,11 +18,11 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.zestyblaze.lootr.LootrTags;
-import net.zestyblaze.lootr.api.LootrAPI;
-import net.zestyblaze.lootr.api.blockentity.ILootBlockEntity;
-import net.zestyblaze.lootr.entity.LootrChestMinecartEntity;
-import net.zestyblaze.lootr.init.ModBlocks;
+import noobanidus.mods.lootr.LootrTags;
+import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
+import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
+import noobanidus.mods.lootr.init.ModBlocks;
 
 import java.util.*;
 

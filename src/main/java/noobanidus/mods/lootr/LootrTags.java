@@ -1,11 +1,11 @@
-package net.zestyblaze.lootr;
+package noobanidus.mods.lootr;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.zestyblaze.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.LootrAPI;
 
 public class LootrTags {
   public static class Blocks {
