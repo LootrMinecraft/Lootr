@@ -1,6 +1,5 @@
 package noobanidus.mods.lootr.init;
 
-import net.minecraft.advancements.CriterionTrigger;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -16,12 +15,12 @@ public class ModAdvancements {
     public static final ResourceLocation SHULKER_LOCATION = ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "shulker_opened");
     public static final ResourceLocation ADVANCEMENT_LOCATION = ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "advancement");
     public static final ResourceLocation SCORE_LOCATION = ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "score");
-    public static CriterionTrigger<?> CHEST_PREDICATE = null;
-    public static CriterionTrigger<?> BARREL_PREDICATE = null;
-    public static CriterionTrigger<?> CART_PREDICATE = null;
-    public static CriterionTrigger<?> SHULKER_PREDICATE = null;
-    public static CriterionTrigger<?> SCORE_PREDICATE = null;
-    public static CriterionTrigger<?> ADVANCEMENT_PREDICATE = null;
+    public static ContainerTrigger CHEST_PREDICATE = null;
+    public static ContainerTrigger BARREL_PREDICATE = null;
+    public static ContainerTrigger CART_PREDICATE = null;
+    public static ContainerTrigger SHULKER_PREDICATE = null;
+    public static LootedStatTrigger SCORE_PREDICATE = null;
+    public static AdvancementTrigger ADVANCEMENT_PREDICATE = null;
 
     public static void registerAdvancements() {
         ADVANCEMENT_PREDICATE = Registry.register(BuiltInRegistries.TRIGGER_TYPES, ADVANCEMENT_LOCATION, new AdvancementTrigger());

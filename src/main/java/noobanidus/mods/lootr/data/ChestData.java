@@ -22,11 +22,9 @@ import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.api.ILootInfoProvider;
 import noobanidus.mods.lootr.api.LootFiller;
 import noobanidus.mods.lootr.api.LootrAPI;
-import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
 import org.jetbrains.annotations.Nullable;
@@ -290,7 +288,7 @@ public class ChestData extends SavedData {
         ServerLevel level = (ServerLevel) player.level();
         SpecialChestInventory result;
         if (level.dimension() != dimension) {
-            MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+            MinecraftServer server = level.getServer();
             if (server == null) {
                 return null;
             }
@@ -313,7 +311,7 @@ public class ChestData extends SavedData {
         ServerLevel level = (ServerLevel) player.level();
         SpecialChestInventory result;
         if (level.dimension() != dimension) {
-            MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+            MinecraftServer server = level.getServer();
             if (server == null) {
                 return null;
             }
@@ -346,7 +344,7 @@ public class ChestData extends SavedData {
             provider = cart;
             NonNullList<ItemStack> items = NonNullList.withSize(cart.getContainerSize(), ItemStack.EMPTY);
             result = new SpecialChestInventory(this, items, cart.getDisplayName());
-            lootTable = cart.lootTable;
+            lootTable = cart.getLootTable();
         } else {
             if (tile == null) {
                 return null;

@@ -30,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class LootrChestBlock extends ChestBlock {
     public LootrChestBlock(Properties properties) {
-        super(properties, ModBlockEntities.LOOTR_CHEST::get);
+        super(properties, () -> ModBlockEntities.SPECIAL_LOOT_CHEST);
     }
 
     @Override

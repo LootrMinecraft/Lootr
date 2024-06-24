@@ -30,12 +30,12 @@ import java.util.UUID;
 
 @SuppressWarnings("deprecation")
 public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootBlockEntity> extends ChestRenderer<T> {
-    public static final Material MATERIAL = new Material(Sheets.CHEST_SHEET, new ResourceLocation(LootrAPI.MODID, "chest"));
-    public static final Material MATERIAL2 = new Material(Sheets.CHEST_SHEET, new ResourceLocation(LootrAPI.MODID, "chest_opened"));
-    public static final Material MATERIAL3 = new Material(Sheets.CHEST_SHEET, new ResourceLocation(LootrAPI.MODID, "chest_trapped"));
-    public static final Material MATERIAL4 = new Material(Sheets.CHEST_SHEET, new ResourceLocation(LootrAPI.MODID, "chest_trapped_opened"));
-    public static final Material OLD_MATERIAL = new Material(Sheets.CHEST_SHEET, new ResourceLocation(LootrAPI.MODID, "old_chest"));
-    public static final Material OLD_MATERIAL2 = new Material(Sheets.CHEST_SHEET, new ResourceLocation(LootrAPI.MODID, "old_chest_opened"));
+    public static final Material MATERIAL = new Material(Sheets.CHEST_SHEET, ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "chest"));
+    public static final Material MATERIAL2 = new Material(Sheets.CHEST_SHEET, ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "chest_opened"));
+    public static final Material MATERIAL3 = new Material(Sheets.CHEST_SHEET, ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "chest_trapped"));
+    public static final Material MATERIAL4 = new Material(Sheets.CHEST_SHEET, ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "chest_trapped_opened"));
+    public static final Material OLD_MATERIAL = new Material(Sheets.CHEST_SHEET, ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "old_chest"));
+    public static final Material OLD_MATERIAL2 = new Material(Sheets.CHEST_SHEET, ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "old_chest_opened"));
     private final ModelPart lid;
     private final ModelPart bottom;
     private final ModelPart lock;

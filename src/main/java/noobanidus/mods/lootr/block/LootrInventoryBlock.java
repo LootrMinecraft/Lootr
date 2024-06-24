@@ -33,7 +33,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class LootrInventoryBlock extends ChestBlock {
     public LootrInventoryBlock(Properties properties) {
-        super(properties, ModBlockEntities.LOOTR_INVENTORY::get);
+        super(properties, () -> ModBlockEntities.SPECIAL_LOOT_INVENTORY);
     }
 
     @Override
@@ -105,12 +105,12 @@ public class LootrInventoryBlock extends ChestBlock {
 
     @Override
     public boolean isSignalSource(BlockState pState) {
-        return ConfigManager.TRAPPED_CUSTOM.get();
+        return ConfigManager.get().breaking.trapped_custom;
     }
 
     @Override
     public int getSignal(BlockState pBlockState, BlockGetter pBlockAccess, BlockPos pPos, Direction pSide) {
-        if (ConfigManager.TRAPPED_CUSTOM.get()) {
+        if (ConfigManager.get().breaking.trapped_custom) {
             return Mth.clamp(LootrChestBlockEntity.getOpenCount(pBlockAccess, pPos), 0, 15);
         } else {
             return 0;
@@ -119,7 +119,7 @@ public class LootrInventoryBlock extends ChestBlock {
 
     @Override
     public int getDirectSignal(BlockState pBlockState, BlockGetter pBlockAccess, BlockPos pPos, Direction pSide) {
-        if (ConfigManager.TRAPPED_CUSTOM.get()) {
+        if (ConfigManager.get().breaking.trapped_custom) {
             return pSide == Direction.UP ? pBlockState.getSignal(pBlockAccess, pPos, pSide) : 0;
         } else {
             return 0;

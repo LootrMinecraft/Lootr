@@ -1,9 +1,6 @@
 package noobanidus.mods.lootr.client.block;
 
 import com.google.common.collect.Streams;
-import net.fabricmc.fabric.api.client.model.ModelProviderContext;
-import net.fabricmc.fabric.api.client.model.ModelProviderException;
-import net.fabricmc.fabric.api.client.model.ModelResourceProvider;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.material.RenderMaterial;
@@ -179,28 +176,28 @@ public class BarrelModel implements UnbakedModel {
 
     public static class BarrelModelLoader implements ModelResourceProvider {
         // Model references
-        private static final ResourceLocation LOOTR_BARREL_MODEL_UNOPENED = new ResourceLocation(LootrAPI.MODID, "block/lootr_barrel");
-        private static final ResourceLocation LOOTR_BARREL_MODEL_OPENED = new ResourceLocation(LootrAPI.MODID, "block/lootr_barrel_open");
+        private static final ResourceLocation LOOTR_BARREL_MODEL_UNOPENED = ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "block/lootr_barrel");
+        private static final ResourceLocation LOOTR_BARREL_MODEL_OPENED = ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "block/lootr_barrel_open");
 
         // Unopened models
-        private static final ResourceLocation LOOTR_BARREL_UNOPENED = new ResourceLocation(LootrAPI.MODID, "block/lootr_barrel_unopened");
-        private static final ResourceLocation LOOTR_BARREL_UNOPENED_OPEN = new ResourceLocation(LootrAPI.MODID, "block/lootr_barrel_unopened_open");
+        private static final ResourceLocation LOOTR_BARREL_UNOPENED = ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "block/lootr_barrel_unopened");
+        private static final ResourceLocation LOOTR_BARREL_UNOPENED_OPEN = ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "block/lootr_barrel_unopened_open");
 
         // Opened models
-        private static final ResourceLocation LOOTR_OPENED_BARREL = new ResourceLocation(LootrAPI.MODID, "block/lootr_opened_barrel");
-        private static final ResourceLocation LOOTR_OPENED_BARREL_OPEN = new ResourceLocation(LootrAPI.MODID, "block/lootr_opened_barrel_open");
+        private static final ResourceLocation LOOTR_OPENED_BARREL = ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "block/lootr_opened_barrel");
+        private static final ResourceLocation LOOTR_OPENED_BARREL_OPEN = ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "block/lootr_opened_barrel_open");
 
         // Vanilla models
-        private static final ResourceLocation VANILLA = new ResourceLocation("minecraft", "block/barrel");
-        private static final ResourceLocation VANILLA_OPEN = new ResourceLocation("minecraft", "block/barrel_open");
+        private static final ResourceLocation VANILLA = ResourceLocation.fromNamespaceAndPath("minecraft", "block/barrel");
+        private static final ResourceLocation VANILLA_OPEN = ResourceLocation.fromNamespaceAndPath("minecraft", "block/barrel_open");
 
         // Old unopened models
-        private static final ResourceLocation OLD_LOOTR_BARREL_UNOPENED = new ResourceLocation(LootrAPI.MODID, "block/old_lootr_barrel_unopened");
-        private static final ResourceLocation OLD_LOOTR_BARREL_UNOPENED_OPEN = new ResourceLocation(LootrAPI.MODID, "block/old_lootr_barrel_unopened_open");
+        private static final ResourceLocation OLD_LOOTR_BARREL_UNOPENED = ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "block/old_lootr_barrel_unopened");
+        private static final ResourceLocation OLD_LOOTR_BARREL_UNOPENED_OPEN = ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "block/old_lootr_barrel_unopened_open");
 
         // Old opened models
-        private static final ResourceLocation OLD_LOOTR_OPENED_BARREL = new ResourceLocation(LootrAPI.MODID, "block/old_lootr_opened_barrel");
-        private static final ResourceLocation OLD_LOOTR_OPENED_BARREL_OPEN = new ResourceLocation(LootrAPI.MODID, "block/old_lootr_opened_barrel_open");
+        private static final ResourceLocation OLD_LOOTR_OPENED_BARREL = ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "block/old_lootr_opened_barrel");
+        private static final ResourceLocation OLD_LOOTR_OPENED_BARREL_OPEN = ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "block/old_lootr_opened_barrel_open");
 
         @Override
         public @Nullable UnbakedModel loadModelResource(ResourceLocation resourceId, ModelProviderContext context) throws ModelProviderException {

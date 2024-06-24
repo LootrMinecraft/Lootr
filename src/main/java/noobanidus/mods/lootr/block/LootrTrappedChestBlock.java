@@ -27,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class LootrTrappedChestBlock extends ChestBlock {
     public LootrTrappedChestBlock(Properties properties) {
-        super(properties, ModBlockEntities.LOOTR_TRAPPED_CHEST::get);
+        super(properties, () -> ModBlockEntities.SPECIAL_TRAPPED_LOOT_CHEST);
     }
 
     @Override
