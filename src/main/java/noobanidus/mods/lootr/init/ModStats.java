@@ -11,7 +11,7 @@ import noobanidus.mods.lootr.api.LootrAPI;
 
 public class ModStats {
   private static final DeferredRegister<ResourceLocation> REGISTER = DeferredRegister.create(BuiltInRegistries.CUSTOM_STAT, LootrAPI.MODID);
-  public static final DeferredHolder<ResourceLocation, ResourceLocation> LOOTED_LOCATION = REGISTER.register("looted_stat", () -> new ResourceLocation(LootrAPI.MODID, "looted_stat"));
+  public static final DeferredHolder<ResourceLocation, ResourceLocation> LOOTED_LOCATION = REGISTER.register("looted_stat", () -> LootrAPI.rl("looted_stat"));
   public static Stat<ResourceLocation> LOOTED_STAT;
 
   public static void register(IEventBus bus) {

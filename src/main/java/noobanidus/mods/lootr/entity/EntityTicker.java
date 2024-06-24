@@ -4,8 +4,8 @@ import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.data.DataStorage;
@@ -13,7 +13,7 @@ import noobanidus.mods.lootr.data.DataStorage;
 import java.util.ArrayList;
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid = LootrAPI.MODID)
+@EventBusSubscriber(modid = LootrAPI.MODID)
 public class EntityTicker {
   private static final List<LootrChestMinecartEntity> entities = new ArrayList<>();
   private static final List<LootrChestMinecartEntity> pendingEntities = new ArrayList<>();
@@ -25,11 +25,7 @@ public class EntityTicker {
   private static boolean tickingList = false;
 
   @SubscribeEvent
-  public static void onServerTick(TickEvent.ServerTickEvent event) {
-    if (event.phase != TickEvent.Phase.END) {
-      return;
-    }
-
+  public static void onServerTick(ServerTickEvent.Post event) {
     if (!ConfigManager.DISABLE.get()) {
       List<LootrChestMinecartEntity> completed = new ArrayList<>();
       List<LootrChestMinecartEntity> copy;

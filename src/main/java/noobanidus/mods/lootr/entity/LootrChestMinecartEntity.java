@@ -1,7 +1,6 @@
 package noobanidus.mods.lootr.entity;
 
-import net.minecraft.ChatFormatting;
-import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -9,9 +8,7 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextColor;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.Container;
@@ -28,29 +25,25 @@ import net.minecraft.world.entity.vehicle.AbstractMinecartContainer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.neoforged.neoforge.common.util.FakePlayer;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.network.PacketDistributor;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.entity.ILootCart;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.event.HandleBreak;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.init.ModEntities;
-import noobanidus.mods.lootr.network.PacketUtils;
 import noobanidus.mods.lootr.network.to_client.PacketOpenCart;
 import noobanidus.mods.lootr.util.ChestUtil;
-
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -69,7 +62,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
   @Override
-  public void unpackChestVehicleLootTable(@org.jetbrains.annotations.Nullable Player p_219950_) {
+  public void unpackChestVehicleLootTable(@Nullable Player p_219950_) {
   }
 
   @Override
@@ -173,10 +166,6 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
 
   @Override
   protected void addAdditionalSaveData(CompoundTag compound) {
-    if (this.lootTable != null) {
-      compound.putString("LootTable", this.lootTable.toString());
-    }
-    compound.putLong("LootTableSeed", this.lootTableSeed);
     ListTag list = new ListTag();
     for (UUID opener : this.openers) {
       list.add(NbtUtils.createUUID(opener));
@@ -187,8 +176,6 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
 
   @Override
   protected void readAdditionalSaveData(CompoundTag compound) {
-    this.lootTable = new ResourceLocation(compound.getString("LootTable"));
-    this.lootTableSeed = compound.getLong("LootTableSeed");
     if (compound.contains("LootrOpeners", Tag.TAG_LIST)) {
       ListTag openers = compound.getList("LootrOpeners", Tag.TAG_INT_ARRAY);
       this.openers.clear();
@@ -221,32 +208,14 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     }
   }
 
-  public void addLoot(@Nullable Player player, Container inventory, @Nullable ResourceLocation overrideTable, long seed) {
-    if (this.lootTable != null && this.level().getServer() != null) {
-      LootTable loottable = this.level().getServer().getLootData().getLootTable(overrideTable != null ? overrideTable : this.lootTable);
-      if (loottable == LootTable.EMPTY) {
-        LootrAPI.LOG.error("Unable to fill loot in " + level().dimension().location() + " at " + position() + " as the loot table '" + (overrideTable != null ? overrideTable : this.lootTable) + "' couldn't be resolved! Please search the loot table in `latest.log` to see if there are errors in loading.");
-        if (ConfigManager.REPORT_UNRESOLVED_TABLES.get() && player != null) {
-          player.displayClientMessage(ChestUtil.getInvalidTable(overrideTable != null ? overrideTable : this.lootTable), false);
-        }
-      }
-      if (player instanceof ServerPlayer) {
-        CriteriaTriggers.GENERATE_LOOT.trigger((ServerPlayer) player, overrideTable != null ? overrideTable : this.lootTable);
-      }
-      LootParams.Builder builder = (new LootParams.Builder((ServerLevel) this.level())).withParameter(LootContextParams.ORIGIN, position());
-      builder.withParameter(LootContextParams.KILLER_ENTITY, this); // TODO: Keep an eye on this, it's only for Forge
-      if (player != null) {
-        builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
-      }
-
-      loottable.fill(inventory, builder.create(LootContextParamSets.CHEST), LootrAPI.getLootSeed(seed == Long.MIN_VALUE ? this.lootTableSeed : seed));
-    }
+  public void addLoot(@Nullable Player player, Container inventory, @Nullable ResourceKey<LootTable> overrideTable, long seed) {
+    unpackLootTable(this, player, inventory, overrideTable, seed);
   }
 
   @Override
   public void startOpen(Player player) {
     if (!player.isSpectator()) {
-      PacketUtils.sendTo(new PacketOpenCart(this.getId()), (ServerPlayer) player);
+      PacketDistributor.sendToPlayer((ServerPlayer) player, new PacketOpenCart(this.getId()));
     }
   }
 
@@ -262,7 +231,38 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     super.startSeenByPlayer(pPlayer);
 
     if (getOpeners().contains(pPlayer.getUUID())) {
-      PacketUtils.sendTo(new PacketOpenCart(getId()), pPlayer);
+      PacketDistributor.sendToPlayer((ServerPlayer) pPlayer, new PacketOpenCart(this.getId()));
     }
+  }
+
+  @Override
+  public BlockPos getInfoPos() {
+    return blockPosition();
+  }
+
+  @Override
+  public ResourceKey<LootTable> getInfoLootTable() {
+    return getLootTable();
+  }
+
+  @Override
+  public long getInfoLootSeed() {
+    return getLootTableSeed();
+  }
+
+  @Override
+  public Level getInfoLevel() {
+    return level();
+  }
+
+  @Override
+  public Vec3 getInfoVec() {
+    return position();
+  }
+
+  @Override
+  @NotNull
+  public UUID getInfoUUID() {
+    return getUUID();
   }
 }

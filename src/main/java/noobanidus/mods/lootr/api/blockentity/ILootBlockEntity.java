@@ -1,29 +1,19 @@
 package noobanidus.mods.lootr.api.blockentity;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.api.IHasOpeners;
+import noobanidus.mods.lootr.api.ILootInfoProvider;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.UUID;
-
-public interface ILootBlockEntity extends IHasOpeners {
-  void unpackLootTable(Player player, Container inventory, ResourceLocation table, long seed);
-
-  ResourceLocation getTable();
-
-  BlockPos getPosition();
-
-  long getSeed();
-
-  UUID getTileId();
-
-  void updatePacketViaState();
+public interface ILootBlockEntity extends IHasOpeners, ILootInfoProvider {
+  void unpackLootTable(Player player, Container inventory, @Nullable ResourceKey<LootTable> overrideTable, long overrideSeed);
 
   default void updatePacketViaForce (BlockEntity entity) {
     if (entity.getLevel() instanceof ServerLevel level) {
@@ -34,5 +24,7 @@ public interface ILootBlockEntity extends IHasOpeners {
     }
   }
 
-  void setOpened(boolean opened);
+  boolean isClientOpened ();
+
+  void setClientOpened(boolean opened);
 }

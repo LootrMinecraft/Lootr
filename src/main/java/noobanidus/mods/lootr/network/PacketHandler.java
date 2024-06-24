@@ -11,8 +11,8 @@ Original source: https://github.com/mekanism/Mekanism/blob/1.20.4/src/main/java/
  */
 
 public class PacketHandler extends BasePacketHandler {
-  public PacketHandler(IEventBus modEventBus, String modid, String version) {
-    super(modEventBus, modid, version);
+  public PacketHandler(IEventBus modEventBus) {
+    super(modEventBus);
   }
 
   @Override
@@ -22,9 +22,9 @@ public class PacketHandler extends BasePacketHandler {
 
   @Override
   protected void registerServerToClient(PacketRegistrar registrar) {
-    registrar.play(PacketOpenCart.ID, PacketOpenCart::new);
-    registrar.play(PacketOpenContainer.ID, PacketOpenContainer::new);
-    registrar.play(PacketCloseCart.ID, PacketCloseCart::new);
-    registrar.play(PacketCloseContainer.ID, PacketCloseContainer::new);
+    registrar.play(PacketOpenCart.TYPE, PacketOpenCart.STREAM_CODEC);
+    registrar.play(PacketOpenContainer.TYPE, PacketOpenContainer.STREAM_CODEC);
+    registrar.play(PacketCloseCart.TYPE, PacketCloseCart.STREAM_CODEC);
+    registrar.play(PacketCloseContainer.TYPE, PacketCloseContainer.STREAM_CODEC);
   }
 }

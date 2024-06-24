@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.data;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -20,7 +21,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
+import noobanidus.mods.lootr.api.ILootInfoProvider;
 import noobanidus.mods.lootr.api.LootFiller;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
@@ -31,10 +34,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Function;
-import java.util.function.IntSupplier;
-import java.util.function.LongSupplier;
-import java.util.function.Supplier;
+import java.util.function.*;
 
 public class ChestData extends SavedData {
   private String key;
@@ -107,9 +107,9 @@ public class ChestData extends SavedData {
     };
   }
 
-  public static Function<CompoundTag, ChestData> loadWrapper(UUID id, ResourceKey<Level> dimension, BlockPos position) {
-    return (tag) -> {
-      ChestData result = ChestData.load(tag);
+  public static BiFunction<CompoundTag, HolderLookup.Provider, ChestData> loadWrapper(UUID id, ResourceKey<Level> dimension, BlockPos position) {
+    return (tag, provider) -> {
+      ChestData result = ChestData.load(tag, provider);
       result.key = ID(id);
       result.dimension = dimension;
       result.pos = position;
@@ -125,7 +125,7 @@ public class ChestData extends SavedData {
     return data;
   }
 
-  public static ChestData load(CompoundTag compound) {
+  public static ChestData load(CompoundTag compound, HolderLookup.Provider provider) {
     ChestData data = new ChestData(compound.getString("key"));
     data.inventories.clear();
     data.pos = null;
@@ -134,10 +134,10 @@ public class ChestData extends SavedData {
     if (compound.contains("position", Tag.TAG_LONG)) {
       data.pos = BlockPos.of(compound.getLong("position"));
     } else if (compound.contains("position", Tag.TAG_COMPOUND)) {
-      data.pos = NbtUtils.readBlockPos(compound.getCompound("position"));
+      data.pos = NbtUtils.readBlockPos(compound, "position").orElseThrow();
     }
     if (compound.contains("dimension")) {
-      data.dimension = ResourceKey.create(Registries.DIMENSION, new ResourceLocation(compound.getString("dimension")));
+      data.dimension = ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(compound.getString("dimension")));
     }
     boolean foundNewUUID = false;
     if (compound.hasUUID("uuid")) {
@@ -182,7 +182,7 @@ public class ChestData extends SavedData {
       int size = compound.getInt("referenceSize");
       data.size = size;
       data.reference = NonNullList.withSize(data.size, ItemStack.EMPTY);
-      ContainerHelper.loadAllItems(compound.getCompound("reference"), data.reference);
+      ContainerHelper.loadAllItems(compound.getCompound("reference"), data.reference, provider);
     }
     if (compound.contains("size", Tag.TAG_INT)) {
       data.size = compound.getInt("size");
@@ -213,7 +213,7 @@ public class ChestData extends SavedData {
       CompoundTag items = thisTag.getCompound("chest");
       String name = thisTag.getString("name");
       UUID uuid = thisTag.getUUID("uuid");
-      data.inventories.put(uuid, new SpecialChestInventory(data, items, name));
+      data.inventories.put(uuid, new SpecialChestInventory(data, items, name, provider));
     }
     return data;
   }
@@ -286,7 +286,7 @@ public class ChestData extends SavedData {
     return inventories.get(player.getUUID());
   }
 
-  public SpecialChestInventory createInventory(ServerPlayer player, LootFiller filler, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
+  public SpecialChestInventory createInventory(ServerPlayer player, LootFiller filler, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, Supplier<ResourceKey<LootTable>> tableSupplier, LongSupplier seedSupplier) {
     ServerLevel level = (ServerLevel) player.level();
     SpecialChestInventory result;
     if (level.dimension() != dimension) {
@@ -309,7 +309,7 @@ public class ChestData extends SavedData {
     return result;
   }
 
-  public SpecialChestInventory createInventory(ServerPlayer player, LootFiller filler, BaseContainerBlockEntity blockEntity, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
+  public SpecialChestInventory createInventory(ServerPlayer player, LootFiller filler, BaseContainerBlockEntity blockEntity, Supplier<ResourceKey<LootTable>> tableSupplier, LongSupplier seedSupplier) {
     ServerLevel level = (ServerLevel) player.level();
     SpecialChestInventory result;
     if (level.dimension() != dimension) {
@@ -336,7 +336,7 @@ public class ChestData extends SavedData {
     ServerLevel world = (ServerLevel) player.level();
     SpecialChestInventory result;
     long seed = -1;
-    ResourceLocation lootTable;
+    ResourceKey<LootTable> lootTable;
     if (entity) {
       Entity initial = world.getEntity(uuid);
       if (!(initial instanceof LootrChestMinecartEntity cart)) {
@@ -350,7 +350,7 @@ public class ChestData extends SavedData {
         return null;
       }
 
-      lootTable = ((ILootBlockEntity) tile).getTable();
+      lootTable = ((ILootInfoProvider) tile).getInfoLootTable();
 
       NonNullList<ItemStack> items = NonNullList.withSize(tile.getContainerSize(), ItemStack.EMPTY);
       result = new SpecialChestInventory(this, items, tile.getDisplayName());
@@ -362,7 +362,7 @@ public class ChestData extends SavedData {
   }
 
   @Override
-  public CompoundTag save(CompoundTag compound) {
+  public CompoundTag save(CompoundTag compound, HolderLookup.Provider provider) {
     // These values should always be updated before there is a potential for them to be saved; that said, it's possible that they have been manually loaded, ala with the `/lootr clear` command.
 
     if (key != null) {
@@ -390,14 +390,14 @@ public class ChestData extends SavedData {
     compound.putInt("size", size);
     if (reference != null) {
       compound.putInt("referenceSize", reference.size());
-      compound.put("reference", ContainerHelper.saveAllItems(new CompoundTag(), reference, true));
+      compound.put("reference", ContainerHelper.saveAllItems(new CompoundTag(), reference, true, provider));
     }
     ListTag compounds = new ListTag();
     for (Map.Entry<UUID, SpecialChestInventory> entry : inventories.entrySet()) {
       CompoundTag thisTag = new CompoundTag();
       thisTag.putUUID("uuid", entry.getKey());
-      thisTag.put("chest", entry.getValue().writeItems());
-      thisTag.putString("name", entry.getValue().writeName());
+      thisTag.put("chest", entry.getValue().writeItems(provider));
+      thisTag.putString("name", entry.getValue().writeName(provider));
       compounds.add(thisTag);
     }
     compound.put("inventories", compounds);
@@ -410,10 +410,10 @@ public class ChestData extends SavedData {
   }
 
   @Override
-  public void save(File pFile) {
+  public void save(File pFile, HolderLookup.Provider provider) {
     if (isDirty()) {
       pFile.getParentFile().mkdirs();
     }
-    super.save(pFile);
+    super.save(pFile, provider);
   }
 }

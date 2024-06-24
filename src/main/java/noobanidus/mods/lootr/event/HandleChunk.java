@@ -6,10 +6,10 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.ChunkAccess;
-import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.chunk.status.ChunkStatus;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.level.ChunkEvent;
 import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
@@ -19,7 +19,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-@Mod.EventBusSubscriber(modid = LootrAPI.MODID)
+@EventBusSubscriber(modid = LootrAPI.MODID)
 public class HandleChunk {
   public static final Map<ResourceKey<Level>, Set<ChunkPos>> LOADED_CHUNKS = Collections.synchronizedMap(new Object2ObjectLinkedOpenHashMap<>());
 
@@ -27,7 +27,7 @@ public class HandleChunk {
   public static void onChunkLoad(ChunkEvent.Load event) {
     if (!event.getLevel().isClientSide()) {
       ChunkAccess chunk = event.getChunk();
-      if (chunk.getStatus().isOrAfter(ChunkStatus.FULL) && chunk instanceof LevelChunk lChunk) {
+      if (chunk.getPersistedStatus().isOrAfter(ChunkStatus.FULL) && chunk instanceof LevelChunk lChunk) {
         synchronized (LOADED_CHUNKS) {
           Set<ChunkPos> chunkSet = LOADED_CHUNKS.computeIfAbsent(lChunk.getLevel().dimension(), k -> Collections.synchronizedSet(new ObjectLinkedOpenHashSet<>()));
           chunkSet.add(chunk.getPos());

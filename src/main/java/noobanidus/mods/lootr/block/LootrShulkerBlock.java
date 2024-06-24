@@ -11,6 +11,7 @@ import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
@@ -45,7 +46,7 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
     if (pBlockEntity.getAnimationStatus() != ShulkerBoxBlockEntity.AnimationStatus.CLOSED) {
       return true;
     } else {
-      AABB aabb = Shulker.getProgressDeltaAabb(pState.getValue(FACING), 0.0F, 0.5F).move(pPos).deflate(1.0E-6D);
+      AABB aabb = Shulker.getProgressDeltaAabb(1.0f, pState.getValue(FACING), 0.0F, 0.5F).move(pPos).deflate(1.0E-6D);
       return pLevel.noCollision(aabb);
     }
   }
@@ -56,7 +57,7 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
   }
 
   @Override
-  public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+  public InteractionResult useWithoutItem(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, BlockHitResult pHit) {
     if (pLevel.isClientSide) {
       return InteractionResult.SUCCESS;
     } else if (pPlayer.isSpectator()) {
@@ -107,7 +108,7 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
   }
 
   @Override
-  public void appendHoverText(ItemStack pStack, @Nullable BlockGetter pLevel, List<Component> pTooltip, TooltipFlag pFlag) {
+  public void appendHoverText(ItemStack p_56193_, Item.TooltipContext p_339693_, List<Component> p_56195_, TooltipFlag p_56196_) {
   }
 
   @Override
@@ -139,7 +140,7 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
 
   @Override
   public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-    return new LootrShulkerBlockEntity(ModBlockEntities.LOOTR_SHULKER.get(), pPos, pState);
+    return new LootrShulkerBlockEntity(pPos, pState);
   }
 
   @Override

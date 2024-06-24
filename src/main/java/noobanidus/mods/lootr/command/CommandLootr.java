@@ -15,10 +15,12 @@ import net.minecraft.commands.arguments.coordinates.Vec3Argument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentUtils;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
@@ -34,6 +36,7 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
@@ -53,17 +56,17 @@ import java.util.stream.Collectors;
 
 public class CommandLootr {
   private static final Map<String, UUID> profileMap = new HashMap<>();
-  private static List<ResourceLocation> tables = null;
+  private static List<ResourceKey<LootTable>> tables = null;
   private static List<String> tableNames = null;
   private final CommandDispatcher<CommandSourceStack> dispatcher;
   public CommandLootr(CommandDispatcher<CommandSourceStack> dispatcher) {
     this.dispatcher = dispatcher;
   }
 
-  private static List<ResourceLocation> getTables() {
+  private static List<ResourceKey<LootTable>> getTables() {
     if (tables == null) {
       tables = new ArrayList<>(BuiltInLootTables.all());
-      tableNames = tables.stream().map(ResourceLocation::toString).collect(Collectors.toList());
+      tableNames = tables.stream().map(o -> o.location().toString()).toList();
     }
     return tables;
   }
@@ -77,11 +80,11 @@ public class CommandLootr {
     return tableNames;
   }
 
-  public static void createBlock(CommandSourceStack c, @Nullable Block block, @Nullable ResourceLocation incomingTable) {
+  public static void createBlock(CommandSourceStack c, @Nullable Block block, @Nullable ResourceKey<LootTable> incomingTable) {
     Level world = c.getLevel();
     Vec3 incomingPos = c.getPosition();
     BlockPos pos = new BlockPos((int) incomingPos.x, (int) incomingPos.y, (int) incomingPos.z);
-    ResourceLocation table;
+    ResourceKey<LootTable> table;
     if (incomingTable == null) {
       table = getTables().get(world.getRandom().nextInt(getTables().size()));
     } else {
@@ -145,28 +148,28 @@ public class CommandLootr {
       createBlock(c.getSource(), ModBlocks.BARREL.get(), null);
       return 1;
     }).then(suggestTables().executes(c -> {
-      createBlock(c.getSource(), ModBlocks.BARREL.get(), ResourceLocationArgument.getId(c, "table"));
+      createBlock(c.getSource(), ModBlocks.BARREL.get(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
       return 1;
     })));
     builder.then(Commands.literal("trapped_chest").executes(c -> {
       createBlock(c.getSource(), ModBlocks.TRAPPED_CHEST.get(), null);
       return 1;
     }).then(suggestTables().executes(c -> {
-      createBlock(c.getSource(), ModBlocks.TRAPPED_CHEST.get(), ResourceLocationArgument.getId(c, "table"));
+      createBlock(c.getSource(), ModBlocks.TRAPPED_CHEST.get(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
       return 1;
     })));
     builder.then(Commands.literal("chest").executes(c -> {
       createBlock(c.getSource(), ModBlocks.CHEST.get(), null);
       return 1;
     }).then(suggestTables().executes(c -> {
-      createBlock(c.getSource(), ModBlocks.CHEST.get(), ResourceLocationArgument.getId(c, "table"));
+      createBlock(c.getSource(), ModBlocks.CHEST.get(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
       return 1;
     })));
     builder.then(Commands.literal("shulker").executes(c -> {
       createBlock(c.getSource(), ModBlocks.SHULKER.get(), null);
       return 1;
     }).then(suggestTables().executes(c -> {
-      createBlock(c.getSource(), ModBlocks.SHULKER.get(), ResourceLocationArgument.getId(c, "table"));
+      createBlock(c.getSource(), ModBlocks.SHULKER.get(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
       return 1;
     })));
     builder.then(Commands.literal("clear").executes(c -> {
@@ -187,7 +190,7 @@ public class CommandLootr {
       createBlock(c.getSource(), null, null);
       return 1;
     }).then(suggestTables().executes(c -> {
-      createBlock(c.getSource(), null, ResourceLocationArgument.getId(c, "table"));
+      createBlock(c.getSource(), null, ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
       return 1;
     })));
     builder.then(Commands.literal("custom").executes(c -> {
@@ -238,7 +241,7 @@ public class CommandLootr {
       if (!(te instanceof ILootBlockEntity ibe)) {
         c.getSource().sendSuccess(() -> Component.literal("Please stand on a valid Lootr container."), false);
       } else {
-        c.getSource().sendSuccess(() -> Component.literal("The ID of this inventory is: " + (ibe).getTileId().toString()), false);
+        c.getSource().sendSuccess(() -> Component.literal("The ID of this inventory is: " + (ibe).getInfoUUID().toString()), false);
       }
       return 1;
     }));
@@ -251,8 +254,8 @@ public class CommandLootr {
         be = level.getBlockEntity(pos);
       }
       if (be instanceof ILootBlockEntity ibe) {
-        DataStorage.setRefreshing(((ILootBlockEntity) be).getTileId(), ConfigManager.REFRESH_VALUE.get());
-        c.getSource().sendSuccess(() -> Component.literal("Container with ID " + (ibe).getTileId() + " has been set to refresh with a delay of " + ConfigManager.REFRESH_VALUE.get()), false);
+        DataStorage.setRefreshing(((ILootBlockEntity) be).getInfoUUID(), ConfigManager.REFRESH_VALUE.get());
+        c.getSource().sendSuccess(() -> Component.literal("Container with ID " + (ibe).getInfoUUID() + " has been set to refresh with a delay of " + ConfigManager.REFRESH_VALUE.get()), false);
       } else {
         c.getSource().sendSuccess(() -> Component.literal("Please stand on a valid Lootr container."), false);
       }
@@ -267,8 +270,8 @@ public class CommandLootr {
         be = level.getBlockEntity(pos);
       }
       if (be instanceof ILootBlockEntity ibe) {
-        DataStorage.setDecaying((ibe).getTileId(), ConfigManager.DECAY_VALUE.get());
-        c.getSource().sendSuccess(() -> Component.literal("Container with ID " + (ibe).getTileId() + " has been set to decay with a delay of " + ConfigManager.DECAY_VALUE.get()), false);
+        DataStorage.setDecaying((ibe).getInfoUUID(), ConfigManager.DECAY_VALUE.get());
+        c.getSource().sendSuccess(() -> Component.literal("Container with ID " + (ibe).getInfoUUID() + " has been set to decay with a delay of " + ConfigManager.DECAY_VALUE.get()), false);
       } else {
         c.getSource().sendSuccess(() -> Component.literal("Please stand on a valid Lootr container."), false);
       }

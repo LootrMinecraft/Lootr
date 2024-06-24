@@ -6,6 +6,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,6 +19,8 @@ import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.neoforged.neoforge.network.PacketDistributor;
 import noobanidus.mods.lootr.advancement.ContainerTrigger;
 import noobanidus.mods.lootr.api.IHasOpeners;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
@@ -47,7 +50,7 @@ public class ChestUtil {
       if (tile.getOpeners().remove(player.getUUID())) {
         te.setChanged();
         tile.updatePacketViaForce(te);
-        PacketUtils.sendTo(new PacketCloseContainer(te.getBlockPos()), (ServerPlayer) player);
+        PacketDistributor.sendToPlayer((ServerPlayer) player, new PacketCloseContainer(te.getBlockPos()));
       }
     }
 
@@ -60,7 +63,7 @@ public class ChestUtil {
     }
 
     cart.getOpeners().remove(player.getUUID());
-    PacketUtils.sendToAllTracking(new PacketCloseCart(cart.getId()), cart);
+    PacketDistributor.sendToPlayersTrackingEntity(cart, new PacketCloseCart(cart.getId()));
   }
 
   public static Style getInvalidStyle() {
@@ -75,8 +78,8 @@ public class ChestUtil {
     return ConfigManager.DISABLE_MESSAGE_STYLES.get() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true);
   }
 
-  public static Component getInvalidTable (ResourceLocation lootTable) {
-    return Component.translatable("lootr.message.invalid_table", lootTable.getNamespace(), lootTable.toString()).setStyle(ConfigManager.DISABLE_MESSAGE_STYLES.get() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED)).withBold(true));
+  public static Component getInvalidTable (ResourceKey<LootTable> lootTable) {
+    return Component.translatable("lootr.message.invalid_table", lootTable.location().getNamespace(), lootTable.toString()).setStyle(ConfigManager.DISABLE_MESSAGE_STYLES.get() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED)).withBold(true));
   }
 
   public static void handleLootChest(Block block, Level level, BlockPos pos, Player player) {
@@ -88,7 +91,7 @@ public class ChestUtil {
     }
     BlockEntity te = level.getBlockEntity(pos);
     if (te instanceof ILootBlockEntity tile) {
-      UUID tileId = tile.getTileId();
+      UUID tileId = tile.getInfoUUID();
       if (tileId == null) {
         player.displayClientMessage(Component.translatable("lootr.message.invalid_block").setStyle(getInvalidStyle()), true);
         return;
@@ -136,7 +139,7 @@ public class ChestUtil {
       checkScore((ServerPlayer) player, tileId);
       if (addOpener(tile, player)) {
         te.setChanged();
-        tile.updatePacketViaState();
+        ((ILootBlockEntity) te).updatePacketViaForce(te);
       }
       player.openMenu(provider);
       // TODO: Instances using this check the block tags first.
@@ -203,14 +206,14 @@ public class ChestUtil {
     }
     BlockEntity te = level.getBlockEntity(pos);
     if (te instanceof LootrInventoryBlockEntity tile) {
-      ModAdvancements.CHEST.get().trigger((ServerPlayer) player, tile.getTileId());
+      ModAdvancements.CHEST.get().trigger((ServerPlayer) player, tile.getInfoUUID());
       NonNullList<ItemStack> stacks = null;
       if (tile.getCustomInventory() != null) {
         stacks = copyItemList(tile.getCustomInventory());
       }
-      UUID tileId = tile.getTileId();
+      UUID tileId = tile.getInfoUUID();
       if (DataStorage.isRefreshed(tileId)) {
-        DataStorage.refreshInventory(level, pos, tile.getTileId(), stacks, (ServerPlayer) player);
+        DataStorage.refreshInventory(level, pos, tile.getInfoUUID(), stacks, (ServerPlayer) player);
         notifyRefresh(player, tileId);
       }
       int refreshValue = DataStorage.getRefreshValue(tileId);
@@ -221,15 +224,15 @@ public class ChestUtil {
           startRefresh(player, tileId, refreshValue);
         }
       }
-      MenuProvider provider = DataStorage.getInventory(level, tile.getTileId(), stacks, (ServerPlayer) player, pos, tile);
+      MenuProvider provider = DataStorage.getInventory(level, tile.getInfoUUID(), stacks, (ServerPlayer) player, pos, tile);
       if (provider == null) {
         // Error messages are already handled by nested methods in `getInventory`
         return;
       }
-      checkScore((ServerPlayer) player, tile.getTileId());
+      checkScore((ServerPlayer) player, tile.getInfoUUID());
       if (addOpener(tile, player)) {
         te.setChanged();
-        tile.updatePacketViaState();
+        tile.updatePacketViaForce(tile);
       }
       player.openMenu(provider);
       PiglinAi.angerNearbyPiglins(player, true);

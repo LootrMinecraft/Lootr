@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.data;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -43,11 +44,11 @@ public class SpecialChestInventory implements ILootrInventory {
     this.name = name;
   }
 
-  public SpecialChestInventory(ChestData newChestData, CompoundTag items, String componentAsJSON) {
+  public SpecialChestInventory(ChestData newChestData, CompoundTag items, String componentAsJSON, HolderLookup.Provider provider) {
     this.newChestData = newChestData;
-    this.name = Component.Serializer.fromJson(componentAsJSON);
+    this.name = Component.Serializer.fromJson(componentAsJSON, provider);
     this.contents = NonNullList.withSize(newChestData.getSize(), ItemStack.EMPTY);
-    ContainerHelper.loadAllItems(items, this.contents);
+    ContainerHelper.loadAllItems(items, this.contents, provider);
   }
 
   public void setMenuBuilder(MenuBuilder builder) {
@@ -248,13 +249,13 @@ public class SpecialChestInventory implements ILootrInventory {
     return newChestData.getTileId();
   }
 
-  public CompoundTag writeItems() {
+  public CompoundTag writeItems(HolderLookup.Provider provider) {
     CompoundTag result = new CompoundTag();
-    return ContainerHelper.saveAllItems(result, this.contents);
+    return ContainerHelper.saveAllItems(result, this.contents, provider);
   }
 
-  public String writeName() {
-    return Component.Serializer.toJson(this.name);
+  public String writeName(HolderLookup.Provider provider) {
+    return Component.Serializer.toJson(this.name, provider);
   }
 
   @Override

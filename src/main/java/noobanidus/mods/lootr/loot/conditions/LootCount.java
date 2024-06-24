@@ -2,6 +2,7 @@ package noobanidus.mods.lootr.loot.conditions;
 
 import com.google.common.collect.ImmutableSet;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.PrimitiveCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
@@ -26,7 +27,7 @@ import java.util.function.Predicate;
 
 public record LootCount(List<Operation> operations) implements LootItemCondition {
 
-  public static final Codec<LootCount> CODEC = RecordCodecBuilder.create(
+  public static final MapCodec<LootCount> CODEC = RecordCodecBuilder.mapCodec(
       builder -> builder.group(
               Operation.CODEC.listOf().xmap(operationList -> operationList.stream().sorted(Comparator.comparingInt(Operation::getPrecedence)).toList(), Function.identity()).fieldOf("operations").forGetter(LootCount::operations)
           )

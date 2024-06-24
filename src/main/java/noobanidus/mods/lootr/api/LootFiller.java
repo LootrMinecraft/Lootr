@@ -1,8 +1,10 @@
 package noobanidus.mods.lootr.api;
 
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 
 @FunctionalInterface
@@ -21,5 +23,5 @@ public interface LootFiller {
    *                  <p>
    *                  Example implementations can be found in `LootrChestblockEntity::unpackLootTable`.
    */
-  void unpackLootTable(@NotNull Player player, Container inventory, ResourceLocation table, long seed);
+  void unpackLootTable(@NotNull Player player, Container inventory, ResourceKey<LootTable> table, long seed);
 }

@@ -25,7 +25,7 @@ public class LootrTags {
     public static final TagKey<Block> CONTAINERS = tag("containers");
 
     static TagKey<Block> tag(String name) {
-      return TagKey.create(Registries.BLOCK, new ResourceLocation(LootrAPI.MODID, name));
+      return TagKey.create(Registries.BLOCK, LootrAPI.rl(name));
     }
   }
 
@@ -37,7 +37,7 @@ public class LootrTags {
     public static TagKey<Item> CONTAINERS = tag("containers");
 
     static TagKey<Item> tag(String name) {
-      return TagKey.create(Registries.ITEM, new ResourceLocation(LootrAPI.MODID, name));
+      return TagKey.create(Registries.ITEM, LootrAPI.rl(name));
     }
   }
 }

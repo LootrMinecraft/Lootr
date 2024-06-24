@@ -1,9 +1,8 @@
 package noobanidus.mods.lootr.block.entities;
 
-import net.minecraft.ChatFormatting;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -11,12 +10,8 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -27,28 +22,21 @@ import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.PushReaction;
-import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
-import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlockEntities;
-import noobanidus.mods.lootr.util.ChestUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,27 +46,18 @@ import java.util.Set;
 import java.util.UUID;
 
 public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity implements ILootBlockEntity {
-  @Nullable
-  private final DyeColor color;
   public Set<UUID> openers = new HashSet<>();
-  protected ResourceLocation savedLootTable = null;
-  protected long seed = -1;
-  protected UUID tileId;
-  protected boolean opened;
-  private NonNullList<ItemStack> itemStacks = NonNullList.withSize(27, ItemStack.EMPTY);
+  protected UUID infoId;
+  protected boolean clientOpened;
   private int openCount;
   private ShulkerBoxBlockEntity.AnimationStatus animationStatus = ShulkerBoxBlockEntity.AnimationStatus.CLOSED;
   private float progress;
   private float progressOld;
   private boolean savingToItem = false;
-
-  public LootrShulkerBlockEntity(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState) {
-    super(pType, pWorldPosition, pBlockState);
-    color = DyeColor.YELLOW;
-  }
+  private static final NonNullList<ItemStack> itemStacks = NonNullList.withSize(27, ItemStack.EMPTY);
 
   public LootrShulkerBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
-    this(ModBlockEntities.LOOTR_SHULKER.get(), pWorldPosition, pBlockState);
+    super(ModBlockEntities.LOOTR_SHULKER.get(), pWorldPosition, pBlockState);
   }
 
   public static void tick(Level pLevel, BlockPos pPos, BlockState pState, LootrShulkerBlockEntity pBlockEntity) {
@@ -87,6 +66,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
 
   private static void doNeighborUpdates(Level pLevel, BlockPos pPos, BlockState pState) {
     pState.updateNeighbourShapes(pLevel, pPos, 3);
+    pLevel.updateNeighborsAt(pPos, pState.getBlock());
   }
 
   private void updateAnimation(Level pLevel, BlockPos pPos, BlockState pState) {
@@ -95,6 +75,10 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
       case CLOSED -> this.progress = 0.0F;
       case OPENING -> {
         this.progress += 0.1F;
+        if (this.progressOld == 0.0F) {
+          doNeighborUpdates(pLevel, pPos, pState);
+        }
+
         if (this.progress >= 1.0F) {
           this.animationStatus = ShulkerBoxBlockEntity.AnimationStatus.OPENED;
           this.progress = 1.0F;
@@ -103,17 +87,20 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
 
         this.moveCollidedEntities(pLevel, pPos, pState);
       }
+      case OPENED -> this.progress = 1.0F;
       case CLOSING -> {
         this.progress -= 0.1F;
+        if (this.progressOld == 1.0F) {
+          doNeighborUpdates(pLevel, pPos, pState);
+        }
+
         if (this.progress <= 0.0F) {
           this.animationStatus = ShulkerBoxBlockEntity.AnimationStatus.CLOSED;
           this.progress = 0.0F;
           doNeighborUpdates(pLevel, pPos, pState);
         }
       }
-      case OPENED -> this.progress = 1.0F;
     }
-
   }
 
   public ShulkerBoxBlockEntity.AnimationStatus getAnimationStatus() {
@@ -121,61 +108,60 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   public AABB getBoundingBox(BlockState pState) {
-    return Shulker.getProgressAabb(pState.getValue(ShulkerBoxBlock.FACING), 0.5F * this.getProgress(1.0F));
+    return Shulker.getProgressAabb(1.0F, pState.getValue(ShulkerBoxBlock.FACING), 0.5F * this.getProgress(1.0F));
   }
 
   private void moveCollidedEntities(Level pLevel, BlockPos pPos, BlockState pState) {
     if (pState.getBlock() instanceof ShulkerBoxBlock) {
       Direction direction = pState.getValue(ShulkerBoxBlock.FACING);
-      AABB aabb = Shulker.getProgressDeltaAabb(direction, this.progressOld, this.progress).move(pPos);
+      AABB aabb = Shulker.getProgressDeltaAabb(1.0F, direction, this.progressOld, this.progress).move(pPos);
       List<Entity> list = pLevel.getEntities(null, aabb);
-      if (!list.isEmpty()) {
-        for (Entity entity : list) {
-          if (entity.getPistonPushReaction() != PushReaction.IGNORE) {
-            entity.move(MoverType.SHULKER_BOX, new Vec3((aabb.getXsize() + 0.01D) * (double) direction.getStepX(), (aabb.getYsize() + 0.01D) * (double) direction.getStepY(), (aabb.getZsize() + 0.01D) * (double) direction.getStepZ()));
-          }
+      for (Entity entity : list) {
+        if (entity.getPistonPushReaction() != PushReaction.IGNORE) {
+          entity.move(
+              MoverType.SHULKER_BOX,
+              new Vec3(
+                  (aabb.getXsize() + 0.01) * (double) direction.getStepX(),
+                  (aabb.getYsize() + 0.01) * (double) direction.getStepY(),
+                  (aabb.getZsize() + 0.01) * (double) direction.getStepZ()
+              )
+          );
         }
-
       }
     }
   }
 
-  /**
-   * Returns the number of slots in the inventory.
-   */
   @Override
   public int getContainerSize() {
-    return this.itemStacks.size();
+    return 27;
   }
 
   @Override
-  public boolean triggerEvent(int pId, int pType) {
-    if (pId == 1) {
-      this.openCount = pType;
-      if (pType == 0) {
+  public boolean triggerEvent(int pEvent, int pCount) {
+    if (pEvent == 1) {
+      this.openCount = pCount;
+      if (pCount == 0) {
         this.animationStatus = ShulkerBoxBlockEntity.AnimationStatus.CLOSING;
-        doNeighborUpdates(this.getLevel(), this.worldPosition, this.getBlockState());
       }
 
-      if (pType == 1) {
+      if (pCount == 1) {
         this.animationStatus = ShulkerBoxBlockEntity.AnimationStatus.OPENING;
-        doNeighborUpdates(this.getLevel(), this.worldPosition, this.getBlockState());
       }
 
       return true;
     } else {
-      return super.triggerEvent(pId, pType);
+      return super.triggerEvent(pEvent, pCount);
     }
   }
 
   @Override
   public void startOpen(Player pPlayer) {
-    if (!pPlayer.isSpectator()) {
+    if (!this.remove && !pPlayer.isSpectator()) {
       if (this.openCount < 0) {
         this.openCount = 0;
       }
 
-      ++this.openCount;
+      this.openCount++;
       this.level.blockEvent(this.worldPosition, this.getBlockState().getBlock(), 1, this.openCount);
       if (this.openCount == 1) {
         this.level.gameEvent(pPlayer, GameEvent.CONTAINER_OPEN, this.worldPosition);
@@ -186,16 +172,13 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
 
   @Override
   public void stopOpen(Player pPlayer) {
-    if (!pPlayer.isSpectator()) {
-      --this.openCount;
+    if (!this.remove && !pPlayer.isSpectator()) {
+      this.openCount--;
       this.level.blockEvent(this.worldPosition, this.getBlockState().getBlock(), 1, this.openCount);
       if (this.openCount <= 0) {
         this.level.gameEvent(pPlayer, GameEvent.CONTAINER_CLOSE, this.worldPosition);
         this.level.playSound(null, this.worldPosition, SoundEvents.SHULKER_BOX_CLOSE, SoundSource.BLOCKS, 0.5F, this.level.random.nextFloat() * 0.1F + 0.9F);
       }
-      openers.add(pPlayer.getUUID());
-      setChanged();
-      updatePacketViaState();
     }
   }
 
@@ -210,18 +193,12 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   @Override
-  public void load(CompoundTag compound) {
-    if (compound.contains("LootTable", Tag.TAG_STRING)) {
-      savedLootTable = new ResourceLocation(compound.getString("LootTable"));
-      if (compound.contains("LootTableSeed", Tag.TAG_LONG)) {
-        seed = compound.getLong("LootTableSeed");
-      }
+  public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider) {
+    if (compound.hasUUID("LootrId")) {
+      this.infoId = compound.getUUID("LootrId");
     }
-    if (compound.hasUUID("tileId")) {
-      this.tileId = compound.getUUID("tileId");
-    }
-    if (this.tileId == null) {
-      getTileId();
+    if (this.infoId == null) {
+      getInfoUUID();
     }
     if (compound.contains("LootrOpeners")) {
       ListTag openers = compound.getList("LootrOpeners", Tag.TAG_INT_ARRAY);
@@ -230,33 +207,27 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
         this.openers.add(NbtUtils.loadUUID(item));
       }
     }
-    super.load(compound);
+    super.loadAdditional(compound, provider);
   }
 
   @Override
-  public void saveToItem(ItemStack itemstack) {
+  public void saveToItem(ItemStack itemstack, HolderLookup.Provider provider) {
     savingToItem = true;
-    super.saveToItem(itemstack);
+    super.saveToItem(itemstack, provider);
     savingToItem = false;
   }
 
   @Override
-  protected void saveAdditional(CompoundTag compound) {
-    super.saveAdditional(compound);
-    if (savedLootTable != null) {
-      compound.putString("LootTable", savedLootTable.toString());
-    }
-    if (seed != -1) {
-      compound.putLong("LootTableSeed", seed);
-    }
+  protected void saveAdditional(CompoundTag compound, HolderLookup.Provider provider) {
     if (!LootrAPI.shouldDiscard() && !savingToItem) {
-      compound.putUUID("tileId", getTileId());
+      compound.putUUID("LootrId", getInfoUUID());
       ListTag list = new ListTag();
       for (UUID opener : this.openers) {
         list.add(NbtUtils.createUUID(opener));
       }
       compound.put("LootrOpeners", list);
     }
+    super.saveAdditional(compound, provider);
   }
 
   @Override
@@ -266,7 +237,6 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
 
   @Override
   protected void setItems(NonNullList<ItemStack> pItems) {
-    this.itemStacks = pItems;
   }
 
   public float getProgress(float pPartialTicks) {
@@ -278,51 +248,29 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   @Override
-  public ResourceLocation getTable() {
-    return savedLootTable;
-  }
-
-  @Override
-  public BlockPos getPosition() {
-    return getBlockPos();
-  }
-
-  @Override
-  public long getSeed() {
-    return seed;
-  }
-
-  @Override
   public Set<UUID> getOpeners() {
     return openers;
   }
 
   @Override
-  public UUID getTileId() {
-    if (this.tileId == null) {
-      this.tileId = UUID.randomUUID();
+  @NotNull
+  public UUID getInfoUUID() {
+    if (this.infoId == null) {
+      this.infoId = UUID.randomUUID();
     }
-    return this.tileId;
+    return this.infoId;
   }
 
   @Override
-  public void updatePacketViaState() {
-    if (level != null && !level.isClientSide) {
-      BlockState state = level.getBlockState(getBlockPos());
-      level.sendBlockUpdated(getBlockPos(), state, state, 8);
-    }
-  }
-
-  @Override
-  public void setOpened(boolean opened) {
-    this.opened = true;
+  public void setClientOpened(boolean opened) {
+    this.clientOpened = true;
   }
 
   @Override
   @NotNull
-  public CompoundTag getUpdateTag() {
-    CompoundTag result = super.getUpdateTag();
-    saveAdditional(result);
+  public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
+    CompoundTag result = super.getUpdateTag(provider);
+    saveAdditional(result, provider);
     return result;
   }
 
@@ -333,9 +281,9 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   @Override
-  public void onDataPacket(@NotNull Connection net, @NotNull ClientboundBlockEntityDataPacket pkt) {
+  public void onDataPacket(@NotNull Connection net, @NotNull ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider provider) {
     if (pkt.getTag() != null) {
-      load(pkt.getTag());
+      loadAdditional(pkt.getTag(), provider);
     }
   }
 
@@ -344,32 +292,32 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   @Override
-  public void unpackLootTable(Player player, Container inventory, ResourceLocation overrideTable, long seed) {
-    if (this.level != null && this.savedLootTable != null && this.level.getServer() != null) {
-      LootTable loottable = this.level.getServer().getLootData().getLootTable(overrideTable != null ? overrideTable : this.savedLootTable);
-      if (loottable == LootTable.EMPTY) {
-        LootrAPI.LOG.error("Unable to fill loot shulker in " + level.dimension().location() + " at " + worldPosition + " as the loot table '" + (overrideTable != null ? overrideTable : this.savedLootTable) + "' couldn't be resolved! Please search the loot table in `latest.log` to see if there are errors in loading.");
-        if (ConfigManager.REPORT_UNRESOLVED_TABLES.get()) {
-          player.displayClientMessage(ChestUtil.getInvalidTable(overrideTable != null ? overrideTable : this.savedLootTable), false);
-        }
-      }
-      if (player instanceof ServerPlayer) {
-        CriteriaTriggers.GENERATE_LOOT.trigger((ServerPlayer) player, overrideTable != null ? overrideTable : this.lootTable);
-      }
-
-      LootParams.Builder builder = (new LootParams.Builder((ServerLevel) this.level)).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(this.worldPosition));
-      if (player != null) {
-        builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
-      }
-
-      loottable.fill(inventory, builder.create(LootContextParamSets.CHEST), LootrAPI.getLootSeed(seed == Long.MIN_VALUE ? this.seed : seed));
-    }
+  public void unpackLootTable(Player player, Container inventory, @Nullable ResourceKey<LootTable> overrideTable, long overrideSeed) {
+    unpackLootTable(this, player, inventory, overrideTable, overrideSeed);
   }
 
   @Override
-  public void setLootTable(ResourceLocation lootTableIn, long seedIn) {
-    super.setLootTable(lootTableIn, seedIn);
-    this.savedLootTable = lootTableIn;
-    this.seed = seedIn;
+  public boolean isClientOpened() {
+    return clientOpened;
+  }
+
+  @Override
+  public BlockPos getInfoPos() {
+    return getBlockPos();
+  }
+
+  @Override
+  public ResourceKey<LootTable> getInfoLootTable() {
+    return getLootTable();
+  }
+
+  @Override
+  public long getInfoLootSeed() {
+    return getLootTableSeed();
+  }
+
+  @Override
+  public Level getInfoLevel() {
+    return getLevel();
   }
 }

@@ -1,110 +1,119 @@
 package noobanidus.mods.lootr.network;
 
+import com.mojang.datafixers.util.Function9;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
+import net.minecraft.SharedConstants;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.SectionPos;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBundlePacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.server.players.PlayerList;
+import net.minecraft.util.ByIdMap;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
-
-/* Shamelessly crib from Mekanism until it works
- * Original source: https://github.com/mekanism/Mekanism/blob/1.20.4/src/main/java/mekanism/common/network/PacketUtils.java
- */
 public class PacketUtils {
 
-  private PacketUtils() {
-  }
-
-  public static Optional<ServerPlayer> asServerPlayer(IPayloadContext context) {
-    return context.player()
-        .filter(ServerPlayer.class::isInstance)
-        .map(ServerPlayer.class::cast);
-  }
-
-  /**
-   * Send this message to the specified player.
-   *
-   * @param message - the message to send
-   * @param player  - the player to send it to
-   */
-  public static <MSG extends CustomPacketPayload> void sendTo(MSG message, ServerPlayer player) {
-    PacketDistributor.PLAYER.with(player).send(message);
-  }
-
-  /**
-   * Send this message to everyone connected to the server.
-   *
-   * @param message - message to send
-   */
-  public static <MSG extends CustomPacketPayload> void sendToAll(MSG message) {
-    PacketDistributor.ALL.noArg().send(message);
-  }
-
-  /**
-   * Send this message to everyone connected to the server if the server has loaded.
-   *
-   * @param message - message to send
-   * @apiNote This is useful for reload listeners
-   */
-  public static <MSG extends CustomPacketPayload> void sendToAllIfLoaded(MSG message) {
-    if (ServerLifecycleHooks.getCurrentServer() != null) {
-      //If the server has loaded, send to all players
-      sendToAll(message);
+    private PacketUtils() {
     }
-  }
 
-  /**
-   * Send this message to everyone within the supplied dimension.
-   *
-   * @param message   - the message to send
-   * @param dimension - the dimension to target
-   */
-  public static <MSG extends CustomPacketPayload> void sendToDimension(MSG message, ResourceKey<Level> dimension) {
-    PacketDistributor.DIMENSION.with(dimension).send(message);
-  }
-
-  /**
-   * Send this message to the server.
-   *
-   * @param message - the message to send
-   */
-  public static <MSG extends CustomPacketPayload> void sendToServer(MSG message) {
-    PacketDistributor.SERVER.noArg().send(message);
-  }
-
-  public static <MSG extends CustomPacketPayload> void sendToAllTracking(MSG message, Entity entity) {
-    PacketDistributor.TRACKING_ENTITY.with(entity).send(message);
-  }
-
-  public static <MSG extends CustomPacketPayload> void sendToAllTrackingAndSelf(MSG message, Entity entity) {
-    PacketDistributor.TRACKING_ENTITY_AND_SELF.with(entity).send(message);
-  }
-
-  public static <MSG extends CustomPacketPayload> void sendToAllTracking(MSG message, BlockEntity tile) {
-    sendToAllTracking(message, tile.getLevel(), tile.getBlockPos());
-  }
-
-  public static <MSG extends CustomPacketPayload> void sendToAllTracking(MSG message, Level world, BlockPos pos) {
-    if (world instanceof ServerLevel level) {
-      //If we have a ServerWorld just directly figure out the ChunkPos to not require looking up the chunk
-      // This provides a decent performance boost over using the packet distributor
-      level.getChunkSource().chunkMap.getPlayers(new ChunkPos(pos), false).forEach(p -> sendTo(message, p));
-    } else {
-      //Otherwise, fallback to entities tracking the chunk if some mod did something odd and our world is not a ServerWorld
-      PacketDistributor.TRACKING_CHUNK.with(world.getChunk(SectionPos.blockToSectionCoord(pos.getX()), SectionPos.blockToSectionCoord(pos.getZ()))).send(message);
+    //Similar to NeoForgeStreamCodecs#enumCodec but allows for keeping it as a ByteBuf and wrapping the value
+    public static <V extends Enum<V>> StreamCodec<ByteBuf, V> enumCodec(Class<V> enumClass) {
+        return ByteBufCodecs.idMapper(ByIdMap.continuous(Enum::ordinal, enumClass.getEnumConstants(), ByIdMap.OutOfBoundsStrategy.WRAP), Enum::ordinal);
     }
-  }
 
-  private static boolean isChunkTracked(ServerPlayer player, int chunkX, int chunkZ) {
-    return player.getChunkTrackingView().contains(chunkX, chunkZ) && !player.connection.chunkSender.isPending(ChunkPos.asLong(chunkX, chunkZ));
-  }
+    public static void log(String logFormat, Object... params) {
+    }
+
+    public static <OBJ> OBJ read(RegistryAccess registryAccess, byte[] rawData, Function<RegistryFriendlyByteBuf, OBJ> deserializer) {
+        RegistryFriendlyByteBuf buffer = new RegistryFriendlyByteBuf(Unpooled.wrappedBuffer(rawData), registryAccess);
+        try {
+            return deserializer.apply(buffer);
+        } finally {
+            buffer.release();
+        }
+    }
+
+    /**
+     * Send this message to the server.
+     *
+     * @param message - the message to send
+     */
+    public static <MSG extends CustomPacketPayload> boolean sendToServer(MSG message) {
+        PacketDistributor.sendToServer(message);
+        return true;
+    }
+
+    public static <MSG extends CustomPacketPayload> void sendToAllTracking(MSG message, BlockEntity tile) {
+        sendToAllTracking(message, tile.getLevel(), tile.getBlockPos());
+    }
+
+    public static <MSG extends CustomPacketPayload> void sendToAllTracking(MSG message, Level world, BlockPos pos) {
+        PacketDistributor.sendToPlayersTrackingChunk((ServerLevel) world, new ChunkPos(pos), message);
+    }
+
+    public static <B, C, T1, T2, T3, T4, T5, T6, T7, T8, T9> StreamCodec<B, C> composite(
+          final StreamCodec<? super B, T1> codec1, final Function<C, T1> getter1,
+          final StreamCodec<? super B, T2> codec2, final Function<C, T2> getter2,
+          final StreamCodec<? super B, T3> codec3, final Function<C, T3> getter3,
+          final StreamCodec<? super B, T4> codec4, final Function<C, T4> getter4,
+          final StreamCodec<? super B, T5> codec5, final Function<C, T5> getter5,
+          final StreamCodec<? super B, T6> codec6, final Function<C, T6> getter6,
+          final StreamCodec<? super B, T7> codec7, final Function<C, T7> getter7,
+          final StreamCodec<? super B, T8> codec8, final Function<C, T8> getter8,
+          final StreamCodec<? super B, T9> codec9, final Function<C, T9> getter9,
+          final Function9<T1, T2, T3, T4, T5, T6, T7, T8, T9, C> factory) {
+        return new StreamCodec<>() {
+            @NotNull
+            @Override
+            public C decode(@NotNull B buffer) {
+                T1 t1 = codec1.decode(buffer);
+                T2 t2 = codec2.decode(buffer);
+                T3 t3 = codec3.decode(buffer);
+                T4 t4 = codec4.decode(buffer);
+                T5 t5 = codec5.decode(buffer);
+                T6 t6 = codec6.decode(buffer);
+                T7 t7 = codec7.decode(buffer);
+                T8 t8 = codec8.decode(buffer);
+                T9 t9 = codec9.decode(buffer);
+                return factory.apply(t1, t2, t3, t4, t5, t6, t7, t8, t9);
+            }
+
+            @Override
+            public void encode(@NotNull B buffer, @NotNull C obj) {
+                codec1.encode(buffer, getter1.apply(obj));
+                codec2.encode(buffer, getter2.apply(obj));
+                codec3.encode(buffer, getter3.apply(obj));
+                codec4.encode(buffer, getter4.apply(obj));
+                codec5.encode(buffer, getter5.apply(obj));
+                codec6.encode(buffer, getter6.apply(obj));
+                codec7.encode(buffer, getter7.apply(obj));
+                codec8.encode(buffer, getter8.apply(obj));
+                codec9.encode(buffer, getter9.apply(obj));
+            }
+        };
+    }
 }

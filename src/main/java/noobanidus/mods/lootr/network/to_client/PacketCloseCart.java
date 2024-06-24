@@ -1,31 +1,30 @@
 package noobanidus.mods.lootr.network.to_client;
 
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
-import noobanidus.mods.lootr.Lootr;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.network.ILootrPacket;
 import noobanidus.mods.lootr.network.client.ClientHandlers;
 
-public record PacketCloseCart(int entityId) implements ILootrPacket<PlayPayloadContext> {
-  public static final ResourceLocation ID = Lootr.rl("close_cart");
+public record PacketCloseCart(int entityId) implements ILootrPacket{
+  public static final CustomPacketPayload.Type<PacketCloseCart> TYPE = new CustomPacketPayload.Type<>(LootrAPI.rl("close_Cart"));
+  public static final StreamCodec<ByteBuf, PacketCloseCart> STREAM_CODEC = StreamCodec.composite(ByteBufCodecs.VAR_INT, PacketCloseCart::entityId, PacketCloseCart::new);
 
-  public PacketCloseCart(FriendlyByteBuf buffer) {
+  public PacketCloseCart(RegistryFriendlyByteBuf buffer) {
     this(buffer.readVarInt());
   }
 
   @Override
-  public void handle(PlayPayloadContext context) {
+  public Type<? extends CustomPacketPayload> type() {
+    return TYPE;
+  }
+
+  @Override
+  public void handle(IPayloadContext context) {
     ClientHandlers.handleCloseCart(this.entityId);
-  }
-
-  @Override
-  public void write(FriendlyByteBuf buf) {
-    buf.writeVarInt(this.entityId);
-  }
-
-  @Override
-  public ResourceLocation id() {
-    return ID;
   }
 }

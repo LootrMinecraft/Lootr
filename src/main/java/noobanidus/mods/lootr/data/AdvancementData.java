@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.data;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -19,12 +20,12 @@ public class AdvancementData extends SavedData {
   public AdvancementData() {
   }
 
-  public static AdvancementData load(CompoundTag compound) {
+  public static AdvancementData load(CompoundTag compound, HolderLookup.Provider provider) {
     AdvancementData data = new AdvancementData();
     data.data.clear();
     ListTag incoming = compound.getList("data", Tag.TAG_COMPOUND);
     for (int i = 0; i < incoming.size(); i++) {
-      data.data.add(UUIDPair.fromNBT(incoming.getCompound(i)));
+      data.data.add(UUIDPair.fromNBT(provider, incoming.getCompound(i)));
     }
     return data;
   }
@@ -46,21 +47,21 @@ public class AdvancementData extends SavedData {
   }
 
   @Override
-  public CompoundTag save(CompoundTag pCompound) {
+  public CompoundTag save(CompoundTag pCompound, HolderLookup.Provider provider) {
     ListTag result = new ListTag();
     for (UUIDPair pair : this.data) {
-      result.add(pair.serializeNBT());
+      result.add(pair.serializeNBT(provider));
     }
     pCompound.put("data", result);
     return pCompound;
   }
 
   @Override
-  public void save(File pFile) {
+  public void save(File pFile, HolderLookup.Provider provider) {
     if (isDirty()) {
       pFile.getParentFile().mkdirs();
     }
-    super.save(pFile);
+    super.save(pFile, provider);
   }
 
   public static class UUIDPair implements INBTSerializable<CompoundTag> {
@@ -76,9 +77,9 @@ public class AdvancementData extends SavedData {
       this.second = second;
     }
 
-    public static UUIDPair fromNBT(CompoundTag tag) {
+    public static UUIDPair fromNBT(HolderLookup.Provider provider, CompoundTag tag) {
       UUIDPair pair = new UUIDPair();
-      pair.deserializeNBT(tag);
+      pair.deserializeNBT(provider, tag);
       return pair;
     }
 
@@ -111,7 +112,7 @@ public class AdvancementData extends SavedData {
     }
 
     @Override
-    public CompoundTag serializeNBT() {
+    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
       CompoundTag result = new CompoundTag();
       result.putUUID("first", getFirst());
       result.putUUID("second", getSecond());
@@ -119,7 +120,7 @@ public class AdvancementData extends SavedData {
     }
 
     @Override
-    public void deserializeNBT(CompoundTag nbt) {
+    public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
       this.first = nbt.getUUID("first");
       this.second = nbt.getUUID("second");
     }

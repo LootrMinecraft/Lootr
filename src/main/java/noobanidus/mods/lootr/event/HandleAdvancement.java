@@ -2,12 +2,13 @@ package noobanidus.mods.lootr.event;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.entity.player.AdvancementEvent;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.init.ModAdvancements;
 
-@Mod.EventBusSubscriber(modid = LootrAPI.MODID)
+@EventBusSubscriber(modid = LootrAPI.MODID)
 public class HandleAdvancement {
   @SubscribeEvent
   public static void onAdvancement(AdvancementEvent.AdvancementEarnEvent event) {

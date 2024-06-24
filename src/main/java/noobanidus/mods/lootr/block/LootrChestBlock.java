@@ -43,7 +43,7 @@ public class LootrChestBlock extends ChestBlock {
   }
 
   @Override
-  public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult trace) {
+  public InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult trace) {
     if (player.isShiftKeyDown()) {
       ChestUtil.handleLootSneak(this, world, pos, player);
     } else if (!ChestBlock.isChestBlockedAt(world, pos)) {

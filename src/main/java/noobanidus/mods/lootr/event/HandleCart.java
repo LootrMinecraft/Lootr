@@ -4,6 +4,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.vehicle.MinecartChest;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import noobanidus.mods.lootr.api.LootrAPI;
@@ -11,7 +12,7 @@ import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.entity.EntityTicker;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
-@Mod.EventBusSubscriber(modid = LootrAPI.MODID)
+@EventBusSubscriber(modid = LootrAPI.MODID)
 public class HandleCart {
   @SubscribeEvent
   public static void onEntityJoin(EntityJoinLevelEvent event) {

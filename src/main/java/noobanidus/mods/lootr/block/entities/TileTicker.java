@@ -13,9 +13,11 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.border.WorldBorder;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
@@ -24,7 +26,7 @@ import noobanidus.mods.lootr.event.HandleChunk;
 
 import java.util.Set;
 
-@Mod.EventBusSubscriber(modid = LootrAPI.MODID)
+@EventBusSubscriber(modid = LootrAPI.MODID)
 public class TileTicker {
   private final static Object listLock = new Object();
   private final static Object worldLock = new Object();
@@ -81,10 +83,7 @@ public class TileTicker {
   }
 
   @SubscribeEvent
-  public static void serverTick(TickEvent.ServerTickEvent event) {
-    if (event.phase != TickEvent.Phase.END) {
-      return;
-    }
+  public static void serverTick(ServerTickEvent.Post event) {
     if (ConfigManager.DISABLE.get()) {
       return;
     }
@@ -144,7 +143,7 @@ public class TileTicker {
           toRemove.add(entry);
           continue;
         }
-        ResourceLocation table = be.lootTable;
+        ResourceKey<LootTable> table = be.lootTable;
         long seed = be.lootTableSeed;
         be.lootTable = null;
         CompoundTag oldData = be.getPersistentData();

@@ -4,13 +4,9 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 /* Shamelessly cribbed from Mekanism
-Original source: https://github.com/mekanism/Mekanism/blob/1.20.4/src/main/java/mekanism/common/network/IMekanismPacket.java
+Original source: https://github.com/mekanism/Mekanism/blob/1.21.x/src/main/java/mekanism/common/network/IMekanismPacket.java
  */
-public interface ILootrPacket<CONTEXT extends IPayloadContext> extends CustomPacketPayload {
+public interface ILootrPacket extends CustomPacketPayload {
 
-  void handle(CONTEXT context);
-
-  default void handleMainThread(CONTEXT context) {
-    context.workHandler().execute(() -> handle(context));
-  }
+  void handle(IPayloadContext context);
 }

@@ -4,7 +4,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.loading.FMLPaths;
@@ -24,13 +23,10 @@ public class Lootr {
 
   public CommandLootr COMMAND_LOOTR;
 
-  public CreativeModeTab TAB;
-
   public Lootr(ModContainer modContainer, IEventBus modBus) {
     instance = this;
-    ModLoadingContext context = ModLoadingContext.get();
-    context.registerConfig(ModConfig.Type.COMMON, ConfigManager.COMMON_CONFIG);
-    context.registerConfig(ModConfig.Type.CLIENT, ConfigManager.CLIENT_CONFIG);
+    modContainer.registerConfig(ModConfig.Type.COMMON, ConfigManager.COMMON_CONFIG);
+    modContainer.registerConfig(ModConfig.Type.CLIENT, ConfigManager.CLIENT_CONFIG);
     ConfigManager.loadConfig(ConfigManager.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve(LootrAPI.MODID + "-common.toml"));
     if (ConfigManager.MAXIMUM_AGE.get() == ConfigManager.OLD_MAX_AGE) {
       ConfigManager.MAXIMUM_AGE.set(60 * 20 * 15);
@@ -46,11 +42,11 @@ public class Lootr {
     ModLoot.register(modBus);
     ModStats.register(modBus);
     ModAdvancements.register(modBus);
-    this.packetHandler = new PacketHandler(modBus, LootrAPI.MODID, VERSION);
+    this.packetHandler = new PacketHandler(modBus);
   }
 
   public static ResourceLocation rl(String path) {
-    return new ResourceLocation(LootrAPI.MODID, path);
+    return LootrAPI.rl(path);
   }
 
   public static PacketHandler getPacketHandler() {

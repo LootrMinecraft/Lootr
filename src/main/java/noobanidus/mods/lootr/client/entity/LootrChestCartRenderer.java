@@ -77,7 +77,7 @@ public class LootrChestCartRenderer<T extends LootrChestMinecartEntity> extends 
     pMatrixStack.scale(-1.0F, -1.0F, 1.0F);
     this.model.setupAnim(pEntity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F);
     VertexConsumer vertexconsumer = pBuffer.getBuffer(this.model.renderType(this.getTextureLocation(pEntity)));
-    this.model.renderToBuffer(pMatrixStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+    this.model.renderToBuffer(pMatrixStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY);
     pMatrixStack.popPose();
   }
 }

@@ -2,31 +2,29 @@ package noobanidus.mods.lootr.network.to_client;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 import noobanidus.mods.lootr.Lootr;
 import noobanidus.mods.lootr.network.ILootrPacket;
 import noobanidus.mods.lootr.network.client.ClientHandlers;
 
-public record PacketCloseContainer(BlockPos position) implements ILootrPacket<PlayPayloadContext> {
-  public static final ResourceLocation ID = Lootr.rl("close_container");
+public record PacketCloseContainer(BlockPos position) implements ILootrPacket {
+  public static final CustomPacketPayload.Type<PacketCloseContainer> TYPE = new CustomPacketPayload.Type<>(Lootr.rl("close_container"));
+  public static final StreamCodec<FriendlyByteBuf, PacketCloseContainer> STREAM_CODEC = StreamCodec.composite(BlockPos.STREAM_CODEC, PacketCloseContainer::position, PacketCloseContainer::new);
 
   public PacketCloseContainer(FriendlyByteBuf buffer) {
     this(buffer.readBlockPos());
   }
 
   @Override
-  public void handle(PlayPayloadContext context) {
+  public void handle(IPayloadContext context) {
     ClientHandlers.handleCloseContainer(this.position);
   }
 
-  @Override
-  public void write(FriendlyByteBuf buffer) {
-    buffer.writeBlockPos(this.position);
-  }
 
   @Override
-  public ResourceLocation id() {
-    return ID;
+  public Type<? extends CustomPacketPayload> type() {
+    return TYPE;
   }
 }

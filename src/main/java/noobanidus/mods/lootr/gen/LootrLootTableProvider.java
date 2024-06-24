@@ -1,8 +1,10 @@
 package noobanidus.mods.lootr.gen;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.data.loot.LootTableSubProvider;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -15,16 +17,20 @@ import noobanidus.mods.lootr.api.LootrAPI;
 
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 
 public class LootrLootTableProvider {
-  public static LootTableProvider create(PackOutput output) {
-    return new LootTableProvider(output, Set.of(LootrAPI.ELYTRA_CHEST), List.of(new LootTableProvider.SubProviderEntry(ChestLootTables::new, LootContextParamSets.CHEST)));
+  public static LootTableProvider create(PackOutput output, CompletableFuture<HolderLookup.Provider> provider) {
+    return new LootTableProvider(output, Set.of(LootrAPI.ELYTRA_CHEST), List.of(new LootTableProvider.SubProviderEntry(ChestLootTables::new, LootContextParamSets.CHEST)), provider);
   }
 
   public static class ChestLootTables implements LootTableSubProvider {
+    public ChestLootTables(HolderLookup.Provider provider) {
+    }
+
     @Override
-    public void generate(BiConsumer<ResourceLocation, LootTable.Builder> p_249643_) {
+    public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> p_249643_) {
       p_249643_.accept(
           LootrAPI.ELYTRA_CHEST,
           LootTable.lootTable()

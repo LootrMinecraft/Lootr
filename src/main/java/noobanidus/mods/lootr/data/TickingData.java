@@ -2,6 +2,7 @@ package noobanidus.mods.lootr.data;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -18,7 +19,7 @@ public class TickingData extends SavedData {
     tickMap.defaultReturnValue(-1);
   }
 
-  public static TickingData load(CompoundTag pCompound) {
+  public static TickingData load(CompoundTag pCompound, HolderLookup.Provider provider) {
     TickingData data = new TickingData();
     data.tickMap.clear();
     data.tickMap.defaultReturnValue(-1);
@@ -75,7 +76,7 @@ public class TickingData extends SavedData {
   }
 
   @Override
-  public CompoundTag save(CompoundTag pCompound) {
+  public CompoundTag save(CompoundTag pCompound, HolderLookup.Provider provider) {
     ListTag decayList = new ListTag();
     for (Object2IntMap.Entry<UUID> entry : tickMap.object2IntEntrySet()) {
       CompoundTag thisTag = new CompoundTag();
@@ -88,10 +89,10 @@ public class TickingData extends SavedData {
   }
 
   @Override
-  public void save(File pFile) {
+  public void save(File pFile, HolderLookup.Provider provider) {
     if (isDirty()) {
       pFile.getParentFile().mkdirs();
     }
-    super.save(pFile);
+    super.save(pFile, provider);
   }
 }

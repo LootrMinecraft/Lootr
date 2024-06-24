@@ -43,19 +43,19 @@ public class BarrelModel implements IUnbakedGeometry<BarrelModel> {
     this.old_unopened = old_unopened;
   }
 
-  private static BakedModel buildModel(UnbakedModel entry, ModelState modelTransform, ModelBaker bakery, Function<Material, TextureAtlasSprite> spriteGetter, ResourceLocation modelLocation) {
-    return entry.bake(bakery, spriteGetter, modelTransform, modelLocation);
+  private static BakedModel buildModel(UnbakedModel entry, ModelState modelTransform, ModelBaker bakery, Function<Material, TextureAtlasSprite> spriteGetter) {
+    return entry.bake(bakery, spriteGetter, modelTransform);
   }
 
   @Override
-  public BakedModel bake(IGeometryBakingContext context, ModelBaker bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides, ResourceLocation modelLocation) {
+  public BakedModel bake(IGeometryBakingContext context, ModelBaker bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides) {
     return new BarrelBakedModel(context.useAmbientOcclusion(), context.isGui3d(), context.useBlockLight(),
         spriteGetter.apply(context.getMaterial("particle")), overrides,
-        buildModel(opened, modelTransform, bakery, spriteGetter, modelLocation),
-        buildModel(unopened, modelTransform, bakery, spriteGetter, modelLocation),
-        buildModel(vanilla, modelTransform, bakery, spriteGetter, modelLocation),
-        buildModel(old_opened, modelTransform, bakery, spriteGetter, modelLocation),
-        buildModel(old_unopened, modelTransform, bakery, spriteGetter, modelLocation),
+        buildModel(opened, modelTransform, bakery, spriteGetter),
+        buildModel(unopened, modelTransform, bakery, spriteGetter),
+        buildModel(vanilla, modelTransform, bakery, spriteGetter),
+        buildModel(old_opened, modelTransform, bakery, spriteGetter),
+        buildModel(old_unopened, modelTransform, bakery, spriteGetter),
         context.getTransforms()
     );
   }

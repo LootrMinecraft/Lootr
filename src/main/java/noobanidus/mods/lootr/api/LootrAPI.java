@@ -1,7 +1,9 @@
 package noobanidus.mods.lootr.api;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
@@ -11,6 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootTable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,9 +25,18 @@ import java.util.function.Supplier;
 public class LootrAPI {
   public static final Logger LOG = LogManager.getLogger();
   public static final String MODID = "lootr";
-  public static final ResourceLocation ELYTRA_CHEST = new ResourceLocation(MODID, "chests/elytra");
+  public static final String NETWORK_VERSION = "lootr-1.21.0-1";
+  public static final ResourceKey<LootTable> ELYTRA_CHEST = ResourceKey.create(Registries.LOOT_TABLE, LootrAPI.rl("chests/elytra"));
 
   public static ILootrAPI INSTANCE;
+
+  public static ResourceLocation rl (String path) {
+    return ResourceLocation.fromNamespaceAndPath(MODID, path);
+  }
+
+  public static ResourceLocation rl (String namespace, String path) {
+    return ResourceLocation.fromNamespaceAndPath(namespace, path);
+  }
 
   public static boolean shouldDiscardIdAndOpeners;
 
@@ -40,32 +52,12 @@ public class LootrAPI {
     return INSTANCE.clearPlayerLoot(id);
   }
 
-  public static MenuProvider getModdedMenu(Level level, UUID id, BlockPos pos, ServerPlayer player, RandomizableContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
-    return INSTANCE.getModdedMenu(level, id, pos, player, blockEntity, filler, tableSupplier, seedSupplier);
-  }
-
-  public static MenuProvider getModdedMenu(Level level, UUID id, BlockPos pos, ServerPlayer player, RandomizableContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier, MenuBuilder builder) {
-    return INSTANCE.getModdedMenu(level, id, pos, player, blockEntity, filler, tableSupplier, seedSupplier, builder);
-  }
-
-  public static MenuProvider getModdedMenu(Level level, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
-    return INSTANCE.getModdedMenu(level, id, pos, player, sizeSupplier, displaySupplier, filler, tableSupplier, seedSupplier);
-  }
-
-  public static MenuProvider getModdedMenu(Level level, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier, MenuBuilder builder) {
-    return INSTANCE.getModdedMenu(level, id, pos, player, sizeSupplier, displaySupplier, filler, tableSupplier, seedSupplier, builder);
-  }
-
   public static long getLootSeed(long seed) {
     return INSTANCE.getLootSeed(seed);
   }
 
-  public static boolean isSavingStructure() {
-    return shouldDiscard();
-  }
-
   public static boolean shouldDiscard() {
-    return INSTANCE.isSavingStructure();
+    return INSTANCE.shouldDiscard();
   }
 
   public static float getExplosionResistance(Block block, float defaultResistance) {

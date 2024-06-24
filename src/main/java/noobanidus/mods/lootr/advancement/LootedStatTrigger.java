@@ -23,7 +23,7 @@ public class LootedStatTrigger extends SimpleCriterionTrigger<LootedStatTrigger.
 
   public record TriggerInstance(Optional<ContextAwarePredicate> player,
                                 MinMaxBounds.Ints score) implements SimpleCriterionTrigger.SimpleInstance {
-    public static final Codec<TriggerInstance> CODEC = RecordCodecBuilder.create(codec -> codec.group(ContextAwarePredicate.CODEC.optionalFieldOf("player").forGetter(LootedStatTrigger.TriggerInstance::player), ExtraCodecs.strictOptionalField(MinMaxBounds.Ints.CODEC, "score", MinMaxBounds.Ints.ANY).forGetter(LootedStatTrigger.TriggerInstance::score)).apply(codec, LootedStatTrigger.TriggerInstance::new));
+    public static final Codec<TriggerInstance> CODEC = RecordCodecBuilder.create(codec -> codec.group(ContextAwarePredicate.CODEC.optionalFieldOf("player").forGetter(LootedStatTrigger.TriggerInstance::player), MinMaxBounds.Ints.CODEC.optionalFieldOf("score", MinMaxBounds.Ints.ANY).forGetter(LootedStatTrigger.TriggerInstance::score)).apply(codec, LootedStatTrigger.TriggerInstance::new));
 
     public boolean test(ServerPlayer player) {
       return this.score.matches(player.getStats().getValue(ModStats.LOOTED_STAT));
