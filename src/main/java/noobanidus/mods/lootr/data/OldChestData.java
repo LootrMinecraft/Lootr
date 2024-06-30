@@ -26,7 +26,6 @@ import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.api.ILootInfoProvider;
 import noobanidus.mods.lootr.api.LootFiller;
 import noobanidus.mods.lootr.api.LootrAPI;
-import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
 import org.jetbrains.annotations.Nullable;
@@ -36,7 +35,16 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.*;
 
-public class ChestData extends SavedData {
+public class OldChestData extends SavedData {
+  // String Key
+  // BlockPos
+  // ResourceKey<Level>
+  // UUID id
+  // int size
+  // NonNullList<ItemStack> base
+  // Entity or not
+  // Custom or not
+
   private String key;
   private BlockPos pos;
   private ResourceKey<Level> dimension;
@@ -47,7 +55,7 @@ public class ChestData extends SavedData {
   private boolean entity;
   private int size = -1;
 
-  protected ChestData(String key) {
+  protected OldChestData(String key) {
     this.key = key;
   }
 
@@ -56,7 +64,7 @@ public class ChestData extends SavedData {
     return "lootr/" + idString.charAt(0) + "/" + idString.substring(0, 2) + "/" + idString;
   }
 
-  public static Supplier<ChestData> ref_id(ResourceKey<Level> dimension, BlockPos pos, UUID id, NonNullList<ItemStack> base) {
+/*  public static Supplier<ChestData> ref_id(ResourceKey<Level> dimension, BlockPos pos, UUID id, NonNullList<ItemStack> base) {
     if (id == null) {
       throw new IllegalArgumentException("Can't create ChestData for custom container in dimension '" + dimension + "' at '" + pos + "' with a null id.");
     }
@@ -73,9 +81,9 @@ public class ChestData extends SavedData {
       }
       return data;
     };
-  }
+  }*/
 
-  public static Supplier<ChestData> id(ResourceKey<Level> dimension, BlockPos pos, UUID id) {
+/*  public static Supplier<ChestData> id(ResourceKey<Level> dimension, BlockPos pos, UUID id) {
     if (id == null) {
       throw new IllegalArgumentException("Can't create ChestData for container in dimension '" + dimension + "' at '" + pos + "' with a null id.");
     }
@@ -89,9 +97,9 @@ public class ChestData extends SavedData {
       data.entity = false;
       return data;
     };
-  }
+  }*/
 
-  public static Supplier<ChestData> entity(ResourceKey<Level> dimension, BlockPos pos, UUID entityId) {
+/*  public static Supplier<ChestData> entity(ResourceKey<Level> dimension, BlockPos pos, UUID entityId) {
     if (entityId == null) {
       throw new IllegalArgumentException("Can't create ChestData for minecart in dimension '" + dimension + "' at '" + pos + "' with a null entityId.");
     }
@@ -105,8 +113,9 @@ public class ChestData extends SavedData {
       data.custom = false;
       return data;
     };
-  }
+  }*/
 
+/*
   public static BiFunction<CompoundTag, HolderLookup.Provider, ChestData> loadWrapper(UUID id, ResourceKey<Level> dimension, BlockPos position) {
     return (tag, provider) -> {
       ChestData result = ChestData.load(tag, provider);
@@ -116,17 +125,18 @@ public class ChestData extends SavedData {
       return result;
     };
   }
+*/
 
-  public static ChestData unwrap(ChestData data, UUID id, ResourceKey<Level> dimension, BlockPos position, int size) {
+/*  public static ChestData unwrap(ChestData data, UUID id, ResourceKey<Level> dimension, BlockPos position, int size) {
     data.key = ID(id);
     data.dimension = dimension;
     data.pos = position;
     data.setSize(size);
     return data;
-  }
+  }*/
 
-  public static ChestData load(CompoundTag compound, HolderLookup.Provider provider) {
-    ChestData data = new ChestData(compound.getString("key"));
+  public static OldChestData load(CompoundTag compound, HolderLookup.Provider provider) {
+    OldChestData data = new OldChestData(compound.getString("key"));
     data.inventories.clear();
     data.pos = null;
     data.dimension = null;
@@ -234,7 +244,7 @@ public class ChestData extends SavedData {
     return size;
   }
 
-  private void setSize(int size) {
+/*  private void setSize(int size) {
     if (this.size == size) {
       return;
     }
@@ -245,7 +255,7 @@ public class ChestData extends SavedData {
     for (SpecialChestInventory inventory : inventories.values()) {
       inventory.resizeInventory(size);
     }
-  }
+  }*/
 
   @Nullable
   public UUID getEntityId() {

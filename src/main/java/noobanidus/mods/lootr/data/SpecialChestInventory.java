@@ -29,12 +29,18 @@ import java.util.UUID;
 
 @SuppressWarnings("NullableProblems")
 public class SpecialChestInventory implements ILootrInventory {
+  // Needs:
+  // Component name
+  // NonNullList<ItemStack>
+  // MenuBuilder
+
+
   private final Component name;
-  private final ChestData newChestData;
+  private final OldChestData newChestData;
   private NonNullList<ItemStack> contents;
   private MenuBuilder menuBuilder = null;
 
-  public SpecialChestInventory(ChestData newChestData, NonNullList<ItemStack> contents, Component name) {
+  public SpecialChestInventory(OldChestData newChestData, NonNullList<ItemStack> contents, Component name) {
     this.newChestData = newChestData;
     if (!contents.isEmpty()) {
       this.contents = contents;
@@ -44,7 +50,7 @@ public class SpecialChestInventory implements ILootrInventory {
     this.name = name;
   }
 
-  public SpecialChestInventory(ChestData newChestData, CompoundTag items, String componentAsJSON, HolderLookup.Provider provider) {
+  public SpecialChestInventory(OldChestData newChestData, CompoundTag items, String componentAsJSON, HolderLookup.Provider provider) {
     this.newChestData = newChestData;
     this.name = Component.Serializer.fromJson(componentAsJSON, provider);
     this.contents = NonNullList.withSize(newChestData.getSize(), ItemStack.EMPTY);
@@ -261,19 +267,5 @@ public class SpecialChestInventory implements ILootrInventory {
   @Override
   public NonNullList<ItemStack> getInventoryContents() {
     return this.contents;
-  }
-
-  public void resizeInventory(int newSize) {
-    if (newSize > this.contents.size()) {
-      NonNullList<ItemStack> oldContents = this.contents;
-      this.contents = NonNullList.withSize(newSize, ItemStack.EMPTY);
-      for (int i = 0; i < oldContents.size(); i++) {
-        this.contents.set(i, oldContents.get(i));
-      }
-      // TODO: Remove this once we confirm it works
-      LootrAPI.LOG.info("Resized inventory with key '" + newChestData.getKey() + "' in dimension '" + newChestData.getDimension() + "' at location '" + newChestData.getPos() + "' from " + oldContents.size() + " slots to " + newSize + " slots.");
-    } else if (newSize < this.contents.size()) {
-      throw new IllegalArgumentException("Cannot resize inventory associated with '" + newChestData.getKey() + "' in dimension '" + newChestData.getDimension() + "' at location '" + newChestData.getPos() + "' to a smaller size.");
-    }
   }
 }
