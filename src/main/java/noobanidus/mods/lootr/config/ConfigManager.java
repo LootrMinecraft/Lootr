@@ -188,49 +188,49 @@ public class ConfigManager {
     }
   }
 
-  public static Set<ResourceKey<Level>> getDimensionWhitelist() {
+  private static Set<ResourceKey<Level>> getDimensionWhitelist() {
     if (DIM_WHITELIST == null) {
       DIM_WHITELIST = DIMENSION_WHITELIST.get().stream().map(o -> ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(o))).collect(Collectors.toSet());
     }
     return DIM_WHITELIST;
   }
 
-  public static Set<String> getDimensionModidWhitelist() {
+  private static Set<String> getDimensionModidWhitelist() {
     if (MODID_DIM_WHITELIST == null) {
       MODID_DIM_WHITELIST = MODID_DIMENSION_WHITELIST.get().stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
     }
     return MODID_DIM_WHITELIST;
   }
 
-  public static Set<ResourceKey<Level>> getDimensionBlacklist() {
+  private static Set<ResourceKey<Level>> getDimensionBlacklist() {
     if (DIM_BLACKLIST == null) {
       DIM_BLACKLIST = DIMENSION_BLACKLIST.get().stream().map(o -> ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(o))).collect(Collectors.toSet());
     }
     return DIM_BLACKLIST;
   }
 
-  public static Set<String> getDimensionModidBlacklist() {
+  private static Set<String> getDimensionModidBlacklist() {
     if (MODID_DIM_BLACKLIST == null) {
       MODID_DIM_BLACKLIST = MODID_DIMENSION_BLACKLIST.get().stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
     }
     return MODID_DIM_BLACKLIST;
   }
 
-  public static Set<ResourceKey<Level>> getDecayDimensions() {
+  private static Set<ResourceKey<Level>> getDecayDimensions() {
     if (DECAY_DIMS == null) {
       DECAY_DIMS = DECAY_DIMENSIONS.get().stream().map(o -> ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(o))).collect(Collectors.toSet());
     }
     return DECAY_DIMS;
   }
 
-  public static Set<ResourceKey<Level>> getRefreshDimensions() {
+  private static Set<ResourceKey<Level>> getRefreshDimensions() {
     if (REFRESH_DIMS == null) {
       REFRESH_DIMS = REFRESH_DIMENSIONS.get().stream().map(o -> ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(o))).collect(Collectors.toSet());
     }
     return REFRESH_DIMS;
   }
 
-  public static Set<ResourceKey<LootTable>> getLootBlacklist() {
+  private static Set<ResourceKey<LootTable>> getLootBlacklist() {
     if (LOOT_BLACKLIST == null) {
       LOOT_BLACKLIST = LOOT_TABLE_BLACKLIST.get().stream().map(o -> ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse(o))).collect(Collectors.toSet());
       // Fixes for #79 and #74
@@ -239,7 +239,7 @@ public class ConfigManager {
     return LOOT_BLACKLIST;
   }
 
-  public static Set<String> getLootModids() {
+  private static Set<String> getLootModids() {
     if (LOOT_MODIDS == null) {
       LOOT_MODIDS = LOOT_MODID_BLACKLIST.get().stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
     }
@@ -254,28 +254,28 @@ public class ConfigManager {
     return getLootModids().contains(table.location().getNamespace());
   }
 
-  public static Set<ResourceKey<LootTable>> getDecayingTables() {
+  private static Set<ResourceKey<LootTable>> getDecayingTables() {
     if (DECAY_TABLES == null) {
       DECAY_TABLES = DECAY_LOOT_TABLES.get().stream().map(o -> ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse(o))).collect(Collectors.toSet());
     }
     return DECAY_TABLES;
   }
 
-  public static Set<String> getDecayMods() {
+  private static Set<String> getDecayMods() {
     if (DECAY_MODS == null) {
       DECAY_MODS = DECAY_MODIDS.get().stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
     }
     return DECAY_MODS;
   }
 
-  public static Set<ResourceKey<LootTable>> getRefreshingTables() {
+  private static Set<ResourceKey<LootTable>> getRefreshingTables() {
     if (REFRESH_TABLES == null) {
       REFRESH_TABLES = REFRESH_LOOT_TABLES.get().stream().map(o -> ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse(o))).collect(Collectors.toSet());
     }
     return REFRESH_TABLES;
   }
 
-  public static Set<String> getRefreshMods() {
+  private static Set<String> getRefreshMods() {
     if (REFRESH_MODS == null) {
       REFRESH_MODS = REFRESH_MODIDS.get().stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
     }
