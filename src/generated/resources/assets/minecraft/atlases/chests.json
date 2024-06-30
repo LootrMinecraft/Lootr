@@ -1,0 +1,28 @@
+{
+  "sources": [
+    {
+      "type": "minecraft:single",
+      "resource": "lootr:chest"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "lootr:chest_opened"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "lootr:chest_trapped"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "lootr:chest_trapped_opened"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "lootr:old_chest"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "lootr:old_chest_opened"
+    }
+  ]
+}
