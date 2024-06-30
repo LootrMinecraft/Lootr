@@ -7,7 +7,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
@@ -23,7 +22,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.neoforge.network.PacketDistributor;
 import noobanidus.mods.lootr.advancement.ContainerTrigger;
 import noobanidus.mods.lootr.api.IHasOpeners;
-import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
+import noobanidus.mods.lootr.api.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.block.LootrShulkerBlock;
 import noobanidus.mods.lootr.block.entities.LootrInventoryBlockEntity;
 import noobanidus.mods.lootr.config.ConfigManager;
@@ -31,7 +30,6 @@ import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModAdvancements;
 import noobanidus.mods.lootr.init.ModStats;
-import noobanidus.mods.lootr.network.PacketUtils;
 import noobanidus.mods.lootr.network.to_client.PacketCloseCart;
 import noobanidus.mods.lootr.network.to_client.PacketCloseContainer;
 
@@ -46,7 +44,7 @@ public class ChestUtil {
     }
 
     BlockEntity te = level.getBlockEntity(pos);
-    if (te instanceof ILootBlockEntity tile) {
+    if (te instanceof ILootrBlockEntity tile) {
       if (tile.getOpeners().remove(player.getUUID())) {
         te.setChanged();
         tile.updatePacketViaForce(te);
@@ -90,7 +88,7 @@ public class ChestUtil {
       return;
     }
     BlockEntity te = level.getBlockEntity(pos);
-    if (te instanceof ILootBlockEntity tile) {
+    if (te instanceof ILootrBlockEntity tile) {
       UUID tileId = tile.getInfoUUID();
       if (tileId == null) {
         player.displayClientMessage(Component.translatable("lootr.message.invalid_block").setStyle(getInvalidStyle()), true);
@@ -131,7 +129,7 @@ public class ChestUtil {
         }
       }
       // Check if it already refreshed
-      MenuProvider provider = DataStorage.getInventory(level, tileId, pos, (ServerPlayer) player, (RandomizableContainerBlockEntity) te, tile::unpackLootTable);
+      MenuProvider provider = DataStorage.getInventory(level, tileId, pos, (ServerPlayer) player, (RandomizableContainerBlockEntity) te, tile::lootFiller);
       if (provider == null) {
         // Error messages are already handled by nested methods in `getInventory`
         return;
@@ -139,7 +137,7 @@ public class ChestUtil {
       checkScore((ServerPlayer) player, tileId);
       if (addOpener(tile, player)) {
         te.setChanged();
-        ((ILootBlockEntity) te).updatePacketViaForce(te);
+        ((ILootrBlockEntity) te).updatePacketViaForce(te);
       }
       player.openMenu(provider);
       // TODO: Instances using this check the block tags first.
@@ -189,7 +187,7 @@ public class ChestUtil {
         startRefresh(player, tileId, refreshValue);
       }
     }
-    MenuProvider provider = DataStorage.getInventory(level, cart, (ServerPlayer) player, cart::unpackLootTable);
+    MenuProvider provider = DataStorage.getInventory(level, cart, (ServerPlayer) player, cart::lootFiller);
     if (provider == null) {
       // Error messages are already handled by nested methods in `getInventory`
       return;

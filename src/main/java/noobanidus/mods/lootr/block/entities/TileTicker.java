@@ -4,7 +4,6 @@ import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
@@ -16,11 +15,10 @@ import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.api.LootrAPI;
-import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
+import noobanidus.mods.lootr.api.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.event.HandleChunk;
 
@@ -129,7 +127,7 @@ public class TileTicker {
           continue;
         }
         BlockEntity blockEntity = level.getBlockEntity(entry.getPosition());
-        if (!(blockEntity instanceof RandomizableContainerBlockEntity be) || blockEntity instanceof ILootBlockEntity) {
+        if (!(blockEntity instanceof RandomizableContainerBlockEntity be) || blockEntity instanceof ILootrBlockEntity) {
           toRemove.add(entry);
           continue;
         }
@@ -154,7 +152,7 @@ public class TileTicker {
         if (blockEntity != null) {
           blockEntity.getPersistentData().merge(oldData);
         }
-        if (blockEntity instanceof ILootBlockEntity) {
+        if (blockEntity instanceof ILootrBlockEntity) {
           ((RandomizableContainerBlockEntity) blockEntity).setLootTable(table, seed);
         } else {
           LootrAPI.LOG.error("replacement " + replacement + " is not an ILootTile " + entry.getDimension() + " at " + entry.getPosition());

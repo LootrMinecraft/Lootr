@@ -13,7 +13,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
@@ -25,7 +24,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.api.LootrAPI;
-import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
+import noobanidus.mods.lootr.api.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.data.SpecialChestInventory;
 import noobanidus.mods.lootr.init.ModBlockEntities;
 import org.jetbrains.annotations.NotNull;
@@ -35,7 +34,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBlockEntity {
+public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlockEntity {
   private final ChestLidController chestLidController = new ChestLidController();
   private final Set<UUID> openers = new HashSet<>();
   protected UUID infoId;

@@ -11,7 +11,6 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
-import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -34,7 +33,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
 import noobanidus.mods.lootr.api.LootrAPI;
-import noobanidus.mods.lootr.api.entity.ILootCart;
+import noobanidus.mods.lootr.api.entity.ILootrCart;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.event.HandleBreak;
 import noobanidus.mods.lootr.init.ModBlocks;
@@ -48,7 +47,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class LootrChestMinecartEntity extends AbstractMinecartContainer implements ILootCart {
+public class LootrChestMinecartEntity extends AbstractMinecartContainer implements ILootrCart {
   private static BlockState cartNormal = null;
   private final Set<UUID> openers = new HashSet<>();
   private boolean opened = false;

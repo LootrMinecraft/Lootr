@@ -30,7 +30,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import noobanidus.mods.lootr.api.LootrAPI;
-import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
+import noobanidus.mods.lootr.api.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.block.LootrBarrelBlock;
 import noobanidus.mods.lootr.data.SpecialChestInventory;
 import noobanidus.mods.lootr.init.ModBlockEntities;
@@ -42,7 +42,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity implements ILootBlockEntity {
+public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity implements ILootrBlockEntity {
   private final Set<UUID> openers = new HashSet<>();
   protected UUID infoId = null;
   protected boolean clientOpened = false;

@@ -20,7 +20,7 @@ public class HandleCart {
       return;
     }
     if (event.getEntity().getType() == EntityType.CHEST_MINECART && event.getEntity() instanceof MinecartChest chest) {
-      if (!chest.level().isClientSide && chest.lootTable != null && ConfigManager.CONVERT_MINESHAFTS.get() && !ConfigManager.getLootBlacklist().contains(chest.lootTable)) {
+      if (!chest.level().isClientSide && chest.lootTable != null && ConfigManager.CONVERT_MINESHAFTS.get() && !ConfigManager.isBlacklisted(chest.lootTable)) {
         if (chest.level() instanceof ServerLevel level) {
           LootrChestMinecartEntity lootr = new LootrChestMinecartEntity(chest.level(), chest.getX(), chest.getY(), chest.getZ());
           lootr.setLootTable(chest.lootTable, chest.lootTableSeed);

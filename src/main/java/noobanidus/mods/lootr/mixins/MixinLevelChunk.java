@@ -3,7 +3,7 @@ package noobanidus.mods.lootr.mixins;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.chunk.LevelChunk;
-import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
+import noobanidus.mods.lootr.api.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.block.entities.TileTicker;
 import noobanidus.mods.lootr.config.ConfigManager;
 import org.spongepowered.asm.mixin.Mixin;
@@ -19,7 +19,7 @@ public class MixinLevelChunk {
       return;
     }
 
-    if (entity instanceof RandomizableContainerBlockEntity && !(entity instanceof ILootBlockEntity)) {
+    if (entity instanceof RandomizableContainerBlockEntity && !(entity instanceof ILootrBlockEntity)) {
       LevelChunk level = (LevelChunk) (Object) this;
       if (level.getLevel().isClientSide()) {
         return;

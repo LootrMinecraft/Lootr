@@ -14,7 +14,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraft.world.phys.Vec3;
-import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
+import noobanidus.mods.lootr.api.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.init.ModLoot;
 
 import java.util.Comparator;
@@ -47,8 +47,8 @@ public record LootCount(List<Operation> operations) implements LootItemCondition
     }
     BlockPos position = new BlockPos((int) incomingPos.x, (int) incomingPos.y, (int) incomingPos.z);
     BlockEntity tileentity = lootContext.getLevel().getBlockEntity(position);
-    if (tileentity instanceof ILootBlockEntity) {
-      int count = ((ILootBlockEntity) tileentity).getOpeners().size() + 1; // Additional opener to include the current opener
+    if (tileentity instanceof ILootrBlockEntity) {
+      int count = ((ILootrBlockEntity) tileentity).getOpeners().size() + 1; // Additional opener to include the current opener
       for (Operation op : operations) {
         if (!op.test(count)) {
           return false;
