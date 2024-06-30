@@ -3,16 +3,16 @@ package noobanidus.mods.lootr.api;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.api.client.ClientTextureType;
@@ -20,9 +20,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.UUID;
-import java.util.function.IntSupplier;
-import java.util.function.LongSupplier;
-import java.util.function.Supplier;
 
 public class LootrAPI {
   public static final Logger LOG = LogManager.getLogger();
@@ -92,6 +89,98 @@ public class LootrAPI {
 
   public static boolean isDefaultTextures() {
     return INSTANCE.isDefaultTextures();
+  }
+
+  public static boolean shouldNotify (int remaining) {
+    return INSTANCE.shouldNotify(remaining);
+  }
+
+  public static boolean isDisabled () {
+    return INSTANCE.isDisabled();
+  }
+
+  public static boolean isLootTableBlacklisted (ResourceKey<LootTable> table) {
+    return INSTANCE.isLootTableBlacklisted(table);
+  }
+
+  public static boolean isDimensionBlocked (ResourceKey<Level> dimension) {
+    return INSTANCE.isDimensionBlocked(dimension);
+  }
+
+  public static boolean isDecaying (ILootInfoProvider provider) {
+    return INSTANCE.isDecaying(provider);
+  }
+
+  public static boolean isRefreshing (ILootInfoProvider provider) {
+    return INSTANCE.isRefreshing(provider);
+  }
+
+  public static boolean reportUnresolvedTables () {
+    return INSTANCE.reportUnresolvedTables();
+  }
+
+  public static boolean isCustomTrapped () {
+    return INSTANCE.isCustomTrapped();
+  }
+
+  public static boolean isWorldBorderSafe(Level level, BlockPos pos) {
+    return INSTANCE.isWorldBorderSafe(level, pos);
+  }
+
+  public static boolean isWorldBorderSafe(Level level, ChunkPos pos) {
+    return INSTANCE.isWorldBorderSafe(level, pos);
+  }
+
+  public static boolean hasExpired (long time) {
+    return INSTANCE.hasExpired(time);
+  }
+
+  public static boolean shouldConvertMineshafts () {
+    return INSTANCE.shouldConvertMineshafts();
+  }
+
+  public static boolean shouldConvertElytras () {
+    return INSTANCE.shouldConvertElytras();
+  }
+
+  public static int getDecayValue () {
+    return INSTANCE.getDecayValue();
+  }
+
+  public static int getRefreshValue () {
+    return INSTANCE.getRefreshValue();
+  }
+
+  public static Style getInvalidStyle() {
+    return INSTANCE.getInvalidStyle();
+  }
+
+  public static Style getDecayStyle () {
+    return INSTANCE.getDecayStyle();
+  }
+
+  public static Style getRefreshStyle () {
+    return INSTANCE.getRefreshStyle();
+  }
+
+  public static Style getChatStyle () {
+    return INSTANCE.getChatStyle();
+  }
+
+  public static Component getInvalidTableComponent (ResourceKey<LootTable> lootTable) {
+    return INSTANCE.getInvalidTableComponent(lootTable);
+  }
+
+  public static boolean canDestroyOrBreak (Player player) {
+    return INSTANCE.canDestroyOrBreak(player);
+  }
+
+  public static boolean isBreakDisabled () {
+    return INSTANCE.isBreakDisabled();
+  }
+
+  public static BlockState replacementBlockState (BlockState original) {
+    return INSTANCE.replacementBlockState(original);
   }
 
   // TODO: Consider if this is really needed

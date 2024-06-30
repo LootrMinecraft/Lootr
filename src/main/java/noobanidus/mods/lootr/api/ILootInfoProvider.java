@@ -15,8 +15,6 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
-import noobanidus.mods.lootr.config.ConfigManager;
-import noobanidus.mods.lootr.util.ChestUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -80,8 +78,8 @@ public interface ILootInfoProvider {
 
       if (loottable == LootTable.EMPTY) {
         LootrAPI.LOG.error("Unable to fill loot barrel in " + level.dimension().location() + " at " + pos + " as the loot table '" + lootTable.location() + "' couldn't be resolved! Please search the loot table in `latest.log` to see if there are errors in loading.");
-        if (ConfigManager.REPORT_UNRESOLVED_TABLES.get()) {
-          player.displayClientMessage(ChestUtil.getInvalidTable(lootTable), false);
+        if (LootrAPI.reportUnresolvedTables()) {
+          player.displayClientMessage(LootrAPI.getInvalidTableComponent(lootTable), false);
         }
       }
 

@@ -9,7 +9,6 @@ import net.minecraft.world.level.block.state.properties.ChestType;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.block.entities.LootrChestBlockEntity;
-import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlockEntities;
 import noobanidus.mods.lootr.util.Getter;
 
@@ -31,7 +30,7 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootrBlo
 
   @Override
   protected Material getMaterial(T tile, ChestType type) {
-    if (ConfigManager.isVanillaTextures()) {
+    if (LootrAPI.isVanillaTextures()) {
       return Sheets.chooseMaterial(tile, type, false);
     }
     boolean trapped = tile.getType().equals(ModBlockEntities.LOOTR_TRAPPED_CHEST.get());
@@ -40,25 +39,25 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootrBlo
       if (player != null) {
         playerId = player.getUUID();
       } else {
-        if (ConfigManager.isOldTextures()) {
+        if (LootrAPI.isOldTextures()) {
           return OLD_MATERIAL;
         }
         return trapped ? MATERIAL3 : MATERIAL;
       }
     }
     if (tile.isClientOpened()) {
-      if (ConfigManager.isOldTextures()) {
+      if (LootrAPI.isOldTextures()) {
         return OLD_MATERIAL2;
       }
       return trapped ? MATERIAL4 : MATERIAL2;
     }
     if (tile.getOpeners().contains(playerId)) {
-      if (ConfigManager.isOldTextures()) {
+      if (LootrAPI.isOldTextures()) {
         return OLD_MATERIAL2;
       }
       return trapped ? MATERIAL4 : MATERIAL2;
     } else {
-        if (ConfigManager.isOldTextures()) {
+        if (LootrAPI.isOldTextures()) {
           return OLD_MATERIAL;
         }
         return trapped ? MATERIAL3 : MATERIAL;

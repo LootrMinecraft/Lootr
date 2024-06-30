@@ -1,13 +1,8 @@
 package noobanidus.mods.lootr.util;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextColor;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.monster.piglin.PiglinAi;
@@ -18,14 +13,13 @@ import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
-import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.neoforge.network.PacketDistributor;
 import noobanidus.mods.lootr.advancement.ContainerTrigger;
 import noobanidus.mods.lootr.api.IHasOpeners;
+import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.block.LootrShulkerBlock;
 import noobanidus.mods.lootr.block.entities.LootrInventoryBlockEntity;
-import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModAdvancements;
@@ -64,22 +58,6 @@ public class ChestUtil {
     PacketDistributor.sendToPlayersTrackingEntity(cart, new PacketCloseCart(cart.getId()));
   }
 
-  public static Style getInvalidStyle() {
-    return ConfigManager.DISABLE_MESSAGE_STYLES.get() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true);
-  }
-
-  public static Style getDecayStyle() {
-    return ConfigManager.DISABLE_MESSAGE_STYLES.get() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true);
-  }
-
-  public static Style getRefreshStyle() {
-    return ConfigManager.DISABLE_MESSAGE_STYLES.get() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true);
-  }
-
-  public static Component getInvalidTable (ResourceKey<LootTable> lootTable) {
-    return Component.translatable("lootr.message.invalid_table", lootTable.location().getNamespace(), lootTable.toString()).setStyle(ConfigManager.DISABLE_MESSAGE_STYLES.get() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED)).withBold(true));
-  }
-
   public static void handleLootChest(Block block, Level level, BlockPos pos, Player player) {
     if (level.isClientSide() || player.isSpectator()) {
       if (player.isSpectator()) {
@@ -91,7 +69,7 @@ public class ChestUtil {
     if (te instanceof ILootrBlockEntity tile) {
       UUID tileId = tile.getInfoUUID();
       if (tileId == null) {
-        player.displayClientMessage(Component.translatable("lootr.message.invalid_block").setStyle(getInvalidStyle()), true);
+        player.displayClientMessage(Component.translatable("lootr.message.invalid_block").setStyle(LootrAPI.getInvalidStyle()), true);
         return;
       }
       if (DataStorage.isDecayed(tileId)) {
@@ -100,10 +78,10 @@ public class ChestUtil {
         return;
       } else {
         int decayValue = DataStorage.getDecayValue(tileId);
-        if (decayValue > 0 && ConfigManager.shouldNotify(decayValue)) {
-          player.displayClientMessage(Component.translatable("lootr.message.decay_in", decayValue / 20).setStyle(getDecayStyle()), true);
+        if (decayValue > 0 && LootrAPI.shouldNotify(decayValue)) {
+          player.displayClientMessage(Component.translatable("lootr.message.decay_in", decayValue / 20).setStyle(LootrAPI.getDecayStyle()), true);
         } else if (decayValue == -1) {
-          if (ConfigManager.isDecaying((ServerLevel) level, tile)) {
+          if (LootrAPI.isDecaying(tile)) {
             startDecay(player, tileId, decayValue);
           }
         }
@@ -121,10 +99,10 @@ public class ChestUtil {
         notifyRefresh(player, tileId);
       }
       int refreshValue = DataStorage.getRefreshValue(tileId);
-      if (refreshValue > 0 && ConfigManager.shouldNotify(refreshValue)) {
-        player.displayClientMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20).setStyle(getRefreshStyle()), true);
+      if (refreshValue > 0 && LootrAPI.shouldNotify(refreshValue)) {
+        player.displayClientMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20).setStyle(LootrAPI.getRefreshStyle()), true);
       } else if (refreshValue == -1) {
-        if (ConfigManager.isRefreshing((ServerLevel) level, tile)) {
+        if (LootrAPI.isRefreshing(tile)) {
           startRefresh(player, tileId, refreshValue);
         }
       }
@@ -165,10 +143,10 @@ public class ChestUtil {
       return;
     } else {
       int decayValue = DataStorage.getDecayValue(tileId);
-      if (decayValue > 0 && ConfigManager.shouldNotify(decayValue)) {
-        player.displayClientMessage(Component.translatable("lootr.message.decay_in", decayValue / 20).setStyle(getDecayStyle()), true);
+      if (decayValue > 0 && LootrAPI.shouldNotify(decayValue)) {
+        player.displayClientMessage(Component.translatable("lootr.message.decay_in", decayValue / 20).setStyle(LootrAPI.getDecayStyle()), true);
       } else if (decayValue == -1) {
-        if (ConfigManager.isDecaying((ServerLevel) level, cart)) {
+        if (LootrAPI.isDecaying(cart)) {
           startDecay(player, tileId, decayValue);
         }
       }
@@ -180,10 +158,10 @@ public class ChestUtil {
       notifyRefresh(player, tileId);
     }
     int refreshValue = DataStorage.getRefreshValue(tileId);
-    if (refreshValue > 0 && ConfigManager.shouldNotify(refreshValue)) {
-      player.displayClientMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20).setStyle(getRefreshStyle()), true);
+    if (refreshValue > 0 && LootrAPI.shouldNotify(refreshValue)) {
+      player.displayClientMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20).setStyle(LootrAPI.getRefreshStyle()), true);
     } else if (refreshValue == -1) {
-      if (ConfigManager.isRefreshing((ServerLevel) level, cart)) {
+      if (LootrAPI.isRefreshing(cart)) {
         startRefresh(player, tileId, refreshValue);
       }
     }
@@ -215,10 +193,10 @@ public class ChestUtil {
         notifyRefresh(player, tileId);
       }
       int refreshValue = DataStorage.getRefreshValue(tileId);
-      if (refreshValue > 0 && ConfigManager.shouldNotify(refreshValue)) {
-        player.displayClientMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20).setStyle(getRefreshStyle()), true);
+      if (refreshValue > 0 && LootrAPI.shouldNotify(refreshValue)) {
+        player.displayClientMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20).setStyle(LootrAPI.getRefreshStyle()), true);
       } else if (refreshValue == -1) {
-        if (ConfigManager.isRefreshing((ServerLevel) level, tile)) {
+        if (LootrAPI.isRefreshing(tile)) {
           startRefresh(player, tileId, refreshValue);
         }
       }
@@ -254,22 +232,22 @@ public class ChestUtil {
   }
 
   private static void notifyDecay(Player player, UUID tileId) {
-    player.displayClientMessage(Component.translatable("lootr.message.decayed").setStyle(getDecayStyle()), true);
+    player.displayClientMessage(Component.translatable("lootr.message.decayed").setStyle(LootrAPI.getDecayStyle()), true);
     DataStorage.removeDecayed(tileId);
   }
 
   private static void notifyRefresh(Player player, UUID tileId) {
     DataStorage.removeRefreshed(tileId);
-    player.displayClientMessage(Component.translatable("lootr.message.refreshed").setStyle(getRefreshStyle()), true);
+    player.displayClientMessage(Component.translatable("lootr.message.refreshed").setStyle(LootrAPI.getRefreshStyle()), true);
   }
 
   private static void startDecay(Player player, UUID tileId, int decayValue) {
-    DataStorage.setDecaying(tileId, ConfigManager.DECAY_VALUE.get());
-    player.displayClientMessage(Component.translatable("lootr.message.decay_start", ConfigManager.DECAY_VALUE.get() / 20).setStyle(getDecayStyle()), true);
+    DataStorage.setDecaying(tileId, decayValue);
+    player.displayClientMessage(Component.translatable("lootr.message.decay_start", decayValue / 20).setStyle(LootrAPI.getDecayStyle()), true);
   }
 
   private static void startRefresh(Player player, UUID tileId, int refreshValue) {
-    DataStorage.setRefreshing(tileId, ConfigManager.REFRESH_VALUE.get());
-    player.displayClientMessage(Component.translatable("lootr.message.refresh_start", ConfigManager.REFRESH_VALUE.get() / 20).setStyle(getRefreshStyle()), true);
+    DataStorage.setRefreshing(tileId, refreshValue);
+    player.displayClientMessage(Component.translatable("lootr.message.refresh_start", refreshValue / 20).setStyle(LootrAPI.getRefreshStyle()), true);
   }
 }

@@ -1,6 +1,5 @@
 package noobanidus.mods.lootr.client.block;
 
-import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import net.minecraft.client.renderer.RenderType;
@@ -20,8 +19,8 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.client.model.geometry.IGeometryBakingContext;
 import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
 import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
+import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.block.LootrBarrelBlock;
-import noobanidus.mods.lootr.config.ConfigManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -101,17 +100,17 @@ public class BarrelModel implements IUnbakedGeometry<BarrelModel> {
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand, @NotNull ModelData extraData, @NotNull RenderType renderType) {
       BakedModel model;
-      if (ConfigManager.isVanillaTextures()) {
+      if (LootrAPI.isVanillaTextures()) {
         model = vanilla;
       } else {
         if (extraData.has(LootrBarrelBlock.OPENED)) {
           if (extraData.get(LootrBarrelBlock.OPENED) == Boolean.TRUE) {
-            model = ConfigManager.isOldTextures() ? old_opened : opened;
+            model = LootrAPI.isOldTextures() ? old_opened : opened;
           } else {
-            model = ConfigManager.isOldTextures() ? old_unopened : unopened;
+            model = LootrAPI.isOldTextures() ? old_unopened : unopened;
           }
         } else {
-          model = ConfigManager.isOldTextures() ? old_unopened : unopened;
+          model = LootrAPI.isOldTextures() ? old_unopened : unopened;
         }
       }
       return model.getQuads(state, side, rand, extraData, renderType);
@@ -144,13 +143,13 @@ public class BarrelModel implements IUnbakedGeometry<BarrelModel> {
 
     @Override
     public TextureAtlasSprite getParticleIcon(@NotNull ModelData data) {
-      if (ConfigManager.isVanillaTextures()) {
+      if (LootrAPI.isVanillaTextures()) {
         return vanilla.getParticleIcon();
       }
       if (data.get(LootrBarrelBlock.OPENED) == Boolean.TRUE) {
-        return ConfigManager.isOldTextures() ? old_opened.getParticleIcon() : opened.getParticleIcon();
+        return LootrAPI.isOldTextures() ? old_opened.getParticleIcon() : opened.getParticleIcon();
       } else {
-        return ConfigManager.isOldTextures() ? old_unopened.getParticleIcon() : unopened.getParticleIcon();
+        return LootrAPI.isOldTextures() ? old_unopened.getParticleIcon() : unopened.getParticleIcon();
       }
     }
 

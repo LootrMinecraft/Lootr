@@ -7,7 +7,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import noobanidus.mods.lootr.api.LootrAPI;
-import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.data.DataStorage;
 
 import java.util.ArrayList;
@@ -26,41 +25,43 @@ public class EntityTicker {
 
   @SubscribeEvent
   public static void onServerTick(ServerTickEvent.Post event) {
-    if (!ConfigManager.DISABLE.get()) {
-      List<LootrChestMinecartEntity> completed = new ArrayList<>();
-      List<LootrChestMinecartEntity> copy;
-      synchronized (listLock) {
-        tickingList = true;
-        copy = new ArrayList<>(entities);
-        tickingList = false;
-      }
-      synchronized (worldLock) {
-        for (LootrChestMinecartEntity entity : copy) {
-          if (entity.isAddedToWorld()) {
-            continue;
-          }
-          ServerLevel world = (ServerLevel) entity.level();
-          ServerChunkCache provider = world.getChunkSource();
-          if (provider.hasChunk(Mth.floor(entity.getX() / 16.0D), Mth.floor(entity.getZ() / 16.0D))) {
-            world.addFreshEntity(entity);
-            completed.add(entity);
-          }
-        }
-      }
-      synchronized (listLock) {
-        tickingList = true;
-        entities.removeAll(completed);
-        entities.addAll(pendingEntities);
-        tickingList = false;
-        pendingEntities.clear();
-      }
-    }
     DataStorage.doDecay();
     DataStorage.doRefresh();
+
+    if (LootrAPI.isDisabled()) {
+      return;
+    }
+    List<LootrChestMinecartEntity> completed = new ArrayList<>();
+    List<LootrChestMinecartEntity> copy;
+    synchronized (listLock) {
+      tickingList = true;
+      copy = new ArrayList<>(entities);
+      tickingList = false;
+    }
+    synchronized (worldLock) {
+      for (LootrChestMinecartEntity entity : copy) {
+        if (entity.isAddedToWorld()) {
+          continue;
+        }
+        ServerLevel world = (ServerLevel) entity.level();
+        ServerChunkCache provider = world.getChunkSource();
+        if (provider.hasChunk(Mth.floor(entity.getX() / 16.0D), Mth.floor(entity.getZ() / 16.0D))) {
+          world.addFreshEntity(entity);
+          completed.add(entity);
+        }
+      }
+    }
+    synchronized (listLock) {
+      tickingList = true;
+      entities.removeAll(completed);
+      entities.addAll(pendingEntities);
+      tickingList = false;
+      pendingEntities.clear();
+    }
   }
 
   public static void addEntity(LootrChestMinecartEntity entity) {
-    if (ConfigManager.DISABLE.get()) {
+    if (LootrAPI.isDisabled()) {
       return;
     }
     synchronized (listLock) {

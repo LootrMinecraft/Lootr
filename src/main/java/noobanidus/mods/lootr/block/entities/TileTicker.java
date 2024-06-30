@@ -11,7 +11,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -19,7 +18,6 @@ import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootrBlockEntity;
-import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.event.HandleChunk;
 
 import java.util.Set;
@@ -33,22 +31,20 @@ public class TileTicker {
   private static boolean tickingList = false;
 
   public static void addEntry(Level level, BlockPos position) {
-    if (ConfigManager.DISABLE.get()) {
+    if (LootrAPI.isDisabled()) {
       return;
     }
 
-    if (ServerLifecycleHooks.getCurrentServer() == null) {
+    if (LootrAPI.getServer() == null) {
       return;
     }
 
     ResourceKey<Level> dimension = level.dimension();
-    if (ConfigManager.isDimensionBlocked(dimension)) {
+    if (LootrAPI.isDimensionBlocked(dimension)) {
       return;
     }
 
     ChunkPos chunkPos = new ChunkPos(position);
-
-    WorldBorder border = level.getWorldBorder();
 
     Set<ChunkPos> chunks = new ObjectLinkedOpenHashSet<>();
     chunks.add(chunkPos);
@@ -62,7 +58,7 @@ public class TileTicker {
         ChunkPos newPos = new ChunkPos(oX + x, oZ + z);
         // This has the potential to force-load chunks on the main thread
         // by ignoring the loading state of chunks outside the world border.
-        if (ConfigManager.CHECK_WORLD_BORDER.get() && !border.isWithinBounds(newPos)) {
+        if (!LootrAPI.isWorldBorderSafe(level, newPos)) {
           continue;
         }
 
@@ -82,7 +78,7 @@ public class TileTicker {
 
   @SubscribeEvent
   public static void serverTick(ServerTickEvent.Post event) {
-    if (ConfigManager.DISABLE.get()) {
+    if (LootrAPI.isDisabled()) {
       return;
     }
     Set<Entry> toRemove = new ObjectLinkedOpenHashSet<>();
@@ -93,10 +89,14 @@ public class TileTicker {
       tickingList = false;
     }
     synchronized (worldLock) {
-      MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+      MinecraftServer server = LootrAPI.getServer();
+      if (server == null) {
+        LootrAPI.LOG.error("MinecraftServer was null during ServerTickEvent!");
+        return;
+      }
       for (Entry entry : copy) {
         ServerLevel level = server.getLevel(entry.getDimension());
-        if (level == null || entry.age(server) > ConfigManager.MAXIMUM_AGE.get() || (ConfigManager.CHECK_WORLD_BORDER.get() && !level.getWorldBorder().isWithinBounds(entry.getPosition()))) {
+        if (level == null || LootrAPI.hasExpired(entry.age(server)) || (!LootrAPI.isWorldBorderSafe(level, entry.getPosition()))) {
           toRemove.add(entry);
           continue;
         }
@@ -131,12 +131,12 @@ public class TileTicker {
           toRemove.add(entry);
           continue;
         }
-        if (be.lootTable == null || ConfigManager.isBlacklisted(be.lootTable)) {
+        if (be.lootTable == null || LootrAPI.isLootTableBlacklisted(be.lootTable)) {
           toRemove.add(entry);
           continue;
         }
         BlockState stateAt = level.getBlockState(entry.getPosition());
-        BlockState replacement = ConfigManager.replacement(stateAt);
+        BlockState replacement = LootrAPI.replacementBlockState(stateAt);
         if (replacement == null) {
           toRemove.add(entry);
           continue;

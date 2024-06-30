@@ -6,7 +6,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ChestBlock;
@@ -34,11 +33,8 @@ import java.util.stream.Collectors;
 
 @EventBusSubscriber(modid = LootrAPI.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class ConfigManager {
-  // Debug
   public static final ModConfigSpec.BooleanValue REPORT_UNRESOLVED_TABLES;
-  // Seed randomization
   public static final ModConfigSpec.BooleanValue RANDOMISE_SEED;
-  // Conversion
   public static final ModConfigSpec.BooleanValue DISABLE;
   public static final ModConfigSpec.IntValue MAXIMUM_AGE;
   public static final ModConfigSpec.BooleanValue CONVERT_MINESHAFTS;
@@ -246,7 +242,7 @@ public class ConfigManager {
     return LOOT_MODIDS;
   }
 
-  public static boolean isBlacklisted(ResourceKey<LootTable> table) {
+  public static boolean isLootTableBlacklisted(ResourceKey<LootTable> table) {
     if (getLootBlacklist().contains(table)) {
       return true;
     }
@@ -298,7 +294,7 @@ public class ConfigManager {
     return getRefreshDimensions().contains(key);
   }
 
-  public static boolean isDecaying(ServerLevel level, ILootInfoProvider tile) {
+  public static boolean isDecaying(ILootInfoProvider tile) {
     if (DECAY_ALL.get()) {
       return true;
     }
@@ -310,10 +306,10 @@ public class ConfigManager {
         return true;
       }
     }
-    return isDimensionDecaying(level.dimension());
+    return isDimensionDecaying(tile.getInfoDimension());
   }
 
-  public static boolean isRefreshing(ServerLevel level, ILootInfoProvider tile) {
+  public static boolean isRefreshing(ILootInfoProvider tile) {
     if (REFRESH_ALL.get()) {
       return true;
     }
@@ -325,7 +321,7 @@ public class ConfigManager {
         return true;
       }
     }
-    return isDimensionRefreshing(level.dimension());
+    return isDimensionRefreshing(tile.getInfoDimension());
   }
 
 
@@ -344,6 +340,11 @@ public class ConfigManager {
 
   public static BlockState replacement(BlockState original) {
     if (original.is(LootrTags.Blocks.CONVERT_BLACKLIST)) {
+      return null;
+    }
+
+    // TODO: Don't convert already-converted containers?
+    if (original.is(LootrTags.Blocks.CONTAINERS)) {
       return null;
     }
 

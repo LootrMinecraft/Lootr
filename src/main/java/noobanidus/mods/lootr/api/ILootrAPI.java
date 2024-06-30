@@ -2,13 +2,13 @@ package noobanidus.mods.lootr.api;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
@@ -85,6 +85,8 @@ public interface ILootrAPI {
 
   int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos, int defaultSignal);
 
+  boolean shouldNotify (int remaining);
+
   ClientTextureType getTextureType();
 
   default boolean isOldTextures () {
@@ -100,6 +102,53 @@ public interface ILootrAPI {
   }
 
   boolean isDisabled();
+
+  boolean isLootTableBlacklisted (ResourceKey<LootTable> table);
+
+  boolean isDimensionBlocked (ResourceKey<Level> dimension);
+
+  boolean isDimensionDecaying (ResourceKey<Level> dimension);
+
+  boolean isDimensionRefreshing (ResourceKey<Level> dimension);
+
+  boolean isDecaying (ILootInfoProvider provider);
+
+  boolean isRefreshing (ILootInfoProvider provider);
+
+  boolean reportUnresolvedTables ();
+
+  boolean isCustomTrapped ();
+
+  boolean isWorldBorderSafe(Level level, BlockPos pos);
+
+  boolean isWorldBorderSafe(Level level, ChunkPos pos);
+
+  boolean hasExpired (long time);
+
+  boolean shouldConvertMineshafts ();
+
+  boolean shouldConvertElytras ();
+
+  int getDecayValue ();
+
+  int getRefreshValue ();
+
+  Style getInvalidStyle();
+
+  Style getDecayStyle();
+
+  Style getRefreshStyle();
+
+  Style getChatStyle ();
+
+  Component getInvalidTableComponent (ResourceKey<LootTable> lootTable) ;
+
+  boolean canDestroyOrBreak (Player player);
+
+  boolean isBreakDisabled ();
+
+  @Nullable
+  BlockState replacementBlockState (BlockState original);
 
   // TODO: Think on this.
   default boolean hasCapacity(String capacity) {

@@ -13,12 +13,10 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.block.entities.LootrShulkerBlockEntity;
-import noobanidus.mods.lootr.config.ConfigManager;
 
 import java.util.UUID;
 
@@ -36,21 +34,21 @@ public class LootrShulkerBlockRenderer implements BlockEntityRenderer<LootrShulk
   }
 
   protected Material getMaterial(LootrShulkerBlockEntity tile) {
-    if (ConfigManager.isVanillaTextures()) {
+    if (LootrAPI.isVanillaTextures()) {
       return Sheets.DEFAULT_SHULKER_TEXTURE_LOCATION;
     }
     if (playerId == null) {
       Minecraft mc = Minecraft.getInstance();
       if (mc.player == null) {
-        return ConfigManager.isOldTextures() ? MATERIAL3 : MATERIAL;
+        return LootrAPI.isOldTextures() ? MATERIAL3 : MATERIAL;
       } else {
         playerId = mc.player.getUUID();
       }
     }
     if (tile.getOpeners().contains(playerId)) {
-      return ConfigManager.isOldTextures() ? MATERIAL4 : MATERIAL2;
+      return LootrAPI.isOldTextures() ? MATERIAL4 : MATERIAL2;
     } else {
-      return ConfigManager.isOldTextures() ? MATERIAL3 : MATERIAL;
+      return LootrAPI.isOldTextures() ? MATERIAL3 : MATERIAL;
     }
   }
 

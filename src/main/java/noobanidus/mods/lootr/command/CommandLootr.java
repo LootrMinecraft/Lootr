@@ -39,18 +39,18 @@ import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
+import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.block.LootrBarrelBlock;
 import noobanidus.mods.lootr.block.LootrChestBlock;
 import noobanidus.mods.lootr.block.LootrShulkerBlock;
 import noobanidus.mods.lootr.block.entities.LootrInventoryBlockEntity;
-import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.util.ChestUtil;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.*;
 
 public class CommandLootr {
@@ -253,8 +253,8 @@ public class CommandLootr {
         be = level.getBlockEntity(pos);
       }
       if (be instanceof ILootrBlockEntity ibe) {
-        DataStorage.setRefreshing(((ILootrBlockEntity) be).getInfoUUID(), ConfigManager.REFRESH_VALUE.get());
-        c.getSource().sendSuccess(() -> Component.literal("Container with ID " + (ibe).getInfoUUID() + " has been set to refresh with a delay of " + ConfigManager.REFRESH_VALUE.get()), false);
+        DataStorage.setRefreshing(((ILootrBlockEntity) be).getInfoUUID(), LootrAPI.getRefreshValue());
+        c.getSource().sendSuccess(() -> Component.literal("Container with ID " + (ibe).getInfoUUID() + " has been set to refresh with a delay of " + LootrAPI.getRefreshValue()), false);
       } else {
         c.getSource().sendSuccess(() -> Component.literal("Please stand on a valid Lootr container."), false);
       }
@@ -269,8 +269,8 @@ public class CommandLootr {
         be = level.getBlockEntity(pos);
       }
       if (be instanceof ILootrBlockEntity ibe) {
-        DataStorage.setDecaying((ibe).getInfoUUID(), ConfigManager.DECAY_VALUE.get());
-        c.getSource().sendSuccess(() -> Component.literal("Container with ID " + (ibe).getInfoUUID() + " has been set to decay with a delay of " + ConfigManager.DECAY_VALUE.get()), false);
+        DataStorage.setDecaying((ibe).getInfoUUID(), LootrAPI.getDecayValue());
+        c.getSource().sendSuccess(() -> Component.literal("Container with ID " + (ibe).getInfoUUID() + " has been set to decay with a delay of " + LootrAPI.getDecayValue()), false);
       } else {
         c.getSource().sendSuccess(() -> Component.literal("Please stand on a valid Lootr container."), false);
       }

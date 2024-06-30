@@ -5,7 +5,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
@@ -17,7 +16,6 @@ import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.material.FluidState;
@@ -28,12 +26,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.block.entities.LootrChestBlockEntity;
 import noobanidus.mods.lootr.block.entities.LootrInventoryBlockEntity;
-import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.init.ModBlockEntities;
 import noobanidus.mods.lootr.util.ChestUtil;
-
 import org.jetbrains.annotations.Nullable;
-import java.util.function.Supplier;
 
 public class LootrInventoryBlock extends ChestBlock {
   public LootrInventoryBlock(Properties properties) {
@@ -109,12 +104,12 @@ public class LootrInventoryBlock extends ChestBlock {
 
   @Override
   public boolean isSignalSource(BlockState pState) {
-    return ConfigManager.TRAPPED_CUSTOM.get();
+    return LootrAPI.isCustomTrapped();
   }
 
   @Override
   public int getSignal(BlockState pBlockState, BlockGetter pBlockAccess, BlockPos pPos, Direction pSide) {
-    if (ConfigManager.TRAPPED_CUSTOM.get()) {
+    if (LootrAPI.isCustomTrapped()) {
       return Mth.clamp(LootrChestBlockEntity.getOpenCount(pBlockAccess, pPos), 0, 15);
     } else {
       return 0;
@@ -123,7 +118,7 @@ public class LootrInventoryBlock extends ChestBlock {
 
   @Override
   public int getDirectSignal(BlockState pBlockState, BlockGetter pBlockAccess, BlockPos pPos, Direction pSide) {
-    if (ConfigManager.TRAPPED_CUSTOM.get()) {
+    if (LootrAPI.isCustomTrapped()) {
       return pSide == Direction.UP ? pBlockState.getSignal(pBlockAccess, pPos, pSide) : 0;
     } else {
       return 0;

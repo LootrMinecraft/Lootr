@@ -27,13 +27,15 @@ import noobanidus.mods.lootr.api.ILootInfoProvider;
 import noobanidus.mods.lootr.api.LootFiller;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.*;
+import java.util.function.IntSupplier;
+import java.util.function.LongSupplier;
+import java.util.function.Supplier;
 
 public class OldChestData extends SavedData {
   // String Key
