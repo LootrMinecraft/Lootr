@@ -107,11 +107,11 @@ public class LootrAPI {
     return INSTANCE.isDimensionBlocked(dimension);
   }
 
-  public static boolean isDecaying (ILootInfoProvider provider) {
+  public static boolean isDecaying (ILootrInfoProvider provider) {
     return INSTANCE.isDecaying(provider);
   }
 
-  public static boolean isRefreshing (ILootInfoProvider provider) {
+  public static boolean isRefreshing (ILootrInfoProvider provider) {
     return INSTANCE.isRefreshing(provider);
   }
 

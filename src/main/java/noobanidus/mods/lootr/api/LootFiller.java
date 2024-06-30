@@ -23,5 +23,5 @@ public interface LootFiller {
    *                  <p>
    *                  Example implementations can be found in `LootrChestblockEntity::unpackLootTable`.
    */
-  void unpackLootTable(@NotNull ILootInfoProvider provider, @NotNull Player player, Container inventory, @Nullable ResourceKey<LootTable> table, long seed);
+  void unpackLootTable(@NotNull ILootrInfoProvider provider, @NotNull Player player, Container inventory, @Nullable ResourceKey<LootTable> table, long seed);
 }

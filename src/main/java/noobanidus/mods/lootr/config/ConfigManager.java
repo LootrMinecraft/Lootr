@@ -22,7 +22,7 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import noobanidus.mods.lootr.LootrTags;
-import noobanidus.mods.lootr.api.ILootInfoProvider;
+import noobanidus.mods.lootr.api.ILootrInfoProvider;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.init.ModBlocks;
 
@@ -294,7 +294,7 @@ public class ConfigManager {
     return getRefreshDimensions().contains(key);
   }
 
-  public static boolean isDecaying(ILootInfoProvider tile) {
+  public static boolean isDecaying(ILootrInfoProvider tile) {
     if (DECAY_ALL.get()) {
       return true;
     }
@@ -309,7 +309,7 @@ public class ConfigManager {
     return isDimensionDecaying(tile.getInfoDimension());
   }
 
-  public static boolean isRefreshing(ILootInfoProvider tile) {
+  public static boolean isRefreshing(ILootrInfoProvider tile) {
     if (REFRESH_ALL.get()) {
       return true;
     }

@@ -23,9 +23,9 @@ import java.util.UUID;
 import java.util.function.LongSupplier;
 import java.util.function.Supplier;
 
-public interface ILootInfoProvider {
-  default LootInfoType getInfoType() {
-    return LootInfoType.CUSTOM;
+public interface ILootrInfoProvider {
+  default LootrInfoType getInfoType() {
+    return LootrInfoType.CUSTOM;
   }
 
   @NotNull
@@ -68,7 +68,7 @@ public interface ILootInfoProvider {
     return Optional.empty();
   }
 
-  default void lootFiller(ILootInfoProvider provider, Player player, Container inventory, @Nullable ResourceKey<LootTable> overrideTable, long overrideSeed) {
+  default void lootFiller(ILootrInfoProvider provider, Player player, Container inventory, @Nullable ResourceKey<LootTable> overrideTable, long overrideSeed) {
     Level level = provider.getInfoLevel();
     BlockPos pos = provider.getInfoPos();
     ResourceKey<LootTable> lootTable = overrideTable == null ? provider.getInfoLootTable() : overrideTable;
@@ -97,33 +97,33 @@ public interface ILootInfoProvider {
     }
   }
 
-  static ILootInfoProvider of(ILootInfoProvider provider) {
+  static ILootrInfoProvider of(ILootrInfoProvider provider) {
     return provider;
   }
 
-  static ILootInfoProvider of(RandomizableContainerBlockEntity blockEntity) {
-    if (blockEntity instanceof ILootInfoProvider provider) {
+  static ILootrInfoProvider of(RandomizableContainerBlockEntity blockEntity) {
+    if (blockEntity instanceof ILootrInfoProvider provider) {
       return provider;
     }
-    return new RandomizableContainerBlockEntityLootInfoProvider(blockEntity);
+    return new RandomizableContainerBlockEntityLootrInfoProvider(blockEntity);
   }
 
-  static ILootInfoProvider of(AbstractMinecartContainer minecart) {
-    if (minecart instanceof ILootInfoProvider provider) {
+  static ILootrInfoProvider of(AbstractMinecartContainer minecart) {
+    if (minecart instanceof ILootrInfoProvider provider) {
       return provider;
     }
-    return new AbstractMinecartContainerLootInfoProvider(minecart);
+    return new AbstractMinecartContainerLootrInfoProvider(minecart);
   }
 
-  static ILootInfoProvider of (Supplier<BlockPos> pos, Supplier<ResourceKey<LootTable>> lootTable, LongSupplier lootSeed, Level level) {
-    return new CustomLootInfoProvider(pos, lootTable, lootSeed, level);
+  static ILootrInfoProvider of (Supplier<BlockPos> pos, Supplier<ResourceKey<LootTable>> lootTable, LongSupplier lootSeed, Level level) {
+    return new CustomLootrInfoProvider(pos, lootTable, lootSeed, level);
   }
 
-  record CustomLootInfoProvider (
+  record CustomLootrInfoProvider(
       Supplier<BlockPos> pos,
       Supplier<ResourceKey<LootTable>> lootTable,
       LongSupplier lootSeed,
-      Level level) implements ILootInfoProvider {
+      Level level) implements ILootrInfoProvider {
 
     @Override
     public BlockPos getInfoPos() {
@@ -146,12 +146,12 @@ public interface ILootInfoProvider {
     }
   }
 
-  record AbstractMinecartContainerLootInfoProvider (
-      AbstractMinecartContainer minecart) implements ILootInfoProvider {
+  record AbstractMinecartContainerLootrInfoProvider(
+      AbstractMinecartContainer minecart) implements ILootrInfoProvider {
 
     @Override
-    public LootInfoType getInfoType() {
-      return LootInfoType.MINECART_ENTITY;
+    public LootrInfoType getInfoType() {
+      return LootrInfoType.MINECART_ENTITY;
     }
 
     @Override
@@ -185,12 +185,12 @@ public interface ILootInfoProvider {
     }
   }
 
-  record RandomizableContainerBlockEntityLootInfoProvider(
-      @NotNull RandomizableContainerBlockEntity blockEntity) implements ILootInfoProvider {
+  record RandomizableContainerBlockEntityLootrInfoProvider(
+      @NotNull RandomizableContainerBlockEntity blockEntity) implements ILootrInfoProvider {
 
     @Override
-    public LootInfoType getInfoType() {
-      return LootInfoType.RANDOMIZABLE_CONTAINER_BLOCK_ENTITY;
+    public LootrInfoType getInfoType() {
+      return LootrInfoType.RANDOMIZABLE_CONTAINER_BLOCK_ENTITY;
     }
 
     @Override
@@ -220,7 +220,7 @@ public interface ILootInfoProvider {
     }
   }
 
-  enum LootInfoType {
+  enum LootrInfoType {
     RANDOMIZABLE_CONTAINER_BLOCK_ENTITY,
     MINECART_ENTITY,
     CUSTOM

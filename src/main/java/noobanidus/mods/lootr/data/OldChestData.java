@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
-import noobanidus.mods.lootr.api.ILootInfoProvider;
+import noobanidus.mods.lootr.api.ILootrInfoProvider;
 import noobanidus.mods.lootr.api.LootFiller;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
@@ -315,7 +315,7 @@ public class OldChestData extends SavedData {
 
     NonNullList<ItemStack> items = NonNullList.withSize(sizeSupplier.getAsInt(), ItemStack.EMPTY);
     result = new SpecialChestInventory(this, items, displaySupplier.get());
-    filler.unpackLootTable(ILootInfoProvider.of(posSupplier, tableSupplier, seedSupplier, level), player, result, tableSupplier.get(), seedSupplier.getAsLong());
+    filler.unpackLootTable(ILootrInfoProvider.of(posSupplier, tableSupplier, seedSupplier, level), player, result, tableSupplier.get(), seedSupplier.getAsLong());
     inventories.put(player.getUUID(), result);
     setDirty();
     return result;
@@ -338,7 +338,7 @@ public class OldChestData extends SavedData {
 
     NonNullList<ItemStack> items = NonNullList.withSize(blockEntity.getContainerSize(), ItemStack.EMPTY);
     result = new SpecialChestInventory(this, items, blockEntity.getDisplayName());
-    filler.unpackLootTable(ILootInfoProvider.of(blockEntity::getBlockPos, tableSupplier, seedSupplier, level), player, result, tableSupplier.get(), seedSupplier.getAsLong());
+    filler.unpackLootTable(ILootrInfoProvider.of(blockEntity::getBlockPos, tableSupplier, seedSupplier, level), player, result, tableSupplier.get(), seedSupplier.getAsLong());
     inventories.put(player.getUUID(), result);
     setDirty();
     return result;
@@ -349,7 +349,7 @@ public class OldChestData extends SavedData {
     SpecialChestInventory result;
     long seed = -1;
     ResourceKey<LootTable> lootTable;
-    ILootInfoProvider provider;
+    ILootrInfoProvider provider;
     if (entity) {
       Entity initial = world.getEntity(uuid);
       if (!(initial instanceof LootrChestMinecartEntity cart)) {
@@ -364,7 +364,7 @@ public class OldChestData extends SavedData {
         return null;
       }
 
-      provider = (ILootInfoProvider) tile;
+      provider = (ILootrInfoProvider) tile;
       lootTable = provider.getInfoLootTable();
 
       NonNullList<ItemStack> items = NonNullList.withSize(tile.getContainerSize(), ItemStack.EMPTY);

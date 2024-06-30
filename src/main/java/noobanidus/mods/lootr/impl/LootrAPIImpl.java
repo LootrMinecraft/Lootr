@@ -169,12 +169,12 @@ public class LootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  public boolean isDecaying(ILootInfoProvider provider) {
+  public boolean isDecaying(ILootrInfoProvider provider) {
     return ConfigManager.isDecaying(provider);
   }
 
   @Override
-  public boolean isRefreshing(ILootInfoProvider provider) {
+  public boolean isRefreshing(ILootrInfoProvider provider) {
     return ConfigManager.isRefreshing(provider);
   }
 

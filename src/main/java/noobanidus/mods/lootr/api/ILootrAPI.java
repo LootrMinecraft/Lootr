@@ -111,9 +111,9 @@ public interface ILootrAPI {
 
   boolean isDimensionRefreshing (ResourceKey<Level> dimension);
 
-  boolean isDecaying (ILootInfoProvider provider);
+  boolean isDecaying (ILootrInfoProvider provider);
 
-  boolean isRefreshing (ILootInfoProvider provider);
+  boolean isRefreshing (ILootrInfoProvider provider);
 
   boolean reportUnresolvedTables ();
 

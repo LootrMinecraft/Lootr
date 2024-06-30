@@ -5,9 +5,9 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import noobanidus.mods.lootr.api.IHasOpeners;
-import noobanidus.mods.lootr.api.ILootInfoProvider;
+import noobanidus.mods.lootr.api.ILootrInfoProvider;
 
-public interface ILootrBlockEntity extends IHasOpeners, ILootInfoProvider {
+public interface ILootrBlockEntity extends IHasOpeners, ILootrInfoProvider {
   default void updatePacketViaForce (BlockEntity entity) {
     if (entity.getLevel() instanceof ServerLevel level) {
       Packet<?> packet = entity.getUpdatePacket();
