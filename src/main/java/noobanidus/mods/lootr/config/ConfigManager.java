@@ -166,7 +166,16 @@ public class ConfigManager {
   }
 
   @SubscribeEvent
-  public static void reloadConfig(ModConfigEvent event) {
+  public static void reloadConfig (ModConfigEvent.Reloading event) {
+    configEvent(event);
+  }
+
+  @SubscribeEvent
+  public static void loadConfig (ModConfigEvent.Loading event) {
+    configEvent(event);
+  }
+
+  public static void configEvent(ModConfigEvent event) {
     if (event.getConfig().getType() == ModConfig.Type.COMMON) {
       COMMON_CONFIG.setConfig(event.getConfig().getConfigData());
       replacements = null;
