@@ -36,7 +36,7 @@ public class LootrBlockTagProvider extends BlockTagsProvider {
     //noinspection unchecked
     tag(LootrTags.Blocks.CONTAINERS).addTags(LootrTags.Blocks.BARRELS, LootrTags.Blocks.CHESTS, LootrTags.Blocks.TRAPPED_CHESTS, LootrTags.Blocks.SHULKERS);
 
-    tag(LootrTags.Blocks.CONVERT_BARRELS).add(Blocks.BARREL);
+    tag(LootrTags.Blocks.CONVERT_BARRELS).add(Blocks.BARREL).addTag(Tags.Blocks.BARRELS);
     tag(LootrTags.Blocks.CONVERT_CHESTS).add(Blocks.CHEST).addTag(Tags.Blocks.CHESTS_WOODEN);
     tag(LootrTags.Blocks.CONVERT_TRAPPED_CHESTS).add(Blocks.TRAPPED_CHEST).addTag(Tags.Blocks.CHESTS_TRAPPED);
     tag(LootrTags.Blocks.CONVERT_SHULKERS).add(Blocks.SHULKER_BOX);

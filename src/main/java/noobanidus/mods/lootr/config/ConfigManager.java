@@ -84,11 +84,12 @@ public class ConfigManager {
   private static final List<ResourceLocation> PROBLEMATIC_CHESTS = Arrays.asList(LootrAPI.rl("twilightforest", "structures/stronghold_boss"), LootrAPI.rl("atum", "chests/pharaoh"));
   public static ModConfigSpec COMMON_CONFIG;
   public static ModConfigSpec CLIENT_CONFIG;
+
+  // Caches
   private static Set<String> DECAY_MODS = null;
   private static Set<ResourceKey<LootTable>> DECAY_TABLES = null;
   private static Set<String> REFRESH_MODS = null;
   private static Set<ResourceKey<LootTable>> REFRESH_TABLES = null;
-
   private static Set<ResourceKey<Level>> DIM_WHITELIST = null;
   private static Set<String> MODID_DIM_WHITELIST = null;
   private static Set<ResourceKey<Level>> DIM_BLACKLIST = null;
@@ -96,8 +97,8 @@ public class ConfigManager {
   private static Set<ResourceKey<Level>> DECAY_DIMS = null;
   private static Set<ResourceKey<Level>> REFRESH_DIMS = null;
   private static Set<ResourceKey<LootTable>> LOOT_BLACKLIST = null;
-  private static Map<Block, Block> replacements = null;
   private static Set<String> LOOT_MODIDS = null;
+  private static Map<Block, Block> replacements = null;
 
   static {
     RANDOMISE_SEED = COMMON_BUILDER.comment("determine whether or not loot generated is the same for all players using the provided seed, or randomised per player").define("randomise_seed", true);

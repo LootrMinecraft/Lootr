@@ -1,5 +1,6 @@
 {
   "values": [
-    "minecraft:barrel"
+    "minecraft:barrel",
+    "#c:barrels"
   ]
 }
