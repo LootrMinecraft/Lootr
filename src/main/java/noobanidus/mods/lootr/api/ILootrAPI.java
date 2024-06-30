@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
@@ -13,6 +14,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
+import noobanidus.mods.lootr.api.client.ClientTextureType;
 import noobanidus.mods.lootr.api.inventory.ILootrInventory;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,6 +24,8 @@ import java.util.function.LongSupplier;
 import java.util.function.Supplier;
 
 public interface ILootrAPI {
+  MinecraftServer getServer ();
+
   boolean isFakePlayer (Player player);
 
   default boolean clearPlayerLoot(ServerPlayer entity) {
@@ -80,6 +84,22 @@ public interface ILootrAPI {
   float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos position, float defaultProgress);
 
   int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos, int defaultSignal);
+
+  ClientTextureType getTextureType();
+
+  default boolean isOldTextures () {
+    return getTextureType() == ClientTextureType.OLD;
+  }
+
+  default boolean isVanillaTextures () {
+    return getTextureType() == ClientTextureType.VANILLA;
+  }
+
+  default boolean isDefaultTextures () {
+    return getTextureType() == ClientTextureType.DEFAULT;
+  }
+
+  boolean isDisabled();
 
   // TODO: Think on this.
   default boolean hasCapacity(String capacity) {

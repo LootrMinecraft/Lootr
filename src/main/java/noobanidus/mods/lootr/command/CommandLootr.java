@@ -52,7 +52,6 @@ import noobanidus.mods.lootr.util.ChestUtil;
 
 import org.jetbrains.annotations.Nullable;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class CommandLootr {
   private static final Map<String, UUID> profileMap = new HashMap<>();
@@ -176,14 +175,14 @@ public class CommandLootr {
       c.getSource().sendSuccess(() -> Component.literal("Must provide player name."), true);
       return 1;
     }).then(suggestProfiles().executes(c -> {
-      String playerName = StringArgumentType.getString(c, "profile");
+/*      String playerName = StringArgumentType.getString(c, "profile");
       Optional<GameProfile> opt_profile = c.getSource().getServer().getProfileCache().get(playerName);
       if (!opt_profile.isPresent()) {
         c.getSource().sendFailure(Component.literal("Invalid player name: " + playerName + ", profile not found in the cache."));
         return 0;
       }
       GameProfile profile = opt_profile.get();
-      c.getSource().sendSuccess(() -> Component.literal(DataStorage.clearInventories(profile.getId()) ? "Cleared stored inventories for " + playerName : "No stored inventories for " + playerName + " to clear"), true);
+      c.getSource().sendSuccess(() -> Component.literal(DataStorage.clearInventories(profile.getId()) ? "Cleared stored inventories for " + playerName : "No stored inventories for " + playerName + " to clear"), true);*/
       return 1;
     })));
     builder.then(Commands.literal("cart").executes(c -> {

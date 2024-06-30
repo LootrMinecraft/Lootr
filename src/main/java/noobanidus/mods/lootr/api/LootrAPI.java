@@ -5,6 +5,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
@@ -14,6 +15,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
+import noobanidus.mods.lootr.api.client.ClientTextureType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,6 +38,10 @@ public class LootrAPI {
 
   public static ResourceLocation rl (String namespace, String path) {
     return ResourceLocation.fromNamespaceAndPath(namespace, path);
+  }
+
+  public static MinecraftServer getServer () {
+    return INSTANCE.getServer();
   }
 
   public static boolean shouldDiscardIdAndOpeners;
@@ -70,6 +76,22 @@ public class LootrAPI {
 
   public static int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos, int defaultSignal) {
     return INSTANCE.getAnalogOutputSignal(pBlockState, pLevel, pPos, defaultSignal);
+  }
+
+  public static ClientTextureType getTextureType() {
+    return INSTANCE.getTextureType();
+  }
+
+  public static boolean isOldTextures() {
+    return INSTANCE.isOldTextures();
+  }
+
+  public static boolean isVanillaTextures() {
+    return INSTANCE.isVanillaTextures();
+  }
+
+  public static boolean isDefaultTextures() {
+    return INSTANCE.isDefaultTextures();
   }
 
   // TODO: Consider if this is really needed

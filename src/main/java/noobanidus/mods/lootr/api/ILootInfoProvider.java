@@ -17,6 +17,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.util.ChestUtil;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -29,6 +30,7 @@ public interface ILootInfoProvider {
     return LootInfoType.CUSTOM;
   }
 
+  @NotNull
   default Vec3 getInfoVec() {
     return Vec3.atCenterOf(getInfoPos());
   }
@@ -38,25 +40,37 @@ public interface ILootInfoProvider {
     return null;
   }
 
+  @NotNull
   BlockPos getInfoPos();
 
+  @NotNull
   ResourceKey<LootTable> getInfoLootTable();
+
+  @Nullable
+  default ResourceKey<Level> getInfoDimension() {
+    Level level = getInfoLevel();
+    if (level == null) {
+      return null;
+    }
+    return level.dimension();
+  }
 
   long getInfoLootSeed();
 
+  @Nullable
   Level getInfoLevel();
 
   @Nullable
-  default Optional<? extends RandomizableContainerBlockEntity> asBlockEntity() {
+  default Optional<? extends RandomizableContainerBlockEntity> asBaseBlockEntity() {
     return Optional.empty();
   }
 
   @Nullable
-  default Optional<? extends AbstractMinecartContainer> asMinecart() {
+  default Optional<? extends AbstractMinecartContainer> asBaseMinecartEntity() {
     return Optional.empty();
   }
 
-  default void unpackLootTable(ILootInfoProvider provider, Player player, Container inventory, @Nullable ResourceKey<LootTable> overrideTable, long overrideSeed) {
+  default void lootFiller(ILootInfoProvider provider, Player player, Container inventory, @Nullable ResourceKey<LootTable> overrideTable, long overrideSeed) {
     Level level = provider.getInfoLevel();
     BlockPos pos = provider.getInfoPos();
     ResourceKey<LootTable> lootTable = overrideTable == null ? provider.getInfoLootTable() : overrideTable;
@@ -168,13 +182,13 @@ public interface ILootInfoProvider {
     }
 
     @Override
-    public Optional<AbstractMinecartContainer> asMinecart() {
+    public Optional<AbstractMinecartContainer> asBaseMinecartEntity() {
       return Optional.of(minecart);
     }
   }
 
   record RandomizableContainerBlockEntityLootInfoProvider(
-      RandomizableContainerBlockEntity blockEntity) implements ILootInfoProvider {
+      @NotNull RandomizableContainerBlockEntity blockEntity) implements ILootInfoProvider {
 
     @Override
     public LootInfoType getInfoType() {
@@ -182,12 +196,13 @@ public interface ILootInfoProvider {
     }
 
     @Override
-    public BlockPos getInfoPos() {
+    public @NotNull BlockPos getInfoPos() {
       return blockEntity.getBlockPos();
     }
 
+    // TODO: Can return null
     @Override
-    public ResourceKey<LootTable> getInfoLootTable() {
+    public @NotNull ResourceKey<LootTable> getInfoLootTable() {
       return blockEntity.getLootTable();
     }
 
@@ -202,7 +217,7 @@ public interface ILootInfoProvider {
     }
 
     @Override
-    public Optional<RandomizableContainerBlockEntity> asBlockEntity() {
+    public Optional<RandomizableContainerBlockEntity> asBaseBlockEntity() {
       return Optional.of(blockEntity);
     }
   }
