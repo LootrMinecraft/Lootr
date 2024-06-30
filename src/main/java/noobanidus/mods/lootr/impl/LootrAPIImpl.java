@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
@@ -13,10 +14,12 @@ import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.neoforge.common.util.FakePlayer;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.api.ILootrAPI;
 import noobanidus.mods.lootr.api.LootFiller;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.MenuBuilder;
+import noobanidus.mods.lootr.api.client.ClientTextureType;
 import noobanidus.mods.lootr.api.inventory.ILootrInventory;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.data.DataStorage;
@@ -32,6 +35,11 @@ import java.util.function.Supplier;
 public class LootrAPIImpl implements ILootrAPI {
 
   @Override
+  public MinecraftServer getServer () {
+    return ServerLifecycleHooks.getCurrentServer();
+  }
+
+  @Override
   public boolean isFakePlayer(Player player) {
     if (player instanceof ServerPlayer sPlayer) {
       //noinspection ConstantValue
@@ -44,7 +52,8 @@ public class LootrAPIImpl implements ILootrAPI {
 
   @Override
   public boolean clearPlayerLoot(UUID id) {
-    return DataStorage.clearInventories(id);
+    return false;
+/*    return DataStorage.clearInventories(id);*/
   }
 
   @Override
@@ -116,5 +125,21 @@ public class LootrAPIImpl implements ILootrAPI {
       return 1;
     }
     return defaultSignal;
+  }
+
+  @Override
+  public ClientTextureType getTextureType() {
+    if (ConfigManager.isOldTextures()) {
+      return ClientTextureType.OLD;
+    } else if (ConfigManager.isVanillaTextures()) {
+      return ClientTextureType.VANILLA;
+    } else {
+      return ClientTextureType.DEFAULT;
+    }
+  }
+
+  @Override
+  public boolean isDisabled() {
+    return ConfigManager.DISABLE.get();
   }
 }
