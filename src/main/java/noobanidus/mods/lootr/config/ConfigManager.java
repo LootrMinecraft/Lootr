@@ -340,6 +340,10 @@ public class ConfigManager {
   }
 
   public static BlockState replacement(BlockState original) {
+    if (original.is(LootrTags.Blocks.CONVERT_BLACKLIST)) {
+      return null;
+    }
+
     if (replacements == null) {
       replacements = new HashMap<>();
     }

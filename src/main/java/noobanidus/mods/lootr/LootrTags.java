@@ -17,6 +17,7 @@ public class LootrTags {
     public static final TagKey<Block> CONVERT_SHULKERS = tag("convert/shulkers");
     public static final TagKey<Block> CONVERT_BARRELS = tag("convert/barrels");
     public static final TagKey<Block> CONVERT_BLOCK = tag("convert/blocks");
+    public static final TagKey<Block> CONVERT_BLACKLIST = tag("convert/blacklist");
 
     public static final TagKey<Block> CHESTS = tag("chests");
     public static final TagKey<Block> TRAPPED_CHESTS = tag("trapped_chests");
