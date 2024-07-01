@@ -4,6 +4,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.loot.LootTable;
+import noobanidus.mods.lootr.api.info.ILootrInfoProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,4 +25,6 @@ public interface LootFiller {
    *                  Example implementations can be found in `LootrChestblockEntity::unpackLootTable`.
    */
   void unpackLootTable(@NotNull ILootrInfoProvider provider, @NotNull Player player, Container inventory, @Nullable ResourceKey<LootTable> table, long seed);
+
+
 }

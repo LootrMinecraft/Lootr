@@ -306,6 +306,21 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   @Override
+  public @Nullable Component getInfoDisplayName() {
+    return getDisplayName();
+  }
+
+  @Override
+  public @NotNull ResourceKey<Level> getInfoDimension() {
+    return getLevel().dimension();
+  }
+
+  @Override
+  public int getInfoContainerSize() {
+    return getContainerSize();
+  }
+
+  @Override
   public long getInfoLootSeed() {
     return getLootTableSeed();
   }

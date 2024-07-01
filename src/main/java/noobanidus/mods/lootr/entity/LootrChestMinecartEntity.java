@@ -239,6 +239,21 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
   @Override
+  public @Nullable Component getInfoDisplayName() {
+    return getDisplayName();
+  }
+
+  @Override
+  public @NotNull ResourceKey<Level> getInfoDimension() {
+    return level().dimension();
+  }
+
+  @Override
+  public int getInfoContainerSize() {
+    return getContainerSize();
+  }
+
+  @Override
   public long getInfoLootSeed() {
     return getLootTableSeed();
   }

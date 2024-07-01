@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.neoforged.neoforge.network.PacketDistributor;
 import noobanidus.mods.lootr.advancement.ContainerTrigger;
+import noobanidus.mods.lootr.api.DefaultLootFiller;
 import noobanidus.mods.lootr.api.IHasOpeners;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootrBlockEntity;
@@ -107,7 +108,7 @@ public class ChestUtil {
         }
       }
       // Check if it already refreshed
-      MenuProvider provider = DataStorage.getInventory(level, tileId, pos, (ServerPlayer) player, (RandomizableContainerBlockEntity) te, tile::lootFiller);
+      MenuProvider provider = DataStorage.getInventory(level, tileId, pos, (ServerPlayer) player, (RandomizableContainerBlockEntity) te, DefaultLootFiller.getInstance());
       if (provider == null) {
         // Error messages are already handled by nested methods in `getInventory`
         return;
@@ -165,7 +166,7 @@ public class ChestUtil {
         startRefresh(player, tileId, refreshValue);
       }
     }
-    MenuProvider provider = DataStorage.getInventory(level, cart, (ServerPlayer) player, cart::lootFiller);
+    MenuProvider provider = DataStorage.getInventory(level, cart, (ServerPlayer) player, DefaultLootFiller.getInstance());
     if (provider == null) {
       // Error messages are already handled by nested methods in `getInventory`
       return;

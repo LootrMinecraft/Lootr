@@ -8,6 +8,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.Connection;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
@@ -239,6 +240,21 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   @Override
   public ResourceKey<LootTable> getInfoLootTable() {
     return getLootTable();
+  }
+
+  @Override
+  public @Nullable Component getInfoDisplayName() {
+    return getDisplayName();
+  }
+
+  @Override
+  public @NotNull ResourceKey<Level> getInfoDimension() {
+    return getLevel().dimension();
+  }
+
+  @Override
+  public int getInfoContainerSize() {
+    return getContainerSize();
   }
 
   @Override

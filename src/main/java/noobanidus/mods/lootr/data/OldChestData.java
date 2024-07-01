@@ -14,8 +14,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
@@ -23,10 +25,11 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
-import noobanidus.mods.lootr.api.ILootrInfoProvider;
+import noobanidus.mods.lootr.api.info.ILootrInfoProvider;
 import noobanidus.mods.lootr.api.LootFiller;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -281,12 +284,17 @@ public class OldChestData extends SavedData {
     return entity;
   }
 
-  public LootFiller customInventory() {
-    return (info, player, inventory, table, seed) -> {
+  public class CustomInventoryFiller implements LootFiller {
+    @Override
+    public void unpackLootTable(@NotNull ILootrInfoProvider provider, @NotNull Player player, Container inventory, @Nullable ResourceKey<LootTable> table, long seed) {
       for (int i = 0; i < reference.size(); i++) {
         inventory.setItem(i, reference.get(i).copy());
       }
-    };
+    }
+  }
+
+  public CustomInventoryFiller customInventory () {
+    return new CustomInventoryFiller();
   }
 
   public boolean clearInventory(UUID uuid) {
@@ -315,7 +323,8 @@ public class OldChestData extends SavedData {
 
     NonNullList<ItemStack> items = NonNullList.withSize(sizeSupplier.getAsInt(), ItemStack.EMPTY);
     result = new SpecialChestInventory(this, items, displaySupplier.get());
-    filler.unpackLootTable(ILootrInfoProvider.of(posSupplier, tableSupplier, seedSupplier, level), player, result, tableSupplier.get(), seedSupplier.getAsLong());
+    ServerLevel finalLevel = level;
+    filler.unpackLootTable(ILootrInfoProvider.of(posSupplier, sizeSupplier, tableSupplier, seedSupplier, displaySupplier, () -> finalLevel.dimension()), player, result, tableSupplier.get(), seedSupplier.getAsLong());
     inventories.put(player.getUUID(), result);
     setDirty();
     return result;
@@ -338,7 +347,7 @@ public class OldChestData extends SavedData {
 
     NonNullList<ItemStack> items = NonNullList.withSize(blockEntity.getContainerSize(), ItemStack.EMPTY);
     result = new SpecialChestInventory(this, items, blockEntity.getDisplayName());
-    filler.unpackLootTable(ILootrInfoProvider.of(blockEntity::getBlockPos, tableSupplier, seedSupplier, level), player, result, tableSupplier.get(), seedSupplier.getAsLong());
+    filler.unpackLootTable(ILootrInfoProvider.of(blockEntity::getBlockPos, blockEntity::getContainerSize, tableSupplier, seedSupplier, blockEntity::getDisplayName, level::dimension), player, result, tableSupplier.get(), seedSupplier.getAsLong());
     inventories.put(player.getUUID(), result);
     setDirty();
     return result;

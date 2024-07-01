@@ -20,6 +20,7 @@ import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.api.*;
 import noobanidus.mods.lootr.api.client.ClientTextureType;
+import noobanidus.mods.lootr.api.info.ILootrInfoProvider;
 import noobanidus.mods.lootr.api.inventory.ILootrInventory;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.data.DataStorage;
