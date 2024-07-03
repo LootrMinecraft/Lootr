@@ -13,23 +13,23 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PoiType.class)
 public class MixinPoiType {
-    @Unique
-    private boolean fishermanCheck;
-    @Unique
-    private boolean isFisherman;
+  @Unique
+  private boolean fishermanCheck;
+  @Unique
+  private boolean isFisherman;
 
-    @Inject(method = "is", at = @At(value = "RETURN"), cancellable = true)
-    private void LootrGetBlockStates(BlockState state, CallbackInfoReturnable<Boolean> cir) {
-        PoiType thisPoi = (PoiType) (Object) this;
-        if (!fishermanCheck) {
-            fishermanCheck = true;
-            isFisherman = BuiltInRegistries.POINT_OF_INTEREST_TYPE.getResourceKey(thisPoi).map(o -> o.equals(PoiTypes.FISHERMAN)).orElse(false);
-        }
-        if (isFisherman) {
-            if (state.is(ModBlocks.BARREL)) {
-                cir.setReturnValue(true);
-                cir.cancel();
-            }
-        }
+  @Inject(method = "is", at = @At(value = "RETURN"), cancellable = true)
+  private void LootrGetBlockStates(BlockState state, CallbackInfoReturnable<Boolean> cir) {
+    PoiType thisPoi = (PoiType) (Object) this;
+    if (!fishermanCheck) {
+      fishermanCheck = true;
+      isFisherman = BuiltInRegistries.POINT_OF_INTEREST_TYPE.getResourceKey(thisPoi).map(o -> o.equals(PoiTypes.FISHERMAN)).orElse(false);
     }
+    if (isFisherman) {
+      if (state.is(ModBlocks.BARREL)) {
+        cir.setReturnValue(true);
+        cir.cancel();
+      }
+    }
+  }
 }

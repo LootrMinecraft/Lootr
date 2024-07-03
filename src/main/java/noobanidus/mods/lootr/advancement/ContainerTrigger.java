@@ -11,26 +11,26 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class ContainerTrigger extends SimpleCriterionTrigger<ContainerTrigger.TriggerInstance> {
-    public void trigger(ServerPlayer player, UUID condition) {
-        this.trigger(player, (instance) -> instance.test(player, condition));
-    }
+  public void trigger(ServerPlayer player, UUID condition) {
+    this.trigger(player, (instance) -> instance.test(player, condition));
+  }
 
-    @Override
-    public Codec<TriggerInstance> codec() {
-        return TriggerInstance.CODEC;
-    }
+  @Override
+  public Codec<TriggerInstance> codec() {
+    return TriggerInstance.CODEC;
+  }
 
-    public record TriggerInstance(
-            Optional<ContextAwarePredicate> player) implements SimpleCriterionTrigger.SimpleInstance {
-        public static final Codec<TriggerInstance> CODEC = RecordCodecBuilder.create(codec -> codec.group(ContextAwarePredicate.CODEC.optionalFieldOf("player").forGetter(TriggerInstance::player)).apply(codec, TriggerInstance::new));
+  public record TriggerInstance(
+      Optional<ContextAwarePredicate> player) implements SimpleCriterionTrigger.SimpleInstance {
+    public static final Codec<TriggerInstance> CODEC = RecordCodecBuilder.create(codec -> codec.group(ContextAwarePredicate.CODEC.optionalFieldOf("player").forGetter(TriggerInstance::player)).apply(codec, TriggerInstance::new));
 
-        public boolean test(ServerPlayer player, UUID container) {
-            if (DataStorage.isAwarded(player.getUUID(), container)) {
-                return false;
-            } else {
-                DataStorage.award(player.getUUID(), container);
-                return true;
-            }
-        }
+    public boolean test(ServerPlayer player, UUID container) {
+      if (DataStorage.isAwarded(player.getUUID(), container)) {
+        return false;
+      } else {
+        DataStorage.award(player.getUUID(), container);
+        return true;
+      }
     }
+  }
 }

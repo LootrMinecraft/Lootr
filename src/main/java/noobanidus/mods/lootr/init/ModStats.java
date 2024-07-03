@@ -8,11 +8,11 @@ import net.minecraft.stats.Stats;
 import noobanidus.mods.lootr.api.LootrAPI;
 
 public class ModStats {
-    public static ResourceLocation LOOTED_LOCATION = LootrAPI.rl("looted_stat");
-    public static Stat<ResourceLocation> LOOTED_STAT;
+  public static ResourceLocation LOOTED_LOCATION = LootrAPI.rl("looted_stat");
+  public static Stat<ResourceLocation> LOOTED_STAT;
 
-    public static void registerStats() {
-        Registry.register(BuiltInRegistries.CUSTOM_STAT, LOOTED_LOCATION, LOOTED_LOCATION);
-        LOOTED_STAT = Stats.CUSTOM.get(LOOTED_LOCATION);
-    }
+  public static void registerStats() {
+    Registry.register(BuiltInRegistries.CUSTOM_STAT, LOOTED_LOCATION, LOOTED_LOCATION);
+    LOOTED_STAT = Stats.CUSTOM.get(LOOTED_LOCATION);
+  }
 }

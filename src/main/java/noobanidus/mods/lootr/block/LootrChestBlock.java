@@ -29,88 +29,88 @@ import noobanidus.mods.lootr.util.ChestUtil;
 import org.jetbrains.annotations.Nullable;
 
 public class LootrChestBlock extends ChestBlock {
-    public LootrChestBlock(Properties properties) {
-        super(properties, () -> ModBlockEntities.LOOTR_CHEST);
+  public LootrChestBlock(Properties properties) {
+    super(properties, () -> ModBlockEntities.LOOTR_CHEST);
+  }
+
+  @Override
+  public float getExplosionResistance() {
+    return LootrAPI.getExplosionResistance(this, super.getExplosionResistance());
+  }
+
+  @Override
+  public InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult trace) {
+    if (player.isShiftKeyDown()) {
+      ChestUtil.handleLootSneak(this, world, pos, player);
+    } else if (!ChestBlock.isChestBlockedAt(world, pos)) {
+      ChestUtil.handleLootChest(this, world, pos, player);
+    }
+    return InteractionResult.SUCCESS;
+  }
+
+  @Override
+  public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    return new LootrChestBlockEntity(pos, state);
+  }
+
+  @Override
+  public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
+    if (stateIn.getValue(WATERLOGGED)) {
+      worldIn.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
     }
 
-    @Override
-    public float getExplosionResistance() {
-        return LootrAPI.getExplosionResistance(this, super.getExplosionResistance());
-    }
+    return stateIn;
+  }
 
-    @Override
-    public InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult trace) {
-        if (player.isShiftKeyDown()) {
-            ChestUtil.handleLootSneak(this, world, pos, player);
-        } else if (!ChestBlock.isChestBlockedAt(world, pos)) {
-            ChestUtil.handleLootChest(this, world, pos, player);
-        }
-        return InteractionResult.SUCCESS;
-    }
+  @Override
+  public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+    return AABB;
+  }
 
-    @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new LootrChestBlockEntity(pos, state);
-    }
+  @Override
+  public BlockState getStateForPlacement(BlockPlaceContext context) {
+    Direction direction = context.getHorizontalDirection().getOpposite();
+    FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
+    return this.defaultBlockState().setValue(FACING, direction).setValue(TYPE, ChestType.SINGLE).setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
+  }
 
-    @Override
-    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
-        if (stateIn.getValue(WATERLOGGED)) {
-            worldIn.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
-        }
+  @Override
+  public FluidState getFluidState(BlockState state) {
+    return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+  }
 
-        return stateIn;
-    }
+  @Override
+  @Nullable
+  public MenuProvider getMenuProvider(BlockState state, Level worldIn, BlockPos pos) {
+    return null;
+  }
 
-    @Override
-    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
-        return AABB;
-    }
+  @Override
+  public boolean hasAnalogOutputSignal(BlockState pState) {
+    return true;
+  }
 
-    @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
-        Direction direction = context.getHorizontalDirection().getOpposite();
-        FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
-        return this.defaultBlockState().setValue(FACING, direction).setValue(TYPE, ChestType.SINGLE).setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
-    }
+  @Override
+  public float getDestroyProgress(BlockState p_60466_, Player p_60467_, BlockGetter p_60468_, BlockPos p_60469_) {
+    return LootrAPI.getDestroyProgress(p_60466_, p_60467_, p_60468_, p_60469_, super.getDestroyProgress(p_60466_, p_60467_, p_60468_, p_60469_));
+  }
 
-    @Override
-    public FluidState getFluidState(BlockState state) {
-        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
-    }
+  @Override
+  public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos) {
+    return LootrAPI.getAnalogOutputSignal(pBlockState, pLevel, pPos, 0);
+  }
 
-    @Override
-    @Nullable
-    public MenuProvider getMenuProvider(BlockState state, Level worldIn, BlockPos pos) {
-        return null;
-    }
+  @Override
+  @Nullable
+  public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+    return pLevel.isClientSide ? LootrChestBlockEntity::lootrLidAnimateTick : null;
+  }
 
-    @Override
-    public boolean hasAnalogOutputSignal(BlockState pState) {
-        return true;
+  @Override
+  public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
+    BlockEntity blockentity = pLevel.getBlockEntity(pPos);
+    if (blockentity instanceof LootrChestBlockEntity chest) {
+      chest.recheckOpen();
     }
-
-    @Override
-    public float getDestroyProgress(BlockState p_60466_, Player p_60467_, BlockGetter p_60468_, BlockPos p_60469_) {
-        return LootrAPI.getDestroyProgress(p_60466_, p_60467_, p_60468_, p_60469_, super.getDestroyProgress(p_60466_, p_60467_, p_60468_, p_60469_));
-    }
-
-    @Override
-    public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos) {
-        return LootrAPI.getAnalogOutputSignal(pBlockState, pLevel, pPos, 0);
-    }
-
-    @Override
-    @Nullable
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-        return pLevel.isClientSide ? LootrChestBlockEntity::lootrLidAnimateTick : null;
-    }
-
-    @Override
-    public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
-        BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-        if (blockentity instanceof LootrChestBlockEntity chest) {
-            chest.recheckOpen();
-        }
-    }
+  }
 }

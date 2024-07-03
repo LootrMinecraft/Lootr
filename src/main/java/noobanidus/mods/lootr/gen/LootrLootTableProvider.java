@@ -18,18 +18,18 @@ import java.util.function.BiConsumer;
 
 public class LootrLootTableProvider extends SimpleFabricLootTableProvider {
 
-    public LootrLootTableProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registryLookup) {
-        super(output, registryLookup, LootContextParamSet.builder().build());
-    }
+  public LootrLootTableProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registryLookup) {
+    super(output, registryLookup, LootContextParamSet.builder().build());
+  }
 
-    @Override
-    public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> biConsumer) {
-        biConsumer.accept(
-                LootrAPI.ELYTRA_CHEST,
-                LootTable.lootTable()
-                        .withPool(
-                                LootPool.lootPool()
-                                        .setRolls(ConstantValue.exactly(1))
-                                        .add(LootItem.lootTableItem(Items.ELYTRA).apply(SetItemCountFunction.setCount(ConstantValue.exactly(1))))));
-    }
+  @Override
+  public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> biConsumer) {
+    biConsumer.accept(
+        LootrAPI.ELYTRA_CHEST,
+        LootTable.lootTable()
+            .withPool(
+                LootPool.lootPool()
+                    .setRolls(ConstantValue.exactly(1))
+                    .add(LootItem.lootTableItem(Items.ELYTRA).apply(SetItemCountFunction.setCount(ConstantValue.exactly(1))))));
+  }
 }

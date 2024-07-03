@@ -36,115 +36,115 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class LootrShulkerBlock extends ShulkerBoxBlock {
-    public LootrShulkerBlock(Properties pProperties) {
-        super(DyeColor.YELLOW, pProperties);
-        this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.UP));
+  public LootrShulkerBlock(Properties pProperties) {
+    super(DyeColor.YELLOW, pProperties);
+    this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.UP));
+  }
+
+  private static boolean canOpen(BlockState pState, Level pLevel, BlockPos pPos, LootrShulkerBlockEntity pBlockEntity) {
+    if (pBlockEntity.getAnimationStatus() != ShulkerBoxBlockEntity.AnimationStatus.CLOSED) {
+      return true;
+    } else {
+      AABB aabb = Shulker.getProgressDeltaAabb(1.0f, pState.getValue(FACING), 0.0F, 0.5F).move(pPos).deflate(1.0E-6D);
+      return pLevel.noCollision(aabb);
     }
+  }
 
-    private static boolean canOpen(BlockState pState, Level pLevel, BlockPos pPos, LootrShulkerBlockEntity pBlockEntity) {
-        if (pBlockEntity.getAnimationStatus() != ShulkerBoxBlockEntity.AnimationStatus.CLOSED) {
-            return true;
-        } else {
-            AABB aabb = Shulker.getProgressDeltaAabb(1.0f, pState.getValue(FACING), 0.0F, 0.5F).move(pPos).deflate(1.0E-6D);
-            return pLevel.noCollision(aabb);
-        }
-    }
+  @Override
+  public float getExplosionResistance() {
+    return LootrAPI.getExplosionResistance(this, super.getExplosionResistance());
+  }
 
-    @Override
-    public float getExplosionResistance() {
-        return LootrAPI.getExplosionResistance(this, super.getExplosionResistance());
-    }
-
-    @Override
-    public InteractionResult useWithoutItem(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, BlockHitResult pHit) {
-        if (pLevel.isClientSide) {
-            return InteractionResult.SUCCESS;
-        } else if (pPlayer.isSpectator()) {
-            return InteractionResult.CONSUME;
-        } else {
-            BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-            if (blockentity instanceof LootrShulkerBlockEntity shulkerboxblockentity) {
-                if (canOpen(pState, pLevel, pPos, shulkerboxblockentity)) {
-                    if (pPlayer.isShiftKeyDown()) {
-                        ChestUtil.handleLootSneak(this, pLevel, pPos, pPlayer);
-                    } else {
-                        ChestUtil.handleLootChest(this, pLevel, pPos, pPlayer);
-                    }
-                    pPlayer.awardStat(Stats.OPEN_SHULKER_BOX);
-                }
-
-                return InteractionResult.CONSUME;
-            } else {
-                return InteractionResult.PASS;
-            }
-        }
-    }
-
-    @Override
-    public BlockState playerWillDestroy(Level pLevel, BlockPos pPos, BlockState pState, Player pPlayer) {
-        this.spawnDestroyParticles(pLevel, pPlayer, pPos, pState);
-        if (pState.is(BlockTags.GUARDED_BY_PIGLINS)) {
-            PiglinAi.angerNearbyPiglins(pPlayer, false);
+  @Override
+  public InteractionResult useWithoutItem(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, BlockHitResult pHit) {
+    if (pLevel.isClientSide) {
+      return InteractionResult.SUCCESS;
+    } else if (pPlayer.isSpectator()) {
+      return InteractionResult.CONSUME;
+    } else {
+      BlockEntity blockentity = pLevel.getBlockEntity(pPos);
+      if (blockentity instanceof LootrShulkerBlockEntity shulkerboxblockentity) {
+        if (canOpen(pState, pLevel, pPos, shulkerboxblockentity)) {
+          if (pPlayer.isShiftKeyDown()) {
+            ChestUtil.handleLootSneak(this, pLevel, pPos, pPlayer);
+          } else {
+            ChestUtil.handleLootChest(this, pLevel, pPos, pPlayer);
+          }
+          pPlayer.awardStat(Stats.OPEN_SHULKER_BOX);
         }
 
-        pLevel.gameEvent(pPlayer, GameEvent.BLOCK_DESTROY, pPos);
+        return InteractionResult.CONSUME;
+      } else {
+        return InteractionResult.PASS;
+      }
+    }
+  }
 
-        return pState;
+  @Override
+  public BlockState playerWillDestroy(Level pLevel, BlockPos pPos, BlockState pState, Player pPlayer) {
+    this.spawnDestroyParticles(pLevel, pPlayer, pPos, pState);
+    if (pState.is(BlockTags.GUARDED_BY_PIGLINS)) {
+      PiglinAi.angerNearbyPiglins(pPlayer, false);
     }
 
-    @Override
-    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
-        if (!pState.is(pNewState.getBlock())) {
-            BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-            if (blockentity instanceof LootrShulkerBlockEntity) {
-                pLevel.updateNeighbourForOutputSignal(pPos, pState.getBlock());
-            }
+    pLevel.gameEvent(pPlayer, GameEvent.BLOCK_DESTROY, pPos);
 
-            if (pState.hasBlockEntity() && (!pState.is(pNewState.getBlock()) || !pNewState.hasBlockEntity())) {
-                pLevel.removeBlockEntity(pPos);
-            }
-        }
-    }
+    return pState;
+  }
 
-    @Override
-    public void appendHoverText(ItemStack p_56193_, Item.TooltipContext p_339693_, List<Component> p_56195_, TooltipFlag p_56196_) {
-    }
+  @Override
+  public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
+    if (!pState.is(pNewState.getBlock())) {
+      BlockEntity blockentity = pLevel.getBlockEntity(pPos);
+      if (blockentity instanceof LootrShulkerBlockEntity) {
+        pLevel.updateNeighbourForOutputSignal(pPos, pState.getBlock());
+      }
 
-    @Override
-    public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
-        BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-        return blockentity instanceof LootrShulkerBlockEntity ? Shapes.create(((LootrShulkerBlockEntity) blockentity).getBoundingBox(pState)) : Shapes.block();
+      if (pState.hasBlockEntity() && (!pState.is(pNewState.getBlock()) || !pNewState.hasBlockEntity())) {
+        pLevel.removeBlockEntity(pPos);
+      }
     }
+  }
 
-    @Override
-    public boolean hasAnalogOutputSignal(BlockState pState) {
-        return true;
-    }
+  @Override
+  public void appendHoverText(ItemStack p_56193_, Item.TooltipContext p_339693_, List<Component> p_56195_, TooltipFlag p_56196_) {
+  }
 
-    @Override
-    @Nullable
-    public DyeColor getColor() {
-        return DyeColor.YELLOW;
-    }
+  @Override
+  public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
+    BlockEntity blockentity = pLevel.getBlockEntity(pPos);
+    return blockentity instanceof LootrShulkerBlockEntity ? Shapes.create(((LootrShulkerBlockEntity) blockentity).getBoundingBox(pState)) : Shapes.block();
+  }
 
-    @Override
-    public float getDestroyProgress(BlockState p_60466_, Player p_60467_, BlockGetter p_60468_, BlockPos p_60469_) {
-        return LootrAPI.getDestroyProgress(p_60466_, p_60467_, p_60468_, p_60469_, super.getDestroyProgress(p_60466_, p_60467_, p_60468_, p_60469_));
-    }
+  @Override
+  public boolean hasAnalogOutputSignal(BlockState pState) {
+    return true;
+  }
 
-    @Override
-    public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos) {
-        return LootrAPI.getAnalogOutputSignal(pBlockState, pLevel, pPos, 0);
-    }
+  @Override
+  @Nullable
+  public DyeColor getColor() {
+    return DyeColor.YELLOW;
+  }
 
-    @Override
-    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-        return new LootrShulkerBlockEntity(pPos, pState);
-    }
+  @Override
+  public float getDestroyProgress(BlockState p_60466_, Player p_60467_, BlockGetter p_60468_, BlockPos p_60469_) {
+    return LootrAPI.getDestroyProgress(p_60466_, p_60467_, p_60468_, p_60469_, super.getDestroyProgress(p_60466_, p_60467_, p_60468_, p_60469_));
+  }
 
-    @Override
-    @Nullable
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-        return createTickerHelper(pBlockEntityType, ModBlockEntities.LOOTR_SHULKER, LootrShulkerBlockEntity::tick);
-    }
+  @Override
+  public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos) {
+    return LootrAPI.getAnalogOutputSignal(pBlockState, pLevel, pPos, 0);
+  }
+
+  @Override
+  public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
+    return new LootrShulkerBlockEntity(pPos, pState);
+  }
+
+  @Override
+  @Nullable
+  public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+    return createTickerHelper(pBlockEntityType, ModBlockEntities.LOOTR_SHULKER, LootrShulkerBlockEntity::tick);
+  }
 }

@@ -1,15 +1,11 @@
 package noobanidus.mods.lootr.client.block;
 
-import com.google.gson.JsonObject;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelResolver;
-import net.fabricmc.fabric.api.client.model.loading.v1.PreparableModelLoadingPlugin;
 import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.resources.ResourceLocation;
 import noobanidus.mods.lootr.api.LootrAPI;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Map;
 
 public class BarrelModelLoader implements ModelLoadingPlugin, ModelResolver {
   public static final BarrelModelLoader INSTANCE = new BarrelModelLoader();

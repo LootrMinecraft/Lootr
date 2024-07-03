@@ -8,16 +8,16 @@ import noobanidus.mods.lootr.api.IHasOpeners;
 import noobanidus.mods.lootr.api.ILootInfoProvider;
 
 public interface ILootBlockEntity extends IHasOpeners, ILootInfoProvider {
-    default void updatePacketViaForce(BlockEntity entity) {
-        if (entity.getLevel() instanceof ServerLevel level) {
-            Packet<?> packet = entity.getUpdatePacket();
-            if (packet != null) {
-                level.getChunkSource().chunkMap.getPlayers(new ChunkPos(entity.getBlockPos()), false).forEach(player -> player.connection.send(packet));
-            }
-        }
+  default void updatePacketViaForce(BlockEntity entity) {
+    if (entity.getLevel() instanceof ServerLevel level) {
+      Packet<?> packet = entity.getUpdatePacket();
+      if (packet != null) {
+        level.getChunkSource().chunkMap.getPlayers(new ChunkPos(entity.getBlockPos()), false).forEach(player -> player.connection.send(packet));
+      }
     }
+  }
 
-    boolean isClientOpened();
+  boolean isClientOpened();
 
-    void setClientOpened(boolean opened);
+  void setClientOpened(boolean opened);
 }

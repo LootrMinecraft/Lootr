@@ -9,27 +9,27 @@ import noobanidus.mods.lootr.block.entities.TileTicker;
 import noobanidus.mods.lootr.entity.EntityTicker;
 
 public class LootrEventsInit {
-    public static MinecraftServer serverInstance;
+  public static MinecraftServer serverInstance;
 
-    public static void registerEvents() {
-        ServerLifecycleEvents.SERVER_STARTING.register(server -> {
-            serverInstance = server;
-            HandleChunk.onServerStarted();
-        });
+  public static void registerEvents() {
+    ServerLifecycleEvents.SERVER_STARTING.register(server -> {
+      serverInstance = server;
+      HandleChunk.onServerStarted();
+    });
 
-        ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
-            serverInstance = null;
-        });
+    ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
+      serverInstance = null;
+    });
 
-        ServerTickEvents.END_SERVER_TICK.register(server -> {
-            EntityTicker.serverTick();
-            TileTicker.serverTick();
-        });
+    ServerTickEvents.END_SERVER_TICK.register(server -> {
+      EntityTicker.serverTick();
+      TileTicker.serverTick();
+    });
 
-        ServerChunkEvents.CHUNK_LOAD.register(HandleChunk::onChunkLoad);
+    ServerChunkEvents.CHUNK_LOAD.register(HandleChunk::onChunkLoad);
 
-        PlayerBlockBreakEvents.BEFORE.register(HandleBreak::beforeBlockBreak);
+    PlayerBlockBreakEvents.BEFORE.register(HandleBreak::beforeBlockBreak);
 
-        PlayerBlockBreakEvents.CANCELED.register(HandleBreak::afterBlockBreak);
-    }
+    PlayerBlockBreakEvents.CANCELED.register(HandleBreak::afterBlockBreak);
+  }
 }

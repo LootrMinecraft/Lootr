@@ -47,218 +47,217 @@ import java.util.Set;
 import java.util.UUID;
 
 public class LootrChestMinecartEntity extends AbstractMinecartContainer implements ILootCart {
-    private static BlockState cartNormal = null;
-    private final Set<UUID> openers = new HashSet<>();
-    private boolean opened = false;
+  private static BlockState cartNormal = null;
+  private final Set<UUID> openers = new HashSet<>();
+  private boolean opened = false;
 
-    public LootrChestMinecartEntity(EntityType<LootrChestMinecartEntity> type, Level world) {
-        super(type, world);
+  public LootrChestMinecartEntity(EntityType<LootrChestMinecartEntity> type, Level world) {
+    super(type, world);
+  }
+
+  public LootrChestMinecartEntity(Level worldIn, double x, double y, double z) {
+    super(ModEntities.LOOTR_MINECART_ENTITY, x, y, z, worldIn);
+  }
+
+  @Override
+  public void unpackChestVehicleLootTable(@Nullable Player p_219950_) {
+  }
+
+  @Override
+  public Set<UUID> getOpeners() {
+    return openers;
+  }
+
+  public void addOpener(Player player) {
+    openers.add(player.getUUID());
+    setChanged();
+  }
+
+  public boolean isOpened() {
+    return opened;
+  }
+
+  public void setOpened() {
+    this.opened = true;
+  }
+
+  public void setClosed() {
+    this.opened = false;
+  }
+
+  @Override
+  public boolean isInvulnerableTo(DamageSource source) {
+    if (this.isInvulnerable() && source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+      return true;
     }
 
-    public LootrChestMinecartEntity(Level worldIn, double x, double y, double z) {
-        super(ModEntities.LOOTR_MINECART_ENTITY, x, y, z, worldIn);
-    }
-
-    @Override
-    public void unpackChestVehicleLootTable(@Nullable Player p_219950_) {
-    }
-
-    @Override
-    public Set<UUID> getOpeners() {
-        return openers;
-    }
-
-    public void addOpener(Player player) {
-        openers.add(player.getUUID());
-        setChanged();
-    }
-
-    public boolean isOpened() {
-        return opened;
-    }
-
-    public void setOpened() {
-        this.opened = true;
-    }
-
-    public void setClosed() {
-        this.opened = false;
-    }
-
-    @Override
-    public boolean isInvulnerableTo(DamageSource source) {
-        if (this.isInvulnerable() && source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+    if (source.getEntity() instanceof Player player) {
+      if ((LootrAPI.isFakePlayer(player) && ConfigManager.get().breaking.enable_fake_player_break) || ConfigManager.get().breaking.enable_break) {
+        return false;
+      }
+      if (ConfigManager.get().breaking.disable_break) {
+        if (player.getAbilities().instabuild) {
+          if (!player.isShiftKeyDown()) {
+            player.displayClientMessage(Component.translatable("lootr.message.cannot_break_sneak").setStyle(HandleBreak.getChatStyle()), false);
             return true;
-        }
-
-        if (source.getEntity() instanceof Player player) {
-            if ((LootrAPI.isFakePlayer(player) && ConfigManager.get().breaking.enable_fake_player_break) || ConfigManager.get().breaking.enable_break) {
-                return false;
-            }
-            if (ConfigManager.get().breaking.disable_break) {
-                if (player.getAbilities().instabuild) {
-                    if (!player.isShiftKeyDown()) {
-                        player.displayClientMessage(Component.translatable("lootr.message.cannot_break_sneak").setStyle(HandleBreak.getChatStyle()), false);
-                        return true;
-                    } else {
-                        return false;
-                    }
-                } else {
-                    player.displayClientMessage(Component.translatable("lootr.message.cannot_break").setStyle(HandleBreak.getChatStyle()), false);
-                    return true;
-                }
-            } else if (!source.getEntity().isShiftKeyDown()) {
-                ((Player) source.getEntity()).displayClientMessage(Component.translatable("lootr.message.cart_should_sneak").setStyle(HandleBreak.getChatStyle()), false);
-                ((Player) source.getEntity()).displayClientMessage(Component.translatable("lootr.message.should_sneak2", Component.translatable("lootr.message.cart_should_sneak3").setStyle(Style.EMPTY.withBold(true))).setStyle(HandleBreak.getChatStyle()), false);
-                // TODO: I think this is broken
-            }
+          } else {
+            return false;
+          }
         } else {
-            return true;
+          player.displayClientMessage(Component.translatable("lootr.message.cannot_break").setStyle(HandleBreak.getChatStyle()), false);
+          return true;
         }
-
-        return true;
+      } else if (!source.getEntity().isShiftKeyDown()) {
+        ((Player) source.getEntity()).displayClientMessage(Component.translatable("lootr.message.cart_should_sneak").setStyle(HandleBreak.getChatStyle()), false);
+        ((Player) source.getEntity()).displayClientMessage(Component.translatable("lootr.message.should_sneak2", Component.translatable("lootr.message.cart_should_sneak3").setStyle(Style.EMPTY.withBold(true))).setStyle(HandleBreak.getChatStyle()), false);
+        // TODO: I think this is broken
+      }
+    } else {
+      return true;
     }
 
-    @Override
-    public int getContainerSize() {
-        return 27;
+    return true;
+  }
+
+  @Override
+  public int getContainerSize() {
+    return 27;
+  }
+
+
+  @Override
+  public AbstractMinecart.Type getMinecartType() {
+    return AbstractMinecart.Type.CHEST;
+  }
+
+  @Override
+  public BlockState getDefaultDisplayBlockState() {
+    if (cartNormal == null) {
+      cartNormal = ModBlocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
     }
+    return cartNormal;
+  }
 
+  @Override
+  public int getDefaultDisplayOffset() {
+    return 8;
+  }
 
+  @Override
+  public AbstractContainerMenu createMenu(int id, Inventory playerInventoryIn) {
+    return ChestMenu.threeRows(id, playerInventoryIn, this);
+  }
 
-    @Override
-    public AbstractMinecart.Type getMinecartType() {
-        return AbstractMinecart.Type.CHEST;
+  @Override
+  public void remove(RemovalReason reason) {
+    this.setRemoved(reason);
+    if (reason == Entity.RemovalReason.KILLED) {
+      this.gameEvent(GameEvent.ENTITY_DIE);
     }
+    // TODO Neo: still needed?
+    //this.invalidateCaps();
+  }
 
-    @Override
-    public BlockState getDefaultDisplayBlockState() {
-        if (cartNormal == null) {
-            cartNormal = ModBlocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
-        }
-        return cartNormal;
+  @Override
+  protected void addAdditionalSaveData(CompoundTag compound) {
+    ListTag list = new ListTag();
+    for (UUID opener : this.openers) {
+      list.add(NbtUtils.createUUID(opener));
     }
+    compound.put("LootrOpeners", list);
+    super.addAdditionalSaveData(compound);
+  }
 
-    @Override
-    public int getDefaultDisplayOffset() {
-        return 8;
+  @Override
+  protected void readAdditionalSaveData(CompoundTag compound) {
+    if (compound.contains("LootrOpeners", Tag.TAG_LIST)) {
+      ListTag openers = compound.getList("LootrOpeners", Tag.TAG_INT_ARRAY);
+      this.openers.clear();
+      for (Tag item : openers) {
+        this.openers.add(NbtUtils.loadUUID(item));
+      }
     }
+    super.readAdditionalSaveData(compound);
+  }
 
-    @Override
-    public AbstractContainerMenu createMenu(int id, Inventory playerInventoryIn) {
-        return ChestMenu.threeRows(id, playerInventoryIn, this);
+  @Override
+  public InteractionResult interact(Player player, InteractionHand hand) {
+    InteractionResult ret = InteractionResult.PASS;
+    if (ret.consumesAction()) return ret;
+    if (player.isShiftKeyDown()) {
+      ChestUtil.handleLootCartSneak(player.level(), this, player);
+      if (!player.level().isClientSide) {
+        return InteractionResult.CONSUME;
+      } else {
+        return InteractionResult.SUCCESS;
+      }
+    } else {
+      ChestUtil.handleLootCart(player.level(), this, player);
+      if (!player.level().isClientSide) {
+        PiglinAi.angerNearbyPiglins(player, true);
+        return InteractionResult.CONSUME;
+      } else {
+        return InteractionResult.SUCCESS;
+      }
     }
+  }
 
-    @Override
-    public void remove(RemovalReason reason) {
-        this.setRemoved(reason);
-        if (reason == Entity.RemovalReason.KILLED) {
-            this.gameEvent(GameEvent.ENTITY_DIE);
-        }
-        // TODO Neo: still needed?
-        //this.invalidateCaps();
+  @Override
+  public void startOpen(Player player) {
+    if (!player.isSpectator()) {
+      NetworkConstants.sendOpenCart(this.getId(), (ServerPlayer) player);
     }
+  }
 
-    @Override
-    protected void addAdditionalSaveData(CompoundTag compound) {
-        ListTag list = new ListTag();
-        for (UUID opener : this.openers) {
-            list.add(NbtUtils.createUUID(opener));
-        }
-        compound.put("LootrOpeners", list);
-        super.addAdditionalSaveData(compound);
+  @Override
+  public void stopOpen(Player player) {
+    if (!player.isSpectator()) {
+      addOpener(player);
     }
+  }
 
-    @Override
-    protected void readAdditionalSaveData(CompoundTag compound) {
-        if (compound.contains("LootrOpeners", Tag.TAG_LIST)) {
-            ListTag openers = compound.getList("LootrOpeners", Tag.TAG_INT_ARRAY);
-            this.openers.clear();
-            for (Tag item : openers) {
-                this.openers.add(NbtUtils.loadUUID(item));
-            }
-        }
-        super.readAdditionalSaveData(compound);
+  @Override
+  public void startSeenByPlayer(ServerPlayer pPlayer) {
+    super.startSeenByPlayer(pPlayer);
+
+    if (getOpeners().contains(pPlayer.getUUID())) {
+      NetworkConstants.sendOpenCart(this.getId(), (ServerPlayer) pPlayer);
     }
+  }
 
-    @Override
-    public InteractionResult interact(Player player, InteractionHand hand) {
-        InteractionResult ret = InteractionResult.PASS;
-        if (ret.consumesAction()) return ret;
-        if (player.isShiftKeyDown()) {
-            ChestUtil.handleLootCartSneak(player.level(), this, player);
-            if (!player.level().isClientSide) {
-                return InteractionResult.CONSUME;
-            } else {
-                return InteractionResult.SUCCESS;
-            }
-        } else {
-            ChestUtil.handleLootCart(player.level(), this, player);
-            if (!player.level().isClientSide) {
-                PiglinAi.angerNearbyPiglins(player, true);
-                return InteractionResult.CONSUME;
-            } else {
-                return InteractionResult.SUCCESS;
-            }
-        }
-    }
+  @Override
+  public BlockPos getInfoPos() {
+    return blockPosition();
+  }
 
-    @Override
-    public void startOpen(Player player) {
-        if (!player.isSpectator()) {
-            NetworkConstants.sendOpenCart(this.getId(), (ServerPlayer) player);
-        }
-    }
+  @Override
+  public ResourceKey<LootTable> getInfoLootTable() {
+    return getLootTable();
+  }
 
-    @Override
-    public void stopOpen(Player player) {
-        if (!player.isSpectator()) {
-            addOpener(player);
-        }
-    }
+  @Override
+  public long getInfoLootSeed() {
+    return getLootTableSeed();
+  }
 
-    @Override
-    public void startSeenByPlayer(ServerPlayer pPlayer) {
-        super.startSeenByPlayer(pPlayer);
+  @Override
+  public Level getInfoLevel() {
+    return level();
+  }
 
-        if (getOpeners().contains(pPlayer.getUUID())) {
-            NetworkConstants.sendOpenCart(this.getId(), (ServerPlayer) pPlayer);
-        }
-    }
+  @Override
+  public Vec3 getInfoVec() {
+    return position();
+  }
 
-    @Override
-    public BlockPos getInfoPos() {
-        return blockPosition();
-    }
+  @Override
+  @NotNull
+  public UUID getInfoUUID() {
+    return getUUID();
+  }
 
-    @Override
-    public ResourceKey<LootTable> getInfoLootTable() {
-        return getLootTable();
-    }
-
-    @Override
-    public long getInfoLootSeed() {
-        return getLootTableSeed();
-    }
-
-    @Override
-    public Level getInfoLevel() {
-        return level();
-    }
-
-    @Override
-    public Vec3 getInfoVec() {
-        return position();
-    }
-
-    @Override
-    @NotNull
-    public UUID getInfoUUID() {
-        return getUUID();
-    }
-
-    @Override
-    public Item getDropItem() {
-        return Items.CHEST_MINECART;
-    }
+  @Override
+  public Item getDropItem() {
+    return Items.CHEST_MINECART;
+  }
 }

@@ -10,21 +10,21 @@ import net.minecraft.server.level.ServerPlayer;
 import java.util.Optional;
 
 public class AdvancementTrigger extends SimpleCriterionTrigger<AdvancementTrigger.TriggerInstance> {
-    @Override
-    public Codec<AdvancementTrigger.TriggerInstance> codec() {
-        return TriggerInstance.CODEC;
-    }
+  @Override
+  public Codec<AdvancementTrigger.TriggerInstance> codec() {
+    return TriggerInstance.CODEC;
+  }
 
-    public void trigger(ServerPlayer player, ResourceLocation advancementId) {
-        this.trigger(player, (instance) -> instance.test(advancementId));
-    }
+  public void trigger(ServerPlayer player, ResourceLocation advancementId) {
+    this.trigger(player, (instance) -> instance.test(advancementId));
+  }
 
-    public record TriggerInstance(Optional<ContextAwarePredicate> player,
-                                  Optional<ResourceLocation> advancement) implements SimpleCriterionTrigger.SimpleInstance {
-        public static final Codec<AdvancementTrigger.TriggerInstance> CODEC = RecordCodecBuilder.create(codec -> codec.group(ContextAwarePredicate.CODEC.optionalFieldOf("player").forGetter(TriggerInstance::player), ResourceLocation.CODEC.optionalFieldOf("advancement").forGetter(TriggerInstance::advancement)).apply(codec, AdvancementTrigger.TriggerInstance::new));
+  public record TriggerInstance(Optional<ContextAwarePredicate> player,
+                                Optional<ResourceLocation> advancement) implements SimpleCriterionTrigger.SimpleInstance {
+    public static final Codec<AdvancementTrigger.TriggerInstance> CODEC = RecordCodecBuilder.create(codec -> codec.group(ContextAwarePredicate.CODEC.optionalFieldOf("player").forGetter(TriggerInstance::player), ResourceLocation.CODEC.optionalFieldOf("advancement").forGetter(TriggerInstance::advancement)).apply(codec, AdvancementTrigger.TriggerInstance::new));
 
-        public boolean test(ResourceLocation advancementId) {
-            return this.advancement.isEmpty() || this.advancement.get().equals(advancementId);
-        }
+    public boolean test(ResourceLocation advancementId) {
+      return this.advancement.isEmpty() || this.advancement.get().equals(advancementId);
     }
+  }
 }

@@ -15,11 +15,11 @@ import java.util.Optional;
 
 @Mixin(PoiTypes.class)
 public class MixinPoiTypes {
-    @Inject(method = "forState", at = @At("RETURN"), cancellable = true)
-    private static void LootrForState(BlockState state, CallbackInfoReturnable<Optional<Holder<PoiType>>> cir) {
-        if (state.is(ModBlocks.BARREL)) {
-            cir.setReturnValue(BuiltInRegistries.POINT_OF_INTEREST_TYPE.getHolder(PoiTypes.FISHERMAN).map(o -> o));
-            cir.cancel();
-        }
+  @Inject(method = "forState", at = @At("RETURN"), cancellable = true)
+  private static void LootrForState(BlockState state, CallbackInfoReturnable<Optional<Holder<PoiType>>> cir) {
+    if (state.is(ModBlocks.BARREL)) {
+      cir.setReturnValue(BuiltInRegistries.POINT_OF_INTEREST_TYPE.getHolder(PoiTypes.FISHERMAN).map(o -> o));
+      cir.cancel();
     }
+  }
 }

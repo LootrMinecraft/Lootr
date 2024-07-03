@@ -12,20 +12,20 @@ import org.jetbrains.annotations.Nullable;
 
 public interface ILootrInventory extends Container, MenuProvider {
 
-    BaseContainerBlockEntity getBlockEntity(Level level);
+  BaseContainerBlockEntity getBlockEntity(Level level);
 
-    @Deprecated
-    @Nullable
-    default BaseContainerBlockEntity getTile(Level level) {
-        return getBlockEntity(level);
-    }
+  @Deprecated
+  @Nullable
+  default BaseContainerBlockEntity getTile(Level level) {
+    return getBlockEntity(level);
+  }
 
-    @Nullable
-    AbstractMinecartContainer getEntity(Level world);
+  @Nullable
+  AbstractMinecartContainer getEntity(Level world);
 
-    @Nullable
-    BlockPos getPos();
+  @Nullable
+  BlockPos getPos();
 
-    NonNullList<ItemStack> getInventoryContents();
+  NonNullList<ItemStack> getInventoryContents();
 
 }

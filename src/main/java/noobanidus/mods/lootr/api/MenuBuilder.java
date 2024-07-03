@@ -7,5 +7,5 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 
 @FunctionalInterface
 public interface MenuBuilder {
-    AbstractContainerMenu build(int id, Inventory inventory, Container container, int rows);
+  AbstractContainerMenu build(int id, Inventory inventory, Container container, int rows);
 }
