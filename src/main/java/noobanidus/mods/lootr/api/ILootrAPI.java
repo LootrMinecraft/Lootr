@@ -21,10 +21,6 @@ import java.util.function.LongSupplier;
 import java.util.function.Supplier;
 
 public interface ILootrAPI {
-  ResourceLocation rl(String path);
-
-  ResourceLocation rl(String namespace, String path);
-
   boolean isFakePlayer(Player player);
 
   default boolean clearPlayerLoot(ServerPlayer entity) {

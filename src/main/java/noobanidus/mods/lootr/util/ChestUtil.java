@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.util;
 
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
@@ -29,7 +30,7 @@ import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModAdvancements;
 import noobanidus.mods.lootr.init.ModStats;
-import noobanidus.mods.lootr.network.NetworkConstants;
+import noobanidus.mods.lootr.network.to_client.PacketCloseCart;
 
 import java.util.UUID;
 
@@ -58,7 +59,7 @@ public class ChestUtil {
     }
 
     cart.getOpeners().remove(player.getUUID());
-    NetworkConstants.sendCloseCart(cart.getId(), (ServerPlayer) player);
+    ServerPlayNetworking.send((ServerPlayer) player, new PacketCloseCart(cart.getId()));
   }
 
   public static Style getInvalidStyle() {

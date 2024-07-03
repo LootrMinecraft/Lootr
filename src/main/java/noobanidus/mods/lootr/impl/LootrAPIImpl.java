@@ -30,17 +30,6 @@ import java.util.function.LongSupplier;
 import java.util.function.Supplier;
 
 public class LootrAPIImpl implements ILootrAPI {
-
-  @Override
-  public ResourceLocation rl(String path) {
-    return LootrAPI.rl(path);
-  }
-
-  @Override
-  public ResourceLocation rl(String namespace, String path) {
-    return ResourceLocation.fromNamespaceAndPath(namespace, path);
-  }
-
   @Override
   public boolean isFakePlayer(Player player) {
     if (player instanceof ServerPlayer sPlayer) {

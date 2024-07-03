@@ -1,5 +1,7 @@
 package noobanidus.mods.lootr.entity;
 
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -37,7 +39,7 @@ import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.event.HandleBreak;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.init.ModEntities;
-import noobanidus.mods.lootr.network.NetworkConstants;
+import noobanidus.mods.lootr.network.to_client.PacketOpenCart;
 import noobanidus.mods.lootr.util.ChestUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -205,7 +207,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   @Override
   public void startOpen(Player player) {
     if (!player.isSpectator()) {
-      NetworkConstants.sendOpenCart(this.getId(), (ServerPlayer) player);
+      ServerPlayNetworking.send((ServerPlayer) player, new PacketOpenCart(this.getId()));
     }
   }
 
@@ -221,7 +223,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     super.startSeenByPlayer(pPlayer);
 
     if (getOpeners().contains(pPlayer.getUUID())) {
-      NetworkConstants.sendOpenCart(this.getId(), (ServerPlayer) pPlayer);
+      ServerPlayNetworking.send((ServerPlayer) pPlayer, new PacketOpenCart(this.getId()));
     }
   }
 

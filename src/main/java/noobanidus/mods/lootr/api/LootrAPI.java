@@ -24,11 +24,11 @@ public class LootrAPI {
   public static boolean shouldDiscardIdAndOpeners;
 
   public static ResourceLocation rl(String path) {
-    return INSTANCE.rl(path);
+    return ResourceLocation.fromNamespaceAndPath(MODID, path);
   }
 
   public static ResourceLocation rl(String namespace, String path) {
-    return INSTANCE.rl(namespace, path);
+    return ResourceLocation.fromNamespaceAndPath(namespace, path);
   }
 
   public static boolean isFakePlayer(Player player) {
