@@ -1,19 +1,15 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "net.zestyblaze.lootr.mixins",
+  "package": "noobanidus.mods.lootr.mixins",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
     "MixinCatSitOnBlockGoal",
-    "MixinLevelChunk",
-    "MixinPersistentEntitySectionManager",
-    "MixinPlayerAdvancements",
     "MixinEndCityPieces$EndCityPiece",
+    "MixinLevelChunk",
     "MixinPoiType",
     "MixinPoiTypes",
     "MixinStructureTemplate"
-  ],
-  "client": [
   ],
   "injectors": {
     "defaultRequire": 1
