@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 
 @Config(name = LootrAPI.MODID)
 public class ConfigManager implements ConfigData {
+  @ConfigEntry.Gui.Excluded
   private static final List<ResourceLocation> PROBLEMATIC_CHESTS = Arrays.asList(ResourceLocation.fromNamespaceAndPath("atum", "chests/pharaoh"), ResourceLocation.fromNamespaceAndPath("twilightforest", "structures/stronghold_boss"));
 
   @ConfigEntry.Gui.Excluded
