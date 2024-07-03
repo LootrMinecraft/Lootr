@@ -3,6 +3,7 @@ package noobanidus.mods.lootr.api;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
@@ -20,6 +21,10 @@ import java.util.function.LongSupplier;
 import java.util.function.Supplier;
 
 public interface ILootrAPI {
+    ResourceLocation rl (String path);
+
+    ResourceLocation rl (String namespace, String path);
+
     boolean isFakePlayer(Player player);
 
     default boolean clearPlayerLoot(ServerPlayer entity) {

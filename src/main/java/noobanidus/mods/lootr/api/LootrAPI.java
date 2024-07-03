@@ -19,17 +19,16 @@ import java.util.UUID;
 public class LootrAPI {
     public static final Logger LOG = LogManager.getLogger();
     public static final String MODID = "lootr";
-    public static final String NETWORK_VERSION = "lootr-1.21.0-1";
     public static final ResourceKey<LootTable> ELYTRA_CHEST = ResourceKey.create(Registries.LOOT_TABLE, LootrAPI.rl("chests/elytra"));
 
     public static ILootrAPI INSTANCE;
 
     public static ResourceLocation rl(String path) {
-        return ResourceLocation.fromNamespaceAndPath(MODID, path);
+        return INSTANCE.rl(path);
     }
 
     public static ResourceLocation rl(String namespace, String path) {
-        return ResourceLocation.fromNamespaceAndPath(namespace, path);
+        return INSTANCE.rl(namespace, path);
     }
 
     public static boolean shouldDiscardIdAndOpeners;

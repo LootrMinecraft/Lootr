@@ -4,6 +4,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.world.level.saveddata.SavedData;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,7 +14,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class AdvancementData extends SavedData {
-    public static final SavedData.Factory<AdvancementData> FACTORY = new SavedData.Factory<>(AdvancementData::new, AdvancementData::load);
+    public static final SavedData.Factory<AdvancementData> FACTORY = new SavedData.Factory<>(AdvancementData::new, AdvancementData::load, (DataFixTypes)  null);
     private final Set<UUIDPair> data = new HashSet<>();
 
     public AdvancementData() {
@@ -63,7 +64,7 @@ public class AdvancementData extends SavedData {
         super.save(pFile, provider);
     }
 
-    public static class UUIDPair implements INBTSerializable<CompoundTag> {
+    public static class UUIDPair {
         @NotNull
         private UUID first;
         private UUID second;
@@ -110,7 +111,6 @@ public class AdvancementData extends SavedData {
             return result;
         }
 
-        @Override
         public CompoundTag serializeNBT(HolderLookup.Provider provider) {
             CompoundTag result = new CompoundTag();
             result.putUUID("first", getFirst());
@@ -118,7 +118,6 @@ public class AdvancementData extends SavedData {
             return result;
         }
 
-        @Override
         public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
             this.first = nbt.getUUID("first");
             this.second = nbt.getUUID("second");

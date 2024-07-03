@@ -30,12 +30,12 @@ import java.util.UUID;
 
 @SuppressWarnings("deprecation")
 public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootBlockEntity> extends ChestRenderer<T> {
-    public static final Material MATERIAL = new Material(Sheets.CHEST_SHEET, ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "chest"));
-    public static final Material MATERIAL2 = new Material(Sheets.CHEST_SHEET, ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "chest_opened"));
-    public static final Material MATERIAL3 = new Material(Sheets.CHEST_SHEET, ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "chest_trapped"));
-    public static final Material MATERIAL4 = new Material(Sheets.CHEST_SHEET, ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "chest_trapped_opened"));
-    public static final Material OLD_MATERIAL = new Material(Sheets.CHEST_SHEET, ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "old_chest"));
-    public static final Material OLD_MATERIAL2 = new Material(Sheets.CHEST_SHEET, ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "old_chest_opened"));
+    public static final Material MATERIAL = new Material(Sheets.CHEST_SHEET, LootrAPI.rl("chest"));
+    public static final Material MATERIAL2 = new Material(Sheets.CHEST_SHEET, LootrAPI.rl("chest_opened"));
+    public static final Material MATERIAL3 = new Material(Sheets.CHEST_SHEET, LootrAPI.rl("chest_trapped"));
+    public static final Material MATERIAL4 = new Material(Sheets.CHEST_SHEET, LootrAPI.rl("chest_trapped_opened"));
+    public static final Material OLD_MATERIAL = new Material(Sheets.CHEST_SHEET, LootrAPI.rl("old_chest"));
+    public static final Material OLD_MATERIAL2 = new Material(Sheets.CHEST_SHEET, LootrAPI.rl("old_chest_opened"));
     private final ModelPart lid;
     private final ModelPart bottom;
     private final ModelPart lock;
@@ -78,7 +78,7 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootBloc
 
     protected Material getMaterial(T tile) {
         if (ConfigManager.isVanillaTextures()) {
-            if (tile.getType() == ModBlockEntities.SPECIAL_TRAPPED_LOOT_CHEST) {
+            if (tile.getType() == ModBlockEntities.LOOTR_TRAPPED_CHEST) {
                 return Sheets.CHEST_TRAP_LOCATION;
             } else {
                 return Sheets.chooseMaterial(tile, ChestType.SINGLE, false);
@@ -93,7 +93,7 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootBloc
                     return OLD_MATERIAL;
                 }
             }
-            if (tile.isOpened()) {
+            if (tile.isClientOpened()) {
                 return OLD_MATERIAL2;
             }
             if (tile.getOpeners().contains(playerId)) {
@@ -107,28 +107,28 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootBloc
                 if (player != null) {
                     playerId = player.getUUID();
                 } else {
-                    if (tile.getType() == ModBlockEntities.SPECIAL_TRAPPED_LOOT_CHEST) {
+                    if (tile.getType() == ModBlockEntities.LOOTR_TRAPPED_CHEST) {
                         return MATERIAL3;
                     } else {
                         return MATERIAL;
                     }
                 }
             }
-            if (tile.isOpened()) {
-                if (tile.getType() == ModBlockEntities.SPECIAL_TRAPPED_LOOT_CHEST) {
+            if (tile.isClientOpened()) {
+                if (tile.getType() == ModBlockEntities.LOOTR_TRAPPED_CHEST) {
                     return MATERIAL4;
                 } else {
                     return MATERIAL2;
                 }
             }
             if (tile.getOpeners().contains(playerId)) {
-                if (tile.getType() == ModBlockEntities.SPECIAL_TRAPPED_LOOT_CHEST) {
+                if (tile.getType() == ModBlockEntities.LOOTR_TRAPPED_CHEST) {
                     return MATERIAL4;
                 } else {
                     return MATERIAL2;
                 }
             } else {
-                if (tile.getType() == ModBlockEntities.SPECIAL_TRAPPED_LOOT_CHEST) {
+                if (tile.getType() == ModBlockEntities.LOOTR_TRAPPED_CHEST) {
                     return MATERIAL3;
                 } else {
                     return MATERIAL;

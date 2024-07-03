@@ -1,5 +1,7 @@
 package noobanidus.mods.lootr.block.entities;
 
+import com.google.common.collect.Sets;
+import net.fabricmc.fabric.api.blockview.v2.RenderDataBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
@@ -29,7 +31,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
-import noobanidus.mods.lootr.block.LootrBarrelBlock;
+import noobanidus.mods.lootr.client.ClientHooks;
 import noobanidus.mods.lootr.data.SpecialChestInventory;
 import noobanidus.mods.lootr.init.ModBlockEntities;
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +41,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity implements ILootBlockEntity {
+public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity implements ILootBlockEntity, RenderDataBlockEntity {
     private final Set<UUID> openers = new HashSet<>();
     protected UUID infoId = null;
     protected boolean clientOpened = false;
@@ -74,25 +76,11 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
             return false;
         }
     };
-    private ModelData modelData = null;
     private final NonNullList<ItemStack> items = NonNullList.withSize(27, ItemStack.EMPTY);
     private boolean savingToItem = false;
 
     public LootrBarrelBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
-        super(ModBlockEntities.LOOTR_BARREL.get(), pWorldPosition, pBlockState);
-    }
-
-    @NotNull
-    @Override
-    public ModelData getModelData() {
-        if (modelData == null) {
-            modelData = ModelData.builder().with(LootrBarrelBlock.OPENED, false).build();
-        }
-        Player player = Getter.getPlayer();
-        if (player != null) {
-            return modelData.derive().with(LootrBarrelBlock.OPENED, openers.contains(player.getUUID())).build();
-        }
-        return modelData;
+        super(ModBlockEntities.LOOTR_BARREL, pWorldPosition, pBlockState);
     }
 
     @Override
@@ -132,13 +120,19 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
             getInfoUUID();
         }
         if (compound.contains("LootrOpeners")) {
+            Set<UUID> newOpeners = new HashSet<>();
             ListTag openers = compound.getList("LootrOpeners", Tag.TAG_INT_ARRAY);
-            this.openers.clear();
             for (Tag item : openers) {
-                this.openers.add(NbtUtils.loadUUID(item));
+                newOpeners.add(NbtUtils.loadUUID(item));
+            }
+            if (!Sets.symmetricDifference(this.openers, newOpeners).isEmpty()) {
+                this.openers.clear();
+                this.openers.addAll(newOpeners);
+                if (this.getLevel() != null && this.getLevel().isClientSide()) {
+                    ClientHooks.clearCache(this.getBlockPos());
+                }
             }
         }
-        requestModelDataUpdate();
         super.loadAdditional(compound, provider);
     }
 
@@ -234,13 +228,6 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     }
 
     @Override
-    public void onDataPacket(@NotNull Connection net, @NotNull ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider provider) {
-        if (pkt.getTag() != null) {
-            loadAdditional(pkt.getTag(), provider);
-        }
-    }
-
-    @Override
     public BlockPos getInfoPos() {
         return getBlockPos();
     }
@@ -258,5 +245,14 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     @Override
     public Level getInfoLevel() {
         return getLevel();
+    }
+
+    @Override
+    public @Nullable Object getRenderData() {
+        Player player = ClientHooks.getPlayer();
+        if (player == null) {
+            return null;
+        }
+        return getOpeners().contains(player.getUUID());
     }
 }

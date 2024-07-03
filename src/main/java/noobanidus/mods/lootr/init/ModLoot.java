@@ -11,6 +11,6 @@ public class ModLoot {
     public static final LootItemConditionType LOOT_COUNT = new LootItemConditionType(LootCount.CODEC);
 
     public static void registerLoot() {
-        Registry.register(BuiltInRegistries.LOOT_CONDITION_TYPE, ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "loot_count"), LOOT_COUNT);
+        Registry.register(BuiltInRegistries.LOOT_CONDITION_TYPE, LootrAPI.rl("loot_count"), LOOT_COUNT);
     }
 }

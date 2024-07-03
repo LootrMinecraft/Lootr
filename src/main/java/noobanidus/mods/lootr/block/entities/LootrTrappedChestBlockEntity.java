@@ -8,7 +8,7 @@ import noobanidus.mods.lootr.init.ModBlockEntities;
 
 public class LootrTrappedChestBlockEntity extends LootrChestBlockEntity {
     public LootrTrappedChestBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
-        super(ModBlockEntities.LOOTR_TRAPPED_CHEST.get(), pWorldPosition, pBlockState);
+        super(ModBlockEntities.LOOTR_TRAPPED_CHEST, pWorldPosition, pBlockState);
     }
 
     @Override

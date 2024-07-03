@@ -64,7 +64,7 @@ public class HandleBreak {
         if (state.is(LootrTags.Blocks.CONTAINERS)) {
             blockEntity.setChanged();
             if (blockEntity instanceof ILootBlockEntity lbe) {
-                lbe.updatePacketViaState();
+                lbe.updatePacketViaForce(blockEntity);
             }
         }
     }

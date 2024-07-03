@@ -34,11 +34,11 @@ public class ModBlocks {
     public static final LootrShulkerBlock SHULKER = new LootrShulkerBlock(BlockBehaviour.Properties.of().strength(2.5f).dynamicShape().noOcclusion().isSuffocating(posPredicate).isViewBlocking(posPredicate));
 
     public static void registerBlocks() {
-        Registry.register(BuiltInRegistries.BLOCK, ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "lootr_chest"), CHEST);
-        Registry.register(BuiltInRegistries.BLOCK, ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "lootr_barrel"), BARREL);
-        Registry.register(BuiltInRegistries.BLOCK, ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "lootr_trapped_chest"), TRAPPED_CHEST);
-        Registry.register(BuiltInRegistries.BLOCK, ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "lootr_shulker"), SHULKER);
-        Registry.register(BuiltInRegistries.BLOCK, ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "lootr_inventory"), INVENTORY);
-        Registry.register(BuiltInRegistries.BLOCK, ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "trophy"), TROPHY);
+        Registry.register(BuiltInRegistries.BLOCK, LootrAPI.rl("lootr_chest"), CHEST);
+        Registry.register(BuiltInRegistries.BLOCK, LootrAPI.rl("lootr_barrel"), BARREL);
+        Registry.register(BuiltInRegistries.BLOCK, LootrAPI.rl("lootr_trapped_chest"), TRAPPED_CHEST);
+        Registry.register(BuiltInRegistries.BLOCK, LootrAPI.rl("lootr_shulker"), SHULKER);
+        Registry.register(BuiltInRegistries.BLOCK, LootrAPI.rl("lootr_inventory"), INVENTORY);
+        Registry.register(BuiltInRegistries.BLOCK, LootrAPI.rl("trophy"), TROPHY);
     }
 }

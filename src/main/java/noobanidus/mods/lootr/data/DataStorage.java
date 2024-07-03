@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
@@ -22,7 +23,10 @@ import noobanidus.mods.lootr.api.LootFiller;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
+import noobanidus.mods.lootr.util.ServerAccessImpl;
 import org.jetbrains.annotations.Nullable;
+
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -43,7 +47,7 @@ public class DataStorage {
 
     @Nullable
     public static DimensionDataStorage getDataStorage() {
-        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+        MinecraftServer server = ServerAccessImpl.getServer();
         if (server == null) {
             LootrAPI.LOG.error("MinecraftServer is null at this stage; Lootr cannot fetch data storage.");
             return null;
@@ -233,7 +237,7 @@ public class DataStorage {
             LootrAPI.LOG.error("We have no heuristic to determine the size of '" + id.toString() + "' in '" + world.dimension() + "' at '" + pos + "'. Defaulting to 27.");
             size = 27;
         }
-        return ChestData.unwrap(manager.computeIfAbsent(new SavedData.Factory<>(ChestData.id(world.dimension(), pos, id), ChestData.loadWrapper(id, world.dimension(), pos)), ChestData.ID(id)), id, world.dimension(), pos, size);
+        return ChestData.unwrap(manager.computeIfAbsent(new SavedData.Factory<>(ChestData.id(world.dimension(), pos, id), ChestData.loadWrapper(id, world.dimension(), pos), (DataFixTypes) null), ChestData.ID(id)), id, world.dimension(), pos, size);
     }
 
     // Deprecated: use getEntityData instead.
@@ -259,7 +263,7 @@ public class DataStorage {
             LootrAPI.LOG.error("We have no heuristic to determine the size of entity '" + id + "' in '" + world.dimension() + "' at '" + pos + "'. Defaulting to 27.");
             size = 27;
         }
-        return ChestData.unwrap(manager.computeIfAbsent(new SavedData.Factory<>(ChestData.entity(world.dimension(), pos, id), ChestData.loadWrapper(id, world.dimension(), pos)), ChestData.ID(id)), id, world.dimension(), pos, size);
+        return ChestData.unwrap(manager.computeIfAbsent(new SavedData.Factory<>(ChestData.entity(world.dimension(), pos, id), ChestData.loadWrapper(id, world.dimension(), pos), (DataFixTypes) null), ChestData.ID(id)), id, world.dimension(), pos, size);
     }
 
     // Deprecated: use getReferenceContainerData instead.
@@ -274,7 +278,7 @@ public class DataStorage {
             LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot fetch chest data for " + world.dimension() + " at " + pos.toString() + " with ID " + id.toString() + " and cannot continue.");
             return null;
         }
-        return ChestData.unwrap(manager.computeIfAbsent(new SavedData.Factory<>(ChestData.ref_id(world.dimension(), pos, id, base), ChestData.loadWrapper(id, world.dimension(), pos)), ChestData.ID(id)), id, world.dimension(), pos, base.size());
+        return ChestData.unwrap(manager.computeIfAbsent(new SavedData.Factory<>(ChestData.ref_id(world.dimension(), pos, id, base), ChestData.loadWrapper(id, world.dimension(), pos), (DataFixTypes) null), ChestData.ID(id)), id, world.dimension(), pos, base.size());
     }
 
     @Nullable
@@ -360,7 +364,7 @@ public class DataStorage {
             return false;
         }
         // Server being null is already handled in `getDataStorage`
-        @SuppressWarnings("resource") ServerLevel world = ServerLifecycleHooks.getCurrentServer().overworld();
+        @SuppressWarnings("resource") ServerLevel world = ServerAccessImpl.getServer().overworld();
         // This can actually be null on occasion.
         //noinspection ConstantValue
         if (world == null) {
@@ -388,7 +392,7 @@ public class DataStorage {
         for (String id : ids) {
             ChestData chestData = data.get(new SavedData.Factory<>(() -> {
                 throw new UnsupportedOperationException("Cannot create ChestData here");
-            }, ChestData::load), id);
+            }, ChestData::load, (DataFixTypes) null), id);
             if (chestData != null) {
                 if (chestData.clearInventory(uuid)) {
                     cleared++;

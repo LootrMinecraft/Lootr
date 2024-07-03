@@ -17,7 +17,7 @@ public class LootrInventoryBlockEntity extends LootrChestBlockEntity {
     private NonNullList<ItemStack> customInventory;
 
     public LootrInventoryBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
-        super(ModBlockEntities.LOOTR_INVENTORY.get(), pWorldPosition, pBlockState);
+        super(ModBlockEntities.LOOTR_INVENTORY, pWorldPosition, pBlockState);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class LootrInventoryBlockEntity extends LootrChestBlockEntity {
     @Override
     protected void signalOpenCount(Level level, BlockPos pos, BlockState state, int p_155868_, int p_155869_) {
         super.signalOpenCount(level, pos, state, p_155868_, p_155869_);
-        if (ConfigManager.TRAPPED_CUSTOM.get() && p_155868_ != p_155869_) {
+        if (ConfigManager.get().breaking.trapped_custom && p_155868_ != p_155869_) {
             Block block = state.getBlock();
             level.updateNeighborsAt(pos, block);
             level.updateNeighborsAt(pos.below(), block);

@@ -49,7 +49,7 @@ public class LootrChestItemRenderer extends BlockEntityWithoutLevelRenderer impl
     }
 
     public void renderByMinecart(LootrChestMinecartEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight) {
-        boolean open = tile.isOpened();
+        boolean open = tile.isClientOpened();
         tile.setClientOpened(entity.isOpened());
         getBlockEntityRenderDispatcher().renderItem(tile, matrixStack, buffer, combinedLight, OverlayTexture.NO_OVERLAY);
         tile.setClientOpened(open);

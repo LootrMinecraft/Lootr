@@ -9,12 +9,12 @@ import noobanidus.mods.lootr.advancement.LootedStatTrigger;
 import noobanidus.mods.lootr.api.LootrAPI;
 
 public class ModAdvancements {
-    public static final ResourceLocation CHEST_LOCATION = ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "chest_opened");
-    public static final ResourceLocation BARREL_LOCATION = ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "barrel_opened");
-    public static final ResourceLocation CART_LOCATION = ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "cart_opened");
-    public static final ResourceLocation SHULKER_LOCATION = ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "shulker_opened");
-    public static final ResourceLocation ADVANCEMENT_LOCATION = ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "advancement");
-    public static final ResourceLocation SCORE_LOCATION = ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "score");
+    public static final ResourceLocation CHEST_LOCATION = LootrAPI.rl("chest_opened");
+    public static final ResourceLocation BARREL_LOCATION = LootrAPI.rl("barrel_opened");
+    public static final ResourceLocation CART_LOCATION = LootrAPI.rl("cart_opened");
+    public static final ResourceLocation SHULKER_LOCATION = LootrAPI.rl("shulker_opened");
+    public static final ResourceLocation ADVANCEMENT_LOCATION = LootrAPI.rl("advancement");
+    public static final ResourceLocation SCORE_LOCATION = LootrAPI.rl("score");
     public static ContainerTrigger CHEST_PREDICATE = null;
     public static ContainerTrigger BARREL_PREDICATE = null;
     public static ContainerTrigger CART_PREDICATE = null;

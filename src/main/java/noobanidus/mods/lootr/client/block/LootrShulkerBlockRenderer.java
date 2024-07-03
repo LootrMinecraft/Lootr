@@ -24,10 +24,10 @@ import java.util.UUID;
 
 @SuppressWarnings("deprecation")
 public class LootrShulkerBlockRenderer implements BlockEntityRenderer<LootrShulkerBlockEntity> {
-    public static final Material MATERIAL = new Material(Sheets.SHULKER_SHEET, ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "shulker"));
-    public static final Material MATERIAL2 = new Material(Sheets.SHULKER_SHEET, ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "shulker_opened"));
-    public static final Material OLD_MATERIAL = new Material(Sheets.SHULKER_SHEET, ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "old_shulker"));
-    public static final Material OLD_MATERIAL2 = new Material(Sheets.SHULKER_SHEET, ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "old_shulker_opened"));
+    public static final Material MATERIAL = new Material(Sheets.SHULKER_SHEET, LootrAPI.rl("shulker"));
+    public static final Material MATERIAL2 = new Material(Sheets.SHULKER_SHEET, LootrAPI.rl("shulker_opened"));
+    public static final Material OLD_MATERIAL = new Material(Sheets.SHULKER_SHEET, LootrAPI.rl("old_shulker"));
+    public static final Material OLD_MATERIAL2 = new Material(Sheets.SHULKER_SHEET, LootrAPI.rl("old_shulker_opened"));
     private final ShulkerModel<?> model;
     private UUID playerId;
 
@@ -92,7 +92,7 @@ public class LootrShulkerBlockRenderer implements BlockEntityRenderer<LootrShulk
         modelpart.setPos(0.0F, 24.0F - pBlockEntity.getProgress(pPartialTicks) * 0.5F * 16.0F, 0.0F);
         modelpart.yRot = 270.0F * pBlockEntity.getProgress(pPartialTicks) * ((float) Math.PI / 180F);
         VertexConsumer vertexconsumer = material.buffer(pBuffer, RenderType::entityCutoutNoCull);
-        this.model.renderToBuffer(pMatrixStack, vertexconsumer, pCombinedLight, pCombinedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.model.renderToBuffer(pMatrixStack, vertexconsumer, pCombinedLight, pCombinedOverlay);
         pMatrixStack.popPose();
     }
 }

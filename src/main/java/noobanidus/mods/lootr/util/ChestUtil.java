@@ -29,6 +29,7 @@ import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModAdvancements;
 import noobanidus.mods.lootr.init.ModStats;
+import noobanidus.mods.lootr.network.NetworkConstants;
 
 import java.util.UUID;
 
@@ -45,7 +46,6 @@ public class ChestUtil {
             if (tile.getOpeners().remove(player.getUUID())) {
                 te.setChanged();
                 tile.updatePacketViaForce(te);
-                PacketDistributor.sendToPlayer((ServerPlayer) player, new PacketCloseContainer(te.getBlockPos()));
             }
         }
 
@@ -58,7 +58,7 @@ public class ChestUtil {
         }
 
         cart.getOpeners().remove(player.getUUID());
-        PacketDistributor.sendToPlayersTrackingEntity(cart, new PacketCloseCart(cart.getId()));
+        NetworkConstants.sendCloseCart(cart.getId(), (ServerPlayer) player);
     }
 
     public static Style getInvalidStyle() {

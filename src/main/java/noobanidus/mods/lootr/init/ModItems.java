@@ -18,11 +18,11 @@ public class ModItems {
     public static final BlockItem TROPHY = new BlockItem(ModBlocks.TROPHY, new Item.Properties().rarity(Rarity.EPIC));
 
     public static void registerItems() {
-        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "lootr_chest"), CHEST);
-        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "lootr_barrel"), BARREL);
-        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "lootr_trapped_chest"), TRAPPED_CHEST);
-        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "lootr_shulker"), SHULKER);
-        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "lootr_inventory"), INVENTORY);
-        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "trophy"), TROPHY);
+        Registry.register(BuiltInRegistries.ITEM, LootrAPI.rl("lootr_chest"), CHEST);
+        Registry.register(BuiltInRegistries.ITEM, LootrAPI.rl("lootr_barrel"), BARREL);
+        Registry.register(BuiltInRegistries.ITEM, LootrAPI.rl("lootr_trapped_chest"), TRAPPED_CHEST);
+        Registry.register(BuiltInRegistries.ITEM, LootrAPI.rl("lootr_shulker"), SHULKER);
+        Registry.register(BuiltInRegistries.ITEM, LootrAPI.rl("lootr_inventory"), INVENTORY);
+        Registry.register(BuiltInRegistries.ITEM, LootrAPI.rl("trophy"), TROPHY);
     }
 }

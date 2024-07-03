@@ -8,7 +8,7 @@ import net.minecraft.stats.Stats;
 import noobanidus.mods.lootr.api.LootrAPI;
 
 public class ModStats {
-    public static ResourceLocation LOOTED_LOCATION = ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "looted_stat");
+    public static ResourceLocation LOOTED_LOCATION = LootrAPI.rl("looted_stat");
     public static Stat<ResourceLocation> LOOTED_STAT;
 
     public static void registerStats() {

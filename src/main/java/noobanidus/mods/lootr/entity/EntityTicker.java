@@ -3,17 +3,12 @@ package noobanidus.mods.lootr.entity;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.tick.ServerTickEvent;
-import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.data.DataStorage;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@EventBusSubscriber(modid = LootrAPI.MODID)
 public class EntityTicker {
     private static final List<LootrChestMinecartEntity> entities = new ArrayList<>();
     private static final List<LootrChestMinecartEntity> pendingEntities = new ArrayList<>();
@@ -24,9 +19,8 @@ public class EntityTicker {
 
     private static boolean tickingList = false;
 
-    @SubscribeEvent
-    public static void onServerTick(ServerTickEvent.Post event) {
-        if (!ConfigManager.DISABLE.get()) {
+    public static void serverTick() {
+        if (!ConfigManager.get().conversion.disable) {
             List<LootrChestMinecartEntity> completed = new ArrayList<>();
             List<LootrChestMinecartEntity> copy;
             synchronized (listLock) {
@@ -36,9 +30,6 @@ public class EntityTicker {
             }
             synchronized (worldLock) {
                 for (LootrChestMinecartEntity entity : copy) {
-                    if (entity.isAddedToWorld()) {
-                        continue;
-                    }
                     ServerLevel world = (ServerLevel) entity.level();
                     ServerChunkCache provider = world.getChunkSource();
                     if (provider.hasChunk(Mth.floor(entity.getX() / 16.0D), Mth.floor(entity.getZ() / 16.0D))) {
@@ -60,7 +51,7 @@ public class EntityTicker {
     }
 
     public static void addEntity(LootrChestMinecartEntity entity) {
-        if (ConfigManager.DISABLE.get()) {
+        if (ConfigManager.get().conversion.disable) {
             return;
         }
         synchronized (listLock) {

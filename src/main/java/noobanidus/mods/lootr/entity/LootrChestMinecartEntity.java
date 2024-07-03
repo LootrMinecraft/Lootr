@@ -11,7 +11,6 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
-import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -32,14 +31,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.network.PacketDistributor;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.entity.ILootCart;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.event.HandleBreak;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.init.ModEntities;
-import noobanidus.mods.lootr.network.to_client.PacketOpenCart;
+import noobanidus.mods.lootr.network.NetworkConstants;
 import noobanidus.mods.lootr.util.ChestUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -58,7 +56,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     }
 
     public LootrChestMinecartEntity(Level worldIn, double x, double y, double z) {
-        super(ModEntities.LOOTR_MINECART_ENTITY.get(), x, y, z, worldIn);
+        super(ModEntities.LOOTR_MINECART_ENTITY, x, y, z, worldIn);
     }
 
     @Override
@@ -94,10 +92,10 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
         }
 
         if (source.getEntity() instanceof Player player) {
-            if ((LootrAPI.isFakePlayer(player) && ConfigManager.ENABLE_FAKE_PLAYER_BREAK.get()) || ConfigManager.ENABLE_BREAK.get()) {
+            if ((LootrAPI.isFakePlayer(player) && ConfigManager.get().breaking.enable_fake_player_break) || ConfigManager.get().breaking.enable_break) {
                 return false;
             }
-            if (ConfigManager.DISABLE_BREAK.get()) {
+            if (ConfigManager.get().breaking.disable_break) {
                 if (player.getAbilities().instabuild) {
                     if (!player.isShiftKeyDown()) {
                         player.displayClientMessage(Component.translatable("lootr.message.cannot_break_sneak").setStyle(HandleBreak.getChatStyle()), false);
@@ -122,14 +120,11 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     }
 
     @Override
-    public Item getDropItem() {
-        return Items.CHEST_MINECART;
-    }
-
-    @Override
     public int getContainerSize() {
         return 27;
     }
+
+
 
     @Override
     public AbstractMinecart.Type getMinecartType() {
@@ -139,7 +134,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     @Override
     public BlockState getDefaultDisplayBlockState() {
         if (cartNormal == null) {
-            cartNormal = ModBlocks.CHEST.get().defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
+            cartNormal = ModBlocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
         }
         return cartNormal;
     }
@@ -211,7 +206,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     @Override
     public void startOpen(Player player) {
         if (!player.isSpectator()) {
-            PacketDistributor.sendToPlayer((ServerPlayer) player, new PacketOpenCart(this.getId()));
+            NetworkConstants.sendOpenCart(this.getId(), (ServerPlayer) player);
         }
     }
 
@@ -227,7 +222,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
         super.startSeenByPlayer(pPlayer);
 
         if (getOpeners().contains(pPlayer.getUUID())) {
-            PacketDistributor.sendToPlayer((ServerPlayer) pPlayer, new PacketOpenCart(this.getId()));
+            NetworkConstants.sendOpenCart(this.getId(), (ServerPlayer) pPlayer);
         }
     }
 
@@ -260,5 +255,10 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     @NotNull
     public UUID getInfoUUID() {
         return getUUID();
+    }
+
+    @Override
+    public Item getDropItem() {
+        return Items.CHEST_MINECART;
     }
 }

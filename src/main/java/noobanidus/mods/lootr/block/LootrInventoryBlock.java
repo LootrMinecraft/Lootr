@@ -33,7 +33,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class LootrInventoryBlock extends ChestBlock {
     public LootrInventoryBlock(Properties properties) {
-        super(properties, () -> ModBlockEntities.SPECIAL_LOOT_INVENTORY);
+        super(properties, () -> ModBlockEntities.LOOTR_INVENTORY);
     }
 
     @Override

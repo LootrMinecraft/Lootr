@@ -77,7 +77,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
     }
 
     public LootrChestBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
-        this(ModBlockEntities.LOOTR_CHEST.get(), pWorldPosition, pBlockState);
+        this(ModBlockEntities.LOOTR_CHEST, pWorldPosition, pBlockState);
     }
 
     public static <T extends BlockEntity> void lootrLidAnimateTick(Level pLevel, BlockPos pPos, BlockState pState, T pBlockEntity) {
@@ -199,13 +199,6 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
     @Nullable
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this, BlockEntity::getUpdateTag);
-    }
-
-    @Override
-    public void onDataPacket(@NotNull Connection net, @NotNull ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider provider) {
-        if (pkt.getTag() != null) {
-            loadAdditional(pkt.getTag(), provider);
-        }
     }
 
     @Override

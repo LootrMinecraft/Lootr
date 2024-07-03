@@ -56,7 +56,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
     private static final NonNullList<ItemStack> itemStacks = NonNullList.withSize(27, ItemStack.EMPTY);
 
     public LootrShulkerBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
-        super(ModBlockEntities.LOOTR_SHULKER.get(), pWorldPosition, pBlockState);
+        super(ModBlockEntities.LOOTR_SHULKER, pWorldPosition, pBlockState);
     }
 
     public static void tick(Level pLevel, BlockPos pPos, BlockState pState, LootrShulkerBlockEntity pBlockEntity) {
@@ -277,13 +277,6 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
     @Nullable
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this, BlockEntity::getUpdateTag);
-    }
-
-    @Override
-    public void onDataPacket(@NotNull Connection net, @NotNull ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider provider) {
-        if (pkt.getTag() != null) {
-            loadAdditional(pkt.getTag(), provider);
-        }
     }
 
     @Override

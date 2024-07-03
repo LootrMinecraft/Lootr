@@ -13,7 +13,7 @@ public class ModEntities {
     public static EntityType<LootrChestMinecartEntity> LOOTR_MINECART_ENTITY;
 
     public static void registerEntities() {
-        LOOTR_MINECART_ENTITY = Registry.register(BuiltInRegistries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(LootrAPI.MODID, "lootr_minecart"), EntityType.Builder.of(new EntityType.EntityFactory<LootrChestMinecartEntity>() {
+        LOOTR_MINECART_ENTITY = Registry.register(BuiltInRegistries.ENTITY_TYPE, LootrAPI.rl("lootr_minecart"), EntityType.Builder.of(new EntityType.EntityFactory<LootrChestMinecartEntity>() {
             @Override
             public LootrChestMinecartEntity create(EntityType<LootrChestMinecartEntity> entityType, Level level) {
                 return new LootrChestMinecartEntity(entityType, level);

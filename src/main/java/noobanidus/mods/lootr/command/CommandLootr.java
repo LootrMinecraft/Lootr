@@ -49,6 +49,7 @@ import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.util.ChestUtil;
+import noobanidus.mods.lootr.util.ServerAccessImpl;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -79,7 +80,7 @@ public class CommandLootr {
     }
 
     private static List<String> getProfiles() {
-        return Lists.newArrayList(ServerLifecycleHooks.getCurrentServer().getProfileCache().profilesByName.keySet());
+        return Lists.newArrayList(ServerAccessImpl.getServer().getProfileCache().profilesByName.keySet());
     }
 
     private static List<String> getTableNames() {

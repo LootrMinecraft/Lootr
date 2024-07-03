@@ -360,12 +360,10 @@ public class ConfigManager implements ConfigData {
     }
 
     public static class Conversion {
+        public int max_entry_age = 60 * 20 * 15;
         public boolean disable = false;
-        public int maximum_age = 60 * 20 * 15;
-        public boolean convert_mineshafts = true;
         public boolean convert_elytras = true;
-        public List<String> additional_chests = List.of();
-        public List<String> additional_trapped_chests = List.of();
+        public boolean world_border = false;
     }
 
     public static class Breaking {
