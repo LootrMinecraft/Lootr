@@ -192,6 +192,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
 
   @Override
   public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider) {
+    super.loadAdditional(compound, provider);
     if (compound.hasUUID("LootrId")) {
       this.infoId = compound.getUUID("LootrId");
     }
@@ -205,7 +206,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
         this.openers.add(NbtUtils.loadUUID(item));
       }
     }
-    super.loadAdditional(compound, provider);
+    this.tryLoadLootTable(compound);
   }
 
   @Override
@@ -217,6 +218,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
 
   @Override
   protected void saveAdditional(CompoundTag compound, HolderLookup.Provider provider) {
+    super.saveAdditional(compound, provider);
     if (!LootrAPI.shouldDiscard() && !savingToItem) {
       compound.putUUID("LootrId", getInfoUUID());
       ListTag list = new ListTag();
@@ -225,7 +227,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
       }
       compound.put("LootrOpeners", list);
     }
-    super.saveAdditional(compound, provider);
+    this.trySaveLootTable(compound);
   }
 
   @Override
