@@ -112,6 +112,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   @SuppressWarnings("Duplicates")
   @Override
   public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider) {
+    super.loadAdditional(compound, provider);
     if (compound.hasUUID("LootrId")) {
       this.infoId = compound.getUUID("LootrId");
     }
@@ -132,7 +133,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
         }
       }
     }
-    super.loadAdditional(compound, provider);
+    this.trySaveLootTable(compound);
   }
 
   @Override
@@ -153,6 +154,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
       }
       compound.put("LootrOpeners", list);
     }
+    this.trySaveLootTable(compound);
   }
 
   @Override
