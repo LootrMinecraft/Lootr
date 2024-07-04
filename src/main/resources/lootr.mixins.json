@@ -7,6 +7,8 @@
     "MixinCatSitOnBlockGoal",
     "MixinEndCityPieces$EndCityPiece",
     "MixinLevelChunk",
+    "MixinPersistentEntitySectionManager",
+    "MixinPlayerAdvancements",
     "MixinPoiType",
     "MixinPoiTypes",
     "MixinStructureTemplate"
