@@ -12,7 +12,7 @@
   "lootr.message.refreshed": "The contents of the container are refreshed at your touch!",
   "lootr.message.refresh_in": "This container will refresh its contents in %s seconds.",
   "lootr.message.refresh_start": "The container will refresh with new contents in %s seconds!",
-  "lootr.message.invalid_table": "Error with mod [%s]! The loot table for this container [%s] could not be found and loot was not generated. Please check your `latest.log` for loading errors.",
+  "lootr.message.invalid_table": "La table de butin pour ce conteneur [%s] a été résolue comme étant vide et le butin n'a pas pu être généré. Vérifiez votre `latest.log` pour les erreurs.",
   "lootr.message.invalid_block": "The container that you have tried to open is invalid as it has not generated its identifier.",
   "block.lootr.lootr_chest": "Loot Chest",
   "block.lootr.lootr_trapped_chest": "Loot Chest",
