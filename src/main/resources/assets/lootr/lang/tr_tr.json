@@ -1,8 +1,8 @@
 {
-  "lootr.message.should_sneak": "Breaking the chest will delete your unique loot and all items in the chest! In order to break, you must sneak while doing so.",
-  "lootr.message.should_sneak2": "As loot is %s, only break if really needed.",
-  "lootr.message.should_sneak3": "per-player per-chest",
-  "lootr.message.cart_should_sneak": "Breaking the cart will delete your unique loot and items! In order to break, you must sneak while attacking",
+  "lootr.message.should_sneak": "Sandığı kırarsanız içindeki tüm eşyalar ve size özel ganimet yok olucak! Kırmak için eğilin.",
+  "lootr.message.should_sneak2": "Ganimet %s olduğundan sadece gerçekten ihtiyacınız var ise kırın.",
+  "lootr.message.should_sneak3": "her oyuncu için farklı",
+  "lootr.message.cart_should_sneak": "Vagonu kırarsanız içindeki tüm eşyalar ve size özel ganimet yok olucak! Kırmak için eğilin",
   "lootr.message.cart_should_sneak3": "per-player per-cart",
   "lootr.message.cannot_break": "Loot containers and carts cannot be broken.",
   "lootr.message.cannot_break_sneak": "Loot containers and carts can only be broken while sneaking in creative mode.",
