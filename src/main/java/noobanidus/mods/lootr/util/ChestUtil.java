@@ -12,7 +12,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.neoforged.neoforge.network.PacketDistributor;
 import noobanidus.mods.lootr.api.DefaultLootFiller;
 import noobanidus.mods.lootr.api.IHasOpeners;
@@ -66,23 +65,23 @@ public class ChestUtil {
       return;
     }
     BlockEntity te = level.getBlockEntity(pos);
-    if (te instanceof ILootrBlockEntity tile) {
-      UUID tileId = tile.getInfoUUID();
-      if (tileId == null) {
+    if (te instanceof ILootrBlockEntity provider) {
+      UUID infoId = provider.getInfoUUID();
+      if (infoId == null) {
         player.displayClientMessage(Component.translatable("lootr.message.invalid_block").setStyle(LootrAPI.getInvalidStyle()), true);
         return;
       }
-      if (DataStorage.isDecayed(tileId)) {
+      if (DataStorage.isDecayed(infoId)) {
         level.destroyBlock(pos, true);
-        notifyDecay(player, tileId);
+        notifyDecay(player, infoId);
         return;
       } else {
-        int decayValue = DataStorage.getDecayValue(tileId);
+        int decayValue = DataStorage.getDecayValue(infoId);
         if (decayValue > 0 && LootrAPI.shouldNotify(decayValue)) {
           player.displayClientMessage(Component.translatable("lootr.message.decay_in", decayValue / 20).setStyle(LootrAPI.getDecayStyle()), true);
         } else if (decayValue == -1) {
-          if (LootrAPI.isDecaying(tile)) {
-            startDecay(player, tileId, decayValue);
+          if (LootrAPI.isDecaying(provider)) {
+            startDecay(player, infoId, decayValue);
           }
         }
       }
@@ -92,32 +91,32 @@ public class ChestUtil {
       } else if (block instanceof LootrShulkerBlock) {
         trigger = LootrRegistry.getShulkerTrigger();
       }
-      trigger.trigger((ServerPlayer) player, tileId);
+      trigger.trigger((ServerPlayer) player, infoId);
       // Generalize refresh check
-      if (DataStorage.isRefreshed(tileId)) {
-        DataStorage.refreshInventory(level, pos, tileId, (ServerPlayer) player);
-        notifyRefresh(player, tileId);
+      if (DataStorage.isRefreshed(infoId)) {
+        DataStorage.refreshInventory(provider);
+        notifyRefresh(player, infoId);
       }
-      int refreshValue = DataStorage.getRefreshValue(tileId);
+      int refreshValue = DataStorage.getRefreshValue(infoId);
       if (refreshValue > 0 && LootrAPI.shouldNotify(refreshValue)) {
         player.displayClientMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20).setStyle(LootrAPI.getRefreshStyle()), true);
       } else if (refreshValue == -1) {
-        if (LootrAPI.isRefreshing(tile)) {
-          startRefresh(player, tileId, refreshValue);
+        if (LootrAPI.isRefreshing(provider)) {
+          startRefresh(player, infoId, refreshValue);
         }
       }
       // Check if it already refreshed
-      MenuProvider provider = DataStorage.getInventory(level, tileId, pos, (ServerPlayer) player, (RandomizableContainerBlockEntity) te, DefaultLootFiller.getInstance());
-      if (provider == null) {
+      MenuProvider menuProvider = DataStorage.getInventory(provider, (ServerPlayer) player, DefaultLootFiller.getInstance());
+      if (menuProvider == null) {
         // Error messages are already handled by nested methods in `getInventory`
         return;
       }
-      checkScore((ServerPlayer) player, tileId);
-      if (addOpener(tile, player)) {
+      checkScore((ServerPlayer) player, infoId);
+      if (addOpener(provider, player)) {
         te.setChanged();
         ((ILootrBlockEntity) te).updatePacketViaForce(te);
       }
-      player.openMenu(provider);
+      player.openMenu(menuProvider);
       // TODO: Instances using this check the block tags first.
       PiglinAi.angerNearbyPiglins(player, true);
     }
@@ -137,37 +136,38 @@ public class ChestUtil {
       return;
     }
 
-    LootrRegistry.getCartTrigger().trigger((ServerPlayer) player, cart.getUUID());
-    UUID tileId = cart.getUUID();
-    if (DataStorage.isDecayed(tileId)) {
+    UUID infoId = cart.getInfoUUID();
+    LootrRegistry.getCartTrigger().trigger((ServerPlayer) player, infoId);
+
+    if (DataStorage.isDecayed(infoId)) {
       cart.destroy(cart.damageSources().fellOutOfWorld());
-      notifyDecay(player, tileId);
+      notifyDecay(player, infoId);
       return;
     } else {
-      int decayValue = DataStorage.getDecayValue(tileId);
+      int decayValue = DataStorage.getDecayValue(infoId);
       if (decayValue > 0 && LootrAPI.shouldNotify(decayValue)) {
         player.displayClientMessage(Component.translatable("lootr.message.decay_in", decayValue / 20).setStyle(LootrAPI.getDecayStyle()), true);
       } else if (decayValue == -1) {
         if (LootrAPI.isDecaying(cart)) {
-          startDecay(player, tileId, decayValue);
+          startDecay(player, infoId, decayValue);
         }
       }
     }
     addOpener(cart, player);
     checkScore((ServerPlayer) player, cart.getUUID());
-    if (DataStorage.isRefreshed(tileId)) {
-      DataStorage.refreshInventory(level, cart, (ServerPlayer) player);
-      notifyRefresh(player, tileId);
+    if (DataStorage.isRefreshed(infoId)) {
+      DataStorage.refreshInventory(cart);
+      notifyRefresh(player, infoId);
     }
-    int refreshValue = DataStorage.getRefreshValue(tileId);
+    int refreshValue = DataStorage.getRefreshValue(infoId);
     if (refreshValue > 0 && LootrAPI.shouldNotify(refreshValue)) {
       player.displayClientMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20).setStyle(LootrAPI.getRefreshStyle()), true);
     } else if (refreshValue == -1) {
       if (LootrAPI.isRefreshing(cart)) {
-        startRefresh(player, tileId, refreshValue);
+        startRefresh(player, infoId, refreshValue);
       }
     }
-    MenuProvider provider = DataStorage.getInventory(level, cart, (ServerPlayer) player, DefaultLootFiller.getInstance());
+    MenuProvider provider = DataStorage.getInventory(cart, (ServerPlayer) player, DefaultLootFiller.getInstance());
     if (provider == null) {
       // Error messages are already handled by nested methods in `getInventory`
       return;
@@ -175,7 +175,7 @@ public class ChestUtil {
     player.openMenu(provider);
   }
 
-  public static void handleLootInventory(Block block, Level level, BlockPos pos, Player player) {
+/*  public static void handleLootInventory(Block block, Level level, BlockPos pos, Player player) {
     if (level.isClientSide() || player.isSpectator()) {
       if (player.isSpectator()) {
         player.openMenu(null);
@@ -215,7 +215,7 @@ public class ChestUtil {
       player.openMenu(provider);
       PiglinAi.angerNearbyPiglins(player, true);
     }
-  }
+  }*/
 
   public static NonNullList<ItemStack> copyItemList(NonNullList<ItemStack> reference) {
     NonNullList<ItemStack> contents = NonNullList.withSize(reference.size(), ItemStack.EMPTY);

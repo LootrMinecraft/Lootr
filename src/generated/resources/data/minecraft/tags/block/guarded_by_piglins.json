@@ -2,6 +2,7 @@
   "values": [
     "lootr:lootr_chest",
     "lootr:lootr_trapped_chest",
-    "lootr:lootr_barrel"
+    "lootr:lootr_barrel",
+    "lootr:lootr_inventory"
   ]
 }

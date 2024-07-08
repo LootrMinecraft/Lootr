@@ -45,7 +45,7 @@ public class LootrInventoryBlock extends ChestBlock {
     if (player.isShiftKeyDown()) {
       ChestUtil.handleLootSneak(this, world, pos, player);
     } else if (!ChestBlock.isChestBlockedAt(world, pos)) {
-      ChestUtil.handleLootInventory(this, world, pos, player);
+      ChestUtil.handleLootChest(this, world, pos, player);
     }
     return InteractionResult.SUCCESS;
   }

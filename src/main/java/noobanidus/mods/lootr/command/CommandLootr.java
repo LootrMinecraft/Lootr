@@ -215,7 +215,7 @@ public class CommandLootr {
             facing = Direction.NORTH;
           }
           reference = ((BarrelBlockEntity) Objects.requireNonNull(world.getBlockEntity(pos))).items;
-          newState = LootrRegistry.getInventory().get().defaultBlockState().setValue(ChestBlock.FACING, facing);
+          newState = LootrRegistry.getInventory().defaultBlockState().setValue(ChestBlock.FACING, facing);
         }
         NonNullList<ItemStack> custom = ChestUtil.copyItemList(reference);
         world.removeBlockEntity(pos);
