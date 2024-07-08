@@ -281,7 +281,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
 
   @Override
   public long getInfoLootSeed() {
-    return getInfoLootSeed();
+    return getLootTableSeed();
   }
 
   @Override
