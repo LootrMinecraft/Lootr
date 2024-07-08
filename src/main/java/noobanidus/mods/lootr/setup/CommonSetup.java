@@ -4,7 +4,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import noobanidus.mods.lootr.api.LootrAPI;
-import noobanidus.mods.lootr.impl.LootrAPIImpl;
 import noobanidus.mods.lootr.init.ModStats;
 
 @EventBusSubscriber(modid = LootrAPI.MODID, bus = EventBusSubscriber.Bus.MOD)

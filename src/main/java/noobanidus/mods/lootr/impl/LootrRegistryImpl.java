@@ -1,12 +1,12 @@
 package noobanidus.mods.lootr.impl;
 
-import net.minecraft.advancements.CriterionTrigger;
 import net.minecraft.stats.Stat;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import noobanidus.mods.lootr.api.advancement.IAdvancementTrigger;
 import noobanidus.mods.lootr.api.advancement.IContainerTrigger;
@@ -51,17 +51,17 @@ public class LootrRegistryImpl implements ILootrRegistry {
   }
 
   @Override
-  public BlockEntityType<?> getChestBlockEntity() {
+  public BlockEntityType<? extends ChestBlockEntity> getChestBlockEntity() {
     return ModBlockEntities.LOOTR_CHEST.get();
   }
 
   @Override
-  public BlockEntityType<?> getTrappedChestBlockEntity() {
+  public BlockEntityType<? extends ChestBlockEntity> getTrappedChestBlockEntity() {
     return ModBlockEntities.LOOTR_TRAPPED_CHEST.get();
   }
 
   @Override
-  public BlockEntityType<?> getInventoryBlockEntity() {
+  public BlockEntityType<? extends ChestBlockEntity> getInventoryBlockEntity() {
     return ModBlockEntities.LOOTR_INVENTORY.get();
   }
 

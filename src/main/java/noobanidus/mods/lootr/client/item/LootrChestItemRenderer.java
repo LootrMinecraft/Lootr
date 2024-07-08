@@ -10,9 +10,9 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.block.entities.LootrChestBlockEntity;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
-import noobanidus.mods.lootr.init.ModBlocks;
 
 public class LootrChestItemRenderer extends BlockEntityWithoutLevelRenderer {
   private static LootrChestItemRenderer INSTANCE = null;
@@ -23,7 +23,7 @@ public class LootrChestItemRenderer extends BlockEntityWithoutLevelRenderer {
   public LootrChestItemRenderer(BlockEntityRenderDispatcher pBlockEntityRenderDispatcher, EntityModelSet pEntityModelSet) {
     super(pBlockEntityRenderDispatcher, pEntityModelSet);
     this.blockEntityRenderDispatcher = pBlockEntityRenderDispatcher;
-    this.tile = new LootrChestBlockEntity(BlockPos.ZERO, ModBlocks.CHEST.get().defaultBlockState());
+    this.tile = new LootrChestBlockEntity(BlockPos.ZERO, LootrRegistry.getChest().defaultBlockState());
   }
 
   public LootrChestItemRenderer() {

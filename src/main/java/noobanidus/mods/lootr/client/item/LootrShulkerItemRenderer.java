@@ -9,8 +9,8 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.block.entities.LootrShulkerBlockEntity;
-import noobanidus.mods.lootr.init.ModBlocks;
 
 public class LootrShulkerItemRenderer extends BlockEntityWithoutLevelRenderer {
   private static LootrShulkerItemRenderer INSTANCE = null;
@@ -21,7 +21,7 @@ public class LootrShulkerItemRenderer extends BlockEntityWithoutLevelRenderer {
   public LootrShulkerItemRenderer(BlockEntityRenderDispatcher pBlockEntityRenderDispatcher, EntityModelSet pEntityModelSet) {
     super(pBlockEntityRenderDispatcher, pEntityModelSet);
     this.blockEntityRenderDispatcher = pBlockEntityRenderDispatcher;
-    this.tile = new LootrShulkerBlockEntity(BlockPos.ZERO, ModBlocks.CHEST.get().defaultBlockState());
+    this.tile = new LootrShulkerBlockEntity(BlockPos.ZERO, LootrRegistry.getShulker().defaultBlockState());
   }
 
   public LootrShulkerItemRenderer() {

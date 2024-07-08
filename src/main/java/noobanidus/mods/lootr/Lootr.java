@@ -27,6 +27,9 @@ public class Lootr {
 
   public Lootr(ModContainer modContainer, IEventBus modBus) {
     instance = this;
+    LootrAPI.INSTANCE = new LootrAPIImpl();
+    LootrRegistry.INSTANCE = new LootrRegistryImpl();
+
     modContainer.registerConfig(ModConfig.Type.COMMON, ConfigManager.COMMON_CONFIG);
     modContainer.registerConfig(ModConfig.Type.CLIENT, ConfigManager.CLIENT_CONFIG);
     ConfigManager.loadConfig(ConfigManager.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve(LootrAPI.MODID + "-common.toml"));
@@ -41,8 +44,6 @@ public class Lootr {
     ModStats.register(modBus);
     ModAdvancements.register(modBus);
     this.packetHandler = new PacketHandler(modBus);
-    LootrAPI.INSTANCE = new LootrAPIImpl();
-    LootrRegistry.INSTANCE = new LootrRegistryImpl();
   }
 
   public static ResourceLocation rl(String path) {

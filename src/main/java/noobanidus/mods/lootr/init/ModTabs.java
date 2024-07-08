@@ -8,15 +8,16 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.registry.LootrRegistry;
 
 public class ModTabs {
   private static final DeferredRegister<CreativeModeTab> REGISTER = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, LootrAPI.MODID);
 
   public static final DeferredHolder<CreativeModeTab, CreativeModeTab> LOOTR = REGISTER.register("lootr", () -> CreativeModeTab.builder()
       .title(Component.translatable("itemGroup.lootr"))
-      .icon(() -> new ItemStack(ModBlocks.TROPHY.get()))
+      .icon(() -> new ItemStack(LootrRegistry.getTrophyItem()))
       .displayItems((p, output) -> {
-        output.accept(ModBlocks.TROPHY.get());
+        output.accept(LootrRegistry.getTrophy());
       }).build());
 
   public static void register(IEventBus bus) {

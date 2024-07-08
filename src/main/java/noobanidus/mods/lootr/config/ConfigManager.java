@@ -24,7 +24,7 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 import noobanidus.mods.lootr.LootrTags;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.info.ILootrInfoProvider;
-import noobanidus.mods.lootr.init.ModBlocks;
+import noobanidus.mods.lootr.api.registry.LootrRegistry;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -358,13 +358,13 @@ public class ConfigManager {
         BlockEntity be = entityBlock.newBlockEntity(BlockPos.ZERO, original);
         if (be instanceof RandomizableContainerBlockEntity) {
           if (original.is(LootrTags.Blocks.CONVERT_TRAPPED_CHESTS)) {
-            replacements.put(original.getBlock(), ModBlocks.TRAPPED_CHEST.get());
+            replacements.put(original.getBlock(), LootrRegistry.getTrappedChest());
           } else if (original.is(LootrTags.Blocks.CONVERT_BARRELS)) {
-            replacements.put(original.getBlock(), ModBlocks.BARREL.get());
+            replacements.put(original.getBlock(), LootrRegistry.getBarrel());
           } else if (original.is(LootrTags.Blocks.CONVERT_CHESTS)) {
-            replacements.put(original.getBlock(), ModBlocks.CHEST.get());
+            replacements.put(original.getBlock(), LootrRegistry.getChest());
           } else if (original.is(LootrTags.Blocks.CONVERT_SHULKERS)) {
-            replacements.put(original.getBlock(), ModBlocks.SHULKER.get());
+            replacements.put(original.getBlock(), LootrRegistry.getShulker());
           }
         }
       }

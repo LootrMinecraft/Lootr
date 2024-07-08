@@ -6,7 +6,6 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.AdvancementEvent;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
-import noobanidus.mods.lootr.init.ModAdvancements;
 
 @EventBusSubscriber(modid = LootrAPI.MODID)
 public class HandleAdvancement {

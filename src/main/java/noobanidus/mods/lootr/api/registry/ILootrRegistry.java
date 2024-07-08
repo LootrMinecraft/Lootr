@@ -6,6 +6,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import noobanidus.mods.lootr.api.advancement.IAdvancementTrigger;
 import noobanidus.mods.lootr.api.advancement.IContainerTrigger;
@@ -40,11 +41,11 @@ public interface ILootrRegistry {
 
   BlockEntityType<?> getBarrelBlockEntity();
 
-  BlockEntityType<?> getChestBlockEntity();
+  BlockEntityType<? extends ChestBlockEntity> getChestBlockEntity();
 
-  BlockEntityType<?> getTrappedChestBlockEntity();
+  BlockEntityType<? extends ChestBlockEntity> getTrappedChestBlockEntity();
 
-  BlockEntityType<?> getInventoryBlockEntity();
+  BlockEntityType<? extends ChestBlockEntity> getInventoryBlockEntity();
 
   BlockEntityType<?> getShulkerBlockEntity();
 

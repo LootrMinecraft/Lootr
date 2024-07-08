@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import noobanidus.mods.lootr.LootrTags;
 import noobanidus.mods.lootr.api.LootrAPI;
-import noobanidus.mods.lootr.init.ModItems;
+import noobanidus.mods.lootr.api.registry.LootrRegistry;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -19,10 +19,10 @@ public class LootrItemTagsProvider extends ItemTagsProvider {
 
   @Override
   protected void addTags(HolderLookup.Provider provider) {
-    tag(LootrTags.Items.BARRELS).add(ModItems.BARREL.get());
-    tag(LootrTags.Items.CHESTS).add(ModItems.CHEST.get(), ModItems.INVENTORY.get());
-    tag(LootrTags.Items.TRAPPED_CHESTS).add(ModItems.TRAPPED_CHEST.get());
-    tag(LootrTags.Items.SHULKERS).add(ModItems.SHULKER.get());
+    tag(LootrTags.Items.BARRELS).add(LootrRegistry.getBarrelItem());
+    tag(LootrTags.Items.CHESTS).add(LootrRegistry.getChestItem(), LootrRegistry.getTrappedChestItem(), LootrRegistry.getInventoryItem());
+    tag(LootrTags.Items.TRAPPED_CHESTS).add(LootrRegistry.getTrappedChestItem());
+    tag(LootrTags.Items.SHULKERS).add(LootrRegistry.getShulkerItem());
     //noinspection unchecked
     tag(LootrTags.Items.CONTAINERS).addTags(LootrTags.Items.BARRELS, LootrTags.Items.CHESTS, LootrTags.Items.TRAPPED_CHESTS, LootrTags.Items.SHULKERS);
   }

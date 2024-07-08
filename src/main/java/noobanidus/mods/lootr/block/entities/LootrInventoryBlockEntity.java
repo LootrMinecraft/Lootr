@@ -10,14 +10,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import noobanidus.mods.lootr.api.LootrAPI;
-import noobanidus.mods.lootr.init.ModBlockEntities;
+import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import org.jetbrains.annotations.Nullable;
 
 public class LootrInventoryBlockEntity extends LootrChestBlockEntity {
   private NonNullList<ItemStack> customInventory;
 
   public LootrInventoryBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
-    super(ModBlockEntities.LOOTR_INVENTORY.get(), pWorldPosition, pBlockState);
+    super(LootrRegistry.getInventoryBlockEntity(), pWorldPosition, pBlockState);
   }
 
   @Override

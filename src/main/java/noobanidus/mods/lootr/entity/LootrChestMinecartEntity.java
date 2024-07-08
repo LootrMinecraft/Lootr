@@ -36,8 +36,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.entity.ILootrCart;
-import noobanidus.mods.lootr.init.ModBlocks;
-import noobanidus.mods.lootr.init.ModEntities;
+import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.network.to_client.PacketOpenCart;
 import noobanidus.mods.lootr.util.ChestUtil;
 import org.jetbrains.annotations.NotNull;
@@ -58,7 +57,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
   public LootrChestMinecartEntity(Level worldIn, double x, double y, double z) {
-    super(ModEntities.LOOTR_MINECART_ENTITY.get(), x, y, z, worldIn);
+    super(LootrRegistry.getMinecart(), x, y, z, worldIn);
   }
 
   @Override
@@ -144,7 +143,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   @Override
   public BlockState getDefaultDisplayBlockState() {
     if (cartNormal == null) {
-      cartNormal = ModBlocks.CHEST.get().defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
+      cartNormal = LootrRegistry.getChest().defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
     }
     return cartNormal;
   }

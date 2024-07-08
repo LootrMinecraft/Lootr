@@ -8,8 +8,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootrBlockEntity;
+import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.block.entities.LootrChestBlockEntity;
-import noobanidus.mods.lootr.init.ModBlockEntities;
 import noobanidus.mods.lootr.util.Getter;
 
 import java.util.UUID;
@@ -33,7 +33,8 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootrBlo
     if (LootrAPI.isVanillaTextures()) {
       return Sheets.chooseMaterial(tile, type, false);
     }
-    boolean trapped = tile.getType().equals(ModBlockEntities.LOOTR_TRAPPED_CHEST.get());
+    // TODO: ???
+    boolean trapped = tile.getType().equals(LootrRegistry.getTrappedChestBlockEntity());
     if (playerId == null) {
       Player player = Getter.getPlayer();
       if (player != null) {

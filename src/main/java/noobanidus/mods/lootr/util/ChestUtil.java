@@ -14,17 +14,16 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.neoforged.neoforge.network.PacketDistributor;
-import noobanidus.mods.lootr.advancement.ContainerTrigger;
 import noobanidus.mods.lootr.api.DefaultLootFiller;
 import noobanidus.mods.lootr.api.IHasOpeners;
 import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.api.blockentity.ILootrBlockEntity;
+import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.block.LootrShulkerBlock;
 import noobanidus.mods.lootr.block.entities.LootrInventoryBlockEntity;
 import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
-import noobanidus.mods.lootr.init.ModAdvancements;
-import noobanidus.mods.lootr.init.ModStats;
 import noobanidus.mods.lootr.network.to_client.PacketCloseCart;
 import noobanidus.mods.lootr.network.to_client.PacketCloseContainer;
 
@@ -87,11 +86,11 @@ public class ChestUtil {
           }
         }
       }
-      ContainerTrigger trigger = ModAdvancements.CHEST.get();
+      IContainerTrigger trigger = LootrRegistry.getChestTrigger();
       if (block instanceof BarrelBlock) {
-        trigger = ModAdvancements.BARREL.get();
+        trigger = LootrRegistry.getBarrelTrigger();
       } else if (block instanceof LootrShulkerBlock) {
-        trigger = ModAdvancements.SHULKER.get();
+        trigger = LootrRegistry.getShulkerTrigger();
       }
       trigger.trigger((ServerPlayer) player, tileId);
       // Generalize refresh check
@@ -138,7 +137,7 @@ public class ChestUtil {
       return;
     }
 
-    ModAdvancements.CART.get().trigger((ServerPlayer) player, cart.getUUID());
+    LootrRegistry.getCartTrigger().trigger((ServerPlayer) player, cart.getUUID());
     UUID tileId = cart.getUUID();
     if (DataStorage.isDecayed(tileId)) {
       cart.destroy(cart.damageSources().fellOutOfWorld());
@@ -185,7 +184,7 @@ public class ChestUtil {
     }
     BlockEntity te = level.getBlockEntity(pos);
     if (te instanceof LootrInventoryBlockEntity tile) {
-      ModAdvancements.CHEST.get().trigger((ServerPlayer) player, tile.getInfoUUID());
+      LootrRegistry.getChestTrigger().trigger((ServerPlayer) player, tile.getInfoUUID());
       NonNullList<ItemStack> stacks = null;
       if (tile.getInfoReferenceInventory() != null) {
         stacks = copyItemList(tile.getInfoReferenceInventory());
@@ -228,8 +227,8 @@ public class ChestUtil {
 
   private static void checkScore(ServerPlayer player, UUID tileId) {
     if (!DataStorage.isScored(player.getUUID(), tileId)) {
-      player.awardStat(ModStats.LOOTED_STAT);
-      ModAdvancements.STAT.get().trigger(player);
+      player.awardStat(LootrRegistry.getLootedStat());
+      LootrRegistry.getStatTrigger().trigger(player);
       DataStorage.score(player.getUUID(), tileId);
     }
   }

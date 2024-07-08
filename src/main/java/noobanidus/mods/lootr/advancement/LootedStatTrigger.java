@@ -7,7 +7,7 @@ import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
 import noobanidus.mods.lootr.api.advancement.ILootedStatTrigger;
-import noobanidus.mods.lootr.init.ModStats;
+import noobanidus.mods.lootr.api.registry.LootrRegistry;
 
 import java.util.Optional;
 
@@ -26,7 +26,7 @@ public class LootedStatTrigger extends SimpleCriterionTrigger<LootedStatTrigger.
     public static final Codec<TriggerInstance> CODEC = RecordCodecBuilder.create(codec -> codec.group(ContextAwarePredicate.CODEC.optionalFieldOf("player").forGetter(LootedStatTrigger.TriggerInstance::player), MinMaxBounds.Ints.CODEC.optionalFieldOf("score", MinMaxBounds.Ints.ANY).forGetter(LootedStatTrigger.TriggerInstance::score)).apply(codec, LootedStatTrigger.TriggerInstance::new));
 
     public boolean test(ServerPlayer player) {
-      return this.score.matches(player.getStats().getValue(ModStats.LOOTED_STAT));
+      return this.score.matches(player.getStats().getValue(LootrRegistry.getLootedStat()));
     }
   }
 }

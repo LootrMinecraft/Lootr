@@ -41,13 +41,13 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootrBlockEntity;
+import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.block.LootrBarrelBlock;
 import noobanidus.mods.lootr.block.LootrChestBlock;
 import noobanidus.mods.lootr.block.LootrShulkerBlock;
 import noobanidus.mods.lootr.block.entities.LootrInventoryBlockEntity;
 import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
-import noobanidus.mods.lootr.init.ModBlocks;
 import noobanidus.mods.lootr.util.ChestUtil;
 import org.jetbrains.annotations.Nullable;
 
@@ -145,31 +145,31 @@ public class CommandLootr {
       return 1;
     });
     builder.then(Commands.literal("barrel").executes(c -> {
-      createBlock(c.getSource(), ModBlocks.BARREL.get(), null);
+      createBlock(c.getSource(), LootrRegistry.getBarrel(), null);
       return 1;
     }).then(suggestTables().executes(c -> {
-      createBlock(c.getSource(), ModBlocks.BARREL.get(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
+      createBlock(c.getSource(), LootrRegistry.getBarrel(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
       return 1;
     })));
     builder.then(Commands.literal("trapped_chest").executes(c -> {
-      createBlock(c.getSource(), ModBlocks.TRAPPED_CHEST.get(), null);
+      createBlock(c.getSource(), LootrRegistry.getTrappedChest(), null);
       return 1;
     }).then(suggestTables().executes(c -> {
-      createBlock(c.getSource(), ModBlocks.TRAPPED_CHEST.get(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
+      createBlock(c.getSource(), LootrRegistry.getTrappedChest(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
       return 1;
     })));
     builder.then(Commands.literal("chest").executes(c -> {
-      createBlock(c.getSource(), ModBlocks.CHEST.get(), null);
+      createBlock(c.getSource(), LootrRegistry.getChest(), null);
       return 1;
     }).then(suggestTables().executes(c -> {
-      createBlock(c.getSource(), ModBlocks.CHEST.get(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
+      createBlock(c.getSource(), LootrRegistry.getChest(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
       return 1;
     })));
     builder.then(Commands.literal("shulker").executes(c -> {
-      createBlock(c.getSource(), ModBlocks.SHULKER.get(), null);
+      createBlock(c.getSource(), LootrRegistry.getShulker(), null);
       return 1;
     }).then(suggestTables().executes(c -> {
-      createBlock(c.getSource(), ModBlocks.SHULKER.get(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
+      createBlock(c.getSource(), LootrRegistry.getShulker(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
       return 1;
     })));
     builder.then(Commands.literal("clear").executes(c -> {
@@ -208,14 +208,14 @@ public class CommandLootr {
         BlockState newState;
         if (state.is(Blocks.CHEST)) {
           reference = ((ChestBlockEntity) Objects.requireNonNull(world.getBlockEntity(pos))).items;
-          newState = ModBlocks.INVENTORY.get().defaultBlockState().setValue(ChestBlock.FACING, state.getValue(ChestBlock.FACING)).setValue(ChestBlock.WATERLOGGED, state.getValue(ChestBlock.WATERLOGGED));
+          newState = LootrRegistry.getInventory().defaultBlockState().setValue(ChestBlock.FACING, state.getValue(ChestBlock.FACING)).setValue(ChestBlock.WATERLOGGED, state.getValue(ChestBlock.WATERLOGGED));
         } else {
           Direction facing = state.getValue(BarrelBlock.FACING);
           if (facing == Direction.UP || facing == Direction.DOWN) {
             facing = Direction.NORTH;
           }
           reference = ((BarrelBlockEntity) Objects.requireNonNull(world.getBlockEntity(pos))).items;
-          newState = ModBlocks.INVENTORY.get().defaultBlockState().setValue(ChestBlock.FACING, facing);
+          newState = LootrRegistry.getInventory().get().defaultBlockState().setValue(ChestBlock.FACING, facing);
         }
         NonNullList<ItemStack> custom = ChestUtil.copyItemList(reference);
         world.removeBlockEntity(pos);

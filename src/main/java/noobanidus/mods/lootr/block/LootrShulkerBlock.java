@@ -28,8 +28,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.block.entities.LootrShulkerBlockEntity;
-import noobanidus.mods.lootr.init.ModBlockEntities;
 import noobanidus.mods.lootr.util.ChestUtil;
 import org.jetbrains.annotations.Nullable;
 
@@ -145,6 +145,6 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
   @Override
   @Nullable
   public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-    return createTickerHelper(pBlockEntityType, ModBlockEntities.LOOTR_SHULKER.get(), LootrShulkerBlockEntity::tick);
+    return createTickerHelper(pBlockEntityType, (BlockEntityType<LootrShulkerBlockEntity>) LootrRegistry.getShulkerBlockEntity(), LootrShulkerBlockEntity::tick);
   }
 }

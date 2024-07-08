@@ -30,9 +30,9 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootrBlockEntity;
+import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.block.LootrBarrelBlock;
 import noobanidus.mods.lootr.data.LootrInventory;
-import noobanidus.mods.lootr.init.ModBlockEntities;
 import noobanidus.mods.lootr.util.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -76,7 +76,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   private boolean savingToItem = false;
 
   public LootrBarrelBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
-    super(ModBlockEntities.LOOTR_BARREL.get(), pWorldPosition, pBlockState);
+    super(LootrRegistry.getBarrelBlockEntity(), pWorldPosition, pBlockState);
   }
 
   @NotNull

@@ -27,8 +27,8 @@ import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootrBlockEntity;
+import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.data.LootrInventory;
-import noobanidus.mods.lootr.init.ModBlockEntities;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -76,7 +76,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   }
 
   public LootrChestBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
-    this(ModBlockEntities.LOOTR_CHEST.get(), pWorldPosition, pBlockState);
+    this(LootrRegistry.getChestBlockEntity(), pWorldPosition, pBlockState);
   }
 
   public static <T extends BlockEntity> void lootrLidAnimateTick(Level pLevel, BlockPos pPos, BlockState pState, T pBlockEntity) {

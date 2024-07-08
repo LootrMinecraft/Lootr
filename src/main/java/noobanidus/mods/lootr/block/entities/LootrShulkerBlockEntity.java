@@ -35,7 +35,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootrBlockEntity;
-import noobanidus.mods.lootr.init.ModBlockEntities;
+import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -57,7 +57,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   private boolean savingToItem = false;
 
   public LootrShulkerBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
-    super(ModBlockEntities.LOOTR_SHULKER.get(), pWorldPosition, pBlockState);
+    super(LootrRegistry.getShulkerBlockEntity(), pWorldPosition, pBlockState);
   }
 
   public static void tick(Level pLevel, BlockPos pPos, BlockState pState, LootrShulkerBlockEntity pBlockEntity) {

@@ -19,15 +19,15 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.block.entities.LootrChestBlockEntity;
 import noobanidus.mods.lootr.block.entities.LootrTrappedChestBlockEntity;
-import noobanidus.mods.lootr.init.ModBlockEntities;
 import noobanidus.mods.lootr.util.ChestUtil;
 import org.jetbrains.annotations.Nullable;
 
 public class LootrTrappedChestBlock extends ChestBlock {
   public LootrTrappedChestBlock(Properties properties) {
-    super(properties, ModBlockEntities.LOOTR_TRAPPED_CHEST::get);
+    super(properties, LootrRegistry::getTrappedChestBlockEntity);
   }
 
   @Override
