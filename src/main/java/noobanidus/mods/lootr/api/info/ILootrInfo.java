@@ -91,12 +91,12 @@ public interface ILootrInfo {
       return null;
     }
 
-    if (getInfoType() == LootrInfoType.CONTAINER_BLOCK_ENTITY) {
+    if (getInfoType() == LootrInfoType.CONTAINER_ENTITY) {
       Entity entity = level.getEntity(getInfoUUID());
       if (entity instanceof Container container) {
         return container;
       }
-    } else if (getInfoType() == LootrInfoType.CONTAINER_ENTITY) {
+    } else if (getInfoType() == LootrInfoType.CONTAINER_BLOCK_ENTITY) {
       BlockEntity be = level.getBlockEntity(getInfoPos());
       if (be instanceof Container container) {
         return container;
