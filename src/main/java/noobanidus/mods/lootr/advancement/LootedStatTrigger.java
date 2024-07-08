@@ -6,11 +6,12 @@ import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
+import noobanidus.mods.lootr.api.advancement.ILootedStatTrigger;
 import noobanidus.mods.lootr.init.ModStats;
 
 import java.util.Optional;
 
-public class LootedStatTrigger extends SimpleCriterionTrigger<LootedStatTrigger.TriggerInstance> {
+public class LootedStatTrigger extends SimpleCriterionTrigger<LootedStatTrigger.TriggerInstance> implements ILootedStatTrigger {
   public void trigger(ServerPlayer player) {
     this.trigger(player, (instance) -> instance.test(player));
   }

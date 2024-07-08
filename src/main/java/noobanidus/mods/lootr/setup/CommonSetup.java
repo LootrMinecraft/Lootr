@@ -11,8 +11,6 @@ import noobanidus.mods.lootr.init.ModStats;
 public class CommonSetup {
   @SubscribeEvent
   public static void init(FMLCommonSetupEvent event) {
-    LootrAPI.INSTANCE = new LootrAPIImpl();
-
     event.enqueueWork(() -> {
       ModStats.load();
     });

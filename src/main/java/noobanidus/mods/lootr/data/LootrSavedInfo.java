@@ -41,77 +41,6 @@ public class LootrSavedInfo extends SavedData implements ILootrSavedInfo {
     return () -> new LootrSavedInfo(info);
   }
 
-/*  public static Supplier<ChestData> ref_id(ResourceKey<Level> dimension, BlockPos pos, UUID id, NonNullList<ItemStack> base) {
-    if (id == null) {
-      throw new IllegalArgumentException("Can't create ChestData for custom container in dimension '" + dimension + "' at '" + pos + "' with a null id.");
-    }
-    return () -> {
-      ChestData data = new ChestData(ID(id));
-      data.pos = pos;
-      data.dimension = dimension;
-      data.uuid = id;
-      data.reference = base;
-      data.custom = true;
-      data.entity = false;
-      if (data.reference == null) {
-        throw new IllegalArgumentException("Inventory reference cannot be null.");
-      }
-      return data;
-    };
-  }*/
-
-/*  public static Supplier<ChestData> id(ResourceKey<Level> dimension, BlockPos pos, UUID id) {
-    if (id == null) {
-      throw new IllegalArgumentException("Can't create ChestData for container in dimension '" + dimension + "' at '" + pos + "' with a null id.");
-    }
-    return () -> {
-      ChestData data = new ChestData(ID(id));
-      data.pos = pos;
-      data.dimension = dimension;
-      data.uuid = id;
-      data.reference = null;
-      data.custom = false;
-      data.entity = false;
-      return data;
-    };
-  }*/
-
-/*  public static Supplier<ChestData> entity(ResourceKey<Level> dimension, BlockPos pos, UUID entityId) {
-    if (entityId == null) {
-      throw new IllegalArgumentException("Can't create ChestData for minecart in dimension '" + dimension + "' at '" + pos + "' with a null entityId.");
-    }
-    return () -> {
-      ChestData data = new ChestData(ID(entityId));
-      data.pos = pos;
-      data.dimension = dimension;
-      data.uuid = entityId;
-      data.entity = true;
-      data.reference = null;
-      data.custom = false;
-      return data;
-    };
-  }*/
-
-/*
-  public static BiFunction<CompoundTag, HolderLookup.Provider, ChestData> loadWrapper(UUID id, ResourceKey<Level> dimension, BlockPos position) {
-    return (tag, provider) -> {
-      ChestData result = ChestData.load(tag, provider);
-      result.key = ID(id);
-      result.dimension = dimension;
-      result.pos = position;
-      return result;
-    };
-  }
-*/
-
-/*  public static ChestData unwrap(ChestData data, UUID id, ResourceKey<Level> dimension, BlockPos position, int size) {
-    data.key = ID(id);
-    data.dimension = dimension;
-    data.pos = position;
-    data.setSize(size);
-    return data;
-  }*/
-
   public static LootrSavedInfo load(CompoundTag compound, HolderLookup.Provider provider) {
     ILootrInfo info = ILootrInfo.loadInfoFromTag(compound, provider);
     LootrSavedInfo data = new LootrSavedInfo(info, true);
@@ -133,10 +62,6 @@ public class LootrSavedInfo extends SavedData implements ILootrSavedInfo {
   @Override
   public ILootrInfo getRedirect() {
     return info;
-  }
-
-  public CustomInventoryFiller customInventory() {
-    return new CustomInventoryFiller();
   }
 
   public boolean clearInventory(UUID uuid) {
@@ -202,9 +127,7 @@ public class LootrSavedInfo extends SavedData implements ILootrSavedInfo {
       if (provider.getInfoReferenceInventory() == null) {
         return;
       }
-      for (int i = 0; i < provider.getInfoReferenceInventory().size(); i++) {
-        inventory.setItem(i, provider.getInfoReferenceInventory().get(i).copy());
-      }
+
     }
   }
 }

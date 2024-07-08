@@ -5,12 +5,13 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
+import noobanidus.mods.lootr.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.data.DataStorage;
 
 import java.util.Optional;
 import java.util.UUID;
 
-public class ContainerTrigger extends SimpleCriterionTrigger<ContainerTrigger.TriggerInstance> {
+public class ContainerTrigger extends SimpleCriterionTrigger<ContainerTrigger.TriggerInstance> implements IContainerTrigger {
   public void trigger(ServerPlayer player, UUID condition) {
     this.trigger(player, (instance) -> instance.test(player, condition));
   }

@@ -51,7 +51,7 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootrBlo
       }
       return trapped ? MATERIAL4 : MATERIAL2;
     }
-    if (tile.getOpeners().contains(playerId)) {
+    if (tile.getVisualOpeners().contains(playerId)) {
       if (LootrAPI.isOldTextures()) {
         return OLD_MATERIAL2;
       }

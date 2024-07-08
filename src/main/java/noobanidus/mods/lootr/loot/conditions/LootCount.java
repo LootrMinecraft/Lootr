@@ -50,7 +50,7 @@ public record LootCount(List<Operation> operations) implements LootItemCondition
     // TODO: REDO THIS TO USE OPENED COUNTERS
     // RATHER THAN OPENERS
     if (tileentity instanceof ILootrBlockEntity) {
-      int count = ((ILootrBlockEntity) tileentity).getOpeners().size() + 1; // Additional opener to include the current opener
+      int count = ((ILootrBlockEntity) tileentity).getActualOpeners().size() + 1; // Additional opener to include the current opener
       for (Operation op : operations) {
         if (!op.test(count)) {
           return false;

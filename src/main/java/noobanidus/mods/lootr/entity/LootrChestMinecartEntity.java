@@ -50,6 +50,7 @@ import java.util.UUID;
 public class LootrChestMinecartEntity extends AbstractMinecartContainer implements ILootrCart {
   private static BlockState cartNormal = null;
   private final Set<UUID> openers = new HashSet<>();
+  private final Set<UUID> actualOpeners = new HashSet<>();
   private boolean opened = false;
 
   public LootrChestMinecartEntity(EntityType<LootrChestMinecartEntity> type, Level world) {
@@ -65,8 +66,13 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
   @Override
-  public Set<UUID> getOpeners() {
+  public Set<UUID> getVisualOpeners() {
     return openers;
+  }
+
+  @Override
+  public Set<UUID> getActualOpeners() {
+    return actualOpeners;
   }
 
   public void addOpener(Player player) {
@@ -170,6 +176,11 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
       list.add(NbtUtils.createUUID(opener));
     }
     compound.put("LootrOpeners", list);
+    ListTag list2 = new ListTag();
+    for (UUID opener : this.actualOpeners) {
+      list2.add(NbtUtils.createUUID(opener));
+    }
+    compound.put("LootrActualOpeners", list2);
     super.addAdditionalSaveData(compound);
   }
 
@@ -180,6 +191,13 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
       this.openers.clear();
       for (Tag item : openers) {
         this.openers.add(NbtUtils.loadUUID(item));
+      }
+    }
+    if (compound.contains("LootrActualOpeners", Tag.TAG_LIST)) {
+      ListTag openers = compound.getList("LootrActualOpeners", Tag.TAG_INT_ARRAY);
+      this.actualOpeners.clear();
+      for (Tag item : openers) {
+        this.actualOpeners.add(NbtUtils.loadUUID(item));
       }
     }
     super.readAdditionalSaveData(compound);
@@ -225,7 +243,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   public void startSeenByPlayer(ServerPlayer pPlayer) {
     super.startSeenByPlayer(pPlayer);
 
-    if (getOpeners().contains(pPlayer.getUUID())) {
+    if (getVisualOpeners().contains(pPlayer.getUUID())) {
       PacketDistributor.sendToPlayer((ServerPlayer) pPlayer, new PacketOpenCart(this.getId()));
     }
   }

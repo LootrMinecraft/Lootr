@@ -39,6 +39,7 @@ import java.util.UUID;
 public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlockEntity {
   private final ChestLidController chestLidController = new ChestLidController();
   private final Set<UUID> openers = new HashSet<>();
+  private final Set<UUID> actualOpeners = new HashSet<>();
   protected UUID infoId;
   private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
     @Override
@@ -125,6 +126,13 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
         this.openers.add(NbtUtils.loadUUID(item));
       }
     }
+    if (compound.contains("LootrActualOpeners")) {
+      ListTag openers = compound.getList("LootrActualOpeners", Tag.TAG_INT_ARRAY);
+      this.actualOpeners.clear();
+      for (Tag item : openers) {
+        this.actualOpeners.add(NbtUtils.loadUUID(item));
+      }
+    }
     super.loadAdditional(compound, provider);
   }
 
@@ -144,6 +152,11 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
         list.add(NbtUtils.createUUID(opener));
       }
       compound.put("LootrOpeners", list);
+      ListTag list2 = new ListTag();
+      for (UUID opener : this.actualOpeners) {
+        list2.add(NbtUtils.createUUID(opener));
+      }
+      compound.put("LootrActualOpeners", list2);
     }
     super.saveAdditional(compound, provider);
   }
@@ -211,8 +224,13 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   }
 
   @Override
-  public Set<UUID> getOpeners() {
+  public Set<UUID> getVisualOpeners() {
     return openers;
+  }
+
+  @Override
+  public Set<UUID> getActualOpeners() {
+    return actualOpeners;
   }
 
   @Override

@@ -9,8 +9,11 @@ import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.command.CommandLootr;
 import noobanidus.mods.lootr.config.ConfigManager;
+import noobanidus.mods.lootr.impl.LootrAPIImpl;
+import noobanidus.mods.lootr.impl.LootrRegistryImpl;
 import noobanidus.mods.lootr.init.*;
 import noobanidus.mods.lootr.network.PacketHandler;
 
@@ -27,10 +30,6 @@ public class Lootr {
     modContainer.registerConfig(ModConfig.Type.COMMON, ConfigManager.COMMON_CONFIG);
     modContainer.registerConfig(ModConfig.Type.CLIENT, ConfigManager.CLIENT_CONFIG);
     ConfigManager.loadConfig(ConfigManager.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve(LootrAPI.MODID + "-common.toml"));
-    if (ConfigManager.MAXIMUM_AGE.get() == ConfigManager.OLD_MAX_AGE) {
-      ConfigManager.MAXIMUM_AGE.set(60 * 20 * 15);
-      ConfigManager.COMMON_CONFIG.save();
-    }
     ConfigManager.loadConfig(ConfigManager.CLIENT_CONFIG, FMLPaths.CONFIGDIR.get().resolve(LootrAPI.MODID + "-client.toml"));
     NeoForge.EVENT_BUS.addListener(this::onCommands);
     ModTabs.register(modBus);
@@ -42,6 +41,8 @@ public class Lootr {
     ModStats.register(modBus);
     ModAdvancements.register(modBus);
     this.packetHandler = new PacketHandler(modBus);
+    LootrAPI.INSTANCE = new LootrAPIImpl();
+    LootrRegistry.INSTANCE = new LootrRegistryImpl();
   }
 
   public static ResourceLocation rl(String path) {

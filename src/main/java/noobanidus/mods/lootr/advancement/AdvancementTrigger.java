@@ -6,15 +6,17 @@ import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import noobanidus.mods.lootr.api.advancement.IAdvancementTrigger;
 
 import java.util.Optional;
 
-public class AdvancementTrigger extends SimpleCriterionTrigger<AdvancementTrigger.TriggerInstance> {
+public class AdvancementTrigger extends SimpleCriterionTrigger<AdvancementTrigger.TriggerInstance> implements IAdvancementTrigger {
   @Override
   public Codec<AdvancementTrigger.TriggerInstance> codec() {
     return TriggerInstance.CODEC;
   }
 
+  @Override
   public void trigger(ServerPlayer player, ResourceLocation advancementId) {
     this.trigger(player, (instance) -> instance.test(advancementId));
   }

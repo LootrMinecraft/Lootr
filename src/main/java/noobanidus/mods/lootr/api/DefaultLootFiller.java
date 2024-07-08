@@ -26,28 +26,35 @@ public class DefaultLootFiller implements LootFiller {
     Level level = provider.getInfoLevel();
     BlockPos pos = provider.getInfoPos();
     ResourceKey<LootTable> lootTable = provider.getInfoLootTable();
-    long seed = provider.getInfoLootSeed();
-    // TODO: Handle calculating seed?
-    // TODO: Loot table shouldn't be null but could be null
-    LootTable loottable = level.getServer().reloadableRegistries().getLootTable(lootTable);
+    if (provider.isInfoReferenceInventory()) {
+        for (int i = 0; i < provider.getInfoReferenceInventory().size(); i++) {
+          inventory.setItem(i, provider.getInfoReferenceInventory().get(i).copy());
+        }
+    } else if (lootTable == null) {
+      LootrAPI.LOG.error("Unable to fill loot container in " + level.dimension().location() + " at " + pos + " as the loot table is null and the provider is not a reference inventory!");
+      // TODO:
+    } else {
+      long seed = provider.getInfoLootSeed();
+      LootTable loottable = level.getServer().reloadableRegistries().getLootTable(lootTable);
 
-    if (loottable == LootTable.EMPTY) {
-      LootrAPI.LOG.error("Unable to fill loot barrel in " + level.dimension().location() + " at " + pos + " as the loot table '" + lootTable.location() + "' couldn't be resolved! Please search the loot table in `latest.log` to see if there are errors in loading.");
-      if (LootrAPI.reportUnresolvedTables()) {
-        player.displayClientMessage(LootrAPI.getInvalidTableComponent(lootTable), false);
+      if (loottable == LootTable.EMPTY) {
+        LootrAPI.LOG.error("Unable to fill loot container in " + level.dimension().location() + " at " + pos + " as the loot table '" + lootTable.location() + "' couldn't be resolved! Please search the loot table in `latest.log` to see if there are errors in loading.");
+        if (LootrAPI.reportUnresolvedTables()) {
+          player.displayClientMessage(LootrAPI.getInvalidTableComponent(lootTable), false);
+        }
       }
-    }
 
-    if (player instanceof ServerPlayer sPlayer) {
-      CriteriaTriggers.GENERATE_LOOT.trigger(sPlayer, lootTable);
-    }
+      if (player instanceof ServerPlayer sPlayer) {
+        CriteriaTriggers.GENERATE_LOOT.trigger(sPlayer, lootTable);
+      }
 
-    LootParams.Builder builder = new LootParams.Builder((ServerLevel) level)
-        .withParameter(LootContextParams.ORIGIN, provider.getInfoVec());
-    if (player != null) {
-      builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
-    }
+      LootParams.Builder builder = new LootParams.Builder((ServerLevel) level)
+          .withParameter(LootContextParams.ORIGIN, provider.getInfoVec());
+      if (player != null) {
+        builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
+      }
 
-    loottable.fill(inventory, builder.create(LootContextParamSets.CHEST), LootrAPI.getLootSeed(seed));
+      loottable.fill(inventory, builder.create(LootContextParamSets.CHEST), LootrAPI.getLootSeed(seed));
+    }
   }
 }

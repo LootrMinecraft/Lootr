@@ -10,6 +10,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -39,8 +40,8 @@ public interface ILootrInfoProvider extends ILootrInfo {
     return new CustomLootrInfoProvider(id, pos, containerSize, lootTable, lootSeed, displayName, dimension, customInventory, type);
   }
 
-  // This is only ever used when creating inventories
-  @NotNull
+  // This can be null but only if it is a custom inventory.
+  @Nullable
   ResourceKey<LootTable> getInfoLootTable();
 
   long getInfoLootSeed();

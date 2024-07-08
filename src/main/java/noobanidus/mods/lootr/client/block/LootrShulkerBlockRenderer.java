@@ -45,7 +45,7 @@ public class LootrShulkerBlockRenderer implements BlockEntityRenderer<LootrShulk
         playerId = mc.player.getUUID();
       }
     }
-    if (tile.getOpeners().contains(playerId)) {
+    if (tile.getVisualOpeners().contains(playerId)) {
       return LootrAPI.isOldTextures() ? MATERIAL4 : MATERIAL2;
     } else {
       return LootrAPI.isOldTextures() ? MATERIAL3 : MATERIAL;

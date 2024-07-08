@@ -43,6 +43,7 @@ import java.util.UUID;
 
 public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity implements ILootrBlockEntity {
   private final Set<UUID> openers = new HashSet<>();
+  private final Set<UUID> actualOpeners = new HashSet<>();
   private final NonNullList<ItemStack> items = NonNullList.withSize(27, ItemStack.EMPTY);
   protected UUID infoId = null;
   private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
@@ -114,8 +115,13 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   }
 
   @Override
-  public Set<UUID> getOpeners() {
+  public Set<UUID> getVisualOpeners() {
     return openers;
+  }
+
+  @Override
+  public Set<UUID> getActualOpeners() {
+    return actualOpeners;
   }
 
   @SuppressWarnings("Duplicates")
@@ -132,6 +138,13 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
       this.openers.clear();
       for (Tag item : openers) {
         this.openers.add(NbtUtils.loadUUID(item));
+      }
+    }
+    if (compound.contains("LootrActualOpeners")) {
+      ListTag openers = compound.getList("LootrActualOpeners", Tag.TAG_INT_ARRAY);
+      this.actualOpeners.clear();
+      for (Tag item : openers) {
+        this.actualOpeners.add(NbtUtils.loadUUID(item));
       }
     }
     requestModelDataUpdate();
@@ -155,6 +168,11 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
         list.add(NbtUtils.createUUID(opener));
       }
       compound.put("LootrOpeners", list);
+      ListTag list2 = new ListTag();
+      for (UUID opener : this.actualOpeners) {
+        list2.add(NbtUtils.createUUID(opener));
+      }
+      compound.put("LootrActualOpeners", list2);
     }
   }
 

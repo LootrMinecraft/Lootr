@@ -41,7 +41,6 @@ public class ConfigManager {
   public static final ModConfigSpec.BooleanValue CONVERT_ELYTRAS;
   public static final ModConfigSpec.ConfigValue<List<? extends String>> ADDITIONAL_CHESTS;
   public static final ModConfigSpec.ConfigValue<List<? extends String>> ADDITIONAL_TRAPPED_CHESTS;
-  public static final int OLD_MAX_AGE = 60 * 10 * 10;
   // Breaking
   public static final ModConfigSpec.BooleanValue DISABLE_BREAK;
   public static final ModConfigSpec.BooleanValue ENABLE_BREAK;

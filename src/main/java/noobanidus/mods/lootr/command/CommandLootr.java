@@ -282,7 +282,7 @@ public class CommandLootr {
       Level world = c.getSource().getLevel();
       BlockEntity tile = world.getBlockEntity(position);
       if (tile instanceof ILootrBlockEntity ibe) {
-        Set<UUID> openers = ((ILootrBlockEntity) tile).getOpeners();
+        Set<UUID> openers = ((ILootrBlockEntity) tile).getActualOpeners();
         c.getSource().sendSuccess(() -> Component.literal("Tile at location " + position + " has " + openers.size() + " openers. UUIDs as follows:"), true);
         for (UUID uuid : openers) {
           Optional<GameProfile> prof = c.getSource().getServer().getProfileCache().get(uuid);

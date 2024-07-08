@@ -40,7 +40,7 @@ public class ChestUtil {
 
     BlockEntity te = level.getBlockEntity(pos);
     if (te instanceof ILootrBlockEntity tile) {
-      if (tile.getOpeners().remove(player.getUUID())) {
+      if (tile.getVisualOpeners().remove(player.getUUID())) {
         te.setChanged();
         tile.updatePacketViaForce(te);
         PacketDistributor.sendToPlayer((ServerPlayer) player, new PacketCloseContainer(te.getBlockPos()));
@@ -55,7 +55,7 @@ public class ChestUtil {
       return;
     }
 
-    cart.getOpeners().remove(player.getUUID());
+    cart.getVisualOpeners().remove(player.getUUID());
     PacketDistributor.sendToPlayersTrackingEntity(cart, new PacketCloseCart(cart.getId()));
   }
 
@@ -125,7 +125,9 @@ public class ChestUtil {
   }
 
   private static boolean addOpener(IHasOpeners openable, Player player) {
-    return openable.getOpeners().add(player.getUUID());
+    boolean result1 = openable.getActualOpeners().add(player.getUUID());
+    boolean result2 = openable.getVisualOpeners().add(player.getUUID());
+    return result1 || result2;
   }
 
   public static void handleLootCart(Level level, LootrChestMinecartEntity cart, Player player) {

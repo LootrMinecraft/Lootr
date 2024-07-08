@@ -4,5 +4,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public interface IHasOpeners {
-  Set<UUID> getOpeners();
+  Set<UUID> getVisualOpeners();
+
+  Set<UUID> getActualOpeners();
 }
