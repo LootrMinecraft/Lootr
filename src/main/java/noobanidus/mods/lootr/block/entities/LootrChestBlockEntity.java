@@ -113,6 +113,8 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
 
   @Override
   public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider) {
+    super.loadAdditional(compound, provider);
+    this.tryLoadLootTable(compound);
     if (compound.hasUUID("LootrId")) {
       this.infoId = compound.getUUID("LootrId");
     }
@@ -133,7 +135,6 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
         this.actualOpeners.add(NbtUtils.loadUUID(item));
       }
     }
-    super.loadAdditional(compound, provider);
   }
 
   @Override
@@ -145,6 +146,8 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
 
   @Override
   protected void saveAdditional(CompoundTag compound, HolderLookup.Provider provider) {
+    super.saveAdditional(compound, provider);
+    this.trySaveLootTable(compound);
     if (!LootrAPI.shouldDiscard() && !savingToItem) {
       compound.putUUID("tileId", getInfoUUID());
       ListTag list = new ListTag();
@@ -158,7 +161,6 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
       }
       compound.put("LootrActualOpeners", list2);
     }
-    super.saveAdditional(compound, provider);
   }
 
   @Override

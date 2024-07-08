@@ -127,6 +127,8 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   @SuppressWarnings("Duplicates")
   @Override
   public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider) {
+    super.loadAdditional(compound, provider);
+    this.tryLoadLootTable(compound);
     if (compound.hasUUID("LootrId")) {
       this.infoId = compound.getUUID("LootrId");
     }
@@ -148,7 +150,6 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
       }
     }
     requestModelDataUpdate();
-    super.loadAdditional(compound, provider);
   }
 
   @Override
@@ -161,6 +162,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   @Override
   protected void saveAdditional(CompoundTag compound, HolderLookup.Provider provider) {
     super.saveAdditional(compound, provider);
+    this.trySaveLootTable(compound);
     if (!LootrAPI.shouldDiscard() && !savingToItem) {
       compound.putUUID("LootrId", getInfoUUID());
       ListTag list = new ListTag();
