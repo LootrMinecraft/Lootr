@@ -40,7 +40,7 @@ public class LootrInventoryBlockEntity extends LootrChestBlockEntity {
   }
 
   @Nullable
-  public NonNullList<ItemStack> getCustomInventory() {
+  public NonNullList<ItemStack> getInfoReferenceInventory() {
     return customInventory;
   }
 

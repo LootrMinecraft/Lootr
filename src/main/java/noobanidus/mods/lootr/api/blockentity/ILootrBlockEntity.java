@@ -8,7 +8,12 @@ import noobanidus.mods.lootr.api.IHasOpeners;
 import noobanidus.mods.lootr.api.info.ILootrInfoProvider;
 
 public interface ILootrBlockEntity extends IHasOpeners, ILootrInfoProvider {
-  default void updatePacketViaForce (BlockEntity entity) {
+  @Override
+  default LootrInfoType getInfoType() {
+    return LootrInfoType.CONTAINER_BLOCK_ENTITY;
+  }
+
+  default void updatePacketViaForce(BlockEntity entity) {
     if (entity.getLevel() instanceof ServerLevel level) {
       Packet<?> packet = entity.getUpdatePacket();
       if (packet != null) {
@@ -17,7 +22,7 @@ public interface ILootrBlockEntity extends IHasOpeners, ILootrInfoProvider {
     }
   }
 
-  boolean isClientOpened ();
+  boolean isClientOpened();
 
   void setClientOpened(boolean opened);
 }

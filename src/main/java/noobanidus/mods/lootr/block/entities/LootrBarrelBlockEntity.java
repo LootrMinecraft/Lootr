@@ -31,7 +31,7 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.block.LootrBarrelBlock;
-import noobanidus.mods.lootr.data.SpecialChestInventory;
+import noobanidus.mods.lootr.data.LootrInventory;
 import noobanidus.mods.lootr.init.ModBlockEntities;
 import noobanidus.mods.lootr.util.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -43,8 +43,8 @@ import java.util.UUID;
 
 public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity implements ILootrBlockEntity {
   private final Set<UUID> openers = new HashSet<>();
+  private final NonNullList<ItemStack> items = NonNullList.withSize(27, ItemStack.EMPTY);
   protected UUID infoId = null;
-  protected boolean clientOpened = false;
   private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
     @Override
     protected void onOpen(Level level, BlockPos pos, BlockState state) {
@@ -64,20 +64,14 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
 
     @Override
     protected boolean isOwnContainer(Player player) {
-      if (player.containerMenu instanceof ChestMenu) {
-        if (((ChestMenu) player.containerMenu).getContainer() instanceof SpecialChestInventory data) {
-          if (data.getTileId() == null) {
-            return data.getBlockEntity(LootrBarrelBlockEntity.this.getLevel()) == LootrBarrelBlockEntity.this;
-          } else {
-            return data.getTileId().equals(LootrBarrelBlockEntity.this.getInfoUUID());
-          }
-        }
+      if (player.containerMenu instanceof ChestMenu && ((ChestMenu) player.containerMenu).getContainer() instanceof LootrInventory data) {
+        return data.getInfo().getInfoUUID().equals(LootrBarrelBlockEntity.this.getInfoUUID());
       }
       return false;
     }
   };
+  protected boolean clientOpened = false;
   private ModelData modelData = null;
-  private final NonNullList<ItemStack> items = NonNullList.withSize(27, ItemStack.EMPTY);
   private boolean savingToItem = false;
 
   public LootrBarrelBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
@@ -212,13 +206,13 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   }
 
   @Override
-  public void setClientOpened(boolean opened) {
-    this.clientOpened = opened;
+  public boolean isClientOpened() {
+    return clientOpened;
   }
 
   @Override
-  public boolean isClientOpened() {
-    return clientOpened;
+  public void setClientOpened(boolean opened) {
+    this.clientOpened = opened;
   }
 
   @Override
@@ -270,6 +264,11 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   @Override
   public long getInfoLootSeed() {
     return getInfoLootSeed();
+  }
+
+  @Override
+  public @Nullable NonNullList<ItemStack> getInfoReferenceInventory() {
+    return null;
   }
 
   @Override

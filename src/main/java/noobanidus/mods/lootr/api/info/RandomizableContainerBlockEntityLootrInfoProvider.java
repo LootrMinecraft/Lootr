@@ -1,22 +1,31 @@
 package noobanidus.mods.lootr.api.info;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
+import java.util.UUID;
 
 public record RandomizableContainerBlockEntityLootrInfoProvider(
-    @NotNull RandomizableContainerBlockEntity blockEntity) implements ILootrInfoProvider {
+    @NotNull RandomizableContainerBlockEntity blockEntity, UUID id,
+    NonNullList<ItemStack> customInventory) implements ILootrInfoProvider {
 
   @Override
   public LootrInfoType getInfoType() {
-    return LootrInfoType.RANDOMIZABLE_CONTAINER_BLOCK_ENTITY;
+    return LootrInfoType.CONTAINER_BLOCK_ENTITY;
+  }
+
+  @Override
+  public UUID getInfoUUID() {
+    return id();
   }
 
   @Override
@@ -51,12 +60,17 @@ public record RandomizableContainerBlockEntityLootrInfoProvider(
   }
 
   @Override
+  public @Nullable NonNullList<ItemStack> getInfoReferenceInventory() {
+    return customInventory();
+  }
+
+  @Override
   public Level getInfoLevel() {
     return blockEntity.getLevel();
   }
 
   @Override
-  public Optional<RandomizableContainerBlockEntity> asBaseBlockEntity() {
-    return Optional.of(blockEntity);
+  public Container getInfoContainer() {
+    return blockEntity;
   }
 }

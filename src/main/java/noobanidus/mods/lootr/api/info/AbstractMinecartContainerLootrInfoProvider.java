@@ -1,28 +1,36 @@
 package noobanidus.mods.lootr.api.info;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.vehicle.AbstractMinecartContainer;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
+import java.util.UUID;
 
 public record AbstractMinecartContainerLootrInfoProvider(
     AbstractMinecartContainer minecart) implements ILootrInfoProvider {
 
   @Override
   public LootrInfoType getInfoType() {
-    return LootrInfoType.MINECART_ENTITY;
+    return LootrInfoType.CONTAINER_ENTITY;
   }
 
   @Override
   public Vec3 getInfoVec() {
     return minecart.position();
+  }
+
+  @Override
+  public UUID getInfoUUID() {
+    return minecart.getUUID();
   }
 
   @Override
@@ -50,6 +58,12 @@ public record AbstractMinecartContainerLootrInfoProvider(
     return minecart.getContainerSize();
   }
 
+  // Minecarts cannot have custom inventories.
+  @Override
+  public @Nullable NonNullList<ItemStack> getInfoReferenceInventory() {
+    return null;
+  }
+
   @Override
   public long getInfoLootSeed() {
     return minecart.getLootTableSeed();
@@ -61,7 +75,7 @@ public record AbstractMinecartContainerLootrInfoProvider(
   }
 
   @Override
-  public Optional<AbstractMinecartContainer> asBaseMinecartEntity() {
-    return Optional.of(minecart);
+  public Container getInfoContainer() {
+    return minecart;
   }
 }

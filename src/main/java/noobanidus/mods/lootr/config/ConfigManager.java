@@ -22,8 +22,8 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import noobanidus.mods.lootr.LootrTags;
-import noobanidus.mods.lootr.api.info.ILootrInfoProvider;
 import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.info.ILootrInfoProvider;
 import noobanidus.mods.lootr.init.ModBlocks;
 
 import java.nio.file.Path;
@@ -157,12 +157,12 @@ public class ConfigManager {
   }
 
   @SubscribeEvent
-  public static void reloadConfig (ModConfigEvent.Reloading event) {
+  public static void reloadConfig(ModConfigEvent.Reloading event) {
     configEvent(event);
   }
 
   @SubscribeEvent
-  public static void loadConfig (ModConfigEvent.Loading event) {
+  public static void loadConfig(ModConfigEvent.Loading event) {
     configEvent(event);
   }
 
@@ -335,7 +335,7 @@ public class ConfigManager {
     return VANILLA_TEXTURES.get();
   }
 
-  public static boolean isOldTextures () {
+  public static boolean isOldTextures() {
     return OLD_TEXTURES.get();
   }
 

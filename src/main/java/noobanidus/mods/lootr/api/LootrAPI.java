@@ -29,22 +29,25 @@ public class LootrAPI {
   public static final ResourceKey<LootTable> ELYTRA_CHEST = ResourceKey.create(Registries.LOOT_TABLE, LootrAPI.rl("chests/elytra"));
 
   public static ILootrAPI INSTANCE;
+  public static boolean shouldDiscardIdAndOpeners;
 
-  public static ResourceLocation rl (String path) {
+  public static ResourceLocation rl(String path) {
     return ResourceLocation.fromNamespaceAndPath(MODID, path);
   }
 
-  public static ResourceLocation rl (String namespace, String path) {
+  public static ResourceLocation rl(String namespace, String path) {
     return ResourceLocation.fromNamespaceAndPath(namespace, path);
   }
 
-  public static MinecraftServer getServer () {
+  public static MinecraftServer getServer() {
     return INSTANCE.getServer();
   }
 
-  public static boolean shouldDiscardIdAndOpeners;
+  public static int getCurrentTicks() {
+    return INSTANCE.getCurrentTicks();
+  }
 
-  public static boolean isFakePlayer (Player player) {
+  public static boolean isFakePlayer(Player player) {
     return INSTANCE.isFakePlayer(player);
   }
 
@@ -92,35 +95,35 @@ public class LootrAPI {
     return INSTANCE.isDefaultTextures();
   }
 
-  public static boolean shouldNotify (int remaining) {
+  public static boolean shouldNotify(int remaining) {
     return INSTANCE.shouldNotify(remaining);
   }
 
-  public static boolean isDisabled () {
+  public static boolean isDisabled() {
     return INSTANCE.isDisabled();
   }
 
-  public static boolean isLootTableBlacklisted (ResourceKey<LootTable> table) {
+  public static boolean isLootTableBlacklisted(ResourceKey<LootTable> table) {
     return INSTANCE.isLootTableBlacklisted(table);
   }
 
-  public static boolean isDimensionBlocked (ResourceKey<Level> dimension) {
+  public static boolean isDimensionBlocked(ResourceKey<Level> dimension) {
     return INSTANCE.isDimensionBlocked(dimension);
   }
 
-  public static boolean isDecaying (ILootrInfoProvider provider) {
+  public static boolean isDecaying(ILootrInfoProvider provider) {
     return INSTANCE.isDecaying(provider);
   }
 
-  public static boolean isRefreshing (ILootrInfoProvider provider) {
+  public static boolean isRefreshing(ILootrInfoProvider provider) {
     return INSTANCE.isRefreshing(provider);
   }
 
-  public static boolean reportUnresolvedTables () {
+  public static boolean reportUnresolvedTables() {
     return INSTANCE.reportUnresolvedTables();
   }
 
-  public static boolean isCustomTrapped () {
+  public static boolean isCustomTrapped() {
     return INSTANCE.isCustomTrapped();
   }
 
@@ -132,23 +135,23 @@ public class LootrAPI {
     return INSTANCE.isWorldBorderSafe(level, pos);
   }
 
-  public static boolean hasExpired (long time) {
+  public static boolean hasExpired(long time) {
     return INSTANCE.hasExpired(time);
   }
 
-  public static boolean shouldConvertMineshafts () {
+  public static boolean shouldConvertMineshafts() {
     return INSTANCE.shouldConvertMineshafts();
   }
 
-  public static boolean shouldConvertElytras () {
+  public static boolean shouldConvertElytras() {
     return INSTANCE.shouldConvertElytras();
   }
 
-  public static int getDecayValue () {
+  public static int getDecayValue() {
     return INSTANCE.getDecayValue();
   }
 
-  public static int getRefreshValue () {
+  public static int getRefreshValue() {
     return INSTANCE.getRefreshValue();
   }
 
@@ -156,31 +159,31 @@ public class LootrAPI {
     return INSTANCE.getInvalidStyle();
   }
 
-  public static Style getDecayStyle () {
+  public static Style getDecayStyle() {
     return INSTANCE.getDecayStyle();
   }
 
-  public static Style getRefreshStyle () {
+  public static Style getRefreshStyle() {
     return INSTANCE.getRefreshStyle();
   }
 
-  public static Style getChatStyle () {
+  public static Style getChatStyle() {
     return INSTANCE.getChatStyle();
   }
 
-  public static Component getInvalidTableComponent (ResourceKey<LootTable> lootTable) {
+  public static Component getInvalidTableComponent(ResourceKey<LootTable> lootTable) {
     return INSTANCE.getInvalidTableComponent(lootTable);
   }
 
-  public static boolean canDestroyOrBreak (Player player) {
+  public static boolean canDestroyOrBreak(Player player) {
     return INSTANCE.canDestroyOrBreak(player);
   }
 
-  public static boolean isBreakDisabled () {
+  public static boolean isBreakDisabled() {
     return INSTANCE.isBreakDisabled();
   }
 
-  public static BlockState replacementBlockState (BlockState original) {
+  public static BlockState replacementBlockState(BlockState original) {
     return INSTANCE.replacementBlockState(original);
   }
 

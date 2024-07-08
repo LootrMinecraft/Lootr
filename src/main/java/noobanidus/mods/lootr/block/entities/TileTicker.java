@@ -15,7 +15,6 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
-import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.event.HandleChunk;
@@ -66,7 +65,7 @@ public class TileTicker {
       }
     }
 
-    Entry newEntry = new Entry(dimension, position, chunks, ServerLifecycleHooks.getCurrentServer().getTickCount());
+    Entry newEntry = new Entry(dimension, position, chunks, LootrAPI.getCurrentTicks());
     synchronized (listLock) {
       if (tickingList) {
         pendingEntries.add(newEntry);

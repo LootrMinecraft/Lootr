@@ -1,31 +1,17 @@
 package noobanidus.mods.lootr.data;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.Container;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.api.LootFiller;
 import noobanidus.mods.lootr.api.LootrAPI;
-import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
+import noobanidus.mods.lootr.api.info.ILootrInfoProvider;
+import noobanidus.mods.lootr.api.inventory.ILootrInventory;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
-import java.util.function.IntSupplier;
-import java.util.function.LongSupplier;
-import java.util.function.Supplier;
 
 @SuppressWarnings("unused")
 public class DataStorage {
@@ -36,7 +22,7 @@ public class DataStorage {
 
   @Nullable
   public static DimensionDataStorage getDataStorage() {
-    MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+    MinecraftServer server = LootrAPI.getServer();
     if (server == null) {
       LootrAPI.LOG.error("MinecraftServer is null at this stage; Lootr cannot fetch data storage.");
       return null;
@@ -203,128 +189,25 @@ public class DataStorage {
     }
   }
 
-  public static OldChestData getContainerData(ServerLevel world, BlockPos pos, UUID id) {
+  public static LootrSavedInfo getData(ILootrInfoProvider provider) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
-      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot fetch chest data for " + world.dimension() + " at " + pos.toString() + " with ID " + id.toString() + " and cannot continue.");
+      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot fetch data for " + provider.getInfoDimension() + " at " + provider.getInfoPos() + " with ID " + provider.getInfoUUID() + " and cannot continue.");
       return null;
     }
-    int size;
-    BlockEntity be = world.getBlockEntity(pos);
-    if (be == null) {
-      LootrAPI.LOG.error("The block entity with id '" + id.toString() + "' in '" + world.dimension() + "' at '" + pos + "' is null.");
-    }
-    if (be instanceof Container bce) {
-      size = bce.getContainerSize();
-    } else {
-      LootrAPI.LOG.error("We have no heuristic to determine the size of '" + id.toString() + "' in '" + world.dimension() + "' at '" + pos + "'. Defaulting to 27.");
-      size = 27;
-    }
-    // TODO
-    return null;
-  }
-
-  public static OldChestData getEntityData(ServerLevel world, BlockPos pos, UUID id) {
-    DimensionDataStorage manager = DataStorage.getDataStorage();
-    if (manager == null) {
-      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot fetch chest data for " + world.dimension() + " at " + pos.toString() + " with ID " + id.toString() + " and cannot continue.");
-      return null;
-    }
-    Entity entity = world.getEntity(id);
-    int size;
-    if (entity == null) {
-      LootrAPI.LOG.error("The entity with id '" + id + "' in '" + world.dimension() + "' at '" + pos + "' is null.");
-    }
-    if (entity instanceof Container container) {
-      size = container.getContainerSize();
-    } else {
-      LootrAPI.LOG.error("We have no heuristic to determine the size of entity '" + id + "' in '" + world.dimension() + "' at '" + pos + "'. Defaulting to 27.");
-      size = 27;
-    }
-    // TODO
-    return null;
-  }
-
-  public static OldChestData getReferenceContainerData(ServerLevel world, BlockPos pos, UUID id, NonNullList<ItemStack> base) {
-    DimensionDataStorage manager = DataStorage.getDataStorage();
-    if (manager == null) {
-      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot fetch chest data for " + world.dimension() + " at " + pos.toString() + " with ID " + id.toString() + " and cannot continue.");
-      return null;
-    }
-    // TODO
-    return null;
+    return manager.computeIfAbsent(new SavedData.Factory<>(LootrSavedInfo.fromInfo(provider), LootrSavedInfo::load), provider.getInfoKey());
   }
 
   @Nullable
-  public static SpecialChestInventory getInventory(Level level, UUID uuid, BlockPos pos, ServerPlayer player, Supplier<BlockPos> posSupplier, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceKey<LootTable>> tableSupplier, LongSupplier seedSupplier) {
-    if (level.isClientSide() || !(level instanceof ServerLevel)) {
-      return null;
-    }
-
-    OldChestData data = getContainerData((ServerLevel) level, pos, uuid);
+  public static ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler) {
+    LootrSavedInfo data = getData(provider);
     if (data == null) {
-      // Error messages are already generated by `getContainerData`
+      // Error messages are already generated by `getData`
       return null;
     }
-    SpecialChestInventory inventory = data.getInventory(player);
+    ILootrInventory inventory = data.getInventory(player);
     if (inventory == null) {
-      inventory = data.createInventory(player, filler, posSupplier, sizeSupplier, displaySupplier, tableSupplier, seedSupplier);
-    }
-
-    return inventory;
-  }
-
-  @Nullable
-  public static SpecialChestInventory getInventory(Level level, UUID uuid, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceKey<LootTable>> tableSupplier, LongSupplier seedSupplier) {
-    if (level.isClientSide() || !(level instanceof ServerLevel)) {
-      return null;
-    }
-
-    OldChestData data = getContainerData((ServerLevel) level, pos, uuid);
-    if (data == null) {
-      // Error messages are already generated by `getContainerData`
-      return null;
-    }
-    SpecialChestInventory inventory = data.getInventory(player);
-    if (inventory == null) {
-      inventory = data.createInventory(player, filler, blockEntity, tableSupplier, seedSupplier);
-    }
-
-    return inventory;
-  }
-
-  @Nullable
-  public static SpecialChestInventory getInventory(Level world, UUID uuid, BlockPos pos, ServerPlayer player, RandomizableContainerBlockEntity tile, LootFiller filler) {
-    if (world.isClientSide || !(world instanceof ServerLevel)) {
-      return null;
-    }
-
-    OldChestData data = getContainerData((ServerLevel) world, pos, uuid);
-    if (data == null) {
-      // Error messages are already generated by `getContainerData`
-      return null;
-    }
-    SpecialChestInventory inventory = data.getInventory(player);
-    if (inventory == null) {
-      inventory = data.createInventory(player, filler, tile);
-    }
-
-    return inventory;
-  }
-
-  @Nullable
-  public static SpecialChestInventory getInventory(Level world, UUID uuid, NonNullList<ItemStack> base, ServerPlayer player, BlockPos pos, RandomizableContainerBlockEntity tile) {
-    if (world.isClientSide || !(world instanceof ServerLevel)) {
-      return null;
-    }
-    OldChestData data = getReferenceContainerData((ServerLevel) world, pos, uuid, base);
-    if (data == null) {
-      // Error messages are already generated by `getReferenceContainerData`
-      return null;
-    }
-    SpecialChestInventory inventory = data.getInventory(player);
-    if (inventory == null) {
-      inventory = data.createInventory(player, data.customInventory(), tile);
+      inventory = data.createInventory(provider, player, filler);
     }
 
     return inventory;
@@ -378,63 +261,13 @@ public class DataStorage {
     return cleared != 0;
   }*/
 
-  @Nullable
-  public static SpecialChestInventory getInventory(Level world, LootrChestMinecartEntity cart, ServerPlayer player, LootFiller filler) {
-    if (world.isClientSide || !(world instanceof ServerLevel)) {
-      return null;
-    }
-
-    OldChestData data = getEntityData((ServerLevel) world, cart.blockPosition(), cart.getUUID());
+  public static void refreshInventory(ILootrInfoProvider provider) {
+    LootrSavedInfo data = getData(provider);
     if (data == null) {
-      // Error messages are already generated by `getEntityData`
-      return null;
-    }
-    SpecialChestInventory inventory = data.getInventory(player);
-    if (inventory == null) {
-      inventory = data.createInventory(player, filler, null);
-    }
-
-    return inventory;
-  }
-
-  public static void refreshInventory(Level level, BlockPos pos, UUID uuid, ServerPlayer player) {
-    if (level.isClientSide() || !(level instanceof ServerLevel)) {
+      // Error messages are already generated by `getData`
       return;
     }
-
-    OldChestData data = getContainerData((ServerLevel) level, pos, uuid);
-    if (data == null) {
-      // Error messages are already generated by `getContainerData`
-      return;
-    }
-    data.clear();
-    data.setDirty();
-  }
-
-  public static void refreshInventory(Level world, BlockPos pos, UUID uuid, NonNullList<ItemStack> base, ServerPlayer player) {
-    if (world.isClientSide() || !(world instanceof ServerLevel)) {
-      return;
-    }
-    OldChestData data = getReferenceContainerData((ServerLevel) world, pos, uuid, base);
-    if (data == null) {
-      // Error messages are already generated by `getContainerReferenceData`
-      return;
-    }
-    data.clear();
-    data.setDirty();
-  }
-
-  public static void refreshInventory(Level world, LootrChestMinecartEntity cart, ServerPlayer player) {
-    if (world.isClientSide() || !(world instanceof ServerLevel)) {
-      return;
-    }
-
-    OldChestData data = getEntityData((ServerLevel) world, cart.blockPosition(), cart.getUUID());
-    if (data == null) {
-      // Error messages are already generated by `getEntityData`
-      return;
-    }
-    data.clear();
+    data.clearInventories();
     data.setDirty();
   }
 }

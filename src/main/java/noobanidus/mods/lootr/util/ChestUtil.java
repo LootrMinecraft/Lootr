@@ -185,8 +185,8 @@ public class ChestUtil {
     if (te instanceof LootrInventoryBlockEntity tile) {
       ModAdvancements.CHEST.get().trigger((ServerPlayer) player, tile.getInfoUUID());
       NonNullList<ItemStack> stacks = null;
-      if (tile.getCustomInventory() != null) {
-        stacks = copyItemList(tile.getCustomInventory());
+      if (tile.getInfoReferenceInventory() != null) {
+        stacks = copyItemList(tile.getInfoReferenceInventory());
       }
       UUID tileId = tile.getInfoUUID();
       if (DataStorage.isRefreshed(tileId)) {

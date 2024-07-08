@@ -57,10 +57,10 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootrBlo
       }
       return trapped ? MATERIAL4 : MATERIAL2;
     } else {
-        if (LootrAPI.isOldTextures()) {
-          return OLD_MATERIAL;
-        }
-        return trapped ? MATERIAL3 : MATERIAL;
+      if (LootrAPI.isOldTextures()) {
+        return OLD_MATERIAL;
+      }
+      return trapped ? MATERIAL3 : MATERIAL;
     }
   }
 }

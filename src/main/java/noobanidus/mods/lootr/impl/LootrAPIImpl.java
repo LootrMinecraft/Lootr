@@ -13,25 +13,23 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
-import noobanidus.mods.lootr.api.*;
+import noobanidus.mods.lootr.api.ILootrAPI;
+import noobanidus.mods.lootr.api.LootFiller;
+import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.MenuBuilder;
 import noobanidus.mods.lootr.api.client.ClientTextureType;
 import noobanidus.mods.lootr.api.info.ILootrInfoProvider;
 import noobanidus.mods.lootr.api.inventory.ILootrInventory;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.data.DataStorage;
-import noobanidus.mods.lootr.data.SpecialChestInventory;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.IntSupplier;
-import java.util.function.LongSupplier;
-import java.util.function.Supplier;
 
 public class LootrAPIImpl implements ILootrAPI {
 
@@ -58,30 +56,13 @@ public class LootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  public ILootrInventory getInventory(Level level, UUID id, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceKey<LootTable>> tableSupplier, LongSupplier seedSupplier) {
-    return DataStorage.getInventory(level, id, pos, player, blockEntity, filler, tableSupplier, seedSupplier);
+  public ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler) {
+    return DataStorage.getInventory(provider, player, filler);
   }
 
-  @Nullable
   @Override
-  public ILootrInventory getInventory(Level level, UUID id, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceKey<LootTable>> tableSupplier, LongSupplier seedSupplier, MenuBuilder menuBuilder) {
-    SpecialChestInventory inventory = DataStorage.getInventory(level, id, pos, player, blockEntity, filler, tableSupplier, seedSupplier);
-    if (inventory != null) {
-      inventory.setMenuBuilder(menuBuilder);
-    }
-    return inventory;
-  }
-
-  @Nullable
-  @Override
-  public ILootrInventory getInventory(Level level, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceKey<LootTable>> tableSupplier, LongSupplier seedSupplier) {
-    return DataStorage.getInventory(level, id, pos, player, () -> pos, sizeSupplier, displaySupplier, filler, tableSupplier, seedSupplier);
-  }
-
-  @Nullable
-  @Override
-  public ILootrInventory getInventory(Level level, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceKey<LootTable>> tableSupplier, LongSupplier seedSupplier, MenuBuilder menuBuilder) {
-    SpecialChestInventory inventory = DataStorage.getInventory(level, id, pos, player, () -> pos, sizeSupplier, displaySupplier, filler, tableSupplier, seedSupplier);
+  public ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler, MenuBuilder menuBuilder) {
+    ILootrInventory inventory = DataStorage.getInventory(provider, player, filler);
     if (inventory != null) {
       inventory.setMenuBuilder(menuBuilder);
     }
@@ -90,7 +71,8 @@ public class LootrAPIImpl implements ILootrAPI {
 
   @Override
   public long getLootSeed(long seed) {
-    if (ConfigManager.RANDOMISE_SEED.get() || seed == -1) {
+    // TODO: Check seed = 0
+    if (ConfigManager.RANDOMISE_SEED.get() || seed == -1 || seed == 0) {
       return ThreadLocalRandom.current().nextLong();
     }
     return seed;

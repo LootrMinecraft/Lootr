@@ -45,6 +45,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity implements ILootrBlockEntity {
+  private static final NonNullList<ItemStack> itemStacks = NonNullList.withSize(27, ItemStack.EMPTY);
   public Set<UUID> openers = new HashSet<>();
   protected UUID infoId;
   protected boolean clientOpened;
@@ -53,7 +54,6 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   private float progress;
   private float progressOld;
   private boolean savingToItem = false;
-  private static final NonNullList<ItemStack> itemStacks = NonNullList.withSize(27, ItemStack.EMPTY);
 
   public LootrShulkerBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
     super(ModBlockEntities.LOOTR_SHULKER.get(), pWorldPosition, pBlockState);
@@ -261,11 +261,6 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   @Override
-  public void setClientOpened(boolean opened) {
-    this.clientOpened = true;
-  }
-
-  @Override
   @NotNull
   public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
     CompoundTag result = super.getUpdateTag(provider);
@@ -296,6 +291,11 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   @Override
+  public void setClientOpened(boolean opened) {
+    this.clientOpened = true;
+  }
+
+  @Override
   public BlockPos getInfoPos() {
     return getBlockPos();
   }
@@ -323,6 +323,11 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   @Override
   public long getInfoLootSeed() {
     return getLootTableSeed();
+  }
+
+  @Override
+  public @Nullable NonNullList<ItemStack> getInfoReferenceInventory() {
+    return null;
   }
 
   @Override

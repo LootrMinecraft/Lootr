@@ -3,6 +3,7 @@ package noobanidus.mods.lootr.block.entities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
@@ -26,7 +27,7 @@ import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootrBlockEntity;
-import noobanidus.mods.lootr.data.SpecialChestInventory;
+import noobanidus.mods.lootr.data.LootrInventory;
 import noobanidus.mods.lootr.init.ModBlockEntities;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -58,8 +59,8 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
     @Override
     protected boolean isOwnContainer(Player player) {
       if ((player.containerMenu instanceof ChestMenu menu)) {
-        if (menu.getContainer() instanceof SpecialChestInventory chest) {
-          return LootrChestBlockEntity.this.getInfoUUID().equals(chest.getTileId());
+        if (menu.getContainer() instanceof LootrInventory data) {
+          return LootrChestBlockEntity.this.getInfoUUID().equals(data.getInfo().getInfoUUID());
         }
       }
 
@@ -215,6 +216,11 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   }
 
   @Override
+  public LootrInfoType getInfoType() {
+    return LootrInfoType.CONTAINER_BLOCK_ENTITY;
+  }
+
+  @Override
   @NotNull
   public UUID getInfoUUID() {
     if (this.infoId == null) {
@@ -260,6 +266,11 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   @Override
   public long getInfoLootSeed() {
     return getLootTableSeed();
+  }
+
+  @Override
+  public @Nullable NonNullList<ItemStack> getInfoReferenceInventory() {
+    return null;
   }
 
   @Override

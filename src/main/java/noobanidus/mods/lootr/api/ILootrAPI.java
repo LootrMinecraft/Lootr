@@ -11,7 +11,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.api.client.ClientTextureType;
@@ -20,14 +19,19 @@ import noobanidus.mods.lootr.api.inventory.ILootrInventory;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
-import java.util.function.IntSupplier;
-import java.util.function.LongSupplier;
-import java.util.function.Supplier;
 
 public interface ILootrAPI {
-  MinecraftServer getServer ();
+  MinecraftServer getServer();
 
-  boolean isFakePlayer (Player player);
+  default int getCurrentTicks() {
+    MinecraftServer server = getServer();
+    if (server == null) {
+      return -1;
+    }
+    return server.getTickCount();
+  }
+
+  boolean isFakePlayer(Player player);
 
   default boolean clearPlayerLoot(ServerPlayer entity) {
     return clearPlayerLoot(entity.getUUID());
@@ -35,47 +39,12 @@ public interface ILootrAPI {
 
   boolean clearPlayerLoot(UUID id);
 
-  /**
-   * Provides access to a Lootr-instanced container/MenuProvider for the relevant non-Lootr and non-Vanilla container.
-   * <p>
-   * This should be called via an integration class in the relevant `use` method of a block.
-   * <p>
-   * Requirements include a UUID generated for the specific container. Some implementation of `LootFiller` should exist in the relevant block entity. Likewise, you will need to provide functional references in order to fill in the `lootTable` and `lootTableSeed`.
-   * <p>
-   * If your class does not derive from `BaseContainerBlockEntity`, please use the alternate method that accepts an `IntSupplier` (for the size of the container) and a `Supplier<Component>` for the name of the block entity.
-   *
-   * @param level         The relevant level.
-   * @param id            The universally unique identifier for this block entity.
-   * @param pos           The block position where this block entity is located.
-   * @param player        The ServerPlayer currently accessing the container.
-   * @param blockEntity   The instance of your block entity, extending `BaseContainerBlockEntity`
-   * @param filler        A functional interface that accepts the container to be filled, the loot table, the seed, and the player who is opening the container.
-   * @param tableSupplier A method reference to the loot table of this block entity.
-   * @param seedSupplier  A method reference to the loot table seed of this block entity.
-   * @return Either the relevant inventory (cast as a MenuProvider) or null if the function was called with a client-size Level or an instance of Level that isn't ServerLevel.
-   */
   @Nullable
-  ILootrInventory getInventory(Level level, UUID id, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceKey<LootTable>> tableSupplier, LongSupplier seedSupplier);
+  ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler);
 
   @Nullable
-  ILootrInventory getInventory(Level level, UUID id, BlockPos pos, ServerPlayer player, BaseContainerBlockEntity blockEntity, LootFiller filler, Supplier<ResourceKey<LootTable>> tableSupplier, LongSupplier seedSupplier, MenuBuilder builder);
+  ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler, MenuBuilder builder);
 
-  /**
-   * Provides access to an instanced player container for the relevant block entity. Instead of requiring the block entity extend BaseContainerBlockEntity, this instead accepts an IntSupplier (the size of the container) and a `Supplier<Component>` equivalent to `BaseContainerBlockEntity::getDisplayName`.
-   * <p>
-   * If your block entity extends BaseContainerBlockEntity, please use the method that accepts that instead.
-   * <p>
-   * See the documentation of the other `getModdedMenu` for more details.
-   */
-  @Nullable
-  ILootrInventory getInventory(Level level, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceKey<LootTable>> tableSupplier, LongSupplier seedSupplier);
-
-  @Nullable
-  ILootrInventory getInventory(Level level, UUID id, BlockPos pos, ServerPlayer player, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, LootFiller filler, Supplier<ResourceKey<LootTable>> tableSupplier, LongSupplier seedSupplier, MenuBuilder builder);
-
-  /**
-   * Provides access to the relevant configuration for the loot seed. This is used to determine if the provided seed is randomized or not.
-   */
   long getLootSeed(long seed);
 
   boolean shouldDiscard();
@@ -86,53 +55,53 @@ public interface ILootrAPI {
 
   int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos, int defaultSignal);
 
-  boolean shouldNotify (int remaining);
+  boolean shouldNotify(int remaining);
 
   ClientTextureType getTextureType();
 
-  default boolean isOldTextures () {
+  default boolean isOldTextures() {
     return getTextureType() == ClientTextureType.OLD;
   }
 
-  default boolean isVanillaTextures () {
+  default boolean isVanillaTextures() {
     return getTextureType() == ClientTextureType.VANILLA;
   }
 
-  default boolean isDefaultTextures () {
+  default boolean isDefaultTextures() {
     return getTextureType() == ClientTextureType.DEFAULT;
   }
 
   boolean isDisabled();
 
-  boolean isLootTableBlacklisted (ResourceKey<LootTable> table);
+  boolean isLootTableBlacklisted(ResourceKey<LootTable> table);
 
-  boolean isDimensionBlocked (ResourceKey<Level> dimension);
+  boolean isDimensionBlocked(ResourceKey<Level> dimension);
 
-  boolean isDimensionDecaying (ResourceKey<Level> dimension);
+  boolean isDimensionDecaying(ResourceKey<Level> dimension);
 
-  boolean isDimensionRefreshing (ResourceKey<Level> dimension);
+  boolean isDimensionRefreshing(ResourceKey<Level> dimension);
 
-  boolean isDecaying (ILootrInfoProvider provider);
+  boolean isDecaying(ILootrInfoProvider provider);
 
-  boolean isRefreshing (ILootrInfoProvider provider);
+  boolean isRefreshing(ILootrInfoProvider provider);
 
-  boolean reportUnresolvedTables ();
+  boolean reportUnresolvedTables();
 
-  boolean isCustomTrapped ();
+  boolean isCustomTrapped();
 
   boolean isWorldBorderSafe(Level level, BlockPos pos);
 
   boolean isWorldBorderSafe(Level level, ChunkPos pos);
 
-  boolean hasExpired (long time);
+  boolean hasExpired(long time);
 
-  boolean shouldConvertMineshafts ();
+  boolean shouldConvertMineshafts();
 
-  boolean shouldConvertElytras ();
+  boolean shouldConvertElytras();
 
-  int getDecayValue ();
+  int getDecayValue();
 
-  int getRefreshValue ();
+  int getRefreshValue();
 
   Style getInvalidStyle();
 
@@ -140,16 +109,16 @@ public interface ILootrAPI {
 
   Style getRefreshStyle();
 
-  Style getChatStyle ();
+  Style getChatStyle();
 
-  Component getInvalidTableComponent (ResourceKey<LootTable> lootTable) ;
+  Component getInvalidTableComponent(ResourceKey<LootTable> lootTable);
 
-  boolean canDestroyOrBreak (Player player);
+  boolean canDestroyOrBreak(Player player);
 
-  boolean isBreakDisabled ();
+  boolean isBreakDisabled();
 
   @Nullable
-  BlockState replacementBlockState (BlockState original);
+  BlockState replacementBlockState(BlockState original);
 
   // TODO: Think on this.
   default boolean hasCapacity(String capacity) {
