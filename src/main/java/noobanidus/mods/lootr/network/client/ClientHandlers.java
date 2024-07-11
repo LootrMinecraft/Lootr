@@ -53,35 +53,11 @@ public class ClientHandlers {
   }
 
   public static void handleOpenContainer(BlockPos pos) {
-    Level level = Minecraft.getInstance().level;
-    if (level == null) {
-      LootrAPI.LOG.info("Unable to mark container open for location '" + pos + "' as level is null.");
-      return;
-    }
-
-    Player player = Minecraft.getInstance().player;
-    if (player == null) {
-      LootrAPI.LOG.info("Unable to mark container open for location '" + pos + "' as player is null.");
-      return;
-    }
-
     SectionPos sPos = SectionPos.of(pos);
     Minecraft.getInstance().levelRenderer.setSectionDirty(sPos.x(), sPos.y(), sPos.z());
   }
 
   public static void handleCloseContainer(BlockPos pos) {
-    Level level = Minecraft.getInstance().level;
-    if (level == null) {
-      LootrAPI.LOG.info("Unable to mark container closed for location '" + pos + "' as level is null.");
-      return;
-    }
-
-    Player player = Minecraft.getInstance().player;
-    if (player == null) {
-      LootrAPI.LOG.info("Unable to mark container closed for location '" + pos + "' as player is null.");
-      return;
-    }
-
     SectionPos sPos = SectionPos.of(pos);
     Minecraft.getInstance().levelRenderer.setSectionDirty(sPos.x(), sPos.y(), sPos.z());
   }
