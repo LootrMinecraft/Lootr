@@ -22,6 +22,8 @@ import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.network.toClient.PacketCloseCart;
 import noobanidus.mods.lootr.network.toClient.PacketCloseContainer;
+import noobanidus.mods.lootr.network.toClient.PacketOpenCart;
+import noobanidus.mods.lootr.network.toClient.PacketOpenContainer;
 
 import java.util.UUID;
 
@@ -110,7 +112,9 @@ public class ChestUtil {
       }
       checkAndScore(provider, (ServerPlayer) player);
       if (addOpener(provider, player)) {
+        // TODO: Send a packet here
         provider.updatePacketViaForce();
+        PacketDistributor.sendToPlayer((ServerPlayer) player, new PacketOpenContainer(provider.getInfoPos()));
       }
       player.openMenu(menuProvider);
       // TODO: Instances using this check the block tags first.
@@ -149,7 +153,10 @@ public class ChestUtil {
         }
       }
     }
-    addOpener(cart, player);
+    if (addOpener(cart, player)) {
+      // TODO: Send a packet here
+      PacketDistributor.sendToPlayersTrackingEntity(cart, new PacketOpenCart(cart.getId()));
+    }
     checkAndScore(cart, (ServerPlayer) player);
     if (DataStorage.isRefreshed(infoId)) {
       DataStorage.refreshInventory(cart);
