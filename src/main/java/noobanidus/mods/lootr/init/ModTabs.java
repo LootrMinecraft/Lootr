@@ -17,7 +17,7 @@ public class ModTabs {
       .title(Component.translatable("itemGroup.lootr"))
       .icon(() -> new ItemStack(LootrRegistry.getTrophyItem()))
       .displayItems((p, output) -> {
-        output.accept(LootrRegistry.getTrophy());
+        output.accept(LootrRegistry.getTrophyBlock());
       }).build());
 
   public static void register(IEventBus bus) {

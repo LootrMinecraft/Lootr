@@ -145,31 +145,31 @@ public class CommandLootr {
       return 1;
     });
     builder.then(Commands.literal("barrel").executes(c -> {
-      createBlock(c.getSource(), LootrRegistry.getBarrel(), null);
+      createBlock(c.getSource(), LootrRegistry.getBarrelBlock(), null);
       return 1;
     }).then(suggestTables().executes(c -> {
-      createBlock(c.getSource(), LootrRegistry.getBarrel(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
+      createBlock(c.getSource(), LootrRegistry.getBarrelBlock(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
       return 1;
     })));
     builder.then(Commands.literal("trapped_chest").executes(c -> {
-      createBlock(c.getSource(), LootrRegistry.getTrappedChest(), null);
+      createBlock(c.getSource(), LootrRegistry.getTrappedChestBlock(), null);
       return 1;
     }).then(suggestTables().executes(c -> {
-      createBlock(c.getSource(), LootrRegistry.getTrappedChest(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
+      createBlock(c.getSource(), LootrRegistry.getTrappedChestBlock(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
       return 1;
     })));
     builder.then(Commands.literal("chest").executes(c -> {
-      createBlock(c.getSource(), LootrRegistry.getChest(), null);
+      createBlock(c.getSource(), LootrRegistry.getChestBlock(), null);
       return 1;
     }).then(suggestTables().executes(c -> {
-      createBlock(c.getSource(), LootrRegistry.getChest(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
+      createBlock(c.getSource(), LootrRegistry.getChestBlock(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
       return 1;
     })));
     builder.then(Commands.literal("shulker").executes(c -> {
-      createBlock(c.getSource(), LootrRegistry.getShulker(), null);
+      createBlock(c.getSource(), LootrRegistry.getShulkerBlock(), null);
       return 1;
     }).then(suggestTables().executes(c -> {
-      createBlock(c.getSource(), LootrRegistry.getShulker(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
+      createBlock(c.getSource(), LootrRegistry.getShulkerBlock(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
       return 1;
     })));
     builder.then(Commands.literal("clear").executes(c -> {
@@ -208,14 +208,14 @@ public class CommandLootr {
         BlockState newState;
         if (state.is(Blocks.CHEST)) {
           reference = ((ChestBlockEntity) Objects.requireNonNull(world.getBlockEntity(pos))).items;
-          newState = LootrRegistry.getInventory().defaultBlockState().setValue(ChestBlock.FACING, state.getValue(ChestBlock.FACING)).setValue(ChestBlock.WATERLOGGED, state.getValue(ChestBlock.WATERLOGGED));
+          newState = LootrRegistry.getInventoryBlock().defaultBlockState().setValue(ChestBlock.FACING, state.getValue(ChestBlock.FACING)).setValue(ChestBlock.WATERLOGGED, state.getValue(ChestBlock.WATERLOGGED));
         } else {
           Direction facing = state.getValue(BarrelBlock.FACING);
           if (facing == Direction.UP || facing == Direction.DOWN) {
             facing = Direction.NORTH;
           }
           reference = ((BarrelBlockEntity) Objects.requireNonNull(world.getBlockEntity(pos))).items;
-          newState = LootrRegistry.getInventory().defaultBlockState().setValue(ChestBlock.FACING, facing);
+          newState = LootrRegistry.getInventoryBlock().defaultBlockState().setValue(ChestBlock.FACING, facing);
         }
         NonNullList<ItemStack> custom = ChestUtil.copyItemList(reference);
         world.removeBlockEntity(pos);

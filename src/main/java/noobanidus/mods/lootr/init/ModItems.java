@@ -15,12 +15,12 @@ import noobanidus.mods.lootr.item.LootrShulkerBlockItem;
 public class ModItems {
   private static final DeferredRegister<Item> REGISTER = DeferredRegister.create(BuiltInRegistries.ITEM, LootrAPI.MODID);
 
-  public static final DeferredHolder<Item, BlockItem> CHEST = REGISTER.register("lootr_chest", () -> new LootrChestBlockItem(LootrRegistry.getChest(), new BlockItem.Properties()));
-  public static final DeferredHolder<Item, BlockItem> TRAPPED_CHEST = REGISTER.register("lootr_trapped_chest", () -> new LootrChestBlockItem(LootrRegistry.getTrappedChest(), new BlockItem.Properties()));
-  public static final DeferredHolder<Item, BlockItem> BARREL = REGISTER.register("lootr_barrel", () -> new BlockItem(LootrRegistry.getBarrel(), new BlockItem.Properties()));
-  public static final DeferredHolder<Item, BlockItem> INVENTORY = REGISTER.register("lootr_inventory", () -> new LootrChestBlockItem(LootrRegistry.getInventory(), new BlockItem.Properties()));
-  public static final DeferredHolder<Item, BlockItem> SHULKER = REGISTER.register("lootr_shulker", () -> new LootrShulkerBlockItem(LootrRegistry.getShulker(), new BlockItem.Properties()));
-  public static final DeferredHolder<Item, BlockItem> TROPHY = REGISTER.register("trophy", () -> new BlockItem(LootrRegistry.getTrophy(), new Item.Properties().rarity(Rarity.EPIC)));
+  public static final DeferredHolder<Item, BlockItem> CHEST = REGISTER.register("lootr_chest", () -> new LootrChestBlockItem(LootrRegistry.getChestBlock(), new BlockItem.Properties()));
+  public static final DeferredHolder<Item, BlockItem> TRAPPED_CHEST = REGISTER.register("lootr_trapped_chest", () -> new LootrChestBlockItem(LootrRegistry.getTrappedChestBlock(), new BlockItem.Properties()));
+  public static final DeferredHolder<Item, BlockItem> BARREL = REGISTER.register("lootr_barrel", () -> new BlockItem(LootrRegistry.getBarrelBlock(), new BlockItem.Properties()));
+  public static final DeferredHolder<Item, BlockItem> INVENTORY = REGISTER.register("lootr_inventory", () -> new LootrChestBlockItem(LootrRegistry.getInventoryBlock(), new BlockItem.Properties()));
+  public static final DeferredHolder<Item, BlockItem> SHULKER = REGISTER.register("lootr_shulker", () -> new LootrShulkerBlockItem(LootrRegistry.getShulkerBlock(), new BlockItem.Properties()));
+  public static final DeferredHolder<Item, BlockItem> TROPHY = REGISTER.register("trophy", () -> new BlockItem(LootrRegistry.getTrophyBlock(), new Item.Properties().rarity(Rarity.EPIC)));
 
   public static void register(IEventBus bus) {
     REGISTER.register(bus);

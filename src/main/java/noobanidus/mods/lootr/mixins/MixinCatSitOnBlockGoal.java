@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinCatSitOnBlockGoal {
   @Redirect(method = "isValidTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;is(Lnet/minecraft/world/level/block/Block;)Z"))
   protected boolean lootrIsIn(BlockState state, Block block) {
-    return state.is(block) || state.is(LootrRegistry.getChest()) || state.is(LootrRegistry.getTrappedChest());
+    return state.is(block) || state.is(LootrRegistry.getChestBlock()) || state.is(LootrRegistry.getTrappedChestBlock());
   }
 
   @Inject(method = "isValidTarget", at = @At(target = "Lnet/minecraft/world/level/block/entity/ChestBlockEntity;getOpenCount(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;)I", value = "INVOKE"), cancellable = true)

@@ -21,18 +21,18 @@ public class LootrBlockTagProvider extends BlockTagsProvider {
 
   @Override
   protected void addTags(HolderLookup.Provider provider) {
-    tag(BlockTags.SHULKER_BOXES).add(LootrRegistry.getShulker());
-    tag(BlockTags.MINEABLE_WITH_PICKAXE).add(LootrRegistry.getTrophy());
-    tag(BlockTags.MINEABLE_WITH_AXE).add(LootrRegistry.getChest(), LootrRegistry.getTrappedChest(), LootrRegistry.getBarrel(), LootrRegistry.getInventory());
-    tag(BlockTags.GUARDED_BY_PIGLINS).add(LootrRegistry.getChest(), LootrRegistry.getTrappedChest(), LootrRegistry.getBarrel(), LootrRegistry.getInventory());
-    tag(Tags.Blocks.CHESTS_WOODEN).add(LootrRegistry.getChest(), LootrRegistry.getInventory());
-    tag(Tags.Blocks.CHESTS_TRAPPED).add(LootrRegistry.getTrappedChest());
-    tag(Tags.Blocks.BARRELS).add(LootrRegistry.getBarrel());
+    tag(BlockTags.SHULKER_BOXES).add(LootrRegistry.getShulkerBlock());
+    tag(BlockTags.MINEABLE_WITH_PICKAXE).add(LootrRegistry.getTrophyBlock());
+    tag(BlockTags.MINEABLE_WITH_AXE).add(LootrRegistry.getChestBlock(), LootrRegistry.getTrappedChestBlock(), LootrRegistry.getBarrelBlock(), LootrRegistry.getInventoryBlock());
+    tag(BlockTags.GUARDED_BY_PIGLINS).add(LootrRegistry.getChestBlock(), LootrRegistry.getTrappedChestBlock(), LootrRegistry.getBarrelBlock(), LootrRegistry.getInventoryBlock());
+    tag(Tags.Blocks.CHESTS_WOODEN).add(LootrRegistry.getChestBlock(), LootrRegistry.getInventoryBlock());
+    tag(Tags.Blocks.CHESTS_TRAPPED).add(LootrRegistry.getTrappedChestBlock());
+    tag(Tags.Blocks.BARRELS).add(LootrRegistry.getBarrelBlock());
 
-    tag(LootrTags.Blocks.BARRELS).add(LootrRegistry.getBarrel());
-    tag(LootrTags.Blocks.CHESTS).add(LootrRegistry.getChest(), LootrRegistry.getInventory());
-    tag(LootrTags.Blocks.TRAPPED_CHESTS).add(LootrRegistry.getTrappedChest());
-    tag(LootrTags.Blocks.SHULKERS).add(LootrRegistry.getShulker());
+    tag(LootrTags.Blocks.BARRELS).add(LootrRegistry.getBarrelBlock());
+    tag(LootrTags.Blocks.CHESTS).add(LootrRegistry.getChestBlock(), LootrRegistry.getInventoryBlock());
+    tag(LootrTags.Blocks.TRAPPED_CHESTS).add(LootrRegistry.getTrappedChestBlock());
+    tag(LootrTags.Blocks.SHULKERS).add(LootrRegistry.getShulkerBlock());
     //noinspection unchecked
     tag(LootrTags.Blocks.CONTAINERS).addTags(LootrTags.Blocks.BARRELS, LootrTags.Blocks.CHESTS, LootrTags.Blocks.TRAPPED_CHESTS, LootrTags.Blocks.SHULKERS);
 

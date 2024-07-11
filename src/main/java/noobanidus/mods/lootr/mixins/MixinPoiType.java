@@ -26,7 +26,7 @@ public class MixinPoiType {
       isFisherman = PoiTypes.FISHERMAN.location().equals(BuiltInRegistries.POINT_OF_INTEREST_TYPE.getKey(thisPoi));
     }
     if (isFisherman) {
-      if (state.is(LootrRegistry.getBarrel())) {
+      if (state.is(LootrRegistry.getBarrelBlock())) {
         cir.setReturnValue(true);
         cir.cancel();
       }

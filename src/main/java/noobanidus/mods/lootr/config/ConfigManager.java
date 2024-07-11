@@ -358,13 +358,13 @@ public class ConfigManager {
         BlockEntity be = entityBlock.newBlockEntity(BlockPos.ZERO, original);
         if (be instanceof RandomizableContainerBlockEntity) {
           if (original.is(LootrTags.Blocks.CONVERT_TRAPPED_CHESTS)) {
-            replacements.put(original.getBlock(), LootrRegistry.getTrappedChest());
+            replacements.put(original.getBlock(), LootrRegistry.getTrappedChestBlock());
           } else if (original.is(LootrTags.Blocks.CONVERT_BARRELS)) {
-            replacements.put(original.getBlock(), LootrRegistry.getBarrel());
+            replacements.put(original.getBlock(), LootrRegistry.getBarrelBlock());
           } else if (original.is(LootrTags.Blocks.CONVERT_CHESTS)) {
-            replacements.put(original.getBlock(), LootrRegistry.getChest());
+            replacements.put(original.getBlock(), LootrRegistry.getChestBlock());
           } else if (original.is(LootrTags.Blocks.CONVERT_SHULKERS)) {
-            replacements.put(original.getBlock(), LootrRegistry.getShulker());
+            replacements.put(original.getBlock(), LootrRegistry.getShulkerBlock());
           }
         }
       }

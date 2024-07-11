@@ -15,27 +15,27 @@ import noobanidus.mods.lootr.api.advancement.ILootedStatTrigger;
 public class LootrRegistry {
   public static ILootrRegistry INSTANCE;
 
-  public static Block getBarrel() {
+  public static Block getBarrelBlock() {
     return INSTANCE.getBarrel();
   }
 
-  public static Block getChest() {
+  public static Block getChestBlock() {
     return INSTANCE.getChest();
   }
 
-  public static Block getTrappedChest() {
+  public static Block getTrappedChestBlock() {
     return INSTANCE.getTrappedChest();
   }
 
-  public static Block getInventory() {
+  public static Block getInventoryBlock() {
     return INSTANCE.getInventory();
   }
 
-  public static Block getTrophy() {
+  public static Block getTrophyBlock() {
     return INSTANCE.getTrophy();
   }
 
-  public static Block getShulker() {
+  public static Block getShulkerBlock() {
     return INSTANCE.getShulker();
   }
 

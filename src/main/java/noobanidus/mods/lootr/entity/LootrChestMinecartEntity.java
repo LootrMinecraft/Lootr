@@ -143,7 +143,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   @Override
   public BlockState getDefaultDisplayBlockState() {
     if (cartNormal == null) {
-      cartNormal = LootrRegistry.getChest().defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
+      cartNormal = LootrRegistry.getChestBlock().defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
     }
     return cartNormal;
   }
