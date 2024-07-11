@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.data;
+package noobanidus.mods.lootr.api.data;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;

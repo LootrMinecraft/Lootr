@@ -1,11 +1,11 @@
-package noobanidus.mods.lootr.api.blockentity;
+package noobanidus.mods.lootr.api.data.blockentity;
 
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import noobanidus.mods.lootr.api.IHasOpeners;
-import noobanidus.mods.lootr.api.info.ILootrInfoProvider;
+import noobanidus.mods.lootr.api.data.ILootrInfoProvider;
 
 public interface ILootrBlockEntity extends IHasOpeners, ILootrInfoProvider {
   @Override

@@ -14,8 +14,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.api.client.ClientTextureType;
-import noobanidus.mods.lootr.api.info.ILootrInfoProvider;
-import noobanidus.mods.lootr.api.inventory.ILootrInventory;
+import noobanidus.mods.lootr.api.data.ILootrInfoProvider;
+import noobanidus.mods.lootr.api.data.LootFiller;
+import noobanidus.mods.lootr.api.data.inventory.ILootrInventory;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;

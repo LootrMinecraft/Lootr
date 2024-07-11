@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.data;
+package noobanidus.mods.lootr.api.data;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;

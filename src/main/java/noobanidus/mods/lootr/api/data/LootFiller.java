@@ -1,8 +1,7 @@
-package noobanidus.mods.lootr.api;
+package noobanidus.mods.lootr.api.data;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
-import noobanidus.mods.lootr.api.info.ILootrInfoProvider;
 import org.jetbrains.annotations.NotNull;
 
 @FunctionalInterface

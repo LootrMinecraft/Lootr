@@ -4,8 +4,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.chunk.LevelChunk;
 import noobanidus.mods.lootr.api.LootrAPI;
-import noobanidus.mods.lootr.api.blockentity.ILootrBlockEntity;
-import noobanidus.mods.lootr.block.entities.TileTicker;
+import noobanidus.mods.lootr.api.data.blockentity.ILootrBlockEntity;
+import noobanidus.mods.lootr.block.entity.BlockEntityTicker;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -31,7 +31,7 @@ public class MixinLevelChunk {
         return;
       }
 
-      TileTicker.addEntry(level.getLevel(), entity.getBlockPos());
+      BlockEntityTicker.addEntry(level.getLevel(), entity.getBlockPos());
     }
   }
 }

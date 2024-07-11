@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.api.inventory;
+package noobanidus.mods.lootr.api.data.inventory;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
@@ -8,13 +8,13 @@ import net.minecraft.world.Container;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.item.ItemStack;
 import noobanidus.mods.lootr.api.MenuBuilder;
-import noobanidus.mods.lootr.api.info.ILootrInfo;
-import noobanidus.mods.lootr.api.info.ILootrSavedInfo;
+import noobanidus.mods.lootr.api.data.ILootrInfo;
+import noobanidus.mods.lootr.api.data.ILootrSavedData;
 
 public interface ILootrInventory extends Container, MenuProvider {
   ILootrInfo getInfo();
 
-  void setInfo(ILootrSavedInfo info);
+  void setInfo(ILootrSavedData info);
 
   @Override
   default Component getDisplayName() {

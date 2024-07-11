@@ -11,11 +11,11 @@ import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.saveddata.SavedData;
-import noobanidus.mods.lootr.api.LootFiller;
-import noobanidus.mods.lootr.api.info.BaseLootrInfo;
-import noobanidus.mods.lootr.api.info.ILootrInfo;
-import noobanidus.mods.lootr.api.info.ILootrInfoProvider;
-import noobanidus.mods.lootr.api.info.ILootrSavedInfo;
+import noobanidus.mods.lootr.api.data.LootFiller;
+import noobanidus.mods.lootr.api.data.BaseLootrInfo;
+import noobanidus.mods.lootr.api.data.ILootrInfo;
+import noobanidus.mods.lootr.api.data.ILootrInfoProvider;
+import noobanidus.mods.lootr.api.data.ILootrSavedData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,25 +25,25 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-public class LootrSavedInfo extends SavedData implements ILootrSavedInfo {
+public class LootrSavedData extends SavedData implements ILootrSavedData {
   private final ILootrInfo info;
   private final Map<UUID, LootrInventory> inventories = new HashMap<>();
 
-  protected LootrSavedInfo(ILootrInfo info) {
+  protected LootrSavedData(ILootrInfo info) {
     this.info = BaseLootrInfo.copy(info);
   }
 
-  protected LootrSavedInfo(ILootrInfo info, boolean noCopy) {
+  protected LootrSavedData(ILootrInfo info, boolean noCopy) {
     this.info = info;
   }
 
-  public static Supplier<LootrSavedInfo> fromInfo(ILootrInfo info) {
-    return () -> new LootrSavedInfo(info);
+  public static Supplier<LootrSavedData> fromInfo(ILootrInfo info) {
+    return () -> new LootrSavedData(info);
   }
 
-  public static LootrSavedInfo load(CompoundTag compound, HolderLookup.Provider provider) {
+  public static LootrSavedData load(CompoundTag compound, HolderLookup.Provider provider) {
     ILootrInfo info = ILootrInfo.loadInfoFromTag(compound, provider);
-    LootrSavedInfo data = new LootrSavedInfo(info, true);
+    LootrSavedData data = new LootrSavedData(info, true);
     data.inventories.clear();
 
     ListTag compounds = compound.getList("inventories", Tag.TAG_COMPOUND);

@@ -10,7 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
-import noobanidus.mods.lootr.block.entities.LootrShulkerBlockEntity;
+import noobanidus.mods.lootr.block.entity.LootrShulkerBlockEntity;
 
 public class LootrShulkerItemRenderer extends BlockEntityWithoutLevelRenderer {
   private static LootrShulkerItemRenderer INSTANCE = null;

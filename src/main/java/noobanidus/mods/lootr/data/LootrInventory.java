@@ -15,18 +15,18 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import noobanidus.mods.lootr.api.MenuBuilder;
-import noobanidus.mods.lootr.api.info.ILootrInfo;
-import noobanidus.mods.lootr.api.info.ILootrSavedInfo;
-import noobanidus.mods.lootr.api.inventory.ILootrInventory;
+import noobanidus.mods.lootr.api.data.ILootrInfo;
+import noobanidus.mods.lootr.api.data.ILootrSavedData;
+import noobanidus.mods.lootr.api.data.inventory.ILootrInventory;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("NullableProblems")
 public class LootrInventory implements ILootrInventory {
   private final NonNullList<ItemStack> contents;
-  private ILootrSavedInfo info;
+  private ILootrSavedData info;
   private MenuBuilder menuBuilder = null;
 
-  public LootrInventory(ILootrSavedInfo info, NonNullList<ItemStack> contents) {
+  public LootrInventory(ILootrSavedData info, NonNullList<ItemStack> contents) {
     this.info = info;
     if (!contents.isEmpty()) {
       this.contents = contents;
@@ -136,7 +136,7 @@ public class LootrInventory implements ILootrInventory {
   }
 
   @Override
-  public void setInfo(ILootrSavedInfo info) {
+  public void setInfo(ILootrSavedData info) {
     this.info = info;
   }
 

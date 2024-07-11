@@ -7,9 +7,9 @@ import net.minecraft.client.resources.model.Material;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import noobanidus.mods.lootr.api.LootrAPI;
-import noobanidus.mods.lootr.api.blockentity.ILootrBlockEntity;
+import noobanidus.mods.lootr.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
-import noobanidus.mods.lootr.block.entities.LootrChestBlockEntity;
+import noobanidus.mods.lootr.block.entity.LootrChestBlockEntity;
 import noobanidus.mods.lootr.util.Getter;
 
 import java.util.UUID;

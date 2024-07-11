@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.api;
+package noobanidus.mods.lootr.api.data;
 
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -12,7 +12,7 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import noobanidus.mods.lootr.api.info.ILootrInfoProvider;
+import noobanidus.mods.lootr.api.LootrAPI;
 
 public class DefaultLootFiller implements LootFiller {
   private static DefaultLootFiller INSTANCE = new DefaultLootFiller();

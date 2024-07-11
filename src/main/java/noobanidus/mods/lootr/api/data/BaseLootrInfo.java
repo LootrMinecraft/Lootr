@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.api.info;
+package noobanidus.mods.lootr.api.data;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;

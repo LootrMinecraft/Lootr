@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.block.entities;
+package noobanidus.mods.lootr.block.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;

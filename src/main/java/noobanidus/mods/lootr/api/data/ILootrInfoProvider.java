@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.api.info;
+package noobanidus.mods.lootr.api.data;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
@@ -9,6 +9,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
+import noobanidus.mods.lootr.api.data.blockentity.RandomizableContainerBlockEntityLootrInfoProvider;
+import noobanidus.mods.lootr.api.data.entity.AbstractMinecartContainerLootrInfoProvider;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;

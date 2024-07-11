@@ -12,7 +12,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.block.*;
-import noobanidus.mods.lootr.block.entities.LootrShulkerBlockEntity;
+import noobanidus.mods.lootr.block.entity.LootrShulkerBlockEntity;
 
 
 public class ModBlocks {

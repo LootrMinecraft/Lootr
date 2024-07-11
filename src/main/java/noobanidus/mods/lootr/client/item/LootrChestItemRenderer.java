@@ -11,7 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
-import noobanidus.mods.lootr.block.entities.LootrChestBlockEntity;
+import noobanidus.mods.lootr.block.entity.LootrChestBlockEntity;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
 public class LootrChestItemRenderer extends BlockEntityWithoutLevelRenderer {

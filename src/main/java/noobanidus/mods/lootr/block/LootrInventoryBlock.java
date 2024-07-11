@@ -25,8 +25,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
-import noobanidus.mods.lootr.block.entities.LootrChestBlockEntity;
-import noobanidus.mods.lootr.block.entities.LootrInventoryBlockEntity;
+import noobanidus.mods.lootr.block.entity.LootrChestBlockEntity;
+import noobanidus.mods.lootr.block.entity.LootrInventoryBlockEntity;
 import noobanidus.mods.lootr.util.ChestUtil;
 import org.jetbrains.annotations.Nullable;
 

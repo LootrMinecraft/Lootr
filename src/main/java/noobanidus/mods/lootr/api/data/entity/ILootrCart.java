@@ -1,7 +1,7 @@
-package noobanidus.mods.lootr.api.entity;
+package noobanidus.mods.lootr.api.data.entity;
 
 import noobanidus.mods.lootr.api.IHasOpeners;
-import noobanidus.mods.lootr.api.info.ILootrInfoProvider;
+import noobanidus.mods.lootr.api.data.ILootrInfoProvider;
 
 public interface ILootrCart extends IHasOpeners, ILootrInfoProvider {
   @Override

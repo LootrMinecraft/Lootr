@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.block.entities;
+package noobanidus.mods.lootr.block.entity;
 
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import net.minecraft.core.BlockPos;
@@ -16,13 +16,13 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import noobanidus.mods.lootr.api.LootrAPI;
-import noobanidus.mods.lootr.api.blockentity.ILootrBlockEntity;
+import noobanidus.mods.lootr.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.event.HandleChunk;
 
 import java.util.Set;
 
 @EventBusSubscriber(modid = LootrAPI.MODID)
-public class TileTicker {
+public class BlockEntityTicker {
   private final static Object listLock = new Object();
   private final static Object worldLock = new Object();
   private final static Set<Entry> tileEntries = new ObjectLinkedOpenHashSet<>();
