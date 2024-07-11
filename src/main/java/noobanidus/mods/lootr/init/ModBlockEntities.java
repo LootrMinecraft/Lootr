@@ -9,6 +9,7 @@ import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.block.entity.*;
 
+@SuppressWarnings("DataFlowIssue")
 public class ModBlockEntities {
   private static final DeferredRegister<BlockEntityType<?>> REGISTER = DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrAPI.MODID);
 

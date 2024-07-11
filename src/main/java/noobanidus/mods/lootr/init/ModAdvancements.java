@@ -13,12 +13,12 @@ import noobanidus.mods.lootr.api.LootrAPI;
 public class ModAdvancements {
   private static final DeferredRegister<CriterionTrigger<?>> REGISTER = DeferredRegister.create(BuiltInRegistries.TRIGGER_TYPES, LootrAPI.MODID);
 
-  public static final DeferredHolder<CriterionTrigger<?>, AdvancementTrigger> ADVANCEMENT = REGISTER.register("advancement", () -> new AdvancementTrigger());
-  public static final DeferredHolder<CriterionTrigger<?>, ContainerTrigger> CHEST = REGISTER.register("chest_opened", () -> new ContainerTrigger());
-  public static final DeferredHolder<CriterionTrigger<?>, ContainerTrigger> BARREL = REGISTER.register("barrel_opened", () -> new ContainerTrigger());
-  public static final DeferredHolder<CriterionTrigger<?>, ContainerTrigger> CART = REGISTER.register("cart_opened", () -> new ContainerTrigger());
-  public static final DeferredHolder<CriterionTrigger<?>, ContainerTrigger> SHULKER = REGISTER.register("shulker_opened", () -> new ContainerTrigger());
-  public static final DeferredHolder<CriterionTrigger<?>, LootedStatTrigger> STAT = REGISTER.register("score", () -> new LootedStatTrigger());
+  public static final DeferredHolder<CriterionTrigger<?>, AdvancementTrigger> ADVANCEMENT = REGISTER.register("advancement", AdvancementTrigger::new);
+  public static final DeferredHolder<CriterionTrigger<?>, ContainerTrigger> CHEST = REGISTER.register("chest_opened", ContainerTrigger::new);
+  public static final DeferredHolder<CriterionTrigger<?>, ContainerTrigger> BARREL = REGISTER.register("barrel_opened", ContainerTrigger::new);
+  public static final DeferredHolder<CriterionTrigger<?>, ContainerTrigger> CART = REGISTER.register("cart_opened", ContainerTrigger::new);
+  public static final DeferredHolder<CriterionTrigger<?>, ContainerTrigger> SHULKER = REGISTER.register("shulker_opened", ContainerTrigger::new);
+  public static final DeferredHolder<CriterionTrigger<?>, LootedStatTrigger> STAT = REGISTER.register("score", LootedStatTrigger::new);
 
 
   public static void register(IEventBus bus) {

@@ -47,7 +47,6 @@ public record LootCount(List<Operation> operations) implements LootItemCondition
     }
     BlockPos position = new BlockPos((int) incomingPos.x, (int) incomingPos.y, (int) incomingPos.z);
     BlockEntity blockEntity = lootContext.getLevel().getBlockEntity(position);
-    // TODO: REDO THIS TO USE OPENED COUNTERS
     // RATHER THAN OPENERS
     if (blockEntity instanceof ILootrBlockEntity) {
       int count = ((ILootrBlockEntity) blockEntity).getActualOpeners().size() + 1; // Additional opener to include the current opener

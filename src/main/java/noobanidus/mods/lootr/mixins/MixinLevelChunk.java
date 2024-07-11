@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(LevelChunk.class)
 public class MixinLevelChunk {
   @Inject(method = "updateBlockEntityTicker", at = @At(value = "HEAD"))
-  private void lootrUpdateBlockEntityTicker(BlockEntity entity, CallbackInfo cir) {
+  private void LootrUpdateBlockEntityTicker(BlockEntity entity, CallbackInfo cir) {
     if (LootrAPI.isDisabled()) {
       return;
     }

@@ -36,6 +36,7 @@ public class EntityTicker {
     }
     synchronized (levelLock) {
       for (LootrChestMinecartEntity entity : copy) {
+        // TODO: Forge-only
         if (entity.isAddedToWorld()) {
           continue;
         }
