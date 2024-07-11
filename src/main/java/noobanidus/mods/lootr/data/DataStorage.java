@@ -119,14 +119,14 @@ public class DataStorage {
     data.remove(id);
   }
 
-  public static void doDecay() {
+  public static void doTick() {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot iterate and tick decay.");
       return;
     }
-    TickingData data = manager.computeIfAbsent(TickingData.FACTORY, DECAYS);
-    data.tick();
+    manager.computeIfAbsent(TickingData.FACTORY, DECAYS).tick();
+    manager.computeIfAbsent(TickingData.FACTORY, REFRESHES).tick();
   }
 
   public static int getRefreshValue(UUID id) {
@@ -167,16 +167,6 @@ public class DataStorage {
     }
     TickingData data = manager.computeIfAbsent(TickingData.FACTORY, REFRESHES);
     data.remove(id);
-  }
-
-  public static void doRefresh() {
-    DimensionDataStorage manager = DataStorage.getDataStorage();
-    if (manager == null) {
-      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot iterate and tick refresh.");
-      return;
-    }
-    TickingData data = manager.computeIfAbsent(TickingData.FACTORY, REFRESHES);
-    data.tick();
   }
 
   public static LootrSavedData getData(ILootrInfoProvider provider) {

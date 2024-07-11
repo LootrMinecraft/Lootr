@@ -12,8 +12,7 @@ import noobanidus.mods.lootr.entity.EntityTicker;
 public class HandleTick {
   @SubscribeEvent
   public static void onServerTick (ServerTickEvent.Post event) {
-    DataStorage.doDecay();
-    DataStorage.doRefresh();
+    DataStorage.doTick();
 
     EntityTicker.onServerTick(event);
     BlockEntityTicker.onServerTick(event);
