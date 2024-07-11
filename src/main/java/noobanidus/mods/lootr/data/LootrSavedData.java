@@ -183,14 +183,4 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
     }
     super.save(pFile, provider);
   }
-
-  public class CustomInventoryFiller implements LootFiller {
-    @Override
-    public void unpackLootTable(@NotNull ILootrInfoProvider provider, @NotNull Player player, Container inventory) {
-      if (provider.getInfoReferenceInventory() == null) {
-        return;
-      }
-
-    }
-  }
 }
