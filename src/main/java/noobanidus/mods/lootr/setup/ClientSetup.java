@@ -27,6 +27,7 @@ public class ClientSetup {
     event.register(LootrAPI.rl("barrel"), BarrelModel.Loader.INSTANCE);
   }
 
+  @SuppressWarnings("unchecked")
   @SubscribeEvent
   public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
     event.registerBlockEntityRenderer((BlockEntityType<LootrChestBlockEntity>) LootrRegistry.getChestBlockEntity(), LootrChestBlockRenderer::new);
