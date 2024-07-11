@@ -7,6 +7,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 
 
@@ -23,12 +24,12 @@ public class ClientHandlers {
       return;
     }
 
-    if (!(cart instanceof LootrChestMinecartEntity lootrCart)) {
+    if (!(cart instanceof ILootrCart lootrCart)) {
       LootrAPI.LOG.info("Unable to mark entity with id '" + entityId + "' as closed as entity is not a Lootr minecart.");
       return;
     }
 
-    lootrCart.setClosed();
+    lootrCart.setClientOpened(false);
   }
 
   public static void handleOpenCart(int entityId) {
@@ -43,12 +44,12 @@ public class ClientHandlers {
       return;
     }
 
-    if (!(cart instanceof LootrChestMinecartEntity lootrCart)) {
+    if (!(cart instanceof ILootrCart lootrCart)) {
       LootrAPI.LOG.info("Unable to mark entity with id '" + entityId + "' as opened as entity is not a Lootr minecart.");
       return;
     }
 
-    lootrCart.setOpened();
+    lootrCart.setClientOpened(true);
   }
 
   public static void handleOpenContainer(BlockPos pos) {

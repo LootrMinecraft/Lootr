@@ -8,4 +8,8 @@ public interface ILootrCart extends IHasOpeners, ILootrInfoProvider {
   default LootrInfoType getInfoType() {
     return LootrInfoType.CONTAINER_ENTITY;
   }
+
+  boolean isClientOpened();
+
+  void setClientOpened(boolean opened);
 }

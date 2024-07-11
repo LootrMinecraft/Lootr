@@ -79,16 +79,14 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     setChanged();
   }
 
-  public boolean isOpened() {
+  @Override
+  public boolean isClientOpened() {
     return opened;
   }
 
-  public void setOpened() {
-    this.opened = true;
-  }
-
-  public void setClosed() {
-    this.opened = false;
+  @Override
+  public void setClientOpened(boolean opened) {
+    this.opened = opened;
   }
 
   @Override
