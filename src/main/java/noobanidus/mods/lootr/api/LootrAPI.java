@@ -211,7 +211,7 @@ public class LootrAPI {
     return INSTANCE.getInventory(provider, player, filler, builder);
   }
 
-  @NotNull
+  @Nullable
   public static ILootrSavedData getData (ILootrInfoProvider provider) {
     return INSTANCE.getData(provider);
   }
