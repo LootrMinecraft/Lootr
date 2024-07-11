@@ -13,10 +13,6 @@ public record PacketCloseContainer(BlockPos position) implements ILootrPacket {
   public static final CustomPacketPayload.Type<PacketCloseContainer> TYPE = new CustomPacketPayload.Type<>(Lootr.rl("close_container"));
   public static final StreamCodec<FriendlyByteBuf, PacketCloseContainer> STREAM_CODEC = StreamCodec.composite(BlockPos.STREAM_CODEC, PacketCloseContainer::position, PacketCloseContainer::new);
 
-  public PacketCloseContainer(FriendlyByteBuf buffer) {
-    this(buffer.readBlockPos());
-  }
-
   @Override
   public void handle(IPayloadContext context) {
     ClientHandlers.handleCloseContainer(this.position);

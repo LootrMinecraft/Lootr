@@ -13,10 +13,6 @@ public record PacketOpenContainer(BlockPos position) implements ILootrPacket {
   public static final CustomPacketPayload.Type<PacketOpenContainer> TYPE = new CustomPacketPayload.Type<>(Lootr.rl("open_container"));
   public static final StreamCodec<FriendlyByteBuf, PacketOpenContainer> STREAM_CODEC = StreamCodec.composite(BlockPos.STREAM_CODEC, PacketOpenContainer::position, PacketOpenContainer::new);
 
-  public PacketOpenContainer(FriendlyByteBuf buffer) {
-    this(buffer.readBlockPos());
-  }
-
   @Override
   public void handle(IPayloadContext context) {
     ClientHandlers.handleOpenContainer(this.position);

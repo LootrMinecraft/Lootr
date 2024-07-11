@@ -14,10 +14,6 @@ public record PacketCloseCart(int entityId) implements ILootrPacket {
   public static final CustomPacketPayload.Type<PacketCloseCart> TYPE = new CustomPacketPayload.Type<>(LootrAPI.rl("close_cart"));
   public static final StreamCodec<ByteBuf, PacketCloseCart> STREAM_CODEC = StreamCodec.composite(ByteBufCodecs.VAR_INT, PacketCloseCart::entityId, PacketCloseCart::new);
 
-  public PacketCloseCart(RegistryFriendlyByteBuf buffer) {
-    this(buffer.readVarInt());
-  }
-
   @Override
   public Type<? extends CustomPacketPayload> type() {
     return TYPE;

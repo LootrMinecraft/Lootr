@@ -27,7 +27,6 @@ public class LootrShulkerBlockRenderer implements BlockEntityRenderer<LootrShulk
   public static final Material MATERIAL3 = new Material(Sheets.SHULKER_SHEET, LootrAPI.rl("old_shulker"));
   public static final Material MATERIAL4 = new Material(Sheets.SHULKER_SHEET, LootrAPI.rl("old_shulker_opened"));
   private final ShulkerModel<?> model;
-  private UUID playerId;
 
   public LootrShulkerBlockRenderer(BlockEntityRendererProvider.Context context) {
     this.model = new ShulkerModel<>(context.bakeLayer(ModelLayers.SHULKER));
@@ -37,15 +36,7 @@ public class LootrShulkerBlockRenderer implements BlockEntityRenderer<LootrShulk
     if (LootrAPI.isVanillaTextures()) {
       return Sheets.DEFAULT_SHULKER_TEXTURE_LOCATION;
     }
-    if (playerId == null) {
-      Minecraft mc = Minecraft.getInstance();
-      if (mc.player == null) {
-        return LootrAPI.isOldTextures() ? MATERIAL3 : MATERIAL;
-      } else {
-        playerId = mc.player.getUUID();
-      }
-    }
-    if (blockEntity.getVisualOpeners().contains(playerId)) {
+    if (blockEntity.isClientOpened()) {
       return LootrAPI.isOldTextures() ? MATERIAL4 : MATERIAL2;
     } else {
       return LootrAPI.isOldTextures() ? MATERIAL3 : MATERIAL;
