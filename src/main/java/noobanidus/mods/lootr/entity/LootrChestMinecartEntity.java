@@ -248,7 +248,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
   @Override
-  public BlockPos getInfoPos() {
+  public @NotNull BlockPos getInfoPos() {
     return blockPosition();
   }
 
@@ -283,12 +283,17 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
   @Override
+  public boolean isInfoReferenceInventory() {
+    return false;
+  }
+
+  @Override
   public Level getInfoLevel() {
     return level();
   }
 
   @Override
-  public Vec3 getInfoVec() {
+  public @NotNull Vec3 getInfoVec() {
     return position();
   }
 

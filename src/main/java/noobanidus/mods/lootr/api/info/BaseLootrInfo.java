@@ -23,7 +23,7 @@ public record BaseLootrInfo(LootrInfoType type, UUID uuid, BlockPos pos, Compone
   }
 
   @Override
-  public UUID getInfoUUID() {
+  public @NotNull UUID getInfoUUID() {
     return uuid();
   }
 
@@ -50,5 +50,10 @@ public record BaseLootrInfo(LootrInfoType type, UUID uuid, BlockPos pos, Compone
   @Override
   public @Nullable NonNullList<ItemStack> getInfoReferenceInventory() {
     return customInventory();
+  }
+
+  @Override
+  public boolean isInfoReferenceInventory() {
+    return customInventory() == null || customInventory().isEmpty();
   }
 }

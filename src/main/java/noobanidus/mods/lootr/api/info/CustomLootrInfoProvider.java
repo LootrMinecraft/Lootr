@@ -29,12 +29,12 @@ public record CustomLootrInfoProvider(
   }
 
   @Override
-  public UUID getInfoUUID() {
+  public @NotNull UUID getInfoUUID() {
     return id();
   }
 
   @Override
-  public BlockPos getInfoPos() {
+  public @NotNull BlockPos getInfoPos() {
     return pos();
   }
 
@@ -66,5 +66,10 @@ public record CustomLootrInfoProvider(
   @Override
   public @Nullable NonNullList<ItemStack> getInfoReferenceInventory() {
     return customInventory();
+  }
+
+  @Override
+  public boolean isInfoReferenceInventory() {
+    return customInventory() == null || customInventory().isEmpty();
   }
 }

@@ -25,24 +25,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 
 public interface ILootrInfo {
-  static ILootrInfo loadInfoFromTag(CompoundTag tag, HolderLookup.Provider provider) {
-    LootrInfoType type = LootrInfoType.values()[tag.getInt("type")];
-    BlockPos pos = NbtUtils.readBlockPos(tag, "position").orElseThrow();
-    UUID uuid = tag.getUUID("uuid");
-    ResourceKey<Level> dimension = ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(tag.getString("dimension")));
-    int size = tag.getInt("size");
-    Component name = null;
-    if (tag.contains("name")) {
-      name = Component.Serializer.fromJson(tag.getString("name"), provider);
-    }
-    NonNullList<ItemStack> reference = null;
-    if (tag.contains("reference")) {
-      reference = NonNullList.withSize(tag.getInt("referenceSize"), ItemStack.EMPTY);
-      ContainerHelper.loadAllItems(tag.getCompound("reference"), reference, provider);
-    }
-    return new BaseLootrInfo(type, uuid, pos, name, dimension, size, reference);
-  }
-
   LootrInfoType getInfoType();
 
   @NotNull
@@ -50,6 +32,7 @@ public interface ILootrInfo {
     return Vec3.atCenterOf(getInfoPos());
   }
 
+  @NotNull
   UUID getInfoUUID();
 
   default String getInfoKey() {
@@ -70,10 +53,12 @@ public interface ILootrInfo {
   @Nullable
   NonNullList<ItemStack> getInfoReferenceInventory();
 
-  default boolean isInfoReferenceInventory() {
+  boolean isInfoReferenceInventory();
+
+ /*
     NonNullList<ItemStack> reference = getInfoReferenceInventory();
     return reference != null && !reference.isEmpty();
-  }
+  }*/
 
   @Nullable
   default Level getInfoLevel() {
@@ -124,6 +109,31 @@ public interface ILootrInfo {
       tag.putInt("referenceSize", getInfoReferenceInventory().size());
       tag.put("reference", ContainerHelper.saveAllItems(new CompoundTag(), getInfoReferenceInventory(), true, provider));
     }
+  }
+
+  static ILootrInfo loadInfoFromTag(CompoundTag tag, HolderLookup.Provider provider) {
+    LootrInfoType type = LootrInfoType.CONTAINER_BLOCK_ENTITY;
+    if (tag.contains("type", CompoundTag.TAG_INT)) {
+      type = LootrInfoType.values()[tag.getInt("type")];
+    } else if (tag.contains("entity") && tag.getBoolean("entity")) {
+      type = LootrInfoType.CONTAINER_ENTITY;
+    } else {
+      LootrAPI.LOG.error("Couldn't deduce the type of LootrInfo from tag: {}", tag);
+    }
+    BlockPos pos = NbtUtils.readBlockPos(tag, "position").orElseThrow();
+    UUID uuid = tag.getUUID("uuid");
+    ResourceKey<Level> dimension = ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(tag.getString("dimension")));
+    int size = tag.getInt("size");
+    Component name = null;
+    if (tag.contains("name")) {
+      name = Component.Serializer.fromJson(tag.getString("name"), provider);
+    }
+    NonNullList<ItemStack> reference = null;
+    if (tag.contains("reference") && tag.contains("referenceSize")) {
+      reference = NonNullList.withSize(tag.getInt("referenceSize"), ItemStack.EMPTY);
+      ContainerHelper.loadAllItems(tag.getCompound("reference"), reference, provider);
+    }
+    return new BaseLootrInfo(type, uuid, pos, name, dimension, size, reference);
   }
 
   enum LootrInfoType {

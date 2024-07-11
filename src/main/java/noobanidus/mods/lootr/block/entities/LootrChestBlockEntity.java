@@ -259,7 +259,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   }
 
   @Override
-  public BlockPos getInfoPos() {
+  public @NotNull BlockPos getInfoPos() {
     return getBlockPos();
   }
 
@@ -291,6 +291,11 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   @Override
   public @Nullable NonNullList<ItemStack> getInfoReferenceInventory() {
     return null;
+  }
+
+  @Override
+  public boolean isInfoReferenceInventory() {
+    return false;
   }
 
   @Override

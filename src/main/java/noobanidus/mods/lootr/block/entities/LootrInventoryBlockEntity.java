@@ -57,4 +57,10 @@ public class LootrInventoryBlockEntity extends LootrChestBlockEntity {
       level.updateNeighborsAt(pos.below(), block);
     }
   }
+
+
+  @Override
+  public boolean isInfoReferenceInventory() {
+    return true;
+  }
 }

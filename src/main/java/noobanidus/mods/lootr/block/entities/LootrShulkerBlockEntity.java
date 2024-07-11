@@ -316,7 +316,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   @Override
-  public BlockPos getInfoPos() {
+  public @NotNull BlockPos getInfoPos() {
     return getBlockPos();
   }
 
@@ -348,6 +348,11 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   @Override
   public @Nullable NonNullList<ItemStack> getInfoReferenceInventory() {
     return null;
+  }
+
+  @Override
+  public boolean isInfoReferenceInventory() {
+    return false;
   }
 
   @Override

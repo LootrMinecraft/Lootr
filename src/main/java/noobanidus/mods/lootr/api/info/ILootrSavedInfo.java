@@ -45,7 +45,7 @@ public interface ILootrSavedInfo extends IRedirect<ILootrInfo>, ILootrInfo {
   }
 
   @Override
-  default UUID getInfoUUID() {
+  default @NotNull UUID getInfoUUID() {
     return getRedirect().getInfoUUID();
   }
 
@@ -87,5 +87,10 @@ public interface ILootrSavedInfo extends IRedirect<ILootrInfo>, ILootrInfo {
   @Override
   default @Nullable NonNullList<ItemStack> getInfoReferenceInventory() {
     return getRedirect().getInfoReferenceInventory();
+  }
+
+  @Override
+  default boolean isInfoReferenceInventory() {
+    return getRedirect().isInfoReferenceInventory();
   }
 }

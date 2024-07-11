@@ -24,17 +24,17 @@ public record AbstractMinecartContainerLootrInfoProvider(
   }
 
   @Override
-  public Vec3 getInfoVec() {
+  public @NotNull Vec3 getInfoVec() {
     return minecart.position();
   }
 
   @Override
-  public UUID getInfoUUID() {
+  public @NotNull UUID getInfoUUID() {
     return minecart.getUUID();
   }
 
   @Override
-  public BlockPos getInfoPos() {
+  public @NotNull BlockPos getInfoPos() {
     return minecart.blockPosition();
   }
 
@@ -62,6 +62,11 @@ public record AbstractMinecartContainerLootrInfoProvider(
   @Override
   public @Nullable NonNullList<ItemStack> getInfoReferenceInventory() {
     return null;
+  }
+
+  @Override
+  public boolean isInfoReferenceInventory() {
+    return false;
   }
 
   @Override

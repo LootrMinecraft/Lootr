@@ -24,7 +24,7 @@ public record RandomizableContainerBlockEntityLootrInfoProvider(
   }
 
   @Override
-  public UUID getInfoUUID() {
+  public @NotNull UUID getInfoUUID() {
     return id();
   }
 
@@ -62,6 +62,11 @@ public record RandomizableContainerBlockEntityLootrInfoProvider(
   @Override
   public @Nullable NonNullList<ItemStack> getInfoReferenceInventory() {
     return customInventory();
+  }
+
+  @Override
+  public boolean isInfoReferenceInventory() {
+    return false;
   }
 
   @Override
