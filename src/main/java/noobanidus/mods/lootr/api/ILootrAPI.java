@@ -15,8 +15,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.api.client.ClientTextureType;
 import noobanidus.mods.lootr.api.data.ILootrInfoProvider;
+import noobanidus.mods.lootr.api.data.ILootrSavedData;
 import noobanidus.mods.lootr.api.data.LootFiller;
 import noobanidus.mods.lootr.api.data.inventory.ILootrInventory;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
@@ -47,6 +49,9 @@ public interface ILootrAPI {
 
   @Nullable
   ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler, MenuBuilder builder);
+
+  @Nullable
+  ILootrSavedData getData (ILootrInfoProvider provider);
 
   long getLootSeed(long seed);
 

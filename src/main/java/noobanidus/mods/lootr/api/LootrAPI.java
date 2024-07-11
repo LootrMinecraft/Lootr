@@ -17,8 +17,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.api.client.ClientTextureType;
 import noobanidus.mods.lootr.api.data.ILootrInfoProvider;
+import noobanidus.mods.lootr.api.data.ILootrSavedData;
+import noobanidus.mods.lootr.api.data.LootFiller;
+import noobanidus.mods.lootr.api.data.inventory.ILootrInventory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -194,5 +199,20 @@ public class LootrAPI {
   // TODO: Consider if this is really needed
   public static boolean hasCapacity(String capacity) {
     return INSTANCE.hasCapacity(capacity);
+  }
+
+  @Nullable
+  public static ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler) {
+    return INSTANCE.getInventory(provider, player, filler);
+  }
+
+  @Nullable
+  public static ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler, MenuBuilder builder) {
+    return INSTANCE.getInventory(provider, player, filler, builder);
+  }
+
+  @NotNull
+  public static ILootrSavedData getData (ILootrInfoProvider provider) {
+    return INSTANCE.getData(provider);
   }
 }
