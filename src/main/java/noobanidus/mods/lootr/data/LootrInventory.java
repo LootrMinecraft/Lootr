@@ -20,7 +20,6 @@ import noobanidus.mods.lootr.api.data.ILootrSavedData;
 import noobanidus.mods.lootr.api.data.inventory.ILootrInventory;
 import org.jetbrains.annotations.Nullable;
 
-@SuppressWarnings("NullableProblems")
 public class LootrInventory implements ILootrInventory {
   private final NonNullList<ItemStack> contents;
   private ILootrSavedData info;

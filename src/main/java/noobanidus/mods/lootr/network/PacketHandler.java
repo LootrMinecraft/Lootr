@@ -1,10 +1,10 @@
 package noobanidus.mods.lootr.network;
 
 import net.neoforged.bus.api.IEventBus;
-import noobanidus.mods.lootr.network.to_client.PacketCloseCart;
-import noobanidus.mods.lootr.network.to_client.PacketCloseContainer;
-import noobanidus.mods.lootr.network.to_client.PacketOpenCart;
-import noobanidus.mods.lootr.network.to_client.PacketOpenContainer;
+import noobanidus.mods.lootr.network.toClient.PacketCloseCart;
+import noobanidus.mods.lootr.network.toClient.PacketCloseContainer;
+import noobanidus.mods.lootr.network.toClient.PacketOpenCart;
+import noobanidus.mods.lootr.network.toClient.PacketOpenContainer;
 
 /* Shamelessly cribbed from Mekanism.
 Original source: https://github.com/mekanism/Mekanism/blob/1.20.4/src/main/java/mekanism/common/network/PacketHandler.java

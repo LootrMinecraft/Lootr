@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.network.to_client;
+package noobanidus.mods.lootr.network.toClient;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;

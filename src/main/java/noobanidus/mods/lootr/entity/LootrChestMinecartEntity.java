@@ -37,7 +37,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
-import noobanidus.mods.lootr.network.to_client.PacketOpenCart;
+import noobanidus.mods.lootr.network.toClient.PacketOpenCart;
 import noobanidus.mods.lootr.util.ChestUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

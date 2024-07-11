@@ -29,23 +29,7 @@ public abstract class BasePacketHandler {
 
   protected abstract void registerServerToClient(PacketRegistrar registrar);
 
-  protected record SimplePacketPayLoad(
-      CustomPacketPayload.Type<CustomPacketPayload> type) implements CustomPacketPayload {
-
-    private SimplePacketPayLoad(ResourceLocation id) {
-      this(new CustomPacketPayload.Type<>(id));
-    }
-  }
-
   protected record PacketRegistrar(PayloadRegistrar registrar, boolean toServer) {
-
-    public <MSG extends ILootrPacket> void configuration(CustomPacketPayload.Type<MSG> type, StreamCodec<? super FriendlyByteBuf, MSG> reader) {
-      if (toServer) {
-        registrar.configurationToServer(type, reader, ILootrPacket::handle);
-      } else {
-        registrar.configurationToClient(type, reader, ILootrPacket::handle);
-      }
-    }
 
     public <MSG extends ILootrPacket> void play(CustomPacketPayload.Type<MSG> type, StreamCodec<? super RegistryFriendlyByteBuf, MSG> reader) {
       if (toServer) {
@@ -53,16 +37,6 @@ public abstract class BasePacketHandler {
       } else {
         registrar.playToClient(type, reader, ILootrPacket::handle);
       }
-    }
-
-    public SimplePacketPayLoad playInstanced(ResourceLocation id, IPayloadHandler<CustomPacketPayload> handler) {
-      SimplePacketPayLoad payload = new SimplePacketPayLoad(id);
-      if (toServer) {
-        registrar.playToServer(payload.type(), StreamCodec.unit(payload), handler);
-      } else {
-        registrar.playToClient(payload.type(), StreamCodec.unit(payload), handler);
-      }
-      return payload;
     }
   }
 }

@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.network.to_client;
+package noobanidus.mods.lootr.network.toClient;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;

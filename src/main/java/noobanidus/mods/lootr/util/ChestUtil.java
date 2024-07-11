@@ -22,8 +22,8 @@ import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.block.LootrShulkerBlock;
 import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
-import noobanidus.mods.lootr.network.to_client.PacketCloseCart;
-import noobanidus.mods.lootr.network.to_client.PacketCloseContainer;
+import noobanidus.mods.lootr.network.toClient.PacketCloseCart;
+import noobanidus.mods.lootr.network.toClient.PacketCloseContainer;
 
 import java.util.UUID;
 
