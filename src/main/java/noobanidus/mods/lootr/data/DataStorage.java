@@ -18,7 +18,6 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 public class DataStorage {
   public static final String ADVANCEMENTS = "lootr/Lootr-AdvancementData";
-  public static final String SCORES = "lootr/Lootr-ScoreData";
   public static final String DECAYS = "lootr/Lootr-DecayData";
   public static final String REFRESHES = "lootr/Lootr-RefreshData";
 
@@ -56,26 +55,6 @@ public class DataStorage {
       return;
     }
     AdvancementData data = manager.computeIfAbsent(AdvancementData.FACTORY, ADVANCEMENTS);
-    data.add(player, infoId);
-  }
-
-  public static boolean isScored(UUID player, UUID infoId) {
-    DimensionDataStorage manager = DataStorage.getDataStorage();
-    if (manager == null) {
-      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot determine if block entity has been scored.");
-      return false;
-    }
-    AdvancementData data = manager.computeIfAbsent(AdvancementData.FACTORY, SCORES);
-    return data.contains(player, infoId);
-  }
-
-  public static void score(UUID player, UUID infoId) {
-    DimensionDataStorage manager = DataStorage.getDataStorage();
-    if (manager == null) {
-      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot score block entities at this time.");
-      return;
-    }
-    AdvancementData data = manager.computeIfAbsent(AdvancementData.FACTORY, SCORES);
     data.add(player, infoId);
   }
 

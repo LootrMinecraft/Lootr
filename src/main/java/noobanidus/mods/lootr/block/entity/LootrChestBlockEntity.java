@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.block.entity;
 
+import com.google.common.collect.Sets;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -26,6 +27,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.data.ILootrSavedData;
 import noobanidus.mods.lootr.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.data.LootrInventory;
@@ -201,12 +203,20 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
 
   @Override
   public Set<UUID> getVisualOpeners() {
-    return openers;
+    ILootrSavedData data = LootrAPI.getData(this);
+    if (data != null) {
+      return data.getVisualOpeners();
+    }
+    return Set.of();
   }
 
   @Override
   public Set<UUID> getActualOpeners() {
-    return actualOpeners;
+    ILootrSavedData data = LootrAPI.getData(this);
+    if (data != null) {
+      return data.getActualOpeners();
+    }
+    return Set.of();
   }
 
   @Override
