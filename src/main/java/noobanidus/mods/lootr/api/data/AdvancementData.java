@@ -44,6 +44,7 @@ public class AdvancementData extends SavedData {
 
   public void add(UUIDPair pair) {
     data.add(pair);
+    setDirty();
   }
 
   @Override
@@ -64,7 +65,7 @@ public class AdvancementData extends SavedData {
     super.save(pFile, provider);
   }
 
-  public static class UUIDPair implements INBTSerializable<CompoundTag> {
+  public static class UUIDPair {
     @NotNull
     private UUID first;
     private UUID second;
@@ -111,7 +112,6 @@ public class AdvancementData extends SavedData {
       return result;
     }
 
-    @Override
     public CompoundTag serializeNBT(HolderLookup.Provider provider) {
       CompoundTag result = new CompoundTag();
       result.putUUID("first", getFirst());
@@ -119,7 +119,6 @@ public class AdvancementData extends SavedData {
       return result;
     }
 
-    @Override
     public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
       this.first = nbt.getUUID("first");
       this.second = nbt.getUUID("second");

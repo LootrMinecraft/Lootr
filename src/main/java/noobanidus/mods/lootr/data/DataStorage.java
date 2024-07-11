@@ -57,7 +57,6 @@ public class DataStorage {
     }
     AdvancementData data = manager.computeIfAbsent(AdvancementData.FACTORY, ADVANCEMENTS);
     data.add(player, infoId);
-    data.setDirty();
   }
 
   public static boolean isScored(UUID player, UUID infoId) {
@@ -78,7 +77,6 @@ public class DataStorage {
     }
     AdvancementData data = manager.computeIfAbsent(AdvancementData.FACTORY, SCORES);
     data.add(player, infoId);
-    data.setDirty();
   }
 
   public static int getDecayValue(UUID id) {
@@ -109,7 +107,6 @@ public class DataStorage {
     }
     TickingData data = manager.computeIfAbsent(TickingData.FACTORY, DECAYS);
     data.setValue(id, decay);
-    data.setDirty();
   }
 
   public static void removeDecayed(UUID id) {
@@ -119,9 +116,7 @@ public class DataStorage {
       return;
     }
     TickingData data = manager.computeIfAbsent(TickingData.FACTORY, DECAYS);
-    if (data.remove(id) != -1) {
-      data.setDirty();
-    }
+    data.remove(id);
   }
 
   public static void doDecay() {
@@ -131,9 +126,7 @@ public class DataStorage {
       return;
     }
     TickingData data = manager.computeIfAbsent(TickingData.FACTORY, DECAYS);
-    if (data.tick()) {
-      data.setDirty();
-    }
+    data.tick();
   }
 
   public static int getRefreshValue(UUID id) {
@@ -164,7 +157,6 @@ public class DataStorage {
     }
     TickingData data = manager.computeIfAbsent(TickingData.FACTORY, REFRESHES);
     data.setValue(id, decay);
-    data.setDirty();
   }
 
   public static void removeRefreshed(UUID id) {
@@ -174,9 +166,7 @@ public class DataStorage {
       return;
     }
     TickingData data = manager.computeIfAbsent(TickingData.FACTORY, REFRESHES);
-    if (data.remove(id) != -1) {
-      data.setDirty();
-    }
+    data.remove(id);
   }
 
   public static void doRefresh() {
@@ -186,9 +176,7 @@ public class DataStorage {
       return;
     }
     TickingData data = manager.computeIfAbsent(TickingData.FACTORY, REFRESHES);
-    if (data.tick()) {
-      data.setDirty();
-    }
+    data.tick();
   }
 
   public static LootrSavedData getData(ILootrInfoProvider provider) {
