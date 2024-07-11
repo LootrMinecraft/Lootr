@@ -10,6 +10,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import noobanidus.mods.lootr.api.IHasOpeners;
+import noobanidus.mods.lootr.api.IMarkChanged;
 import noobanidus.mods.lootr.api.IRedirect;
 import noobanidus.mods.lootr.api.data.inventory.ILootrInventory;
 import org.jetbrains.annotations.NotNull;
@@ -21,8 +23,7 @@ import java.util.UUID;
 // The info providers are always *instances* of something (even if it
 // is a custom class), whereas the SavedData never has an associated
 // level, block entity, etc.
-public interface ILootrSavedData extends IRedirect<ILootrInfo>, ILootrInfo {
-  void markChanged();
+public interface ILootrSavedData extends IRedirect<ILootrInfo>, ILootrInfo, IHasOpeners, IMarkChanged {
 
   void clearInventories();
 

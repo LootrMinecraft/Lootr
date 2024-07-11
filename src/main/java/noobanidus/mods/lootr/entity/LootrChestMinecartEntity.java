@@ -300,4 +300,9 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   public UUID getInfoUUID() {
     return getUUID();
   }
+
+  @Override
+  public void markChanged() {
+    setChanged();
+  }
 }

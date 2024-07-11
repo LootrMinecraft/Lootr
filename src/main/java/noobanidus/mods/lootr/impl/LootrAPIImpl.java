@@ -20,6 +20,7 @@ import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.api.ILootrAPI;
+import noobanidus.mods.lootr.api.data.ILootrSavedData;
 import noobanidus.mods.lootr.api.data.LootFiller;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.MenuBuilder;
@@ -29,6 +30,7 @@ import noobanidus.mods.lootr.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.client.impl.ClientGetter;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.data.DataStorage;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
@@ -79,6 +81,11 @@ public class LootrAPIImpl implements ILootrAPI {
       inventory.setMenuBuilder(menuBuilder);
     }
     return inventory;
+  }
+
+  @Override
+  public @NotNull ILootrSavedData getData(ILootrInfoProvider provider) {
+    return DataStorage.getData(provider);
   }
 
   @Override

@@ -34,6 +34,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.data.ILootrSavedData;
 import noobanidus.mods.lootr.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import org.jetbrains.annotations.NotNull;
@@ -46,8 +47,6 @@ import java.util.UUID;
 
 public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity implements ILootrBlockEntity {
   private static final NonNullList<ItemStack> itemStacks = NonNullList.withSize(27, ItemStack.EMPTY);
-  private final Set<UUID> openers = new HashSet<>();
-  private final Set<UUID> actualOpeners = new HashSet<>();
   protected UUID infoId;
   protected boolean clientOpened;
   private int openCount;
@@ -202,20 +201,6 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
     if (this.infoId == null) {
       getInfoUUID();
     }
-    if (compound.contains("LootrOpeners")) {
-      ListTag openers = compound.getList("LootrOpeners", Tag.TAG_INT_ARRAY);
-      this.openers.clear();
-      for (Tag item : openers) {
-        this.openers.add(NbtUtils.loadUUID(item));
-      }
-    }
-    if (compound.contains("LootrActualOpeners")) {
-      ListTag openers = compound.getList("LootrActualOpeners", Tag.TAG_INT_ARRAY);
-      this.actualOpeners.clear();
-      for (Tag item : openers) {
-        this.actualOpeners.add(NbtUtils.loadUUID(item));
-      }
-    }
   }
 
   @Override
@@ -231,16 +216,6 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
     this.trySaveLootTable(compound);
     if (!LootrAPI.shouldDiscard() && !savingToItem) {
       compound.putUUID("LootrId", getInfoUUID());
-      ListTag list = new ListTag();
-      for (UUID opener : this.openers) {
-        list.add(NbtUtils.createUUID(opener));
-      }
-      compound.put("LootrOpeners", list);
-      ListTag list2 = new ListTag();
-      for (UUID opener : this.actualOpeners) {
-        list2.add(NbtUtils.createUUID(opener));
-      }
-      compound.put("LootrActualOpeners", list2);
     }
   }
 
@@ -263,12 +238,20 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
 
   @Override
   public Set<UUID> getVisualOpeners() {
-    return openers;
+    ILootrSavedData data = LootrAPI.getData(this);
+    if (data != null) {
+      return data.getVisualOpeners();
+    }
+    return Set.of();
   }
 
   @Override
   public Set<UUID> getActualOpeners() {
-    return actualOpeners;
+    ILootrSavedData data = LootrAPI.getData(this);
+    if (data != null) {
+      return data.getActualOpeners();
+    }
+    return Set.of();
   }
 
   @Override
@@ -303,6 +286,11 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
 
   @Override
   public void unpackLootTable(@Nullable Player player) {
+  }
+
+  @Override
+  public void markChanged() {
+    setChanged();
   }
 
   @Override

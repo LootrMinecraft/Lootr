@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.block.entity;
 
+import com.google.common.collect.Sets;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
@@ -29,6 +30,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.data.ILootrSavedData;
 import noobanidus.mods.lootr.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.block.LootrBarrelBlock;
@@ -41,8 +43,6 @@ import java.util.Set;
 import java.util.UUID;
 
 public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity implements ILootrBlockEntity {
-  private final Set<UUID> openers = new HashSet<>();
-  private final Set<UUID> actualOpeners = new HashSet<>();
   private final NonNullList<ItemStack> items = NonNullList.withSize(27, ItemStack.EMPTY);
   protected UUID infoId = null;
   private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
@@ -86,7 +86,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     }
     Player player = LootrAPI.getPlayer();
     if (player != null) {
-      return modelData.derive().with(LootrBarrelBlock.OPENED, openers.contains(player.getUUID())).build();
+      return modelData.derive().with(LootrBarrelBlock.OPENED, hasVisuallyOpened(player)).build();
     }
     return modelData;
   }
@@ -115,12 +115,20 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
 
   @Override
   public Set<UUID> getVisualOpeners() {
-    return openers;
+    ILootrSavedData data = LootrAPI.getData(this);
+    if (data != null) {
+      return data.getVisualOpeners();
+    }
+    return Set.of();
   }
 
   @Override
   public Set<UUID> getActualOpeners() {
-    return actualOpeners;
+    ILootrSavedData data = LootrAPI.getData(this);
+    if (data != null) {
+      return data.getActualOpeners();
+    }
+    return Set.of();
   }
 
   @SuppressWarnings("Duplicates")
@@ -133,20 +141,6 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     }
     if (this.infoId == null) {
       getInfoUUID();
-    }
-    if (compound.contains("LootrOpeners")) {
-      ListTag openers = compound.getList("LootrOpeners", Tag.TAG_INT_ARRAY);
-      this.openers.clear();
-      for (Tag item : openers) {
-        this.openers.add(NbtUtils.loadUUID(item));
-      }
-    }
-    if (compound.contains("LootrActualOpeners")) {
-      ListTag openers = compound.getList("LootrActualOpeners", Tag.TAG_INT_ARRAY);
-      this.actualOpeners.clear();
-      for (Tag item : openers) {
-        this.actualOpeners.add(NbtUtils.loadUUID(item));
-      }
     }
     requestModelDataUpdate();
   }
@@ -164,16 +158,6 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     this.trySaveLootTable(compound);
     if (!LootrAPI.shouldDiscard() && !savingToItem) {
       compound.putUUID("LootrId", getInfoUUID());
-      ListTag list = new ListTag();
-      for (UUID opener : this.openers) {
-        list.add(NbtUtils.createUUID(opener));
-      }
-      compound.put("LootrOpeners", list);
-      ListTag list2 = new ListTag();
-      for (UUID opener : this.actualOpeners) {
-        list2.add(NbtUtils.createUUID(opener));
-      }
-      compound.put("LootrActualOpeners", list2);
     }
   }
 
@@ -222,6 +206,11 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     double d1 = (double) this.worldPosition.getY() + 0.5D + (double) vec3i.getY() / 2.0D;
     double d2 = (double) this.worldPosition.getZ() + 0.5D + (double) vec3i.getZ() / 2.0D;
     this.level.playSound(null, d0, d1, d2, pSound, SoundSource.BLOCKS, 0.5F, this.level.random.nextFloat() * 0.1F + 0.9F);
+  }
+
+  @Override
+  public void markChanged() {
+    setChanged();
   }
 
   @Override

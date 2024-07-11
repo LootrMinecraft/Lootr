@@ -1,9 +1,11 @@
 package noobanidus.mods.lootr.data;
 
+import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
@@ -22,12 +24,15 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
 
 public class LootrSavedData extends SavedData implements ILootrSavedData {
   private final ILootrInfo info;
   private final Map<UUID, LootrInventory> inventories = new HashMap<>();
+  private final Set<UUID> openers = new ObjectLinkedOpenHashSet<>();
+  private final Set<UUID> actualOpeners = new ObjectLinkedOpenHashSet<>();
 
   protected LootrSavedData(ILootrInfo info) {
     this.info = BaseLootrInfo.copy(info);
@@ -45,6 +50,8 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
     ILootrInfo info = ILootrInfo.loadInfoFromTag(compound, provider);
     LootrSavedData data = new LootrSavedData(info, true);
     data.inventories.clear();
+    data.openers.clear();
+    data.actualOpeners.clear();
 
     ListTag compounds = compound.getList("inventories", Tag.TAG_COMPOUND);
 
@@ -56,6 +63,19 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
       UUID uuid = thisTag.getUUID("uuid");
       data.inventories.put(uuid, new LootrInventory(data, items));
     }
+
+    if (compound.contains("openers")) {
+      ListTag openers = compound.getList("openers", Tag.TAG_COMPOUND);
+      for (Tag opener : openers) {
+        data.openers.add(NbtUtils.loadUUID(opener));
+      }
+    }
+    if (compound.contains("actualOpeners")) {
+      ListTag openers = compound.getList("actualOpeners", Tag.TAG_COMPOUND);
+      for (Tag opener : openers) {
+        data.actualOpeners.add(NbtUtils.loadUUID(opener));
+      }
+    }
     return data;
   }
 
@@ -64,8 +84,41 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
     return info;
   }
 
-  public boolean clearInventory(UUID uuid) {
-    return inventories.remove(uuid) != null;
+  @Override
+  public Set<UUID> getVisualOpeners() {
+    return openers;
+  }
+
+  @Override
+  public boolean addVisualOpener(UUID uuid) {
+    boolean result = ILootrSavedData.super.addVisualOpener(uuid);
+    if (result) {
+      setDirty();
+    }
+    return result;
+  }
+
+  @Override
+  public boolean removeVisualOpener(UUID uuid) {
+    boolean result = ILootrSavedData.super.removeVisualOpener(uuid);
+    if (result) {
+      setDirty();
+    }
+    return result;
+  }
+
+  @Override
+  public boolean addActuallyOpened(UUID uuid) {
+    boolean result = ILootrSavedData.super.addActuallyOpened(uuid);
+    if (result) {
+      setDirty();
+    }
+    return result;
+  }
+
+  @Override
+  public Set<UUID> getActualOpeners() {
+    return actualOpeners;
   }
 
   @Override
@@ -104,6 +157,16 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
       compounds.add(thisTag);
     }
     compound.put("inventories", compounds);
+    ListTag openers = new ListTag();
+    for (UUID opener : this.openers) {
+      openers.add(NbtUtils.createUUID(opener));
+    }
+    compound.put("openers", openers);
+    ListTag actualOpeners = new ListTag();
+    for (UUID opener : this.actualOpeners) {
+      actualOpeners.add(NbtUtils.createUUID(opener));
+    }
+    compound.put("actualOpeners", actualOpeners);
 
     return compound;
   }

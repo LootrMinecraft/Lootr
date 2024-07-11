@@ -110,7 +110,7 @@ public class ChestUtil {
         // Error messages are already handled by nested methods in `getInventory`
         return;
       }
-      checkScore((ServerPlayer) player, infoId);
+      checkScore(provider, (ServerPlayer) player);
       if (addOpener(provider, player)) {
         te.setChanged();
         ((ILootrBlockEntity) te).updatePacketViaForce();
@@ -122,8 +122,9 @@ public class ChestUtil {
   }
 
   private static boolean addOpener(IHasOpeners openable, Player player) {
-    boolean result1 = openable.getActualOpeners().add(player.getUUID());
-    boolean result2 = openable.getVisualOpeners().add(player.getUUID());
+
+    boolean result1 = openable.addActuallyOpened(player);
+    boolean result2 = openable.addVisualOpener(player);
     return result1 || result2;
   }
 
@@ -153,7 +154,7 @@ public class ChestUtil {
       }
     }
     addOpener(cart, player);
-    checkScore((ServerPlayer) player, cart.getUUID());
+    checkScore(cart, (ServerPlayer) player);
     if (DataStorage.isRefreshed(infoId)) {
       DataStorage.refreshInventory(cart);
       notifyRefresh(player, infoId);
@@ -224,11 +225,11 @@ public class ChestUtil {
     return contents;
   }
 
-  private static void checkScore(ServerPlayer player, UUID infoId) {
-    if (!DataStorage.isScored(player.getUUID(), infoId)) {
+  private static void checkScore(IHasOpeners openable, ServerPlayer player) {
+    if (!openable.hasActuallyOpened(player)) {
       player.awardStat(LootrRegistry.getLootedStat());
       LootrRegistry.getStatTrigger().trigger(player);
-      DataStorage.score(player.getUUID(), infoId);
+      openable.addActuallyOpened(player);
     }
   }
 

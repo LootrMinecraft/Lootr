@@ -38,8 +38,6 @@ import java.util.UUID;
 
 public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlockEntity {
   private final ChestLidController chestLidController = new ChestLidController();
-  private final Set<UUID> openers = new HashSet<>();
-  private final Set<UUID> actualOpeners = new HashSet<>();
   protected UUID infoId;
   private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
     @Override
@@ -121,20 +119,6 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
     if (this.infoId == null) {
       getInfoUUID();
     }
-    if (compound.contains("LootrOpeners")) {
-      ListTag openers = compound.getList("LootrOpeners", Tag.TAG_INT_ARRAY);
-      this.openers.clear();
-      for (Tag item : openers) {
-        this.openers.add(NbtUtils.loadUUID(item));
-      }
-    }
-    if (compound.contains("LootrActualOpeners")) {
-      ListTag openers = compound.getList("LootrActualOpeners", Tag.TAG_INT_ARRAY);
-      this.actualOpeners.clear();
-      for (Tag item : openers) {
-        this.actualOpeners.add(NbtUtils.loadUUID(item));
-      }
-    }
   }
 
   @Override
@@ -149,18 +133,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
     super.saveAdditional(compound, provider);
     this.trySaveLootTable(compound);
     if (!LootrAPI.shouldDiscard() && !savingToItem) {
-      // TODO: Was "tileId"
       compound.putUUID("LootrId", getInfoUUID());
-      ListTag list = new ListTag();
-      for (UUID opener : this.openers) {
-        list.add(NbtUtils.createUUID(opener));
-      }
-      compound.put("LootrOpeners", list);
-      ListTag list2 = new ListTag();
-      for (UUID opener : this.actualOpeners) {
-        list2.add(NbtUtils.createUUID(opener));
-      }
-      compound.put("LootrActualOpeners", list2);
     }
   }
 
@@ -239,6 +212,11 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   @Override
   public LootrInfoType getInfoType() {
     return LootrInfoType.CONTAINER_BLOCK_ENTITY;
+  }
+
+  @Override
+  public void markChanged() {
+    setChanged();
   }
 
   @Override

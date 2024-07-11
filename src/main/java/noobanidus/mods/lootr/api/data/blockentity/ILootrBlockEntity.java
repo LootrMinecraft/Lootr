@@ -13,6 +13,8 @@ public interface ILootrBlockEntity extends IHasOpeners, ILootrInfoProvider {
     return LootrInfoType.CONTAINER_BLOCK_ENTITY;
   }
 
+  void markChanged ();
+
   default void updatePacketViaForce () {
     if (this instanceof BlockEntity blockEntity) {
       updatePacketViaForce(blockEntity);
