@@ -48,7 +48,6 @@ import noobanidus.mods.lootr.block.LootrShulkerBlock;
 import noobanidus.mods.lootr.block.entity.LootrInventoryBlockEntity;
 import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
-import noobanidus.mods.lootr.util.ChestUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -123,6 +122,14 @@ public class CommandLootr {
       }
       c.sendSuccess(() -> Component.translatable("lootr.commands.create", Component.translatable(block.getDescriptionId()), ComponentUtils.wrapInSquareBrackets(Component.translatable("lootr.commands.blockpos", pos.getX(), pos.getY(), pos.getZ()).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.GREEN)).withBold(true))), table.toString()), false);
     }
+  }
+
+  private static NonNullList<ItemStack> copyItemList(NonNullList<ItemStack> reference) {
+    NonNullList<ItemStack> contents = NonNullList.withSize(reference.size(), ItemStack.EMPTY);
+    for (int i = 0; i < reference.size(); i++) {
+      contents.set(i, reference.get(i).copy());
+    }
+    return contents;
   }
 
   public CommandLootr register() {
@@ -217,7 +224,7 @@ public class CommandLootr {
           reference = ((BarrelBlockEntity) Objects.requireNonNull(world.getBlockEntity(pos))).items;
           newState = LootrRegistry.getInventoryBlock().defaultBlockState().setValue(ChestBlock.FACING, facing);
         }
-        NonNullList<ItemStack> custom = ChestUtil.copyItemList(reference);
+        NonNullList<ItemStack> custom = copyItemList(reference);
         world.removeBlockEntity(pos);
         world.setBlockAndUpdate(pos, newState);
         BlockEntity te = world.getBlockEntity(pos);

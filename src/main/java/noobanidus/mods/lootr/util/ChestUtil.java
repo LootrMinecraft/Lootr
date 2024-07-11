@@ -1,13 +1,11 @@
 package noobanidus.mods.lootr.util;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.Block;
@@ -37,8 +35,7 @@ public class ChestUtil {
 
     BlockEntity be = level.getBlockEntity(pos);
     if (be instanceof ILootrBlockEntity blockEntity) {
-      if (blockEntity.getVisualOpeners().remove(player.getUUID())) {
-        be.setChanged();
+      if (blockEntity.removeVisualOpener(player)) {
         blockEntity.updatePacketViaForce();
         PacketDistributor.sendToPlayer((ServerPlayer) player, new PacketCloseContainer(be.getBlockPos()));
       }
@@ -52,8 +49,9 @@ public class ChestUtil {
       return;
     }
 
-    cart.getVisualOpeners().remove(player.getUUID());
-    PacketDistributor.sendToPlayersTrackingEntity(cart, new PacketCloseCart(cart.getId()));
+    if (cart.removeVisualOpener(player)) {
+      PacketDistributor.sendToPlayersTrackingEntity(cart, new PacketCloseCart(cart.getId()));
+    }
   }
 
   public static void handleLootChest(Block block, Level level, BlockPos pos, Player player) {
@@ -110,10 +108,9 @@ public class ChestUtil {
         // Error messages are already handled by nested methods in `getInventory`
         return;
       }
-      checkScore(provider, (ServerPlayer) player);
+      checkAndScore(provider, (ServerPlayer) player);
       if (addOpener(provider, player)) {
-        te.setChanged();
-        ((ILootrBlockEntity) te).updatePacketViaForce();
+        provider.updatePacketViaForce();
       }
       player.openMenu(menuProvider);
       // TODO: Instances using this check the block tags first.
@@ -122,7 +119,6 @@ public class ChestUtil {
   }
 
   private static boolean addOpener(IHasOpeners openable, Player player) {
-
     boolean result1 = openable.addActuallyOpened(player);
     boolean result2 = openable.addVisualOpener(player);
     return result1 || result2;
@@ -154,7 +150,7 @@ public class ChestUtil {
       }
     }
     addOpener(cart, player);
-    checkScore(cart, (ServerPlayer) player);
+    checkAndScore(cart, (ServerPlayer) player);
     if (DataStorage.isRefreshed(infoId)) {
       DataStorage.refreshInventory(cart);
       notifyRefresh(player, infoId);
@@ -175,57 +171,7 @@ public class ChestUtil {
     player.openMenu(provider);
   }
 
-/*  public static void handleLootInventory(Block block, Level level, BlockPos pos, Player player) {
-    if (level.isClientSide() || player.isSpectator()) {
-      if (player.isSpectator()) {
-        player.openMenu(null);
-      }
-      return;
-    }
-    BlockEntity te = level.getBlockEntity(pos);
-    if (te instanceof LootrInventoryBlockEntity tile) {
-      LootrRegistry.getChestTrigger().trigger((ServerPlayer) player, tile.getInfoUUID());
-      NonNullList<ItemStack> stacks = null;
-      if (tile.getInfoReferenceInventory() != null) {
-        stacks = copyItemList(tile.getInfoReferenceInventory());
-      }
-      UUID tileId = tile.getInfoUUID();
-      if (DataStorage.isRefreshed(tileId)) {
-        DataStorage.refreshInventory(level, pos, tile.getInfoUUID(), stacks, (ServerPlayer) player);
-        notifyRefresh(player, tileId);
-      }
-      int refreshValue = DataStorage.getRefreshValue(tileId);
-      if (refreshValue > 0 && LootrAPI.shouldNotify(refreshValue)) {
-        player.displayClientMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20).setStyle(LootrAPI.getRefreshStyle()), true);
-      } else if (refreshValue == -1) {
-        if (LootrAPI.isRefreshing(tile)) {
-          startRefresh(player, tileId, refreshValue);
-        }
-      }
-      MenuProvider provider = DataStorage.getInventory(level, tile.getInfoUUID(), stacks, (ServerPlayer) player, pos, tile);
-      if (provider == null) {
-        // Error messages are already handled by nested methods in `getInventory`
-        return;
-      }
-      checkScore((ServerPlayer) player, tile.getInfoUUID());
-      if (addOpener(tile, player)) {
-        te.setChanged();
-        tile.updatePacketViaForce(tile);
-      }
-      player.openMenu(provider);
-      PiglinAi.angerNearbyPiglins(player, true);
-    }
-  }*/
-
-  public static NonNullList<ItemStack> copyItemList(NonNullList<ItemStack> reference) {
-    NonNullList<ItemStack> contents = NonNullList.withSize(reference.size(), ItemStack.EMPTY);
-    for (int i = 0; i < reference.size(); i++) {
-      contents.set(i, reference.get(i).copy());
-    }
-    return contents;
-  }
-
-  private static void checkScore(IHasOpeners openable, ServerPlayer player) {
+  private static void checkAndScore(IHasOpeners openable, ServerPlayer player) {
     if (!openable.hasActuallyOpened(player)) {
       player.awardStat(LootrRegistry.getLootedStat());
       LootrRegistry.getStatTrigger().trigger(player);
