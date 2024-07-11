@@ -39,6 +39,10 @@ public class LootrAPI {
     return ResourceLocation.fromNamespaceAndPath(namespace, path);
   }
 
+  public static Player getPlayer () {
+    return INSTANCE.getPlayer();
+  }
+
   public static MinecraftServer getServer() {
     return INSTANCE.getServer();
   }

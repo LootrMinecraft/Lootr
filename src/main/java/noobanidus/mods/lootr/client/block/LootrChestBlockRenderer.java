@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.client.block;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.ChestRenderer;
@@ -10,7 +11,6 @@ import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.block.entity.LootrChestBlockEntity;
-import noobanidus.mods.lootr.util.Getter;
 
 import java.util.UUID;
 
@@ -36,7 +36,7 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootrBlo
     // TODO: ???
     boolean trapped = blockEntity.getType().equals(LootrRegistry.getTrappedChestBlockEntity());
     if (playerId == null) {
-      Player player = Getter.getPlayer();
+      Player player = Minecraft.getInstance().player;
       if (player != null) {
         playerId = player.getUUID();
       } else {

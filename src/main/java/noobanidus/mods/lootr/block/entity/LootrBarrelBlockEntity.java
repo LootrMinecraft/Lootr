@@ -33,7 +33,6 @@ import noobanidus.mods.lootr.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.block.LootrBarrelBlock;
 import noobanidus.mods.lootr.data.LootrInventory;
-import noobanidus.mods.lootr.util.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -85,7 +84,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     if (modelData == null) {
       modelData = ModelData.builder().with(LootrBarrelBlock.OPENED, false).build();
     }
-    Player player = Getter.getPlayer();
+    Player player = LootrAPI.getPlayer();
     if (player != null) {
       return modelData.derive().with(LootrBarrelBlock.OPENED, openers.contains(player.getUUID())).build();
     }

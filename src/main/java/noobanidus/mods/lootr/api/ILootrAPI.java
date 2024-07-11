@@ -22,6 +22,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 
 public interface ILootrAPI {
+  Player getPlayer ();
+
   MinecraftServer getServer();
 
   default int getCurrentTicks() {

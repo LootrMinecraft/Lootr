@@ -15,6 +15,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.api.ILootrAPI;
@@ -24,6 +26,7 @@ import noobanidus.mods.lootr.api.MenuBuilder;
 import noobanidus.mods.lootr.api.client.ClientTextureType;
 import noobanidus.mods.lootr.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.api.data.inventory.ILootrInventory;
+import noobanidus.mods.lootr.client.impl.ClientGetter;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.data.DataStorage;
 import org.jetbrains.annotations.Nullable;
@@ -32,6 +35,15 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class LootrAPIImpl implements ILootrAPI {
+
+  @Override
+  public Player getPlayer() {
+    if (FMLEnvironment.dist == Dist.CLIENT) {
+      return ClientGetter.getPlayer();
+    } else {
+      return null;
+    }
+  }
 
   @Override
   public MinecraftServer getServer() {
