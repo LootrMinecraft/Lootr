@@ -142,6 +142,9 @@ public class LootrRegistryImpl implements ILootrRegistry {
 
   @Override
   public Stat<?> getLootedStat() {
+    if (ModStats.LOOTED_STAT == null) {
+      ModStats.load();
+    }
     return ModStats.LOOTED_STAT;
   }
 

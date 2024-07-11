@@ -11,7 +11,6 @@ public class CommonSetup {
   @SubscribeEvent
   public static void init(FMLCommonSetupEvent event) {
     event.enqueueWork(() -> {
-      ModStats.load();
     });
   }
 }
