@@ -39,45 +39,45 @@ public class DataStorage {
     return overworld.getDataStorage();
   }
 
-  public static boolean isAwarded(UUID player, UUID tileId) {
+  public static boolean isAwarded(UUID player, UUID infoId) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot determine if advancement has been awarded.");
       return false;
     }
     AdvancementData data = manager.computeIfAbsent(AdvancementData.FACTORY, ADVANCEMENTS);
-    return data.contains(player, tileId);
+    return data.contains(player, infoId);
   }
 
-  public static void award(UUID player, UUID tileId) {
+  public static void award(UUID player, UUID infoId) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot award advancement.");
       return;
     }
     AdvancementData data = manager.computeIfAbsent(AdvancementData.FACTORY, ADVANCEMENTS);
-    data.add(player, tileId);
+    data.add(player, infoId);
     data.setDirty();
   }
 
-  public static boolean isScored(UUID player, UUID tileId) {
+  public static boolean isScored(UUID player, UUID infoId) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot determine if block entity has been scored.");
       return false;
     }
     AdvancementData data = manager.computeIfAbsent(AdvancementData.FACTORY, SCORES);
-    return data.contains(player, tileId);
+    return data.contains(player, infoId);
   }
 
-  public static void score(UUID player, UUID tileId) {
+  public static void score(UUID player, UUID infoId) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot score block entities at this time.");
       return;
     }
     AdvancementData data = manager.computeIfAbsent(AdvancementData.FACTORY, SCORES);
-    data.add(player, tileId);
+    data.add(player, infoId);
     data.setDirty();
   }
 

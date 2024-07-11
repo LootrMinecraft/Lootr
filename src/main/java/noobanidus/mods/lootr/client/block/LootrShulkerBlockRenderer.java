@@ -33,7 +33,7 @@ public class LootrShulkerBlockRenderer implements BlockEntityRenderer<LootrShulk
     this.model = new ShulkerModel<>(context.bakeLayer(ModelLayers.SHULKER));
   }
 
-  protected Material getMaterial(LootrShulkerBlockEntity tile) {
+  protected Material getMaterial(LootrShulkerBlockEntity blockEntity) {
     if (LootrAPI.isVanillaTextures()) {
       return Sheets.DEFAULT_SHULKER_TEXTURE_LOCATION;
     }
@@ -45,7 +45,7 @@ public class LootrShulkerBlockRenderer implements BlockEntityRenderer<LootrShulk
         playerId = mc.player.getUUID();
       }
     }
-    if (tile.getVisualOpeners().contains(playerId)) {
+    if (blockEntity.getVisualOpeners().contains(playerId)) {
       return LootrAPI.isOldTextures() ? MATERIAL4 : MATERIAL2;
     } else {
       return LootrAPI.isOldTextures() ? MATERIAL3 : MATERIAL;

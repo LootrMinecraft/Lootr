@@ -18,12 +18,12 @@ public class LootrChestItemRenderer extends BlockEntityWithoutLevelRenderer {
   private static LootrChestItemRenderer INSTANCE = null;
 
   private final BlockEntityRenderDispatcher blockEntityRenderDispatcher;
-  private final LootrChestBlockEntity tile;
+  private final LootrChestBlockEntity blockEntity;
 
   public LootrChestItemRenderer(BlockEntityRenderDispatcher pBlockEntityRenderDispatcher, EntityModelSet pEntityModelSet) {
     super(pBlockEntityRenderDispatcher, pEntityModelSet);
     this.blockEntityRenderDispatcher = pBlockEntityRenderDispatcher;
-    this.tile = new LootrChestBlockEntity(BlockPos.ZERO, LootrRegistry.getChestBlock().defaultBlockState());
+    this.blockEntity = new LootrChestBlockEntity(BlockPos.ZERO, LootrRegistry.getChestBlock().defaultBlockState());
   }
 
   public LootrChestItemRenderer() {
@@ -40,13 +40,13 @@ public class LootrChestItemRenderer extends BlockEntityWithoutLevelRenderer {
 
   @Override
   public void renderByItem(ItemStack p_108830_, ItemDisplayContext p_270899_, PoseStack p_108832_, MultiBufferSource p_108833_, int p_108834_, int p_108835_) {
-    this.blockEntityRenderDispatcher.renderItem(tile, p_108832_, p_108833_, p_108834_, p_108835_);
+    this.blockEntityRenderDispatcher.renderItem(blockEntity, p_108832_, p_108833_, p_108834_, p_108835_);
   }
 
   public void renderByMinecart(LootrChestMinecartEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight) {
-    boolean open = tile.isClientOpened();
-    tile.setClientOpened(entity.isOpened());
-    this.blockEntityRenderDispatcher.renderItem(tile, matrixStack, buffer, combinedLight, OverlayTexture.NO_OVERLAY);
-    tile.setClientOpened(open);
+    boolean open = blockEntity.isClientOpened();
+    blockEntity.setClientOpened(entity.isOpened());
+    this.blockEntityRenderDispatcher.renderItem(blockEntity, matrixStack, buffer, combinedLight, OverlayTexture.NO_OVERLAY);
+    blockEntity.setClientOpened(open);
   }
 }

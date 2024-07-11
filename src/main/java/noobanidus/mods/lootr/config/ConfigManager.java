@@ -39,8 +39,6 @@ public class ConfigManager {
   public static final ModConfigSpec.IntValue MAXIMUM_AGE;
   public static final ModConfigSpec.BooleanValue CONVERT_MINESHAFTS;
   public static final ModConfigSpec.BooleanValue CONVERT_ELYTRAS;
-  public static final ModConfigSpec.ConfigValue<List<? extends String>> ADDITIONAL_CHESTS;
-  public static final ModConfigSpec.ConfigValue<List<? extends String>> ADDITIONAL_TRAPPED_CHESTS;
   // Breaking
   public static final ModConfigSpec.BooleanValue DISABLE_BREAK;
   public static final ModConfigSpec.BooleanValue ENABLE_BREAK;
@@ -109,8 +107,6 @@ public class ConfigManager {
     Predicate<Object> validator = o -> o instanceof String && ((String) o).contains(":");
     Predicate<Object> modidValidator = o -> o instanceof String && !((String) o).contains(":");
     REPORT_UNRESOLVED_TABLES = COMMON_BUILDER.comment("lootr will automatically log all unresolved tables (i.e., for containers that have a loot table associated with them but, for whatever reason, the lookup for this table returns empty). setting this option to true additionally informs players when they open containers.").define("report_unresolved_tables", false);
-    ADDITIONAL_CHESTS = COMMON_BUILDER.comment("a list of additional chests that should be converted (in the format of [\"modid:name\", \"modid:other_name\"], must be a tile entity instance of RandomizableContainerBlockEntity)").defineList("additional_chests", empty, validator);
-    ADDITIONAL_TRAPPED_CHESTS = COMMON_BUILDER.comment("a list of additional trapped chests that should be converted (in the format of [\"modid:name\", \"modid:other_name\"], must be a tile entity instance of RandomizableContainerBlockEntity)").defineList("additional_trapped_chests", empty, validator);
     DIMENSION_WHITELIST = COMMON_BUILDER.comment("list of dimensions (to the exclusion of all others) that loot chest should be replaced in (default: blank, allowing all dimensions, e.g., [\"minecraft:overworld\", \"minecraft:the_end\"])").defineList("dimension_whitelist", empty, validator);
     DIMENSION_BLACKLIST = COMMON_BUILDER.comment("list of dimensions that loot chests should not be replaced in (default: blank, allowing all dimensions, format e.g., [\"minecraft:overworld\", \"minecraft:the_end\"])").defineList("dimension_blacklist", empty, validator);
     MODID_DIMENSION_BLACKLIST = COMMON_BUILDER.comment("list of dimensions by modid that loot chests should not be replaced in (default: blank, allowing all modids, format e.g., [\"minecraft", "othermod\"])").defineList("modid_dimension_blacklist", empty, modidValidator);
@@ -294,34 +290,34 @@ public class ConfigManager {
     return getRefreshDimensions().contains(key);
   }
 
-  public static boolean isDecaying(ILootrInfoProvider tile) {
+  public static boolean isDecaying(ILootrInfoProvider provider) {
     if (DECAY_ALL.get()) {
       return true;
     }
-    if (tile.getInfoLootTable() != null) {
-      if (getDecayingTables().contains(tile.getInfoLootTable())) {
+    if (provider.getInfoLootTable() != null) {
+      if (getDecayingTables().contains(provider.getInfoLootTable())) {
         return true;
       }
-      if (getDecayMods().contains(tile.getInfoLootTable().location().getNamespace())) {
+      if (getDecayMods().contains(provider.getInfoLootTable().location().getNamespace())) {
         return true;
       }
     }
-    return isDimensionDecaying(tile.getInfoDimension());
+    return isDimensionDecaying(provider.getInfoDimension());
   }
 
-  public static boolean isRefreshing(ILootrInfoProvider tile) {
+  public static boolean isRefreshing(ILootrInfoProvider provider) {
     if (REFRESH_ALL.get()) {
       return true;
     }
-    if (tile.getInfoLootTable() != null) {
-      if (getRefreshingTables().contains(tile.getInfoLootTable())) {
+    if (provider.getInfoLootTable() != null) {
+      if (getRefreshingTables().contains(provider.getInfoLootTable())) {
         return true;
       }
-      if (getRefreshMods().contains(tile.getInfoLootTable().location().getNamespace())) {
+      if (getRefreshMods().contains(provider.getInfoLootTable().location().getNamespace())) {
         return true;
       }
     }
-    return isDimensionRefreshing(tile.getInfoDimension());
+    return isDimensionRefreshing(provider.getInfoDimension());
   }
 
 

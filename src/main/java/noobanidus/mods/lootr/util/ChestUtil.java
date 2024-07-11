@@ -35,12 +35,12 @@ public class ChestUtil {
       return;
     }
 
-    BlockEntity te = level.getBlockEntity(pos);
-    if (te instanceof ILootrBlockEntity tile) {
-      if (tile.getVisualOpeners().remove(player.getUUID())) {
-        te.setChanged();
-        tile.updatePacketViaForce(te);
-        PacketDistributor.sendToPlayer((ServerPlayer) player, new PacketCloseContainer(te.getBlockPos()));
+    BlockEntity be = level.getBlockEntity(pos);
+    if (be instanceof ILootrBlockEntity blockEntity) {
+      if (blockEntity.getVisualOpeners().remove(player.getUUID())) {
+        be.setChanged();
+        blockEntity.updatePacketViaForce();
+        PacketDistributor.sendToPlayer((ServerPlayer) player, new PacketCloseContainer(be.getBlockPos()));
       }
     }
 
@@ -113,7 +113,7 @@ public class ChestUtil {
       checkScore((ServerPlayer) player, infoId);
       if (addOpener(provider, player)) {
         te.setChanged();
-        ((ILootrBlockEntity) te).updatePacketViaForce(te);
+        ((ILootrBlockEntity) te).updatePacketViaForce();
       }
       player.openMenu(menuProvider);
       // TODO: Instances using this check the block tags first.
@@ -224,31 +224,31 @@ public class ChestUtil {
     return contents;
   }
 
-  private static void checkScore(ServerPlayer player, UUID tileId) {
-    if (!DataStorage.isScored(player.getUUID(), tileId)) {
+  private static void checkScore(ServerPlayer player, UUID infoId) {
+    if (!DataStorage.isScored(player.getUUID(), infoId)) {
       player.awardStat(LootrRegistry.getLootedStat());
       LootrRegistry.getStatTrigger().trigger(player);
-      DataStorage.score(player.getUUID(), tileId);
+      DataStorage.score(player.getUUID(), infoId);
     }
   }
 
-  private static void notifyDecay(Player player, UUID tileId) {
+  private static void notifyDecay(Player player, UUID infoId) {
     player.displayClientMessage(Component.translatable("lootr.message.decayed").setStyle(LootrAPI.getDecayStyle()), true);
-    DataStorage.removeDecayed(tileId);
+    DataStorage.removeDecayed(infoId);
   }
 
-  private static void notifyRefresh(Player player, UUID tileId) {
-    DataStorage.removeRefreshed(tileId);
+  private static void notifyRefresh(Player player, UUID infoId) {
+    DataStorage.removeRefreshed(infoId);
     player.displayClientMessage(Component.translatable("lootr.message.refreshed").setStyle(LootrAPI.getRefreshStyle()), true);
   }
 
-  private static void startDecay(Player player, UUID tileId, int decayValue) {
-    DataStorage.setDecaying(tileId, decayValue);
+  private static void startDecay(Player player, UUID infoId, int decayValue) {
+    DataStorage.setDecaying(infoId, decayValue);
     player.displayClientMessage(Component.translatable("lootr.message.decay_start", decayValue / 20).setStyle(LootrAPI.getDecayStyle()), true);
   }
 
-  private static void startRefresh(Player player, UUID tileId, int refreshValue) {
-    DataStorage.setRefreshing(tileId, refreshValue);
+  private static void startRefresh(Player player, UUID infoId, int refreshValue) {
+    DataStorage.setRefreshing(infoId, refreshValue);
     player.displayClientMessage(Component.translatable("lootr.message.refresh_start", refreshValue / 20).setStyle(LootrAPI.getRefreshStyle()), true);
   }
 }

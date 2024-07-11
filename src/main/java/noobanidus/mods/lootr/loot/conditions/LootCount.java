@@ -46,11 +46,11 @@ public record LootCount(List<Operation> operations) implements LootItemCondition
       return false; // THIS SHOULD NEVER HAPPEN
     }
     BlockPos position = new BlockPos((int) incomingPos.x, (int) incomingPos.y, (int) incomingPos.z);
-    BlockEntity tileentity = lootContext.getLevel().getBlockEntity(position);
+    BlockEntity blockEntity = lootContext.getLevel().getBlockEntity(position);
     // TODO: REDO THIS TO USE OPENED COUNTERS
     // RATHER THAN OPENERS
-    if (tileentity instanceof ILootrBlockEntity) {
-      int count = ((ILootrBlockEntity) tileentity).getActualOpeners().size() + 1; // Additional opener to include the current opener
+    if (blockEntity instanceof ILootrBlockEntity) {
+      int count = ((ILootrBlockEntity) blockEntity).getActualOpeners().size() + 1; // Additional opener to include the current opener
       for (Operation op : operations) {
         if (!op.test(count)) {
           return false;

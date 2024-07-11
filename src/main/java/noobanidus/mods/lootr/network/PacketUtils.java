@@ -51,8 +51,8 @@ public class PacketUtils {
     return true;
   }
 
-  public static <MSG extends CustomPacketPayload> void sendToAllTracking(MSG message, BlockEntity tile) {
-    sendToAllTracking(message, tile.getLevel(), tile.getBlockPos());
+  public static <MSG extends CustomPacketPayload> void sendToAllTracking(MSG message, BlockEntity blockEntity) {
+    sendToAllTracking(message, blockEntity.getLevel(), blockEntity.getBlockPos());
   }
 
   public static <MSG extends CustomPacketPayload> void sendToAllTracking(MSG message, Level world, BlockPos pos) {

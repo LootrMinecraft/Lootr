@@ -280,16 +280,16 @@ public class CommandLootr {
     builder.then(Commands.literal("openers").then(Commands.argument("location", Vec3Argument.vec3()).executes(c -> {
       BlockPos position = Vec3Argument.getCoordinates(c, "location").getBlockPos(c.getSource());
       Level world = c.getSource().getLevel();
-      BlockEntity tile = world.getBlockEntity(position);
-      if (tile instanceof ILootrBlockEntity ibe) {
-        Set<UUID> openers = ((ILootrBlockEntity) tile).getActualOpeners();
-        c.getSource().sendSuccess(() -> Component.literal("Tile at location " + position + " has " + openers.size() + " openers. UUIDs as follows:"), true);
+      BlockEntity blockEntity = world.getBlockEntity(position);
+      if (blockEntity instanceof ILootrBlockEntity ibe) {
+        Set<UUID> openers = ibe.getActualOpeners();
+        c.getSource().sendSuccess(() -> Component.literal("BlockEntity at location " + position + " has " + openers.size() + " openers. UUIDs as follows:"), true);
         for (UUID uuid : openers) {
           Optional<GameProfile> prof = c.getSource().getServer().getProfileCache().get(uuid);
           c.getSource().sendSuccess(() -> Component.literal("UUID: " + uuid + ", user profile: " + (prof.isPresent() ? prof.get().getName() : "null")), true);
         }
       } else {
-        c.getSource().sendSuccess(() -> Component.literal("No Lootr tile exists at location: " + position), false);
+        c.getSource().sendSuccess(() -> Component.literal("No Lootr block entity exists at location: " + position), false);
       }
       return 1;
     })));

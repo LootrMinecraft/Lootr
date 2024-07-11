@@ -64,8 +64,8 @@ public class LootrBarrelBlock extends BarrelBlock {
   @SuppressWarnings("deprecation")
   public boolean triggerEvent(BlockState state, Level world, BlockPos pos, int id, int param) {
     super.triggerEvent(state, world, pos, id, param);
-    BlockEntity tile = world.getBlockEntity(pos);
-    return tile != null && tile.triggerEvent(id, param);
+    BlockEntity blockEntity = world.getBlockEntity(pos);
+    return blockEntity != null && blockEntity.triggerEvent(id, param);
   }
 
   @Override

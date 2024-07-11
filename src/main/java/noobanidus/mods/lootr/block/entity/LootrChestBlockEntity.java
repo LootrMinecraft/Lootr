@@ -149,7 +149,8 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
     super.saveAdditional(compound, provider);
     this.trySaveLootTable(compound);
     if (!LootrAPI.shouldDiscard() && !savingToItem) {
-      compound.putUUID("tileId", getInfoUUID());
+      // TODO: Was "tileId"
+      compound.putUUID("LootrId", getInfoUUID());
       ListTag list = new ListTag();
       for (UUID opener : this.openers) {
         list.add(NbtUtils.createUUID(opener));

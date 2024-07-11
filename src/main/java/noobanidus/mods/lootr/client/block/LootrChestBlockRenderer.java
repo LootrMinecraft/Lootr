@@ -29,12 +29,12 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootrBlo
   }
 
   @Override
-  protected Material getMaterial(T tile, ChestType type) {
+  protected Material getMaterial(T blockEntity, ChestType type) {
     if (LootrAPI.isVanillaTextures()) {
-      return Sheets.chooseMaterial(tile, type, false);
+      return Sheets.chooseMaterial(blockEntity, type, false);
     }
     // TODO: ???
-    boolean trapped = tile.getType().equals(LootrRegistry.getTrappedChestBlockEntity());
+    boolean trapped = blockEntity.getType().equals(LootrRegistry.getTrappedChestBlockEntity());
     if (playerId == null) {
       Player player = Getter.getPlayer();
       if (player != null) {
@@ -46,13 +46,13 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootrBlo
         return trapped ? MATERIAL3 : MATERIAL;
       }
     }
-    if (tile.isClientOpened()) {
+    if (blockEntity.isClientOpened()) {
       if (LootrAPI.isOldTextures()) {
         return OLD_MATERIAL2;
       }
       return trapped ? MATERIAL4 : MATERIAL2;
     }
-    if (tile.getVisualOpeners().contains(playerId)) {
+    if (blockEntity.getVisualOpeners().contains(playerId)) {
       if (LootrAPI.isOldTextures()) {
         return OLD_MATERIAL2;
       }

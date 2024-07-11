@@ -12,22 +12,18 @@ import noobanidus.mods.lootr.data.DataStorage;
 import java.util.ArrayList;
 import java.util.List;
 
-@EventBusSubscriber(modid = LootrAPI.MODID)
+
 public class EntityTicker {
   private static final List<LootrChestMinecartEntity> entities = new ArrayList<>();
   private static final List<LootrChestMinecartEntity> pendingEntities = new ArrayList<>();
 
   private final static Object listLock = new Object();
 
-  private final static Object worldLock = new Object();
+  private final static Object levelLock = new Object();
 
   private static boolean tickingList = false;
 
-  @SubscribeEvent
   public static void onServerTick(ServerTickEvent.Post event) {
-    DataStorage.doDecay();
-    DataStorage.doRefresh();
-
     if (LootrAPI.isDisabled()) {
       return;
     }
@@ -38,7 +34,7 @@ public class EntityTicker {
       copy = new ArrayList<>(entities);
       tickingList = false;
     }
-    synchronized (worldLock) {
+    synchronized (levelLock) {
       for (LootrChestMinecartEntity entity : copy) {
         if (entity.isAddedToWorld()) {
           continue;

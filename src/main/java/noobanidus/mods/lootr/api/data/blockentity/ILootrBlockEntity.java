@@ -13,6 +13,14 @@ public interface ILootrBlockEntity extends IHasOpeners, ILootrInfoProvider {
     return LootrInfoType.CONTAINER_BLOCK_ENTITY;
   }
 
+  default void updatePacketViaForce () {
+    if (this instanceof BlockEntity blockEntity) {
+      updatePacketViaForce(blockEntity);
+    } else {
+      throw new IllegalStateException("updatePacketViaForce called on non-BlockEntity ILootrBlockEntity");
+    }
+  }
+
   default void updatePacketViaForce(BlockEntity entity) {
     if (entity.getLevel() instanceof ServerLevel level) {
       Packet<?> packet = entity.getUpdatePacket();

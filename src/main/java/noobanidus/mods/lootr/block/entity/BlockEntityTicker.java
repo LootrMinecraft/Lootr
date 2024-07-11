@@ -21,11 +21,10 @@ import noobanidus.mods.lootr.event.HandleChunk;
 
 import java.util.Set;
 
-@EventBusSubscriber(modid = LootrAPI.MODID)
 public class BlockEntityTicker {
   private final static Object listLock = new Object();
   private final static Object worldLock = new Object();
-  private final static Set<Entry> tileEntries = new ObjectLinkedOpenHashSet<>();
+  private final static Set<Entry> blockEntityEntries = new ObjectLinkedOpenHashSet<>();
   private final static Set<Entry> pendingEntries = new ObjectLinkedOpenHashSet<>();
   private static boolean tickingList = false;
 
@@ -70,13 +69,12 @@ public class BlockEntityTicker {
       if (tickingList) {
         pendingEntries.add(newEntry);
       } else {
-        tileEntries.add(newEntry);
+        blockEntityEntries.add(newEntry);
       }
     }
   }
 
-  @SubscribeEvent
-  public static void serverTick(ServerTickEvent.Post event) {
+  public static void onServerTick(ServerTickEvent.Post event) {
     if (LootrAPI.isDisabled()) {
       return;
     }
@@ -84,7 +82,7 @@ public class BlockEntityTicker {
     Set<Entry> copy;
     synchronized (listLock) {
       tickingList = true;
-      copy = new ObjectLinkedOpenHashSet<>(tileEntries);
+      copy = new ObjectLinkedOpenHashSet<>(blockEntityEntries);
       tickingList = false;
     }
     synchronized (worldLock) {
@@ -154,7 +152,7 @@ public class BlockEntityTicker {
         if (blockEntity instanceof ILootrBlockEntity) {
           ((RandomizableContainerBlockEntity) blockEntity).setLootTable(table, seed);
         } else {
-          LootrAPI.LOG.error("replacement " + replacement + " is not an ILootTile " + entry.getDimension() + " at " + entry.getPosition());
+          LootrAPI.LOG.error("replacement " + replacement + " is not an ILootrBlockEntity " + entry.getDimension() + " at " + entry.getPosition());
         }
 
         toRemove.add(entry);
@@ -162,8 +160,8 @@ public class BlockEntityTicker {
     }
     synchronized (listLock) {
       tickingList = true;
-      tileEntries.removeAll(toRemove);
-      tileEntries.addAll(pendingEntries);
+      blockEntityEntries.removeAll(toRemove);
+      blockEntityEntries.addAll(pendingEntries);
       tickingList = false;
       pendingEntries.clear();
     }
