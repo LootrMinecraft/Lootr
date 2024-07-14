@@ -3,6 +3,7 @@ package noobanidus.mods.lootr.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
@@ -41,11 +42,14 @@ public class LootrInventoryBlock extends ChestBlock {
   }
 
   @Override
-  public InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult trace) {
-    if (player.isShiftKeyDown()) {
-      ChestUtil.handleLootSneak(this, world, pos, player);
-    } else if (!ChestBlock.isChestBlockedAt(world, pos)) {
-      ChestUtil.handleLootChest(this, world, pos, player);
+  public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult trace) {
+    if (level.isClientSide() || player.isSpectator() || !(player instanceof ServerPlayer serverPlayer)) {
+      return InteractionResult.CONSUME;
+    }
+    if (serverPlayer.isShiftKeyDown()) {
+      ChestUtil.handleLootSneak(this, level, pos, serverPlayer);
+    } else if (!isChestBlockedAt(level, pos)) {
+      ChestUtil.handleLootChest(this, level, pos, serverPlayer);
     }
     return InteractionResult.SUCCESS;
   }

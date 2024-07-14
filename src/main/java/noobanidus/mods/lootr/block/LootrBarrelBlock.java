@@ -2,6 +2,7 @@ package noobanidus.mods.lootr.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionResult;
@@ -45,11 +46,14 @@ public class LootrBarrelBlock extends BarrelBlock {
   }
 
   @Override
-  public InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult trace) {
-    if (player.isShiftKeyDown()) {
-      ChestUtil.handleLootSneak(this, world, pos, player);
+  public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult trace) {
+    if (level.isClientSide() || player.isSpectator() || !(player instanceof ServerPlayer serverPlayer)) {
+      return InteractionResult.CONSUME;
+    }
+    if (serverPlayer.isShiftKeyDown()) {
+      ChestUtil.handleLootSneak(this, level, pos, serverPlayer);
     } else {
-      ChestUtil.handleLootChest(this, world, pos, player);
+      ChestUtil.handleLootChest(this, level, pos, serverPlayer);
     }
     return InteractionResult.SUCCESS;
   }

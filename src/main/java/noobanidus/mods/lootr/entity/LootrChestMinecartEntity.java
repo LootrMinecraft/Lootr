@@ -1,12 +1,10 @@
 package noobanidus.mods.lootr.entity;
 
+import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceKey;
@@ -35,21 +33,21 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
 import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.network.toClient.PacketCloseCart;
 import noobanidus.mods.lootr.network.toClient.PacketOpenCart;
 import noobanidus.mods.lootr.util.ChestUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class LootrChestMinecartEntity extends AbstractMinecartContainer implements ILootrCart {
+public class LootrChestMinecartEntity extends AbstractMinecartContainer implements ILootrNeoForgeCart {
   private static BlockState cartNormal = null;
-  private final Set<UUID> openers = new HashSet<>();
-  private final Set<UUID> actualOpeners = new HashSet<>();
+  private final Set<UUID> clientOpeners = new ObjectLinkedOpenHashSet<>();
   private boolean opened = false;
 
   public LootrChestMinecartEntity(EntityType<LootrChestMinecartEntity> type, Level world) {
@@ -65,18 +63,8 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
   @Override
-  public Set<UUID> getVisualOpeners() {
-    return openers;
-  }
-
-  @Override
-  public Set<UUID> getActualOpeners() {
-    return actualOpeners;
-  }
-
-  public void addOpener(Player player) {
-    openers.add(player.getUUID());
-    setChanged();
+  public @Nullable Set<UUID> getClientOpeners() {
+    return clientOpeners;
   }
 
   @Override
@@ -168,57 +156,27 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
 
   @Override
   protected void addAdditionalSaveData(CompoundTag compound) {
-    ListTag list = new ListTag();
-    for (UUID opener : this.openers) {
-      list.add(NbtUtils.createUUID(opener));
-    }
-    compound.put("LootrOpeners", list);
-    ListTag list2 = new ListTag();
-    for (UUID opener : this.actualOpeners) {
-      list2.add(NbtUtils.createUUID(opener));
-    }
-    compound.put("LootrActualOpeners", list2);
     super.addAdditionalSaveData(compound);
   }
 
   @Override
   protected void readAdditionalSaveData(CompoundTag compound) {
-    if (compound.contains("LootrOpeners", Tag.TAG_LIST)) {
-      ListTag openers = compound.getList("LootrOpeners", Tag.TAG_INT_ARRAY);
-      this.openers.clear();
-      for (Tag item : openers) {
-        this.openers.add(NbtUtils.loadUUID(item));
-      }
-    }
-    if (compound.contains("LootrActualOpeners", Tag.TAG_LIST)) {
-      ListTag openers = compound.getList("LootrActualOpeners", Tag.TAG_INT_ARRAY);
-      this.actualOpeners.clear();
-      for (Tag item : openers) {
-        this.actualOpeners.add(NbtUtils.loadUUID(item));
-      }
-    }
     super.readAdditionalSaveData(compound);
   }
 
   @Override
   public InteractionResult interact(Player player, InteractionHand hand) {
-    InteractionResult ret = InteractionResult.PASS;
-    if (ret.consumesAction()) return ret;
+    if (level().isClientSide() || player.isSpectator() || !(player instanceof ServerPlayer serverPlayer)) {
+      return InteractionResult.CONSUME;
+    }
+
     if (player.isShiftKeyDown()) {
-      ChestUtil.handleLootCartSneak(player.level(), this, player);
-      if (!player.level().isClientSide) {
-        return InteractionResult.CONSUME;
-      } else {
-        return InteractionResult.SUCCESS;
-      }
+      ChestUtil.handleLootCartSneak(player.level(), this, serverPlayer);
+      return InteractionResult.SUCCESS;
     } else {
-      ChestUtil.handleLootCart(player.level(), this, player);
-      if (!player.level().isClientSide) {
-        PiglinAi.angerNearbyPiglins(player, true);
-        return InteractionResult.CONSUME;
-      } else {
-        return InteractionResult.SUCCESS;
-      }
+      ChestUtil.handleLootCart(player.level(), this, serverPlayer);
+      PiglinAi.angerNearbyPiglins(player, true);
+      return InteractionResult.SUCCESS;
     }
   }
 
@@ -232,6 +190,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   @Override
   public void stopOpen(Player player) {
     if (!player.isSpectator()) {
+      // TODO: ???
       addOpener(player);
     }
   }
@@ -240,8 +199,10 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   public void startSeenByPlayer(ServerPlayer pPlayer) {
     super.startSeenByPlayer(pPlayer);
 
-    if (getVisualOpeners().contains(pPlayer.getUUID())) {
-      PacketDistributor.sendToPlayer((ServerPlayer) pPlayer, new PacketOpenCart(this.getId()));
+    if (hasVisualOpened(pPlayer)) {
+      PacketDistributor.sendToPlayer(pPlayer, new PacketOpenCart(this.getId()));
+    } else {
+      PacketDistributor.sendToPlayer(pPlayer, new PacketCloseCart(this.getId()));
     }
   }
 
@@ -304,5 +265,10 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   @Override
   public void markChanged() {
     setChanged();
+  }
+
+  @Override
+  public @Nullable IContainerTrigger getTrigger() {
+    return LootrRegistry.getCartTrigger();
   }
 }

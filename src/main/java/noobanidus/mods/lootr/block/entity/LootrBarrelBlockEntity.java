@@ -1,14 +1,11 @@
 package noobanidus.mods.lootr.block.entity;
 
-import com.google.common.collect.Sets;
+import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -30,20 +27,20 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.api.data.ILootrSavedData;
-import noobanidus.mods.lootr.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.block.LootrBarrelBlock;
 import noobanidus.mods.lootr.data.LootrInventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity implements ILootrBlockEntity {
+public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity implements ILootrNeoForgeBlockEntity {
   private final NonNullList<ItemStack> items = NonNullList.withSize(27, ItemStack.EMPTY);
+  private final Set<UUID> clientOpeners = new ObjectLinkedOpenHashSet<>();
   protected UUID infoId = null;
   private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
     @Override
@@ -86,7 +83,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     }
     Player player = LootrAPI.getPlayer();
     if (player != null) {
-      return modelData.derive().with(LootrBarrelBlock.OPENED, hasVisuallyOpened(player)).build();
+      return modelData.derive().with(LootrBarrelBlock.OPENED, hasVisualOpened(player)).build();
     }
     return modelData;
   }
@@ -111,24 +108,6 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
 
   @Override
   public void unpackLootTable(@Nullable Player player) {
-  }
-
-  @Override
-  public Set<UUID> getVisualOpeners() {
-    ILootrSavedData data = LootrAPI.getData(this);
-    if (data != null) {
-      return data.getVisualOpeners();
-    }
-    return Set.of();
-  }
-
-  @Override
-  public Set<UUID> getActualOpeners() {
-    ILootrSavedData data = LootrAPI.getData(this);
-    if (data != null) {
-      return data.getActualOpeners();
-    }
-    return Set.of();
   }
 
   @SuppressWarnings("Duplicates")
@@ -214,6 +193,11 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   }
 
   @Override
+  public @Nullable Set<UUID> getClientOpeners() {
+    return clientOpeners;
+  }
+
+  @Override
   public boolean isClientOpened() {
     return clientOpened;
   }
@@ -287,5 +271,10 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   @Override
   public Level getInfoLevel() {
     return getLevel();
+  }
+
+  @Override
+  public @Nullable IContainerTrigger getTrigger() {
+    return LootrRegistry.getBarrelTrigger();
   }
 }

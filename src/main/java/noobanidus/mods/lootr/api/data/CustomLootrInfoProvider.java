@@ -10,6 +10,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Set;
 import java.util.UUID;
 
 public record CustomLootrInfoProvider(
@@ -71,5 +72,24 @@ public record CustomLootrInfoProvider(
   @Override
   public boolean isInfoReferenceInventory() {
     return customInventory() == null || customInventory().isEmpty();
+  }
+
+  @Override
+  public void markChanged() {
+  }
+
+  @Override
+  public @Nullable Set<UUID> getClientOpeners() {
+    return null;
+  }
+
+  @Override
+  public boolean isClientOpened() {
+    return false;
+  }
+
+  @Override
+  public void setClientOpened(boolean opened) {
+
   }
 }

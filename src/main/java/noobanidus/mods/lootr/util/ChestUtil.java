@@ -6,57 +6,55 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.AbstractMinecartContainer;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.network.PacketDistributor;
-import noobanidus.mods.lootr.api.data.DefaultLootFiller;
-import noobanidus.mods.lootr.api.IHasOpeners;
+import noobanidus.mods.lootr.api.IOpeners;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.advancement.IContainerTrigger;
+import noobanidus.mods.lootr.api.data.DefaultLootFiller;
+import noobanidus.mods.lootr.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.api.data.blockentity.ILootrBlockEntity;
+import noobanidus.mods.lootr.api.network.ILootrPacket;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
-import noobanidus.mods.lootr.block.LootrShulkerBlock;
 import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
-import noobanidus.mods.lootr.network.toClient.PacketCloseCart;
-import noobanidus.mods.lootr.network.toClient.PacketCloseContainer;
-import noobanidus.mods.lootr.network.toClient.PacketOpenCart;
-import noobanidus.mods.lootr.network.toClient.PacketOpenContainer;
 
 import java.util.UUID;
 
 @SuppressWarnings("unused")
 public class ChestUtil {
   // TODO: The code for handling this should probably go into the API.
-  public static void handleLootSneak(Block block, Level level, BlockPos pos, Player player) {
+  public static void handleLootSneak(Block block, Level level, BlockPos pos, ServerPlayer player) {
     if (level.isClientSide() || player.isSpectator()) {
       return;
     }
 
     BlockEntity be = level.getBlockEntity(pos);
+    // TODO:
     if (be instanceof ILootrBlockEntity blockEntity) {
       if (blockEntity.removeVisualOpener(player)) {
         blockEntity.updatePacketViaForce();
-        PacketDistributor.sendToPlayer((ServerPlayer) player, new PacketCloseContainer(be.getBlockPos()));
+        blockEntity.performClose(player);
       }
     }
 
   }
 
   // TODO: Move to API?
-  public static void handleLootCartSneak(Level level, LootrChestMinecartEntity cart, Player player) {
+  public static void handleLootCartSneak(Level level, LootrChestMinecartEntity cart, ServerPlayer player) {
     if (level.isClientSide() || player.isSpectator()) {
       return;
     }
 
     if (cart.removeVisualOpener(player)) {
-      PacketDistributor.sendToPlayersTrackingEntity(cart, new PacketCloseCart(cart.getId()));
+      cart.performClose(player);
     }
   }
 
-  public static void handleLootChest(Block block, Level level, BlockPos pos, Player player) {
+  public static void handleLootChest(Block block, Level level, BlockPos pos, ServerPlayer player) {
     if (level.isClientSide() || player.isSpectator()) {
       if (player.isSpectator()) {
         player.openMenu(null);
@@ -64,14 +62,14 @@ public class ChestUtil {
       return;
     }
     BlockEntity te = level.getBlockEntity(pos);
-    if (te instanceof ILootrBlockEntity provider) {
+    if (te instanceof ILootrInfoProvider provider) {
       UUID infoId = provider.getInfoUUID();
       if (infoId == null) {
         player.displayClientMessage(Component.translatable("lootr.message.invalid_block").setStyle(LootrAPI.getInvalidStyle()), true);
         return;
       }
       if (DataStorage.isDecayed(infoId)) {
-        level.destroyBlock(pos, true);
+        provider.performDecay(player);
         notifyDecay(player, infoId);
         return;
       } else {
@@ -84,13 +82,10 @@ public class ChestUtil {
           }
         }
       }
-      IContainerTrigger trigger = LootrRegistry.getChestTrigger();
-      if (block instanceof BarrelBlock) {
-        trigger = LootrRegistry.getBarrelTrigger();
-      } else if (block instanceof LootrShulkerBlock) {
-        trigger = LootrRegistry.getShulkerTrigger();
+      IContainerTrigger trigger = provider.getTrigger();
+      if (trigger != null) {
+        trigger.trigger(player, infoId);
       }
-      trigger.trigger((ServerPlayer) player, infoId);
       // Generalize refresh check
       if (DataStorage.isRefreshed(infoId)) {
         DataStorage.refreshInventory(provider);
@@ -105,16 +100,16 @@ public class ChestUtil {
         }
       }
       // Check if it already refreshed
-      MenuProvider menuProvider = DataStorage.getInventory(provider, (ServerPlayer) player, DefaultLootFiller.getInstance());
+      MenuProvider menuProvider = DataStorage.getInventory(provider, player, DefaultLootFiller.getInstance());
       if (menuProvider == null) {
         // Error messages are already handled by nested methods in `getInventory`
         return;
       }
-      checkAndScore(provider, (ServerPlayer) player);
+      checkAndScore(provider, player);
       if (addOpener(provider, player)) {
-        // TODO: Send a packet here
-        provider.updatePacketViaForce();
-        PacketDistributor.sendToPlayer((ServerPlayer) player, new PacketOpenContainer(provider.getInfoPos()));
+        provider.markChanged();
+        provider.performUpdate(player);
+        provider.performOpen(player);
       }
       player.openMenu(menuProvider);
       // TODO: Instances using this check the block tags first.
@@ -122,13 +117,13 @@ public class ChestUtil {
     }
   }
 
-  private static boolean addOpener(IHasOpeners openable, Player player) {
-    boolean result1 = openable.addActuallyOpened(player);
+  private static boolean addOpener(IOpeners openable, Player player) {
+    boolean result1 = openable.addActualOpener(player);
     boolean result2 = openable.addVisualOpener(player);
     return result1 || result2;
   }
 
-  public static void handleLootCart(Level level, LootrChestMinecartEntity cart, Player player) {
+  public static void handleLootCart(Level level, ILootrInfoProvider cart, ServerPlayer player) {
     if (level.isClientSide() || player.isSpectator()) {
       if (player.isSpectator()) {
         player.openMenu(null);
@@ -137,10 +132,14 @@ public class ChestUtil {
     }
 
     UUID infoId = cart.getInfoUUID();
-    LootrRegistry.getCartTrigger().trigger((ServerPlayer) player, infoId);
+    IContainerTrigger trigger = cart.getTrigger();
+    if (trigger != null) {
+      trigger.trigger(player, infoId);
+    }
 
     if (DataStorage.isDecayed(infoId)) {
-      cart.destroy(cart.damageSources().fellOutOfWorld());
+      cart.performDecay(player);
+      // TODO: Destruction
       notifyDecay(player, infoId);
       return;
     } else {
@@ -155,7 +154,7 @@ public class ChestUtil {
     }
     if (addOpener(cart, player)) {
       // TODO: Send a packet here
-      PacketDistributor.sendToPlayersTrackingEntity(cart, new PacketOpenCart(cart.getId()));
+      cart.performClose(player);
     }
     checkAndScore(cart, (ServerPlayer) player);
     if (DataStorage.isRefreshed(infoId)) {
@@ -178,11 +177,11 @@ public class ChestUtil {
     player.openMenu(provider);
   }
 
-  private static void checkAndScore(IHasOpeners openable, ServerPlayer player) {
-    if (!openable.hasActuallyOpened(player)) {
+  private static void checkAndScore(IOpeners openable, ServerPlayer player) {
+    if (!openable.hasOpened(player)) {
       player.awardStat(LootrRegistry.getLootedStat());
       LootrRegistry.getStatTrigger().trigger(player);
-      openable.addActuallyOpened(player);
+      openable.addActualOpener(player);
     }
   }
 

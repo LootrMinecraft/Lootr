@@ -54,6 +54,6 @@ public record BaseLootrInfo(LootrInfoType type, UUID uuid, BlockPos pos, Compone
 
   @Override
   public boolean isInfoReferenceInventory() {
-    return customInventory() == null || customInventory().isEmpty();
+    return customInventory() != null && !customInventory().isEmpty();
   }
 }

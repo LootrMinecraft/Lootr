@@ -1,13 +1,10 @@
 package noobanidus.mods.lootr.network;
 
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
-import net.neoforged.neoforge.network.handling.IPayloadHandler;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import noobanidus.mods.lootr.api.LootrAPI;
 
@@ -31,11 +28,11 @@ public abstract class BasePacketHandler {
 
   protected record PacketRegistrar(PayloadRegistrar registrar, boolean toServer) {
 
-    public <MSG extends ILootrPacket> void play(CustomPacketPayload.Type<MSG> type, StreamCodec<? super RegistryFriendlyByteBuf, MSG> reader) {
+    public <MSG extends ILootrNeoForgePacket> void play(CustomPacketPayload.Type<MSG> type, StreamCodec<? super RegistryFriendlyByteBuf, MSG> reader) {
       if (toServer) {
-        registrar.playToServer(type, reader, ILootrPacket::handle);
+        registrar.playToServer(type, reader, ILootrNeoForgePacket::handle);
       } else {
-        registrar.playToClient(type, reader, ILootrPacket::handle);
+        registrar.playToClient(type, reader, ILootrNeoForgePacket::handle);
       }
     }
   }

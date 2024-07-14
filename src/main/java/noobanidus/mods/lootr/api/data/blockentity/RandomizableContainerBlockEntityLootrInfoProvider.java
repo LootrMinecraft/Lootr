@@ -13,6 +13,7 @@ import noobanidus.mods.lootr.api.data.ILootrInfoProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Set;
 import java.util.UUID;
 
 public record RandomizableContainerBlockEntityLootrInfoProvider(
@@ -78,5 +79,24 @@ public record RandomizableContainerBlockEntityLootrInfoProvider(
   @Override
   public Container getInfoContainer() {
     return blockEntity;
+  }
+
+  @Override
+  public void markChanged() {
+    blockEntity.setChanged();
+  }
+
+  @Override
+  public @Nullable Set<UUID> getClientOpeners() {
+    return null;
+  }
+
+  @Override
+  public boolean isClientOpened() {
+    return false;
+  }
+
+  @Override
+  public void setClientOpened(boolean opened) {
   }
 }

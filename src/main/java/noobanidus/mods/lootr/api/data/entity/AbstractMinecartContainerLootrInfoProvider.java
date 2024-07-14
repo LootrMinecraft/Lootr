@@ -14,6 +14,7 @@ import noobanidus.mods.lootr.api.data.ILootrInfoProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Set;
 import java.util.UUID;
 
 public record AbstractMinecartContainerLootrInfoProvider(
@@ -83,5 +84,25 @@ public record AbstractMinecartContainerLootrInfoProvider(
   @Override
   public Container getInfoContainer() {
     return minecart;
+  }
+
+  @Override
+  public void markChanged() {
+    minecart.setChanged();
+  }
+
+  @Override
+  public @Nullable Set<UUID> getClientOpeners() {
+    return null;
+  }
+
+  @Override
+  public boolean isClientOpened() {
+    return false;
+  }
+
+  @Override
+  public void setClientOpened(boolean opened) {
+
   }
 }

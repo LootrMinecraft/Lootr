@@ -4,16 +4,17 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import noobanidus.mods.lootr.api.IHasOpeners;
 import noobanidus.mods.lootr.api.data.ILootrInfoProvider;
 
-public interface ILootrBlockEntity extends IHasOpeners, ILootrInfoProvider {
+public interface ILootrBlockEntity extends ILootrInfoProvider {
+  default BlockEntity asBlockEntity () {
+    return ((BlockEntity) this);
+  }
+
   @Override
   default LootrInfoType getInfoType() {
     return LootrInfoType.CONTAINER_BLOCK_ENTITY;
   }
-
-  void markChanged ();
 
   default void updatePacketViaForce () {
     if (this instanceof BlockEntity blockEntity) {
@@ -31,8 +32,4 @@ public interface ILootrBlockEntity extends IHasOpeners, ILootrInfoProvider {
       }
     }
   }
-
-  boolean isClientOpened();
-
-  void setClientOpened(boolean opened);
 }

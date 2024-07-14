@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.block.entity;
 
 import com.google.common.collect.Sets;
+import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -27,6 +28,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.api.data.ILootrSavedData;
 import noobanidus.mods.lootr.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
@@ -38,9 +40,10 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlockEntity {
+public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrNeoForgeBlockEntity {
   private final ChestLidController chestLidController = new ChestLidController();
   protected UUID infoId;
+  private final Set<UUID> clientOpeners = new ObjectLinkedOpenHashSet<>();
   private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
     @Override
     protected void onOpen(Level level, BlockPos pos, BlockState state) {
@@ -202,21 +205,8 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   }
 
   @Override
-  public Set<UUID> getVisualOpeners() {
-    ILootrSavedData data = LootrAPI.getData(this);
-    if (data != null) {
-      return data.getVisualOpeners();
-    }
-    return Set.of();
-  }
-
-  @Override
-  public Set<UUID> getActualOpeners() {
-    ILootrSavedData data = LootrAPI.getData(this);
-    if (data != null) {
-      return data.getActualOpeners();
-    }
-    return Set.of();
+  public @Nullable Set<UUID> getClientOpeners() {
+    return clientOpeners;
   }
 
   @Override
@@ -290,5 +280,10 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   @Override
   public Level getInfoLevel() {
     return getLevel();
+  }
+
+  @Override
+  public @Nullable IContainerTrigger getTrigger() {
+    return LootrRegistry.getChestTrigger();
   }
 }

@@ -3,6 +3,7 @@ package noobanidus.mods.lootr.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionResult;
@@ -56,28 +57,24 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
   }
 
   @Override
-  public InteractionResult useWithoutItem(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, BlockHitResult pHit) {
-    if (pLevel.isClientSide) {
-      return InteractionResult.SUCCESS;
-    } else if (pPlayer.isSpectator()) {
+  public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult trace) {
+    if (level.isClientSide() || player.isSpectator() || !(player instanceof ServerPlayer serverPlayer)) {
       return InteractionResult.CONSUME;
-    } else {
-      BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-      if (blockentity instanceof LootrShulkerBlockEntity shulkerboxblockentity) {
-        if (canOpen(pState, pLevel, pPos, shulkerboxblockentity)) {
-          if (pPlayer.isShiftKeyDown()) {
-            ChestUtil.handleLootSneak(this, pLevel, pPos, pPlayer);
-          } else {
-            ChestUtil.handleLootChest(this, pLevel, pPos, pPlayer);
-          }
-          pPlayer.awardStat(Stats.OPEN_SHULKER_BOX);
-        }
-
-        return InteractionResult.CONSUME;
-      } else {
-        return InteractionResult.PASS;
-      }
     }
+    BlockEntity blockEntity = level.getBlockEntity(pos);
+    if (!(blockEntity instanceof LootrShulkerBlockEntity shulkerboxblockentity)) {
+      return InteractionResult.PASS;
+    }
+    if (!canOpen(state, level, pos, shulkerboxblockentity)) {
+      return InteractionResult.PASS;
+    }
+    if (serverPlayer.isShiftKeyDown()) {
+      ChestUtil.handleLootSneak(this, level, pos, serverPlayer);
+    } else {
+      ChestUtil.handleLootChest(this, level, pos, serverPlayer);
+      player.awardStat(Stats.OPEN_SHULKER_BOX);
+    }
+    return InteractionResult.SUCCESS;
   }
 
   @Override

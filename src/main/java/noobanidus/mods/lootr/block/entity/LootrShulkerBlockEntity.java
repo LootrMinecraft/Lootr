@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.block.entity;
 
+import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -34,6 +35,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.api.data.ILootrSavedData;
 import noobanidus.mods.lootr.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
@@ -45,9 +47,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity implements ILootrBlockEntity {
+public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity implements ILootrNeoForgeBlockEntity {
   private static final NonNullList<ItemStack> itemStacks = NonNullList.withSize(27, ItemStack.EMPTY);
   protected UUID infoId;
+  private final Set<UUID> clientOpeners = new ObjectLinkedOpenHashSet<>();
   protected boolean clientOpened;
   private int openCount;
   private ShulkerBoxBlockEntity.AnimationStatus animationStatus = ShulkerBoxBlockEntity.AnimationStatus.CLOSED;
@@ -237,21 +240,8 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   @Override
-  public Set<UUID> getVisualOpeners() {
-    ILootrSavedData data = LootrAPI.getData(this);
-    if (data != null) {
-      return data.getVisualOpeners();
-    }
-    return Set.of();
-  }
-
-  @Override
-  public Set<UUID> getActualOpeners() {
-    ILootrSavedData data = LootrAPI.getData(this);
-    if (data != null) {
-      return data.getActualOpeners();
-    }
-    return Set.of();
+  public @Nullable Set<UUID> getClientOpeners() {
+    return clientOpeners;
   }
 
   @Override
@@ -346,5 +336,10 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   @Override
   public Level getInfoLevel() {
     return getLevel();
+  }
+
+  @Override
+  public @Nullable IContainerTrigger getTrigger() {
+    return LootrRegistry.getShulkerTrigger();
   }
 }

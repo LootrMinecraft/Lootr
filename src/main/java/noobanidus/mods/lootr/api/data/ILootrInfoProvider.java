@@ -4,18 +4,24 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.vehicle.AbstractMinecartContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
+import noobanidus.mods.lootr.api.IClientOpeners;
+import noobanidus.mods.lootr.api.IOpeners;
+import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.api.data.blockentity.RandomizableContainerBlockEntityLootrInfoProvider;
 import noobanidus.mods.lootr.api.data.entity.AbstractMinecartContainerLootrInfoProvider;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Set;
 import java.util.UUID;
 
-public interface ILootrInfoProvider extends ILootrInfo {
+public interface ILootrInfoProvider extends ILootrInfo, IOpeners, IClientOpeners {
   static ILootrInfoProvider of(RandomizableContainerBlockEntity blockEntity, UUID id) {
     if (blockEntity instanceof ILootrInfoProvider provider) {
       return provider;
@@ -41,9 +47,44 @@ public interface ILootrInfoProvider extends ILootrInfo {
     return new CustomLootrInfoProvider(id, pos, containerSize, lootTable, lootSeed, displayName, dimension, customInventory, type);
   }
 
+  @Override
+  default Set<UUID> getVisualOpeners() {
+    ILootrSavedData data = LootrAPI.getData(this);
+    if (data != null) {
+      return data.getVisualOpeners();
+    }
+    return null;
+  }
+
+  @Override
+  default Set<UUID> getActualOpeners() {
+    ILootrSavedData data = LootrAPI.getData(this);
+    if (data != null) {
+      return data.getActualOpeners();
+    }
+    return null;
+  }
+
   // This can be null but only if it is a custom inventory.
   @Nullable
   ResourceKey<LootTable> getInfoLootTable();
 
   long getInfoLootSeed();
+
+  @Nullable
+  default IContainerTrigger getTrigger () {
+    return null;
+  }
+
+  default void performOpen(ServerPlayer player) {
+  }
+
+  default void performClose(ServerPlayer player) {
+  }
+
+  default void performDecay (ServerPlayer player) {
+  }
+
+  default void performUpdate (ServerPlayer player) {
+  }
 }

@@ -6,10 +6,10 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import noobanidus.mods.lootr.Lootr;
-import noobanidus.mods.lootr.network.ILootrPacket;
+import noobanidus.mods.lootr.network.ILootrNeoForgePacket;
 import noobanidus.mods.lootr.network.client.ClientHandlers;
 
-public record PacketCloseContainer(BlockPos position) implements ILootrPacket {
+public record PacketCloseContainer(BlockPos position) implements ILootrNeoForgePacket {
   public static final CustomPacketPayload.Type<PacketCloseContainer> TYPE = new CustomPacketPayload.Type<>(Lootr.rl("close_container"));
   public static final StreamCodec<FriendlyByteBuf, PacketCloseContainer> STREAM_CODEC = StreamCodec.composite(BlockPos.STREAM_CODEC, PacketCloseContainer::position, PacketCloseContainer::new);
 
