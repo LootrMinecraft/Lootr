@@ -33,7 +33,11 @@ public interface IOpeners extends IMarkChanged {
   }
 
   default boolean hasVisualOpened(UUID uuid) {
-    return getVisualOpeners().contains(uuid);
+    Set<UUID> openers = getVisualOpeners();
+    if (openers == null) {
+      return false;
+    }
+    return openers.contains(uuid);
   }
 
   default boolean removeVisualOpener (UUID uuid) {
@@ -62,7 +66,11 @@ public interface IOpeners extends IMarkChanged {
 
 
   default boolean hasOpened(UUID uuid) {
-    return getActualOpeners().contains(uuid);
+    Set<UUID> openers = getActualOpeners();
+    if (openers == null) {
+      return false;
+    }
+    return openers.contains(uuid);
   }
 
   default boolean hasOpened(Player player) {

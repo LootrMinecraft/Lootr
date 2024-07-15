@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.block.entity;
 
+import com.google.common.collect.Sets;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -258,6 +259,16 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
     CompoundTag result = super.getUpdateTag(provider);
     saveAdditional(result, provider);
+    Set<UUID> currentOpeners = getVisualOpeners();
+    if (currentOpeners != null) {
+      ListTag list = new ListTag();
+      for (UUID opener : Sets.intersection(currentOpeners, LootrAPI.getPlayerIds())) {
+        list.add(NbtUtils.createUUID(opener));
+      }
+      if (!list.isEmpty()) {
+        result.put("LootrOpeners", list);
+      }
+    }
     return result;
   }
 
@@ -269,8 +280,16 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
 
   @Override
   public void onDataPacket(@NotNull Connection net, @NotNull ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider provider) {
-    if (pkt.getTag() != null) {
+    CompoundTag tag = pkt.getTag();
+    if (tag != null) {
       loadAdditional(pkt.getTag(), provider);
+      clientOpeners.clear();
+      if (tag.contains("LootrOpeners")) {
+        ListTag list = tag.getList("LootrOpeners", CompoundTag.TAG_INT_ARRAY);
+        for (Tag thisTag : list) {
+          clientOpeners.add(NbtUtils.loadUUID(thisTag));
+        }
+      }
     }
   }
 
@@ -290,7 +309,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
 
   @Override
   public void setClientOpened(boolean opened) {
-    this.clientOpened = true;
+    this.clientOpened = opened;
   }
 
   @Override

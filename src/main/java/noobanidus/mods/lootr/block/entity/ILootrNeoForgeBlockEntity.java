@@ -21,7 +21,6 @@ public interface ILootrNeoForgeBlockEntity extends ILootrBlockEntity {
 
   @Override
   default void performUpdate(ServerPlayer player) {
-    // TODO: Too many mark changes?
     markChanged();
     updatePacketViaForce();
   }

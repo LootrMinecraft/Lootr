@@ -21,9 +21,12 @@ import noobanidus.mods.lootr.api.data.inventory.ILootrInventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Set;
 import java.util.UUID;
 
 public interface ILootrAPI {
+  Set<UUID> getPlayerIds ();
+
   Player getPlayer ();
 
   MinecraftServer getServer();

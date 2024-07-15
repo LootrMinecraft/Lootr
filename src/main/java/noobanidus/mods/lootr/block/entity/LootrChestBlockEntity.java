@@ -184,6 +184,16 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrNeo
   public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
     CompoundTag result = super.getUpdateTag(provider);
     saveAdditional(result, provider);
+    Set<UUID> currentOpeners = getVisualOpeners();
+    if (currentOpeners != null) {
+      ListTag list = new ListTag();
+      for (UUID opener : Sets.intersection(currentOpeners, LootrAPI.getPlayerIds())) {
+        list.add(NbtUtils.createUUID(opener));
+      }
+      if (!list.isEmpty()) {
+        result.put("LootrOpeners", list);
+      }
+    }
     return result;
   }
 
@@ -195,8 +205,16 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrNeo
 
   @Override
   public void onDataPacket(@NotNull Connection net, @NotNull ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider provider) {
-    if (pkt.getTag() != null) {
+    CompoundTag tag = pkt.getTag();
+    if (tag != null) {
       loadAdditional(pkt.getTag(), provider);
+      clientOpeners.clear();
+      if (tag.contains("LootrOpeners")) {
+        ListTag list = tag.getList("LootrOpeners", CompoundTag.TAG_INT_ARRAY);
+        for (Tag thisTag : list) {
+          clientOpeners.add(NbtUtils.loadUUID(thisTag));
+        }
+      }
     }
   }
 

@@ -30,7 +30,7 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootrBlo
     }
     // TODO: ???
     boolean trapped = blockEntity.getType().equals(LootrRegistry.getTrappedChestBlockEntity());
-    if (blockEntity.isClientOpened()) {
+    if (blockEntity.hasClientOpened()) {
       if (LootrAPI.isOldTextures()) {
         return OLD_MATERIAL2;
       }

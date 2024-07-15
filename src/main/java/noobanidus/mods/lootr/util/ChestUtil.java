@@ -34,17 +34,17 @@ public class ChestUtil {
 
     BlockEntity be = level.getBlockEntity(pos);
     // TODO:
-    if (be instanceof ILootrBlockEntity blockEntity) {
+    if (be instanceof ILootrInfoProvider blockEntity) {
       if (blockEntity.removeVisualOpener(player)) {
-        blockEntity.updatePacketViaForce();
         blockEntity.performClose(player);
+        blockEntity.performUpdate(player);
       }
     }
 
   }
 
   // TODO: Move to API?
-  public static void handleLootCartSneak(Level level, LootrChestMinecartEntity cart, ServerPlayer player) {
+  public static void handleLootCartSneak(Level level, ILootrInfoProvider cart, ServerPlayer player) {
     if (level.isClientSide() || player.isSpectator()) {
       return;
     }
@@ -82,10 +82,7 @@ public class ChestUtil {
           }
         }
       }
-      IContainerTrigger trigger = provider.getTrigger();
-      if (trigger != null) {
-        trigger.trigger(player, infoId);
-      }
+      provider.performTrigger(player);
       // Generalize refresh check
       if (DataStorage.isRefreshed(infoId)) {
         DataStorage.refreshInventory(provider);
@@ -132,10 +129,7 @@ public class ChestUtil {
     }
 
     UUID infoId = cart.getInfoUUID();
-    IContainerTrigger trigger = cart.getTrigger();
-    if (trigger != null) {
-      trigger.trigger(player, infoId);
-    }
+    cart.performTrigger(player);
 
     if (DataStorage.isDecayed(infoId)) {
       cart.performDecay(player);
@@ -153,10 +147,9 @@ public class ChestUtil {
       }
     }
     if (addOpener(cart, player)) {
-      // TODO: Send a packet here
       cart.performClose(player);
     }
-    checkAndScore(cart, (ServerPlayer) player);
+    checkAndScore(cart, player);
     if (DataStorage.isRefreshed(infoId)) {
       DataStorage.refreshInventory(cart);
       notifyRefresh(player, infoId);
@@ -169,7 +162,7 @@ public class ChestUtil {
         startRefresh(player, infoId, refreshValue);
       }
     }
-    MenuProvider provider = DataStorage.getInventory(cart, (ServerPlayer) player, DefaultLootFiller.getInstance());
+    MenuProvider provider = DataStorage.getInventory(cart, player, DefaultLootFiller.getInstance());
     if (provider == null) {
       // Error messages are already handled by nested methods in `getInventory`
       return;

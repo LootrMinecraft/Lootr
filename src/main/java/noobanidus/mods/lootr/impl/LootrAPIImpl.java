@@ -33,10 +33,33 @@ import noobanidus.mods.lootr.data.DataStorage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class LootrAPIImpl implements ILootrAPI {
+
+  @Override
+  public Set<UUID> getPlayerIds() {
+    MinecraftServer server = getServer();
+    if (server == null) {
+      return Set.of();
+    }
+
+    Set<UUID> result = new HashSet<>();
+    for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+      if (isFakePlayer(player)) {
+        continue;
+      }
+      UUID thisUuid = player.getUUID();
+      // Offline servers?
+      if (thisUuid != null) {
+        result.add(thisUuid);
+      }
+    }
+    return result;
+  }
 
   @Override
   public Player getPlayer() {

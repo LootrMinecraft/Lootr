@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Set;
 import java.util.UUID;
 
-public interface ILootrInfoProvider extends ILootrInfo, IOpeners, IClientOpeners {
+public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
   static ILootrInfoProvider of(RandomizableContainerBlockEntity blockEntity, UUID id) {
     if (blockEntity instanceof ILootrInfoProvider provider) {
       return provider;
@@ -74,6 +74,13 @@ public interface ILootrInfoProvider extends ILootrInfo, IOpeners, IClientOpeners
   @Nullable
   default IContainerTrigger getTrigger () {
     return null;
+  }
+
+  default void performTrigger (ServerPlayer player) {
+    IContainerTrigger trigger = getTrigger();
+    if (trigger != null) {
+      trigger.trigger(player, getInfoUUID());
+    }
   }
 
   default void performOpen(ServerPlayer player) {

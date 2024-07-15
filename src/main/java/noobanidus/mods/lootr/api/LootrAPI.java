@@ -22,9 +22,9 @@ import noobanidus.mods.lootr.api.data.LootFiller;
 import noobanidus.mods.lootr.api.data.inventory.ILootrInventory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Set;
 import java.util.UUID;
 
 public class LootrAPI {
@@ -44,7 +44,11 @@ public class LootrAPI {
     return ResourceLocation.fromNamespaceAndPath(namespace, path);
   }
 
-  public static Player getPlayer () {
+  public static Set<UUID> getPlayerIds() {
+    return INSTANCE.getPlayerIds();
+  }
+
+  public static Player getPlayer() {
     return INSTANCE.getPlayer();
   }
 
@@ -212,7 +216,7 @@ public class LootrAPI {
   }
 
   @Nullable
-  public static ILootrSavedData getData (ILootrInfoProvider provider) {
+  public static ILootrSavedData getData(ILootrInfoProvider provider) {
     return INSTANCE.getData(provider);
   }
 }
