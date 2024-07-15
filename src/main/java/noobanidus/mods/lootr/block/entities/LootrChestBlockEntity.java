@@ -135,7 +135,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootBloc
   @Override
   protected void saveAdditional(CompoundTag compound, HolderLookup.Provider provider) {
     if (!LootrAPI.shouldDiscard() && !savingToItem) {
-      compound.putUUID("tileId", getInfoUUID());
+      compound.putUUID("LootrId", getInfoUUID());
       ListTag list = new ListTag();
       for (UUID opener : this.openers) {
         list.add(NbtUtils.createUUID(opener));
