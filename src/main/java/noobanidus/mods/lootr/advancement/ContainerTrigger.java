@@ -26,10 +26,10 @@ public class ContainerTrigger extends SimpleCriterionTrigger<ContainerTrigger.Tr
     public static final Codec<TriggerInstance> CODEC = RecordCodecBuilder.create(codec -> codec.group(ContextAwarePredicate.CODEC.optionalFieldOf("player").forGetter(TriggerInstance::player)).apply(codec, TriggerInstance::new));
 
     public boolean test(ServerPlayer player, UUID container) {
-      if (DataStorage.isAwarded(player.getUUID(), container)) {
+      if (DataStorage.isAwarded(container, player)) {
         return false;
       } else {
-        DataStorage.award(player.getUUID(), container);
+        DataStorage.award(container, player);
         return true;
       }
     }

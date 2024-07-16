@@ -5,48 +5,36 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.monster.piglin.PiglinAi;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import noobanidus.mods.lootr.api.IOpeners;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.data.DefaultLootFiller;
 import noobanidus.mods.lootr.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.data.DataStorage;
 
-import java.util.UUID;
-
 @SuppressWarnings("unused")
 public class ChestUtil {
   // TODO: The code for handling this should probably go into the API.
   public static void handleLootSneak(Block block, Level level, BlockPos pos, ServerPlayer player) {
-    if (level.isClientSide() || player.isSpectator()) {
-      return;
-    }
-
     BlockEntity be = level.getBlockEntity(pos);
     // TODO:
     if (be instanceof ILootrInfoProvider blockEntity) {
-      if (blockEntity.removeVisualOpener(player)) {
-        blockEntity.performClose(player);
-        blockEntity.performUpdate(player);
-      }
+      handleSneak(blockEntity, player);
     }
+  }
 
+  public static void handleSneak(ILootrInfoProvider provider, ServerPlayer player) {
+    if (provider.removeVisualOpener(player)) {
+      provider.performClose(player);
+      provider.performUpdate(player);
+    }
   }
 
   // TODO: Move to API?
   public static void handleLootCartSneak(Level level, ILootrInfoProvider cart, ServerPlayer player) {
-    if (level.isClientSide() || player.isSpectator()) {
-      return;
-    }
-
-    if (cart.removeVisualOpener(player)) {
-      cart.performClose(player);
-      cart.performUpdate(player);
-    }
+    handleSneak(cart, player);
   }
 
   public static void handleProvider(ILootrInfoProvider provider, ServerPlayer player) {
@@ -55,47 +43,50 @@ public class ChestUtil {
       return;
     }
 
-    UUID infoId = provider.getInfoUUID();
-    if (infoId == null) {
+    if (provider.getInfoUUID() == null) {
       player.displayClientMessage(Component.translatable("lootr.message.invalid_block").setStyle(LootrAPI.getInvalidStyle()), true);
       return;
     }
-    if (DataStorage.isDecayed(infoId)) {
+    if (DataStorage.isDecayed(provider)) {
       provider.performDecay(player);
-      notifyDecay(player, infoId);
+      player.displayClientMessage(Component.translatable("lootr.message.decayed").setStyle(LootrAPI.getDecayStyle()), true);
+      DataStorage.removeDecayed(provider);
       return;
     } else {
-      int decayValue = DataStorage.getDecayValue(infoId);
+      int decayValue = DataStorage.getDecayValue(provider);
       if (decayValue > 0 && LootrAPI.shouldNotify(decayValue)) {
         player.displayClientMessage(Component.translatable("lootr.message.decay_in", decayValue / 20).setStyle(LootrAPI.getDecayStyle()), true);
       } else if (decayValue == -1) {
         if (LootrAPI.isDecaying(provider)) {
-          startDecay(player, infoId, decayValue);
+          DataStorage.setDecaying(provider, decayValue);
+          player.displayClientMessage(Component.translatable("lootr.message.decay_start", decayValue / 20).setStyle(LootrAPI.getDecayStyle()), true);
         }
       }
     }
     provider.performTrigger(player);
-    // Generalize refresh check
-    if (DataStorage.isRefreshed(infoId)) {
+    if (DataStorage.isRefreshed(provider)) {
       DataStorage.refreshInventory(provider);
-      notifyRefresh(player, infoId);
+      DataStorage.removeRefreshed(provider);
+      player.displayClientMessage(Component.translatable("lootr.message.refreshed").setStyle(LootrAPI.getRefreshStyle()), true);
     }
-    int refreshValue = DataStorage.getRefreshValue(infoId);
+    int refreshValue = DataStorage.getRefreshValue(provider);
     if (refreshValue > 0 && LootrAPI.shouldNotify(refreshValue)) {
       player.displayClientMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20).setStyle(LootrAPI.getRefreshStyle()), true);
     } else if (refreshValue == -1) {
       if (LootrAPI.isRefreshing(provider)) {
-        startRefresh(player, infoId, refreshValue);
+        DataStorage.setRefreshing(provider, refreshValue);
+        player.displayClientMessage(Component.translatable("lootr.message.refresh_start", refreshValue / 20).setStyle(LootrAPI.getRefreshStyle()), true);
       }
     }
-    // Check if it already refreshed
     MenuProvider menuProvider = DataStorage.getInventory(provider, player, DefaultLootFiller.getInstance());
     if (menuProvider == null) {
-      // Error messages are already handled by nested methods in `getInventory`
       return;
     }
-    checkAndScore(provider, player);
-    if (addOpener(provider, player)) {
+    if (!provider.hasOpened(player)) {
+      player.awardStat(LootrRegistry.getLootedStat());
+      LootrRegistry.getStatTrigger().trigger(player);
+    }
+    if (provider.addOpener(player)) {
       provider.performOpen(player);
       provider.performUpdate(player);
     }
@@ -113,41 +104,8 @@ public class ChestUtil {
     }
   }
 
-  private static boolean addOpener(IOpeners openable, Player player) {
-    boolean result1 = openable.addActualOpener(player);
-    boolean result2 = openable.addVisualOpener(player);
-    return result1 || result2;
-  }
-
   public static void handleLootCart(Level level, ILootrInfoProvider cart, ServerPlayer player) {
     handleProvider(cart, player);
   }
 
-  private static void checkAndScore(IOpeners openable, ServerPlayer player) {
-    if (!openable.hasOpened(player)) {
-      player.awardStat(LootrRegistry.getLootedStat());
-      LootrRegistry.getStatTrigger().trigger(player);
-      openable.addActualOpener(player);
-    }
-  }
-
-  private static void notifyDecay(Player player, UUID infoId) {
-    player.displayClientMessage(Component.translatable("lootr.message.decayed").setStyle(LootrAPI.getDecayStyle()), true);
-    DataStorage.removeDecayed(infoId);
-  }
-
-  private static void notifyRefresh(Player player, UUID infoId) {
-    DataStorage.removeRefreshed(infoId);
-    player.displayClientMessage(Component.translatable("lootr.message.refreshed").setStyle(LootrAPI.getRefreshStyle()), true);
-  }
-
-  private static void startDecay(Player player, UUID infoId, int decayValue) {
-    DataStorage.setDecaying(infoId, decayValue);
-    player.displayClientMessage(Component.translatable("lootr.message.decay_start", decayValue / 20).setStyle(LootrAPI.getDecayStyle()), true);
-  }
-
-  private static void startRefresh(Player player, UUID infoId, int refreshValue) {
-    DataStorage.setRefreshing(infoId, refreshValue);
-    player.displayClientMessage(Component.translatable("lootr.message.refresh_start", refreshValue / 20).setStyle(LootrAPI.getRefreshStyle()), true);
-  }
 }

@@ -3,11 +3,8 @@ package noobanidus.mods.lootr.entity;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import noobanidus.mods.lootr.api.LootrAPI;
-import noobanidus.mods.lootr.data.DataStorage;
 
 import java.util.ArrayList;
 import java.util.List;

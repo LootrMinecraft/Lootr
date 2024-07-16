@@ -34,7 +34,6 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.advancement.IContainerTrigger;
-import noobanidus.mods.lootr.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.network.toClient.PacketCloseCart;
 import noobanidus.mods.lootr.network.toClient.PacketOpenCart;
