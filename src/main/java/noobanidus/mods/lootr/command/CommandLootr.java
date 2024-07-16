@@ -71,7 +71,7 @@ public class CommandLootr {
   }
 
   private static List<String> getProfiles() {
-    return Lists.newArrayList(ServerLifecycleHooks.getCurrentServer().getProfileCache().profilesByName.keySet());
+    return Lists.newArrayList(LootrAPI.getServer().getProfileCache().profilesByName.keySet());
   }
 
   private static List<String> getTableNames() {

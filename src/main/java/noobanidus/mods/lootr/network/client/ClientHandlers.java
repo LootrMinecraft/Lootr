@@ -4,10 +4,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.api.data.entity.ILootrCart;
+import org.jetbrains.annotations.Nullable;
 
 
 public class ClientHandlers {
@@ -68,5 +70,10 @@ public class ClientHandlers {
   public static void refreshModel(BlockPos pos) {
     SectionPos sPos = SectionPos.of(pos);
     Minecraft.getInstance().levelRenderer.setSectionDirty(sPos.x(), sPos.y(), sPos.z());
+  }
+
+  @Nullable
+  public static Player getPlayer() {
+    return Minecraft.getInstance().player;
   }
 }

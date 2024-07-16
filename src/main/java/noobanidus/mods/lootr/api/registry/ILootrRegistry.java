@@ -13,15 +13,15 @@ import noobanidus.mods.lootr.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.api.advancement.ILootedStatTrigger;
 
 public interface ILootrRegistry {
-  Block getBarrel();
+  Block getBarrelBlock();
 
-  Block getChest();
+  Block getChestBlock();
 
-  Block getTrappedChest();
+  Block getTrappedChestBlock();
 
-  Block getInventory();
+  Block getInventoryBlock();
 
-  Block getTrophy();
+  Block getTrophyBlock();
 
   Block getShulker();
 

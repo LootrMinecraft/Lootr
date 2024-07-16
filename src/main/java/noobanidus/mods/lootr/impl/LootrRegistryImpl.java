@@ -16,27 +16,27 @@ import noobanidus.mods.lootr.init.*;
 
 public class LootrRegistryImpl implements ILootrRegistry {
   @Override
-  public Block getBarrel() {
+  public Block getBarrelBlock() {
     return ModBlocks.BARREL.get();
   }
 
   @Override
-  public Block getChest() {
+  public Block getChestBlock() {
     return ModBlocks.CHEST.get();
   }
 
   @Override
-  public Block getTrappedChest() {
+  public Block getTrappedChestBlock() {
     return ModBlocks.TRAPPED_CHEST.get();
   }
 
   @Override
-  public Block getInventory() {
+  public Block getInventoryBlock() {
     return ModBlocks.INVENTORY.get();
   }
 
   @Override
-  public Block getTrophy() {
+  public Block getTrophyBlock() {
     return ModBlocks.TROPHY.get();
   }
 

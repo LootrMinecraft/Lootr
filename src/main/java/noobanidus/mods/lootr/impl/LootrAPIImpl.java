@@ -27,9 +27,9 @@ import noobanidus.mods.lootr.api.MenuBuilder;
 import noobanidus.mods.lootr.api.client.ClientTextureType;
 import noobanidus.mods.lootr.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.api.data.inventory.ILootrInventory;
-import noobanidus.mods.lootr.client.impl.ClientGetter;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.data.DataStorage;
+import noobanidus.mods.lootr.network.client.ClientHandlers;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -53,7 +53,7 @@ public class LootrAPIImpl implements ILootrAPI {
         continue;
       }
       UUID thisUuid = player.getUUID();
-      // Offline servers?
+      // TODO Offline servers?
       if (thisUuid != null) {
         result.add(thisUuid);
       }
@@ -64,7 +64,7 @@ public class LootrAPIImpl implements ILootrAPI {
   @Override
   public Player getPlayer() {
     if (FMLEnvironment.dist == Dist.CLIENT) {
-      return ClientGetter.getPlayer();
+      return ClientHandlers.getPlayer();
     } else {
       return null;
     }
@@ -88,6 +88,7 @@ public class LootrAPIImpl implements ILootrAPI {
 
   @Override
   public boolean clearPlayerLoot(UUID id) {
+    // TODO:
     return false;
     /*    return DataStorage.clearInventories(id);*/
   }
@@ -107,13 +108,12 @@ public class LootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  public @NotNull ILootrSavedData getData(ILootrInfoProvider provider) {
+  public @Nullable ILootrSavedData getData(ILootrInfoProvider provider) {
     return DataStorage.getData(provider);
   }
 
   @Override
   public long getLootSeed(long seed) {
-    // TODO: Check seed = 0
     if (ConfigManager.RANDOMISE_SEED.get() || seed == -1 || seed == 0) {
       return ThreadLocalRandom.current().nextLong();
     }

@@ -16,23 +16,23 @@ public class LootrRegistry {
   public static ILootrRegistry INSTANCE;
 
   public static Block getBarrelBlock() {
-    return INSTANCE.getBarrel();
+    return INSTANCE.getBarrelBlock();
   }
 
   public static Block getChestBlock() {
-    return INSTANCE.getChest();
+    return INSTANCE.getChestBlock();
   }
 
   public static Block getTrappedChestBlock() {
-    return INSTANCE.getTrappedChest();
+    return INSTANCE.getTrappedChestBlock();
   }
 
   public static Block getInventoryBlock() {
-    return INSTANCE.getInventory();
+    return INSTANCE.getInventoryBlock();
   }
 
   public static Block getTrophyBlock() {
-    return INSTANCE.getTrophy();
+    return INSTANCE.getTrophyBlock();
   }
 
   public static Block getShulkerBlock() {
