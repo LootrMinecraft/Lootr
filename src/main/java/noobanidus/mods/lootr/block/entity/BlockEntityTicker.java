@@ -12,7 +12,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.event.HandleChunk;
@@ -72,7 +71,7 @@ public class BlockEntityTicker {
     }
   }
 
-  public static void onServerTick(ServerTickEvent.Post event) {
+  public static void onServerTick() {
     if (LootrAPI.isDisabled()) {
       return;
     }

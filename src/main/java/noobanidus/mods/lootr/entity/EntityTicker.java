@@ -20,7 +20,7 @@ public class EntityTicker {
 
   private static boolean tickingList = false;
 
-  public static void onServerTick(ServerTickEvent.Post event) {
+  public static void onServerTick() {
     if (LootrAPI.isDisabled()) {
       return;
     }

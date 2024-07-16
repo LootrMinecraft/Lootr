@@ -14,7 +14,7 @@ public class HandleTick {
   public static void onServerTick (ServerTickEvent.Post event) {
     DataStorage.doTick();
 
-    EntityTicker.onServerTick(event);
-    BlockEntityTicker.onServerTick(event);
+    EntityTicker.onServerTick();
+    BlockEntityTicker.onServerTick();
   }
 }

@@ -260,7 +260,7 @@ public class CommandLootr {
         be = level.getBlockEntity(pos);
       }
       if (be instanceof ILootrBlockEntity ibe) {
-        DataStorage.setRefreshing(((ILootrBlockEntity) be).getInfoUUID(), LootrAPI.getRefreshValue());
+        DataStorage.setRefreshing(ibe, LootrAPI.getRefreshValue());
         c.getSource().sendSuccess(() -> Component.literal("Container with ID " + (ibe).getInfoUUID() + " has been set to refresh with a delay of " + LootrAPI.getRefreshValue()), false);
       } else {
         c.getSource().sendSuccess(() -> Component.literal("Please stand on a valid Lootr container."), false);
@@ -276,7 +276,7 @@ public class CommandLootr {
         be = level.getBlockEntity(pos);
       }
       if (be instanceof ILootrBlockEntity ibe) {
-        DataStorage.setDecaying((ibe).getInfoUUID(), LootrAPI.getDecayValue());
+        DataStorage.setDecaying(ibe, LootrAPI.getDecayValue());
         c.getSource().sendSuccess(() -> Component.literal("Container with ID " + (ibe).getInfoUUID() + " has been set to decay with a delay of " + LootrAPI.getDecayValue()), false);
       } else {
         c.getSource().sendSuccess(() -> Component.literal("Please stand on a valid Lootr container."), false);
