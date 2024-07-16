@@ -31,12 +31,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.network.PacketDistributor;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
-import noobanidus.mods.lootr.network.toClient.PacketCloseCart;
-import noobanidus.mods.lootr.network.toClient.PacketOpenCart;
 import noobanidus.mods.lootr.util.ChestUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -182,15 +179,14 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   @Override
   public void startOpen(Player player) {
     if (!player.isSpectator()) {
-      PacketDistributor.sendToPlayer((ServerPlayer) player, new PacketOpenCart(this.getId()));
+      performOpen((ServerPlayer) player);
     }
   }
 
   @Override
   public void stopOpen(Player player) {
     if (!player.isSpectator()) {
-      // TODO: ???
-      addOpener(player);
+      // TODO: Does this need anything?
     }
   }
 
@@ -199,9 +195,9 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     super.startSeenByPlayer(pPlayer);
 
     if (hasVisualOpened(pPlayer)) {
-      PacketDistributor.sendToPlayer(pPlayer, new PacketOpenCart(this.getId()));
+      performOpen(pPlayer);
     } else {
-      PacketDistributor.sendToPlayer(pPlayer, new PacketCloseCart(this.getId()));
+      performClose(pPlayer);
     }
   }
 

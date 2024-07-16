@@ -22,17 +22,20 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 public class LootrSavedData extends SavedData implements ILootrSavedData {
-  private final ILootrInfo info;
+  private boolean justLoaded;
+  private ILootrInfo info;
   private final Map<UUID, LootrInventory> inventories = new HashMap<>();
   private final Set<UUID> openers = new ObjectLinkedOpenHashSet<>();
   private final Set<UUID> actualOpeners = new ObjectLinkedOpenHashSet<>();
 
   protected LootrSavedData(ILootrInfo info) {
     this.info = BaseLootrInfo.copy(info);
+    this.justLoaded = false;
   }
 
   protected LootrSavedData(ILootrInfo info, boolean noCopy) {
     this.info = info;
+    this.justLoaded = true;
   }
 
   public static Supplier<LootrSavedData> fromInfo(ILootrInfo info) {
@@ -71,6 +74,8 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
     }
     return data;
   }
+
+
 
   @Override
   public ILootrInfo getRedirect() {
@@ -162,6 +167,20 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
     compound.put("actualOpeners", actualOpeners);
 
     return compound;
+  }
+
+  @Override
+  public boolean shouldUpdate() {
+    return justLoaded;
+  }
+
+  @Override
+  public void update(ILootrInfo info) {
+    if (shouldUpdate()) {
+      markChanged();
+      this.info = info;
+      justLoaded = false;
+    }
   }
 
   @Override
