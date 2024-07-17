@@ -200,11 +200,6 @@ public class LootrAPI {
     return INSTANCE.replacementBlockState(original);
   }
 
-  // TODO: Consider if this is really needed
-  public static boolean hasCapacity(String capacity) {
-    return INSTANCE.hasCapacity(capacity);
-  }
-
   @Nullable
   public static ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler) {
     return INSTANCE.getInventory(provider, player, filler);

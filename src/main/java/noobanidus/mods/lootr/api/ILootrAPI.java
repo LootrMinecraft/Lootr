@@ -129,16 +129,4 @@ public interface ILootrAPI {
 
   @Nullable
   BlockState replacementBlockState(BlockState original);
-
-  // TODO: Think on this.
-  default boolean hasCapacity(String capacity) {
-    return switch (capacity) {
-      case LootrCapacities.STRUCTURE_SAVING -> true;
-      case LootrCapacities.SHOULD_DISCARD -> true;
-      case LootrCapacities.CAPACITIES -> true;
-      case LootrCapacities.EXPLOSION_RESISTANCE -> true;
-      case LootrCapacities.DESTRUCTION_PROGRESS -> true;
-      default -> false;
-    };
-  }
 }
