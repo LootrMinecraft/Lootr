@@ -1,7 +1,7 @@
 {
-  "lootr.message.should_sneak": "Breaking the chest will delete your unique loot and all items in the chest! In order to break, you must sneak while doing so.",
-  "lootr.message.should_sneak2": "As loot is %s, only break if really needed.",
-  "lootr.message.should_sneak3": "per-player per-chest",
+  "lootr.message.should_sneak": "En détruisant le coffre, vous supprimez votre butin unique et tous les objets qu'il contient ! Pour le détruire, vous devez être accroupi.",
+  "lootr.message.should_sneak2": "Comme le butin est %s, détruisez le coffre seulement si vraiment exigé.",
+  "lootr.message.should_sneak3": "par joueur par coffre",
   "lootr.message.cart_should_sneak": "Breaking the cart will delete your unique loot and items! In order to break, you must sneak while attacking",
   "lootr.message.cart_should_sneak3": "per-player per-cart",
   "lootr.message.cannot_break": "Loot containers and carts cannot be broken.",
