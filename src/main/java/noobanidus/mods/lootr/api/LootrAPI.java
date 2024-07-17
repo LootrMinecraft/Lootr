@@ -312,4 +312,12 @@ public class LootrAPI {
   public static ILootrSavedData getData(ILootrInfoProvider provider) {
     return INSTANCE.getData(provider);
   }
+
+  public static void handleProviderOpen(@Nullable ILootrInfoProvider provider, ServerPlayer player) {
+    INSTANCE.handleProviderOpen(provider, player);
+  }
+
+  public static void handleProviderSneak (@Nullable ILootrInfoProvider provider, ServerPlayer player) {
+    INSTANCE.handleProviderSneak(provider, player);
+  }
 }

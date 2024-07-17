@@ -8,6 +8,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.vehicle.AbstractMinecartContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.api.IClientOpeners;
@@ -21,6 +22,16 @@ import java.util.Set;
 import java.util.UUID;
 
 public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
+  static ILootrInfoProvider of(BlockPos pos, Level level) {
+    if (level.isClientSide()) {
+      return null;
+    }
+    if (level.getBlockEntity(pos) instanceof ILootrInfoProvider provider) {
+      return provider;
+    }
+    return null;
+  }
+
   static ILootrInfoProvider of(RandomizableContainerBlockEntity blockEntity, UUID id) {
     if (blockEntity instanceof ILootrInfoProvider provider) {
       return provider;

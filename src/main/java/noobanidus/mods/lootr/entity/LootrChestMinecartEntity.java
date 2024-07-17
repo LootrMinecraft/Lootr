@@ -15,7 +15,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
@@ -34,7 +33,7 @@ import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
-import noobanidus.mods.lootr.util.ChestUtil;
+import noobanidus.mods.lootr.impl.LootrAPIImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -146,18 +145,6 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     if (reason == Entity.RemovalReason.KILLED) {
       this.gameEvent(GameEvent.ENTITY_DIE);
     }
-    // TODO Neo: still needed?
-    //this.invalidateCaps();
-  }
-
-  @Override
-  protected void addAdditionalSaveData(CompoundTag compound) {
-    super.addAdditionalSaveData(compound);
-  }
-
-  @Override
-  protected void readAdditionalSaveData(CompoundTag compound) {
-    super.readAdditionalSaveData(compound);
   }
 
   @Override
@@ -167,13 +154,11 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     }
 
     if (player.isShiftKeyDown()) {
-      ChestUtil.handleLootCartSneak(player.level(), this, serverPlayer);
-      return InteractionResult.SUCCESS;
+      LootrAPI.handleProviderSneak(this, serverPlayer);
     } else {
-      ChestUtil.handleLootCart(player.level(), this, serverPlayer);
-      PiglinAi.angerNearbyPiglins(player, true);
-      return InteractionResult.SUCCESS;
+      LootrAPI.handleProviderOpen(this, serverPlayer);
     }
+    return InteractionResult.SUCCESS;
   }
 
   @Override

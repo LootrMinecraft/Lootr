@@ -177,4 +177,8 @@ public interface ILootrAPI {
 
   @Nullable
   BlockState replacementBlockState(BlockState original);
+
+  void handleProviderSneak(@Nullable ILootrInfoProvider provider, ServerPlayer player);
+
+  void handleProviderOpen(@Nullable ILootrInfoProvider provider, ServerPlayer player) ;
 }

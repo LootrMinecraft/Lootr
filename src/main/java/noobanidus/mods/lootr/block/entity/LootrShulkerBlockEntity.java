@@ -46,7 +46,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity implements ILootrNeoForgeBlockEntity {
-  private static final NonNullList<ItemStack> itemStacks = NonNullList.withSize(27, ItemStack.EMPTY);
+  private final NonNullList<ItemStack> itemStacks = NonNullList.withSize(27, ItemStack.EMPTY);
   protected UUID infoId;
   private final Set<UUID> clientOpeners = new ObjectLinkedOpenHashSet<>();
   protected boolean clientOpened;

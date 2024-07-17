@@ -8,6 +8,8 @@ import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ChunkPos;
@@ -23,10 +25,12 @@ import noobanidus.mods.lootr.api.ILootrAPI;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.MenuBuilder;
 import noobanidus.mods.lootr.api.client.ClientTextureType;
+import noobanidus.mods.lootr.api.data.DefaultLootFiller;
 import noobanidus.mods.lootr.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.api.data.ILootrSavedData;
 import noobanidus.mods.lootr.api.data.LootFiller;
 import noobanidus.mods.lootr.api.data.inventory.ILootrInventory;
+import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.config.ConfigManager;
 import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.network.client.ClientHandlers;
@@ -38,6 +42,78 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class LootrAPIImpl implements ILootrAPI {
+  @Override
+  public void handleProviderSneak(@Nullable ILootrInfoProvider provider, ServerPlayer player) {
+    if (provider == null) {
+      return;
+    }
+    if (provider.removeVisualOpener(player)) {
+      provider.performClose(player);
+      provider.performUpdate(player);
+    }
+  }
+
+  @Override
+  public void handleProviderOpen(@Nullable ILootrInfoProvider provider, ServerPlayer player) {
+    if (provider == null) {
+      return;
+    }
+    if (player.isSpectator()) {
+      player.openMenu(null);
+      return;
+    }
+
+    if (provider.getInfoUUID() == null) {
+      player.displayClientMessage(Component.translatable("lootr.message.invalid_block").setStyle(LootrAPI.getInvalidStyle()), true);
+      return;
+    }
+    if (DataStorage.isDecayed(provider)) {
+      provider.performDecay(player);
+      player.displayClientMessage(Component.translatable("lootr.message.decayed").setStyle(LootrAPI.getDecayStyle()), true);
+      DataStorage.removeDecayed(provider);
+      return;
+    } else {
+      int decayValue = DataStorage.getDecayValue(provider);
+      if (decayValue > 0 && LootrAPI.shouldNotify(decayValue)) {
+        player.displayClientMessage(Component.translatable("lootr.message.decay_in", decayValue / 20).setStyle(LootrAPI.getDecayStyle()), true);
+      } else if (decayValue == -1) {
+        if (LootrAPI.isDecaying(provider)) {
+          DataStorage.setDecaying(provider, decayValue);
+          player.displayClientMessage(Component.translatable("lootr.message.decay_start", decayValue / 20).setStyle(LootrAPI.getDecayStyle()), true);
+        }
+      }
+    }
+    provider.performTrigger(player);
+    if (DataStorage.isRefreshed(provider)) {
+      DataStorage.refreshInventory(provider);
+      DataStorage.removeRefreshed(provider);
+      player.displayClientMessage(Component.translatable("lootr.message.refreshed").setStyle(LootrAPI.getRefreshStyle()), true);
+    }
+    int refreshValue = DataStorage.getRefreshValue(provider);
+    if (refreshValue > 0 && LootrAPI.shouldNotify(refreshValue)) {
+      player.displayClientMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20).setStyle(LootrAPI.getRefreshStyle()), true);
+    } else if (refreshValue == -1) {
+      if (LootrAPI.isRefreshing(provider)) {
+        DataStorage.setRefreshing(provider, refreshValue);
+        player.displayClientMessage(Component.translatable("lootr.message.refresh_start", refreshValue / 20).setStyle(LootrAPI.getRefreshStyle()), true);
+      }
+    }
+    MenuProvider menuProvider = DataStorage.getInventory(provider, player, DefaultLootFiller.getInstance());
+    if (menuProvider == null) {
+      return;
+    }
+    if (!provider.hasOpened(player)) {
+      player.awardStat(LootrRegistry.getLootedStat());
+      LootrRegistry.getStatTrigger().trigger(player);
+    }
+    if (provider.addOpener(player)) {
+      provider.performOpen(player);
+      provider.performUpdate(player);
+    }
+    // TODO: Opened stat
+    player.openMenu(menuProvider);
+    PiglinAi.angerNearbyPiglins(player, true);
+  }
 
   @Override
   public Set<UUID> getPlayerIds() {
@@ -268,27 +344,27 @@ public class LootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  public Set<ResourceKey<LootTable>> getDecayWhitelist () {
+  public Set<ResourceKey<LootTable>> getDecayWhitelist() {
     return ConfigManager.getDecayingTables();
   }
 
   @Override
-  public Set<ResourceKey<Level>> getDecayDimensions () {
+  public Set<ResourceKey<Level>> getDecayDimensions() {
     return ConfigManager.getDecayDimensions();
   }
 
   @Override
-  public Set<String> getRefreshModids () {
+  public Set<String> getRefreshModids() {
     return ConfigManager.getRefreshMods();
   }
 
   @Override
-  public Set<ResourceKey<LootTable>> getRefreshWhitelist () {
+  public Set<ResourceKey<LootTable>> getRefreshWhitelist() {
     return ConfigManager.getRefreshingTables();
   }
 
   @Override
-  public Set<ResourceKey<Level>> getRefreshDimensions () {
+  public Set<ResourceKey<Level>> getRefreshDimensions() {
     return ConfigManager.getRefreshDimensions();
   }
 

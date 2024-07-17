@@ -32,6 +32,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.advancement.IContainerTrigger;
+import noobanidus.mods.lootr.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.block.LootrBarrelBlock;
 import noobanidus.mods.lootr.data.LootrInventory;
@@ -65,7 +66,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
 
     @Override
     protected boolean isOwnContainer(Player player) {
-      if (player.containerMenu instanceof ChestMenu && ((ChestMenu) player.containerMenu).getContainer() instanceof LootrInventory data) {
+      if (player.containerMenu instanceof ChestMenu chestMenu && chestMenu.getContainer() instanceof ILootrInventory data) {
         return data.getInfo().getInfoUUID().equals(LootrBarrelBlockEntity.this.getInfoUUID());
       }
       return false;

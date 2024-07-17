@@ -15,8 +15,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.client.model.data.ModelProperty;
 import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.block.entity.LootrBarrelBlockEntity;
-import noobanidus.mods.lootr.util.ChestUtil;
+import noobanidus.mods.lootr.impl.LootrAPIImpl;
 import org.jetbrains.annotations.Nullable;
 
 public class LootrBarrelBlock extends BarrelBlock {
@@ -51,9 +52,9 @@ public class LootrBarrelBlock extends BarrelBlock {
       return InteractionResult.CONSUME;
     }
     if (serverPlayer.isShiftKeyDown()) {
-      ChestUtil.handleLootSneak(this, level, pos, serverPlayer);
+      LootrAPI.handleProviderSneak(ILootrInfoProvider.of(pos, level), serverPlayer);
     } else {
-      ChestUtil.handleLootChest(this, level, pos, serverPlayer);
+      LootrAPI.handleProviderOpen(ILootrInfoProvider.of(pos, level), serverPlayer);
     }
     return InteractionResult.SUCCESS;
   }
