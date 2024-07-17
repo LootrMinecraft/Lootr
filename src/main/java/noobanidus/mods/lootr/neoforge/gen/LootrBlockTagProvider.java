@@ -7,7 +7,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import noobanidus.mods.lootr.LootrTags;
+import noobanidus.mods.lootr.api.LootrTags;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import org.jetbrains.annotations.Nullable;

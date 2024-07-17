@@ -21,7 +21,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
-import noobanidus.mods.lootr.LootrTags;
+import noobanidus.mods.lootr.api.LootrTags;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
