@@ -148,7 +148,6 @@ public class ConfigManager {
   public static void loadConfig(ModConfigSpec spec, Path path) {
     CommentedFileConfig configData = CommentedFileConfig.builder(path).sync().autosave().writingMode(WritingMode.REPLACE).build();
     configData.load();
-    spec.setConfig(configData);
   }
 
   @SubscribeEvent
@@ -163,7 +162,6 @@ public class ConfigManager {
 
   public static void configEvent(ModConfigEvent event) {
     if (event.getConfig().getType() == ModConfig.Type.COMMON) {
-      COMMON_CONFIG.setConfig(event.getConfig().getConfigData());
       replacements = null;
       MODID_DIM_WHITELIST = null;
       MODID_DIM_BLACKLIST = null;

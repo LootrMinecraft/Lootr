@@ -33,9 +33,6 @@ public class EntityTicker {
     synchronized (levelLock) {
       for (LootrChestMinecartEntity entity : copy) {
         // TODO: Forge-only
-        if (entity.isAddedToWorld()) {
-          continue;
-        }
         ServerLevel world = (ServerLevel) entity.level();
         ServerChunkCache provider = world.getChunkSource();
         if (provider.hasChunk(Mth.floor(entity.getX() / 16.0D), Mth.floor(entity.getZ() / 16.0D))) {
