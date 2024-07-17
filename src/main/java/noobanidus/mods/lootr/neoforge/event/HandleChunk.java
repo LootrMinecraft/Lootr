@@ -13,7 +13,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.level.ChunkEvent;
 import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
-import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.api.LootrAPI;
 
 import java.util.Collections;
 import java.util.Map;

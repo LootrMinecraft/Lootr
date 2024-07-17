@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.block.entity.LootrShulkerBlockEntity;
 
 public class LootrShulkerItemRenderer extends BlockEntityWithoutLevelRenderer {

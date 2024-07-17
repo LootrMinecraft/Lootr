@@ -5,7 +5,7 @@ import net.minecraft.world.entity.ai.goal.CatSitOnBlockGoal;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.block.entity.LootrChestBlockEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

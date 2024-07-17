@@ -35,9 +35,9 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
-import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.advancement.IContainerTrigger;
+import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

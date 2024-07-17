@@ -6,7 +6,7 @@ import net.minecraft.world.entity.vehicle.AbstractMinecartContainer;
 import net.minecraft.world.entity.vehicle.ContainerEntity;
 import net.minecraft.world.entity.vehicle.VehicleEntity;
 import net.neoforged.neoforge.network.PacketDistributor;
-import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
+import noobanidus.mods.lootr.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.common.mixins.MixinVehicleEntity;
 import noobanidus.mods.lootr.neoforge.network.toClient.PacketCloseCart;
 import noobanidus.mods.lootr.neoforge.network.toClient.PacketOpenCart;

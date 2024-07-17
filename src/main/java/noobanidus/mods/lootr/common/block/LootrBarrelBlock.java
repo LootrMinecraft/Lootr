@@ -14,8 +14,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.client.model.data.ModelProperty;
-import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
+import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.block.entity.LootrBarrelBlockEntity;
 import org.jetbrains.annotations.Nullable;
 

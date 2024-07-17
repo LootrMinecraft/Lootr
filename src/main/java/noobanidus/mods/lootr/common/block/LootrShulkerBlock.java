@@ -28,9 +28,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
-import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.data.ILootrInfoProvider;
+import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.block.entity.LootrShulkerBlockEntity;
 import org.jetbrains.annotations.Nullable;
 

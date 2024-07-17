@@ -4,7 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.api.registry.LootrRegistry;
 
 public class LootrTrappedChestBlockEntity extends LootrChestBlockEntity {
   public LootrTrappedChestBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {

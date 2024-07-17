@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
-import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
+import noobanidus.mods.lootr.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.data.DataStorage;
 
 import java.util.Optional;

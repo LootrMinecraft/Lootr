@@ -5,7 +5,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.common.data.SpriteSourceProvider;
-import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.common.client.block.LootrChestBlockRenderer;
 import noobanidus.mods.lootr.common.client.block.LootrShulkerBlockRenderer;
 

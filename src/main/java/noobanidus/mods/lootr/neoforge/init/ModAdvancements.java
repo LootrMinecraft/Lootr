@@ -8,7 +8,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import noobanidus.mods.lootr.common.advancement.AdvancementTrigger;
 import noobanidus.mods.lootr.common.advancement.ContainerTrigger;
 import noobanidus.mods.lootr.common.advancement.LootedStatTrigger;
-import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.api.LootrAPI;
 
 public class ModAdvancements {
   private static final DeferredRegister<CriterionTrigger<?>> REGISTER = DeferredRegister.create(BuiltInRegistries.TRIGGER_TYPES, LootrAPI.MODID);

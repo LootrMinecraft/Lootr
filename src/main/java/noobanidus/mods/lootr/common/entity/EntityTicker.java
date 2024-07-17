@@ -4,8 +4,8 @@ import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
-import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
+import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.data.entity.ILootrCart;
 
 import java.util.ArrayList;
 import java.util.List;

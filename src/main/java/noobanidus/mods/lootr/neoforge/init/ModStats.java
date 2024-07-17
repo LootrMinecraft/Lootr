@@ -7,7 +7,7 @@ import net.minecraft.stats.Stats;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.api.LootrAPI;
 
 public class ModStats {
   private static final DeferredRegister<ResourceLocation> REGISTER = DeferredRegister.create(BuiltInRegistries.CUSTOM_STAT, LootrAPI.MODID);

@@ -6,9 +6,9 @@ import net.minecraft.core.SectionPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
-import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
+import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.data.blockentity.ILootrBlockEntity;
+import noobanidus.mods.lootr.api.data.entity.ILootrCart;
 import org.jetbrains.annotations.Nullable;
 
 

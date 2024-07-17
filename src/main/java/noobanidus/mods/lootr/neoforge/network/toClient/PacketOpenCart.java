@@ -5,7 +5,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
-import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.neoforge.network.ILootrNeoForgePacket;
 import noobanidus.mods.lootr.neoforge.network.client.ClientHandlers;
 

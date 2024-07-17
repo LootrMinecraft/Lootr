@@ -7,8 +7,8 @@ import net.minecraft.world.item.Rarity;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.item.LootrChestBlockItem;
 import noobanidus.mods.lootr.common.item.LootrShulkerBlockItem;
 

@@ -8,10 +8,10 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
-import noobanidus.mods.lootr.common.api.advancement.IAdvancementTrigger;
-import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
-import noobanidus.mods.lootr.common.api.advancement.ILootedStatTrigger;
-import noobanidus.mods.lootr.common.api.registry.ILootrRegistry;
+import noobanidus.mods.lootr.api.advancement.IAdvancementTrigger;
+import noobanidus.mods.lootr.api.advancement.IContainerTrigger;
+import noobanidus.mods.lootr.api.advancement.ILootedStatTrigger;
+import noobanidus.mods.lootr.api.registry.ILootrRegistry;
 import noobanidus.mods.lootr.neoforge.init.*;
 
 public class LootrRegistryImpl implements ILootrRegistry {

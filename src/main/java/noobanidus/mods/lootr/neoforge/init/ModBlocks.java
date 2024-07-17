@@ -10,7 +10,7 @@ import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.common.block.*;
 import noobanidus.mods.lootr.common.block.entity.LootrShulkerBlockEntity;
 

@@ -4,8 +4,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.AdvancementEvent;
-import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.registry.LootrRegistry;
 
 @EventBusSubscriber(modid = LootrAPI.MODID)
 public class HandleAdvancement {

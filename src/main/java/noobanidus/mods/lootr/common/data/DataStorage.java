@@ -5,12 +5,12 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
-import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.data.AdvancementData;
-import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
-import noobanidus.mods.lootr.common.api.data.LootFiller;
-import noobanidus.mods.lootr.common.api.data.TickingData;
-import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
+import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.data.AdvancementData;
+import noobanidus.mods.lootr.api.data.ILootrInfoProvider;
+import noobanidus.mods.lootr.api.data.LootFiller;
+import noobanidus.mods.lootr.api.data.TickingData;
+import noobanidus.mods.lootr.api.data.inventory.ILootrInventory;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;

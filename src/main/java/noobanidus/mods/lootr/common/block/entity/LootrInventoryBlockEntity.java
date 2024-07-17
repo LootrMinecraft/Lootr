@@ -9,8 +9,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import org.jetbrains.annotations.Nullable;
 
 public class LootrInventoryBlockEntity extends LootrChestBlockEntity {

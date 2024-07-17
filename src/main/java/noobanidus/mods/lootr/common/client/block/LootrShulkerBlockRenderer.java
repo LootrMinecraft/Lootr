@@ -14,7 +14,7 @@ import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.common.block.entity.LootrShulkerBlockEntity;
 
 @SuppressWarnings({"deprecation", "ConstantConditions", "NullableProblems"})

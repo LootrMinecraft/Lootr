@@ -6,7 +6,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
-import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.neoforge.network.toClient.PacketCloseCart;
 import noobanidus.mods.lootr.neoforge.network.toClient.PacketCloseContainer;
 import noobanidus.mods.lootr.neoforge.network.toClient.PacketOpenCart;

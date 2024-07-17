@@ -8,8 +8,8 @@ import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import noobanidus.mods.lootr.LootrTags;
-import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;

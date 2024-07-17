@@ -22,9 +22,9 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import noobanidus.mods.lootr.LootrTags;
-import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
-import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.data.ILootrInfoProvider;
+import noobanidus.mods.lootr.api.registry.LootrRegistry;
 
 import java.nio.file.Path;
 import java.util.*;

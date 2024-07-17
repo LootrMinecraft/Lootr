@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.block.entity.LootrChestBlockEntity;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
 

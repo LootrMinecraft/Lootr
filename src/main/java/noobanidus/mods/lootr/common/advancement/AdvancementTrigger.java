@@ -6,7 +6,7 @@ import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import noobanidus.mods.lootr.common.api.advancement.IAdvancementTrigger;
+import noobanidus.mods.lootr.api.advancement.IAdvancementTrigger;
 
 import java.util.Optional;
 

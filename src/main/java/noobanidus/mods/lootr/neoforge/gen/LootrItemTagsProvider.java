@@ -7,8 +7,8 @@ import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import noobanidus.mods.lootr.LootrTags;
-import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.registry.LootrRegistry;
 
 import java.util.concurrent.CompletableFuture;
 
