@@ -136,6 +136,16 @@ public class LootrAPIImpl implements ILootrAPI {
   }
 
   @Override
+  public boolean isBlastResistant () {
+    return ConfigManager.BLAST_RESISTANT.get();
+  }
+
+  @Override
+  public boolean isBlastImmune () {
+    return ConfigManager.BLAST_IMMUNE.get();
+  }
+
+  @Override
   public float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos position, float defaultProgress) {
     if (ConfigManager.DISABLE_BREAK.get()) {
       return 0f;
@@ -152,8 +162,28 @@ public class LootrAPIImpl implements ILootrAPI {
   }
 
   @Override
+  public boolean shouldPowerComparators () {
+    return ConfigManager.POWER_COMPARATORS.get();
+  }
+
+  @Override
   public boolean shouldNotify(int remaining) {
     return ConfigManager.shouldNotify(remaining);
+  }
+
+  @Override
+  public int getNotificationDelay () {
+    return ConfigManager.NOTIFICATION_DELAY.get();
+  }
+
+  @Override
+  public boolean isNotificationsEnabled () {
+    return !ConfigManager.DISABLE_NOTIFICATIONS.get();
+  }
+
+  @Override
+  public boolean isMessageStylesEnabled() {
+    return !ConfigManager.DISABLE_MESSAGE_STYLES.get();
   }
 
   @Override
@@ -193,6 +223,36 @@ public class LootrAPIImpl implements ILootrAPI {
   }
 
   @Override
+  public Set<ResourceKey<Level>> getDimensionBlacklist() {
+    return ConfigManager.getDimensionBlacklist();
+  }
+
+  @Override
+  public Set<ResourceKey<Level>> getDimensionWhitelist () {
+    return ConfigManager.getDimensionWhitelist();
+  }
+
+  @Override
+  public Set<ResourceKey<LootTable>> getLootTableBlacklist () {
+    return ConfigManager.getLootBlacklist();
+  }
+
+  @Override
+  public Set<String> getLootModidBlacklist () {
+    return ConfigManager.getLootModids();
+  }
+
+  @Override
+  public Set<String> getModidDimensionWhitelist() {
+    return ConfigManager.getDimensionModidWhitelist();
+  }
+
+  @Override
+  public Set<String> getModidDimensionBlacklist() {
+    return ConfigManager.getDimensionModidBlacklist();
+  }
+
+  @Override
   public boolean isDecaying(ILootrInfoProvider provider) {
     return ConfigManager.isDecaying(provider);
   }
@@ -200,6 +260,36 @@ public class LootrAPIImpl implements ILootrAPI {
   @Override
   public boolean isRefreshing(ILootrInfoProvider provider) {
     return ConfigManager.isRefreshing(provider);
+  }
+
+  @Override
+  public Set<String> getModidDecayWhitelist() {
+    return ConfigManager.getDecayMods();
+  }
+
+  @Override
+  public Set<ResourceKey<LootTable>> getDecayWhitelist () {
+    return ConfigManager.getDecayingTables();
+  }
+
+  @Override
+  public Set<ResourceKey<Level>> getDecayDimensions () {
+    return ConfigManager.getDecayDimensions();
+  }
+
+  @Override
+  public Set<String> getRefreshModids () {
+    return ConfigManager.getRefreshMods();
+  }
+
+  @Override
+  public Set<ResourceKey<LootTable>> getRefreshWhitelist () {
+    return ConfigManager.getRefreshingTables();
+  }
+
+  @Override
+  public Set<ResourceKey<Level>> getRefreshDimensions () {
+    return ConfigManager.getRefreshDimensions();
   }
 
   @Override
@@ -229,6 +319,16 @@ public class LootrAPIImpl implements ILootrAPI {
   }
 
   @Override
+  public boolean shouldCheckWorldBorder () {
+    return ConfigManager.CHECK_WORLD_BORDER.get();
+  }
+
+  @Override
+  public int getMaximumAge() {
+    return ConfigManager.MAXIMUM_AGE.get();
+  }
+
+  @Override
   public boolean hasExpired(long time) {
     return time > ConfigManager.MAXIMUM_AGE.get();
   }
@@ -249,8 +349,18 @@ public class LootrAPIImpl implements ILootrAPI {
   }
 
   @Override
+  public boolean shouldDecayAll () {
+    return ConfigManager.DECAY_ALL.get();
+  }
+
+  @Override
   public int getRefreshValue() {
     return ConfigManager.REFRESH_VALUE.get();
+  }
+
+  @Override
+  public boolean shouldRefreshAll () {
+    return ConfigManager.REFRESH_ALL.get();
   }
 
   @Override
@@ -281,6 +391,16 @@ public class LootrAPIImpl implements ILootrAPI {
   @Override
   public boolean isBreakDisabled() {
     return ConfigManager.DISABLE_BREAK.get();
+  }
+
+  @Override
+  public boolean isBreakEnabled() {
+    return ConfigManager.ENABLE_BREAK.get();
+  }
+
+  @Override
+  public boolean isFakePlayerBreakEnabled () {
+    return ConfigManager.ENABLE_FAKE_PLAYER_BREAK.get();
   }
 
   @Override

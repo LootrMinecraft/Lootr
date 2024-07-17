@@ -24,6 +24,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -84,12 +85,24 @@ public class LootrAPI {
     return INSTANCE.getExplosionResistance(block, defaultResistance);
   }
 
+  public static boolean isBlastResistant () {
+    return INSTANCE.isBlastResistant();
+  }
+
+  public static boolean isBlastImmune () {
+    return INSTANCE.isBlastImmune();
+  }
+
   public static float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos position, float defaultProgress) {
     return INSTANCE.getDestroyProgress(state, player, level, position, defaultProgress);
   }
 
   public static int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos, int defaultSignal) {
     return INSTANCE.getAnalogOutputSignal(pBlockState, pLevel, pPos, defaultSignal);
+  }
+
+  public static boolean shouldPowerComparators () {
+    return INSTANCE.shouldPowerComparators();
   }
 
   public static ClientTextureType getTextureType() {
@@ -112,6 +125,14 @@ public class LootrAPI {
     return INSTANCE.shouldNotify(remaining);
   }
 
+  public static int getNotificationDelay () {
+    return INSTANCE.getNotificationDelay();
+  }
+
+  public static boolean isNotificationsEnabled () {
+    return INSTANCE.isNotificationsEnabled();
+  }
+
   public static boolean isDisabled() {
     return INSTANCE.isDisabled();
   }
@@ -124,8 +145,57 @@ public class LootrAPI {
     return INSTANCE.isDimensionBlocked(dimension);
   }
 
+  public static Set<ResourceKey<Level>> getDimensionBlacklist() {
+    return INSTANCE.getDimensionBlacklist();
+  }
+
+  public static Set<ResourceKey<Level>> getDimensionWhitelist () {
+    return INSTANCE.getDimensionWhitelist();
+  }
+
+  public static Set<ResourceKey<LootTable>> getLootTableBlacklist () {
+    return INSTANCE.getLootTableBlacklist();
+  }
+
+  public static Set<String> getLootModidBlacklist () {
+    return INSTANCE.getLootModidBlacklist ();
+  }
+
+  public static Set<String> getModidDimensionWhitelist () {
+    return INSTANCE.getModidDimensionWhitelist ();
+  }
+
+  public static Set<String> getModidDimensionBlacklist () {
+    return INSTANCE.getModidDimensionBlacklist ();
+  }
+
   public static boolean isDecaying(ILootrInfoProvider provider) {
     return INSTANCE.isDecaying(provider);
+  }
+
+
+  public static Set<String> getModidDecayWhitelist() {
+    return INSTANCE.getModidDecayWhitelist();
+  }
+
+  public static Set<ResourceKey<LootTable>> getDecayWhitelist () {
+    return INSTANCE.getDecayWhitelist();
+  }
+
+  public static Set<ResourceKey<Level>> getDecayDimensions () {
+    return INSTANCE.getDecayDimensions();
+  }
+
+  public static Set<String> getRefreshModids () {
+    return INSTANCE.getRefreshModids();
+  }
+
+  public static Set<ResourceKey<LootTable>> getRefreshWhitelist () {
+    return INSTANCE.getRefreshWhitelist();
+  }
+
+  public static Set<ResourceKey<Level>> getRefreshDimensions () {
+    return INSTANCE.getRefreshDimensions();
   }
 
   public static boolean isRefreshing(ILootrInfoProvider provider) {
@@ -148,6 +218,14 @@ public class LootrAPI {
     return INSTANCE.isWorldBorderSafe(level, pos);
   }
 
+  public static boolean shouldCheckWorldBorder () {
+    return INSTANCE.shouldCheckWorldBorder();
+  }
+
+  public static int getMaximumAge() {
+    return INSTANCE.getMaximumAge();
+  }
+
   public static boolean hasExpired(long time) {
     return INSTANCE.hasExpired(time);
   }
@@ -164,8 +242,20 @@ public class LootrAPI {
     return INSTANCE.getDecayValue();
   }
 
+  public static boolean shouldDecayAll () {
+    return INSTANCE.shouldDecayAll();
+  }
+
   public static int getRefreshValue() {
     return INSTANCE.getRefreshValue();
+  }
+
+  public static boolean shouldRefreshAll() {
+    return INSTANCE.shouldRefreshAll();
+  }
+
+  public static boolean isMessageStylesEnabled () {
+    return INSTANCE.isMessageStylesEnabled();
   }
 
   public static Style getInvalidStyle() {
@@ -194,6 +284,14 @@ public class LootrAPI {
 
   public static boolean isBreakDisabled() {
     return INSTANCE.isBreakDisabled();
+  }
+
+  public static boolean isBreakEnabled() {
+    return INSTANCE.isBreakEnabled();
+  }
+
+  public static boolean isFakePlayerBreakEnabled () {
+    return INSTANCE.isFakePlayerBreakEnabled();
   }
 
   public static BlockState replacementBlockState(BlockState original) {

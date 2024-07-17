@@ -61,11 +61,23 @@ public interface ILootrAPI {
 
   float getExplosionResistance(Block block, float defaultResistance);
 
+  boolean isBlastResistant();
+
+  boolean isBlastImmune();
+
   float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos position, float defaultProgress);
 
   int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos, int defaultSignal);
 
+  boolean shouldPowerComparators();
+
   boolean shouldNotify(int remaining);
+
+  int getNotificationDelay();
+
+  boolean isNotificationsEnabled ();
+
+  boolean isMessageStylesEnabled();
 
   ClientTextureType getTextureType();
 
@@ -91,9 +103,33 @@ public interface ILootrAPI {
 
   boolean isDimensionRefreshing(ResourceKey<Level> dimension);
 
+  Set<ResourceKey<Level>> getDimensionBlacklist();
+
+  Set<ResourceKey<Level>> getDimensionWhitelist();
+
+  Set<ResourceKey<LootTable>> getLootTableBlacklist();
+
+  Set<String> getLootModidBlacklist();
+
+  Set<String> getModidDimensionWhitelist();
+
+  Set<String> getModidDimensionBlacklist();
+
   boolean isDecaying(ILootrInfoProvider provider);
 
   boolean isRefreshing(ILootrInfoProvider provider);
+
+  Set<String> getModidDecayWhitelist();
+
+  Set<ResourceKey<LootTable>> getDecayWhitelist();
+
+  Set<ResourceKey<Level>> getDecayDimensions();
+
+  Set<String> getRefreshModids();
+
+  Set<ResourceKey<LootTable>> getRefreshWhitelist();
+
+  Set<ResourceKey<Level>> getRefreshDimensions();
 
   boolean reportUnresolvedTables();
 
@@ -103,6 +139,10 @@ public interface ILootrAPI {
 
   boolean isWorldBorderSafe(Level level, ChunkPos pos);
 
+  boolean shouldCheckWorldBorder();
+
+  int getMaximumAge();
+
   boolean hasExpired(long time);
 
   boolean shouldConvertMineshafts();
@@ -111,7 +151,11 @@ public interface ILootrAPI {
 
   int getDecayValue();
 
+  boolean shouldDecayAll();
+
   int getRefreshValue();
+
+  boolean shouldRefreshAll();
 
   Style getInvalidStyle();
 
@@ -126,6 +170,10 @@ public interface ILootrAPI {
   boolean canDestroyOrBreak(Player player);
 
   boolean isBreakDisabled();
+
+  boolean isBreakEnabled();
+
+  boolean isFakePlayerBreakEnabled();
 
   @Nullable
   BlockState replacementBlockState(BlockState original);
