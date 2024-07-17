@@ -19,7 +19,6 @@ import noobanidus.mods.lootr.network.PacketHandler;
 
 @Mod("lootr")
 public class Lootr {
-  public static final String VERSION = "0.8";
   public static Lootr instance;
   private final PacketHandler packetHandler;
 
