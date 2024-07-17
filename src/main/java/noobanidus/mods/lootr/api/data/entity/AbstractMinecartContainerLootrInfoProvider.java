@@ -18,7 +18,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public record AbstractMinecartContainerLootrInfoProvider(
-    AbstractMinecartContainer minecart) implements ILootrInfoProvider {
+    AbstractMinecartContainer minecart) implements ILootrCart {
 
   @Override
   public LootrInfoType getInfoType() {

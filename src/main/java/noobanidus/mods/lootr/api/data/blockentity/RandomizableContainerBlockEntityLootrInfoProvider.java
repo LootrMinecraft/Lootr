@@ -18,7 +18,7 @@ import java.util.UUID;
 
 public record RandomizableContainerBlockEntityLootrInfoProvider(
     @NotNull RandomizableContainerBlockEntity blockEntity, UUID id,
-    NonNullList<ItemStack> customInventory) implements ILootrInfoProvider {
+    NonNullList<ItemStack> customInventory) implements ILootrBlockEntity {
 
   @Override
   public LootrInfoType getInfoType() {
