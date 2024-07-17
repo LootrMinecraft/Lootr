@@ -64,12 +64,6 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
     return null;
   }
 
-  // This can be null but only if it is a custom inventory.
-  @Nullable
-  ResourceKey<LootTable> getInfoLootTable();
-
-  long getInfoLootSeed();
-
   @Nullable
   default IContainerTrigger getTrigger () {
     return null;

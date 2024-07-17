@@ -17,6 +17,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.api.LootrAPI;
 import org.jetbrains.annotations.NotNull;
@@ -55,10 +56,11 @@ public interface ILootrInfo {
 
   boolean isInfoReferenceInventory();
 
- /*
-    NonNullList<ItemStack> reference = getInfoReferenceInventory();
-    return reference != null && !reference.isEmpty();
-  }*/
+  // This can be null but only if it is a custom inventory.
+  @Nullable
+  ResourceKey<LootTable> getInfoLootTable();
+
+  long getInfoLootSeed();
 
   @Nullable
   default Level getInfoLevel() {
@@ -102,6 +104,10 @@ public interface ILootrInfo {
     tag.putString("dimension", getInfoDimension().location().toString());
     tag.putUUID("uuid", getInfoUUID());
     tag.putInt("size", getInfoContainerSize());
+    if (getInfoLootTable() != null) {
+      tag.putString("table", getInfoLootTable().location().toString());
+      tag.putLong("seed", getInfoLootSeed());
+    }
     if (getInfoDisplayName() != null) {
       tag.putString("name", Component.Serializer.toJson(getInfoDisplayName(), provider));
     }
@@ -133,7 +139,13 @@ public interface ILootrInfo {
       reference = NonNullList.withSize(tag.getInt("referenceSize"), ItemStack.EMPTY);
       ContainerHelper.loadAllItems(tag.getCompound("reference"), reference, provider);
     }
-    return new BaseLootrInfo(type, uuid, pos, name, dimension, size, reference);
+    ResourceKey<LootTable> table = null;
+    long seed = -1;
+    if (tag.contains("table")) {
+      table = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse(tag.getString("table")));
+      seed = tag.getLong("seed");
+    }
+    return new BaseLootrInfo(type, uuid, pos, name, dimension, size, reference, table, seed);
   }
 
   enum LootrInfoType {

@@ -9,6 +9,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.api.IMarkChanged;
 import noobanidus.mods.lootr.api.IOpeners;
@@ -97,5 +98,15 @@ public interface ILootrSavedData extends IRedirect<ILootrInfo>, ILootrInfo, IOpe
   @Override
   default boolean isInfoReferenceInventory() {
     return getRedirect().isInfoReferenceInventory();
+  }
+
+  @Override
+  default ResourceKey<LootTable> getInfoLootTable() {
+    return getRedirect().getInfoLootTable();
+  }
+
+  @Override
+  default long getInfoLootSeed() {
+    return getRedirect().getInfoLootSeed();
   }
 }

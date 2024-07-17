@@ -6,15 +6,16 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
 public record BaseLootrInfo(LootrInfoType type, UUID uuid, BlockPos pos, Component name, ResourceKey<Level> dimension,
-                            int containerSize, NonNullList<ItemStack> customInventory) implements ILootrInfo {
+                            int containerSize, NonNullList<ItemStack> customInventory, ResourceKey<LootTable> table, long seed) implements ILootrInfo {
   public static BaseLootrInfo copy(ILootrInfo info) {
-    return new BaseLootrInfo(info.getInfoType(), info.getInfoUUID(), info.getInfoPos(), info.getInfoDisplayName(), info.getInfoDimension(), info.getInfoContainerSize(), info.getInfoReferenceInventory());
+    return new BaseLootrInfo(info.getInfoType(), info.getInfoUUID(), info.getInfoPos(), info.getInfoDisplayName(), info.getInfoDimension(), info.getInfoContainerSize(), info.getInfoReferenceInventory(), info.getInfoLootTable(), info.getInfoLootSeed());
   }
 
   @Override
@@ -55,5 +56,15 @@ public record BaseLootrInfo(LootrInfoType type, UUID uuid, BlockPos pos, Compone
   @Override
   public boolean isInfoReferenceInventory() {
     return customInventory() != null && !customInventory().isEmpty();
+  }
+
+  @Override
+  public @Nullable ResourceKey<LootTable> getInfoLootTable() {
+    return table();
+  }
+
+  @Override
+  public long getInfoLootSeed() {
+    return seed();
   }
 }
