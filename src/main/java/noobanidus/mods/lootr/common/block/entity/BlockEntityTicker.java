@@ -125,7 +125,7 @@ public class BlockEntityTicker {
           toRemove.add(entry);
           continue;
         }
-        if (be.lootTable == null || LootrAPI.isLootTableBlacklisted(be.lootTable)) {
+        if (be.getLootTable() == null || LootrAPI.isLootTableBlacklisted(be.getLootTable())) {
           toRemove.add(entry);
           continue;
         }
@@ -135,19 +135,20 @@ public class BlockEntityTicker {
           toRemove.add(entry);
           continue;
         }
-        ResourceKey<LootTable> table = be.lootTable;
-        long seed = be.lootTableSeed;
-        be.lootTable = null;
+        ResourceKey<LootTable> table = be.getLootTable();
+        long seed = be.getLootTableSeed();
+        // Clear loot table to prevent loot drop
+        be.setLootTable(null);
         CompoundTag oldData = be.getPersistentData();
 
         level.destroyBlock(entry.getPosition(), false);
         level.setBlock(entry.getPosition(), replacement, 2);
-        blockEntity = level.getBlockEntity(entry.getPosition());
-        if (blockEntity != null) {
-          blockEntity.getPersistentData().merge(oldData);
+        BlockEntity newBlockEntity = level.getBlockEntity(entry.getPosition());
+        if (newBlockEntity != null) {
+          newBlockEntity.getPersistentData().merge(oldData);
         }
-        if (blockEntity instanceof ILootrBlockEntity) {
-          ((RandomizableContainerBlockEntity) blockEntity).setLootTable(table, seed);
+        if (newBlockEntity instanceof ILootrBlockEntity && newBlockEntity instanceof RandomizableContainerBlockEntity rbe) {
+          rbe.setLootTable(table, seed);
         } else {
           LootrAPI.LOG.error("replacement " + replacement + " is not an ILootrBlockEntity " + entry.getDimension() + " at " + entry.getPosition());
         }
