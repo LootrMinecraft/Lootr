@@ -71,6 +71,7 @@ public class CommandLootr {
   }
 
   private static List<String> getProfiles() {
+    // TODO: Come up with a better way to do this
     return Lists.newArrayList(LootrAPI.getServer().getProfileCache().profilesByName.keySet());
   }
 
