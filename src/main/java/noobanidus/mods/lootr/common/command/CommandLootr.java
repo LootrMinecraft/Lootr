@@ -47,6 +47,7 @@ import noobanidus.mods.lootr.common.block.LootrShulkerBlock;
 import noobanidus.mods.lootr.common.block.entity.LootrInventoryBlockEntity;
 import noobanidus.mods.lootr.common.data.DataStorage;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
+import noobanidus.mods.lootr.common.mixins.MixinBaseContainerBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -213,14 +214,14 @@ public class CommandLootr {
         NonNullList<ItemStack> reference;
         BlockState newState;
         if (state.is(Blocks.CHEST)) {
-          reference = ((ChestBlockEntity) Objects.requireNonNull(world.getBlockEntity(pos))).items;
+          reference = ((MixinBaseContainerBlockEntity) Objects.requireNonNull(world.getBlockEntity(pos))).invokeGetItems();
           newState = LootrRegistry.getInventoryBlock().defaultBlockState().setValue(ChestBlock.FACING, state.getValue(ChestBlock.FACING)).setValue(ChestBlock.WATERLOGGED, state.getValue(ChestBlock.WATERLOGGED));
         } else {
           Direction facing = state.getValue(BarrelBlock.FACING);
           if (facing == Direction.UP || facing == Direction.DOWN) {
             facing = Direction.NORTH;
           }
-          reference = ((BarrelBlockEntity) Objects.requireNonNull(world.getBlockEntity(pos))).items;
+          reference = ((MixinBaseContainerBlockEntity) Objects.requireNonNull(world.getBlockEntity(pos))).invokeGetItems();
           newState = LootrRegistry.getInventoryBlock().defaultBlockState().setValue(ChestBlock.FACING, facing);
         }
         NonNullList<ItemStack> custom = copyItemList(reference);
