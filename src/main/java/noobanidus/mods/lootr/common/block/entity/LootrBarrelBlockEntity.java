@@ -34,7 +34,7 @@ import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
-import noobanidus.mods.lootr.common.block.LootrBarrelBlock;
+import noobanidus.mods.lootr.neoforge.init.ModBlockProperties;
 import noobanidus.mods.lootr.neoforge.network.client.ClientHandlers;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -83,12 +83,12 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   @Override
   public ModelData getModelData() {
     if (modelData == null) {
-      modelData = ModelData.builder().with(LootrBarrelBlock.OPENED, false).build();
+      modelData = ModelData.builder().with(ModBlockProperties.OPENED, false).build();
     }
     if (hasClientOpened()) {
-      return modelData.derive().with(LootrBarrelBlock.OPENED, true).build();
+      return modelData.derive().with(ModBlockProperties.OPENED, true).build();
     } else {
-      return modelData.derive().with(LootrBarrelBlock.OPENED, false).build();
+      return modelData.derive().with(ModBlockProperties.OPENED, false).build();
     }
   }
 

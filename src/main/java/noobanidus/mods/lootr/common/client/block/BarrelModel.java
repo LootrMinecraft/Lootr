@@ -20,7 +20,7 @@ import net.neoforged.neoforge.client.model.geometry.IGeometryBakingContext;
 import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
 import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
 import noobanidus.mods.lootr.api.LootrAPI;
-import noobanidus.mods.lootr.common.block.LootrBarrelBlock;
+import noobanidus.mods.lootr.neoforge.init.ModBlockProperties;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -103,8 +103,8 @@ public class BarrelModel implements IUnbakedGeometry<BarrelModel> {
       if (LootrAPI.isVanillaTextures()) {
         model = vanilla;
       } else {
-        if (extraData.has(LootrBarrelBlock.OPENED)) {
-          if (extraData.get(LootrBarrelBlock.OPENED) == Boolean.TRUE) {
+        if (extraData.has(ModBlockProperties.OPENED)) {
+          if (extraData.get(ModBlockProperties.OPENED) == Boolean.TRUE) {
             model = LootrAPI.isOldTextures() ? old_opened : opened;
           } else {
             model = LootrAPI.isOldTextures() ? old_unopened : unopened;
@@ -146,7 +146,7 @@ public class BarrelModel implements IUnbakedGeometry<BarrelModel> {
       if (LootrAPI.isVanillaTextures()) {
         return vanilla.getParticleIcon();
       }
-      if (data.get(LootrBarrelBlock.OPENED) == Boolean.TRUE) {
+      if (data.get(ModBlockProperties.OPENED) == Boolean.TRUE) {
         return LootrAPI.isOldTextures() ? old_opened.getParticleIcon() : opened.getParticleIcon();
       } else {
         return LootrAPI.isOldTextures() ? old_unopened.getParticleIcon() : unopened.getParticleIcon();
