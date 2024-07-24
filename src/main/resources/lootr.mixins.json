@@ -5,6 +5,7 @@
   "mixins": [
     "MixinBaseContainerBlockEntity",
     "MixinCatSitOnBlockGoal",
+    "MixinDimensionDataStorage",
     "MixinEndCityPieces$EndCityPiece",
     "MixinLevelChunk",
     "MixinPoiType",

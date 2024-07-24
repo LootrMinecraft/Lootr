@@ -1,19 +1,30 @@
 package noobanidus.mods.lootr.common.data;
 
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
+import net.minecraft.world.level.storage.LevelResource;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.data.AdvancementData;
 import noobanidus.mods.lootr.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.api.data.LootFiller;
 import noobanidus.mods.lootr.api.data.TickingData;
 import noobanidus.mods.lootr.api.data.inventory.ILootrInventory;
+import noobanidus.mods.lootr.common.mixins.MixinDimensionDataStorage;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @SuppressWarnings("unused")
 public class DataStorage {
@@ -42,7 +53,7 @@ public class DataStorage {
     return isAwarded(provider.getInfoUUID(), player);
   }
 
-  public static boolean isAwarded (UUID uuid, ServerPlayer player) {
+  public static boolean isAwarded(UUID uuid, ServerPlayer player) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot determine if advancement has been awarded.");
@@ -56,7 +67,7 @@ public class DataStorage {
     award(provider.getInfoUUID(), player);
   }
 
-  public static void award (UUID id, ServerPlayer player) {
+  public static void award(UUID id, ServerPlayer player) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot award advancement.");
@@ -178,51 +189,80 @@ public class DataStorage {
     return data.getOrCreateInventory(provider, player, filler);
   }
 
-/*  // TODO: This is non-optimal and can result in poorly loaded containers.
-  public static boolean clearInventories(UUID uuid) {
+  public static boolean clearInventories(Player player) {
+    return clearInventories(player.getUUID());
+  }
+
+  // This is now safe!
+  public static boolean clearInventories(UUID id) {
     DimensionDataStorage data = getDataStorage();
     if (data == null) {
       // Errors are already generated in `getDataStorage`
       return false;
     }
-    // Server being null is already handled in `getDataStorage`
-    @SuppressWarnings("resource") ServerLevel world = ServerLifecycleHooks.getCurrentServer().overworld();
-    // This can actually be null on occasion.
-    //noinspection ConstantValue
-    if (world == null) {
-      LootrAPI.LOG.error("Overworld is null while attempting to clear inventories for '" + uuid.toString() + "'; Lootr cannot clear inventories.");
+
+    MinecraftServer server = LootrAPI.getServer();
+    if (server == null) {
+      // TODO: Errors?
       return false;
     }
-    Path dataPath = world.getServer().getWorldPath(new LevelResource("data")).resolve("lootr");
 
-    List<String> ids = new ArrayList<>();
+    Path dataPath = server.getWorldPath(new LevelResource("data")).resolve("lootr");
+    List<String> files = new ArrayList<>();
     try (Stream<Path> paths = Files.walk(dataPath)) {
-      paths.forEach(o -> {
-        if (Files.isRegularFile(o)) {
-          String fileName = o.getFileName().toString();
+      paths.forEach(path -> {
+        if (Files.isRegularFile(path)) {
+          String fileName = path.getFileName().toString();
           if (fileName.startsWith("Lootr-")) {
             return;
           }
-          ids.add("lootr/" + fileName.charAt(0) + "/" + fileName.substring(0, 2) + "/" + fileName.replace(".dat", ""));
+          files.add("lootr/" + fileName.charAt(0) + "/" + fileName.substring(0, 2) + "/" + fileName.replace(".dat", ""));
         }
       });
     } catch (IOException e) {
       return false;
     }
 
-    int cleared = 0;
-    for (String id : ids) {
-      OldChestData chestData = data.get(new SavedData.Factory<>(() -> {
-        throw new UnsupportedOperationException("Cannot create ChestData here");
-      }, OldChestData::load), id);
-      if (chestData != null) {
-        if (chestData.clearInventory(uuid)) {
-          cleared++;
-          chestData.setDirty();
-        }
+    int count = 0;
+
+    for (String file : files) {
+      SavedData datum = data.get(new SavedData.Factory<>(() -> LootrDummyData.INSTANCE, LootrSavedData::load), file);
+      if (datum == LootrDummyData.INSTANCE) {
+        // Failed to load so clear it from the cache
+        LootrAPI.LOG.error("Failed to load data for " + file + ", removing from cache.");
+        ((MixinDimensionDataStorage) data).getCache().remove(file);
+        continue;
+      }
+      if (!(datum instanceof LootrSavedData lootrSavedData)) {
+        LootrAPI.LOG.error("Data for " + file + " is not a LootrSavedData instance.");
+        ((MixinDimensionDataStorage) data).getCache().remove(file);
+        continue;
+      }
+
+      if (lootrSavedData.clearInventories(id)) {
+        count++;
       }
     }
-    LootrAPI.LOG.info("Cleared " + cleared + " inventories for play UUID " + uuid.toString());
-    return cleared != 0;
-  }*/
+
+    if (count > 0) {
+      data.save();
+      LootrAPI.LOG.info("Cleared " + count + " inventories for play UUID " + id.toString());
+      return true;
+    }
+
+    return false;
+  }
+
+  private static class LootrDummyData extends SavedData {
+    public static final LootrDummyData INSTANCE = new LootrDummyData();
+
+    public LootrDummyData() {
+      super();
+    }
+
+    @Override
+    public CompoundTag save(CompoundTag p_77763_, HolderLookup.Provider p_323640_) {
+      return null;
+    }
+  }
 }

@@ -205,9 +205,7 @@ public class LootrAPIImpl implements ILootrAPI {
 
   @Override
   public boolean clearPlayerLoot(UUID id) {
-    // TODO:
-    return false;
-    /*    return DataStorage.clearInventories(id);*/
+    return DataStorage.clearInventories(id);
   }
 
   @Override

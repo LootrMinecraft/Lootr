@@ -189,6 +189,16 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
   }
 
   @Override
+  public boolean clearInventories(UUID id) {
+    if (inventories.remove(id) != null) {
+      setDirty();
+      return true;
+    }
+
+    return false;
+  }
+
+  @Override
   public void save(File pFile, HolderLookup.Provider provider) {
     if (isDirty()) {
       pFile.getParentFile().mkdirs();
