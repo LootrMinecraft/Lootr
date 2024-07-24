@@ -16,6 +16,7 @@ import noobanidus.mods.lootr.api.data.LootFiller;
 import noobanidus.mods.lootr.api.data.TickingData;
 import noobanidus.mods.lootr.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.mixins.MixinDimensionDataStorage;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -32,6 +33,7 @@ public class DataStorage {
   public static final String DECAYS = "lootr/Lootr-DecayData";
   public static final String REFRESHES = "lootr/Lootr-RefreshData";
 
+  @ApiStatus.Internal
   @Nullable
   public static DimensionDataStorage getDataStorage() {
     MinecraftServer server = LootrAPI.getServer();
@@ -49,10 +51,12 @@ public class DataStorage {
     return overworld.getDataStorage();
   }
 
+  @ApiStatus.Internal
   public static boolean isAwarded(ILootrInfoProvider provider, ServerPlayer player) {
     return isAwarded(provider.getInfoUUID(), player);
   }
 
+  @ApiStatus.Internal
   public static boolean isAwarded(UUID uuid, ServerPlayer player) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
@@ -63,10 +67,12 @@ public class DataStorage {
     return data.contains(player.getUUID(), uuid);
   }
 
+  @ApiStatus.Internal
   public static void award(ILootrInfoProvider provider, ServerPlayer player) {
     award(provider.getInfoUUID(), player);
   }
 
+  @ApiStatus.Internal
   public static void award(UUID id, ServerPlayer player) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
@@ -77,6 +83,7 @@ public class DataStorage {
     data.add(player.getUUID(), id);
   }
 
+  @ApiStatus.Internal
   public static int getDecayValue(ILootrInfoProvider provider) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
@@ -87,6 +94,7 @@ public class DataStorage {
     return data.getValue(provider.getInfoUUID());
   }
 
+  @ApiStatus.Internal
   public static boolean isDecayed(ILootrInfoProvider provider) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
@@ -97,6 +105,7 @@ public class DataStorage {
     return data.isComplete(provider.getInfoUUID());
   }
 
+  @ApiStatus.Internal
   public static void setDecaying(ILootrInfoProvider provider, int decay) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
@@ -107,6 +116,7 @@ public class DataStorage {
     data.setValue(provider.getInfoUUID(), decay);
   }
 
+  @ApiStatus.Internal
   public static void removeDecayed(ILootrInfoProvider provider) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
@@ -117,6 +127,7 @@ public class DataStorage {
     data.remove(provider.getInfoUUID());
   }
 
+  @ApiStatus.Internal
   public static void doTick() {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
@@ -127,6 +138,7 @@ public class DataStorage {
     manager.computeIfAbsent(TickingData.FACTORY, REFRESHES).tick();
   }
 
+  @ApiStatus.Internal
   public static int getRefreshValue(ILootrInfoProvider provider) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
@@ -137,6 +149,7 @@ public class DataStorage {
     return data.getValue(provider.getInfoUUID());
   }
 
+  @ApiStatus.Internal
   public static boolean isRefreshed(ILootrInfoProvider provider) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
@@ -147,6 +160,7 @@ public class DataStorage {
     return data.isComplete(provider.getInfoUUID());
   }
 
+  @ApiStatus.Internal
   public static void setRefreshing(ILootrInfoProvider provider, int decay) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
@@ -157,6 +171,7 @@ public class DataStorage {
     data.setValue(provider.getInfoUUID(), decay);
   }
 
+  @ApiStatus.Internal
   public static void removeRefreshed(ILootrInfoProvider provider) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
@@ -167,6 +182,7 @@ public class DataStorage {
     data.remove(provider.getInfoUUID());
   }
 
+  @ApiStatus.Internal
   public static LootrSavedData getData(ILootrInfoProvider provider) {
     // TODO: Refresh data from provider
     DimensionDataStorage manager = DataStorage.getDataStorage();
@@ -189,10 +205,12 @@ public class DataStorage {
     return data.getOrCreateInventory(provider, player, filler);
   }
 
+  @ApiStatus.Internal
   public static boolean clearInventories(Player player) {
     return clearInventories(player.getUUID());
   }
 
+  @ApiStatus.Internal
   // This is now safe!
   public static boolean clearInventories(UUID id) {
     DimensionDataStorage data = getDataStorage();
