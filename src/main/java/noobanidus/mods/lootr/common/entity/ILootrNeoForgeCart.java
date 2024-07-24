@@ -23,7 +23,7 @@ public interface ILootrNeoForgeCart extends ILootrCart {
   }
 
   @Override
-  default void performDecay(ServerPlayer player) {
+  default void performDecay() {
     if (!(this instanceof Entity entity1)) {
       return;
     }

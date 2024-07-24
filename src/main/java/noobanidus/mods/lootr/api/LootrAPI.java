@@ -320,4 +320,8 @@ public class LootrAPI {
   public static void handleProviderSneak (@Nullable ILootrInfoProvider provider, ServerPlayer player) {
     INSTANCE.handleProviderSneak(provider, player);
   }
+
+  public static void handleProviderTick (@Nullable ILootrInfoProvider provider) {
+    INSTANCE.handleProviderTick(provider);
+  }
 }

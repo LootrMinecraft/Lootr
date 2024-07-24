@@ -1,12 +1,27 @@
 package noobanidus.mods.lootr.api.data.blockentity;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.state.BlockState;
+import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.data.ILootrInfoProvider;
 
 public interface ILootrBlockEntity extends ILootrInfoProvider {
+  static <T extends BlockEntity> void ticker (Level level, BlockPos pos, BlockState state, T blockEntity) {
+    if (blockEntity instanceof ILootrBlockEntity t) {
+      t.defaultTick(level, pos, state);
+    }
+  }
+
+  default void defaultTick (Level level, BlockPos pos, BlockState state) {
+    LootrAPI.handleProviderTick(this);
+  }
+
   default BlockEntity asBlockEntity () {
     return ((BlockEntity) this);
   }

@@ -68,7 +68,7 @@ public class LootrAPIImpl implements ILootrAPI {
       return;
     }
     if (DataStorage.isDecayed(provider)) {
-      provider.performDecay(player);
+      provider.performDecay();
       player.displayClientMessage(Component.translatable("lootr.message.decayed").setStyle(LootrAPI.getDecayStyle()), true);
       DataStorage.removeDecayed(provider);
       return;
@@ -84,10 +84,12 @@ public class LootrAPIImpl implements ILootrAPI {
       }
     }
     provider.performTrigger(player);
+    boolean shouldUpdate = false;
     if (DataStorage.isRefreshed(provider)) {
-      DataStorage.refreshInventory(provider);
+      provider.performRefresh();
       DataStorage.removeRefreshed(provider);
       player.displayClientMessage(Component.translatable("lootr.message.refreshed").setStyle(LootrAPI.getRefreshStyle()), true);
+      shouldUpdate = true;
     }
     int refreshValue = DataStorage.getRefreshValue(provider);
     if (refreshValue > 0 && LootrAPI.shouldNotify(refreshValue)) {
@@ -108,11 +110,51 @@ public class LootrAPIImpl implements ILootrAPI {
     }
     if (provider.addOpener(player)) {
       provider.performOpen(player);
+      shouldUpdate = true;
+    }
+
+    if (shouldUpdate) {
       provider.performUpdate(player);
     }
     // TODO: Opened stat
     player.openMenu(menuProvider);
     PiglinAi.angerNearbyPiglins(player, true);
+  }
+
+  @Override
+  public void handleProviderTick(@Nullable ILootrInfoProvider provider) {
+    if (provider == null) {
+      return;
+    }
+
+    if (provider.getInfoUUID() == null) {
+      return;
+    }
+
+    // TODO: Merge these functions out of DataStorage
+    if (DataStorage.isDecayed(provider)) {
+      provider.performDecay();
+      DataStorage.removeDecayed(provider);
+      return;
+    } else {
+      int decayValue = DataStorage.getDecayValue(provider);
+      if (decayValue == -1) {
+        if (LootrAPI.isDecaying(provider)) {
+          DataStorage.setDecaying(provider, decayValue);
+        }
+      }
+    }
+    if (DataStorage.isRefreshed(provider)) {
+      provider.performRefresh();
+      DataStorage.removeRefreshed(provider);
+      provider.performUpdate();
+    }
+    int refreshValue = DataStorage.getRefreshValue(provider);
+    if (refreshValue == -1) {
+      if (LootrAPI.isRefreshing(provider)) {
+        DataStorage.setRefreshing(provider, refreshValue);
+      }
+    }
   }
 
   @Override

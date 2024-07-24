@@ -79,8 +79,10 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrNeo
     this(LootrRegistry.getChestBlockEntity(), pWorldPosition, pBlockState);
   }
 
-  public static <T extends BlockEntity> void lootrLidAnimateTick(Level pLevel, BlockPos pPos, BlockState pState, T pBlockEntity) {
-    ((LootrChestBlockEntity) pBlockEntity).chestLidController.tickLid();
+  @Override
+  public void defaultTick(Level level, BlockPos pos, BlockState state) {
+    ILootrNeoForgeBlockEntity.super.defaultTick(level, pos, state);
+    chestLidController.tickLid();
   }
 
   protected static void playSound(Level pLevel, BlockPos pPos, BlockState pState, SoundEvent pSound) {

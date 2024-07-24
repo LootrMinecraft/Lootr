@@ -15,6 +15,18 @@ public interface IClientOpeners extends IOpeners {
 
   void setClientOpened(boolean opened);
 
+  @Override
+  default boolean clearOpeners () {
+    boolean result = IOpeners.super.clearOpeners();
+    Set<UUID> clientOpeners = getClientOpeners();
+    if (clientOpeners != null && !clientOpeners.isEmpty()) {
+      clientOpeners.clear();
+      markChanged();
+      return true;
+    }
+    return result;
+  }
+
   default boolean hasClientOpened () {
     Player player = LootrAPI.getPlayer();
     if (player == null) {

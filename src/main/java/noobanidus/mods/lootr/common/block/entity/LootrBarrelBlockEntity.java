@@ -235,6 +235,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     return ClientboundBlockEntityDataPacket.create(this, BlockEntity::getUpdateTag);
   }
 
+  // TODO:
   @Override
   public void onDataPacket(@NotNull Connection net, @NotNull ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider provider) {
     CompoundTag tag = pkt.getTag();

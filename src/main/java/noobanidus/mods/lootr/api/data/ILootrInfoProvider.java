@@ -8,7 +8,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.vehicle.AbstractMinecartContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.api.IClientOpeners;
@@ -93,9 +92,21 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
   default void performClose(ServerPlayer player) {
   }
 
-  default void performDecay (ServerPlayer player) {
+  default void performDecay () {
+    ILootrSavedData data = LootrAPI.getData(this);
+    if (data != null) {
+      data.clearInventories();
+      data.clearOpeners();
+      markChanged();
+    }
+  }
+
+  default void performRefresh () {
   }
 
   default void performUpdate (ServerPlayer player) {
+  }
+
+  default void performUpdate () {
   }
 }

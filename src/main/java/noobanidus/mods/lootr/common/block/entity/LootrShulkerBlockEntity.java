@@ -60,8 +60,10 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
     super(LootrRegistry.getShulkerBlockEntity(), pWorldPosition, pBlockState);
   }
 
-  public static void tick(Level pLevel, BlockPos pPos, BlockState pState, LootrShulkerBlockEntity pBlockEntity) {
-    pBlockEntity.updateAnimation(pLevel, pPos, pState);
+  @Override
+  public void defaultTick(Level level, BlockPos pos, BlockState state) {
+    ILootrNeoForgeBlockEntity.super.defaultTick(level, pos, state);
+    this.updateAnimation(level, pos, state);
   }
 
   private static void doNeighborUpdates(Level pLevel, BlockPos pPos, BlockState pState) {

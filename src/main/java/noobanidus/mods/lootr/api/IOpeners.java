@@ -20,6 +20,19 @@ public interface IOpeners extends IMarkChanged {
     return result1 || result2;
   }
 
+  default boolean clearOpeners () {
+    Set<UUID> openers = getVisualOpeners();
+    if (openers == null) {
+      return false;
+    }
+    if (!openers.isEmpty()) {
+      openers.clear();
+      markChanged();
+      return true;
+    }
+    return false;
+  }
+
   default boolean addVisualOpener (UUID uuid) {
     Set<UUID> openers = getVisualOpeners();
     if (openers == null) {

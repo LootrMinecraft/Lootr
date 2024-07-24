@@ -6,7 +6,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -32,8 +31,17 @@ public interface ILootrSavedData extends IRedirect<ILootrInfo>, ILootrInfo, IOpe
 
   void clearInventories();
 
-  default ILootrInventory getInventory(Player player) {
+  default ILootrInventory getInventory(ServerPlayer player) {
     return getInventory(player.getUUID());
+  }
+
+  default ILootrInventory getOrCreateInventory (ILootrInfoProvider provider, ServerPlayer player, LootFiller filler) {
+    ILootrInventory result = getInventory(player);
+    if (result != null) {
+      return result;
+    }
+
+    return createInventory(provider, player, filler);
   }
 
   ILootrInventory getInventory(UUID id);

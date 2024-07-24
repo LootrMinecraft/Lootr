@@ -181,4 +181,6 @@ public interface ILootrAPI {
   void handleProviderSneak(@Nullable ILootrInfoProvider provider, ServerPlayer player);
 
   void handleProviderOpen(@Nullable ILootrInfoProvider provider, ServerPlayer player) ;
+
+  void handleProviderTick (@Nullable ILootrInfoProvider provider);
 }

@@ -20,12 +20,17 @@ public interface ILootrNeoForgeBlockEntity extends ILootrBlockEntity {
 
   @Override
   default void performUpdate(ServerPlayer player) {
+    performUpdate();
+  }
+
+  @Override
+  default void performUpdate () {
     markChanged();
     updatePacketViaForce();
   }
 
   @Override
-  default void performDecay(ServerPlayer player) {
+  default void performDecay() {
     Level level = getInfoLevel();
     if (level == null || level.isClientSide()) {
       return;
