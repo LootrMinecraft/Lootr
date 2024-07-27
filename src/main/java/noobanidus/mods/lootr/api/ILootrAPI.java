@@ -200,6 +200,8 @@ public interface ILootrAPI {
   void handleProviderOpen(@Nullable ILootrInfoProvider provider, ServerPlayer player) ;
 
   void handleProviderTick (@Nullable ILootrInfoProvider provider);
+
+  boolean anyUnloadedChunks (ResourceKey<Level> dimension, Set<ChunkPos> chunks);
 }
 
 

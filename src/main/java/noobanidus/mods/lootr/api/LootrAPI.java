@@ -371,4 +371,8 @@ public class LootrAPI {
   public static void handleProviderTick(@Nullable ILootrInfoProvider provider) {
     INSTANCE.handleProviderTick(provider);
   }
+
+  public static boolean anyUnloadedChunks (ResourceKey<Level> dimension, Set<ChunkPos> chunks) {
+    return INSTANCE.anyUnloadedChunks(dimension, chunks);
+  }
 }

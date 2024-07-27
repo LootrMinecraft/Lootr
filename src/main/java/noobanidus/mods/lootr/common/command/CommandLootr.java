@@ -287,10 +287,12 @@ public class CommandLootr {
       BlockEntity blockEntity = world.getBlockEntity(position);
       if (blockEntity instanceof ILootrBlockEntity ibe) {
         Set<UUID> openers = ibe.getActualOpeners();
-        c.getSource().sendSuccess(() -> Component.literal("BlockEntity at location " + position + " has " + openers.size() + " openers. UUIDs as follows:"), true);
-        for (UUID uuid : openers) {
-          Optional<GameProfile> prof = c.getSource().getServer().getProfileCache().get(uuid);
-          c.getSource().sendSuccess(() -> Component.literal("UUID: " + uuid + ", user profile: " + (prof.isPresent() ? prof.get().getName() : "null")), true);
+        if (openers != null) {
+          c.getSource().sendSuccess(() -> Component.literal("BlockEntity at location " + position + " has " + openers.size() + " openers. UUIDs as follows:"), true);
+          for (UUID uuid : openers) {
+            Optional<GameProfile> prof = c.getSource().getServer().getProfileCache().get(uuid);
+            c.getSource().sendSuccess(() -> Component.literal("UUID: " + uuid + ", user profile: " + (prof.isPresent() ? prof.get().getName() : "null")), true);
+          }
         }
       } else {
         c.getSource().sendSuccess(() -> Component.literal("No Lootr block entity exists at location: " + position), false);

@@ -106,18 +106,11 @@ public class BlockEntityTicker {
             break;
           }
         }
-        synchronized (HandleChunk.LOADED_CHUNKS) {
-          Set<ChunkPos> loadedChunks = HandleChunk.LOADED_CHUNKS.get(entry.dimension);
-          if (loadedChunks != null) {
-            for (ChunkPos chunkPos : entry.getChunkPositions()) {
-              if (!loadedChunks.contains(chunkPos)) {
-                skip = true;
-                break;
-              }
-            }
-          }
-        }
         if (skip) {
+          continue;
+        }
+
+        if (LootrAPI.anyUnloadedChunks(entry.getDimension(), entry.getChunkPositions())) {
           continue;
         }
         BlockEntity blockEntity = level.getBlockEntity(entry.getPosition());

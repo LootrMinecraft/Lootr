@@ -33,6 +33,7 @@ import noobanidus.mods.lootr.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.data.DataStorage;
 import noobanidus.mods.lootr.neoforge.config.ConfigManager;
+import noobanidus.mods.lootr.neoforge.event.HandleChunk;
 import noobanidus.mods.lootr.neoforge.network.client.ClientHandlers;
 import org.jetbrains.annotations.Nullable;
 
@@ -67,40 +68,40 @@ public class LootrAPIImpl implements ILootrAPI {
       player.displayClientMessage(Component.translatable("lootr.message.invalid_block").setStyle(LootrAPI.getInvalidStyle()), true);
       return;
     }
-    if (DataStorage.isDecayed(provider)) {
+    if (LootrAPI.isDecayed(provider)) {
       provider.performDecay();
       player.displayClientMessage(Component.translatable("lootr.message.decayed").setStyle(LootrAPI.getDecayStyle()), true);
-      DataStorage.removeDecayed(provider);
+      LootrAPI.removeDecayed(provider);
       return;
     } else {
-      int decayValue = DataStorage.getDecayValue(provider);
+      int decayValue = LootrAPI.getDecayValue(provider);
       if (decayValue > 0 && LootrAPI.shouldNotify(decayValue)) {
         player.displayClientMessage(Component.translatable("lootr.message.decay_in", decayValue / 20).setStyle(LootrAPI.getDecayStyle()), true);
       } else if (decayValue == -1) {
         if (LootrAPI.isDecaying(provider)) {
-          DataStorage.setDecaying(provider, decayValue);
+          LootrAPI.setDecaying(provider, decayValue);
           player.displayClientMessage(Component.translatable("lootr.message.decay_start", decayValue / 20).setStyle(LootrAPI.getDecayStyle()), true);
         }
       }
     }
     provider.performTrigger(player);
     boolean shouldUpdate = false;
-    if (DataStorage.isRefreshed(provider)) {
+    if (LootrAPI.isRefreshed(provider)) {
       provider.performRefresh();
-      DataStorage.removeRefreshed(provider);
+      LootrAPI.removeRefreshed(provider);
       player.displayClientMessage(Component.translatable("lootr.message.refreshed").setStyle(LootrAPI.getRefreshStyle()), true);
       shouldUpdate = true;
     }
-    int refreshValue = DataStorage.getRefreshValue(provider);
+    int refreshValue = LootrAPI.getRefreshValue(provider);
     if (refreshValue > 0 && LootrAPI.shouldNotify(refreshValue)) {
       player.displayClientMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20).setStyle(LootrAPI.getRefreshStyle()), true);
     } else if (refreshValue == -1) {
       if (LootrAPI.isRefreshing(provider)) {
-        DataStorage.setRefreshing(provider, refreshValue);
+        LootrAPI.setRefreshing(provider, refreshValue);
         player.displayClientMessage(Component.translatable("lootr.message.refresh_start", refreshValue / 20).setStyle(LootrAPI.getRefreshStyle()), true);
       }
     }
-    MenuProvider menuProvider = DataStorage.getInventory(provider, player, DefaultLootFiller.getInstance());
+    MenuProvider menuProvider = LootrAPI.getInventory(provider, player, DefaultLootFiller.getInstance());
     if (menuProvider == null) {
       return;
     }
@@ -131,28 +132,28 @@ public class LootrAPIImpl implements ILootrAPI {
       return;
     }
 
-    // TODO: Merge these functions out of DataStorage
-    if (DataStorage.isDecayed(provider)) {
+    // TODO: Don't start ticking decay
+    if (LootrAPI.isDecayed(provider)) {
       provider.performDecay();
-      DataStorage.removeDecayed(provider);
+      LootrAPI.removeDecayed(provider);
       return;
     } else {
-      int decayValue = DataStorage.getDecayValue(provider);
+      int decayValue = LootrAPI.getDecayValue(provider);
       if (decayValue == -1) {
         if (LootrAPI.isDecaying(provider)) {
-          DataStorage.setDecaying(provider, decayValue);
+          LootrAPI.setDecaying(provider, decayValue);
         }
       }
     }
-    if (DataStorage.isRefreshed(provider)) {
+    if (LootrAPI.isRefreshed(provider)) {
       provider.performRefresh();
-      DataStorage.removeRefreshed(provider);
+      LootrAPI.removeRefreshed(provider);
       provider.performUpdate();
     }
-    int refreshValue = DataStorage.getRefreshValue(provider);
+    int refreshValue = LootrAPI.getRefreshValue(provider);
     if (refreshValue == -1) {
       if (LootrAPI.isRefreshing(provider)) {
-        DataStorage.setRefreshing(provider, refreshValue);
+        LootrAPI.setRefreshing(provider, refreshValue);
       }
     }
   }
@@ -578,5 +579,23 @@ public class LootrAPIImpl implements ILootrAPI {
   @Override
   public Component getInvalidTableComponent(ResourceKey<LootTable> lootTable) {
     return Component.translatable("lootr.message.invalid_table", lootTable.location().getNamespace(), lootTable.toString()).setStyle(ConfigManager.DISABLE_MESSAGE_STYLES.get() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED)).withBold(true));
+  }
+
+  @Override
+  public boolean anyUnloadedChunks (ResourceKey<Level> dimension, Set<ChunkPos> chunks) {
+    synchronized (HandleChunk.LOADED_CHUNKS) {
+      Set<ChunkPos> syncedChunks = HandleChunk.LOADED_CHUNKS.get(dimension);
+      if (syncedChunks == null) {
+        return false;
+      }
+
+      for (ChunkPos myPos : chunks) {
+        if (!syncedChunks.contains(myPos)) {
+          return true;
+        }
+      }
+    }
+
+    return false;
   }
 }
