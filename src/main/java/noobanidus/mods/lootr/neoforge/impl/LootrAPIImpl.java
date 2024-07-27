@@ -31,8 +31,8 @@ import noobanidus.mods.lootr.api.data.ILootrSavedData;
 import noobanidus.mods.lootr.api.data.LootFiller;
 import noobanidus.mods.lootr.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
-import noobanidus.mods.lootr.neoforge.config.ConfigManager;
 import noobanidus.mods.lootr.common.data.DataStorage;
+import noobanidus.mods.lootr.neoforge.config.ConfigManager;
 import noobanidus.mods.lootr.neoforge.network.client.ClientHandlers;
 import org.jetbrains.annotations.Nullable;
 
@@ -517,6 +517,56 @@ public class LootrAPIImpl implements ILootrAPI {
   @Override
   public boolean isFakePlayerBreakEnabled () {
     return ConfigManager.ENABLE_FAKE_PLAYER_BREAK.get();
+  }
+
+  @Override
+  public boolean isAwarded(UUID uuid, ServerPlayer player) {
+    return DataStorage.isAwarded(uuid, player);
+  }
+
+  @Override
+  public void award(UUID id, ServerPlayer player) {
+    DataStorage.award(id, player);
+  }
+
+  @Override
+  public int getDecayValue(ILootrInfoProvider provider) {
+    return DataStorage.getDecayValue(provider);
+  }
+
+  @Override
+  public boolean isDecayed(ILootrInfoProvider provider) {
+    return DataStorage.isDecayed(provider);
+  }
+
+  @Override
+  public void setDecaying(ILootrInfoProvider provider, int decay) {
+    DataStorage.setDecaying(provider, decay);
+  }
+
+  @Override
+  public void removeDecayed(ILootrInfoProvider provider) {
+    DataStorage.removeDecayed(provider);
+  }
+
+  @Override
+  public int getRefreshValue(ILootrInfoProvider provider) {
+    return DataStorage.getRefreshValue(provider);
+  }
+
+  @Override
+  public boolean isRefreshed(ILootrInfoProvider provider) {
+    return DataStorage.isRefreshed(provider);
+  }
+
+  @Override
+  public void setRefreshing(ILootrInfoProvider provider, int decay) {
+    DataStorage.setRefreshing(provider, decay);
+  }
+
+  @Override
+  public void removeRefreshed(ILootrInfoProvider provider) {
+    DataStorage.removeRefreshed(provider);
   }
 
   @Override

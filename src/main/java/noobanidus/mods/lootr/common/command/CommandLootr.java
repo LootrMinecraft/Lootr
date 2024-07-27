@@ -43,7 +43,6 @@ import noobanidus.mods.lootr.common.block.LootrBarrelBlock;
 import noobanidus.mods.lootr.common.block.LootrChestBlock;
 import noobanidus.mods.lootr.common.block.LootrShulkerBlock;
 import noobanidus.mods.lootr.common.block.entity.LootrInventoryBlockEntity;
-import noobanidus.mods.lootr.common.data.DataStorage;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.common.mixins.MixinBaseContainerBlockEntity;
 import org.jetbrains.annotations.Nullable;
@@ -259,7 +258,7 @@ public class CommandLootr {
         be = level.getBlockEntity(pos);
       }
       if (be instanceof ILootrBlockEntity ibe) {
-        DataStorage.setRefreshing(ibe, LootrAPI.getRefreshValue());
+        LootrAPI.setRefreshing(ibe, LootrAPI.getRefreshValue());
         c.getSource().sendSuccess(() -> Component.literal("Container with ID " + (ibe).getInfoUUID() + " has been set to refresh with a delay of " + LootrAPI.getRefreshValue()), false);
       } else {
         c.getSource().sendSuccess(() -> Component.literal("Please stand on a valid Lootr container."), false);
@@ -275,7 +274,7 @@ public class CommandLootr {
         be = level.getBlockEntity(pos);
       }
       if (be instanceof ILootrBlockEntity ibe) {
-        DataStorage.setDecaying(ibe, LootrAPI.getDecayValue());
+        LootrAPI.setDecaying(ibe, LootrAPI.getDecayValue());
         c.getSource().sendSuccess(() -> Component.literal("Container with ID " + (ibe).getInfoUUID() + " has been set to decay with a delay of " + LootrAPI.getDecayValue()), false);
       } else {
         c.getSource().sendSuccess(() -> Component.literal("Please stand on a valid Lootr container."), false);

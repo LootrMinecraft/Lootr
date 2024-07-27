@@ -175,6 +175,23 @@ public interface ILootrAPI {
 
   boolean isFakePlayerBreakEnabled();
 
+  default boolean isAwarded(ILootrInfoProvider provider, ServerPlayer player) {
+    return isAwarded(provider.getInfoUUID(), player);
+  }
+  boolean isAwarded(UUID uuid, ServerPlayer player);
+  default void award(ILootrInfoProvider provider, ServerPlayer player) {
+    award(provider.getInfoUUID(), player);
+  }
+  void award(UUID id, ServerPlayer player);
+  int getDecayValue(ILootrInfoProvider provider);
+  boolean isDecayed(ILootrInfoProvider provider);
+  void setDecaying(ILootrInfoProvider provider, int decay);
+  void removeDecayed(ILootrInfoProvider provider);
+  int getRefreshValue(ILootrInfoProvider provider);
+  boolean isRefreshed(ILootrInfoProvider provider);
+  void setRefreshing(ILootrInfoProvider provider, int decay);
+  void removeRefreshed(ILootrInfoProvider provider);
+
   @Nullable
   BlockState replacementBlockState(BlockState original);
 
@@ -184,3 +201,5 @@ public interface ILootrAPI {
 
   void handleProviderTick (@Nullable ILootrInfoProvider provider);
 }
+
+

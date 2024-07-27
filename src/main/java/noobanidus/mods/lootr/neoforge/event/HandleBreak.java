@@ -6,8 +6,8 @@ import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.level.BlockEvent;
-import noobanidus.mods.lootr.api.LootrTags;
 import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.LootrTags;
 
 @EventBusSubscriber(modid = LootrAPI.MODID)
 public class HandleBreak {

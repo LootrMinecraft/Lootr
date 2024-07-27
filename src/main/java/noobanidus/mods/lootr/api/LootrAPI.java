@@ -24,7 +24,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -85,11 +84,11 @@ public class LootrAPI {
     return INSTANCE.getExplosionResistance(block, defaultResistance);
   }
 
-  public static boolean isBlastResistant () {
+  public static boolean isBlastResistant() {
     return INSTANCE.isBlastResistant();
   }
 
-  public static boolean isBlastImmune () {
+  public static boolean isBlastImmune() {
     return INSTANCE.isBlastImmune();
   }
 
@@ -101,7 +100,7 @@ public class LootrAPI {
     return INSTANCE.getAnalogOutputSignal(pBlockState, pLevel, pPos, defaultSignal);
   }
 
-  public static boolean shouldPowerComparators () {
+  public static boolean shouldPowerComparators() {
     return INSTANCE.shouldPowerComparators();
   }
 
@@ -125,11 +124,11 @@ public class LootrAPI {
     return INSTANCE.shouldNotify(remaining);
   }
 
-  public static int getNotificationDelay () {
+  public static int getNotificationDelay() {
     return INSTANCE.getNotificationDelay();
   }
 
-  public static boolean isNotificationsEnabled () {
+  public static boolean isNotificationsEnabled() {
     return INSTANCE.isNotificationsEnabled();
   }
 
@@ -149,24 +148,24 @@ public class LootrAPI {
     return INSTANCE.getDimensionBlacklist();
   }
 
-  public static Set<ResourceKey<Level>> getDimensionWhitelist () {
+  public static Set<ResourceKey<Level>> getDimensionWhitelist() {
     return INSTANCE.getDimensionWhitelist();
   }
 
-  public static Set<ResourceKey<LootTable>> getLootTableBlacklist () {
+  public static Set<ResourceKey<LootTable>> getLootTableBlacklist() {
     return INSTANCE.getLootTableBlacklist();
   }
 
-  public static Set<String> getLootModidBlacklist () {
-    return INSTANCE.getLootModidBlacklist ();
+  public static Set<String> getLootModidBlacklist() {
+    return INSTANCE.getLootModidBlacklist();
   }
 
-  public static Set<String> getModidDimensionWhitelist () {
-    return INSTANCE.getModidDimensionWhitelist ();
+  public static Set<String> getModidDimensionWhitelist() {
+    return INSTANCE.getModidDimensionWhitelist();
   }
 
-  public static Set<String> getModidDimensionBlacklist () {
-    return INSTANCE.getModidDimensionBlacklist ();
+  public static Set<String> getModidDimensionBlacklist() {
+    return INSTANCE.getModidDimensionBlacklist();
   }
 
   public static boolean isDecaying(ILootrInfoProvider provider) {
@@ -178,23 +177,23 @@ public class LootrAPI {
     return INSTANCE.getModidDecayWhitelist();
   }
 
-  public static Set<ResourceKey<LootTable>> getDecayWhitelist () {
+  public static Set<ResourceKey<LootTable>> getDecayWhitelist() {
     return INSTANCE.getDecayWhitelist();
   }
 
-  public static Set<ResourceKey<Level>> getDecayDimensions () {
+  public static Set<ResourceKey<Level>> getDecayDimensions() {
     return INSTANCE.getDecayDimensions();
   }
 
-  public static Set<String> getRefreshModids () {
+  public static Set<String> getRefreshModids() {
     return INSTANCE.getRefreshModids();
   }
 
-  public static Set<ResourceKey<LootTable>> getRefreshWhitelist () {
+  public static Set<ResourceKey<LootTable>> getRefreshWhitelist() {
     return INSTANCE.getRefreshWhitelist();
   }
 
-  public static Set<ResourceKey<Level>> getRefreshDimensions () {
+  public static Set<ResourceKey<Level>> getRefreshDimensions() {
     return INSTANCE.getRefreshDimensions();
   }
 
@@ -218,7 +217,7 @@ public class LootrAPI {
     return INSTANCE.isWorldBorderSafe(level, pos);
   }
 
-  public static boolean shouldCheckWorldBorder () {
+  public static boolean shouldCheckWorldBorder() {
     return INSTANCE.shouldCheckWorldBorder();
   }
 
@@ -242,7 +241,7 @@ public class LootrAPI {
     return INSTANCE.getDecayValue();
   }
 
-  public static boolean shouldDecayAll () {
+  public static boolean shouldDecayAll() {
     return INSTANCE.shouldDecayAll();
   }
 
@@ -254,7 +253,7 @@ public class LootrAPI {
     return INSTANCE.shouldRefreshAll();
   }
 
-  public static boolean isMessageStylesEnabled () {
+  public static boolean isMessageStylesEnabled() {
     return INSTANCE.isMessageStylesEnabled();
   }
 
@@ -290,7 +289,7 @@ public class LootrAPI {
     return INSTANCE.isBreakEnabled();
   }
 
-  public static boolean isFakePlayerBreakEnabled () {
+  public static boolean isFakePlayerBreakEnabled() {
     return INSTANCE.isFakePlayerBreakEnabled();
   }
 
@@ -313,15 +312,63 @@ public class LootrAPI {
     return INSTANCE.getData(provider);
   }
 
+  public static boolean isAwarded(ILootrInfoProvider provider, ServerPlayer player) {
+    return INSTANCE.isAwarded(provider, player);
+  }
+
+  public static boolean isAwarded(UUID uuid, ServerPlayer player) {
+    return INSTANCE.isAwarded(uuid, player);
+  }
+
+  public static void award(ILootrInfoProvider provider, ServerPlayer player) {
+    INSTANCE.award(provider, player);
+  }
+
+  public static void award(UUID id, ServerPlayer player) {
+    INSTANCE.award(id, player);
+  }
+
+  public static int getDecayValue(ILootrInfoProvider provider) {
+    return INSTANCE.getDecayValue(provider);
+  }
+
+  public static boolean isDecayed(ILootrInfoProvider provider) {
+    return INSTANCE.isDecayed(provider);
+  }
+
+  public static void setDecaying(ILootrInfoProvider provider, int decay) {
+    INSTANCE.setDecaying(provider, decay);
+  }
+
+  public static void removeDecayed(ILootrInfoProvider provider) {
+    INSTANCE.removeDecayed(provider);
+  }
+
+  public static int getRefreshValue(ILootrInfoProvider provider) {
+    return INSTANCE.getRefreshValue(provider);
+  }
+
+  public static boolean isRefreshed(ILootrInfoProvider provider) {
+    return INSTANCE.isRefreshed(provider);
+  }
+
+  public static void setRefreshing(ILootrInfoProvider provider, int decay) {
+    INSTANCE.setRefreshing(provider, decay);
+  }
+
+  public static void removeRefreshed(ILootrInfoProvider provider) {
+    INSTANCE.removeRefreshed(provider);
+  }
+
   public static void handleProviderOpen(@Nullable ILootrInfoProvider provider, ServerPlayer player) {
     INSTANCE.handleProviderOpen(provider, player);
   }
 
-  public static void handleProviderSneak (@Nullable ILootrInfoProvider provider, ServerPlayer player) {
+  public static void handleProviderSneak(@Nullable ILootrInfoProvider provider, ServerPlayer player) {
     INSTANCE.handleProviderSneak(provider, player);
   }
 
-  public static void handleProviderTick (@Nullable ILootrInfoProvider provider) {
+  public static void handleProviderTick(@Nullable ILootrInfoProvider provider) {
     INSTANCE.handleProviderTick(provider);
   }
 }

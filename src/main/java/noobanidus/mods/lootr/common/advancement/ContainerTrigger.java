@@ -5,8 +5,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
+import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.advancement.IContainerTrigger;
-import noobanidus.mods.lootr.common.data.DataStorage;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -26,10 +26,10 @@ public class ContainerTrigger extends SimpleCriterionTrigger<ContainerTrigger.Tr
     public static final Codec<TriggerInstance> CODEC = RecordCodecBuilder.create(codec -> codec.group(ContextAwarePredicate.CODEC.optionalFieldOf("player").forGetter(TriggerInstance::player)).apply(codec, TriggerInstance::new));
 
     public boolean test(ServerPlayer player, UUID container) {
-      if (DataStorage.isAwarded(container, player)) {
+      if (LootrAPI.isAwarded(container, player)) {
         return false;
       } else {
-        DataStorage.award(container, player);
+        LootrAPI.award(container, player);
         return true;
       }
     }
