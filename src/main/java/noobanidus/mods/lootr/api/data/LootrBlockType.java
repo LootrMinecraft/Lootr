@@ -11,7 +11,7 @@ public enum LootrBlockType {
   INVENTORY(Blocks.CHEST),
   ENTITY(Blocks.AIR);
 
-  private Block block;
+  private final Block block;
 
   LootrBlockType(Block block) {
     this.block = block;
