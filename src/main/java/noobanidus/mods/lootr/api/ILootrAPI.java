@@ -175,6 +175,11 @@ public interface ILootrAPI {
 
   boolean isFakePlayerBreakEnabled();
 
+  boolean shouldPerformDecayWhileTicking ();
+  boolean shouldPerformRefreshWhileTicking ();
+  boolean shouldStartDecayWhileTicking ();
+  boolean shouldStartRefreshWhileTicking ();
+
   default boolean isAwarded(ILootrInfoProvider provider, ServerPlayer player) {
     return isAwarded(provider.getInfoUUID(), player);
   }

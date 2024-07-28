@@ -293,6 +293,20 @@ public class LootrAPI {
     return INSTANCE.isFakePlayerBreakEnabled();
   }
 
+
+  public static boolean shouldPerformDecayWhileTicking () {
+    return INSTANCE.shouldPerformDecayWhileTicking();
+  }
+  public static boolean shouldPerformRefreshWhileTicking () {
+    return INSTANCE.shouldPerformRefreshWhileTicking();
+  }
+  public static boolean shouldStartDecayWhileTicking () {
+    return INSTANCE.shouldStartDecayWhileTicking();
+  }
+  public static boolean shouldStartRefreshWhileTicking () {
+    return INSTANCE.shouldStartRefreshWhileTicking();
+  }
+
   public static BlockState replacementBlockState(BlockState original) {
     return INSTANCE.replacementBlockState(original);
   }

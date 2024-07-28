@@ -132,12 +132,11 @@ public class LootrAPIImpl implements ILootrAPI {
       return;
     }
 
-    // TODO: Don't start ticking decay
-    if (LootrAPI.isDecayed(provider)) {
+    if (LootrAPI.shouldPerformDecayWhileTicking() && LootrAPI.isDecayed(provider)) {
       provider.performDecay();
       LootrAPI.removeDecayed(provider);
       return;
-    } else {
+    } else if (LootrAPI.shouldStartDecayWhileTicking() && !LootrAPI.isDecayed(provider)) {
       int decayValue = LootrAPI.getDecayValue(provider);
       if (decayValue == -1) {
         if (LootrAPI.isDecaying(provider)) {
@@ -145,15 +144,17 @@ public class LootrAPIImpl implements ILootrAPI {
         }
       }
     }
-    if (LootrAPI.isRefreshed(provider)) {
+    if (LootrAPI.shouldPerformRefreshWhileTicking() && LootrAPI.isRefreshed(provider)) {
       provider.performRefresh();
       LootrAPI.removeRefreshed(provider);
       provider.performUpdate();
     }
-    int refreshValue = LootrAPI.getRefreshValue(provider);
-    if (refreshValue == -1) {
-      if (LootrAPI.isRefreshing(provider)) {
-        LootrAPI.setRefreshing(provider, refreshValue);
+    if (LootrAPI.shouldStartRefreshWhileTicking() && !LootrAPI.isRefreshed(provider)) {
+      int refreshValue = LootrAPI.getRefreshValue(provider);
+      if (refreshValue == -1) {
+        if (LootrAPI.isRefreshing(provider)) {
+          LootrAPI.setRefreshing(provider, refreshValue);
+        }
       }
     }
   }
@@ -518,6 +519,26 @@ public class LootrAPIImpl implements ILootrAPI {
   @Override
   public boolean isFakePlayerBreakEnabled () {
     return ConfigManager.ENABLE_FAKE_PLAYER_BREAK.get();
+  }
+
+  @Override
+  public boolean shouldPerformDecayWhileTicking () {
+    return ConfigManager.PERFORM_DECAY_WHILE_TICKING.get();
+  }
+
+  @Override
+  public boolean shouldPerformRefreshWhileTicking () {
+    return ConfigManager.PERFORM_REFRESH_WHILE_TICKING.get();
+  }
+
+  @Override
+  public boolean shouldStartDecayWhileTicking () {
+    return ConfigManager.START_DECAY_WHILE_TICKING.get();
+  }
+
+  @Override
+  public boolean shouldStartRefreshWhileTicking () {
+    return ConfigManager.START_REFRESH_WHILE_TICKING.get();
   }
 
   @Override

@@ -54,12 +54,16 @@ public class ConfigManager {
   // Decay
   public static final ModConfigSpec.IntValue DECAY_VALUE;
   public static final ModConfigSpec.BooleanValue DECAY_ALL;
+  public static final ModConfigSpec.BooleanValue PERFORM_DECAY_WHILE_TICKING;
+  public static final ModConfigSpec.BooleanValue START_DECAY_WHILE_TICKING;
   public static final ModConfigSpec.ConfigValue<List<? extends String>> DECAY_MODIDS;
   public static final ModConfigSpec.ConfigValue<List<? extends String>> DECAY_LOOT_TABLES;
   public static final ModConfigSpec.ConfigValue<List<? extends String>> DECAY_DIMENSIONS;
   // Refresh
   public static final ModConfigSpec.IntValue REFRESH_VALUE;
   public static final ModConfigSpec.BooleanValue REFRESH_ALL;
+  public static final ModConfigSpec.BooleanValue PERFORM_REFRESH_WHILE_TICKING;
+  public static final ModConfigSpec.BooleanValue START_REFRESH_WHILE_TICKING;
   public static final ModConfigSpec.ConfigValue<List<? extends String>> REFRESH_MODIDS;
   public static final ModConfigSpec.ConfigValue<List<? extends String>> REFRESH_LOOT_TABLES;
   public static final ModConfigSpec.ConfigValue<List<? extends String>> REFRESH_DIMENSIONS;
@@ -138,6 +142,8 @@ public class ConfigManager {
     DECAY_MODIDS = COMMON_BUILDER.comment("list of mod IDs whose loot tables will decay (default blank, meaning no chests decay, in the format [\"modid\", \"othermodid\"])").defineList("decay_modids", empty, o -> o instanceof String);
     DECAY_DIMENSIONS = COMMON_BUILDER.comment("list of dimensions where loot chests should automatically decay (default: blank, e.g., [\"minecraft:the_nether\", \"minecraft:the_end\"])").defineList("decay_dimensions", empty, validator);
     //DECAY_STRUCTURES = COMMON_BUILDER.comment("list of structures in which loot chests should automatically decay (in the format of [\"modid:structure_name\", \"modid:other_structure_name\"])").defineList("decay_structures", empty, validator);
+    PERFORM_DECAY_WHILE_TICKING = COMMON_BUILDER.comment("containers that have already been marked as decaying will be decayed during level tick as well as when next opened").define("perform_decay_while_ticking", true);
+    START_DECAY_WHILE_TICKING = COMMON_BUILDER.comment("containers that have not yet been marked as decaying will be marked for decay during level tick as well as when next opened").define("start_decay_while_ticking", false);
     DECAY_ALL = COMMON_BUILDER.comment("overriding decay_loot_tables, decay_modids and decay_dimensions: all chests will decay after being opened for the first time").define("decay_all", false);
     COMMON_BUILDER.pop();
     COMMON_BUILDER.push("refresh").comment("configuration options for refreshing containers");
@@ -146,6 +152,8 @@ public class ConfigManager {
     REFRESH_MODIDS = COMMON_BUILDER.comment("list of mod IDs whose loot tables will refresh (default blank, meaning no chests refresh, in the format of [\"modid\", \"othermodid\"])").defineList("refresh_modids", empty, o -> o instanceof String);
     REFRESH_DIMENSIONS = COMMON_BUILDER.comment("list of dimensions where loot chests should automatically refresh (default: blank, e.g., [\"minecraft:overworld\", \"othermod:otherdimension\"])").defineList("refresh_dimensions", empty, validator);
     //REFRESH_STRUCTURES = COMMON_BUILDER.comment("list of structures in which loot chests should automatically refresh (in the format of [\"modid:structure_name\", \"othermodid:other_structure_name\"])").defineList("refresh_structures", empty, validator);
+    PERFORM_REFRESH_WHILE_TICKING = COMMON_BUILDER.comment("containers that have already been marked as refreshing will be refreshed during level tick as well as when next opened").define("perform_refresh_while_ticking", true);
+    START_REFRESH_WHILE_TICKING = COMMON_BUILDER.comment("containers that have not yet been marked as refreshing will be marked for refresh during level tick as well as when next opened").define("start_refresh_while_ticking", false);
     REFRESH_ALL = COMMON_BUILDER.comment("overriding refresh_loot_tables, refresh_modids and refresh_dimensions: all chests will refresh after being opened for the first time").define("refresh_all", false);
     COMMON_BUILDER.pop();
     COMMON_CONFIG = COMMON_BUILDER.build();
