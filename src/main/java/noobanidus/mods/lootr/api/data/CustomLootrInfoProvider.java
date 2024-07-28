@@ -22,11 +22,17 @@ public record CustomLootrInfoProvider(
     Component displayName,
     ResourceKey<Level> dimension,
     NonNullList<ItemStack> customInventory,
-    LootrInfoType type) implements ILootrInfoProvider {
+    LootrInfoType type,
+    LootrBlockType blockType) implements ILootrInfoProvider {
+
+  @Override
+  public LootrBlockType getInfoBlockType() {
+    return blockType();
+  }
 
   @Override
   public LootrInfoType getInfoType() {
-    return type;
+    return type();
   }
 
   @Override

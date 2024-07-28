@@ -24,9 +24,9 @@ import java.util.Set;
 import java.util.UUID;
 
 public interface ILootrAPI {
-  Set<UUID> getPlayerIds ();
+  Set<UUID> getPlayerIds();
 
-  Player getPlayer ();
+  Player getPlayer();
 
   MinecraftServer getServer();
 
@@ -53,7 +53,7 @@ public interface ILootrAPI {
   ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler, MenuBuilder builder);
 
   @Nullable
-  ILootrSavedData getData (ILootrInfoProvider provider);
+  ILootrSavedData getData(ILootrInfoProvider provider);
 
   long getLootSeed(long seed);
 
@@ -75,7 +75,7 @@ public interface ILootrAPI {
 
   int getNotificationDelay();
 
-  boolean isNotificationsEnabled ();
+  boolean isNotificationsEnabled();
 
   boolean isMessageStylesEnabled();
 
@@ -178,18 +178,29 @@ public interface ILootrAPI {
   default boolean isAwarded(ILootrInfoProvider provider, ServerPlayer player) {
     return isAwarded(provider.getInfoUUID(), player);
   }
+
   boolean isAwarded(UUID uuid, ServerPlayer player);
+
   default void award(ILootrInfoProvider provider, ServerPlayer player) {
     award(provider.getInfoUUID(), player);
   }
+
   void award(UUID id, ServerPlayer player);
+
   int getDecayValue(ILootrInfoProvider provider);
+
   boolean isDecayed(ILootrInfoProvider provider);
+
   void setDecaying(ILootrInfoProvider provider, int decay);
+
   void removeDecayed(ILootrInfoProvider provider);
+
   int getRefreshValue(ILootrInfoProvider provider);
+
   boolean isRefreshed(ILootrInfoProvider provider);
+
   void setRefreshing(ILootrInfoProvider provider, int decay);
+
   void removeRefreshed(ILootrInfoProvider provider);
 
   @Nullable
@@ -197,11 +208,11 @@ public interface ILootrAPI {
 
   void handleProviderSneak(@Nullable ILootrInfoProvider provider, ServerPlayer player);
 
-  void handleProviderOpen(@Nullable ILootrInfoProvider provider, ServerPlayer player) ;
+  void handleProviderOpen(@Nullable ILootrInfoProvider provider, ServerPlayer player);
 
-  void handleProviderTick (@Nullable ILootrInfoProvider provider);
+  void handleProviderTick(@Nullable ILootrInfoProvider provider);
 
-  boolean anyUnloadedChunks (ResourceKey<Level> dimension, Set<ChunkPos> chunks);
+  boolean anyUnloadedChunks(ResourceKey<Level> dimension, Set<ChunkPos> chunks);
 }
 
 

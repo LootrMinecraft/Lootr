@@ -7,8 +7,12 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BarrelBlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
+import net.minecraft.world.level.block.entity.TrappedChestBlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
+import noobanidus.mods.lootr.api.data.LootrBlockType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,6 +22,19 @@ import java.util.UUID;
 public record RandomizableContainerBlockEntityLootrInfoProvider(
     @NotNull RandomizableContainerBlockEntity blockEntity, UUID id,
     NonNullList<ItemStack> customInventory) implements ILootrBlockEntity {
+
+  @Override
+  public LootrBlockType getInfoBlockType() {
+    if (blockEntity instanceof BarrelBlockEntity) {
+      return LootrBlockType.BARREL;
+    } else if (blockEntity instanceof TrappedChestBlockEntity) {
+      return LootrBlockType.TRAPPED_CHEST;
+    } else if (blockEntity instanceof ShulkerBoxBlockEntity) {
+      return LootrBlockType.SHULKER;
+    } else {
+      return LootrBlockType.CHEST;
+    }
+  }
 
   @Override
   public LootrInfoType getInfoType() {

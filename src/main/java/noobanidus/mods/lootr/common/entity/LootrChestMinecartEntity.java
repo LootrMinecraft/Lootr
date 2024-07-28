@@ -31,6 +31,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.advancement.IContainerTrigger;
+import noobanidus.mods.lootr.api.data.LootrBlockType;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -227,6 +228,11 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   @Override
   public Level getInfoLevel() {
     return level();
+  }
+
+  @Override
+  public LootrBlockType getInfoBlockType() {
+    return LootrBlockType.ENTITY;
   }
 
   @Override

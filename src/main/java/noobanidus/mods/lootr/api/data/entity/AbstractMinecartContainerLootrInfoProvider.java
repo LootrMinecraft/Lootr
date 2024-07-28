@@ -10,6 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
+import noobanidus.mods.lootr.api.data.LootrBlockType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,6 +19,11 @@ import java.util.UUID;
 
 public record AbstractMinecartContainerLootrInfoProvider(
     AbstractMinecartContainer minecart) implements ILootrCart {
+
+  @Override
+  public LootrBlockType getInfoBlockType() {
+    return LootrBlockType.ENTITY;
+  }
 
   @Override
   public LootrInfoType getInfoType() {

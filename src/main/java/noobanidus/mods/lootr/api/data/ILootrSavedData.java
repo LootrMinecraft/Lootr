@@ -60,6 +60,11 @@ public interface ILootrSavedData extends IRedirect<ILootrInfo>, ILootrInfo, IOpe
   }
 
   @Override
+  default LootrBlockType getInfoBlockType () {
+    return getRedirect().getInfoBlockType();
+  }
+
+  @Override
   default @NotNull Vec3 getInfoVec() {
     return getRedirect().getInfoVec();
   }

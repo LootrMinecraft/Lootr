@@ -32,6 +32,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.advancement.IContainerTrigger;
+import noobanidus.mods.lootr.api.data.LootrBlockType;
 import noobanidus.mods.lootr.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.neoforge.init.ModBlockProperties;
@@ -90,6 +91,11 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     } else {
       return modelData.derive().with(ModBlockProperties.OPENED, false).build();
     }
+  }
+
+  @Override
+  public LootrBlockType getInfoBlockType() {
+    return LootrBlockType.BARREL;
   }
 
   @Override

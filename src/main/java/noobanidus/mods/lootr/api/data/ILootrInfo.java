@@ -26,6 +26,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 
 public interface ILootrInfo {
+  LootrBlockType getInfoBlockType();
+
   LootrInfoType getInfoType();
 
   @NotNull
@@ -99,6 +101,7 @@ public interface ILootrInfo {
 
   default void saveInfoToTag(CompoundTag tag, HolderLookup.Provider provider) {
     tag.putInt("type", getInfoType().ordinal());
+    tag.putInt("blockType", getInfoBlockType().ordinal());
     tag.put("position", NbtUtils.writeBlockPos(getInfoPos()));
     tag.putString("key", getInfoKey());
     tag.putString("dimension", getInfoDimension().location().toString());
@@ -118,13 +121,17 @@ public interface ILootrInfo {
   }
 
   static ILootrInfo loadInfoFromTag(CompoundTag tag, HolderLookup.Provider provider) {
-    LootrInfoType type = LootrInfoType.CONTAINER_BLOCK_ENTITY;
+    LootrInfoType infoType = LootrInfoType.CONTAINER_BLOCK_ENTITY;
     if (tag.contains("type", CompoundTag.TAG_INT)) {
-      type = LootrInfoType.values()[tag.getInt("type")];
+      infoType = LootrInfoType.values()[tag.getInt("type")];
     } else if (tag.contains("entity") && tag.getBoolean("entity")) {
-      type = LootrInfoType.CONTAINER_ENTITY;
+      infoType = LootrInfoType.CONTAINER_ENTITY;
     } else {
-      LootrAPI.LOG.error("Couldn't deduce the type of LootrInfo from tag: {}", tag);
+      LootrAPI.LOG.error("Couldn't deduce the infoType of LootrInfo from tag: {}", tag);
+    }
+    LootrBlockType blockType = null;
+    if (tag.contains("blockType", CompoundTag.TAG_INT)) {
+      blockType = LootrBlockType.values()[tag.getInt("blockType")];
     }
     BlockPos pos = NbtUtils.readBlockPos(tag, "position").orElseThrow();
     UUID uuid = tag.getUUID("uuid");
@@ -138,6 +145,14 @@ public interface ILootrInfo {
     if (tag.contains("reference") && tag.contains("referenceSize")) {
       reference = NonNullList.withSize(tag.getInt("referenceSize"), ItemStack.EMPTY);
       ContainerHelper.loadAllItems(tag.getCompound("reference"), reference, provider);
+      blockType = LootrBlockType.INVENTORY;
+    }
+    if (blockType == null) {
+      if (infoType == LootrInfoType.CONTAINER_ENTITY) {
+        blockType = LootrBlockType.ENTITY;
+      } else {
+        blockType = LootrBlockType.CHEST;
+      }
     }
     ResourceKey<LootTable> table = null;
     long seed = -1;
@@ -145,7 +160,7 @@ public interface ILootrInfo {
       table = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse(tag.getString("table")));
       seed = tag.getLong("seed");
     }
-    return new BaseLootrInfo(type, uuid, pos, name, dimension, size, reference, table, seed);
+    return new BaseLootrInfo(blockType, infoType, uuid, pos, name, dimension, size, reference, table, seed);
   }
 
   enum LootrInfoType {

@@ -29,6 +29,7 @@ import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.advancement.IContainerTrigger;
+import noobanidus.mods.lootr.api.data.LootrBlockType;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.data.LootrInventory;
 import org.jetbrains.annotations.NotNull;
@@ -224,6 +225,11 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrNeo
   @Override
   public @Nullable Set<UUID> getClientOpeners() {
     return clientOpeners;
+  }
+
+  @Override
+  public LootrBlockType getInfoBlockType() {
+    return null;
   }
 
   @Override

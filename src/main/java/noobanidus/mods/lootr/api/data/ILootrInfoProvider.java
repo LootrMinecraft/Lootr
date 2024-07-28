@@ -52,8 +52,8 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
     return new AbstractMinecartContainerLootrInfoProvider(minecart);
   }
 
-  static ILootrInfoProvider of(UUID id, BlockPos pos, int containerSize, ResourceKey<LootTable> lootTable, long lootSeed, Component displayName, ResourceKey<Level> dimension, NonNullList<ItemStack> customInventory, LootrInfoType type) {
-    return new CustomLootrInfoProvider(id, pos, containerSize, lootTable, lootSeed, displayName, dimension, customInventory, type);
+  static ILootrInfoProvider of(UUID id, BlockPos pos, int containerSize, ResourceKey<LootTable> lootTable, long lootSeed, Component displayName, ResourceKey<Level> dimension, NonNullList<ItemStack> customInventory, LootrInfoType type, LootrBlockType blockType) {
+    return new CustomLootrInfoProvider(id, pos, containerSize, lootTable, lootSeed, displayName, dimension, customInventory, type, blockType);
   }
 
   @Override

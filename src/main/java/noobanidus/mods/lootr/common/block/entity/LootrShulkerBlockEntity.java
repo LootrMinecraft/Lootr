@@ -37,6 +37,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.advancement.IContainerTrigger;
+import noobanidus.mods.lootr.api.data.LootrBlockType;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -242,6 +243,11 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   @Override
   public @Nullable Set<UUID> getClientOpeners() {
     return clientOpeners;
+  }
+
+  @Override
+  public LootrBlockType getInfoBlockType() {
+    return LootrBlockType.SHULKER;
   }
 
   @Override
