@@ -29,7 +29,9 @@ public interface ILootrSavedData extends IRedirect<ILootrInfo>, ILootrInfo, IOpe
 
   void update (ILootrInfo info);
 
-  void clearInventories();
+  void refresh();
+
+  boolean hasBeenOpened ();
 
   default boolean clearInventories (ServerPlayer player) {
     return clearInventories(player.getUUID());

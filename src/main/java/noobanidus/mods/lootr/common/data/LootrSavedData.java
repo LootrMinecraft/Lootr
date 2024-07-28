@@ -22,6 +22,7 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 public class LootrSavedData extends SavedData implements ILootrSavedData {
+  private boolean hasBeenOpened;
   private boolean justLoaded;
   private ILootrInfo info;
   private final Map<UUID, LootrInventory> inventories = new HashMap<>();
@@ -71,6 +72,9 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
       for (Tag opener : openers) {
         data.actualOpeners.add(NbtUtils.loadUUID(opener));
       }
+    }
+    if (compound.contains("hasBeenOpened")) {
+      data.hasBeenOpened = compound.getBoolean("hasBeenOpened");
     }
     return data;
   }
@@ -166,6 +170,8 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
     }
     compound.put("actualOpeners", actualOpeners);
 
+    compound.putBoolean("hasBeenOpened", hasBeenOpened);
+
     return compound;
   }
 
@@ -184,8 +190,16 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
   }
 
   @Override
-  public void clearInventories() {
+  public void refresh() {
     inventories.clear();
+    hasBeenOpened = false;
+    setDirty();
+  }
+
+  // This is triggered in createInventory and reset in refresh.
+  @Override
+  public boolean hasBeenOpened() {
+    return hasBeenOpened;
   }
 
   @Override

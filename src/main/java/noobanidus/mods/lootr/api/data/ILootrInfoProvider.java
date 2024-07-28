@@ -95,7 +95,7 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
   default void performDecay () {
     ILootrSavedData data = LootrAPI.getData(this);
     if (data != null) {
-      data.clearInventories();
+      data.refresh();
       data.clearOpeners();
       markChanged();
     }
