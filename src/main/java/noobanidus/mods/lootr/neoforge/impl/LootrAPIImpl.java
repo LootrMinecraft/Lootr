@@ -606,8 +606,8 @@ public class LootrAPIImpl implements ILootrAPI {
   public boolean anyUnloadedChunks (ResourceKey<Level> dimension, Set<ChunkPos> chunks) {
     synchronized (HandleChunk.LOADED_CHUNKS) {
       Set<ChunkPos> syncedChunks = HandleChunk.LOADED_CHUNKS.get(dimension);
-      if (syncedChunks == null) {
-        return false;
+      if (syncedChunks == null || syncedChunks.isEmpty()) {
+        return true;
       }
 
       for (ChunkPos myPos : chunks) {
