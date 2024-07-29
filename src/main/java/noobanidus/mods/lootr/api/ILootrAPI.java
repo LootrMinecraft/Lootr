@@ -196,7 +196,7 @@ public interface ILootrAPI {
 
   boolean isDecayed(ILootrInfoProvider provider);
 
-  void setDecaying(ILootrInfoProvider provider, int decay);
+  void setDecaying(ILootrInfoProvider provider);
 
   void removeDecayed(ILootrInfoProvider provider);
 
@@ -204,7 +204,7 @@ public interface ILootrAPI {
 
   boolean isRefreshed(ILootrInfoProvider provider);
 
-  void setRefreshing(ILootrInfoProvider provider, int decay);
+  void setRefreshing(ILootrInfoProvider provider);
 
   void removeRefreshed(ILootrInfoProvider provider);
 

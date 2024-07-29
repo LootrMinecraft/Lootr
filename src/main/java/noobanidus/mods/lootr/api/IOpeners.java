@@ -50,7 +50,7 @@ public interface IOpeners extends IMarkChanged {
     if (openers == null) {
       return false;
     }
-    return openers.contains(uuid);
+    return !openers.isEmpty() && openers.contains(uuid);
   }
 
   default boolean removeVisualOpener (UUID uuid) {
@@ -83,7 +83,7 @@ public interface IOpeners extends IMarkChanged {
     if (openers == null) {
       return false;
     }
-    return openers.contains(uuid);
+    return !openers.isEmpty() && openers.contains(uuid);
   }
 
   default boolean hasOpened(Player player) {

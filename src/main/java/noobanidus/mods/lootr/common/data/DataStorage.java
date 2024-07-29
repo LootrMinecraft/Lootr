@@ -106,14 +106,14 @@ public class DataStorage {
   }
 
   @ApiStatus.Internal
-  public static void setDecaying(ILootrInfoProvider provider, int decay) {
+  public static void setDecaying(ILootrInfoProvider provider) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot set the decay value for " + provider.getInfoUUID() + ".");
       return;
     }
     TickingData data = manager.computeIfAbsent(TickingData.FACTORY, DECAYS);
-    data.setValue(provider.getInfoUUID(), decay);
+    data.setValue(provider.getInfoUUID(), LootrAPI.getDecayValue());
   }
 
   @ApiStatus.Internal
@@ -161,14 +161,14 @@ public class DataStorage {
   }
 
   @ApiStatus.Internal
-  public static void setRefreshing(ILootrInfoProvider provider, int decay) {
+  public static void setRefreshing(ILootrInfoProvider provider) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot set the refresh value for " + provider.getInfoUUID() + ".");
       return;
     }
     TickingData data = manager.computeIfAbsent(TickingData.FACTORY, REFRESHES);
-    data.setValue(provider.getInfoUUID(), decay);
+    data.setValue(provider.getInfoUUID(), LootrAPI.getRefreshValue());
   }
 
   @ApiStatus.Internal

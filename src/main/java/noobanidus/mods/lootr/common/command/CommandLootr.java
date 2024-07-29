@@ -258,7 +258,7 @@ public class CommandLootr {
         be = level.getBlockEntity(pos);
       }
       if (be instanceof ILootrBlockEntity ibe) {
-        LootrAPI.setRefreshing(ibe, LootrAPI.getRefreshValue());
+        LootrAPI.setRefreshing(ibe);
         c.getSource().sendSuccess(() -> Component.literal("Container with ID " + (ibe).getInfoUUID() + " has been set to refresh with a delay of " + LootrAPI.getRefreshValue()), false);
       } else {
         c.getSource().sendSuccess(() -> Component.literal("Please stand on a valid Lootr container."), false);
@@ -274,7 +274,7 @@ public class CommandLootr {
         be = level.getBlockEntity(pos);
       }
       if (be instanceof ILootrBlockEntity ibe) {
-        LootrAPI.setDecaying(ibe, LootrAPI.getDecayValue());
+        LootrAPI.setDecaying(ibe);
         c.getSource().sendSuccess(() -> Component.literal("Container with ID " + (ibe).getInfoUUID() + " has been set to decay with a delay of " + LootrAPI.getDecayValue()), false);
       } else {
         c.getSource().sendSuccess(() -> Component.literal("Please stand on a valid Lootr container."), false);

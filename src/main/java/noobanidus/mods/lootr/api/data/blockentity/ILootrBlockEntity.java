@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.data.ILootrInfoProvider;
+import noobanidus.mods.lootr.api.data.ILootrSavedData;
 
 public interface ILootrBlockEntity extends ILootrInfoProvider {
   static <T extends BlockEntity> void ticker (Level level, BlockPos pos, BlockState state, T blockEntity) {

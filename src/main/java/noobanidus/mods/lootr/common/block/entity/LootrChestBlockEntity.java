@@ -229,7 +229,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrNeo
 
   @Override
   public LootrBlockType getInfoBlockType() {
-    return null;
+    return LootrBlockType.CHEST;
   }
 
   @Override

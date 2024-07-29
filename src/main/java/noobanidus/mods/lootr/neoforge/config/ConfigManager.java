@@ -256,11 +256,11 @@ public class ConfigManager {
   }
 
   public static boolean isLootTableBlacklisted(ResourceKey<LootTable> table) {
-    if (getLootBlacklist().contains(table)) {
+    if (!getLootBlacklist().isEmpty() && getLootBlacklist().contains(table)) {
       return true;
     }
 
-    return getLootModids().contains(table.location().getNamespace());
+    return !getLootModids().isEmpty() && getLootModids().contains(table.location().getNamespace());
   }
 
   public static Set<ResourceKey<LootTable>> getDecayingTables() {
@@ -300,11 +300,11 @@ public class ConfigManager {
   }
 
   public static boolean isDimensionDecaying(ResourceKey<Level> key) {
-    return getDecayDimensions().contains(key);
+    return !getDecayDimensions().isEmpty() && getDecayDimensions().contains(key);
   }
 
   public static boolean isDimensionRefreshing(ResourceKey<Level> key) {
-    return getRefreshDimensions().contains(key);
+    return !getRefreshDimensions().isEmpty() && getRefreshDimensions().contains(key);
   }
 
   public static boolean isDecaying(ILootrInfoProvider provider) {
@@ -312,10 +312,10 @@ public class ConfigManager {
       return true;
     }
     if (provider.getInfoLootTable() != null) {
-      if (getDecayingTables().contains(provider.getInfoLootTable())) {
+      if (!getDecayingTables().isEmpty() && getDecayingTables().contains(provider.getInfoLootTable())) {
         return true;
       }
-      if (getDecayMods().contains(provider.getInfoLootTable().location().getNamespace())) {
+      if (!getDecayMods().isEmpty() && getDecayMods().contains(provider.getInfoLootTable().location().getNamespace())) {
         return true;
       }
     }
@@ -327,10 +327,10 @@ public class ConfigManager {
       return true;
     }
     if (provider.getInfoLootTable() != null) {
-      if (getRefreshingTables().contains(provider.getInfoLootTable())) {
+      if (!getRefreshingTables().isEmpty() && getRefreshingTables().contains(provider.getInfoLootTable())) {
         return true;
       }
-      if (getRefreshMods().contains(provider.getInfoLootTable().location().getNamespace())) {
+      if (!getRefreshMods().isEmpty() && getRefreshMods().contains(provider.getInfoLootTable().location().getNamespace())) {
         return true;
       }
     }

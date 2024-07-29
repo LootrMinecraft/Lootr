@@ -350,8 +350,8 @@ public class LootrAPI {
     return INSTANCE.isDecayed(provider);
   }
 
-  public static void setDecaying(ILootrInfoProvider provider, int decay) {
-    INSTANCE.setDecaying(provider, decay);
+  public static void setDecaying(ILootrInfoProvider provider) {
+    INSTANCE.setDecaying(provider);
   }
 
   public static void removeDecayed(ILootrInfoProvider provider) {
@@ -366,8 +366,8 @@ public class LootrAPI {
     return INSTANCE.isRefreshed(provider);
   }
 
-  public static void setRefreshing(ILootrInfoProvider provider, int decay) {
-    INSTANCE.setRefreshing(provider, decay);
+  public static void setRefreshing(ILootrInfoProvider provider) {
+    INSTANCE.setRefreshing(provider);
   }
 
   public static void removeRefreshed(ILootrInfoProvider provider) {

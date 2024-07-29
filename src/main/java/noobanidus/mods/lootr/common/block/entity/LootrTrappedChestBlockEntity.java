@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import noobanidus.mods.lootr.api.data.LootrBlockType;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
 
 public class LootrTrappedChestBlockEntity extends LootrChestBlockEntity {
@@ -19,5 +20,10 @@ public class LootrTrappedChestBlockEntity extends LootrChestBlockEntity {
       level.updateNeighborsAt(pos, block);
       level.updateNeighborsAt(pos.below(), block);
     }
+  }
+
+  @Override
+  public LootrBlockType getInfoBlockType() {
+    return LootrBlockType.TRAPPED_CHEST;
   }
 }

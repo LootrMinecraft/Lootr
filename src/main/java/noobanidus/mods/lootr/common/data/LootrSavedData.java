@@ -143,6 +143,7 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
     LootrInventory result = new LootrInventory(this, provider.buildInitialInventory());
     filler.unpackLootTable(provider, player, result);
     inventories.put(player.getUUID(), result);
+    hasBeenOpened = true;
     setDirty();
     return result;
   }

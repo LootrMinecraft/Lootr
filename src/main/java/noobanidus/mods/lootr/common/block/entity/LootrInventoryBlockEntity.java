@@ -10,6 +10,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.data.LootrBlockType;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import org.jetbrains.annotations.Nullable;
 
@@ -62,5 +63,10 @@ public class LootrInventoryBlockEntity extends LootrChestBlockEntity {
   @Override
   public boolean isInfoReferenceInventory() {
     return true;
+  }
+
+  @Override
+  public LootrBlockType getInfoBlockType() {
+    return LootrBlockType.INVENTORY;
   }
 }

@@ -41,6 +41,11 @@ public record CustomLootrInfoProvider(
   }
 
   @Override
+  public boolean hasBeenOpened() {
+    return false;
+  }
+
+  @Override
   public @NotNull BlockPos getInfoPos() {
     return pos();
   }

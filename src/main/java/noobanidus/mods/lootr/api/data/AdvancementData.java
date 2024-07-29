@@ -34,7 +34,7 @@ public class AdvancementData extends SavedData {
   }
 
   public boolean contains(UUIDPair pair) {
-    return data.contains(pair);
+    return !data.isEmpty() && data.contains(pair);
   }
 
   public void add(UUID first, UUID second) {

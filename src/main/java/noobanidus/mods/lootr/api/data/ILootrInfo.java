@@ -43,6 +43,9 @@ public interface ILootrInfo {
     return "lootr/" + idString.charAt(0) + "/" + idString.substring(0, 2) + "/" + idString;
   }
 
+  // TODO: Does this really make sense?
+  boolean hasBeenOpened ();
+
   @NotNull
   BlockPos getInfoPos();
 
