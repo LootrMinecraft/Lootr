@@ -125,4 +125,12 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
 
   default void performUpdate () {
   }
+
+  @Override
+  default void markDataChanged() {
+    ILootrSavedData data = LootrAPI.getData(this);
+    if (data != null) {
+      data.markChanged();
+    }
+  }
 }

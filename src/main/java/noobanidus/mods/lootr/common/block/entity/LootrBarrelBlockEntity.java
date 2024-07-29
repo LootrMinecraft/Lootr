@@ -131,7 +131,13 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     if (this.infoId == null) {
       getInfoUUID();
     }
-    requestModelDataUpdate();
+    clientOpeners.clear();
+    if (compound.contains("LootrOpeners")) {
+      ListTag list = compound.getList("LootrOpeners", CompoundTag.TAG_INT_ARRAY);
+      for (Tag thisTag : list) {
+        clientOpeners.add(NbtUtils.loadUUID(thisTag));
+      }
+    }
   }
 
   @Override
@@ -200,6 +206,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   @Override
   public void markChanged() {
     setChanged();
+    markDataChanged();
   }
 
   @Override
@@ -244,20 +251,9 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   // TODO:
   @Override
   public void onDataPacket(@NotNull Connection net, @NotNull ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider provider) {
-    CompoundTag tag = pkt.getTag();
-    if (tag != null) {
-      loadAdditional(pkt.getTag(), provider);
-      clientOpeners.clear();
-      if (tag.contains("LootrOpeners")) {
-        ListTag list = tag.getList("LootrOpeners", CompoundTag.TAG_INT_ARRAY);
-        for (Tag thisTag : list) {
-          clientOpeners.add(NbtUtils.loadUUID(thisTag));
-        }
-        requestModelDataUpdate();
-        setChanged();
-        ClientHandlers.refreshModel(getBlockPos());
-      }
-    }
+    super.onDataPacket(net, pkt, provider);
+    requestModelDataUpdate();
+    ClientHandlers.refreshModel(getBlockPos());
   }
 
   @Override

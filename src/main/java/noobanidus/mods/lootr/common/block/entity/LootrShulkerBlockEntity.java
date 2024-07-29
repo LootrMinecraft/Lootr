@@ -39,6 +39,7 @@ import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.api.data.LootrBlockType;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.neoforge.network.client.ClientHandlers;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -205,6 +206,13 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
     if (this.infoId == null) {
       getInfoUUID();
     }
+    clientOpeners.clear();
+    if (compound.contains("LootrOpeners")) {
+      ListTag list = compound.getList("LootrOpeners", CompoundTag.TAG_INT_ARRAY);
+      for (Tag thisTag : list) {
+        clientOpeners.add(NbtUtils.loadUUID(thisTag));
+      }
+    }
   }
 
   @Override
@@ -284,27 +292,13 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   @Override
-  public void onDataPacket(@NotNull Connection net, @NotNull ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider provider) {
-    CompoundTag tag = pkt.getTag();
-    if (tag != null) {
-      loadAdditional(pkt.getTag(), provider);
-      clientOpeners.clear();
-      if (tag.contains("LootrOpeners")) {
-        ListTag list = tag.getList("LootrOpeners", CompoundTag.TAG_INT_ARRAY);
-        for (Tag thisTag : list) {
-          clientOpeners.add(NbtUtils.loadUUID(thisTag));
-        }
-      }
-    }
-  }
-
-  @Override
   public void unpackLootTable(@Nullable Player player) {
   }
 
   @Override
   public void markChanged() {
     setChanged();
+    markDataChanged();
   }
 
   @Override

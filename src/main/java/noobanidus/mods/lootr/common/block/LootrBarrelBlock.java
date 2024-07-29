@@ -11,10 +11,13 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.data.ILootrInfoProvider;
+import noobanidus.mods.lootr.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.block.entity.LootrBarrelBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
@@ -67,6 +70,12 @@ public class LootrBarrelBlock extends BarrelBlock {
     super.triggerEvent(state, world, pos, id, param);
     BlockEntity blockEntity = world.getBlockEntity(pos);
     return blockEntity != null && blockEntity.triggerEvent(id, param);
+  }
+
+  @Override
+  @Nullable
+  public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+    return ILootrBlockEntity::ticker;
   }
 
   @Override

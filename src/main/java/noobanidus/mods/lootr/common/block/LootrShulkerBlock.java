@@ -143,7 +143,5 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
   @Nullable
   public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
     return ILootrBlockEntity::ticker;
-    // TODO:
-/*    return createTickerHelper(pBlockEntityType, (BlockEntityType<LootrShulkerBlockEntity>) LootrRegistry.getShulkerBlockEntity(), LootrShulkerBlockEntity::tick);*/
   }
 }

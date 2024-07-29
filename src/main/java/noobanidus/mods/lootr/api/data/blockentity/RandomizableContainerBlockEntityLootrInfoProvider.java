@@ -12,6 +12,8 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.world.level.block.entity.TrappedChestBlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
+import noobanidus.mods.lootr.api.LootrAPI;
+import noobanidus.mods.lootr.api.data.ILootrSavedData;
 import noobanidus.mods.lootr.api.data.LootrBlockType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -105,6 +107,14 @@ public record RandomizableContainerBlockEntityLootrInfoProvider(
   @Override
   public void markChanged() {
     blockEntity.setChanged();
+  }
+
+  @Override
+  public void markDataChanged() {
+    ILootrSavedData data = LootrAPI.getData(this);
+    if (data != null) {
+      data.markChanged();
+    }
   }
 
   @Override

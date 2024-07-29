@@ -153,7 +153,7 @@ public class ConfigManager {
     REFRESH_DIMENSIONS = COMMON_BUILDER.comment("list of dimensions where loot chests should automatically refresh (default: blank, e.g., [\"minecraft:overworld\", \"othermod:otherdimension\"])").defineList("refresh_dimensions", empty, validator);
     //REFRESH_STRUCTURES = COMMON_BUILDER.comment("list of structures in which loot chests should automatically refresh (in the format of [\"modid:structure_name\", \"othermodid:other_structure_name\"])").defineList("refresh_structures", empty, validator);
     PERFORM_REFRESH_WHILE_TICKING = COMMON_BUILDER.comment("containers that have already been marked as refreshing will be refreshed during level tick as well as when next opened").define("perform_refresh_while_ticking", true);
-    START_REFRESH_WHILE_TICKING = COMMON_BUILDER.comment("containers that have not yet been marked as refreshing will be marked for refresh during level tick as well as when next opened").define("start_refresh_while_ticking", false);
+    START_REFRESH_WHILE_TICKING = COMMON_BUILDER.comment("containers that have not yet been marked as refreshing will be marked for refresh during level tick as well as when next opened").define("start_refresh_while_ticking", true);
     REFRESH_ALL = COMMON_BUILDER.comment("overriding refresh_loot_tables, refresh_modids and refresh_dimensions: all chests will refresh after being opened for the first time").define("refresh_all", false);
     COMMON_BUILDER.pop();
     COMMON_CONFIG = COMMON_BUILDER.build();

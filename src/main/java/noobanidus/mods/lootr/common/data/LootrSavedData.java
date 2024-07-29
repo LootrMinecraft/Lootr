@@ -62,13 +62,13 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
     }
 
     if (compound.contains("openers")) {
-      ListTag openers = compound.getList("openers", Tag.TAG_COMPOUND);
+      ListTag openers = compound.getList("openers", Tag.TAG_INT_ARRAY);
       for (Tag opener : openers) {
         data.openers.add(NbtUtils.loadUUID(opener));
       }
     }
     if (compound.contains("actualOpeners")) {
-      ListTag openers = compound.getList("actualOpeners", Tag.TAG_COMPOUND);
+      ListTag openers = compound.getList("actualOpeners", Tag.TAG_INT_ARRAY);
       for (Tag opener : openers) {
         data.actualOpeners.add(NbtUtils.loadUUID(opener));
       }
@@ -126,6 +126,11 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
   @Override
   public void markChanged() {
     setDirty();
+  }
+
+  @Override
+  public void markDataChanged() {
+    markChanged();
   }
 
   @Nullable

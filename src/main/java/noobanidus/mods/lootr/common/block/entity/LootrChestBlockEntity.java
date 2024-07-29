@@ -124,6 +124,13 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrNeo
     if (this.infoId == null) {
       getInfoUUID();
     }
+    clientOpeners.clear();
+    if (compound.contains("LootrOpeners")) {
+      ListTag list = compound.getList("LootrOpeners", CompoundTag.TAG_INT_ARRAY);
+      for (Tag thisTag : list) {
+        clientOpeners.add(NbtUtils.loadUUID(thisTag));
+      }
+    }
   }
 
   @Override
@@ -203,22 +210,6 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrNeo
     return ClientboundBlockEntityDataPacket.create(this, BlockEntity::getUpdateTag);
   }
 
-  // TODO: Move this to the actual load
-  @Override
-  public void onDataPacket(@NotNull Connection net, @NotNull ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider provider) {
-    CompoundTag tag = pkt.getTag();
-    if (tag != null) {
-      loadAdditional(pkt.getTag(), provider);
-      clientOpeners.clear();
-      if (tag.contains("LootrOpeners")) {
-        ListTag list = tag.getList("LootrOpeners", CompoundTag.TAG_INT_ARRAY);
-        for (Tag thisTag : list) {
-          clientOpeners.add(NbtUtils.loadUUID(thisTag));
-        }
-      }
-    }
-  }
-
   @Override
   public void unpackLootTable(@Nullable Player player) {
   }
@@ -241,6 +232,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrNeo
   @Override
   public void markChanged() {
     setChanged();
+    markDataChanged();
   }
 
   @Override

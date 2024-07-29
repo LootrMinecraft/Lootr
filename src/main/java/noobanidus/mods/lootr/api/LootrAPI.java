@@ -294,16 +294,19 @@ public class LootrAPI {
   }
 
 
-  public static boolean shouldPerformDecayWhileTicking () {
+  public static boolean shouldPerformDecayWhileTicking() {
     return INSTANCE.shouldPerformDecayWhileTicking();
   }
-  public static boolean shouldPerformRefreshWhileTicking () {
+
+  public static boolean shouldPerformRefreshWhileTicking() {
     return INSTANCE.shouldPerformRefreshWhileTicking();
   }
-  public static boolean shouldStartDecayWhileTicking () {
+
+  public static boolean shouldStartDecayWhileTicking() {
     return INSTANCE.shouldStartDecayWhileTicking();
   }
-  public static boolean shouldStartRefreshWhileTicking () {
+
+  public static boolean shouldStartRefreshWhileTicking() {
     return INSTANCE.shouldStartRefreshWhileTicking();
   }
 
@@ -386,7 +389,7 @@ public class LootrAPI {
     INSTANCE.handleProviderTick(provider);
   }
 
-  public static boolean anyUnloadedChunks (ResourceKey<Level> dimension, Set<ChunkPos> chunks) {
+  public static boolean anyUnloadedChunks(ResourceKey<Level> dimension, Set<ChunkPos> chunks) {
     return INSTANCE.anyUnloadedChunks(dimension, chunks);
   }
 }

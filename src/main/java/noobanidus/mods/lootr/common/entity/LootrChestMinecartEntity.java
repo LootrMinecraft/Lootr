@@ -249,6 +249,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   @Override
   public void markChanged() {
     setChanged();
+    markDataChanged();
   }
 
   @Override
