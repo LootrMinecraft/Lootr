@@ -18,8 +18,18 @@ public interface ILootrNeoForgeCart extends ILootrCart {
   }
 
   @Override
+  default void performOpen() {
+    PacketDistributor.sendToPlayersTrackingEntity(asEntity(), new PacketOpenCart(asEntity().getId()));
+  }
+
+  @Override
   default void performClose(ServerPlayer player) {
     PacketDistributor.sendToPlayer(player, new PacketCloseCart(asEntity().getId()));
+  }
+
+  @Override
+  default void performClose () {
+    PacketDistributor.sendToPlayersTrackingEntity(asEntity(), new PacketCloseCart(asEntity().getId()));
   }
 
   @Override
