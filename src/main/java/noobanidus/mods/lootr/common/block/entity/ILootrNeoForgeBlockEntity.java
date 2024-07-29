@@ -1,6 +1,8 @@
 package noobanidus.mods.lootr.common.block.entity;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.PacketDistributor;
 import noobanidus.mods.lootr.api.data.blockentity.ILootrBlockEntity;
@@ -14,8 +16,18 @@ public interface ILootrNeoForgeBlockEntity extends ILootrBlockEntity {
   }
 
   @Override
+  default void performOpen() {
+    PacketDistributor.sendToPlayersTrackingChunk((ServerLevel) getInfoLevel(), new ChunkPos(asBlockEntity().getBlockPos()), new PacketOpenContainer(asBlockEntity().getBlockPos()));
+  }
+
+  @Override
   default void performClose(ServerPlayer player) {
     PacketDistributor.sendToPlayer(player, new PacketCloseContainer(asBlockEntity().getBlockPos()));
+  }
+
+  @Override
+  default void performClose() {
+    PacketDistributor.sendToPlayersTrackingChunk((ServerLevel) getInfoLevel(), new ChunkPos(asBlockEntity().getBlockPos()), new PacketCloseContainer(asBlockEntity().getBlockPos()));
   }
 
   @Override
@@ -24,7 +36,7 @@ public interface ILootrNeoForgeBlockEntity extends ILootrBlockEntity {
   }
 
   @Override
-  default void performUpdate () {
+  default void performUpdate() {
     markChanged();
     updatePacketViaForce();
   }

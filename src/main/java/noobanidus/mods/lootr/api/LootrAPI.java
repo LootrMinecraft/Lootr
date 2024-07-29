@@ -342,8 +342,8 @@ public class LootrAPI {
     INSTANCE.award(id, player);
   }
 
-  public static int getDecayValue(ILootrInfoProvider provider) {
-    return INSTANCE.getDecayValue(provider);
+  public static int getRemainingDecayValue(ILootrInfoProvider provider) {
+    return INSTANCE.getRemainingDecayValue(provider);
   }
 
   public static boolean isDecayed(ILootrInfoProvider provider) {
@@ -358,8 +358,8 @@ public class LootrAPI {
     INSTANCE.removeDecayed(provider);
   }
 
-  public static int getRefreshValue(ILootrInfoProvider provider) {
-    return INSTANCE.getRefreshValue(provider);
+  public static int getRemainingRefreshValue(ILootrInfoProvider provider) {
+    return INSTANCE.getRemainingRefreshValue(provider);
   }
 
   public static boolean isRefreshed(ILootrInfoProvider provider) {

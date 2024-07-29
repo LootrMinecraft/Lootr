@@ -192,7 +192,7 @@ public interface ILootrAPI {
 
   void award(UUID id, ServerPlayer player);
 
-  int getDecayValue(ILootrInfoProvider provider);
+  int getRemainingDecayValue(ILootrInfoProvider provider);
 
   boolean isDecayed(ILootrInfoProvider provider);
 
@@ -200,7 +200,7 @@ public interface ILootrAPI {
 
   void removeDecayed(ILootrInfoProvider provider);
 
-  int getRefreshValue(ILootrInfoProvider provider);
+  int getRemainingRefreshValue(ILootrInfoProvider provider);
 
   boolean isRefreshed(ILootrInfoProvider provider);
 

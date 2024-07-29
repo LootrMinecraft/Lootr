@@ -74,13 +74,13 @@ public class LootrAPIImpl implements ILootrAPI {
       LootrAPI.removeDecayed(provider);
       return;
     } else {
-      int decayValue = LootrAPI.getDecayValue(provider);
+      int decayValue = LootrAPI.getRemainingDecayValue(provider);
       if (decayValue > 0 && LootrAPI.shouldNotify(decayValue)) {
         player.displayClientMessage(Component.translatable("lootr.message.decay_in", decayValue / 20).setStyle(LootrAPI.getDecayStyle()), true);
       } else if (decayValue == -1) {
         if (LootrAPI.isDecaying(provider)) {
           LootrAPI.setDecaying(provider);
-          player.displayClientMessage(Component.translatable("lootr.message.decay_start", decayValue / 20).setStyle(LootrAPI.getDecayStyle()), true);
+          player.displayClientMessage(Component.translatable("lootr.message.decay_start", LootrAPI.getDecayValue() / 20).setStyle(LootrAPI.getDecayStyle()), true);
         }
       }
     }
@@ -88,17 +88,18 @@ public class LootrAPIImpl implements ILootrAPI {
     boolean shouldUpdate = false;
     if (LootrAPI.isRefreshed(provider)) {
       provider.performRefresh();
+      provider.performClose();
       LootrAPI.removeRefreshed(provider);
       player.displayClientMessage(Component.translatable("lootr.message.refreshed").setStyle(LootrAPI.getRefreshStyle()), true);
       shouldUpdate = true;
     }
-    int refreshValue = LootrAPI.getRefreshValue(provider);
+    int refreshValue = LootrAPI.getRemainingRefreshValue(provider);
     if (refreshValue > 0 && LootrAPI.shouldNotify(refreshValue)) {
       player.displayClientMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20).setStyle(LootrAPI.getRefreshStyle()), true);
     } else if (refreshValue == -1) {
       if (LootrAPI.isRefreshing(provider)) {
         LootrAPI.setRefreshing(provider);
-        player.displayClientMessage(Component.translatable("lootr.message.refresh_start", refreshValue / 20).setStyle(LootrAPI.getRefreshStyle()), true);
+        player.displayClientMessage(Component.translatable("lootr.message.refresh_start", LootrAPI.getRefreshValue() / 20).setStyle(LootrAPI.getRefreshStyle()), true);
       }
     }
     MenuProvider menuProvider = LootrAPI.getInventory(provider, player, DefaultLootFiller.getInstance());
@@ -137,7 +138,7 @@ public class LootrAPIImpl implements ILootrAPI {
       LootrAPI.removeDecayed(provider);
       return;
     } else if (provider.hasBeenOpened() && LootrAPI.shouldStartDecayWhileTicking() && !LootrAPI.isDecayed(provider)) {
-      int decayValue = LootrAPI.getDecayValue(provider);
+      int decayValue = LootrAPI.getRemainingDecayValue(provider);
       if (decayValue == -1) {
         if (LootrAPI.isDecaying(provider)) {
           LootrAPI.setDecaying(provider);
@@ -146,11 +147,12 @@ public class LootrAPIImpl implements ILootrAPI {
     }
     if (provider.hasBeenOpened() && LootrAPI.shouldPerformRefreshWhileTicking() && LootrAPI.isRefreshed(provider)) {
       provider.performRefresh();
+      provider.performClose();
       LootrAPI.removeRefreshed(provider);
       provider.performUpdate();
     }
     if (provider.hasBeenOpened() && LootrAPI.shouldStartRefreshWhileTicking() && !LootrAPI.isRefreshed(provider)) {
-      int refreshValue = LootrAPI.getRefreshValue(provider);
+      int refreshValue = LootrAPI.getRemainingRefreshValue(provider);
       if (refreshValue == -1) {
         if (LootrAPI.isRefreshing(provider)) {
           LootrAPI.setRefreshing(provider);
@@ -552,7 +554,7 @@ public class LootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  public int getDecayValue(ILootrInfoProvider provider) {
+  public int getRemainingDecayValue(ILootrInfoProvider provider) {
     return DataStorage.getDecayValue(provider);
   }
 
@@ -572,7 +574,7 @@ public class LootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  public int getRefreshValue(ILootrInfoProvider provider) {
+  public int getRemainingRefreshValue(ILootrInfoProvider provider) {
     return DataStorage.getRefreshValue(provider);
   }
 

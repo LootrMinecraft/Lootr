@@ -99,7 +99,13 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
   default void performOpen(ServerPlayer player) {
   }
 
+  default void performOpen () {
+  }
+
   default void performClose(ServerPlayer player) {
+  }
+
+  default void performClose () {
   }
 
   default void performDecay () {
