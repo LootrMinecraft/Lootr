@@ -194,7 +194,6 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
   public void refresh() {
     inventories.clear();
     hasBeenOpened = false;
-    setDirty();
   }
 
   // This is triggered in createInventory and reset in refresh.

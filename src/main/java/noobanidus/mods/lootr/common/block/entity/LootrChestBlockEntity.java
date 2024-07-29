@@ -203,6 +203,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrNeo
     return ClientboundBlockEntityDataPacket.create(this, BlockEntity::getUpdateTag);
   }
 
+  // TODO: Move this to the actual load
   @Override
   public void onDataPacket(@NotNull Connection net, @NotNull ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider provider) {
     CompoundTag tag = pkt.getTag();
