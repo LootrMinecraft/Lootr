@@ -88,7 +88,7 @@
   "text.autoconfig.lootr.option.notifications.notification_delay": "Fördröjning",
   "text.autoconfig.lootr.option.notifications.disable_notifications": "Inaktivera aviseringar",
   "text.autoconfig.lootr.option.notifications.disable_message_styles": "Inaktivera stilsättning i aviseringarna",
-  "text.autoconfig.lootr.option.client": "Client",
+  "text.autoconfig.lootr.option.client": "Klient",
   "text.autoconfig.lootr.option.client.vanilla_textures": "Originaltexturer",
-  "text.autoconfig.lootr.option.client.old_textures": "Classic Textures"
+  "text.autoconfig.lootr.option.client.old_textures": "Klassiska texturer"
 }
