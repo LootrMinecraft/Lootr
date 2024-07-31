@@ -33,6 +33,7 @@ import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.api.data.LootrBlockType;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.neoforge.entity.ILootrNeoForgeCart;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -246,6 +247,12 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     return getUUID();
   }
 
+  // TODO:
+  @Override
+  public boolean isPhysicallyOpen() {
+    return false;
+  }
+
   @Override
   public void markChanged() {
     setChanged();
@@ -256,4 +263,20 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   public @Nullable IContainerTrigger getTrigger() {
     return LootrRegistry.getCartTrigger();
   }
+
+  // TODO:
+/*  @Override
+  protected void applyNaturalSlowdown() {
+    float f = 0.98F;
+    if (this.lootTable == null) {
+      int i = 15 - AbstractContainerMenu.getRedstoneSignalFromContainer(this);
+      f += (float)i * 0.001F;
+    }
+
+    if (this.isInWater()) {
+      f *= 0.95F;
+    }
+
+    this.setDeltaMovement(this.getDeltaMovement().multiply((double)f, 0.0, (double)f));
+  } */
 }

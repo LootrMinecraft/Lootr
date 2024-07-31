@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.common.entity;
+package noobanidus.mods.lootr.neoforge.entity;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;

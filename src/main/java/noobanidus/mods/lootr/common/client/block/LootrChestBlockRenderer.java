@@ -23,6 +23,7 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootrBlo
     super(p_173607_);
   }
 
+  // TODO: NeoForge injection
   @Override
   protected Material getMaterial(T blockEntity, ChestType type) {
     if (LootrAPI.isVanillaTextures()) {

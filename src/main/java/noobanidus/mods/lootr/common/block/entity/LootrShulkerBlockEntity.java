@@ -10,7 +10,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceKey;
@@ -39,7 +38,7 @@ import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.api.data.LootrBlockType;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
-import noobanidus.mods.lootr.neoforge.network.client.ClientHandlers;
+import noobanidus.mods.lootr.neoforge.block.entity.ILootrNeoForgeBlockEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -265,6 +264,11 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
       this.infoId = UUID.randomUUID();
     }
     return this.infoId;
+  }
+
+  @Override
+  public boolean isPhysicallyOpen() {
+    return !isClosed();
   }
 
   @Override

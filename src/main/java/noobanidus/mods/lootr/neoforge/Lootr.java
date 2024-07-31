@@ -17,6 +17,10 @@ import noobanidus.mods.lootr.neoforge.impl.LootrRegistryImpl;
 import noobanidus.mods.lootr.neoforge.init.*;
 import noobanidus.mods.lootr.neoforge.network.PacketHandler;
 
+// TODO:
+// - Display notices after containers are closed
+// - or use toasts
+
 @Mod("lootr")
 public class Lootr {
   public static Lootr instance;

@@ -39,6 +39,11 @@ public record BaseLootrInfo(LootrBlockType blockType, LootrInfoType infoType, UU
   }
 
   @Override
+  public boolean isPhysicallyOpen() {
+    return false;
+  }
+
+  @Override
   public @NotNull BlockPos getInfoPos() {
     return pos();
   }

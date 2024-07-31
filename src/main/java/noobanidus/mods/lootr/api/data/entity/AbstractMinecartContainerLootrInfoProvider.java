@@ -46,6 +46,11 @@ public record AbstractMinecartContainerLootrInfoProvider(
   }
 
   @Override
+  public boolean isPhysicallyOpen() {
+    return false;
+  }
+
+  @Override
   public @NotNull BlockPos getInfoPos() {
     return minecart.blockPosition();
   }

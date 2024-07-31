@@ -35,6 +35,7 @@ import noobanidus.mods.lootr.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.api.data.LootrBlockType;
 import noobanidus.mods.lootr.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.neoforge.block.entity.ILootrNeoForgeBlockEntity;
 import noobanidus.mods.lootr.neoforge.init.ModBlockProperties;
 import noobanidus.mods.lootr.neoforge.network.client.ClientHandlers;
 import org.jetbrains.annotations.NotNull;
@@ -105,6 +106,11 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
       this.infoId = UUID.randomUUID();
     }
     return this.infoId;
+  }
+
+  @Override
+  public boolean isPhysicallyOpen() {
+    return getBlockState().hasProperty(BarrelBlock.OPEN) && getBlockState().getValue(BarrelBlock.OPEN);
   }
 
   @Override

@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public interface ILootrAPI {
+  // Platform-independent implementations
   Set<UUID> getPlayerIds();
 
   Player getPlayer();
@@ -40,37 +41,50 @@ public interface ILootrAPI {
 
   boolean isFakePlayer(Player player);
 
+  // Clears player loot for all containers
   default boolean clearPlayerLoot(ServerPlayer entity) {
     return clearPlayerLoot(entity.getUUID());
   }
 
   boolean clearPlayerLoot(UUID id);
 
+  // Get specified inventory
   @Nullable
   ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler);
 
+  // Get specified inventory using menubuilder
   @Nullable
   ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler, MenuBuilder builder);
 
+  // Get saved data for specific provider
   @Nullable
   ILootrSavedData getData(ILootrInfoProvider provider);
 
+  // Calculate seed according to configuration
   long getLootSeed(long seed);
 
+  // Determine if saving block entity data in a structure
   boolean shouldDiscard();
 
+  // Calculate resistance according to configuration
   float getExplosionResistance(Block block, float defaultResistance);
 
+  // Determine configuration for blast resistance
   boolean isBlastResistant();
 
+  // Determine configuration for blast resistance
   boolean isBlastImmune();
 
+  // Determine destroy progress from configuration, used to completely prevent block breaking
   float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos position, float defaultProgress);
 
+  // Determine analog signal from configuration
   int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos, int defaultSignal);
 
+  // Determine if comparators should be powered when containers are opened
   boolean shouldPowerComparators();
 
+  // Determine if notifications should be made by checking the remaining time
   boolean shouldNotify(int remaining);
 
   int getNotificationDelay();

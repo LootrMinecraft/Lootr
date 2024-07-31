@@ -16,7 +16,7 @@ import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.block.entity.LootrChestBlockEntity;
 import noobanidus.mods.lootr.common.block.entity.LootrShulkerBlockEntity;
 import noobanidus.mods.lootr.common.block.entity.LootrTrappedChestBlockEntity;
-import noobanidus.mods.lootr.common.client.block.BarrelModel;
+import noobanidus.mods.lootr.neoforge.client.block.BarrelModel;
 import noobanidus.mods.lootr.common.client.block.LootrChestBlockRenderer;
 import noobanidus.mods.lootr.common.client.block.LootrShulkerBlockRenderer;
 import noobanidus.mods.lootr.common.client.entity.LootrChestCartRenderer;

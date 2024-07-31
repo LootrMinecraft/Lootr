@@ -46,6 +46,8 @@ public interface ILootrInfo {
   // TODO: Does this really make sense?
   boolean hasBeenOpened ();
 
+  boolean isPhysicallyOpen ();
+
   @NotNull
   BlockPos getInfoPos();
 

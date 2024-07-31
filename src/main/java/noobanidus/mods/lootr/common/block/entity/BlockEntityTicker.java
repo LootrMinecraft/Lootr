@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.data.blockentity.ILootrBlockEntity;
-import noobanidus.mods.lootr.neoforge.event.HandleChunk;
 
 import java.util.Set;
 

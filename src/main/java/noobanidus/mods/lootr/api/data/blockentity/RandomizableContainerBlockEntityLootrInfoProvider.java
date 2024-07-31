@@ -54,6 +54,11 @@ public record RandomizableContainerBlockEntityLootrInfoProvider(
   }
 
   @Override
+  public boolean isPhysicallyOpen() {
+    return false;
+  }
+
+  @Override
   public @NotNull BlockPos getInfoPos() {
     return blockEntity.getBlockPos();
   }

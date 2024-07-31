@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.common.client.block;
+package noobanidus.mods.lootr.neoforge.client.block;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;

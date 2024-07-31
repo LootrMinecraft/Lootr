@@ -46,6 +46,11 @@ public record CustomLootrInfoProvider(
   }
 
   @Override
+  public boolean isPhysicallyOpen() {
+    return false;
+  }
+
+  @Override
   public @NotNull BlockPos getInfoPos() {
     return pos();
   }

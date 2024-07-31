@@ -29,7 +29,6 @@ public class LootrShulkerBlockRenderer implements BlockEntityRenderer<LootrShulk
     this.model = new ShulkerModel<>(context.bakeLayer(ModelLayers.SHULKER));
   }
 
-  // TODO: `getMaterial` is a NeoForge injection?
   protected Material getMaterial(LootrShulkerBlockEntity blockEntity) {
     if (LootrAPI.isVanillaTextures()) {
       return Sheets.DEFAULT_SHULKER_TEXTURE_LOCATION;

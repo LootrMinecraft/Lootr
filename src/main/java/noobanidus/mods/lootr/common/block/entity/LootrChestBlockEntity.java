@@ -10,7 +10,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceKey;
@@ -32,12 +31,14 @@ import noobanidus.mods.lootr.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.api.data.LootrBlockType;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.data.LootrInventory;
+import noobanidus.mods.lootr.neoforge.block.entity.ILootrNeoForgeBlockEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 import java.util.UUID;
 
+// TODO: Generify
 public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrNeoForgeBlockEntity {
   private final ChestLidController chestLidController = new ChestLidController();
   protected UUID infoId;
@@ -242,6 +243,11 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrNeo
       this.infoId = UUID.randomUUID();
     }
     return this.infoId;
+  }
+
+  @Override
+  public boolean isPhysicallyOpen() {
+    return getOpenNess(1f) > 0;
   }
 
   public boolean isClientOpened() {
