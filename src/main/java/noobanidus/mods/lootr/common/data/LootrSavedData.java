@@ -208,6 +208,11 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
   }
 
   @Override
+  public boolean isPhysicallyOpen() {
+    return false;
+  }
+
+  @Override
   public boolean clearInventories(UUID id) {
     if (inventories.remove(id) != null) {
       setDirty();
