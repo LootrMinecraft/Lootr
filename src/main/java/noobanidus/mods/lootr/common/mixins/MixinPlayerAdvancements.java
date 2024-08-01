@@ -2,6 +2,7 @@ package noobanidus.mods.lootr.common.mixins;
 
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.server.PlayerAdvancements;
+import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.fabric.init.ModAdvancements;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,7 +15,7 @@ public class MixinPlayerAdvancements {
   private void lootrAward(AdvancementHolder advancement, String criterionKey, CallbackInfoReturnable<Boolean> cir) {
     PlayerAdvancements playerAdvancements = (PlayerAdvancements) (Object) this;
     if (!playerAdvancements.player.level().isClientSide()) {
-      ModAdvancements.ADVANCEMENT.trigger(playerAdvancements.player, advancement.id());
+      LootrRegistry.getAdvancementTrigger().trigger(playerAdvancements.player, advancement.id());
     }
   }
 }

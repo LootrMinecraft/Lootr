@@ -2,6 +2,7 @@ package noobanidus.mods.lootr.common.block.entity;
 
 import com.google.common.collect.Sets;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
+import net.fabricmc.fabric.api.blockview.v2.RenderDataBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
@@ -10,7 +11,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceKey;
@@ -35,13 +35,14 @@ import noobanidus.mods.lootr.api.data.LootrBlockType;
 import noobanidus.mods.lootr.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.fabric.block.entity.ILootrFabricBlockEntity;
+import noobanidus.mods.lootr.fabric.client.ClientHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 import java.util.UUID;
 
-public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity implements ILootrFabricBlockEntity {
+public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity implements ILootrFabricBlockEntity, RenderDataBlockEntity {
   private final NonNullList<ItemStack> items = NonNullList.withSize(27, ItemStack.EMPTY);
   private final Set<UUID> clientOpeners = new ObjectLinkedOpenHashSet<>();
   protected UUID infoId = null;
@@ -293,5 +294,16 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   @Override
   public @Nullable IContainerTrigger getTrigger() {
     return LootrRegistry.getBarrelTrigger();
+  }
+
+  @Override
+  public @Nullable Object getRenderData() {
+    Player player = ClientHooks.getPlayer();
+    if (player == null) {
+      return null;
+    }
+
+    // TODO: Improve this?
+    return hasVisualOpened(player) || isClientOpened();
   }
 }
