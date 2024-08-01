@@ -6,6 +6,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import noobanidus.mods.lootr.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
+import noobanidus.mods.lootr.fabric.client.ClientHooks;
 import noobanidus.mods.lootr.fabric.network.to_client.PacketCloseCart;
 import noobanidus.mods.lootr.fabric.network.to_client.PacketCloseContainer;
 import noobanidus.mods.lootr.fabric.network.to_client.PacketOpenCart;
@@ -44,6 +45,7 @@ public class LootrNetworkingInit {
           BlockEntity potential = context.client().player.level().getBlockEntity(position);
           if (potential instanceof ILootrBlockEntity blockEntity) {
             blockEntity.setClientOpened(true);
+            ClientHooks.clearCache(position);
           }
         }
       });
@@ -56,6 +58,7 @@ public class LootrNetworkingInit {
           BlockEntity potential = context.client().player.level().getBlockEntity(position);
           if (potential instanceof ILootrBlockEntity blockEntity) {
             blockEntity.setClientOpened(false);
+            ClientHooks.clearCache(position);
           }
         }
       });
