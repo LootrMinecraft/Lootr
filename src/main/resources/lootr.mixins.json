@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "noobanidus.mods.lootr.mixins",
+  "package": "noobanidus.mods.lootr.common.mixins",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
     "MixinCatSitOnBlockGoal",

@@ -19,7 +19,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "noobanidus.mods.lootr.Lootr"
+      "noobanidus.mods.lootr.fabric.Lootr"
     ],
     "client": [
       "noobanidus.mods.lootr.client.LootrClient"
