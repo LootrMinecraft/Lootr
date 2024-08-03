@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.common.mixins;
+package noobanidus.mods.lootr.fabric.mixins;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;

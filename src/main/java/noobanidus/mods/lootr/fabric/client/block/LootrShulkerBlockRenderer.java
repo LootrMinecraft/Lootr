@@ -2,6 +2,7 @@ package noobanidus.mods.lootr.fabric.client.block;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ShulkerModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.geom.ModelPart;
@@ -36,7 +37,10 @@ public class LootrShulkerBlockRenderer implements BlockEntityRenderer<LootrShulk
     if (LootrAPI.isVanillaTextures()) {
       return Sheets.DEFAULT_SHULKER_TEXTURE_LOCATION;
     }
-    if (blockEntity.isClientOpened()) {
+    if (Minecraft.getInstance().player == null) {
+      return MATERIAL2;
+    }
+    if (blockEntity.hasClientOpened(Minecraft.getInstance().player.getUUID())) {
       return LootrAPI.isOldTextures() ? MATERIAL3 : MATERIAL;
     } else {
       return LootrAPI.isOldTextures() ? MATERIAL4 : MATERIAL2;

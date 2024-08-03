@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.fabric.client.block;
 
 import com.google.common.collect.Streams;
+import net.fabricmc.fabric.api.blockview.v2.FabricBlockView;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.material.RenderMaterial;
@@ -91,7 +92,7 @@ public class BarrelModel implements UnbakedModel {
 
     @Override
     public void emitBlockQuads(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context) {
-      Object data = ((RenderAttachedBlockView) blockView).getBlockEntityRenderAttachment(pos);
+      Object data = blockView.getBlockEntityRenderData(pos);
       BakedModel model = LootrAPI.isOldTextures() ? old_unopened : unopened;
       if (LootrAPI.isVanillaTextures()) {
         model = vanilla;

@@ -22,17 +22,18 @@
       "noobanidus.mods.lootr.fabric.Lootr"
     ],
     "client": [
-      "noobanidus.mods.lootr.client.LootrClient"
+      "noobanidus.mods.lootr.fabric.client.LootrClient"
     ],
     "modmenu": [
-      "noobanidus.mods.lootr.integration.ModMenuIntegration"
+      "noobanidus.mods.lootr.fabric.integration.ModMenuIntegration"
     ],
     "fabric-datagen": [
-      "noobanidus.mods.lootr.gen.LootrDataGenerators"
+      "noobanidus.mods.lootr.fabric.gen.LootrDataGenerators"
     ]
   },
   "mixins": [
-    "lootr.mixins.json"
+    "lootr.mixins.json",
+    "lootr_fabric.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.15.11",

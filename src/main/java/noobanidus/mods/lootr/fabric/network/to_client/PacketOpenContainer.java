@@ -8,7 +8,7 @@ import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.network.ILootrPacket;
 
 public record PacketOpenContainer(BlockPos blockPos) implements ILootrPacket {
-  public static final Type<PacketOpenContainer> TYPE = new Type<>(LootrAPI.rl("close_cart"));
+  public static final Type<PacketOpenContainer> TYPE = new Type<>(LootrAPI.rl("open_container"));
   public static final StreamCodec<ByteBuf, PacketOpenContainer> STREAM_CODEC = StreamCodec.composite(BlockPos.STREAM_CODEC, PacketOpenContainer::blockPos, PacketOpenContainer::new);
 
   @Override

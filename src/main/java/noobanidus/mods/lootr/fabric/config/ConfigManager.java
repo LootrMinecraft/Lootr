@@ -366,7 +366,6 @@ public class ConfigManager implements ConfigData {
     public boolean disable_break = false;
     public boolean enable_break = false;
     public boolean enable_fake_player_break = false;
-    public boolean check_world_border = false;
     public boolean power_comparators = true;
     public boolean blast_resistant = false;
     public boolean blast_immune = false;

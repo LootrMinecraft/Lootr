@@ -3,6 +3,7 @@ package noobanidus.mods.lootr.fabric.client.block;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -76,9 +77,12 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootrBlo
     if (LootrAPI.isVanillaTextures()) {
       return Sheets.chooseMaterial(blockEntity, ChestType.SINGLE, false);
     }
+    if (Minecraft.getInstance().player == null) {
+      return MATERIAL2;
+    }
     // TODO: ???
     boolean trapped = blockEntity.getType().equals(LootrRegistry.getTrappedChestBlockEntity());
-    if (blockEntity.hasClientOpened()) {
+    if (blockEntity.hasClientOpened(Minecraft.getInstance().player.getUUID())) {
       if (LootrAPI.isOldTextures()) {
         return OLD_MATERIAL2;
       }

@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "noobanidus.mods.lootr.fabric.mixins",
+  "compatibilityLevel": "JAVA_16",
+  "mixins": [
+    "MixinPersistentEntitySectionManager",
+    "MixinPlayerAdvancements"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "client": [
+    "client.MixinClientPacketListener"
+  ]
+}

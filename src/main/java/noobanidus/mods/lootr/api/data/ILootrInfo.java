@@ -132,7 +132,11 @@ public interface ILootrInfo {
     } else if (tag.contains("entity") && tag.getBoolean("entity")) {
       infoType = LootrInfoType.CONTAINER_ENTITY;
     } else {
-      LootrAPI.LOG.error("Couldn't deduce the infoType of LootrInfo from tag: {}", tag);
+      if (tag.contains("entity") && !tag.getBoolean("entity") || tag.contains("custom") && !tag.getBoolean("custom")) {
+        infoType = LootrInfoType.CONTAINER_BLOCK_ENTITY;
+      } else {
+        LootrAPI.LOG.error("Couldn't deduce the infoType of LootrInfo from tag: {}", tag);
+      }
     }
     LootrBlockType blockType = null;
     if (tag.contains("blockType", CompoundTag.TAG_INT)) {
