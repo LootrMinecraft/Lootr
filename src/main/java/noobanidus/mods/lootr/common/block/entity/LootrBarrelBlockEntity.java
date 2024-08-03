@@ -303,7 +303,6 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
       return null;
     }
 
-    // TODO: Improve this?
-    return hasVisualOpened(player) || isClientOpened();
+    return hasClientOpened(player.getUUID());
   }
 }
