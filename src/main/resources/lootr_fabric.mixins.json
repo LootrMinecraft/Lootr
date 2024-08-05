@@ -4,9 +4,11 @@
   "package": "noobanidus.mods.lootr.fabric.mixins",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "MixinBlockEntity",
     "MixinPersistentEntitySectionManager",
     "MixinPlayerAdvancements"
   ],
+  "plugin": "noobanidus.mods.lootr.fabric.mixins.LootrFabricMixinPlugin",
   "injectors": {
     "defaultRequire": 1
   },

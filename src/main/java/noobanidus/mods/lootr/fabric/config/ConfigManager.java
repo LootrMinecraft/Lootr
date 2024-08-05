@@ -23,6 +23,7 @@ import noobanidus.mods.lootr.api.LootrTags;
 import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.fabric.init.ModBlocks;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -360,6 +361,8 @@ public class ConfigManager implements ConfigData {
     public boolean convert_elytras = true;
     public boolean convert_mineshafts = true;
     public boolean world_border = false;
+    @ConfigEntry.Gui.RequiresRestart
+    public boolean rename_container_block_entities = false;
   }
 
   public static class Breaking {
@@ -384,7 +387,9 @@ public class ConfigManager implements ConfigData {
   public static class Decay {
     public int decay_value = 6000;
     public boolean decay_all = false;
+    @ConfigEntry.Gui.RequiresRestart
     public boolean perform_tick_decay = true;
+    @ConfigEntry.Gui.RequiresRestart
     public boolean start_tick_decay = false;
     public List<String> decay_modids = List.of();
     public List<String> decay_loot_tables = List.of();
@@ -394,7 +399,9 @@ public class ConfigManager implements ConfigData {
   public static class Refresh {
     public int refresh_value = 24000;
     public boolean refresh_all = false;
+    @ConfigEntry.Gui.RequiresRestart
     public boolean perform_tick_refresh = true;
+    @ConfigEntry.Gui.RequiresRestart
     public boolean start_tick_refresh = true;
     public List<String> refresh_modids = List.of();
     public List<String> refresh_loot_tables = List.of();

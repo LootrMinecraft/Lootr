@@ -118,6 +118,11 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     if (compound.hasUUID("LootrId")) {
       this.infoId = compound.getUUID("LootrId");
     }
+    // Backwards compatibility with 1.20.4
+    if (this.infoId == null && compound.hasUUID("tileId")) {
+      this.infoId = compound.getUUID("tileId");
+    }
+    // End backwards compatibility with 1.20.4
     if (this.infoId == null) {
       getInfoUUID();
     }
