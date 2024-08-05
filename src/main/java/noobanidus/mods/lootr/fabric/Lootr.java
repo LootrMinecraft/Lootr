@@ -25,9 +25,7 @@ public class Lootr implements ModInitializer {
     PayloadTypeRegistry.playS2C().register(PacketOpenContainer.TYPE, PacketOpenContainer.STREAM_CODEC);
     PayloadTypeRegistry.playS2C().register(PacketCloseContainer.TYPE, PacketCloseContainer.STREAM_CODEC);
 
-    //   DUE TO SHENANIGANS, THIS IS NOW ACTIVATED IN
-    //   LootrFabricMixinPlugin.shouldApplyMixin
-    // LootrConfigInit.registerConfig();
+    LootrConfigInit.registerConfig();
     ModItems.registerItems();
     ModBlocks.registerBlocks();
     ModTabs.registerTabs();

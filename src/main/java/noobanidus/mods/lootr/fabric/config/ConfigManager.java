@@ -361,8 +361,6 @@ public class ConfigManager implements ConfigData {
     public boolean convert_elytras = true;
     public boolean convert_mineshafts = true;
     public boolean world_border = false;
-    @ConfigEntry.Gui.RequiresRestart
-    public boolean rename_container_block_entities = false;
   }
 
   public static class Breaking {
