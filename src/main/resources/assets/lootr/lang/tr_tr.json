@@ -90,5 +90,15 @@
   "text.autoconfig.lootr.option.notifications.disable_message_styles": "Bildirimlerde Stil ve Formatlamayı Kapat",
   "text.autoconfig.lootr.option.client": "İstemci",
   "text.autoconfig.lootr.option.client.vanilla_textures": "Vanilla Textures",
-  "text.autoconfig.lootr.option.client.old_textures": "Klasik Dokular"
+  "text.autoconfig.lootr.option.client.old_textures": "Klasik Dokular",
+  "text.autoconfig.lootr.option.debug.report_unresolved_tables": "Report Unresolved Loot Tables to Players",
+  "text.autoconfig.lootr.option.conversion.convert_elytras": "Elitra Eşya Çerçevelerini Değiştir",
+  "text.autoconfig.lootr.option.conversion.convert_mineshafts": "Convert Minecarts to Lootr Minecarts",
+  "text.autoconfig.lootr.option.lists.modid_dimension_whitelist": "Dimension ModID Whitelist",
+  "text.autoconfig.lootr.option.lists.modid_dimension_blacklist": "Dimension ModID Blacklist",
+  "text.autoconfig.lootr.option.decay.perform_tick_decay": "Perform Decay While Ticking Containers",
+  "text.autoconfig.lootr.option.decay.start_tick_decay": "Start Decay While Ticking Containers",
+  "text.autoconfig.lootr.option.refresh.perform_tick_refresh": "Perform Refresh While Ticking Containers",
+  "text.autoconfig.lootr.option.refresh.start_tick_refresh": "Start Refresh While Ticking Containers",
+  "text.autoconfig.lootr.option.conversion.rename_container_block_entities": "Rename Existing Container Block Entities"
 }
