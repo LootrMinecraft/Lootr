@@ -50,28 +50,18 @@ public class TickingData extends SavedData {
     if (tickMap.isEmpty()) {
       return false;
     }
-
-    Object2IntMap<UUID> newMap = new Object2IntOpenHashMap<>();
-    newMap.defaultReturnValue(-1);
-
+    
     boolean changed = false;
 
     for (Object2IntMap.Entry<UUID> entry : tickMap.object2IntEntrySet()) {
       int value = entry.getIntValue();
       if (value > 0) {
-        value--;
+        entry.setValue(value - 1);
         changed = true;
       }
-      newMap.put(entry.getKey(), value);
     }
 
-    if (changed) {
-      tickMap.clear();
-      tickMap.putAll(newMap);
-      return true;
-    }
-
-    return false;
+    return changed;
   }
 
   @Override

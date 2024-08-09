@@ -187,6 +187,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
       getTileId();
     }
     if (compound.contains("LootrOpeners")) {
+      // TODO: PORT THIS TO FORGE
       Set<UUID> newOpeners = new HashSet<>();
       ListTag openers = compound.getList("LootrOpeners", Tag.TAG_INT_ARRAY);
       for (Tag item : openers) {
