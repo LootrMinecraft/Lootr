@@ -1,55 +1,176 @@
 plugins {
-    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id "architectury-plugin" version "3.4-SNAPSHOT"
+    id "dev.architectury.loom" version "1.6-SNAPSHOT" apply false
+    id 'io.github.juuxel.loom-vineflower' version '1.11.0' apply false
+    id "me.modmuss50.mod-publish-plugin" version "0.5.1"
 }
 
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply from: 'gradle/property_helper.gradle'
-apply from: 'gradle/property_loader.gradle'
-apply from: 'https://raw.githubusercontent.com/SizableShrimp/Forge-Class-Remapper/main/classremapper.gradle'
+architectury {
+    minecraft = rootProject.minecraft_version
+}
 
-// Load mod related properties
-ext.modName = getRequiredString('mod_name')
-ext.modAuthor = getRequiredString('mod_author')
-ext.modId = getRequiredString('mod_id')
-ext.modCredits = getDefaultString('mod_credits', ext.modAuthor)
-ext.modDescription = getOptionalString('mod_description')
-ext.modChangelog = getOptionalString('mod_changelog')
-ext.modHomepage = getOptionalString('mod_homepage')
-ext.modSource = getOptionalString('mod_source')
-ext.modIssues = getOptionalString('mod_issues')
-ext.modLicense = getOptionalString('mod_license')
+subprojects {
+    apply plugin: "dev.architectury.loom"
+    apply plugin: "me.modmuss50.mod-publish-plugin"
 
-// Load Minecraft specific properties
-ext.mcVersion = getRequiredString('minecraft_version')
+    version = "${rootProject.mod_version}+${rootProject.minecraft_version}-${name}"
 
-// Load build-time modules
-apply from: 'gradle/build_number.gradle'
-apply from: 'gradle/git_changelog.gradle'
-apply from: 'gradle/patreon.gradle'
-apply from: 'gradle/java.gradle'
-apply from: 'gradle/neoforge.gradle'
-apply from: 'gradle/dependencies.gradle'
-apply from: 'gradle/aequivaleo.gradle'
-apply from: 'gradle/api.gradle'
-apply from: 'gradle/blame.gradle'
-apply from: 'gradle/carrier_bees.gradle'
-apply from: 'gradle/curios.gradle'
-apply from: 'gradle/dynamic_trees.gradle'
-apply from: 'gradle/geckolib.gradle'
-apply from: 'gradle/jade.gradle'
-apply from: 'gradle/jei.gradle'
-apply from: 'gradle/repurposed_structures.gradle'
-apply from: 'gradle/mana_and_artifice.gradle'
-apply from: 'gradle/mysticalworld.gradle'
-apply from: 'gradle/patchouli.gradle'
-apply from: 'gradle/shadow.gradle'
-apply from: 'gradle/stables.gradle'
-apply from: 'gradle/top.gradle'
-apply from: 'gradle/minify_jsons.gradle'
+    loom {
+        silentMojangMappingsLicense()
+    }
 
-// Load publishing modules
-apply from: 'gradle/maven2.gradle'
-apply from: 'gradle/signing.gradle'
-apply from: 'gradle/curseforge.gradle'
-apply from: 'gradle/version_checker.gradle'
+    dependencies {
+        minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+        mappings loom.officialMojangMappings()
+    }
+
+    Map<String, Map<String, String>> platformSettings = [
+            "fabric": [
+                    "curse-id": "615106",
+                    "modrinth-id": "EltpO5cN"
+            ],
+            "neoforge": [
+                    "curse-id": "361276",
+                    "modrinth-id": "EltpO5cN"
+            ]
+    ]
+
+    Map<String, Map<String, Boolean>> platformDependencies = [
+            "fabric": [
+                    "fabric-api": true,
+                    "cloth-config": true
+            ],
+            "neoforge": [
+            ]
+    ]
+
+    var env = System.getenv()
+    def uploadSettings = platformSettings.get(name)
+    def uploadDependencies = platformDependencies.get(name)
+
+    if (uploadSettings != null && uploadDependencies != null) {
+
+        File changeLog = rootProject.file("CHANGELOG.md")
+        String changelogText = changeLog.exists() ? changeLog.text : ""
+
+        publishMods {
+            file = tasks.remapJar.archiveFile
+            type = STABLE
+            changelog = changelogText
+
+            displayName = "The Bumblezone v${rootProject.mod_version} (${rootProject.minecraft_version} MC ${name.capitalize()})"
+            version = "${project.version}"
+            modLoaders.add(name)
+
+            if (env.CURSEFORGEKEY) {
+                curseforge {
+                    accessToken = env.CURSEFORGEKEY
+                    projectId = uploadSettings["curse-id"]
+                    minecraftVersions.add(rootProject.minecraft_version)
+
+                    if (uploadDependencies.size() > 0) {
+                        uploadDependencies.each { dep, required ->
+                            if (required) {
+                                requires(dep)
+                            }
+                            else {
+                                optional(dep)
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (env.MODRINTH_TOKEN) {
+                modrinth {
+                    accessToken = env.MODRINTH_TOKEN
+                    projectId = uploadSettings["modrinth-id"]
+                    minecraftVersions.add(rootProject.minecraft_version)
+
+                    dependencies {
+                        uploadDependencies.each { dep, required ->
+                            if (required) {
+                                requires(dep)
+                            } else {
+                                optional(dep)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+allprojects {
+    apply plugin: "java"
+    apply plugin: "architectury-plugin"
+    apply plugin: "maven-publish"
+
+    archivesBaseName = rootProject.mod_id
+    version = "${rootProject.mod_version}+${rootProject.minecraft_version}-${name}"
+    group = rootProject.maven_group
+
+    repositories {
+        mavenLocal()
+        maven {
+            url "https://maven.neoforged.net/releases/"
+        }
+        maven {
+            url = 'https://api.modrinth.com/maven/'
+            content {
+                includeGroup 'maven.modrinth'
+            }
+        }
+        maven {
+            url = 'https://www.cursemaven.com'
+            content {
+                includeGroup 'curse.maven'
+            }
+        }
+        maven {
+            url = 'https://maven.shedaniel.me'
+            content {
+                includeGroup 'me.shedaniel.cloth'
+                includeGroup 'me.shedaniel'
+            }
+        }
+    }
+
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+        options.release = 21
+    }
+
+    java {
+        withSourcesJar()
+    }
+
+    task optimizePng {
+        def pngPatterns = ["**/*.png"]
+        doFirst {
+            println 'Executing oxipng task...'
+        }
+        doLast {
+            //Ensure the logo is minimized (we add this file to each jar)
+            //Minimize any PNGs in the source sets
+            for (dir in sourceSets.main.resources.srcDirs) {
+                fileTree(dir: dir, includes: pngPatterns).each { minimizePNGFile(it) }
+            }
+            println 'Finished oxipng task...'
+        }
+    }
+}
+
+//Minimize/optimize all png files, requires optipng on the PATH
+// Credits: BrainStone
+void minimizePNGFile(File file) {
+    exec {
+        executable "./oxipng.exe"
+        args "-o", "6", "-i", "0", "--strip", "all", "-a", "-Z", file
+    }
+}
+
+task buildAndReleaseAll{
+    dependsOn(':common:buildAndRelease', ':neoforge:buildAndRelease', ':fabric:buildAndRelease')
+}

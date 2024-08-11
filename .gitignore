@@ -1,50 +1,38 @@
-/download
-/eclipseBin
+# eclipse
+bin
+*.launch
+.settings
+.metadata
+.classpath
+.project
 
-## gradle
-**/.gradle
-**/build
+# idea
+out
+*.ipr
+*.iws
+*.iml
+.idea
 
-/structures
+# gradle
+build
+.gradle
 
-## ForgeGradle
-/run
-/*/run
-/*.launch
-/*/*.launch
+# other
+eclipse
+run
+/runs
+.gitattributes
+/deps
+/common/src/main/generated/
+/flatdir
 
-## eclipse
-/eclipse
-**/.settings
-**/.metadata
-**/.classpath
-**/.project
-**/bin
+# Files from Forge MDK
+forge*changelog.txt
+.factorypath
 
-## intellij
-/out
-/.idea
-/*.iml
-/*.ipr
-/*.iws
-/atlassian-ide-plugin.xml
-/classes
+# songs
+*.ogg
 
-## gedit
-*~
-## most Windows editors
-*.bak
-## OSX
-.DS_Store
-
-## translation reports
-resources/assets/enderio/lang/*.lang.txt
-/ebin/
-
-## local user properties
-user.properties
-
-## temporary build files
-eiostore.jks
-
-build\.sh
+# Misc
+CHANGELOG_OLD.md
+oxipng.exe

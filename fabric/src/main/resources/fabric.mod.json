@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "lootr",
+  "version": "${version}",
+  "name": "Lootr",
+  "description": "A mod that makes it so nobody misses out on Loot!",
+  "authors": [
+    "Noobanidus",
+    "ZestyBlaze",
+    "embeddedt"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/lootr-fabric",
+    "sources": "https://github.com/noobanidus/Lootr/tree/fabric-1.19.4",
+    "issues": "https://github.com/noobanidus/Lootr/issues"
+  },
+  "license": "MIT License",
+  "icon": "icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "noobanidus.mods.lootr.Lootr"
+    ],
+    "client": [
+      "noobanidus.mods.lootr.client.LootrClient"
+    ],
+    "modmenu": [
+      "noobanidus.mods.lootr.integration.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "lootr-common.mixins.json",
+    "lootr-fabric.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.15.11",
+    "fabric": "*",
+    "minecraft": "~1.21",
+    "java": ">=21"
+  }
+}

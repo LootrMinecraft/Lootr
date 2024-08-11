@@ -1,0 +1,19 @@
+pluginManagement {
+    repositories {
+        maven { url "https://maven.architectury.dev/" }
+        maven {
+            url = 'https://maven.fabricmc.net/'
+            content {
+                includeGroup 'net.fabricmc'
+            }
+        }
+        maven { url "https://maven.neoforged.net/" }
+        gradlePluginPortal()
+    }
+}
+
+include("common")
+include("fabric")
+include("neoforge")
+
+rootProject.name = "Lootr"
