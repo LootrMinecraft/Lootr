@@ -4,16 +4,22 @@ issueTrackerURL="https://github.com/noobanidus/Lootr/issues"
 license="https://github.com/noobanidus/Lootr/blob/1.16/LICENSE"
 
 [[mixins]]
-config="lootr.mixins.json"
+    config="lootr-common.mixins.json"
 
 [[mods]] 
-modId="lootr" 
-version="${version}"
-displayName="Lootr" 
-displayURL="https://minecraft.curseforge.com/projects/lootr" 
-authors="Noobanidus"
-description='''
-Makes loot chest loot per-user.
-'''
-[[accessTransformers]]
-file="META-INF/accesstransformer.cfg"
+    modId="lootr"
+    version="${version}"
+    displayName="Lootr"
+    displayURL="https://minecraft.curseforge.com/projects/lootr"
+    authors="Noobanidus"
+    description="Makes loot chest loot per-user."
+
+[[dependencies.lootr]]
+    modId="minecraft"
+    type="required"
+    versionRange="[1.21,)"
+
+ [[dependencies.lootr]]
+    modId="neoforge"
+    type="required"
+    versionRange="[21,)"

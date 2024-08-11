@@ -19,13 +19,13 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "noobanidus.mods.lootr.Lootr"
+      "noobanidus.mods.lootr.fabric.Lootr"
     ],
     "client": [
-      "noobanidus.mods.lootr.client.LootrClient"
+      "noobanidus.mods.lootr.fabric.LootrClient"
     ],
     "modmenu": [
-      "noobanidus.mods.lootr.integration.ModMenuIntegration"
+      "noobanidus.mods.lootr.fabric.integration.ModMenuIntegration"
     ]
   },
   "mixins": [
