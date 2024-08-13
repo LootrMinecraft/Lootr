@@ -283,7 +283,12 @@ public class ChestData extends SavedData {
 
   @Nullable
   public SpecialChestInventory getInventory(ServerPlayer player) {
-    return inventories.get(player.getUUID());
+    return getInventory(player.getUUID());
+  }
+
+  @Nullable
+  public SpecialChestInventory getInventory (UUID id) {
+    return inventories.get(id);
   }
 
   public SpecialChestInventory createInventory(ServerPlayer player, LootFiller filler, IntSupplier sizeSupplier, Supplier<Component> displaySupplier, Supplier<ResourceLocation> tableSupplier, LongSupplier seedSupplier) {
