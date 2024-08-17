@@ -105,7 +105,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
       if ((LootrAPI.isFakePlayer(player) && (ConfigManager.get().breaking.enable_fake_player_break)) || ConfigManager.get().breaking.enable_break) {
         return false;
       }
-      if (ConfigManager.get().breaking.disable_break) {
+      if (ConfigManager.isBreakDisabled()) {
         if (player.getAbilities().instabuild) {
           if (!player.isShiftKeyDown()) {
             player.displayClientMessage(Component.translatable("lootr.message.cannot_break_sneak").setStyle(HandleBreak.getChatStyle()), false);

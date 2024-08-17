@@ -104,7 +104,7 @@ public class LootrAPIImpl implements ILootrAPI {
 
   @Override
   public float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos position, float defaultProgress) {
-    if (ConfigManager.get().breaking.disable_break) {
+    if (ConfigManager.isBreakDisabled()) {
       return 0f;
     }
     return defaultProgress;

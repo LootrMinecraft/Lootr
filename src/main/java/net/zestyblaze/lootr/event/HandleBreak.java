@@ -25,7 +25,7 @@ public class HandleBreak {
       return true;
     }
 
-    if (ConfigManager.get().breaking.disable_break) {
+    if (ConfigManager.isBreakDisabled()) {
       if (player.getAbilities().instabuild) {
         if (!player.isShiftKeyDown()) {
           player.displayClientMessage(Component.translatable("lootr.message.cannot_break_sneak").setStyle(getChatStyle()), false);

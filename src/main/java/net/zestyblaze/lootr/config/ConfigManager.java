@@ -29,6 +29,9 @@ import java.util.*;
 @Config(name = LootrAPI.MODID)
 public class ConfigManager implements ConfigData {
   @ConfigEntry.Gui.Excluded
+  public static ClientConfigStore clientConfigStore = null;
+
+  @ConfigEntry.Gui.Excluded
   private static Set<String> DECAY_MODS = null;
   @ConfigEntry.Gui.Excluded
   private static Set<ResourceLocation> DECAY_TABLES = null;
@@ -393,6 +396,14 @@ public class ConfigManager implements ConfigData {
     public boolean trapped_custom = false;
   }
 
+  public static boolean isBreakDisabled () {
+    if (clientConfigStore != null) {
+      return clientConfigStore.disableBreak;
+    } else {
+      return get().breaking.disable_break;
+    }
+  }
+
   public static class Lists {
     public List<String> dimension_whitelist = List.of();
     public List<String> dimension_blacklist = List.of();
@@ -427,5 +438,9 @@ public class ConfigManager implements ConfigData {
   public static class Client {
     public boolean vanilla_textures = false;
     public boolean old_textures = false;
+  }
+
+  public static class ClientConfigStore {
+    public boolean disableBreak = false;
   }
 }
