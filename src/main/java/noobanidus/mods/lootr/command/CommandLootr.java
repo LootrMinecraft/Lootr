@@ -224,50 +224,6 @@ public class CommandLootr {
       }
       return 1;
     }));
-    builder.then(Commands.literal("list_player").executes(c -> {
-      c.getSource().sendSuccess(() -> Component.literal("Must provide player name."), true);
-      return 1;
-    }).then(suggestProfiles().executes(c -> {
-      String playerName = StringArgumentType.getString(c, "profile");
-      Optional<GameProfile> opt_profile = c.getSource().getServer().getProfileCache().get(playerName);
-      if (!opt_profile.isPresent()) {
-        c.getSource().sendFailure(Component.literal("Invalid player name: " + playerName + ", profile not found in the cache."));
-        return 0;
-      }
-      GameProfile profile = opt_profile.get();
-      BlockPos pos = BlockPos.containing(c.getSource().getPosition());
-      Level level = c.getSource().getLevel();
-      BlockEntity te = level.getBlockEntity(pos);
-      if (!(te instanceof ILootBlockEntity)) {
-        pos = pos.below();
-        te = level.getBlockEntity(pos);
-      }
-      if (!(te instanceof ILootBlockEntity ibe)) {
-        c.getSource().sendSuccess(() -> Component.literal("Please stand on a valid Lootr container."), false);
-        return 0;
-      }
-
-      ChestData data = DataStorage.getContainerData((ServerLevel) level, te.getBlockPos(), ibe.getTileId());
-      SpecialChestInventory inventory = data.getInventory(profile.getId());
-      if (inventory == null) {
-        c.getSource().sendSuccess(() -> Component.literal("No stored inventory for " + playerName + " found."), true);
-        return 0;
-      }
-
-      NonNullList<ItemStack> stacks = inventory.getInventoryContents();
-
-      for (int i = 0; i < stacks.size(); i++) {
-        ItemStack stack = stacks.get(i);
-        if (stack.isEmpty()) {
-          continue;
-        }
-
-        int finalI = i+1;
-        c.getSource().sendSuccess(() -> Component.literal("Item in slot " + finalI + ": ").append(stack.getDisplayName()).append(Component.literal("x" + stack.getCount())), false);
-      }
-
-      return 1;
-    })));
     builder.then(Commands.literal("open_as").executes(c -> {
       c.getSource().sendSuccess(() -> Component.literal("Must provide player name."), true);
       return 1;
@@ -303,7 +259,48 @@ public class CommandLootr {
         c.getSource().sendSuccess(() -> Component.literal("Command can only be executed by a player"), false);
         return 0;
       }
-      
+
+      player.openMenu(inventory);
+
+      return 1;
+    })));
+    builder.then(Commands.literal("open_as_uuid").executes(c -> {
+      c.getSource().sendSuccess(() -> Component.literal("Must provide player UUID."), true);
+      return 1;
+    }).then(Commands.argument("profile", StringArgumentType.string()).executes(c -> {
+      String uuid = StringArgumentType.getString(c, "uuid");
+      UUID id;
+      try {
+        id = UUID.fromString(uuid);
+      } catch (IllegalArgumentException exception) {
+        c.getSource().sendFailure(Component.literal("Invalid UUID: " + uuid));
+        return 0;
+      }
+      BlockPos pos = BlockPos.containing(c.getSource().getPosition());
+      Level level = c.getSource().getLevel();
+      BlockEntity te = level.getBlockEntity(pos);
+      if (!(te instanceof ILootBlockEntity)) {
+        pos = pos.below();
+        te = level.getBlockEntity(pos);
+      }
+      if (!(te instanceof ILootBlockEntity ibe)) {
+        c.getSource().sendSuccess(() -> Component.literal("Please stand on a valid Lootr container."), false);
+        return 0;
+      }
+
+      ChestData data = DataStorage.getContainerData((ServerLevel) level, te.getBlockPos(), ibe.getTileId());
+      SpecialChestInventory inventory = data.getInventory(id);
+      if (inventory == null) {
+        c.getSource().sendSuccess(() -> Component.literal("No stored inventory for " + id + " found."), true);
+        return 0;
+      }
+
+      ServerPlayer player = c.getSource().getPlayer();
+      if (player == null) {
+        c.getSource().sendSuccess(() -> Component.literal("Command can only be executed by a player"), false);
+        return 0;
+      }
+
       player.openMenu(inventory);
 
       return 1;
