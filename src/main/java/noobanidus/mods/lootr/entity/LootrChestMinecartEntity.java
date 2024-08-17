@@ -128,6 +128,8 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
         ((Player) source.getEntity()).displayClientMessage(Component.translatable("lootr.message.cart_should_sneak").setStyle(HandleBreak.getChatStyle()), false);
         ((Player) source.getEntity()).displayClientMessage(Component.translatable("lootr.message.should_sneak2", Component.translatable("lootr.message.cart_should_sneak3").setStyle(Style.EMPTY.withBold(true))).setStyle(HandleBreak.getChatStyle()), false);
         // TODO: I think this is broken
+      } else if (source.getEntity().isShiftKeyDown()) {
+        return false;
       }
     } else {
       return true;
