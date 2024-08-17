@@ -264,7 +264,7 @@ public class CommandLootr {
     builder.then(Commands.literal("open_as_uuid").executes(c -> {
       c.getSource().sendSuccess(() -> Component.literal("Must provide player UUID."), true);
       return 1;
-    }).then(Commands.argument("profile", StringArgumentType.string()).executes(c -> {
+    }).then(Commands.argument("uuid", StringArgumentType.string()).executes(c -> {
       String uuid = StringArgumentType.getString(c, "uuid");
       UUID id;
       try {
