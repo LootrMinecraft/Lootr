@@ -225,7 +225,7 @@ public class CommandLootr {
       return 1;
     }));
     builder.then(Commands.literal("open_as").executes(c -> {
-      c.getSource().sendSuccess(() -> Component.literal("Must provide player name."), true);
+      c.getSource().sendSuccess(Component.literal("Must provide player name."), true);
       return 1;
     }).then(suggestProfiles().executes(c -> {
       String playerName = StringArgumentType.getString(c, "profile");
@@ -235,7 +235,7 @@ public class CommandLootr {
         return 0;
       }
       GameProfile profile = opt_profile.get();
-      BlockPos pos = BlockPos.containing(c.getSource().getPosition());
+      BlockPos pos = new BlockPos(c.getSource().getPosition());
       Level level = c.getSource().getLevel();
       BlockEntity te = level.getBlockEntity(pos);
       if (!(te instanceof ILootBlockEntity)) {
@@ -243,20 +243,20 @@ public class CommandLootr {
         te = level.getBlockEntity(pos);
       }
       if (!(te instanceof ILootBlockEntity ibe)) {
-        c.getSource().sendSuccess(() -> Component.literal("Please stand on a valid Lootr container."), false);
+        c.getSource().sendSuccess(Component.literal("Please stand on a valid Lootr container."), false);
         return 0;
       }
 
       ChestData data = DataStorage.getContainerData((ServerLevel) level, te.getBlockPos(), ibe.getTileId());
       SpecialChestInventory inventory = data.getInventory(profile.getId());
       if (inventory == null) {
-        c.getSource().sendSuccess(() -> Component.literal("No stored inventory for " + playerName + " found."), true);
+        c.getSource().sendSuccess( Component.literal("No stored inventory for " + playerName + " found."), true);
         return 0;
       }
 
       ServerPlayer player = c.getSource().getPlayer();
       if (player == null) {
-        c.getSource().sendSuccess(() -> Component.literal("Command can only be executed by a player"), false);
+        c.getSource().sendSuccess(Component.literal("Command can only be executed by a player"), false);
         return 0;
       }
 
@@ -265,7 +265,7 @@ public class CommandLootr {
       return 1;
     })));
     builder.then(Commands.literal("open_as_uuid").executes(c -> {
-      c.getSource().sendSuccess(() -> Component.literal("Must provide player UUID."), true);
+      c.getSource().sendSuccess( Component.literal("Must provide player UUID."), true);
       return 1;
     }).then(Commands.argument("profile", StringArgumentType.string()).executes(c -> {
       String uuid = StringArgumentType.getString(c, "uuid");
@@ -276,7 +276,7 @@ public class CommandLootr {
         c.getSource().sendFailure(Component.literal("Invalid UUID: " + uuid));
         return 0;
       }
-      BlockPos pos = BlockPos.containing(c.getSource().getPosition());
+      BlockPos pos = new BlockPos(c.getSource().getPosition());
       Level level = c.getSource().getLevel();
       BlockEntity te = level.getBlockEntity(pos);
       if (!(te instanceof ILootBlockEntity)) {
@@ -284,20 +284,20 @@ public class CommandLootr {
         te = level.getBlockEntity(pos);
       }
       if (!(te instanceof ILootBlockEntity ibe)) {
-        c.getSource().sendSuccess(() -> Component.literal("Please stand on a valid Lootr container."), false);
+        c.getSource().sendSuccess(Component.literal("Please stand on a valid Lootr container."), false);
         return 0;
       }
 
       ChestData data = DataStorage.getContainerData((ServerLevel) level, te.getBlockPos(), ibe.getTileId());
       SpecialChestInventory inventory = data.getInventory(id);
       if (inventory == null) {
-        c.getSource().sendSuccess(() -> Component.literal("No stored inventory for " + id + " found."), true);
+        c.getSource().sendSuccess(Component.literal("No stored inventory for " + id + " found."), true);
         return 0;
       }
 
       ServerPlayer player = c.getSource().getPlayer();
       if (player == null) {
-        c.getSource().sendSuccess(() -> Component.literal("Command can only be executed by a player"), false);
+        c.getSource().sendSuccess(Component.literal("Command can only be executed by a player"), false);
         return 0;
       }
 
@@ -316,7 +316,12 @@ public class CommandLootr {
       if (!(te instanceof ILootBlockEntity)) {
         c.getSource().sendSuccess(Component.literal("Please stand on a valid Lootr chest."), false);
       } else {
-        c.getSource().sendSuccess(() -> Component.literal("The ID of this inventory is: ").append(ComponentUtils.copyOnClickText(ibe.getTileId().toString())), false);
+
+        String UUID = ((ILootBlockEntity)te).getTileId().toString();
+
+        Component component = ComponentUtils.wrapInSquareBrackets(Component.literal(UUID).withStyle((p_180514_) -> p_180514_.withColor(ChatFormatting.GREEN).withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, UUID)).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("chat.copy.click"))).withInsertion(UUID)));
+
+        c.getSource().sendSuccess(Component.literal("The ID of this inventory is: ").append(component), false);
       }
       return 1;
     }));
