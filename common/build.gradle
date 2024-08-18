@@ -1,3 +1,11 @@
+def generatedResources = file("src/generated")
+
+sourceSets {
+    main {
+        resources.srcDir generatedResources
+    }
+}
+
 dependencies {
     // REQUIRED
     // We depend on fabric loader here to use the fabric @Environment annotations and get the mixin dependencies
