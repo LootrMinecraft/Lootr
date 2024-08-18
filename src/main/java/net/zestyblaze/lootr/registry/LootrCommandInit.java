@@ -15,15 +15,13 @@ import net.minecraft.commands.arguments.coordinates.Vec3Argument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.ComponentUtils;
-import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextColor;
+import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
@@ -40,7 +38,9 @@ import net.zestyblaze.lootr.blocks.LootrChestBlock;
 import net.zestyblaze.lootr.blocks.LootrShulkerBlock;
 import net.zestyblaze.lootr.blocks.entities.LootrInventoryBlockEntity;
 import net.zestyblaze.lootr.config.LootrModConfig;
+import net.zestyblaze.lootr.data.ChestData;
 import net.zestyblaze.lootr.data.DataStorage;
+import net.zestyblaze.lootr.data.SpecialChestInventory;
 import net.zestyblaze.lootr.entity.LootrChestMinecartEntity;
 import net.zestyblaze.lootr.util.ChestUtil;
 import net.zestyblaze.lootr.util.ServerAccessImpl;
@@ -111,7 +111,7 @@ public class LootrCommandInit {
 
     private static RequiredArgumentBuilder<CommandSourceStack, ResourceLocation> suggestTables() {
         return Commands.argument("table", ResourceLocationArgument.id())
-                .suggests((c, build) -> SharedSuggestionProvider.suggest(getTableNames(), build));
+            .suggests((c, build) -> SharedSuggestionProvider.suggest(getTableNames(), build));
     }
 
     private static RequiredArgumentBuilder<CommandSourceStack, String> suggestProfiles() {
@@ -207,6 +207,87 @@ public class LootrCommandInit {
             }
             return 1;
         }));
+        builder.then(Commands.literal("open_as").executes(c -> {
+            c.getSource().sendSuccess(Component.literal("Must provide player name."), true);
+            return 1;
+        }).then(suggestProfiles().executes(c -> {
+            String playerName = StringArgumentType.getString(c, "profile");
+            Optional<GameProfile> opt_profile = c.getSource().getServer().getProfileCache().get(playerName);
+            if (!opt_profile.isPresent()) {
+                c.getSource().sendFailure(Component.literal("Invalid player name: " + playerName + ", profile not found in the cache."));
+                return 0;
+            }
+            GameProfile profile = opt_profile.get();
+            BlockPos pos = new BlockPos(c.getSource().getPosition());
+            Level level = c.getSource().getLevel();
+            BlockEntity te = level.getBlockEntity(pos);
+            if (!(te instanceof ILootBlockEntity)) {
+                pos = pos.below();
+                te = level.getBlockEntity(pos);
+            }
+            if (!(te instanceof ILootBlockEntity ibe)) {
+                c.getSource().sendSuccess(Component.literal("Please stand on a valid Lootr container."), false);
+                return 0;
+            }
+
+            ChestData data = DataStorage.getContainerData((ServerLevel) level, te.getBlockPos(), ibe.getTileId());
+            SpecialChestInventory inventory = data.getInventory(profile.getId());
+            if (inventory == null) {
+                c.getSource().sendSuccess(Component.literal("No stored inventory for " + playerName + " found."), true);
+                return 0;
+            }
+
+            ServerPlayer player = c.getSource().getPlayer();
+            if (player == null) {
+                c.getSource().sendSuccess(Component.literal("Command can only be executed by a player"), false);
+                return 0;
+            }
+
+            player.openMenu(inventory);
+
+            return 1;
+        })));
+        builder.then(Commands.literal("open_as_uuid").executes(c -> {
+            c.getSource().sendSuccess(Component.literal("Must provide player UUID."), true);
+            return 1;
+        }).then(Commands.argument("profile", StringArgumentType.string()).executes(c -> {
+            String uuid = StringArgumentType.getString(c, "uuid");
+            UUID id;
+            try {
+                id = UUID.fromString(uuid);
+            } catch (IllegalArgumentException exception) {
+                c.getSource().sendFailure(Component.literal("Invalid UUID: " + uuid));
+                return 0;
+            }
+            BlockPos pos = new BlockPos(c.getSource().getPosition());
+            Level level = c.getSource().getLevel();
+            BlockEntity te = level.getBlockEntity(pos);
+            if (!(te instanceof ILootBlockEntity)) {
+                pos = pos.below();
+                te = level.getBlockEntity(pos);
+            }
+            if (!(te instanceof ILootBlockEntity ibe)) {
+                c.getSource().sendSuccess(Component.literal("Please stand on a valid Lootr container."), false);
+                return 0;
+            }
+
+            ChestData data = DataStorage.getContainerData((ServerLevel) level, te.getBlockPos(), ibe.getTileId());
+            SpecialChestInventory inventory = data.getInventory(id);
+            if (inventory == null) {
+                c.getSource().sendSuccess(Component.literal("No stored inventory for " + id + " found."), true);
+                return 0;
+            }
+
+            ServerPlayer player = c.getSource().getPlayer();
+            if (player == null) {
+                c.getSource().sendSuccess(Component.literal("Command can only be executed by a player"), false);
+                return 0;
+            }
+
+            player.openMenu(inventory);
+
+            return 1;
+        })));
         builder.then(Commands.literal("id").executes(c -> {
             BlockPos pos = new BlockPos(c.getSource().getPosition());
             Level world = c.getSource().getLevel();
@@ -218,7 +299,12 @@ public class LootrCommandInit {
             if (!(te instanceof ILootBlockEntity)) {
                 c.getSource().sendSuccess(Component.literal("Please stand on a valid Lootr chest."), false);
             } else {
-                c.getSource().sendSuccess(Component.literal("The ID of this inventory is: " + ((ILootBlockEntity) te).getTileId().toString()), false);
+
+                String UUID = ((ILootBlockEntity) te).getTileId().toString();
+
+                Component component = ComponentUtils.wrapInSquareBrackets(Component.literal(UUID).withStyle((p_180514_) -> p_180514_.withColor(ChatFormatting.GREEN).withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, UUID)).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("chat.copy.click"))).withInsertion(UUID)));
+
+                c.getSource().sendSuccess(Component.literal("The ID of this inventory is: ").append(component), false);
             }
             return 1;
         }));
@@ -231,8 +317,8 @@ public class LootrCommandInit {
                 be = level.getBlockEntity(pos);
             }
             if (be instanceof ILootBlockEntity) {
-                DataStorage.setRefreshing(((ILootBlockEntity)be).getTileId(), LootrModConfig.get().refresh.refresh_value);
-                c.getSource().sendSuccess(Component.literal("Container with ID " + ((ILootBlockEntity)be).getTileId() + " has been set to refresh with a delay of " + LootrModConfig.get().refresh.refresh_value), false);
+                DataStorage.setRefreshing(((ILootBlockEntity) be).getTileId(), LootrModConfig.get().refresh.refresh_value);
+                c.getSource().sendSuccess(Component.literal("Container with ID " + ((ILootBlockEntity) be).getTileId() + " has been set to refresh with a delay of " + LootrModConfig.get().refresh.refresh_value), false);
             } else {
                 c.getSource().sendSuccess(Component.literal("Please stand on a valid Lootr container."), false);
             }
@@ -247,8 +333,8 @@ public class LootrCommandInit {
                 be = level.getBlockEntity(pos);
             }
             if (be instanceof ILootBlockEntity) {
-                DataStorage.setDecaying(((ILootBlockEntity)be).getTileId(), LootrModConfig.get().decay.decay_value);
-                c.getSource().sendSuccess(Component.literal("Container with ID " + ((ILootBlockEntity)be).getTileId() + " has been set to decay with a delay of " + LootrModConfig.get().decay.decay_value), false);
+                DataStorage.setDecaying(((ILootBlockEntity) be).getTileId(), LootrModConfig.get().decay.decay_value);
+                c.getSource().sendSuccess(Component.literal("Container with ID " + ((ILootBlockEntity) be).getTileId() + " has been set to decay with a delay of " + LootrModConfig.get().decay.decay_value), false);
             } else {
                 c.getSource().sendSuccess(Component.literal("Please stand on a valid Lootr container."), false);
             }
@@ -273,7 +359,7 @@ public class LootrCommandInit {
         return builder;
     }
 
-    public static void registerCommands () {
+    public static void registerCommands() {
         CommandRegistrationCallback.EVENT.register(((dispatcher, reg, env) -> dispatcher.register(builder(Commands.literal("lootr").requires(p -> p.hasPermission(2))))));
     }
 }
