@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -15,6 +16,7 @@ import net.zestyblaze.lootr.blocks.entities.TileTicker;
 import net.zestyblaze.lootr.chunk.HandleChunk;
 import net.zestyblaze.lootr.config.LootrModConfig;
 import net.zestyblaze.lootr.entity.EntityTicker;
+import net.zestyblaze.lootr.network.NetworkConstants;
 import net.zestyblaze.lootr.tags.LootrTags;
 
 public class LootrEventsInit {
@@ -44,7 +46,7 @@ public class LootrEventsInit {
                         return true;
                     }
 
-                    if (LootrModConfig.get().breaking.disable_break) {
+                    if (LootrModConfig.isBreakDisabled()) {
                         if (player.getAbilities().instabuild) {
                             if (!player.isShiftKeyDown()) {
                                 player.sendSystemMessage(Component.translatable("lootr.message.cannot_break_sneak").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))));
@@ -73,6 +75,10 @@ public class LootrEventsInit {
                     lbe.updatePacketViaState();
                 }
             }
+        });
+
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
+            NetworkConstants.sendSyncDisableBreak(handler.player);
         });
     }
 }

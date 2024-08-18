@@ -8,6 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -23,11 +24,15 @@ import net.zestyblaze.lootr.api.blockentity.ILootBlockEntity;
 import net.zestyblaze.lootr.entity.LootrChestMinecartEntity;
 import net.zestyblaze.lootr.registry.LootrBlockInit;
 import net.zestyblaze.lootr.tags.LootrTags;
+import net.zestyblaze.lootr.util.ServerAccessImpl;
 
 import java.util.*;
 
 @Config(name = LootrAPI.MODID)
 public class LootrModConfig implements ConfigData {
+  @ConfigEntry.Gui.Excluded
+  public static ClientConfigStore clientConfigStore = null;
+
   @ConfigEntry.Gui.Excluded
   private static Set<String> DECAY_MODS = null;
   @ConfigEntry.Gui.Excluded
@@ -434,5 +439,22 @@ public class LootrModConfig implements ConfigData {
   public static boolean shouldNotify(int remaining) {
     int delay = get().notifications.notification_delay;
     return !get().notifications.disable_notifications && (delay == -1 || remaining <= delay);
+  }
+
+  public static class ClientConfigStore {
+    public boolean disableBreak = false;
+  }
+
+  public static boolean isBreakDisabled () {
+    MinecraftServer server = ServerAccessImpl.getServer();
+    if (server != null) { // There's a server, so it's either dedicated (hence ignore the client config), or integrated (hence ignore the client config)
+      return get().breaking.disable_break;
+    }
+
+    if (clientConfigStore != null) {
+      return clientConfigStore.disableBreak;
+    } else {
+      return get().breaking.disable_break;
+    }
   }
 }

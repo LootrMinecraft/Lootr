@@ -103,11 +103,24 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
             if (LootrAPI.isFakePlayer(player) && (LootrModConfig.get().breaking.enable_fake_player_break || LootrModConfig.get().breaking.enable_break)) {
                 return false;
             }
-            if ((LootrModConfig.get().breaking.disable_break && player.isCreative()) || (!LootrModConfig.get().breaking.disable_break && player.isShiftKeyDown())) {
+            if (LootrModConfig.isBreakDisabled()) {
+                if (player.getAbilities().instabuild) {
+                    if (!player.isShiftKeyDown()) {
+                        player.displayClientMessage(Component.translatable("lootr.message.cannot_break_sneak").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))), false);
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    player.displayClientMessage(Component.translatable("lootr.message.cannot_break").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))), false);
+                    return true;
+                }
+            } else if (!player.isShiftKeyDown()) {
+                player.displayClientMessage(Component.translatable("lootr.message.cart_should_sneak").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))), false);
+                player.displayClientMessage(Component.translatable("lootr.message.should_sneak2", Component.translatable("lootr.message.cart_should_sneak3").setStyle(Style.EMPTY.withBold(true))).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))), false);
+                return true;
+            } else if (player.isShiftKeyDown()) {
                 return false;
-            } else {
-                source.getEntity().sendSystemMessage(Component.translatable("lootr.message.cart_should_sneak").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))));
-                source.getEntity().sendSystemMessage(Component.translatable("lootr.message.should_sneak2", Component.translatable("lootr.message.cart_should_sneak3").setStyle(Style.EMPTY.withBold(true))).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA))));
             }
         } else {
             return true;
