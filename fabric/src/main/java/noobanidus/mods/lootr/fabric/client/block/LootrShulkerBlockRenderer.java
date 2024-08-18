@@ -1,5 +1,4 @@
-/*
-package noobanidus.mods.lootr.client.block;
+package noobanidus.mods.lootr.fabric.client.block;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -16,8 +15,8 @@ import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import noobanidus.mods.lootr.api.LootrAPI;
-import noobanidus.mods.lootr.block.entity.LootrShulkerBlockEntity;
+import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.block.entity.LootrShulkerBlockEntity;
 
 import java.util.UUID;
 
@@ -74,4 +73,3 @@ public class LootrShulkerBlockRenderer implements BlockEntityRenderer<LootrShulk
     pMatrixStack.popPose();
   }
 }
-*/

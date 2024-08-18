@@ -58,6 +58,7 @@ subprojects {
             type = STABLE
             changelog = changelogText
 
+            // TODO
             displayName = "The Bumblezone v${rootProject.mod_version} (${rootProject.minecraft_version} MC ${name.capitalize()})"
             version = "${project.version}"
             modLoaders.add(name)

@@ -3,11 +3,13 @@ package noobanidus.mods.lootr.common.api.data.blockentity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 
 public interface ILootrBlockEntity extends ILootrInfoProvider {
@@ -47,5 +49,45 @@ public interface ILootrBlockEntity extends ILootrInfoProvider {
         level.getChunkSource().chunkMap.getPlayers(new ChunkPos(entity.getBlockPos()), false).forEach(player -> player.connection.send(packet));
       }
     }
+  }
+
+  @Override
+  default void performOpen(ServerPlayer player) {
+    PlatformAPI.performBlockOpen(this, player);
+  }
+
+  @Override
+  default void performOpen() {
+    PlatformAPI.performBlockOpen(this);
+  }
+
+  @Override
+  default void performClose(ServerPlayer player) {
+    PlatformAPI.performBlockClose(this, player);
+  }
+
+  @Override
+  default void performClose() {
+    PlatformAPI.performBlockClose(this);
+  }
+
+  @Override
+  default void performDecay() {
+    Level level = getInfoLevel();
+    if (level == null || level.isClientSide()) {
+      return;
+    }
+    level.destroyBlock(getInfoPos(), true);
+  }
+
+  @Override
+  default void performUpdate(ServerPlayer player) {
+    performUpdate();
+  }
+
+  @Override
+  default void performUpdate() {
+    markChanged();
+    updatePacketViaForce();
   }
 }

@@ -1,5 +1,4 @@
-/*
-package noobanidus.mods.lootr.client.block;
+package noobanidus.mods.lootr.fabric.client.block;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -19,10 +18,10 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
-import noobanidus.mods.lootr.api.LootrAPI;
-import noobanidus.mods.lootr.api.data.blockentity.ILootrBlockEntity;
-import noobanidus.mods.lootr.api.registry.LootrRegistry;
-import noobanidus.mods.lootr.block.entity.LootrChestBlockEntity;
+import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
+import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.common.block.entity.LootrChestBlockEntity;
 
 import java.util.UUID;
 
@@ -96,4 +95,3 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootrBlo
     }
   }
 }
-*/

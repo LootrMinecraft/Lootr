@@ -9,11 +9,13 @@ import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.command.CommandLootr;
 import noobanidus.mods.lootr.neoforge.config.ConfigManager;
 import noobanidus.mods.lootr.neoforge.impl.LootrAPIImpl;
 import noobanidus.mods.lootr.neoforge.impl.LootrRegistryImpl;
+import noobanidus.mods.lootr.neoforge.impl.PlatformAPIImpl;
 import noobanidus.mods.lootr.neoforge.init.*;
 import noobanidus.mods.lootr.neoforge.network.PacketHandler;
 
@@ -36,6 +38,7 @@ public class Lootr {
     instance = this;
     LootrAPI.INSTANCE = new LootrAPIImpl();
     LootrRegistry.INSTANCE = new LootrRegistryImpl();
+    PlatformAPI.INSTANCE = new PlatformAPIImpl();
 
     modContainer.registerConfig(ModConfig.Type.COMMON, ConfigManager.COMMON_CONFIG);
     modContainer.registerConfig(ModConfig.Type.CLIENT, ConfigManager.CLIENT_CONFIG);

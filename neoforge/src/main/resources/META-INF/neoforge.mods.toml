@@ -1,18 +1,20 @@
 modLoader="javafml" 
-loaderVersion="[3,)"
+loaderVersion="[2,)"
 issueTrackerURL="https://github.com/noobanidus/Lootr/issues"
 license="https://github.com/noobanidus/Lootr/blob/1.16/LICENSE"
-
-[[mixins]]
-    config="lootr-common.mixins.json"
-
-[[mods]] 
+[[mods]]
     modId="lootr"
     version="${version}"
     displayName="Lootr"
     displayURL="https://minecraft.curseforge.com/projects/lootr"
     authors="Noobanidus"
     description="Makes loot chest loot per-user."
+
+[[mixins]]
+    config="lootr-common.mixins.json"
+
+[[mixins]]
+    config="lootr-neoforge.mixins.json"
 
 [[dependencies.lootr]]
     modId="minecraft"
