@@ -23,7 +23,6 @@ run
 /runs
 .gitattributes
 /deps
-/common/src/main/generated/
 /flatdir
 
 # Files from Forge MDK
