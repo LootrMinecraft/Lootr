@@ -8,6 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -23,6 +24,7 @@ import net.zestyblaze.lootr.api.LootrAPI;
 import net.zestyblaze.lootr.api.blockentity.ILootBlockEntity;
 import net.zestyblaze.lootr.entity.LootrChestMinecartEntity;
 import net.zestyblaze.lootr.init.ModBlocks;
+import net.zestyblaze.lootr.util.ServerAccessImpl;
 
 import java.util.*;
 
@@ -397,6 +399,11 @@ public class ConfigManager implements ConfigData {
   }
 
   public static boolean isBreakDisabled () {
+    MinecraftServer server = ServerAccessImpl.getServer();
+    if (server != null) { // There's a server, so it's either dedicated (hence ignore the client config), or integrated (hence ignore the client config)
+      return get().breaking.disable_break;
+    }
+
     if (clientConfigStore != null) {
       return clientConfigStore.disableBreak;
     } else {
