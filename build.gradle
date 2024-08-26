@@ -59,13 +59,13 @@ subprojects {
             changelog = changelogText
 
             // TODO
-            displayName = "The Bumblezone v${rootProject.mod_version} (${rootProject.minecraft_version} MC ${name.capitalize()})"
-            version = "${project.version}"
+            displayName = "Lootr-${rootProject.minecraft_version}-${rootProject.mod_version} for ${name.capitalize()})"
+            version = "${rootProject.mod_version}"
             modLoaders.add(name)
 
-            if (env.CURSEFORGEKEY) {
+            if (project.hasProperty("curse_auth")) {
                 curseforge {
-                    accessToken = env.CURSEFORGEKEY
+                    accessToken = project.findProperty("curse_auth")
                     projectId = uploadSettings["curse-id"]
                     minecraftVersions.add(rootProject.minecraft_version)
 
@@ -82,9 +82,9 @@ subprojects {
                 }
             }
 
-            if (env.MODRINTH_TOKEN) {
+            if (project.hasProperty("modrinth_auth")) {
                 modrinth {
-                    accessToken = env.MODRINTH_TOKEN
+                    accessToken = project.findProperty("modrinth_auth")
                     projectId = uploadSettings["modrinth-id"]
                     minecraftVersions.add(rootProject.minecraft_version)
 
@@ -97,6 +97,14 @@ subprojects {
                             }
                         }
                     }
+                }
+            }
+
+            if (project.hasProperty("curse_discord_webhook")) {
+                discord {
+                    webhook = project.findProperty("curse_discord_webhook")
+                    username = "Lootr Update"
+                    setPlatforms(publishMods.platforms.curseforge, publishMods.platforms.modrinth)
                 }
             }
         }
