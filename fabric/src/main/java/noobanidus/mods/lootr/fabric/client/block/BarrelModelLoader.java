@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.fabric;
+package noobanidus.mods.lootr.fabric.client.block;
 
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelResolver;

@@ -40,7 +40,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Set;
 import java.util.UUID;
 
-public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity implements ILootrBlockEntity {
+public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity implements ILootrBlockEntity {
   private final NonNullList<ItemStack> items = NonNullList.withSize(27, ItemStack.EMPTY);
   private final Set<UUID> clientOpeners = new ObjectLinkedOpenHashSet<>();
   protected UUID infoId = null;
@@ -70,25 +70,11 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     }
   };
   protected boolean clientOpened = false;
-/*  private ModelData modelData = null;*/
   private boolean savingToItem = false;
 
   public LootrBarrelBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
     super(LootrRegistry.getBarrelBlockEntity(), pWorldPosition, pBlockState);
   }
-
-/*  @NotNull
-  @Override
-  public ModelData getModelData() {
-    if (modelData == null) {
-      modelData = ModelData.builder().with(ModBlockProperties.OPENED, false).build();
-    }
-    if (hasClientOpened()) {
-      return modelData.derive().with(ModBlockProperties.OPENED, true).build();
-    } else {
-      return modelData.derive().with(ModBlockProperties.OPENED, false).build();
-    }
-  }*/
 
   @Override
   public LootrBlockType getInfoBlockType() {

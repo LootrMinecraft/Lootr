@@ -13,11 +13,12 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.block.*;
 import noobanidus.mods.lootr.common.block.entity.LootrShulkerBlockEntity;
+import noobanidus.mods.lootr.neoforge.block.LootrNeoForgeBarrelBlock;
 
 
 public class ModBlocks {
   private static final DeferredRegister<Block> REGISTER = DeferredRegister.create(BuiltInRegistries.BLOCK, LootrAPI.MODID);
-  public static final DeferredHolder<Block, LootrBarrelBlock> BARREL = REGISTER.register("lootr_barrel", () -> new LootrBarrelBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHEST).strength(2.5f)));
+  public static final DeferredHolder<Block, LootrBarrelBlock> BARREL = REGISTER.register("lootr_barrel", () -> new LootrNeoForgeBarrelBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHEST).strength(2.5f)));
   public static final DeferredHolder<Block, LootrChestBlock> CHEST = REGISTER.register("lootr_chest", () -> new LootrChestBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BARREL).strength(2.5f)));
   public static final DeferredHolder<Block, LootrTrappedChestBlock> TRAPPED_CHEST = REGISTER.register("lootr_trapped_chest", () -> new LootrTrappedChestBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.TRAPPED_CHEST).strength(2.5f)));
   public static final DeferredHolder<Block, LootrInventoryBlock> INVENTORY = REGISTER.register("lootr_inventory", () -> new LootrInventoryBlock(Block.Properties.of().strength(2.5f).sound(SoundType.WOOD)));

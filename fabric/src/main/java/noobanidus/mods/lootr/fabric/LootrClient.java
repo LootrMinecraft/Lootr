@@ -10,6 +10,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import noobanidus.mods.lootr.fabric.client.block.BarrelModelLoader;
 import noobanidus.mods.lootr.fabric.client.block.LootrChestBlockRenderer;
 import noobanidus.mods.lootr.fabric.client.block.LootrShulkerBlockRenderer;
 import noobanidus.mods.lootr.fabric.client.entity.LootrChestCartRenderer;

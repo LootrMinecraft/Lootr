@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.fabric;
+package noobanidus.mods.lootr.fabric.client.block;
 
 import com.google.common.collect.Streams;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
