@@ -13,7 +13,6 @@
   "lootr.message.refresh_in": "This container will refresh its contents in %s seconds.",
   "lootr.message.refresh_start": "The container will refresh with new contents in %s seconds!",
   "lootr.message.invalid_table": "The loot table for this container [%s] resolved to empty and loot could not be generated. Check your `latest.log` for errors.",
-  "lootr.message.invalid_block": "The container that you have tried to open is invalid as it has not generated its identifier.",
   "block.lootr.lootr_chest": "Loot Chest",
   "block.lootr.lootr_trapped_chest": "Loot Chest",
   "block.lootr.lootr_barrel": "Loot Barrel",
@@ -55,8 +54,6 @@
   "text.autoconfig.lootr.option.conversion": "Conversion",
   "text.autoconfig.lootr.option.conversion.max_entry_age": "Maximum Block Entity Age",
   "text.autoconfig.lootr.option.conversion.disable": "Disable Conversion",
-  "text.autoconfig.lootr.option.conversion.elytra": "Convert Elytra Item Frames",
-  "text.autoconfig.lootr.option.conversion.world_border": "Disable Conversion Outside World Border",
   "text.autoconfig.lootr.option.breaking": "Breaking",
   "text.autoconfig.lootr.option.breaking.enable_break": "Enable All Breaking",
   "text.autoconfig.lootr.option.breaking.enable_fake_player_break": "Enable Fake Player Breaking",
@@ -87,8 +84,6 @@
   "text.autoconfig.lootr.option.notifications": "Notifications",
   "text.autoconfig.lootr.option.notifications.notification_delay": "Delay",
   "text.autoconfig.lootr.option.notifications.disable_notifications": "Disable Notifications",
-  "text.autoconfig.lootr.option.notifications.disable_message_styles": "Disable Style And Formatting In Notifications",
-  "text.autoconfig.lootr.option.client": "Client",
-  "text.autoconfig.lootr.option.client.vanilla_textures": "Vanilla Textures",
-  "text.autoconfig.lootr.option.client.old_textures": "Classic Textures"
+  "text.autoconfig.lootr.option.vanilla": "Vanilla",
+  "text.autoconfig.lootr.option.vanilla.vanilla_textures": "Vanilla Textures"
 }
