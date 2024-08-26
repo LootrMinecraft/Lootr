@@ -27,10 +27,12 @@ subprojects {
     Map<String, Map<String, String>> platformSettings = [
             "fabric": [
                     "curse-id": "615106",
+                    "curse-slug": "lootr-fabric",
                     "modrinth-id": "EltpO5cN"
             ],
             "neoforge": [
                     "curse-id": "361276",
+                    "curse-slug": "lootr",
                     "modrinth-id": "EltpO5cN"
             ]
     ]
@@ -59,7 +61,7 @@ subprojects {
             changelog = changelogText
 
             // TODO
-            displayName = "Lootr-${rootProject.minecraft_version}-${rootProject.mod_version} for ${name.capitalize()})"
+            displayName = "lootr-${name}-${rootProject.minecraft_version}-${rootProject.mod_version}"
             version = "${rootProject.mod_version}"
             modLoaders.add(name)
 
@@ -67,6 +69,7 @@ subprojects {
                 curseforge {
                     accessToken = project.findProperty("curse_auth")
                     projectId = uploadSettings["curse-id"]
+                    projectSlug = uploadSettings["curse-slug"]
                     minecraftVersions.add(rootProject.minecraft_version)
 
                     if (uploadDependencies.size() > 0) {
@@ -102,7 +105,7 @@ subprojects {
 
             if (project.hasProperty("curse_discord_webhook")) {
                 discord {
-                    webhook = project.findProperty("curse_discord_webhook")
+                    webhookUrl = project.findProperty("curse_discord_webhook")
                     username = "Lootr Update"
                     setPlatforms(publishMods.platforms.curseforge, publishMods.platforms.modrinth)
                 }
