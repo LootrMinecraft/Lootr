@@ -22,6 +22,7 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -43,6 +44,9 @@ import noobanidus.mods.lootr.common.block.LootrBarrelBlock;
 import noobanidus.mods.lootr.common.block.LootrChestBlock;
 import noobanidus.mods.lootr.common.block.LootrShulkerBlock;
 import noobanidus.mods.lootr.common.block.entity.LootrInventoryBlockEntity;
+import noobanidus.mods.lootr.common.data.DataStorage;
+import noobanidus.mods.lootr.common.data.LootrInventory;
+import noobanidus.mods.lootr.common.data.LootrSavedData;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.common.mixins.MixinBaseContainerBlockEntity;
 import org.jetbrains.annotations.Nullable;
@@ -234,6 +238,87 @@ public class CommandLootr {
       }
       return 1;
     }));
+    builder.then(Commands.literal("open_as").executes(c -> {
+      c.getSource().sendSuccess(() -> Component.literal("Must provide player name."), true);
+      return 1;
+    }).then(suggestProfiles().executes(c -> {
+      String playerName = StringArgumentType.getString(c, "profile");
+      Optional<GameProfile> opt_profile = c.getSource().getServer().getProfileCache().get(playerName);
+      if (!opt_profile.isPresent()) {
+        c.getSource().sendFailure(Component.literal("Invalid player name: " + playerName + ", profile not found in the cache."));
+        return 0;
+      }
+      GameProfile profile = opt_profile.get();
+      BlockPos pos = BlockPos.containing(c.getSource().getPosition());
+      Level level = c.getSource().getLevel();
+      BlockEntity te = level.getBlockEntity(pos);
+      if (!(te instanceof ILootrBlockEntity)) {
+        pos = pos.below();
+        te = level.getBlockEntity(pos);
+      }
+      if (!(te instanceof ILootrBlockEntity ibe)) {
+        c.getSource().sendSuccess(() -> Component.literal("Please stand on a valid Lootr container."), false);
+        return 0;
+      }
+
+      LootrSavedData data = DataStorage.getData(ibe);
+      LootrInventory inventory = data.getInventory(profile.getId());
+      if (inventory == null) {
+        c.getSource().sendSuccess(() -> Component.literal("No stored inventory for " + playerName + " found."), true);
+        return 0;
+      }
+
+      ServerPlayer player = c.getSource().getPlayer();
+      if (player == null) {
+        c.getSource().sendSuccess(() -> Component.literal("Command can only be executed by a player"), false);
+        return 0;
+      }
+
+      player.openMenu(inventory);
+
+      return 1;
+    })));
+    builder.then(Commands.literal("open_as_uuid").executes(c -> {
+      c.getSource().sendSuccess(() -> Component.literal("Must provide player UUID."), true);
+      return 1;
+    }).then(Commands.argument("uuid", StringArgumentType.string()).executes(c -> {
+      String uuid = StringArgumentType.getString(c, "uuid");
+      UUID id;
+      try {
+        id = UUID.fromString(uuid);
+      } catch (IllegalArgumentException exception) {
+        c.getSource().sendFailure(Component.literal("Invalid UUID: " + uuid));
+        return 0;
+      }
+      BlockPos pos = BlockPos.containing(c.getSource().getPosition());
+      Level level = c.getSource().getLevel();
+      BlockEntity te = level.getBlockEntity(pos);
+      if (!(te instanceof ILootrBlockEntity)) {
+        pos = pos.below();
+        te = level.getBlockEntity(pos);
+      }
+      if (!(te instanceof ILootrBlockEntity ibe)) {
+        c.getSource().sendSuccess(() -> Component.literal("Please stand on a valid Lootr container."), false);
+        return 0;
+      }
+
+      LootrSavedData data = DataStorage.getData(ibe);
+      LootrInventory inventory = data.getInventory(id);
+      if (inventory == null) {
+        c.getSource().sendSuccess(() -> Component.literal("No stored inventory for " + id + " found."), true);
+        return 0;
+      }
+
+      ServerPlayer player = c.getSource().getPlayer();
+      if (player == null) {
+        c.getSource().sendSuccess(() -> Component.literal("Command can only be executed by a player"), false);
+        return 0;
+      }
+
+      player.openMenu(inventory);
+
+      return 1;
+    })));
     builder.then(Commands.literal("id").executes(c -> {
       BlockPos pos = BlockPos.containing(c.getSource().getPosition());
       Level world = c.getSource().getLevel();
@@ -245,7 +330,7 @@ public class CommandLootr {
       if (!(te instanceof ILootrBlockEntity ibe)) {
         c.getSource().sendSuccess(() -> Component.literal("Please stand on a valid Lootr container."), false);
       } else {
-        c.getSource().sendSuccess(() -> Component.literal("The ID of this inventory is: " + (ibe).getInfoUUID().toString()), false);
+        c.getSource().sendSuccess(() -> Component.literal("The ID of this inventory is: ").append(ComponentUtils.copyOnClickText(ibe.getInfoUUID().toString())), false);
       }
       return 1;
     }));
