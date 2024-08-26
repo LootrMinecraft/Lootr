@@ -56,6 +56,7 @@ public class ClientHandlers {
   public static void handleOpenContainer(BlockPos pos) {
     if (Minecraft.getInstance().level.getBlockEntity(pos) instanceof ILootrBlockEntity provider) {
       provider.setClientOpened(true);
+      provider.asBlockEntity().requestModelDataUpdate();
     }
     refreshModel(pos);
   }
@@ -63,6 +64,7 @@ public class ClientHandlers {
   public static void handleCloseContainer(BlockPos pos) {
     if (Minecraft.getInstance().level.getBlockEntity(pos) instanceof ILootrBlockEntity provider) {
       provider.setClientOpened(false);
+      provider.asBlockEntity().requestModelDataUpdate();
     }
     refreshModel(pos);
   }
