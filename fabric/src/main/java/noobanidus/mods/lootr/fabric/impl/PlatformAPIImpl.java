@@ -29,7 +29,7 @@ public class PlatformAPIImpl implements IPlatformAPI {
 
   @Override
   public void performCartClose(ILootrCart cart, ServerPlayer player) {
-    ServerPlayNetworking.send(player, new PacketCloseContainer(cart.asEntity().blockPosition()));
+    ServerPlayNetworking.send(player, new PacketCloseCart(cart.asEntity().getId()));
   }
 
   @Override
