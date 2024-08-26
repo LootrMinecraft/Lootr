@@ -1,7 +1,7 @@
 def generatedResources = file("src/generated")
 
 sourceSets {
-    main {
+    generated {
         resources.srcDir generatedResources
     }
 }

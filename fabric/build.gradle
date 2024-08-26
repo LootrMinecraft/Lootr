@@ -43,6 +43,8 @@ processResources {
     filesMatching("fabric.mod.json") {
         expand "version": project.version
     }
+
+    from(project(":common").sourceSets["generated"].resources)
 }
 
 shadowJar {

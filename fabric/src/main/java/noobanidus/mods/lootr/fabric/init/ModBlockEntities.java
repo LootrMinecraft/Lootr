@@ -5,6 +5,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.block.entity.*;
+import noobanidus.mods.lootr.fabric.block.entity.LootrFabricBarrelBlockEntity;
 
 public class ModBlockEntities {
   public static void registerBlockEntities() {
@@ -16,7 +17,7 @@ public class ModBlockEntities {
   }
 
   public static final BlockEntityType<LootrChestBlockEntity> LOOTR_CHEST = BlockEntityType.Builder.of(LootrChestBlockEntity::new, ModBlocks.CHEST).build(null);
-  public static final BlockEntityType<LootrBarrelBlockEntity> LOOTR_BARREL = BlockEntityType.Builder.of(LootrBarrelBlockEntity::new, ModBlocks.BARREL).build(null);
+  public static final BlockEntityType<LootrFabricBarrelBlockEntity> LOOTR_BARREL = BlockEntityType.Builder.of(LootrFabricBarrelBlockEntity::new, ModBlocks.BARREL).build(null);
   public static final BlockEntityType<LootrTrappedChestBlockEntity> LOOTR_TRAPPED_CHEST = BlockEntityType.Builder.of(LootrTrappedChestBlockEntity::new, ModBlocks.TRAPPED_CHEST).build(null);
   public static final BlockEntityType<LootrShulkerBlockEntity> LOOTR_SHULKER = BlockEntityType.Builder.of(LootrShulkerBlockEntity::new, ModBlocks.SHULKER).build(null);
   public static final BlockEntityType<LootrInventoryBlockEntity> LOOTR_INVENTORY = BlockEntityType.Builder.of(LootrInventoryBlockEntity::new, ModBlocks.INVENTORY).build(null);
