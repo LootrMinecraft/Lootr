@@ -51,20 +51,21 @@ dependencies {
 }
 
 processResources {
-    from(project(":common").sourceSets["main"].resources)
-
     inputs.property "version", project.version
 
     filesMatching("META-INF/neoforge.mods.toml") {
         expand "version": project.version
     }
 
-    from(project(":common").sourceSets["generated"].resources)
+    from(project(":common").sourceSets["generated"].resources) {
+        exclude ".cache"
+    }
 }
 
 shadowJar {
     exclude "fabric.mod.json"
     exclude "architectury.common.json"
+    exclude "resources/"
 
     configurations = [project.configurations.shadowCommon]
     archiveClassifier.set("dev-shadow")

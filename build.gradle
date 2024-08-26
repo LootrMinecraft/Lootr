@@ -13,7 +13,7 @@ subprojects {
     apply plugin: "dev.architectury.loom"
     apply plugin: "me.modmuss50.mod-publish-plugin"
 
-    version = "${rootProject.mod_version}+${rootProject.minecraft_version}-${name}"
+    version = "${rootProject.mod_version}-${rootProject.minecraft_version}-${name}"
 
     loom {
         silentMojangMappingsLicense()
@@ -108,8 +108,8 @@ allprojects {
     apply plugin: "architectury-plugin"
     apply plugin: "maven-publish"
 
-    archivesBaseName = rootProject.mod_id
-    version = "${rootProject.mod_version}+${rootProject.minecraft_version}-${name}"
+    archivesBaseName = "${rootProject.mod_id}-${name}"
+    version = "${rootProject.minecraft_version}-${rootProject.mod_version}"
     group = rootProject.maven_group
 
     repositories {

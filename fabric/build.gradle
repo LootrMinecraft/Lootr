@@ -44,11 +44,14 @@ processResources {
         expand "version": project.version
     }
 
-    from(project(":common").sourceSets["generated"].resources)
+    from(project(":common").sourceSets["generated"].resources) {
+        exclude(".cache")
+    }
 }
 
 shadowJar {
     exclude "architectury.common.json"
+    exclude "resources/"
     configurations = [project.configurations.shadowCommon]
     archiveClassifier.set("dev-shadow")
 }
