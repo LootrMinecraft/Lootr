@@ -41,13 +41,13 @@ subprojects {
                     "curse-id": "615106",
                     "curse-slug": "lootr-fabric",
                     "modrinth-id": "EltpO5cN",
-                    "title": " for Fabric"
+                    "title": "for Fabric"
             ],
             "neoforge": [
                     "curse-id": "361276",
                     "curse-slug": "lootr",
                     "modrinth-id": "EltpO5cN",
-                    "title": " for NeoForge"
+                    "title": "for NeoForge"
             ]
     ]
 
@@ -73,7 +73,6 @@ subprojects {
 
     if (gitCommit && gitPrevCommit) {
         changelogText += getExecOutput(['git', 'log', "--pretty=tformat:- %s [(%h)](${gitRepo}/commit/%h)", '' + gitPrevCommit + '..' + gitCommit])
-        project.logger.lifecycle(changelogText)
     }
 
 
@@ -97,7 +96,7 @@ subprojects {
                     accessToken = project.findProperty("curse_auth")
                     projectId = uploadSettings["curse-id"]
                     projectSlug = uploadSettings["curse-slug"]
-                    announcementTitle = "Lootr ${rootProject.minecraft_version}-${rootProject.modVersion} ${uploadSettings["title"]}"
+                    announcementTitle = "Lootr ${rootProject.minecraft_version}-${rootProject.mod_version} ${uploadSettings["title"]}"
                     minecraftVersions.add(rootProject.minecraft_version)
 
                     if (uploadDependencies.size() > 0) {
@@ -117,7 +116,7 @@ subprojects {
                 modrinth {
                     accessToken = project.findProperty("modrinth_auth")
                     projectId = uploadSettings["modrinth-id"]
-                    announcementTitle = "Lootr ${rootProject.minecraft_version}-${rootProject.modVersion} ${uploadSettings["title"]}"
+                    announcementTitle = "Lootr ${rootProject.minecraft_version}-${rootProject.mod_version} ${uploadSettings["title"]}"
                     minecraftVersions.add(rootProject.minecraft_version)
 
                     dependencies {
