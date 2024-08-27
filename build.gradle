@@ -9,6 +9,18 @@ architectury {
     minecraft = rootProject.minecraft_version
 }
 
+def getExecOutput(commands) {
+
+    def out = new ByteArrayOutputStream()
+
+    exec {
+        commandLine commands
+        standardOutput out
+    }
+
+    return out.toString().trim();
+}
+
 subprojects {
     apply plugin: "dev.architectury.loom"
     apply plugin: "me.modmuss50.mod-publish-plugin"
@@ -28,12 +40,14 @@ subprojects {
             "fabric": [
                     "curse-id": "615106",
                     "curse-slug": "lootr-fabric",
-                    "modrinth-id": "EltpO5cN"
+                    "modrinth-id": "EltpO5cN",
+                    "title": " for Fabric"
             ],
             "neoforge": [
                     "curse-id": "361276",
                     "curse-slug": "lootr",
-                    "modrinth-id": "EltpO5cN"
+                    "modrinth-id": "EltpO5cN",
+                    "title": " for NeoForge"
             ]
     ]
 
@@ -50,10 +64,23 @@ subprojects {
     def uploadSettings = platformSettings.get(name)
     def uploadDependencies = platformDependencies.get(name)
 
+    def gitRepo = getExecOutput(['git', 'remote', 'get-url', 'origin'])
+    def gitCommit = getExecOutput(['git', 'log', '-n', '1', '--pretty=tformat:%h'])
+    def gitPrevCommit = project.findProperty("git_previous_commit") ?: env["GIT_PREVIOUS_COMMIT"]
+
+
+    String changelogText = ""
+
+    if (gitCommit && gitPrevCommit) {
+        changelogText += getExecOutput(['git', 'log', "--pretty=tformat:- %s [(%h)](${gitRepo}/commit/%h)", '' + gitPrevCommit + '..' + gitCommit])
+        project.logger.lifecycle(changelogText)
+    }
+
+
     if (uploadSettings != null && uploadDependencies != null) {
 
-        File changeLog = rootProject.file("CHANGELOG.md")
-        String changelogText = changeLog.exists() ? changeLog.text : ""
+        //File changeLog = rootProject.file("CHANGELOG.md")
+        //String changelogText = changeLog.exists() ? changeLog.text : ""
 
         publishMods {
             file = tasks.remapJar.archiveFile
@@ -70,6 +97,7 @@ subprojects {
                     accessToken = project.findProperty("curse_auth")
                     projectId = uploadSettings["curse-id"]
                     projectSlug = uploadSettings["curse-slug"]
+                    announcementTitle = "Lootr ${rootProject.minecraft_version}-${rootProject.modVersion} ${uploadSettings["title"]}"
                     minecraftVersions.add(rootProject.minecraft_version)
 
                     if (uploadDependencies.size() > 0) {
@@ -89,6 +117,7 @@ subprojects {
                 modrinth {
                     accessToken = project.findProperty("modrinth_auth")
                     projectId = uploadSettings["modrinth-id"]
+                    announcementTitle = "Lootr ${rootProject.minecraft_version}-${rootProject.modVersion} ${uploadSettings["title"]}"
                     minecraftVersions.add(rootProject.minecraft_version)
 
                     dependencies {
