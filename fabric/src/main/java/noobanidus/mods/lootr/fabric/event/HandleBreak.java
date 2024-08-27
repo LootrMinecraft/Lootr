@@ -35,14 +35,17 @@ public class HandleBreak {
           if (player.getAbilities().instabuild) {
             if (!player.isShiftKeyDown()) {
               player.displayClientMessage(Component.translatable("lootr.message.cannot_break_sneak").setStyle(getChatStyle()), false);
+              return false;
             }
           } else {
             player.displayClientMessage(Component.translatable("lootr.message.cannot_break").setStyle(getChatStyle()), false);
+            return false;
           }
         } else {
           if (!player.isShiftKeyDown()) {
             player.displayClientMessage(Component.translatable("lootr.message.should_sneak").setStyle(getChatStyle()), false);
             player.displayClientMessage(Component.translatable("lootr.message.should_sneak2", Component.translatable("lootr.message.should_sneak3").setStyle(Style.EMPTY.withBold(true))).setStyle(getChatStyle()), false);
+            return false;
           }
         }
       } else {
