@@ -21,12 +21,7 @@ pipeline {
     }
     post {
         always {
-            archive {
-                artifacts {
-                    excludes 'fabric/build/libs/**-dev-shadow.jar', 'neoforge/build/libs/**-dev-shadow.jar', 'common/build/libs/**-transform**.jar'
-                    includes 'fabric/build/libs/**.jar', 'neoforge/build/libs/**.jar', 'common/build/libs/**.jar'
-                }
-            }
+            archiveArtifacts artifacts: 'fabric/build/libs/**.jar, neoforge/build/libs/**.jar, common/build/libs/**.jar', excludes: 'fabric/build/libs/**-dev-shadow.jar, neoforge/build/libs/**-dev-shadow.jar, common/build/libs/**-transform**.jar', followSymlinks: false, onlyIfSuccessful: true
         }
     }
 } 
