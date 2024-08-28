@@ -3,15 +3,12 @@
 pipeline {
     agent any
     tools {
-        jdk "jdk-16.0.1+9"
+        jdk "jdk-21"
     }
     stages {
         stage('Clean') {
             steps {
                 echo 'Cleaning Project'
-                sh 'git submodule init'
-                sh 'git submodule update'
-                sh 'chmod +x gradlew'
                 sh './gradlew clean'
             }
         }
@@ -24,7 +21,11 @@ pipeline {
     }
     post {
         always {
-            archive 'build/libs/**.jar'
+            archive {
+                excludes 'fabric/build/libs/**-dev-shadow.jar', 'neoforge/build/libs/**-dev-shadow.jar', 'common/build/libs/**-transform**.jar'
+                includes 'fabric/build/libs/**.jar', 'neoforge/build/libs/**.jar', 'common/build/libs/**.jar'
+                }
+            }
         }
     }
 } 
