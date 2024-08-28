@@ -22,8 +22,10 @@ pipeline {
     post {
         always {
             archive {
-                excludes 'fabric/build/libs/**-dev-shadow.jar', 'neoforge/build/libs/**-dev-shadow.jar', 'common/build/libs/**-transform**.jar'
-                includes 'fabric/build/libs/**.jar', 'neoforge/build/libs/**.jar', 'common/build/libs/**.jar'
+                artifacts {
+                    excludes 'fabric/build/libs/**-dev-shadow.jar', 'neoforge/build/libs/**-dev-shadow.jar', 'common/build/libs/**-transform**.jar'
+                    includes 'fabric/build/libs/**.jar', 'neoforge/build/libs/**.jar', 'common/build/libs/**.jar'
+                }
             }
         }
     }
