@@ -14,6 +14,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraft.world.phys.Vec3;
+import noobanidus.mods.lootr.common.api.ILootrOptional;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 
@@ -48,11 +49,21 @@ public record LootCount(List<Operation> operations) implements LootItemCondition
     BlockPos position = new BlockPos((int) incomingPos.x, (int) incomingPos.y, (int) incomingPos.z);
     BlockEntity blockEntity = lootContext.getLevel().getBlockEntity(position);
     // RATHER THAN OPENERS
-    if (blockEntity instanceof ILootrBlockEntity) {
-      int count = ((ILootrBlockEntity) blockEntity).getActualOpeners().size() + 1; // Additional opener to include the current opener
+    if (blockEntity instanceof ILootrBlockEntity blockEntity2) {
+      int count = blockEntity2.getActualOpeners().size() + 1; // Additional opener to include the current opener
       for (Operation op : operations) {
         if (!op.test(count)) {
           return false;
+        }
+      }
+    } else if (blockEntity instanceof ILootrOptional optional) {
+      Object object = optional.getLootrObject();
+      if (object instanceof ILootrBlockEntity blockEntity2) {
+        int count = blockEntity2.getActualOpeners().size() + 1; // Additional opener to include the current opener
+        for (Operation op : operations) {
+          if (!op.test(count)) {
+            return false;
+          }
         }
       }
     }

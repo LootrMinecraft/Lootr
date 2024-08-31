@@ -6,6 +6,8 @@ import net.minecraft.core.SectionPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import noobanidus.mods.lootr.common.api.ILootrOptional;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
@@ -25,12 +27,18 @@ public class ClientHandlers {
       return;
     }
 
-    if (!(cart instanceof ILootrCart lootrCart)) {
-      LootrAPI.LOG.info("Unable to mark entity with id '" + entityId + "' as closed as entity is not a Lootr minecart.");
+    if (cart instanceof ILootrCart lootrCart) {
+      lootrCart.setClientOpened(false);
       return;
+    } else if (cart instanceof ILootrOptional optional) {
+      Object object = optional.getLootrObject();
+      if (object instanceof ILootrCart lootrCart2) {
+        lootrCart2.setClientOpened(false);
+        return;
+      }
     }
 
-    lootrCart.setClientOpened(false);
+    LootrAPI.LOG.info("Unable to mark entity with id '" + entityId + "' as closed as entity is not a Lootr-compatible entity.");
   }
 
   public static void handleOpenCart(int entityId) {
@@ -45,26 +53,46 @@ public class ClientHandlers {
       return;
     }
 
-    if (!(cart instanceof ILootrCart lootrCart)) {
-      LootrAPI.LOG.info("Unable to mark entity with id '" + entityId + "' as opened as entity is not a Lootr minecart.");
+    if (cart instanceof ILootrCart lootrCart) {
+      lootrCart.setClientOpened(true);
       return;
+    } else if (cart instanceof ILootrOptional optional) {
+      Object object = optional.getLootrObject();
+      if (object instanceof ILootrCart lootrCart2) {
+        lootrCart2.setClientOpened(true);
+        return;
+      }
     }
 
-    lootrCart.setClientOpened(true);
+    LootrAPI.LOG.info("Unable to mark entity with id '" + entityId + "' as open as entity is not a Lootr-compatible entity.");
   }
 
   public static void handleOpenContainer(BlockPos pos) {
-    if (Minecraft.getInstance().level.getBlockEntity(pos) instanceof ILootrBlockEntity provider) {
-      provider.setClientOpened(true);
-      provider.asBlockEntity().requestModelDataUpdate();
+    BlockEntity blockEntity = Minecraft.getInstance().level.getBlockEntity(pos);
+    if (blockEntity instanceof ILootrBlockEntity lootrBlockEntity) {
+      lootrBlockEntity.setClientOpened(true);
+      lootrBlockEntity.asBlockEntity().requestModelDataUpdate();
+    } else if (blockEntity instanceof ILootrOptional optionalProvider) {
+      Object object = optionalProvider.getLootrObject();
+      if (object instanceof ILootrBlockEntity lootrBlockEntity2) {
+        lootrBlockEntity2.setClientOpened(true);
+        lootrBlockEntity2.asBlockEntity().requestModelDataUpdate();
+      }
     }
     refreshModel(pos);
   }
 
   public static void handleCloseContainer(BlockPos pos) {
-    if (Minecraft.getInstance().level.getBlockEntity(pos) instanceof ILootrBlockEntity provider) {
-      provider.setClientOpened(false);
-      provider.asBlockEntity().requestModelDataUpdate();
+    BlockEntity blockEntity = Minecraft.getInstance().level.getBlockEntity(pos);
+    if (blockEntity instanceof ILootrBlockEntity lootrBlockEntity) {
+      lootrBlockEntity.setClientOpened(false);
+      lootrBlockEntity.asBlockEntity().requestModelDataUpdate();
+    } else if (blockEntity instanceof ILootrOptional optionalProvider) {
+      Object object = optionalProvider.getLootrObject();
+      if (object instanceof ILootrBlockEntity lootrBlockEntity2) {
+        lootrBlockEntity2.setClientOpened(false);
+        lootrBlockEntity2.asBlockEntity().requestModelDataUpdate();
+      }
     }
     refreshModel(pos);
   }

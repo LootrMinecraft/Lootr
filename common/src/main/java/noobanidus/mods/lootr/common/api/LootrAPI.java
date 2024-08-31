@@ -315,8 +315,18 @@ public class LootrAPI {
   }
 
   @Nullable
+  public static ILootrInventory getInventory(ILootrOptional optionalProvider, ServerPlayer player, LootFiller filler) {
+    return INSTANCE.getInventory(optionalProvider, player, filler);
+  }
+
+  @Nullable
   public static ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler) {
     return INSTANCE.getInventory(provider, player, filler);
+  }
+
+  @Nullable
+  public static ILootrInventory getInventory(ILootrOptional optionalProvider, ServerPlayer player, LootFiller filler, MenuBuilder builder) {
+    return INSTANCE.getInventory(optionalProvider, player, filler, builder);
   }
 
   @Nullable
@@ -327,6 +337,11 @@ public class LootrAPI {
   @Nullable
   public static ILootrSavedData getData(ILootrInfoProvider provider) {
     return INSTANCE.getData(provider);
+  }
+
+  @Nullable
+  public static ILootrSavedData getData(ILootrOptional optionalProvider) {
+    return INSTANCE.getData(optionalProvider);
   }
 
   public static boolean isAwarded(ILootrInfoProvider provider, ServerPlayer player) {

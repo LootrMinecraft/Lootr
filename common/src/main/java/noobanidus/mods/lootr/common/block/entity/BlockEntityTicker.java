@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
+import noobanidus.mods.lootr.common.api.ILootrOptional;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 
@@ -112,7 +113,7 @@ public class BlockEntityTicker {
           continue;
         }
         BlockEntity blockEntity = level.getBlockEntity(entry.getPosition());
-        if (!(blockEntity instanceof RandomizableContainerBlockEntity be) || blockEntity instanceof ILootrBlockEntity) {
+        if (!(blockEntity instanceof RandomizableContainerBlockEntity be) || blockEntity instanceof ILootrBlockEntity || blockEntity instanceof ILootrOptional) {
           toRemove.add(entry);
           continue;
         }

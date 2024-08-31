@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.ILootrAPI;
+import noobanidus.mods.lootr.common.api.ILootrOptional;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.MenuBuilder;
 import noobanidus.mods.lootr.common.api.client.ClientTextureType;
@@ -223,8 +224,35 @@ public class LootrAPIImpl implements ILootrAPI {
   }
 
   @Override
+  public @Nullable ILootrInventory getInventory(ILootrOptional optionalProvider, ServerPlayer player, LootFiller filler) {
+    Object object = optionalProvider.getLootrObject();
+    if (object instanceof ILootrInfoProvider provider) {
+      return getInventory(provider, player, filler);
+    }
+    return null;
+  }
+
+  @Override
+  public @Nullable ILootrInventory getInventory(ILootrOptional optionalProvider, ServerPlayer player, LootFiller filler, MenuBuilder builder) {
+    Object object = optionalProvider.getLootrObject();
+    if (object instanceof ILootrInfoProvider provider) {
+      return getInventory(provider, player, filler, builder);
+    }
+    return null;
+  }
+
+  @Override
   public @Nullable ILootrSavedData getData(ILootrInfoProvider provider) {
     return DataStorage.getData(provider);
+  }
+
+  @Override
+  public @Nullable ILootrSavedData getData(ILootrOptional optionalProvider) {
+    Object object = optionalProvider.getLootrObject();
+    if (object instanceof ILootrInfoProvider provider) {
+      return getData(provider);
+    }
+    return null;
   }
 
   @Override
