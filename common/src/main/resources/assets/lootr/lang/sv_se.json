@@ -100,5 +100,10 @@
   "text.autoconfig.lootr.option.decay.start_tick_decay": "Start Decay While Ticking Containers",
   "text.autoconfig.lootr.option.refresh.perform_tick_refresh": "Perform Refresh While Ticking Containers",
   "text.autoconfig.lootr.option.refresh.start_tick_refresh": "Start Refresh While Ticking Containers",
-  "text.autoconfig.lootr.option.conversion.rename_container_block_entities": "Döp om befintliga blockentiteter som är behållare"
+  "text.autoconfig.lootr.option.conversion.rename_container_block_entities": "Döp om befintliga blockentiteter som är behållare",
+  "tag.item.lootr.containers": "Lootr Containers",
+  "tag.item.lootr.chests": "Lootr Chests",
+  "tag.item.lootr.barrels": "Lootr Barrels",
+  "tag.item.lootr.shulkers": "Lootr Shulkers",
+  "tag.item.lootr.trapped_chests": "Trapped Lootr Chests"
 }
