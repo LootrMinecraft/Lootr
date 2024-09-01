@@ -1,15 +1,19 @@
 package noobanidus.mods.lootr.fabric.impl;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.LockCode;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import noobanidus.mods.lootr.common.api.DataToCopy;
 import noobanidus.mods.lootr.common.api.IPlatformAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
+import noobanidus.mods.lootr.common.mixins.MixinBaseContainerBlockEntity;
 import noobanidus.mods.lootr.fabric.network.to_client.PacketCloseCart;
 import noobanidus.mods.lootr.fabric.network.to_client.PacketCloseContainer;
 import noobanidus.mods.lootr.fabric.network.to_client.PacketOpenCart;
@@ -70,11 +74,17 @@ public class PlatformAPIImpl implements IPlatformAPI {
 
   @Override
   public DataToCopy copySpecificData(BlockEntity oldBlockEntity) {
-    return DataToCopy.EMPTY;
+    LockCode key = LockCode.NO_LOCK;
+    if (oldBlockEntity instanceof BaseContainerBlockEntity baseContainer) {
+      key = ((MixinBaseContainerBlockEntity) baseContainer).getLockKey();
+    }
+    return new DataToCopy(null, key);
   }
 
   @Override
   public void restoreSpecificData(DataToCopy data, BlockEntity newBlockEntity) {
-    // No-op
+    if (newBlockEntity instanceof BaseContainerBlockEntity baseContainer) {
+      ((MixinBaseContainerBlockEntity) baseContainer).setLockKey(data.lockCode());
+    }
   }
 }

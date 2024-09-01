@@ -2,13 +2,16 @@ package noobanidus.mods.lootr.neoforge.impl;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.LockCode;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.network.PacketDistributor;
 import noobanidus.mods.lootr.common.api.DataToCopy;
 import noobanidus.mods.lootr.common.api.IPlatformAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
+import noobanidus.mods.lootr.common.mixins.MixinBaseContainerBlockEntity;
 import noobanidus.mods.lootr.neoforge.network.toClient.PacketCloseCart;
 import noobanidus.mods.lootr.neoforge.network.toClient.PacketCloseContainer;
 import noobanidus.mods.lootr.neoforge.network.toClient.PacketOpenCart;
@@ -57,13 +60,20 @@ public class PlatformAPIImpl implements IPlatformAPI {
 
   @Override
   public DataToCopy copySpecificData(BlockEntity oldBlockEntity) {
-    return new DataToCopy(oldBlockEntity.getPersistentData());
+    LockCode code = LockCode.NO_LOCK;
+    if (oldBlockEntity instanceof BaseContainerBlockEntity baseContainer) {
+      code = ((MixinBaseContainerBlockEntity) baseContainer).getLockKey();
+    }
+    return new DataToCopy(oldBlockEntity.getPersistentData(), code);
   }
 
   @Override
   public void restoreSpecificData(DataToCopy data, BlockEntity newBlockEntity) {
     if (data != DataToCopy.EMPTY && newBlockEntity != null) {
       newBlockEntity.getPersistentData().merge(data.data());
+    }
+    if (newBlockEntity instanceof BaseContainerBlockEntity baseContainer) {
+      ((MixinBaseContainerBlockEntity) baseContainer).setLockKey(data.lockCode());
     }
   }
 }
