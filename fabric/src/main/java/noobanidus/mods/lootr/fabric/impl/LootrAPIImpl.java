@@ -16,6 +16,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.ILootrAPI;
@@ -67,6 +68,12 @@ public class LootrAPIImpl implements ILootrAPI {
     if (provider.getInfoUUID() == null) {
       player.displayClientMessage(Component.translatable("lootr.message.invalid_block").setStyle(LootrAPI.getInvalidStyle()), true);
       return;
+    }
+    // This handles the `lockKey` parameter
+    if (provider instanceof BaseContainerBlockEntity baseContainer) {
+      if (!baseContainer.canOpen(player)) {
+        return;
+      }
     }
     if (LootrAPI.isDecayed(provider)) {
       provider.performDecay();
