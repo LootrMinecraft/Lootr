@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.common.api;
 
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 
@@ -37,5 +38,13 @@ public class PlatformAPI {
 
   public static void performBlockClose(ILootrBlockEntity blockEntity) {
     INSTANCE.performBlockClose(blockEntity);
+  }
+
+  public static DataToCopy copySpecificData(BlockEntity oldBlockEntity) {
+    return INSTANCE.copySpecificData(oldBlockEntity);
+  }
+
+  public static void restoreSpecificData(DataToCopy data, BlockEntity newBlockEntity) {
+    INSTANCE.restoreSpecificData(data, newBlockEntity);
   }
 }

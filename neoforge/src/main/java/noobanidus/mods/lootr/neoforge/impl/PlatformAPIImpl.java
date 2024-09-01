@@ -3,7 +3,9 @@ package noobanidus.mods.lootr.neoforge.impl;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.network.PacketDistributor;
+import noobanidus.mods.lootr.common.api.DataToCopy;
 import noobanidus.mods.lootr.common.api.IPlatformAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
@@ -51,5 +53,17 @@ public class PlatformAPIImpl implements IPlatformAPI {
   @Override
   public void performBlockClose(ILootrBlockEntity blockEntity) {
     PacketDistributor.sendToPlayersTrackingChunk((ServerLevel) blockEntity.getInfoLevel(), new ChunkPos(blockEntity.asBlockEntity().getBlockPos()), new PacketCloseContainer(blockEntity.asBlockEntity().getBlockPos()));
+  }
+
+  @Override
+  public DataToCopy copySpecificData(BlockEntity oldBlockEntity) {
+    return new DataToCopy(oldBlockEntity.getPersistentData());
+  }
+
+  @Override
+  public void restoreSpecificData(DataToCopy data, BlockEntity newBlockEntity) {
+    if (data != DataToCopy.EMPTY && newBlockEntity != null) {
+      newBlockEntity.getPersistentData().merge(data.data());
+    }
   }
 }

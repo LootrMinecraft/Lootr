@@ -293,4 +293,9 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
   public @Nullable IContainerTrigger getTrigger() {
     return LootrRegistry.getBarrelTrigger();
   }
+
+  @Override
+  public void manuallySetLootTable(ResourceKey<LootTable> table, long seed) {
+    setLootTable(table, seed);
+  }
 }

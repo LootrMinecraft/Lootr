@@ -44,6 +44,11 @@ public record RandomizableContainerBlockEntityLootrInfoProvider(
   }
 
   @Override
+  public void manuallySetLootTable(ResourceKey<LootTable> table, long seed) {
+    blockEntity.setLootTable(table, seed);
+  }
+
+  @Override
   public @NotNull UUID getInfoUUID() {
     return id();
   }

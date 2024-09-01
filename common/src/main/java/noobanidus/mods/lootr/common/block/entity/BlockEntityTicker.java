@@ -11,8 +11,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
-import noobanidus.mods.lootr.common.api.ILootrOptional;
-import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.*;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 
 import java.util.Set;
@@ -127,19 +126,17 @@ public class BlockEntityTicker {
           toRemove.add(entry);
           continue;
         }
+        // Save any specific data. Currently this is only function on NeoForge.
+        DataToCopy data = PlatformAPI.copySpecificData(be);
         ResourceKey<LootTable> table = be.getLootTable();
         long seed = be.getLootTableSeed();
-        // Clear loot table to prevent loot drop
+        // IMPORTANT: Clear loot table to prevent loot drop when container is destroyed
         be.setLootTable(null);
-/*        CompoundTag oldData = be.getPersistentData();*/
-
         level.destroyBlock(entry.getPosition(), false);
         level.setBlock(entry.getPosition(), replacement, 2);
         BlockEntity newBlockEntity = level.getBlockEntity(entry.getPosition());
-        // TODO:
-/*        if (newBlockEntity != null) {
-          newBlockEntity.getPersistentData().merge(oldData);
-        }*/
+        // Restore any specific data to the new block entity. Currently this only functions on NeoForge.
+        PlatformAPI.restoreSpecificData(data, newBlockEntity);
         if (newBlockEntity instanceof ILootrBlockEntity && newBlockEntity instanceof RandomizableContainerBlockEntity rbe) {
           rbe.setLootTable(table, seed);
         } else {

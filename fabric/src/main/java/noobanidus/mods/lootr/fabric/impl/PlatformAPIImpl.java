@@ -5,6 +5,8 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import noobanidus.mods.lootr.common.api.DataToCopy;
 import noobanidus.mods.lootr.common.api.IPlatformAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
@@ -64,5 +66,15 @@ public class PlatformAPIImpl implements IPlatformAPI {
       Packet<?> packet = ServerPlayNetworking.createS2CPacket(new PacketCloseContainer(blockEntity.asBlockEntity().getBlockPos()));
       serverLevel.getChunkSource().chunkMap.getPlayers(new ChunkPos(blockEntity.asBlockEntity().getBlockPos()), false).forEach(player -> player.connection.send(packet));
     }
+  }
+
+  @Override
+  public DataToCopy copySpecificData(BlockEntity oldBlockEntity) {
+    return DataToCopy.EMPTY;
+  }
+
+  @Override
+  public void restoreSpecificData(DataToCopy data, BlockEntity newBlockEntity) {
+    // No-op
   }
 }
