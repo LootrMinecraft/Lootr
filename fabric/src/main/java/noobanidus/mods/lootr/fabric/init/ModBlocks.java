@@ -14,6 +14,7 @@ import noobanidus.mods.lootr.fabric.block.LootrFabricBarrelBlock;
 
 public class ModBlocks {
   public static final LootrChestBlock CHEST = new LootrChestBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHEST).strength(2.5f));
+  @SuppressWarnings("deprecation")
   public static final LootrFabricBarrelBlock BARREL = new LootrFabricBarrelBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BARREL).strength(2.5f).forceSolidOff());
   public static final LootrTrappedChestBlock TRAPPED_CHEST = new LootrTrappedChestBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.TRAPPED_CHEST).strength(2.5f));
   public static final LootrInventoryBlock INVENTORY = new LootrInventoryBlock(BlockBehaviour.Properties.of().strength(2.5f).sound(SoundType.WOOD));
