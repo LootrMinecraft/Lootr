@@ -126,7 +126,7 @@ public class BlockEntityTicker {
           toRemove.add(entry);
           continue;
         }
-        // Save any specific data. Currently this is only function on NeoForge.
+        // Save specific data. Currently, this includes the LockCode (all platforms), along with NeoForge's getPersistentData.
         DataToCopy data = PlatformAPI.copySpecificData(be);
         ResourceKey<LootTable> table = be.getLootTable();
         long seed = be.getLootTableSeed();
@@ -135,7 +135,6 @@ public class BlockEntityTicker {
         level.destroyBlock(entry.getPosition(), false);
         level.setBlock(entry.getPosition(), replacement, 2);
         BlockEntity newBlockEntity = level.getBlockEntity(entry.getPosition());
-        // Restore any specific data to the new block entity. Currently this only functions on NeoForge.
         PlatformAPI.restoreSpecificData(data, newBlockEntity);
         if (newBlockEntity instanceof ILootrBlockEntity && newBlockEntity instanceof RandomizableContainerBlockEntity rbe) {
           rbe.setLootTable(table, seed);
