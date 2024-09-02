@@ -41,6 +41,51 @@ sourcesJar {
 def ENV = System.getenv()
 
 publishing {
+    tasks.publish.dependsOn build
+
+    publications {
+        mavenJava(MavenPublication) {
+
+            artifactId project.archivesBaseName
+            artifact remapJar
+            artifact project.sourcesJar {
+                archiveClassifier.set('sources')
+            }
+
+            pom {
+                name = 'Lootr'
+                description = 'Friendly loot for everyone.'
+                url = 'https://github.com/LootrMinecraft/Lootr'
+
+                scm {
+                    connection = 'git:https://github.com/LootrMinecraft/Lootr.git'
+                    developerConnection = 'git:https://github.com/LootrMinecraft/Lootr.git'
+                    url = 'https://github.com/LootrMinecraft/Lootr'
+                }
+
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://opensource.org/licenses/MIT'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'noobanidus'
+                        name = 'Noobanidus'
+                        email = 'noobanidus+spam@gmail.com'
+                    }
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            url "file:///" + System.getenv("local_maven")
+        }
+    }
 }
 
 task buildAndRelease{}
