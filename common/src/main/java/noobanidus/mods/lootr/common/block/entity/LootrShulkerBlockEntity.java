@@ -63,8 +63,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
 
   @Override
   public void defaultTick(Level level, BlockPos pos, BlockState state) {
-    // TODO: ???
-/*    ILootrNeoForgeBlockEntity.super.defaultTick(level, pos, state);*/
+    ILootrBlockEntity.super.defaultTick(level, pos, state);
     this.updateAnimation(level, pos, state);
   }
 

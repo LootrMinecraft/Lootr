@@ -83,7 +83,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
 
   @Override
   public void defaultTick(Level level, BlockPos pos, BlockState state) {
-/*    ILootrNeoForgeBlockEntity.super.defaultTick(level, pos, state);*/
+    ILootrBlockEntity.super.defaultTick(level, pos, state);
     chestLidController.tickLid();
   }
 
