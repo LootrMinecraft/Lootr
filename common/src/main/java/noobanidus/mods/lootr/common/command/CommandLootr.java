@@ -57,7 +57,7 @@ import java.util.*;
 public class CommandLootr {
   private static List<ResourceKey<LootTable>> tables = null;
   private static List<String> tableNames = null;
-  private final CommandDispatcher<CommandSourceStack> dispatcher;
+  private CommandDispatcher<CommandSourceStack> dispatcher;
 
   public CommandLootr(CommandDispatcher<CommandSourceStack> dispatcher) {
     this.dispatcher = dispatcher;
@@ -136,6 +136,7 @@ public class CommandLootr {
 
   public CommandLootr register() {
     this.dispatcher.register(builder(Commands.literal("lootr").requires(p -> p.hasPermission(2))));
+    this.dispatcher = null;
     return this;
   }
 
