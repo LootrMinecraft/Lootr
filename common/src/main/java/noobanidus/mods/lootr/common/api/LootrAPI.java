@@ -112,6 +112,10 @@ public class LootrAPI {
     return INSTANCE.isOldTextures();
   }
 
+  public static boolean isNewTextures () {
+    return INSTANCE.isNewTextures();
+  }
+
   public static boolean isVanillaTextures() {
     return INSTANCE.isVanillaTextures();
   }

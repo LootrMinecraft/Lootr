@@ -28,10 +28,10 @@ public class HandleBreak {
 
     if (!world.isClientSide()) {
       if (state.is(LootrTags.Blocks.CONTAINERS)) {
-        if ((player instanceof FakePlayer && ConfigManager.get().breaking.enable_fake_player_break) || ConfigManager.get().breaking.enable_break) {
+        if ((player instanceof FakePlayer && LootrAPI.isFakePlayerBreakEnabled() || LootrAPI.isBreakEnabled())) {
           return true;
         }
-        if (ConfigManager.get().breaking.disable_break) {
+        if (LootrAPI.isBreakDisabled()) {
           if (player.getAbilities().instabuild) {
             if (!player.isShiftKeyDown()) {
               player.displayClientMessage(Component.translatable("lootr.message.cannot_break_sneak").setStyle(getChatStyle()), false);

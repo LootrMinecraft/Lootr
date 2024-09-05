@@ -343,12 +343,12 @@ public class LootrAPIImpl implements ILootrAPI {
 
   @Override
   public ClientTextureType getTextureType() {
-    if (ConfigManager.isOldTextures()) {
-      return ClientTextureType.OLD;
+    if (ConfigManager.isNewTextures()) {
+      return ClientTextureType.NEW;
     } else if (ConfigManager.isVanillaTextures()) {
       return ClientTextureType.VANILLA;
     } else {
-      return ClientTextureType.DEFAULT;
+      return ClientTextureType.OLD;
     }
   }
 

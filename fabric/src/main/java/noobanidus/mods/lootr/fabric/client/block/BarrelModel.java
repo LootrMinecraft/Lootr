@@ -20,7 +20,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.fabric.config.ConfigManager;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -124,12 +123,12 @@ public class BarrelModel implements UnbakedModel {
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand) {
       // TODO: I don't think is ever being called
-      if (ConfigManager.isVanillaTextures()) {
+      if (LootrAPI.isVanillaTextures()) {
         return vanilla.getQuads(state, side, rand);
-      } else if (ConfigManager.isOldTextures()) {
-        return old_unopened.getQuads(state, side, rand);
-      } else {
+      } else if (LootrAPI.isNewTextures()) {
         return unopened.getQuads(state, side, rand);
+      } else {
+        return old_unopened.getQuads(state, side, rand);
       }
     }
 

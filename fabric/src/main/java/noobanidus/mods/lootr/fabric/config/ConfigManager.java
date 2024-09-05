@@ -291,8 +291,8 @@ public class ConfigManager implements ConfigData {
     return get().client.vanilla_textures;
   }
 
-  public static boolean isOldTextures() {
-    return get().client.old_textures;
+  public static boolean isNewTextures () {
+    return get().client.new_textures;
   }
 
   public static BlockState replacement(BlockState original) {
@@ -412,6 +412,6 @@ public class ConfigManager implements ConfigData {
 
   public static class Client {
     public boolean vanilla_textures = false;
-    public boolean old_textures = false;
+    public boolean new_textures = false;
   }
 }

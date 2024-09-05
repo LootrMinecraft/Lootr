@@ -76,7 +76,7 @@ public class ConfigManager {
   public static final ModConfigSpec.BooleanValue TRAPPED_CUSTOM;
   // Client-only
   public static final ModConfigSpec.BooleanValue VANILLA_TEXTURES;
-  public static final ModConfigSpec.BooleanValue OLD_TEXTURES;
+  public static final ModConfigSpec.BooleanValue NEW_TEXTURES;
   private static final ModConfigSpec.Builder COMMON_BUILDER = new ModConfigSpec.Builder();
   private static final ModConfigSpec.Builder CLIENT_BUILDER = new ModConfigSpec.Builder();
 
@@ -159,7 +159,7 @@ public class ConfigManager {
     COMMON_CONFIG = COMMON_BUILDER.build();
     CLIENT_BUILDER.push("textures").comment("configuration options for textures");
     VANILLA_TEXTURES = CLIENT_BUILDER.comment("set to true to use vanilla textures instead of Lootr special textures. Note: this will prevent previously opened chests from rendering differently").define("vanilla_textures", false);
-    OLD_TEXTURES = CLIENT_BUILDER.comment("set to true to use the old Lootr textures").define("old_textures", false);
+    NEW_TEXTURES = CLIENT_BUILDER.comment("set to true to use the new Lootr textures").define("new_textures", false);
     CLIENT_BUILDER.pop();
     CLIENT_CONFIG = CLIENT_BUILDER.build();
   }
@@ -347,8 +347,8 @@ public class ConfigManager {
     return VANILLA_TEXTURES.get();
   }
 
-  public static boolean isOldTextures() {
-    return OLD_TEXTURES.get();
+  public static boolean isNewTextures () {
+    return NEW_TEXTURES.get();
   }
 
   public static BlockState replacement(BlockState original) {

@@ -1,7 +1,7 @@
 package noobanidus.mods.lootr.common.api.client;
 
 public enum ClientTextureType {
-  DEFAULT,
+  NEW,
   VANILLA,
   OLD;
 }

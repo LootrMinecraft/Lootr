@@ -6,7 +6,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.vehicle.MinecartChest;
 import net.minecraft.world.level.entity.EntityAccess;
 import net.minecraft.world.level.entity.PersistentEntitySectionManager;
-import noobanidus.mods.lootr.fabric.config.ConfigManager;
+import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.entity.EntityTicker;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,15 +20,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinPersistentEntitySectionManager {
   @Inject(method = "addEntity", at = @At("HEAD"), cancellable = true)
   private void LootrAddEntity(EntityAccess entityAccess, boolean bl, CallbackInfoReturnable<Boolean> cir) {
-    if (ConfigManager.get().conversion.disable) {
+    if (LootrAPI.isDisabled()) {
       return;
     }
     if (entityAccess instanceof Entity entity && entity.getType() == EntityType.CHEST_MINECART) {
-      if (ConfigManager.isDimensionBlocked(entity.level().dimension())) {
+      if (LootrAPI.isDimensionBlocked(entity.level().dimension())) {
         return;
       }
       MinecartChest chest = (MinecartChest) entity;
-      if (!chest.level().isClientSide() && chest.getLootTable() != null && !ConfigManager.getLootBlacklist().contains(chest.getLootTable())) {
+      if (!chest.level().isClientSide() && chest.getLootTable() != null && !LootrAPI.isLootTableBlacklisted(chest.getLootTable())) {
         if (chest.level() instanceof ServerLevel level) {
           LootrChestMinecartEntity lootr = new LootrChestMinecartEntity(chest.level(), chest.getX(), chest.getY(), chest.getZ());
           lootr.setLootTable(chest.getLootTable(), chest.getLootTableSeed());
