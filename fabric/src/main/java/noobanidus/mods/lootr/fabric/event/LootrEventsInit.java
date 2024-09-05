@@ -5,7 +5,14 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.block.entity.BlockEntityTicker;
 import noobanidus.mods.lootr.common.command.CommandLootr;
 import noobanidus.mods.lootr.common.data.DataStorage;
@@ -41,5 +48,9 @@ public class LootrEventsInit {
       lootrCommand = new CommandLootr(dispatcher);
       lootrCommand.register();
     });
+
+    ModContainer container = FabricLoader.getInstance().getModContainer(LootrAPI.MODID).orElseThrow();
+
+    ResourceManagerHelper.registerBuiltinResourcePack(LootrAPI.rl("new_textures"), container, Component.literal("Lootr - New Textures"), ResourcePackActivationType.NORMAL);
   }
 }
