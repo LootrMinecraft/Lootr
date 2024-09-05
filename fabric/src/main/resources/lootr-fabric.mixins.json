@@ -6,7 +6,8 @@
   "mixins": [
     "MixinBlockEntity",
     "MixinPersistentEntitySectionManager",
-    "MixinPlayerAdvancements"
+    "MixinPlayerAdvancements",
+    "MixinReloadableServerResources"
   ],
   "injectors": {
     "defaultRequire": 1
