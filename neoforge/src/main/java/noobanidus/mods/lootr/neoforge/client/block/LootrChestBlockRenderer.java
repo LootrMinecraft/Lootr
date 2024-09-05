@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.neoforge.client.block;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.ChestRenderer;
@@ -18,6 +19,8 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootrBlo
   public static final Material MATERIAL4 = new Material(Sheets.CHEST_SHEET, LootrAPI.rl("chest_trapped_opened"));
   public static final Material OLD_MATERIAL = new Material(Sheets.CHEST_SHEET, LootrAPI.rl("old_chest"));
   public static final Material OLD_MATERIAL2 = new Material(Sheets.CHEST_SHEET, LootrAPI.rl("old_chest_opened"));
+  public static final Material OLD_MATERIAL3 = new Material(Sheets.CHEST_SHEET, LootrAPI.rl("old_chest_trapped"));
+  public static final Material OLD_MATERIAL4 = new Material(Sheets.CHEST_SHEET, LootrAPI.rl("old_chest_trapped_opened"));
 
   public LootrChestBlockRenderer(BlockEntityRendererProvider.Context p_173607_) {
     super(p_173607_);
@@ -26,18 +29,21 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootrBlo
   @Override
   protected Material getMaterial(T blockEntity, ChestType type) {
     if (LootrAPI.isVanillaTextures()) {
-      return Sheets.chooseMaterial(blockEntity, type, false);
+      return Sheets.chooseMaterial(blockEntity, ChestType.SINGLE, false);
+    }
+    if (Minecraft.getInstance().player == null) {
+      return LootrAPI.isOldTextures() ? OLD_MATERIAL2 : MATERIAL2;
     }
     // TODO: ???
     boolean trapped = blockEntity.getType().equals(LootrRegistry.getTrappedChestBlockEntity());
-    if (blockEntity.hasClientOpened()) {
+    if (blockEntity.hasClientOpened(Minecraft.getInstance().player.getUUID())) {
       if (LootrAPI.isOldTextures()) {
-        return OLD_MATERIAL2;
+        return trapped ? OLD_MATERIAL4 : OLD_MATERIAL2;
       }
       return trapped ? MATERIAL4 : MATERIAL2;
     } else {
       if (LootrAPI.isOldTextures()) {
-        return OLD_MATERIAL;
+        return trapped ? OLD_MATERIAL3 : OLD_MATERIAL;
       }
       return trapped ? MATERIAL3 : MATERIAL;
     }

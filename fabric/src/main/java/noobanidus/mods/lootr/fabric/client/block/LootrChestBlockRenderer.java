@@ -79,7 +79,7 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootrBlo
       return Sheets.chooseMaterial(blockEntity, ChestType.SINGLE, false);
     }
     if (Minecraft.getInstance().player == null) {
-      return MATERIAL2;
+      return LootrAPI.isOldTextures() ? OLD_MATERIAL2 : MATERIAL2;
     }
     // TODO: ???
     boolean trapped = blockEntity.getType().equals(LootrRegistry.getTrappedChestBlockEntity());
