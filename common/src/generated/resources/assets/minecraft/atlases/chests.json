@@ -23,6 +23,14 @@
     {
       "type": "minecraft:single",
       "resource": "lootr:old_chest_opened"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "lootr:old_chest_trapped"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "lootr:old_chest_trapped_opened"
     }
   ]
 }
