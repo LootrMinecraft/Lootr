@@ -42,8 +42,6 @@ public class Lootr {
 
     modContainer.registerConfig(ModConfig.Type.COMMON, ConfigManager.COMMON_CONFIG);
     modContainer.registerConfig(ModConfig.Type.CLIENT, ConfigManager.CLIENT_CONFIG);
-    ConfigManager.loadConfig(ConfigManager.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve(LootrAPI.MODID + "-common.toml"));
-    ConfigManager.loadConfig(ConfigManager.CLIENT_CONFIG, FMLPaths.CONFIGDIR.get().resolve(LootrAPI.MODID + "-client.toml"));
     NeoForge.EVENT_BUS.addListener(this::onCommands);
     ModTabs.register(modBus);
     ModBlockEntities.register(modBus);
