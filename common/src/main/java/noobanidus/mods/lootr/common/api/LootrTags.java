@@ -2,6 +2,7 @@ package noobanidus.mods.lootr.common.api;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
@@ -34,6 +35,16 @@ public class LootrTags {
 
     static TagKey<Item> tag(String name) {
       return TagKey.create(Registries.ITEM, LootrAPI.rl(name));
+    }
+  }
+
+  public static class Entity extends LootrTags {
+    public static TagKey<EntityType<?>> CONVERT_CARTS = tag("carts");
+    public static TagKey<EntityType<?>> CONVERT_ENTITIES = tag("entities");
+    public static TagKey<EntityType<?>> CONVERT_BLACKLIST = tag("blacklist");
+
+    static TagKey<EntityType<?>> tag(String name) {
+      return TagKey.create(Registries.ENTITY_TYPE, LootrAPI.rl(name));
     }
   }
 }
