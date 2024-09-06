@@ -98,6 +98,7 @@ subprojects {
                     projectSlug = uploadSettings["curse-slug"]
                     announcementTitle = "Lootr ${rootProject.minecraft_version}-${rootProject.mod_version} ${uploadSettings["title"]}"
                     minecraftVersions.add(rootProject.minecraft_version)
+                    minecraftVersions.addAll(rootProject.additional_minecraft_versions)
 
                     if (uploadDependencies.size() > 0) {
                         uploadDependencies.each { dep, required ->
@@ -118,6 +119,7 @@ subprojects {
                     projectId = uploadSettings["modrinth-id"]
                     announcementTitle = "Lootr ${rootProject.minecraft_version}-${rootProject.mod_version} ${uploadSettings["title"]}"
                     minecraftVersions.add(rootProject.minecraft_version)
+                    minecraftVersions.addAll(rootProject.additional_minecraft_versions)
 
                     dependencies {
                         uploadDependencies.each { dep, required ->
