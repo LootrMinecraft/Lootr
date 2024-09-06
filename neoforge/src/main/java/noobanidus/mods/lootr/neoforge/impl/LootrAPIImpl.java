@@ -70,6 +70,7 @@ public class LootrAPIImpl implements ILootrAPI {
       player.displayClientMessage(Component.translatable("lootr.message.invalid_block").setStyle(LootrAPI.getInvalidStyle()), true);
       return;
     }
+    // TODO: HANDLE LOCKKEY ELSEWHERE
     // This handles the `lockKey` parameter
     if (provider instanceof BaseContainerBlockEntity baseContainer) {
       if (!baseContainer.canOpen(player)) {
