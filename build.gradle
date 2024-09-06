@@ -96,9 +96,8 @@ subprojects {
                     accessToken = project.findProperty("curse_auth")
                     projectId = uploadSettings["curse-id"]
                     projectSlug = uploadSettings["curse-slug"]
-                    announcementTitle = "Lootr ${rootProject.minecraft_version}-${rootProject.mod_version} ${uploadSettings["title"]}"
-                    minecraftVersions.add(rootProject.minecraft_version)
-                    minecraftVersions.addAll(rootProject.additional_minecraft_versions)
+                    announcementTitle = "Lootr ${rootProject.minecraft_version}-${rootProject.mod_version} ${uploadSettings["title"]} on CurseForge"
+                    minecraftVersions.addAll(rootProject.minecraft_versions.split(","))
 
                     if (uploadDependencies.size() > 0) {
                         uploadDependencies.each { dep, required ->
@@ -117,9 +116,8 @@ subprojects {
                 modrinth {
                     accessToken = project.findProperty("modrinth_auth")
                     projectId = uploadSettings["modrinth-id"]
-                    announcementTitle = "Lootr ${rootProject.minecraft_version}-${rootProject.mod_version} ${uploadSettings["title"]}"
-                    minecraftVersions.add(rootProject.minecraft_version)
-                    minecraftVersions.addAll(rootProject.additional_minecraft_versions)
+                    announcementTitle = "Lootr ${rootProject.minecraft_version}-${rootProject.mod_version} ${uploadSettings["title"]} on Modrinth"
+                    minecraftVersions.addAll(rootProject.minecraft_versions.split(","))
 
                     dependencies {
                         uploadDependencies.each { dep, required ->
