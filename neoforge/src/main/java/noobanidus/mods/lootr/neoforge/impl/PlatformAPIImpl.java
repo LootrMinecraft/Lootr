@@ -3,6 +3,7 @@ package noobanidus.mods.lootr.neoforge.impl;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.LockCode;
+import net.minecraft.world.entity.vehicle.AbstractMinecartContainer;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -75,5 +76,11 @@ public class PlatformAPIImpl implements IPlatformAPI {
     if (newBlockEntity instanceof BaseContainerBlockEntity baseContainer) {
       ((MixinBaseContainerBlockEntity) baseContainer).setLockKey(data.lockCode());
     }
+  }
+
+  @Override
+  public void copyEntityData(AbstractMinecartContainer entity1, AbstractMinecartContainer entity2) {
+    IPlatformAPI.super.copyEntityData(entity1, entity2);
+    entity2.getPersistentData().merge(entity1.getPersistentData());
   }
 }

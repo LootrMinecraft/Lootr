@@ -1,12 +1,14 @@
 package noobanidus.mods.lootr.fabric.mixins;
 
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Unit;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.vehicle.MinecartChest;
+import net.minecraft.world.entity.vehicle.AbstractMinecartContainer;
 import net.minecraft.world.level.entity.EntityAccess;
 import net.minecraft.world.level.entity.PersistentEntitySectionManager;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.LootrTags;
+import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.entity.EntityTicker;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,7 +16,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-// TODO: API-ify
 // Equivalent to HandleCart::onEntityJoin
 @Mixin(PersistentEntitySectionManager.class)
 public class MixinPersistentEntitySectionManager {
@@ -23,22 +24,27 @@ public class MixinPersistentEntitySectionManager {
     if (LootrAPI.isDisabled()) {
       return;
     }
-    if (entityAccess instanceof Entity entity && entity.getType() == EntityType.CHEST_MINECART) {
-      if (LootrAPI.isDimensionBlocked(entity.level().dimension())) {
-        return;
-      }
-      MinecartChest chest = (MinecartChest) entity;
-      if (!chest.level().isClientSide() && chest.getLootTable() != null && !LootrAPI.isLootTableBlacklisted(chest.getLootTable())) {
-        if (chest.level() instanceof ServerLevel level) {
-          LootrChestMinecartEntity lootr = new LootrChestMinecartEntity(chest.level(), chest.getX(), chest.getY(), chest.getZ());
-          lootr.setLootTable(chest.getLootTable(), chest.getLootTableSeed());
-          cir.setReturnValue(false);
-          cir.cancel();
-          if (level.getServer().isSameThread()) {
-            chest.level().addFreshEntity(lootr);
-          } else {
-            EntityTicker.addEntity(lootr);
-          }
+    if (!(entityAccess instanceof Entity entity)) {
+      return;
+    }
+    if (!(entity.level() instanceof ServerLevel level) || level.isClientSide()) {
+      return;
+    }
+    if (LootrAPI.isDimensionBlocked(level.dimension())) {
+      return;
+    }
+    if (entity.getType().is(LootrTags.Entity.CONVERT_ENTITIES) && entity instanceof AbstractMinecartContainer cart) {
+      if (cart.getLootTable() != null && !LootrAPI.isLootTableBlacklisted(cart.getLootTable())) {
+        LootrChestMinecartEntity lootrCart = new LootrChestMinecartEntity(cart.level(), cart.getX(), cart.getY(), cart.getZ());
+        PlatformAPI.copyEntityData(cart, lootrCart);
+        cir.setReturnValue(false);
+        cir.cancel();
+        if (!level.getServer().isSameThread()) {
+          level.getChunkSource().addRegionTicket(LootrAPI.LOOTR_ENTITY_TICK_TICKET, lootrCart.chunkPosition(), 1, Unit.INSTANCE);
+          LootrAPI.LOG.error("Minecart with Loot table created off main thread. Falling back on EntityTicker.");
+          EntityTicker.addEntity(lootrCart);
+        } else {
+          level.addFreshEntity(lootrCart);
         }
       }
     }
