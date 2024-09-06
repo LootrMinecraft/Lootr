@@ -127,7 +127,6 @@ public class LootrAPIImpl implements ILootrAPI {
     if (shouldUpdate) {
       provider.performUpdate(player);
     }
-    // TODO: Opened stat
     player.openMenu(menuProvider);
     PiglinAi.angerNearbyPiglins(player, true);
   }
