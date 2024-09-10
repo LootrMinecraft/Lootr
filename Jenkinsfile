@@ -6,6 +6,17 @@ pipeline {
         jdk "jdk-21"
     }
     stages {
+        stage('Prepare') {
+            steps {
+                echo 'Preparing Project'
+                checkout scmGit(
+                    branches: [[name: '${SOURCE_BRANCH}']],
+                    extensions: [
+                       cloneOptions(noTags:false)
+                    ]
+                )
+            }
+        }
         stage('Clean') {
             steps {
                 echo 'Cleaning Project'
