@@ -1,2 +1,8 @@
-// 1.21	2024-08-18T14:50:21.7769156	Loot Tables
+// 1.21	2024-09-08T12:21:48.2313791	Loot Tables
+8eea450cccf954b00efcdda2a3d48df6ea079d09 data/lootr/loot_table/blocks/lootr_barrel.json
+05d03b8f6075123c44e0b3ffc269fd47e9a59f68 data/lootr/loot_table/blocks/lootr_chest.json
+260c0547345a0ae965137f565c61a8d3786d02fd data/lootr/loot_table/blocks/lootr_inventory.json
+25f1b2dfda93600fb2f1872a58e575debe732695 data/lootr/loot_table/blocks/lootr_shulker.json
+3447a563cf17c2ca6469d4847c40697d3a7a936c data/lootr/loot_table/blocks/lootr_trapped_chest.json
+12c3e3df4e2b4efcb00682913ce6234d95ec8db4 data/lootr/loot_table/blocks/trophy.json
 345594272603fec7ed1bce397953f4284f6667b8 data/lootr/loot_table/chests/elytra.json
