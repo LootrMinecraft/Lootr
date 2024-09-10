@@ -24,6 +24,8 @@ public class MixinEndCityPieces$EndCityPiece {
     }
     if (marker.startsWith("Elytra")) {
       EndCityPieces.EndCityPiece piece = (EndCityPieces.EndCityPiece) (Object) this;
+      // We use `Blocks.CHEST` so that we can obey the disabled configuration and
+      // rely on the block ticker to convert. Definitely not because of laziness.
       level.setBlock(position.below(), Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, piece.getRotation().rotate(Direction.SOUTH)), 3);
       if (level.getBlockEntity(position.below()) instanceof RandomizableContainerBlockEntity chest) {
         chest.setLootTable(LootrAPI.ELYTRA_CHEST, random.nextLong());

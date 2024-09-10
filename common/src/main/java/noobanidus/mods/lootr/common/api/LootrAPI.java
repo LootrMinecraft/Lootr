@@ -36,8 +36,12 @@ public class LootrAPI {
   public static final ResourceKey<LootTable> ELYTRA_CHEST = ResourceKey.create(Registries.LOOT_TABLE, LootrAPI.rl("chests/elytra"));
   public static final TicketType<Unit> LOOTR_ENTITY_TICK_TICKET = TicketType.create("lootr_entity_tick_ticket", (unit1, unit2) -> 0, 300);
 
-  public static ILootrAPI INSTANCE;
+  public static ILootrAPI INSTANCE = null;
   public static boolean shouldDiscardIdAndOpeners;
+
+  public static boolean isReady () {
+    return INSTANCE != null;
+  }
 
   public static ResourceLocation rl(String path) {
     return ResourceLocation.fromNamespaceAndPath(MODID, path);

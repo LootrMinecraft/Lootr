@@ -13,7 +13,11 @@ import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.advancement.ILootedStatTrigger;
 
 public class LootrRegistry {
-  public static ILootrRegistry INSTANCE;
+  public static ILootrRegistry INSTANCE = null;
+
+  public static boolean isReady () {
+    return INSTANCE != null;
+  }
 
   public static Block getBarrelBlock() {
     return INSTANCE.getBarrelBlock();

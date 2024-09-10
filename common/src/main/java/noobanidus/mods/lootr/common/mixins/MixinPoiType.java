@@ -20,6 +20,9 @@ public class MixinPoiType {
 
   @Inject(method = "is", at = @At(value = "RETURN"), cancellable = true)
   private void LootrGetBlockStates(BlockState state, CallbackInfoReturnable<Boolean> cir) {
+    if (!LootrRegistry.isReady()) {
+      return;
+    }
     PoiType thisPoi = (PoiType) (Object) this;
     if (!fishermanCheck) {
       fishermanCheck = true;
