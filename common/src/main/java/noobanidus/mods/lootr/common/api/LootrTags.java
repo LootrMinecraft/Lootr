@@ -5,6 +5,8 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 
 public class LootrTags {
   public static class Blocks extends LootrTags {
@@ -47,6 +49,18 @@ public class LootrTags {
 
     static TagKey<EntityType<?>> tag(String name) {
       return TagKey.create(Registries.ENTITY_TYPE, LootrAPI.rl(name));
+    }
+  }
+
+  public static class BlockEntity extends LootrTags {
+    public static TagKey<BlockEntityType<?>> LOOTR_OBJECT = tag("object");
+
+    public static boolean isTagged(net.minecraft.world.level.block.entity.BlockEntity blockEntity, TagKey<BlockEntityType<?>> tag) {
+      return blockEntity.getType().builtInRegistryHolder().is(tag);
+    }
+
+    static TagKey<BlockEntityType<?>> tag(String name) {
+      return TagKey.create(Registries.BLOCK_ENTITY_TYPE, LootrAPI.rl(name));
     }
   }
 }

@@ -56,18 +56,9 @@ public interface ILootrAPI {
   @Nullable
   ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler, MenuBuilder builder);
 
-  @Nullable
-  ILootrInventory getInventory(ILootrOptional optionalProvider, ServerPlayer player, LootFiller filler);
-
-  @Nullable
-  ILootrInventory getInventory (ILootrOptional optionalProvider, ServerPlayer player, LootFiller filler, MenuBuilder builder);
-
   // Get saved data for specific provider
   @Nullable
   ILootrSavedData getData(ILootrInfoProvider provider);
-
-  @Nullable
-  ILootrSavedData getData(ILootrOptional optionalProvider);
 
   // Calculate seed according to configuration
   long getLootSeed(long seed);

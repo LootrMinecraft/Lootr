@@ -235,37 +235,10 @@ public class LootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  public @Nullable ILootrInventory getInventory(ILootrOptional optionalProvider, ServerPlayer player, LootFiller filler) {
-    Object object = optionalProvider.getLootrObject();
-    if (object instanceof ILootrInfoProvider provider) {
-      return DataStorage.getInventory(provider, player, filler);
-    }
-    return null;
-  }
-
-  @Override
-  public @Nullable ILootrInventory getInventory(ILootrOptional optionalProvider, ServerPlayer player, LootFiller filler, MenuBuilder builder) {
-    Object object = optionalProvider.getLootrObject();
-    if (object instanceof ILootrInfoProvider provider) {
-      return getInventory(provider, player, filler, builder);
-    }
-    return null;
-  }
-
-  @Override
   public @Nullable ILootrSavedData getData(ILootrInfoProvider provider) {
     return DataStorage.getData(provider);
   }
-
-  @Override
-  public @Nullable ILootrSavedData getData(ILootrOptional optionalProvider) {
-    Object object = optionalProvider.getLootrObject();
-    if (object instanceof ILootrInfoProvider provider) {
-      return getData(provider);
-    }
-    return null;
-  }
-
+  
   @Override
   public long getLootSeed(long seed) {
     if (ConfigManager.RANDOMISE_SEED.get() || seed == -1 || seed == 0) {
