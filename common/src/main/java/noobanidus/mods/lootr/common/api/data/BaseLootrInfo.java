@@ -12,10 +12,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public record BaseLootrInfo(LootrBlockType blockType, LootrInfoType infoType, UUID uuid, BlockPos pos, Component name, ResourceKey<Level> dimension,
+public record BaseLootrInfo(LootrBlockType blockType, LootrInfoType infoType, UUID uuid, String cachedKey, BlockPos pos, Component name, ResourceKey<Level> dimension,
                             int containerSize, NonNullList<ItemStack> customInventory, ResourceKey<LootTable> table, long seed) implements ILootrInfo {
   public static BaseLootrInfo copy(ILootrInfo info) {
-    return new BaseLootrInfo(info.getInfoBlockType(), info.getInfoType(), info.getInfoUUID(), info.getInfoPos(), info.getInfoDisplayName(), info.getInfoDimension(), info.getInfoContainerSize(), info.getInfoReferenceInventory(), info.getInfoLootTable(), info.getInfoLootSeed());
+    return new BaseLootrInfo(info.getInfoBlockType(), info.getInfoType(), info.getInfoUUID(), info.getInfoKey(), info.getInfoPos(), info.getInfoDisplayName(), info.getInfoDimension(), info.getInfoContainerSize(), info.getInfoReferenceInventory(), info.getInfoLootTable(), info.getInfoLootSeed());
   }
 
   @Override
@@ -31,6 +31,11 @@ public record BaseLootrInfo(LootrBlockType blockType, LootrInfoType infoType, UU
   @Override
   public @NotNull UUID getInfoUUID() {
     return uuid();
+  }
+
+  @Override
+  public String getInfoKey() {
+    return cachedKey();
   }
 
   @Override

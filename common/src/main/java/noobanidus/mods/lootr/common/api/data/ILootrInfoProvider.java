@@ -44,25 +44,25 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
     if (blockEntity instanceof ILootrInfoProvider provider) {
       return provider;
     }
-    return new RandomizableContainerBlockEntityLootrInfoProvider(blockEntity, id, null);
+    return new RandomizableContainerBlockEntityLootrInfoProvider(blockEntity, id, ILootrInfo.generateInfoKey(id), null);
   }
 
   static ILootrInfoProvider of(RandomizableContainerBlockEntity blockEntity, UUID id, NonNullList<ItemStack> customInventory) {
     if (blockEntity instanceof ILootrInfoProvider provider) {
       return provider;
     }
-    return new RandomizableContainerBlockEntityLootrInfoProvider(blockEntity, id, customInventory);
+    return new RandomizableContainerBlockEntityLootrInfoProvider(blockEntity, id, ILootrInfo.generateInfoKey(id), customInventory);
   }
 
   static ILootrInfoProvider of(AbstractMinecartContainer minecart) {
     if (minecart instanceof ILootrInfoProvider provider) {
       return provider;
     }
-    return new AbstractMinecartContainerLootrInfoProvider(minecart);
+    return new AbstractMinecartContainerLootrInfoProvider(minecart, ILootrInfo.generateInfoKey(minecart.getUUID()));
   }
 
   static ILootrInfoProvider of(UUID id, BlockPos pos, int containerSize, ResourceKey<LootTable> lootTable, long lootSeed, Component displayName, ResourceKey<Level> dimension, NonNullList<ItemStack> customInventory, LootrInfoType type, LootrBlockType blockType) {
-    return new CustomLootrInfoProvider(id, pos, containerSize, lootTable, lootSeed, displayName, dimension, customInventory, type, blockType);
+    return new CustomLootrInfoProvider(id, ILootrInfo.generateInfoKey(id), pos, containerSize, lootTable, lootSeed, displayName, dimension, customInventory, type, blockType);
   }
 
   @Override

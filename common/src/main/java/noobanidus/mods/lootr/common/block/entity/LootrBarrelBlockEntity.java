@@ -30,6 +30,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
+import noobanidus.mods.lootr.common.api.data.ILootrInfo;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
@@ -44,6 +45,7 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
   private final NonNullList<ItemStack> items = NonNullList.withSize(27, ItemStack.EMPTY);
   private final Set<UUID> clientOpeners = new ObjectLinkedOpenHashSet<>();
   protected UUID infoId = null;
+  private String cachedId;
   private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
     @Override
     protected void onOpen(Level level, BlockPos pos, BlockState state) {
@@ -297,5 +299,13 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
   @Override
   public void manuallySetLootTable(ResourceKey<LootTable> table, long seed) {
     setLootTable(table, seed);
+  }
+
+  @Override
+  public String getInfoKey() {
+    if (cachedId == null) {
+      cachedId = ILootrInfo.generateInfoKey(getInfoUUID());
+    }
+    return cachedId;
   }
 }

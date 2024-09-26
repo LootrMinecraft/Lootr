@@ -28,6 +28,7 @@ import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
+import noobanidus.mods.lootr.common.api.data.ILootrInfo;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
@@ -42,6 +43,7 @@ import java.util.UUID;
 public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlockEntity {
   private final ChestLidController chestLidController = new ChestLidController();
   protected UUID infoId;
+  private String cachedId;
   private final Set<UUID> clientOpeners = new ObjectLinkedOpenHashSet<>();
   private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
     @Override
@@ -248,6 +250,14 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
       this.infoId = UUID.randomUUID();
     }
     return this.infoId;
+  }
+
+  @Override
+  public String getInfoKey() {
+    if (cachedId == null) {
+      cachedId = ILootrInfo.generateInfoKey(getInfoUUID());
+    }
+    return cachedId;
   }
 
   @Override

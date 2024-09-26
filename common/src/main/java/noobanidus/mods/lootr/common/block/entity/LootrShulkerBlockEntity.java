@@ -36,6 +36,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
+import noobanidus.mods.lootr.common.api.data.ILootrInfo;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
@@ -49,6 +50,8 @@ import java.util.UUID;
 public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity implements ILootrBlockEntity {
   private final NonNullList<ItemStack> itemStacks = NonNullList.withSize(27, ItemStack.EMPTY);
   protected UUID infoId;
+  private String cachedId;
+
   private final Set<UUID> clientOpeners = new ObjectLinkedOpenHashSet<>();
   protected boolean clientOpened;
   private int openCount;
@@ -269,6 +272,14 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
       this.infoId = UUID.randomUUID();
     }
     return this.infoId;
+  }
+
+  @Override
+  public String getInfoKey() {
+    if (cachedId == null) {
+      cachedId = ILootrInfo.generateInfoKey(getInfoUUID());
+    }
+    return cachedId;
   }
 
   @Override

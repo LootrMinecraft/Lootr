@@ -15,6 +15,7 @@ import java.util.UUID;
 
 public record CustomLootrInfoProvider(
     UUID id,
+    String cachedKey,
     BlockPos pos,
     int containerSize,
     ResourceKey<LootTable> lootTable,
@@ -38,6 +39,11 @@ public record CustomLootrInfoProvider(
   @Override
   public @NotNull UUID getInfoUUID() {
     return id();
+  }
+
+  @Override
+  public String getInfoKey() {
+    return cachedKey();
   }
 
   @Override

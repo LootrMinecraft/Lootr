@@ -31,6 +31,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
+import noobanidus.mods.lootr.common.api.data.ILootrInfo;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
@@ -44,6 +45,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   private static BlockState cartNormal = null;
   private final Set<UUID> clientOpeners = new ObjectLinkedOpenHashSet<>();
   private boolean opened = false;
+  private String cachedId;
 
   public LootrChestMinecartEntity(EntityType<LootrChestMinecartEntity> type, Level world) {
     super(type, world);
@@ -248,6 +250,14 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   @NotNull
   public UUID getInfoUUID() {
     return getUUID();
+  }
+
+  @Override
+  public String getInfoKey() {
+    if (cachedId == null) {
+      cachedId = ILootrInfo.generateInfoKey(getInfoUUID());
+    }
+    return cachedId;
   }
 
   // TODO:

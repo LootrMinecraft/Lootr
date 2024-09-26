@@ -22,7 +22,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public record RandomizableContainerBlockEntityLootrInfoProvider(
-    @NotNull RandomizableContainerBlockEntity blockEntity, UUID id,
+    @NotNull RandomizableContainerBlockEntity blockEntity, UUID id, String cachedId,
     NonNullList<ItemStack> customInventory) implements ILootrBlockEntity {
 
   @Override
@@ -51,6 +51,11 @@ public record RandomizableContainerBlockEntityLootrInfoProvider(
   @Override
   public @NotNull UUID getInfoUUID() {
     return id();
+  }
+
+  @Override
+  public String getInfoKey() {
+    return cachedId();
   }
 
   @Override

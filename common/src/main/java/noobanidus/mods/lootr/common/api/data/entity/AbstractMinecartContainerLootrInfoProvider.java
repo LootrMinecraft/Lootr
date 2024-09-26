@@ -18,7 +18,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public record AbstractMinecartContainerLootrInfoProvider(
-    AbstractMinecartContainer minecart) implements ILootrCart {
+    AbstractMinecartContainer minecart, String cachedId) implements ILootrCart {
 
   @Override
   public LootrBlockType getInfoBlockType() {
@@ -38,6 +38,11 @@ public record AbstractMinecartContainerLootrInfoProvider(
   @Override
   public @NotNull UUID getInfoUUID() {
     return minecart.getUUID();
+  }
+
+  @Override
+  public String getInfoKey() {
+    return cachedId();
   }
 
   @Override

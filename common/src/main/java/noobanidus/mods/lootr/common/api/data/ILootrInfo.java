@@ -38,8 +38,10 @@ public interface ILootrInfo {
   @NotNull
   UUID getInfoUUID();
 
-  default String getInfoKey() {
-    String idString = getInfoUUID().toString();
+  String getInfoKey ();
+
+  static String generateInfoKey (UUID id) {
+    String idString = id.toString();
     return "lootr/" + idString.charAt(0) + "/" + idString.substring(0, 2) + "/" + idString;
   }
 
@@ -165,7 +167,7 @@ public interface ILootrInfo {
       table = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse(tag.getString("table")));
       seed = tag.getLong("seed");
     }
-    return new BaseLootrInfo(blockType, infoType, uuid, pos, name, dimension, size, reference, table, seed);
+    return new BaseLootrInfo(blockType, infoType, uuid, ILootrInfo.generateInfoKey(uuid), pos, name, dimension, size, reference, table, seed);
   }
 
   enum LootrInfoType {
