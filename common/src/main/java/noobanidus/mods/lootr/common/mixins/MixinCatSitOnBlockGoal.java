@@ -5,6 +5,7 @@ import net.minecraft.world.entity.ai.goal.CatSitOnBlockGoal;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.block.entity.LootrChestBlockEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,7 +19,7 @@ public class MixinCatSitOnBlockGoal {
   @Redirect(method = "isValidTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;is(Lnet/minecraft/world/level/block/Block;)Z"))
   protected boolean LootrIsIn(BlockState state, Block block) {
     if (LootrRegistry.isReady()) {
-      return state.is(block) || state.is(LootrRegistry.getChestBlock()) || state.is(LootrRegistry.getTrappedChestBlock());
+      return state.is(block) || state.is(LootrTags.Blocks.CATS_CAN_BLOCK);
     } else {
       return state.is(block);
     }

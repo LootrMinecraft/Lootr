@@ -21,6 +21,8 @@ public class LootrTags {
     public static final TagKey<Block> BARRELS = tag("barrels");
     public static final TagKey<Block> CONTAINERS = tag("containers");
 
+    public static final TagKey<Block> CATS_CAN_BLOCK = tag("cats_can_block");
+
     static TagKey<Block> tag(String name) {
       return TagKey.create(Registries.BLOCK, LootrAPI.rl(name));
     }
