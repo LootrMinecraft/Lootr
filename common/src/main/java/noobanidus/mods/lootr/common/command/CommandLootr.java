@@ -22,7 +22,9 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.players.GameProfileCache;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -71,8 +73,18 @@ public class CommandLootr {
   }
 
   private static List<String> getProfiles() {
-    // TODO: Come up with a better way to do this
-    return Lists.newArrayList(LootrAPI.getServer().getProfileCache().profilesByName.keySet());
+    MinecraftServer server = LootrAPI.getServer();
+    if (server == null) {
+      return Collections.emptyList();
+    }
+
+    GameProfileCache cache = server.getProfileCache();
+    if (cache == null) {
+      return Collections.emptyList();
+    }
+
+    // This uses an access widener as the GameProfileInfo class is package-private and thus an accessor mixin is not possible
+    return Lists.newArrayList(cache.profilesByName.keySet());
   }
 
   private static List<String> getTableNames() {
