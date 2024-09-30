@@ -59,6 +59,7 @@ public class LootrAPI {
     return INSTANCE.getPlayerIds();
   }
 
+  @Deprecated
   public static Player getPlayer() {
     return INSTANCE.getPlayer();
   }

@@ -192,7 +192,6 @@ public class LootrAPIImpl implements ILootrAPI {
     return result;
   }
 
-  // TODO:
   @Override
   public Player getPlayer() {
     return null;
