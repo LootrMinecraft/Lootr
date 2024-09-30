@@ -258,7 +258,6 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     return cachedId;
   }
 
-  // TODO:
   @Override
   public boolean isPhysicallyOpen() {
     return false;
