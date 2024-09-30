@@ -184,7 +184,8 @@ public class LootrAPIImpl implements ILootrAPI {
         continue;
       }
       UUID thisUuid = player.getUUID();
-      // TODO Offline servers?
+      // I don't know if this is possible but let's just check for it anyway.
+      //noinspection ConstantValue
       if (thisUuid != null) {
         result.add(thisUuid);
       }
