@@ -368,7 +368,6 @@ public class ConfigManager {
     if (replacements.get(original.getBlock()) == null && original.is(LootrTags.Blocks.CONVERT_BLOCK)) {
       if (original.getBlock() instanceof EntityBlock entityBlock) {
         BlockEntity be = entityBlock.newBlockEntity(BlockPos.ZERO, original);
-        // TODO:
         if (be instanceof RandomizableContainerBlockEntity) {
           if (original.is(LootrTags.Blocks.CONVERT_TRAPPED_CHESTS)) {
             replacements.put(original.getBlock(), LootrRegistry.getTrappedChestBlock());
