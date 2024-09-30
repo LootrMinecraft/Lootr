@@ -185,7 +185,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   @Override
   public void startSeenByPlayer(ServerPlayer pPlayer) {
     super.startSeenByPlayer(pPlayer);
-    // TODO: It is possible that these packets will be fired
+    // It is possible that these packets will be fired
     // before the client has actually received the initial
     // packet to create the entity, thus resulting in the
     // resolved entity being null.

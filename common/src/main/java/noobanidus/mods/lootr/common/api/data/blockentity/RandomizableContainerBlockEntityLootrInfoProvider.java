@@ -73,19 +73,20 @@ public record RandomizableContainerBlockEntityLootrInfoProvider(
     return blockEntity.getBlockPos();
   }
 
-  // TODO: Can return null
   @Override
-  public @NotNull ResourceKey<LootTable> getInfoLootTable() {
+  public ResourceKey<LootTable> getInfoLootTable() {
     return blockEntity.getLootTable();
   }
 
   @Override
-  public @Nullable Component getInfoDisplayName() {
+  public Component getInfoDisplayName() {
     return blockEntity.getDisplayName();
   }
 
   @Override
   public @NotNull ResourceKey<Level> getInfoDimension() {
+    // We don't care if this causes a null pointer.
+    //noinspection DataFlowIssue
     return blockEntity.getLevel().dimension();
   }
 
