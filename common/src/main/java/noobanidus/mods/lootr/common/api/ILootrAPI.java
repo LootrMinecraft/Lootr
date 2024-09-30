@@ -17,6 +17,7 @@ import noobanidus.mods.lootr.common.api.client.ClientTextureType;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.ILootrSavedData;
 import noobanidus.mods.lootr.common.api.data.LootFiller;
+import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import org.jetbrains.annotations.Nullable;
 
@@ -236,6 +237,8 @@ public interface ILootrAPI {
   void handleProviderTick(@Nullable ILootrInfoProvider provider);
 
   boolean anyUnloadedChunks(ResourceKey<Level> dimension, Set<ChunkPos> chunks);
+
+  <T> ILootrBlockEntity resolveBlockEntity (T blockEntity);
 }
 
 

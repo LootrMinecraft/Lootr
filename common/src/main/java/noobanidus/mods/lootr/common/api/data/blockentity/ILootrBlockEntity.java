@@ -10,20 +10,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
-import noobanidus.mods.lootr.common.api.ILootrOptional;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 
 public interface ILootrBlockEntity extends ILootrInfoProvider {
   static <T extends BlockEntity> void ticker (Level level, BlockPos pos, BlockState state, T blockEntity) {
-    if (blockEntity instanceof ILootrBlockEntity t) {
+    if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity t) {
       t.defaultTick(level, pos, state);
-    } else if (blockEntity instanceof ILootrOptional o) {
-      Object object = o.getLootrObject();
-      if (object instanceof ILootrBlockEntity t2) {
-        t2.defaultTick(level, pos, state);
-      }
     }
   }
 

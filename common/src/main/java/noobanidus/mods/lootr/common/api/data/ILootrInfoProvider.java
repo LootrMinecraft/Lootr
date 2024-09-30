@@ -12,7 +12,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.IClientOpeners;
-import noobanidus.mods.lootr.common.api.ILootrOptional;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.data.blockentity.RandomizableContainerBlockEntityLootrInfoProvider;
@@ -28,27 +27,27 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
       return null;
     }
     BlockEntity blockEntity = level.getBlockEntity(pos);
-    if (blockEntity instanceof ILootrInfoProvider provider) {
+    if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrInfoProvider provider) {
       return provider;
-    }
-    if (blockEntity instanceof ILootrOptional optionalProvider) {
-      Object object = optionalProvider.getLootrObject();
-      if (object instanceof ILootrInfoProvider provider) {
-        return provider;
-      }
+    } else if (blockEntity instanceof ILootrInfoProvider provider) {
+      return provider;
     }
     return null;
   }
 
   static ILootrInfoProvider of(RandomizableContainerBlockEntity blockEntity, UUID id) {
-    if (blockEntity instanceof ILootrInfoProvider provider) {
+    if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrInfoProvider provider) {
+      return provider;
+    } else if (blockEntity instanceof ILootrInfoProvider provider) {
       return provider;
     }
     return new RandomizableContainerBlockEntityLootrInfoProvider(blockEntity, id, ILootrInfo.generateInfoKey(id), null);
   }
 
   static ILootrInfoProvider of(RandomizableContainerBlockEntity blockEntity, UUID id, NonNullList<ItemStack> customInventory) {
-    if (blockEntity instanceof ILootrInfoProvider provider) {
+    if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrInfoProvider provider) {
+      return provider;
+    } else if (blockEntity instanceof ILootrInfoProvider provider) {
       return provider;
     }
     return new RandomizableContainerBlockEntityLootrInfoProvider(blockEntity, id, ILootrInfo.generateInfoKey(id), customInventory);
@@ -84,7 +83,7 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
   }
 
   @Override
-  default boolean hasBeenOpened () {
+  default boolean hasBeenOpened() {
     ILootrSavedData data = LootrAPI.getData(this);
     if (data == null) {
       return false;
@@ -94,11 +93,11 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
   }
 
   @Nullable
-  default IContainerTrigger getTrigger () {
+  default IContainerTrigger getTrigger() {
     return null;
   }
 
-  default void performTrigger (ServerPlayer player) {
+  default void performTrigger(ServerPlayer player) {
     IContainerTrigger trigger = getTrigger();
     if (trigger != null) {
       trigger.trigger(player, getInfoUUID());
@@ -108,19 +107,19 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
   default void performOpen(ServerPlayer player) {
   }
 
-  default void performOpen () {
+  default void performOpen() {
   }
 
   default void performClose(ServerPlayer player) {
   }
 
-  default void performClose () {
+  default void performClose() {
   }
 
-  default void performDecay () {
+  default void performDecay() {
   }
 
-  default void performRefresh () {
+  default void performRefresh() {
     ILootrSavedData data = LootrAPI.getData(this);
     if (data != null) {
       data.refresh();
@@ -129,10 +128,10 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
     }
   }
 
-  default void performUpdate (ServerPlayer player) {
+  default void performUpdate(ServerPlayer player) {
   }
 
-  default void performUpdate () {
+  default void performUpdate() {
   }
 
   @Override

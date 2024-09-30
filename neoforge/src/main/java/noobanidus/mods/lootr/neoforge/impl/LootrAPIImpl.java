@@ -23,7 +23,6 @@ import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.common.api.ILootrAPI;
-import noobanidus.mods.lootr.common.api.ILootrOptional;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.MenuBuilder;
 import noobanidus.mods.lootr.common.api.client.ClientTextureType;
@@ -31,9 +30,11 @@ import noobanidus.mods.lootr.common.api.data.DefaultLootFiller;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.ILootrSavedData;
 import noobanidus.mods.lootr.common.api.data.LootFiller;
+import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.data.DataStorage;
+import noobanidus.mods.lootr.common.impl.LootrServiceRegistry;
 import noobanidus.mods.lootr.neoforge.config.ConfigManager;
 import noobanidus.mods.lootr.neoforge.event.HandleChunk;
 import noobanidus.mods.lootr.neoforge.network.client.ClientHandlers;
@@ -628,5 +629,10 @@ public class LootrAPIImpl implements ILootrAPI {
     }
 
     return false;
+  }
+
+  @Override
+  public <T> ILootrBlockEntity resolveBlockEntity(T blockEntity) {
+    return LootrServiceRegistry.convert(blockEntity);
   }
 }

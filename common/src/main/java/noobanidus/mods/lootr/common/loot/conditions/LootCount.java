@@ -14,7 +14,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraft.world.phys.Vec3;
-import noobanidus.mods.lootr.common.api.ILootrOptional;
+import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 
@@ -45,14 +45,7 @@ public record LootCount(List<Operation> operations) implements LootItemCondition
     }
     BlockPos position = new BlockPos((int) incomingPos.x, (int) incomingPos.y, (int) incomingPos.z);
     BlockEntity blockEntity = lootContext.getLevel().getBlockEntity(position);
-    ILootrBlockEntity ibe = null;
-    if (blockEntity instanceof ILootrBlockEntity) {
-      ibe = (ILootrBlockEntity) blockEntity;
-    } else if (blockEntity instanceof ILootrOptional optional) {
-      if (optional.getLootrObject() instanceof ILootrBlockEntity) {
-        ibe = (ILootrBlockEntity) optional.getLootrObject();
-      }
-    }
+    ILootrBlockEntity ibe = LootrAPI.resolveBlockEntity(blockEntity);
     if (ibe != null) {
       Set<UUID> actualOpeners = ibe.getActualOpeners();
       if (actualOpeners == null) {

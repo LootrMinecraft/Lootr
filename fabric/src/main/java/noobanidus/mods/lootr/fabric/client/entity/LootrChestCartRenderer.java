@@ -10,8 +10,8 @@ import net.minecraft.client.renderer.entity.MinecartRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
-import noobanidus.mods.lootr.fabric.client.item.LootrChestItemRenderer;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
+import noobanidus.mods.lootr.fabric.client.item.LootrChestItemRenderer;
 
 public class LootrChestCartRenderer<T extends LootrChestMinecartEntity> extends MinecartRenderer<T> {
   public LootrChestCartRenderer(EntityRendererProvider.Context context, ModelLayerLocation modelLayerLocation) {

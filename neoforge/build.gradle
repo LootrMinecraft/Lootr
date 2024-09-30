@@ -51,7 +51,9 @@ dependencies {
 }
 
 processResources {
-    from(project(":common").sourceSets["main"].resources)
+    from(project(":common").sourceSets["main"].resources) {
+        exclude "META-INF/services" // This is important as otherwise NeoForge/FML thinks that both the common jar and the platform jar are exporting the same packages
+    }
 
     inputs.property "version", project.version
 

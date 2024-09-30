@@ -6,8 +6,8 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import noobanidus.mods.lootr.neoforge.Lootr;
-import noobanidus.mods.lootr.neoforge.network.client.ClientHandlers;
 import noobanidus.mods.lootr.neoforge.network.ILootrNeoForgePacket;
+import noobanidus.mods.lootr.neoforge.network.client.ClientHandlers;
 
 public record PacketCloseContainer(BlockPos position) implements ILootrNeoForgePacket {
   public static final CustomPacketPayload.Type<PacketCloseContainer> TYPE = new CustomPacketPayload.Type<>(Lootr.rl("close_container"));

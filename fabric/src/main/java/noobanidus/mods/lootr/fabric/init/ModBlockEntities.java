@@ -4,7 +4,10 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.block.entity.*;
+import noobanidus.mods.lootr.common.block.entity.LootrChestBlockEntity;
+import noobanidus.mods.lootr.common.block.entity.LootrInventoryBlockEntity;
+import noobanidus.mods.lootr.common.block.entity.LootrShulkerBlockEntity;
+import noobanidus.mods.lootr.common.block.entity.LootrTrappedChestBlockEntity;
 import noobanidus.mods.lootr.fabric.block.entity.LootrFabricBarrelBlockEntity;
 
 public class ModBlockEntities {

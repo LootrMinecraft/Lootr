@@ -10,8 +10,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.fabric.config.ConfigManager;
 import org.jetbrains.annotations.Nullable;
@@ -66,7 +66,7 @@ public class HandleBreak {
   public static void afterBlockBreak(Level world, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity) {
     if (state.is(LootrTags.Blocks.CONTAINERS)) {
       blockEntity.setChanged();
-      if (blockEntity instanceof ILootrBlockEntity lbe) {
+      if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity lbe) {
         lbe.updatePacketViaForce(blockEntity);
       }
     }

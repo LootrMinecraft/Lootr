@@ -11,7 +11,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
-import noobanidus.mods.lootr.common.api.*;
+import noobanidus.mods.lootr.common.api.DataToCopy;
+import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 
 import java.util.Set;
@@ -112,7 +114,7 @@ public class BlockEntityTicker {
           continue;
         }
         BlockEntity blockEntity = level.getBlockEntity(entry.getPosition());
-        if (!(blockEntity instanceof RandomizableContainerBlockEntity be) || blockEntity instanceof ILootrBlockEntity || blockEntity instanceof ILootrOptional) {
+        if (!(blockEntity instanceof RandomizableContainerBlockEntity be) || LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity) {
           toRemove.add(entry);
           continue;
         }
@@ -136,7 +138,7 @@ public class BlockEntityTicker {
         level.setBlock(entry.getPosition(), replacement, 2);
         BlockEntity newBlockEntity = level.getBlockEntity(entry.getPosition());
         PlatformAPI.restoreSpecificData(data, newBlockEntity);
-        if (newBlockEntity instanceof ILootrBlockEntity && newBlockEntity instanceof RandomizableContainerBlockEntity rbe) {
+        if (LootrAPI.resolveBlockEntity(newBlockEntity) instanceof ILootrBlockEntity && newBlockEntity instanceof RandomizableContainerBlockEntity rbe) {
           rbe.setLootTable(table, seed);
         } else {
           LootrAPI.LOG.error("replacement " + replacement + " is not an ILootrBlockEntity " + entry.getDimension() + " at " + entry.getPosition());
