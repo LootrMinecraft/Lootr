@@ -32,7 +32,6 @@ public class HandleCart {
       PlatformAPI.copyEntityData(cart, lootrCart);
       event.setCanceled(true);
       if (!level.getServer().isSameThread()) {
-        // TODO: Who knows if this actually works.
         level.getChunkSource().addRegionTicket(LootrAPI.LOOTR_ENTITY_TICK_TICKET, lootrCart.chunkPosition(), 1, Unit.INSTANCE);
         LootrAPI.LOG.error("Minecart with Loot table created off main thread. Falling back on EntityTicker.");
         EntityTicker.addEntity(lootrCart);
