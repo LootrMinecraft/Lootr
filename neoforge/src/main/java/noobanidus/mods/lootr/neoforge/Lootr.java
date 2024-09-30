@@ -18,7 +18,7 @@ import noobanidus.mods.lootr.neoforge.impl.PlatformAPIImpl;
 import noobanidus.mods.lootr.neoforge.init.*;
 import noobanidus.mods.lootr.neoforge.network.PacketHandler;
 
-// TODO:
+// TODO: Ideas/important things to be implemented
 // - Display notices after containers are closed
 // - or use toasts
 // - bring back decay/refresh structures
