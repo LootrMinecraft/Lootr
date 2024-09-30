@@ -47,8 +47,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 // TODO: A lot of this can get moved to the default implementation
 public class LootrAPIImpl implements ILootrAPI {
-  // TODO: This is generic enough
-
   @Override
   public void handleProviderSneak(@Nullable ILootrInfoProvider provider, ServerPlayer player) {
     if (provider == null) {
