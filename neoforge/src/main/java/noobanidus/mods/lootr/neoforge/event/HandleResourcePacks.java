@@ -15,9 +15,9 @@ public class HandleResourcePacks {
   public static void onResourcePacks (AddPackFindersEvent event) {
     if (event.getPackType() == PackType.CLIENT_RESOURCES) {
       event.addPackFinders(
-          LootrAPI.rl("resourcepacks/new_textures"),
+          LootrAPI.rl("resourcepacks/old_textures"),
           PackType.CLIENT_RESOURCES,
-          Component.literal("Lootr - New Textures"),
+          Component.literal("Lootr - Old Textures"),
           PackSource.BUILT_IN,
           false,
           Pack.Position.BOTTOM);

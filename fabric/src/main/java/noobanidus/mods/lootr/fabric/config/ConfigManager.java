@@ -412,6 +412,6 @@ public class ConfigManager implements ConfigData {
 
   public static class Client {
     public boolean vanilla_textures = false;
-    public boolean new_textures = false;
+    public boolean new_textures = true;
   }
 }

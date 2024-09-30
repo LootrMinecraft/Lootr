@@ -50,6 +50,6 @@ public class LootrEventsInit {
 
     ModContainer container = FabricLoader.getInstance().getModContainer(LootrAPI.MODID).orElseThrow();
 
-    ResourceManagerHelper.registerBuiltinResourcePack(LootrAPI.rl("new_textures"), container, Component.literal("Lootr - New Textures"), ResourcePackActivationType.NORMAL);
+    ResourceManagerHelper.registerBuiltinResourcePack(LootrAPI.rl("old_textures"), container, Component.literal("Lootr - Old Textures"), ResourcePackActivationType.NORMAL);
   }
 }

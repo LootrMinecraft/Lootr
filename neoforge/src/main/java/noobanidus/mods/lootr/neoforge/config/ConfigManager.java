@@ -159,7 +159,7 @@ public class ConfigManager {
     COMMON_CONFIG = COMMON_BUILDER.build();
     CLIENT_BUILDER.push("textures").comment("configuration options for textures");
     VANILLA_TEXTURES = CLIENT_BUILDER.comment("set to true to use vanilla textures instead of Lootr special textures. Note: this will prevent previously opened chests from rendering differently").define("vanilla_textures", false);
-    NEW_TEXTURES = CLIENT_BUILDER.comment("set to true to use the new Lootr textures").define("new_textures", false);
+    NEW_TEXTURES = CLIENT_BUILDER.comment("set to true to use the new Lootr textures").define("new_textures", true);
     CLIENT_BUILDER.pop();
     CLIENT_CONFIG = CLIENT_BUILDER.build();
   }
