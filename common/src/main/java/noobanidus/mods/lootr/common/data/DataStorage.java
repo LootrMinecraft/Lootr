@@ -220,11 +220,10 @@ public class DataStorage {
 
     MinecraftServer server = LootrAPI.getServer();
     if (server == null) {
-      // TODO: Errors?
+      LootrAPI.LOG.error("MinecraftServer is null at this stage; Lootr cannot clear inventories.");
       return false;
     }
 
-    // TODO:
     Path dataPath = server.getWorldPath(new LevelResource("data")).resolve("lootr");
     List<String> files = new ArrayList<>();
     try (Stream<Path> paths = Files.walk(dataPath)) {
