@@ -24,6 +24,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -317,8 +318,8 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
     }
 
     @Override
-    public Class<? extends LootrBarrelBlockEntity> getClassType() {
-      return LootrBarrelBlockEntity.class;
+    public BlockEntityType<?> getBlockEntityType() {
+      return LootrRegistry.getBarrelBlockEntity();
     }
   }
 }

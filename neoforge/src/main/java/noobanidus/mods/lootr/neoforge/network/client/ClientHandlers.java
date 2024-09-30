@@ -26,7 +26,7 @@ public class ClientHandlers {
       return;
     }
 
-    if (cart instanceof ILootrCart lootrCart) {
+    if (LootrAPI.resolveEntity(cart) instanceof ILootrCart lootrCart) {
       lootrCart.setClientOpened(false);
       return;
     }
@@ -46,7 +46,7 @@ public class ClientHandlers {
       return;
     }
 
-    if (cart instanceof ILootrCart lootrCart) {
+    if (LootrAPI.resolveEntity(cart) instanceof ILootrCart lootrCart) {
       lootrCart.setClientOpened(true);
       return;
     }

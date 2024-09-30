@@ -20,7 +20,7 @@ public class LootrNetworkingInit {
       context.client().execute(() -> {
         if (context.client().player != null && context.client().player.level() != null) {
           Entity potential = context.client().player.level().getEntity(entityId);
-          if (potential instanceof ILootrCart cart) {
+          if (LootrAPI.resolveEntity(potential) instanceof ILootrCart cart) {
             cart.setClientOpened(false);
           }
         }
@@ -32,7 +32,7 @@ public class LootrNetworkingInit {
       context.client().execute(() -> {
         if (context.client().player != null && context.client().player.level() != null) {
           Entity potential = context.client().player.level().getEntity(entityId);
-          if (potential instanceof ILootrCart cart) {
+          if (LootrAPI.resolveEntity(potential) instanceof ILootrCart cart) {
             cart.setClientOpened(true);
           }
         }

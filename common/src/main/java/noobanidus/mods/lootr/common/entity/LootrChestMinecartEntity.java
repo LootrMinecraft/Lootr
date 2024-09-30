@@ -29,6 +29,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
+import noobanidus.mods.lootr.common.api.ILootrEntityConverter;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.data.ILootrInfo;
@@ -292,4 +293,16 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
 
     this.setDeltaMovement(this.getDeltaMovement().multiply((double)f, 0.0, (double)f));
   } */
+
+  public static class DefaultConverter implements ILootrEntityConverter<LootrChestMinecartEntity> {
+    @Override
+    public ILootrCart apply(LootrChestMinecartEntity entity) {
+      return entity;
+    }
+
+    @Override
+    public EntityType<?> getEntityType() {
+      return LootrRegistry.getMinecart();
+    }
+  }
 }

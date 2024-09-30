@@ -26,6 +26,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -389,8 +390,8 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
     }
 
     @Override
-    public Class<? extends LootrShulkerBlockEntity> getClassType() {
-      return LootrShulkerBlockEntity.class;
+    public BlockEntityType<?> getBlockEntityType() {
+      return LootrRegistry.getShulkerBlockEntity();
     }
   }
 }

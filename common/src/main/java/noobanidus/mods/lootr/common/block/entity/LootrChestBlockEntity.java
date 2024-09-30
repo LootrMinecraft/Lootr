@@ -332,8 +332,8 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
     }
 
     @Override
-    public Class<? extends LootrChestBlockEntity> getClassType() {
-      return LootrChestBlockEntity.class;
+    public BlockEntityType<?> getBlockEntityType() {
+      return LootrRegistry.getChestBlockEntity();
     }
   }
 }
