@@ -112,7 +112,6 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     return true;
   }
 
-  // TODO:
   @Override
   public Item getDropItem() {
     return Items.CHEST_MINECART;
@@ -172,13 +171,6 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   public void startOpen(Player player) {
     if (!player.isSpectator()) {
       performOpen((ServerPlayer) player);
-    }
-  }
-
-  @Override
-  public void stopOpen(Player player) {
-    if (!player.isSpectator()) {
-      // TODO: Does this need anything?
     }
   }
 
