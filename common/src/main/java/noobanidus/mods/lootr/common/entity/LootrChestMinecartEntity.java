@@ -103,8 +103,8 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
         return true;
       } else //noinspection RedundantIfStatement
         if (source.getEntity().isShiftKeyDown()) {
-        return false;
-      }
+          return false;
+        }
     } else {
       return true;
     }
@@ -274,21 +274,15 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     return LootrRegistry.getCartTrigger();
   }
 
-  // TODO:
-/*  @Override
+  @Override
   protected void applyNaturalSlowdown() {
     float f = 0.98F;
-    if (this.lootTable == null) {
-      int i = 15 - AbstractContainerMenu.getRedstoneSignalFromContainer(this);
-      f += (float)i * 0.001F;
-    }
-
     if (this.isInWater()) {
       f *= 0.95F;
     }
 
-    this.setDeltaMovement(this.getDeltaMovement().multiply((double)f, 0.0, (double)f));
-  } */
+    this.setDeltaMovement(this.getDeltaMovement().multiply((double) f, 0.0, (double) f));
+  }
 
   public static class DefaultConverter implements ILootrEntityConverter<LootrChestMinecartEntity> {
     @Override
