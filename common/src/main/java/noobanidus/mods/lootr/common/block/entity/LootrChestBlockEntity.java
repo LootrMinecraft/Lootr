@@ -40,7 +40,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Set;
 import java.util.UUID;
 
-// TODO: Generify
 public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlockEntity {
   private final ChestLidController chestLidController = new ChestLidController();
   protected UUID infoId;
@@ -106,6 +105,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
     }
   }
 
+  // TODO: Provide access to this in ILootrBlockEntity
   public static int getOpenCount(BlockGetter pLevel, BlockPos pPos) {
     BlockState blockstate = pLevel.getBlockState(pPos);
     if (blockstate.hasBlockEntity()) {
