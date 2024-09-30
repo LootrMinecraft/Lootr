@@ -97,6 +97,7 @@ public class ConfigManager {
   private static Set<ResourceKey<Level>> REFRESH_DIMS = null;
   private static Set<ResourceKey<LootTable>> LOOT_BLACKLIST = null;
   private static Set<String> LOOT_MODIDS = null;
+  // TODO: This needs to be cleared whenever tags are refreshed
   private static Map<Block, Block> replacements = null;
 
   static {
