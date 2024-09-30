@@ -57,6 +57,9 @@ public class LootrServiceRegistry {
 
   @Nullable
   public static <T extends BlockEntity> ILootrBlockEntity convertBlockEntity(T blockEntity) {
+    if (blockEntity == null) {
+      return null;
+    }
     Function<T, ILootrBlockEntity> converter = getBlockEntity( blockEntity.getType());
     if (converter == null) {
       return null;
@@ -66,6 +69,9 @@ public class LootrServiceRegistry {
 
   @Nullable
   public static <T extends Entity> ILootrCart convertEntity (T entity) {
+    if (entity == null) {
+      return null;
+    }
     Function<T, ILootrCart> converter = getEntity(entity.getType());
     if (converter == null) {
       return null;
