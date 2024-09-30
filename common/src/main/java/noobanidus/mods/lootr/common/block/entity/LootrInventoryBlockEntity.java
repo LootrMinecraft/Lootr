@@ -9,7 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import noobanidus.mods.lootr.common.api.ILootrConverter;
+import noobanidus.mods.lootr.common.api.ILootrBlockEntityConverter;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
@@ -72,7 +72,7 @@ public class LootrInventoryBlockEntity extends LootrChestBlockEntity {
     return LootrBlockType.INVENTORY;
   }
 
-  public static class DefaultConverter implements ILootrConverter<LootrInventoryBlockEntity> {
+  public static class DefaultBlockEntityConverter implements ILootrBlockEntityConverter<LootrInventoryBlockEntity> {
 
     @Override
     public ILootrBlockEntity apply(LootrInventoryBlockEntity blockEntity) {

@@ -1,6 +1,6 @@
 package noobanidus.mods.lootr.common.impl;
 
-import noobanidus.mods.lootr.common.api.ILootrConverter;
+import noobanidus.mods.lootr.common.api.ILootrBlockEntityConverter;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,9 +15,9 @@ public class LootrServiceRegistry {
   private Map<Class<?>, Function<?, ?>> converterMap = new HashMap<>();
 
   public LootrServiceRegistry () {
-    @SuppressWarnings("rawtypes") ServiceLoader<ILootrConverter> loader = ServiceLoader.load(ILootrConverter.class);
+    @SuppressWarnings("rawtypes") ServiceLoader<ILootrBlockEntityConverter> loader = ServiceLoader.load(ILootrBlockEntityConverter.class);
 
-    for (ILootrConverter<?> converter : loader) {
+    for (ILootrBlockEntityConverter<?> converter : loader) {
       converterMap.put(converter.getClassType(), converter);
     }
   }

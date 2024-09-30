@@ -28,7 +28,7 @@ import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
-import noobanidus.mods.lootr.common.api.ILootrConverter;
+import noobanidus.mods.lootr.common.api.ILootrBlockEntityConverter;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.data.ILootrInfo;
@@ -310,7 +310,7 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
     return cachedId;
   }
 
-  public static class DefaultConverter implements ILootrConverter<LootrBarrelBlockEntity> {
+  public static class DefaultBlockEntityConverter implements ILootrBlockEntityConverter<LootrBarrelBlockEntity> {
     @Override
     public ILootrBlockEntity apply(LootrBarrelBlockEntity blockEntity) {
       return blockEntity;
