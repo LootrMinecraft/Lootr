@@ -118,6 +118,21 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
     return result;
   }
 
+  private void removeOpener (UUID uuid) {
+    /*Set<UUID> actualOpeners = getActualOpeners();
+    if (actualOpeners != null) {
+      if (actualOpeners.remove(uuid)) {
+        setDirty();
+      }
+    }*/
+    Set<UUID> visualOpeners = getVisualOpeners();
+    if (visualOpeners != null) {
+      if (visualOpeners.remove(uuid)) {
+        setDirty();
+      }
+    }
+  }
+
   @Override
   public Set<UUID> getActualOpeners() {
     return actualOpeners;
@@ -215,6 +230,7 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
   @Override
   public boolean clearInventories(UUID id) {
     if (inventories.remove(id) != null) {
+      removeOpener(id);
       setDirty();
       return true;
     }
