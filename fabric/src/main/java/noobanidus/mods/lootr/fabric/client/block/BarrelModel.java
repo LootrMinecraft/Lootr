@@ -122,7 +122,6 @@ public class BarrelModel implements UnbakedModel {
 
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand) {
-      // TODO: I don't think is ever being called
       if (LootrAPI.isVanillaTextures()) {
         return vanilla.getQuads(state, side, rand);
       } else if (LootrAPI.isNewTextures()) {
