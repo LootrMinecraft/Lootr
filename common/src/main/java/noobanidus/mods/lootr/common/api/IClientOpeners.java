@@ -1,13 +1,14 @@
 package noobanidus.mods.lootr.common.api;
 
 import net.minecraft.world.entity.player.Player;
+import noobanidus.mods.lootr.common.api.annotation.ClientOnly;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 import java.util.UUID;
 
 public interface IClientOpeners extends IOpeners {
-  // TODO: CLIENT ONLY
+  @ClientOnly
   @Nullable
   Set<UUID> getClientOpeners();
 

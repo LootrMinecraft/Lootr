@@ -240,14 +240,6 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
     return ClientboundBlockEntityDataPacket.create(this, BlockEntity::getUpdateTag);
   }
 
-/*  // TODO:
-  @Override
-  public void onDataPacket(@NotNull Connection net, @NotNull ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider provider) {
-    super.onDataPacket(net, pkt, provider);
-    requestModelDataUpdate();
-    ClientHandlers.refreshModel(getBlockPos());
-  }*/
-
   @Override
   public @NotNull BlockPos getInfoPos() {
     return getBlockPos();

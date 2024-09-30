@@ -49,7 +49,6 @@ public interface ILootrRegistry {
 
   BlockEntityType<?> getShulkerBlockEntity();
 
-  // TODO: Hm
   IAdvancementTrigger getAdvancementTrigger();
 
   IContainerTrigger getChestTrigger();
