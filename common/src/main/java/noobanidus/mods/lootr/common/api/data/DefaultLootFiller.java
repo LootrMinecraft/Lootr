@@ -32,7 +32,7 @@ public class DefaultLootFiller implements LootFiller {
         }
     } else if (lootTable == null) {
       LootrAPI.LOG.error("Unable to fill loot container in " + level.dimension().location() + " at " + pos + " as the loot table is null and the provider is not a reference inventory!");
-      // TODO:
+      // Unknown TODO: what exactly was supposed to be done here?
     } else {
       long seed = provider.getInfoLootSeed();
       LootTable loottable = level.getServer().reloadableRegistries().getLootTable(lootTable);

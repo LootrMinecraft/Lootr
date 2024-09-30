@@ -184,7 +184,6 @@ public class DataStorage {
 
   @ApiStatus.Internal
   public static LootrSavedData getData(ILootrInfoProvider provider) {
-    // TODO: Refresh data from provider
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot fetch data for " + provider.getInfoDimension() + " at " + provider.getInfoPos() + " with ID " + provider.getInfoUUID() + " and cannot continue.");
