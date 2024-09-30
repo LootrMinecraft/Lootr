@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.block.entity.LootrChestBlockEntity;
@@ -79,8 +80,7 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootrBlo
     if (Minecraft.getInstance().player == null) {
       return LootrAPI.isOldTextures() ? OLD_MATERIAL2 : MATERIAL2;
     }
-    // TODO: ???
-    boolean trapped = blockEntity.getType().equals(LootrRegistry.getTrappedChestBlockEntity());
+    boolean trapped = blockEntity.getType().builtInRegistryHolder().is(LootrTags.BlockEntity.TRAPPED);
     if (blockEntity.hasClientOpened(Minecraft.getInstance().player.getUUID())) {
       if (LootrAPI.isOldTextures()) {
         return trapped ? OLD_MATERIAL4 : OLD_MATERIAL2;

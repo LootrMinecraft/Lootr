@@ -53,6 +53,7 @@ public class LootrTags {
 
   public static class BlockEntity extends LootrTags {
     public static TagKey<BlockEntityType<?>> LOOTR_OBJECT = tag("object");
+    public static TagKey<BlockEntityType<?>> TRAPPED = tag("trapped");
 
     public static boolean isTagged(net.minecraft.world.level.block.entity.BlockEntity blockEntity, TagKey<BlockEntityType<?>> tag) {
       return blockEntity.getType().builtInRegistryHolder().is(tag);
