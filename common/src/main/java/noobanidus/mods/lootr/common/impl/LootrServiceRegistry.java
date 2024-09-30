@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.common.impl;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -18,8 +19,8 @@ import java.util.function.Function;
 public class LootrServiceRegistry {
   private static LootrServiceRegistry INSTANCE;
 
-  private final Map<BlockEntityType<?>, Function<?, ?>> blockEntityConverterMap = new HashMap<>();
-  private final Map<EntityType<?>, Function<?, ?>> entityConverterMap = new HashMap<>();
+  private final Map<BlockEntityType<?>, Function<?, ?>> blockEntityConverterMap = new Object2ObjectOpenHashMap<>();
+  private final Map<EntityType<?>, Function<?, ?>> entityConverterMap = new Object2ObjectOpenHashMap<>();
 
   @SuppressWarnings("rawtypes")
   public LootrServiceRegistry () {
