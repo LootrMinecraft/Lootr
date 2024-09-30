@@ -186,7 +186,7 @@ public class LootrAPIImpl implements ILootrAPI {
         continue;
       }
       UUID thisUuid = player.getUUID();
-      // TODO Offline servers?
+      //noinspection ConstantValue
       if (thisUuid != null) {
         result.add(thisUuid);
       }
