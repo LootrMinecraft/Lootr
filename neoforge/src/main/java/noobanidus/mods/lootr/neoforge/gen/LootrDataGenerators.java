@@ -27,5 +27,6 @@ public class LootrDataGenerators {
     generator.addProvider(true, LootrLootTableProvider.create(output, provider));
     generator.addProvider(event.includeServer(), new LootrEntityTagsProvider(output, provider, helper));
     generator.addProvider(event.includeServer(), new LootrBlockEntityTagsProvider(output, provider, helper));
+    generator.addProvider(event.includeServer(), new LootrStructureTagsProvider(output, provider, helper));
   }
 }

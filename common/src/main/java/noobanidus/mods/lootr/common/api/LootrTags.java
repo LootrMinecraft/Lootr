@@ -6,6 +6,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.levelgen.structure.Structure;
 
 public class LootrTags {
   public static class Blocks extends LootrTags {
@@ -61,6 +62,18 @@ public class LootrTags {
 
     static TagKey<BlockEntityType<?>> tag(String name) {
       return TagKey.create(Registries.BLOCK_ENTITY_TYPE, LootrAPI.rl(name));
+    }
+  }
+
+  public static class Structure extends LootrTags {
+    public static TagKey<net.minecraft.world.level.levelgen.structure.Structure> STRUCTURE_BLACKLIST = tag("blacklist");
+    public static TagKey<net.minecraft.world.level.levelgen.structure.Structure> STRUCTURE_WHITELIST = tag("whitelist");
+
+    public static TagKey<net.minecraft.world.level.levelgen.structure.Structure> REFRESH_STRUCTURES = tag("refresh");
+    public static TagKey<net.minecraft.world.level.levelgen.structure.Structure> DECAY_STRUCTURES = tag("decay");
+
+    static TagKey<net.minecraft.world.level.levelgen.structure.Structure> tag(String name) {
+      return TagKey.create(Registries.STRUCTURE, LootrAPI.rl(name));
     }
   }
 }
