@@ -7,7 +7,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
-import noobanidus.mods.lootr.fabric.ClientHooks;
+import noobanidus.mods.lootr.common.client.ClientHooks;
 import noobanidus.mods.lootr.fabric.network.to_client.PacketCloseCart;
 import noobanidus.mods.lootr.fabric.network.to_client.PacketCloseContainer;
 import noobanidus.mods.lootr.fabric.network.to_client.PacketOpenCart;

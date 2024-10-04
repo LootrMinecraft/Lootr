@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.fabric;
+package noobanidus.mods.lootr.common.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;

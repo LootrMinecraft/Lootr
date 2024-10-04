@@ -28,15 +28,6 @@ public interface IClientOpeners extends IOpeners {
     return result;
   }
 
-  default boolean hasClientOpened () {
-    Player player = LootrAPI.getPlayer();
-    if (player == null) {
-      return false;
-    }
-
-    return hasClientOpened(player.getUUID());
-  }
-
   default boolean hasClientOpened (UUID uuid) {
     Set<UUID> clientOpeners = getClientOpeners();
     if (clientOpeners != null && !clientOpeners.isEmpty() && clientOpeners.contains(uuid)) {
