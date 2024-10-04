@@ -64,6 +64,14 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
     return new CustomLootrInfoProvider(id, ILootrInfo.generateInfoKey(id), pos, containerSize, lootTable, lootSeed, displayName, dimension, customInventory, type, blockType);
   }
 
+  // This matters for actual implementations of ILootrBlockEntity
+  // but not so much as for ILootrCart implementations as those
+  // do not actually track openers; there's no reason why they
+  // couldn't though...
+  default int getPhysicalOpenerCount () {
+    return -1;
+  }
+
   @Override
   default Set<UUID> getVisualOpeners() {
     ILootrSavedData data = LootrAPI.getData(this);

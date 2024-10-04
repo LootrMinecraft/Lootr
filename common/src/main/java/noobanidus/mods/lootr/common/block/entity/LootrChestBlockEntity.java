@@ -321,6 +321,11 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   }
 
   @Override
+  public int getPhysicalOpenerCount() {
+    return this.openersCounter.getOpenerCount();
+  }
+
+  @Override
   public @Nullable IContainerTrigger getTrigger() {
     return LootrRegistry.getChestTrigger();
   }

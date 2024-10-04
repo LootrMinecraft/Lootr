@@ -379,6 +379,11 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   @Override
+  public int getPhysicalOpenerCount() {
+    return openCount;
+  }
+
+  @Override
   public @Nullable IContainerTrigger getTrigger() {
     return LootrRegistry.getShulkerTrigger();
   }

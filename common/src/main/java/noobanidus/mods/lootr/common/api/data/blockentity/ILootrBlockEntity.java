@@ -93,5 +93,6 @@ public interface ILootrBlockEntity extends ILootrInfoProvider {
     updatePacketViaForce();
   }
 
+  // TODO: What are the actual uses of this?
   void manuallySetLootTable (ResourceKey<LootTable> table, long seed);
 }

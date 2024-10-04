@@ -303,6 +303,11 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
     return cachedId;
   }
 
+  @Override
+  public int getPhysicalOpenerCount() {
+    return openersCounter.getOpenerCount();
+  }
+
   public static class DefaultBlockEntityConverter implements ILootrBlockEntityConverter<LootrBarrelBlockEntity> {
     @Override
     public ILootrBlockEntity apply(LootrBarrelBlockEntity blockEntity) {
