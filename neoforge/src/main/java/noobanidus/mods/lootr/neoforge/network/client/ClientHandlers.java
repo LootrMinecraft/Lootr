@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
+import noobanidus.mods.lootr.common.client.ClientHooks;
 import org.jetbrains.annotations.Nullable;
 
 
@@ -60,7 +61,7 @@ public class ClientHandlers {
       lootrBlockEntity.setClientOpened(true);
       lootrBlockEntity.asBlockEntity().requestModelDataUpdate();
     }
-    refreshModel(pos);
+    ClientHooks.clearCache(pos);
   }
 
   public static void handleCloseContainer(BlockPos pos) {
@@ -69,16 +70,6 @@ public class ClientHandlers {
       lootrBlockEntity.setClientOpened(false);
       lootrBlockEntity.asBlockEntity().requestModelDataUpdate();
     }
-    refreshModel(pos);
-  }
-
-  public static void refreshModel(BlockPos pos) {
-    SectionPos sPos = SectionPos.of(pos);
-    Minecraft.getInstance().levelRenderer.setSectionDirty(sPos.x(), sPos.y(), sPos.z());
-  }
-
-  @Nullable
-  public static Player getPlayer() {
-    return Minecraft.getInstance().player;
+    ClientHooks.clearCache(pos);
   }
 }

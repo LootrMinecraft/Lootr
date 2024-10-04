@@ -51,15 +51,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class LootrAPIImpl extends DefaultLootrAPIImpl {
   @Override
-  public Player getPlayer() {
-    if (FMLEnvironment.dist == Dist.CLIENT) {
-      return ClientHandlers.getPlayer();
-    } else {
-      return null;
-    }
-  }
-
-  @Override
   public MinecraftServer getServer() {
     return ServerLifecycleHooks.getCurrentServer();
   }

@@ -31,9 +31,6 @@ public interface ILootrAPI {
   // Platform-independent implementations
   Set<UUID> getPlayerIds();
 
-  @Deprecated
-  Player getPlayer();
-
   MinecraftServer getServer();
 
   default int getCurrentTicks() {

@@ -29,11 +29,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class LootrAPIImpl extends DefaultLootrAPIImpl {
   @Override
-  public Player getPlayer() {
-    return null;
-  }
-
-  @Override
   public MinecraftServer getServer() {
     return LootrEventsInit.serverInstance;
   }

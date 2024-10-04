@@ -59,11 +59,6 @@ public class LootrAPI {
     return INSTANCE.getPlayerIds();
   }
 
-  @Deprecated
-  public static Player getPlayer() {
-    return INSTANCE.getPlayer();
-  }
-
   public static MinecraftServer getServer() {
     return INSTANCE.getServer();
   }
