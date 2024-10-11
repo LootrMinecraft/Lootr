@@ -2,13 +2,13 @@ package noobanidus.mods.lootr.common.block.entity;
 
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -26,6 +26,7 @@ import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 
 public class BlockEntityTicker {
   private final static Object listLock = new Object();
@@ -126,41 +127,15 @@ public class BlockEntityTicker {
         if (level.getServer().getWorldData().worldGenOptions().generateStructures()) {
           Registry<Structure> registry = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
           ChunkPos thisPos = new ChunkPos(entry.getPosition());
-          Optional<HolderSet.Named<Structure>> tag = registry.getTag(LootrTags.Structure.STRUCTURE_BLACKLIST);
-          Optional<HolderSet.Named<Structure>> tag2 = registry.getTag(LootrTags.Structure.STRUCTURE_WHITELIST);
-          if (tag.isPresent()) {
-            if (tag.get().size() != 0) {
-              List<StructureStart> starts = level.structureManager().startsForStructure(thisPos, o -> registry.getHolder(registry.getId(o)).map(b -> b.is(LootrTags.Structure.STRUCTURE_BLACKLIST)).orElse(false));
-              boolean doContinue = false;
-              for (StructureStart start : starts) {
-                if (start.getBoundingBox().isInside(entry.getPosition())) {
-                  toRemove.add(entry);
-                  doContinue = true;
-                  break;
-                }
-              }
-              if (doContinue) {
-                continue;
-              }
+          if (registry.getTag(LootrTags.Structure.STRUCTURE_BLACKLIST).filter(tag -> tag.size() != 0).isPresent()) {
+            if (LootrAPI.isTaggedStructurePresent(level, thisPos, LootrTags.Structure.STRUCTURE_BLACKLIST, entry.getPosition())) {
+              toRemove.add(entry);
+              continue;
             }
-          } else if (tag2.isPresent()) {
-            if (tag2.get().size() != 0) {
-              List<StructureStart> starts = level.structureManager().startsForStructure(thisPos, o -> registry.getHolder(registry.getId(o)).map(b -> b.is(LootrTags.Structure.STRUCTURE_WHITELIST)).orElse(false));
-              if (starts.isEmpty()) {
-                toRemove.add(entry);
-                continue;
-              }
-              boolean foundStructure = false;
-              for (StructureStart start : starts) {
-                if (start.getBoundingBox().isInside(entry.getPosition())) {
-                  foundStructure = true;
-                  break;
-                }
-              }
-              if (!foundStructure) {
-                toRemove.add(entry);
-                continue;
-              }
+          } else if (registry.getTag(LootrTags.Structure.STRUCTURE_WHITELIST).filter(tag -> tag.size() != 0).isPresent()) {
+            if (!LootrAPI.isTaggedStructurePresent(level, thisPos, LootrTags.Structure.STRUCTURE_WHITELIST, entry.getPosition())) {
+              toRemove.add(entry);
+              continue;
             }
           }
         }

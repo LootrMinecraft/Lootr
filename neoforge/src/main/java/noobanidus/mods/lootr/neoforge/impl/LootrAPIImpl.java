@@ -374,6 +374,11 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   }
 
   @Override
+  public boolean performPiecewiseCheck() {
+    return ConfigManager.PERFORM_PIECEWISE_CHECK.get();
+  }
+
+  @Override
   @Nullable
   public BlockState replacementBlockState(BlockState original) {
     return ConfigManager.replacement(original);

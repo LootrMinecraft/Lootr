@@ -39,6 +39,7 @@ public class ConfigManager {
   public static final ModConfigSpec.IntValue MAXIMUM_AGE;
   public static final ModConfigSpec.BooleanValue CONVERT_MINESHAFTS;
   public static final ModConfigSpec.BooleanValue CONVERT_ELYTRAS;
+  public static final ModConfigSpec.BooleanValue PERFORM_PIECEWISE_CHECK;
   // Breaking
   public static final ModConfigSpec.BooleanValue DISABLE_BREAK;
   public static final ModConfigSpec.BooleanValue ENABLE_BREAK;
@@ -109,6 +110,7 @@ public class ConfigManager {
     CONVERT_ELYTRAS = COMMON_BUILDER.comment("whether or not the Elytra item frame should be converted into a standard loot chest with a guaranteed elytra").define("convert_elytras", true);
     REPORT_UNRESOLVED_TABLES = COMMON_BUILDER.comment("lootr will automatically log all unresolved tables (i.e., for containers that have a loot table associated with them but, for whatever reason, the lookup for this table returns empty). setting this option to true additionally informs players when they open containers.").define("report_unresolved_tables", false);
     CHECK_WORLD_BORDER = COMMON_BUILDER.comment("disregard chests and chunks that are outside of the world border; enable this option if you are using a world border and are suffering consistent TPS issues; if you change the world border, you will need to restart your client").define("check_world_border", false);
+    PERFORM_PIECEWISE_CHECK = COMMON_BUILDER.comment("checks structure pieces as well as structure starts when determining if a structure contains a position, more accurate but may cause lag (default true)").define("perform_piecewise_check", true);
     COMMON_BUILDER.pop();
     COMMON_BUILDER.push("whitelist").comment("configuration for specific whitelisting and blacklisting of dimensions, loot tables and modids");
     List<? extends String> empty = Collections.emptyList();
@@ -350,6 +352,10 @@ public class ConfigManager {
 
   public static boolean isNewTextures () {
     return NEW_TEXTURES.get();
+  }
+
+  public static boolean shouldPerformPiecewiseCheck () {
+    return PERFORM_PIECEWISE_CHECK.get();
   }
 
   public static BlockState replacement(BlockState original) {

@@ -287,6 +287,10 @@ public class ConfigManager implements ConfigData {
     return !get().notifications.disable_notifications && (delay == -1 || remaining <= delay);
   }
 
+  public static boolean shouldPerformPiecewiseCheck () {
+    return get().conversion.perform_piecewise_check;
+  }
+
   public static boolean isVanillaTextures() {
     return get().client.vanilla_textures;
   }
@@ -359,6 +363,7 @@ public class ConfigManager implements ConfigData {
     public boolean convert_elytras = true;
     public boolean convert_mineshafts = true;
     public boolean world_border = false;
+    public boolean perform_piecewise_check = true;
   }
 
   public static class Breaking {

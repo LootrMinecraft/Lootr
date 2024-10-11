@@ -1,13 +1,22 @@
 package noobanidus.mods.lootr.common.impl;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.piglin.PiglinAi;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.StructurePiece;
+import net.minecraft.world.level.levelgen.structure.StructureStart;
 import noobanidus.mods.lootr.common.api.ILootrAPI;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.MenuBuilder;
@@ -23,6 +32,7 @@ import noobanidus.mods.lootr.common.data.DataStorage;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -259,5 +269,27 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   @Override
   public final <T extends Entity> ILootrCart resolveEntity(T entity) {
     return LootrServiceRegistry.convertEntity(entity);
+  }
+
+  @Override
+  public boolean isTaggedStructurePresent(ServerLevel level, ChunkPos chunkPos, TagKey<Structure> tag, BlockPos pos) {
+    Registry<Structure> registry = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
+    List<StructureStart> starts = level.structureManager().startsForStructure(chunkPos, o -> registry.getHolder(registry.getId(o)).map(b -> b.is(tag)).orElse(false));
+    for (StructureStart start : starts) {
+      if (start.getBoundingBox().inflatedBy(8).isInside(pos)) {
+        return true;
+      }
+    }
+    if (LootrAPI.performPiecewiseCheck()) {
+      for (StructureStart start : starts) {
+        for (StructurePiece piece : start.getPieces()) {
+          if (piece.getBoundingBox().inflatedBy(8).isInside(pos)) {
+            return true;
+          }
+        }
+      }
+    }
+
+    return false;
   }
 }
