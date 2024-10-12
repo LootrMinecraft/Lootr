@@ -6,6 +6,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ChestBlock;
@@ -322,6 +324,9 @@ public class ConfigManager {
         return true;
       }
     }
+    if (LootrAPI.isTaggedStructurePresent((ServerLevel)provider.getInfoLevel(), new ChunkPos(provider.getInfoPos()), LootrTags.Structure.DECAY_STRUCTURES, provider.getInfoPos())) {
+      return true;
+    }
     return isDimensionDecaying(provider.getInfoDimension());
   }
 
@@ -336,6 +341,9 @@ public class ConfigManager {
       if (!getRefreshMods().isEmpty() && getRefreshMods().contains(provider.getInfoLootTable().location().getNamespace())) {
         return true;
       }
+    }
+    if (LootrAPI.isTaggedStructurePresent((ServerLevel)provider.getInfoLevel(), new ChunkPos(provider.getInfoPos()), LootrTags.Structure.REFRESH_STRUCTURES, provider.getInfoPos())) {
+      return true;
     }
     return isDimensionRefreshing(provider.getInfoDimension());
   }

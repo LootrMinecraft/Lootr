@@ -8,6 +8,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ChestBlock;
@@ -263,6 +265,9 @@ public class ConfigManager implements ConfigData {
         return true;
       }
     }
+    if (LootrAPI.isTaggedStructurePresent((ServerLevel)tile.getInfoLevel(), new ChunkPos(tile.getInfoPos()), LootrTags.Structure.DECAY_STRUCTURES, tile.getInfoPos())) {
+      return true;
+    }
     return isDimensionDecaying(tile.getInfoDimension());
   }
 
@@ -277,6 +282,9 @@ public class ConfigManager implements ConfigData {
       if (getRefreshMods().contains(tile.getInfoLootTable().location().getNamespace())) {
         return true;
       }
+    }
+    if (LootrAPI.isTaggedStructurePresent((ServerLevel)tile.getInfoLevel(), new ChunkPos(tile.getInfoPos()), LootrTags.Structure.REFRESH_STRUCTURES, tile.getInfoPos())) {
+      return true;
     }
     return isDimensionRefreshing(tile.getInfoDimension());
   }

@@ -26,9 +26,9 @@ public class LootrStructureTagsProvider extends IntrinsicHolderTagsProvider<Stru
   @Override
   protected void addTags(HolderLookup.Provider provider) {
     tag(LootrTags.Structure.STRUCTURE_BLACKLIST); //.add(BuiltinStructures.DESERT_PYRAMID);
-    tag(LootrTags.Structure.STRUCTURE_WHITELIST).add(BuiltinStructures.DESERT_PYRAMID);
-    tag(LootrTags.Structure.DECAY_STRUCTURES);
-    tag(LootrTags.Structure.REFRESH_STRUCTURES);
+    tag(LootrTags.Structure.STRUCTURE_WHITELIST); //.add(BuiltinStructures.DESERT_PYRAMID);
+    tag(LootrTags.Structure.DECAY_STRUCTURES).add(BuiltinStructures.DESERT_PYRAMID);
+    tag(LootrTags.Structure.REFRESH_STRUCTURES).add(BuiltinStructures.JUNGLE_TEMPLE);
   }
 
   @Override
