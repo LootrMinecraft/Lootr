@@ -14,9 +14,7 @@ import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraft.world.level.levelgen.structure.StructurePiece;
-import net.minecraft.world.level.levelgen.structure.StructureStart;
+import net.minecraft.world.level.levelgen.structure.*;
 import noobanidus.mods.lootr.common.api.ILootrAPI;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.MenuBuilder;
@@ -271,13 +269,31 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
     return LootrServiceRegistry.convertEntity(entity);
   }
 
+  private static final BoundingBox DESERT_PYRAMID_ADDITIONAL = new BoundingBox(-5, -30, -5, 5, 4, 4);
+
   @Override
   public boolean isTaggedStructurePresent(ServerLevel level, ChunkPos chunkPos, TagKey<Structure> tag, BlockPos pos) {
     Registry<Structure> registry = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
     List<StructureStart> starts = level.structureManager().startsForStructure(chunkPos, o -> registry.getHolder(registry.getId(o)).map(b -> b.is(tag)).orElse(false));
     for (StructureStart start : starts) {
-      if (start.getBoundingBox().inflatedBy(8).isInside(pos)) {
+      BoundingBox extended = start.getBoundingBox().inflatedBy(8);
+      if (extended.isInside(pos)) {
         return true;
+      }
+      if (start.getStructure().type().equals(StructureType.DESERT_PYRAMID)) {
+        // Compensate for the fact that desert pyramid pits aren't within the bounding box
+        BlockPos center = start.getBoundingBox().getCenter();
+        if (DESERT_PYRAMID_ADDITIONAL.moved(center.getX(), center.getY(), center.getZ()).isInside(pos)) {
+          return true;
+        }
+/*      } else if (start.getStructure().type().equals(StructureType.JUNGLE_TEMPLE)) {
+        // Compensate for the fact that the jungle pyramid bounding box is 2 short
+        // TODO: I don't think it ever reaches this point even if it is the jungle temple
+        // due to inflation.
+        BoundingBox jungle = new BoundingBox(extended.minX(), extended.minY() - 2, extended.minZ(), extended.maxX(), extended.maxY(), extended.maxZ());
+        if (jungle.isInside(pos)) {
+          return true;
+        }*/
       }
     }
     if (LootrAPI.performPiecewiseCheck()) {
