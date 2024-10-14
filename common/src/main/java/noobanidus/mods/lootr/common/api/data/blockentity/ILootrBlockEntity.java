@@ -37,11 +37,7 @@ public interface ILootrBlockEntity extends ILootrInfoProvider {
   }
 
   default void updatePacketViaForce () {
-    if (this instanceof BlockEntity blockEntity) {
-      updatePacketViaForce(blockEntity);
-    } else {
-      throw new IllegalStateException("updatePacketViaForce called on non-BlockEntity ILootrBlockEntity");
-    }
+    updatePacketViaForce(asBlockEntity());
   }
 
   default void updatePacketViaForce(BlockEntity entity) {
