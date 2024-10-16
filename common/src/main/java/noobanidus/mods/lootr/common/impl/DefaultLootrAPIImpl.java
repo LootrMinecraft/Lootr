@@ -12,6 +12,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.levelgen.structure.*;
@@ -307,5 +308,21 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
     }
 
     return false;
+  }
+
+  @Override
+  public boolean isWorldBorderSafe(Level level, BlockPos pos) {
+    if (!shouldCheckWorldBorder()) {
+      return true;
+    }
+    return level.getWorldBorder().isWithinBounds(pos);
+  }
+
+  @Override
+  public boolean isWorldBorderSafe(Level level, ChunkPos pos) {
+    if (!shouldCheckWorldBorder()) {
+      return true;
+    }
+    return level.getWorldBorder().isWithinBounds(pos);
   }
 }

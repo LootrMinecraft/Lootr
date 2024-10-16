@@ -253,22 +253,6 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   }
 
   @Override
-  public boolean isWorldBorderSafe(Level level, BlockPos pos) {
-    if (!ConfigManager.CHECK_WORLD_BORDER.get()) {
-      return true;
-    }
-    return level.getWorldBorder().isWithinBounds(pos);
-  }
-
-  @Override
-  public boolean isWorldBorderSafe(Level level, ChunkPos pos) {
-    if (!ConfigManager.CHECK_WORLD_BORDER.get()) {
-      return true;
-    }
-    return level.getWorldBorder().isWithinBounds(pos);
-  }
-
-  @Override
   public boolean shouldCheckWorldBorder () {
     return ConfigManager.CHECK_WORLD_BORDER.get();
   }

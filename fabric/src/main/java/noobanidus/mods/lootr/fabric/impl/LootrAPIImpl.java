@@ -230,24 +230,6 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
     return ConfigManager.get().breaking.trapped_custom;
   }
 
-  // TODO: Move to default API
-  @Override
-  public boolean isWorldBorderSafe(Level level, BlockPos pos) {
-    if (!shouldCheckWorldBorder()) {
-      return true;
-    }
-    return level.getWorldBorder().isWithinBounds(pos);
-  }
-
-  // TODO: Move to default API
-  @Override
-  public boolean isWorldBorderSafe(Level level, ChunkPos pos) {
-    if (!shouldCheckWorldBorder()) {
-      return true;
-    }
-    return level.getWorldBorder().isWithinBounds(pos);
-  }
-
   @Override
   public boolean shouldCheckWorldBorder() {
     return ConfigManager.get().conversion.world_border;
