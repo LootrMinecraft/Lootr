@@ -22,6 +22,12 @@ public class HandleBreak {
       return true;
     }
 
+    if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity lbe) {
+      if (!lbe.hasLootTable()) {
+        return true;
+      }
+    }
+
     if (LootrAPI.isFakePlayer(player) && LootrAPI.isFakePlayerBreakEnabled() || LootrAPI.isBreakEnabled()) {
       return true;
     }

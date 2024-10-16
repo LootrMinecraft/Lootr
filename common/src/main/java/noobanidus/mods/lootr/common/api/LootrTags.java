@@ -45,6 +45,7 @@ public class LootrTags {
   public static class Entity extends LootrTags {
     public static TagKey<EntityType<?>> CONVERT_CARTS = tag("carts");
     public static TagKey<EntityType<?>> CONVERT_ENTITIES = tag("entities");
+    // TODO: Use this
     public static TagKey<EntityType<?>> CONVERT_BLACKLIST = tag("blacklist");
 
     static TagKey<EntityType<?>> tag(String name) {

@@ -46,7 +46,7 @@ public record LootCount(List<Operation> operations) implements LootItemCondition
     BlockPos position = new BlockPos((int) incomingPos.x, (int) incomingPos.y, (int) incomingPos.z);
     BlockEntity blockEntity = lootContext.getLevel().getBlockEntity(position);
     ILootrBlockEntity ibe = LootrAPI.resolveBlockEntity(blockEntity);
-    if (ibe != null) {
+    if (ibe != null && ibe.hasLootTable()) {
       Set<UUID> actualOpeners = ibe.getActualOpeners();
       if (actualOpeners == null) {
         return false;
@@ -57,9 +57,10 @@ public record LootCount(List<Operation> operations) implements LootItemCondition
           return false;
         }
       }
+      return true;
     }
 
-    return true;
+    return false;
   }
 
   @Override

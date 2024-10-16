@@ -16,9 +16,16 @@ import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 
 public interface ILootrBlockEntity extends ILootrInfoProvider {
   static <T extends BlockEntity> void ticker (Level level, BlockPos pos, BlockState state, T blockEntity) {
-    if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity t) {
+    if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity t && t.hasLootTable()) {
       t.defaultTick(level, pos, state);
     }
+  }
+
+  /**
+   * @return It is actually possible for addon-associated block entities to not have a loot table associated with them, meaning they function as a "normal" container. This will never actually happen with Lootr containers, however it should always be checked.
+   */
+  default boolean hasLootTable () {
+    return getInfoLootTable() != null;
   }
 
   default void defaultTick (Level level, BlockPos pos, BlockState state) {
