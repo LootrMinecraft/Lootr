@@ -3,11 +3,13 @@ package noobanidus.mods.lootr.neoforge.event;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
+import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 
 @EventBusSubscriber(modid = LootrAPI.MODID)
 public class HandleBreak {
@@ -18,6 +20,12 @@ public class HandleBreak {
 
     if (!event.getLevel().isClientSide()) {
       if (event.getState().is(LootrTags.Blocks.CONTAINERS)) {
+        BlockEntity block = event.getLevel().getBlockEntity(event.getPos());
+        if (LootrAPI.resolveBlockEntity(block) instanceof ILootrBlockEntity lbe) {
+          if (!lbe.hasLootTable()) {
+            return;
+          }
+        }
         if (LootrAPI.canDestroyOrBreak(player)) {
           return;
         }
