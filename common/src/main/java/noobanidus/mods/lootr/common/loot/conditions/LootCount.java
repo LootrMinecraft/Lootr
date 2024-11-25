@@ -7,9 +7,9 @@ import com.mojang.serialization.codecs.PrimitiveCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
@@ -39,7 +39,7 @@ public record LootCount(List<Operation> operations) implements LootItemCondition
 
   @Override
   public boolean test(LootContext lootContext) {
-    Vec3 incomingPos = lootContext.getParamOrNull(LootContextParams.ORIGIN);
+    Vec3 incomingPos = lootContext.getParameter(LootContextParams.ORIGIN);
     if (incomingPos == null) {
       return false; // THIS SHOULD NEVER HAPPEN
     }
@@ -64,7 +64,7 @@ public record LootCount(List<Operation> operations) implements LootItemCondition
   }
 
   @Override
-  public Set<LootContextParam<?>> getReferencedContextParams() {
+  public Set<ContextKey<?>> getReferencedContextParams() {
     return ImmutableSet.of(LootContextParams.ORIGIN);
   }
 

@@ -3,15 +3,16 @@
   "package": "noobanidus.mods.lootr.common.mixins",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "MixinBaseContainerBlockEntity",
+    "AccessorBaseContainerBlockEntity",
+    "AccessorDimensionDataStorage",
+    "AccessorMixinVehicleEntity",
     "MixinCatSitOnBlockGoal",
-    "MixinDimensionDataStorage",
     "MixinEndCityPieces$EndCityPiece",
     "MixinLevelChunk",
     "MixinPoiType",
     "MixinPoiTypes",
-    "MixinStructureTemplate",
-    "MixinVehicleEntity"
+    "MixinServerChunkCache",
+    "MixinStructureTemplate"
   ],
   "client": [
   ],

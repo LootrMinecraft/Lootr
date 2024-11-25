@@ -17,6 +17,7 @@ import noobanidus.mods.lootr.common.block.entity.LootrChestBlockEntity;
 import noobanidus.mods.lootr.common.block.entity.LootrInventoryBlockEntity;
 import noobanidus.mods.lootr.common.block.entity.LootrShulkerBlockEntity;
 import noobanidus.mods.lootr.common.block.entity.LootrTrappedChestBlockEntity;
+import noobanidus.mods.lootr.common.client.block.LootrShulkerBlockRenderer;
 import noobanidus.mods.lootr.common.client.entity.LootrChestCartRenderer;
 import noobanidus.mods.lootr.common.client.item.LootrChestItemRenderer;
 import noobanidus.mods.lootr.common.client.item.LootrShulkerItemRenderer;
@@ -24,7 +25,6 @@ import noobanidus.mods.lootr.common.client.item.LootrTrappedChestItemRenderer;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.neoforge.client.block.BarrelModel;
 import noobanidus.mods.lootr.neoforge.client.block.LootrChestBlockRenderer;
-import noobanidus.mods.lootr.neoforge.client.block.LootrShulkerBlockRenderer;
 
 @EventBusSubscriber(modid = LootrAPI.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 public class ClientSetup {

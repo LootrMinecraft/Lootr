@@ -1,14 +1,13 @@
 package noobanidus.mods.lootr.fabric.client.block;
 
-import com.google.common.collect.Streams;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.material.RenderMaterial;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
+import net.minecraft.client.renderer.block.model.BakedOverrides;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.*;
@@ -22,21 +21,18 @@ import net.minecraft.world.level.block.state.BlockState;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public class BarrelModel implements UnbakedModel {
-  private final UnbakedModel opened;
-  private final UnbakedModel unopened;
-  private final UnbakedModel vanilla;
-  private final UnbakedModel old_opened;
-  private final UnbakedModel old_unopened;
-  private Collection<ResourceLocation> dependencies = null;
+  private final ResourceLocation opened;
+  private final ResourceLocation unopened;
+  private final ResourceLocation vanilla;
+  private final ResourceLocation old_opened;
+  private final ResourceLocation old_unopened;
 
-  public BarrelModel(UnbakedModel opened, UnbakedModel unopened, UnbakedModel vanilla, UnbakedModel old_opened, UnbakedModel old_unopened) {
+  public BarrelModel(ResourceLocation opened, ResourceLocation unopened, ResourceLocation vanilla, ResourceLocation old_opened, ResourceLocation old_unopened) {
     this.opened = opened;
     this.unopened = unopened;
     this.vanilla = vanilla;
@@ -45,26 +41,17 @@ public class BarrelModel implements UnbakedModel {
   }
 
   @Override
-  public Collection<ResourceLocation> getDependencies() {
-    if (dependencies == null) {
-      this.dependencies = Streams.concat(opened.getDependencies().stream(), unopened.getDependencies().stream(), vanilla.getDependencies().stream(), old_opened.getDependencies().stream(), old_unopened.getDependencies().stream()).collect(Collectors.toSet());
-    }
-    return dependencies;
+  public void resolveDependencies(Resolver resolver) {
+    resolver.resolve(this.opened);
+    resolver.resolve(this.unopened);
+    resolver.resolve(this.vanilla);
+    resolver.resolve(this.old_opened);
+    resolver.resolve(this.old_unopened);
   }
 
-  @Override
-  public void resolveParents(Function<ResourceLocation, UnbakedModel> function) {
-    this.opened.resolveParents(function);
-    this.unopened.resolveParents(function);
-    this.vanilla.resolveParents(function);
-    this.old_opened.resolveParents(function);
-    this.old_unopened.resolveParents(function);
-  }
-
-  @Nullable
   @Override
   public BakedModel bake(ModelBaker modelBakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState transform) {
-    return new BakedBarrelModel(opened.bake(modelBakery, spriteGetter, transform), unopened.bake(modelBakery, spriteGetter, transform), vanilla.bake(modelBakery, spriteGetter, transform), old_opened.bake(modelBakery, spriteGetter, transform), old_unopened.bake(modelBakery, spriteGetter, transform));
+    return new BakedBarrelModel(modelBakery.bake(opened, transform), modelBakery.bake(unopened, transform), modelBakery.bake(vanilla, transform), modelBakery.bake(old_opened, transform), modelBakery.bake(old_unopened, transform));
   }
 
   public static class BakedBarrelModel implements BakedModel, FabricBakedModel {
@@ -162,9 +149,8 @@ public class BarrelModel implements UnbakedModel {
     }
 
     @Override
-    public ItemOverrides getOverrides() {
-      return ItemOverrides.EMPTY;
+    public BakedOverrides overrides() {
+      return BakedOverrides.EMPTY;
     }
   }
-
 }

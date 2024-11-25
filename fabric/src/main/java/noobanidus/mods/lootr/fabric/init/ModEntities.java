@@ -2,6 +2,8 @@ package noobanidus.mods.lootr.fabric.init;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.Level;
@@ -17,6 +19,6 @@ public class ModEntities {
       public LootrChestMinecartEntity create(EntityType<LootrChestMinecartEntity> entityType, Level level) {
         return new LootrChestMinecartEntity(entityType, level);
       }
-    }, MobCategory.MISC).sized(0.9f, 1.4f).clientTrackingRange(8).build());
+    }, MobCategory.MISC).sized(0.9f, 1.4f).clientTrackingRange(8).build((ResourceKey.create(Registries.ENTITY_TYPE, LootrAPI.rl("lootr_minecart")))));
   }
 }

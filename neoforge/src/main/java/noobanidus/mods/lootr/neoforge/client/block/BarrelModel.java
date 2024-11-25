@@ -3,10 +3,7 @@ package noobanidus.mods.lootr.neoforge.client.block;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockModel;
-import net.minecraft.client.renderer.block.model.ItemOverrides;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.*;
 import net.minecraft.core.Direction;
@@ -47,9 +44,9 @@ public class BarrelModel implements IUnbakedGeometry<BarrelModel> {
   }
 
   @Override
-  public BakedModel bake(IGeometryBakingContext context, ModelBaker bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides) {
+  public BakedModel bake(IGeometryBakingContext context, ModelBaker bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, List<ItemOverride> overrides) {
     return new BarrelBakedModel(context.useAmbientOcclusion(), context.isGui3d(), context.useBlockLight(),
-        spriteGetter.apply(context.getMaterial("particle")), overrides,
+        spriteGetter.apply(context.getMaterial("particle")), new BakedOverrides(bakery, overrides, spriteGetter),
         buildModel(opened, modelTransform, bakery, spriteGetter),
         buildModel(unopened, modelTransform, bakery, spriteGetter),
         buildModel(vanilla, modelTransform, bakery, spriteGetter),
@@ -60,12 +57,12 @@ public class BarrelModel implements IUnbakedGeometry<BarrelModel> {
   }
 
   @Override
-  public void resolveParents(Function<ResourceLocation, UnbakedModel> modelGetter, IGeometryBakingContext context) {
-    opened.resolveParents(modelGetter);
-    unopened.resolveParents(modelGetter);
-    vanilla.resolveParents(modelGetter);
-    old_opened.resolveParents(modelGetter);
-    old_unopened.resolveParents(modelGetter);
+  public void resolveDependencies(UnbakedModel.Resolver modelGetter, IGeometryBakingContext context) {
+    opened.resolveDependencies(modelGetter);
+    unopened.resolveDependencies(modelGetter);
+    vanilla.resolveDependencies(modelGetter);
+    old_opened.resolveDependencies(modelGetter);
+    old_unopened.resolveDependencies(modelGetter);
   }
 
   private static final class BarrelBakedModel implements IDynamicBakedModel {
@@ -73,7 +70,7 @@ public class BarrelModel implements IUnbakedGeometry<BarrelModel> {
     private final boolean gui3d;
     private final boolean isSideLit;
     private final TextureAtlasSprite particle;
-    private final ItemOverrides overrides;
+    private final BakedOverrides overrides;
     private final BakedModel opened;
     private final BakedModel unopened;
     private final BakedModel vanilla;
@@ -81,7 +78,7 @@ public class BarrelModel implements IUnbakedGeometry<BarrelModel> {
     private final BakedModel old_unopened;
     private final ItemTransforms cameraTransforms;
 
-    public BarrelBakedModel(boolean ambientOcclusion, boolean isGui3d, boolean isSideLit, TextureAtlasSprite particle, ItemOverrides overrides, BakedModel opened, BakedModel unopened, BakedModel vanilla, BakedModel old_opened, BakedModel old_unopened, ItemTransforms cameraTransforms) {
+    public BarrelBakedModel(boolean ambientOcclusion, boolean isGui3d, boolean isSideLit, TextureAtlasSprite particle, BakedOverrides overrides, BakedModel opened, BakedModel unopened, BakedModel vanilla, BakedModel old_opened, BakedModel old_unopened, ItemTransforms cameraTransforms) {
       this.isSideLit = isSideLit;
       this.cameraTransforms = cameraTransforms;
       this.ambientOcclusion = ambientOcclusion;
@@ -159,7 +156,7 @@ public class BarrelModel implements IUnbakedGeometry<BarrelModel> {
     }
 
     @Override
-    public ItemOverrides getOverrides() {
+    public BakedOverrides overrides() {
       return overrides;
     }
   }

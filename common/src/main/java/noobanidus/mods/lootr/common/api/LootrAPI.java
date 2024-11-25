@@ -1,7 +1,6 @@
 package noobanidus.mods.lootr.common.api;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -22,7 +21,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.client.ClientTextureType;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
@@ -35,10 +33,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class LootrAPI {
   public static final Logger LOG = LogManager.getLogger();
@@ -47,6 +42,7 @@ public class LootrAPI {
   public static final ResourceKey<LootTable> ELYTRA_CHEST = ResourceKey.create(Registries.LOOT_TABLE, LootrAPI.rl("chests/elytra"));
   public static final TicketType<Unit> LOOTR_ENTITY_TICK_TICKET = TicketType.create("lootr_entity_tick_ticket", (unit1, unit2) -> 0, 300);
   public static final TicketType<ChunkPos> LOOTR_CHUNK_CONVERT_TICKET = TicketType.create("lootr_chunk_convert_ticket", Comparator.comparingLong(ChunkPos::toLong),1500);
+  public static final List<String> _lootr$digits = Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f");
 
   public static ILootrAPI INSTANCE = null;
   public static boolean shouldDiscardIdAndOpeners;

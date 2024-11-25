@@ -7,6 +7,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.InteractionHand;
@@ -52,9 +53,9 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     super(type, world);
   }
 
-  public LootrChestMinecartEntity(Level worldIn, double x, double y, double z) {
+/*  public LootrChestMinecartEntity(Level worldIn, double x, double y, double z) {
     super(LootrRegistry.getMinecart(), x, y, z, worldIn);
-  }
+  }*/
 
   @Override
   public void unpackChestVehicleLootTable(@Nullable Player p_219950_) {
@@ -76,6 +77,14 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
   @Override
+  public boolean hurtServer(ServerLevel serverLevel, DamageSource damageSource, float f) {
+    if (isInvulnerableTo(damageSource)) {
+      return false;
+    }
+
+    return super.hurtServer(serverLevel, damageSource, f);
+  }
+
   public boolean isInvulnerableTo(DamageSource source) {
     if (this.isInvulnerable() && source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
       return true;
@@ -123,11 +132,6 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
   @Override
-  public AbstractMinecart.Type getMinecartType() {
-    return AbstractMinecart.Type.CHEST;
-  }
-
-  @Override
   public BlockState getDefaultDisplayBlockState() {
     if (cartNormal == null) {
       cartNormal = LootrRegistry.getChestBlock().defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
@@ -138,6 +142,11 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   @Override
   public int getDefaultDisplayOffset() {
     return 8;
+  }
+
+  @Override
+  public ItemStack getPickResult() {
+    return new ItemStack(Items.CHEST_MINECART);
   }
 
   @Override
@@ -196,7 +205,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
 
   @Override
   public ResourceKey<LootTable> getInfoLootTable() {
-    return getLootTable();
+    return getContainerLootTable();
   }
 
   @Override
@@ -216,7 +225,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
 
   @Override
   public long getInfoLootSeed() {
-    return getLootTableSeed();
+    return getContainerLootTableSeed();
   }
 
   @Override
@@ -275,13 +284,13 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
   @Override
-  protected void applyNaturalSlowdown() {
+  public Vec3 applyNaturalSlowdown(Vec3 incoming) {
     float f = 0.98F;
     if (this.isInWater()) {
       f *= 0.95F;
     }
 
-    this.setDeltaMovement(this.getDeltaMovement().multiply((double) f, 0.0, (double) f));
+    return incoming.multiply(f, 0, f);
   }
 
   public static class DefaultConverter implements ILootrEntityConverter<LootrChestMinecartEntity> {

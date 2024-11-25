@@ -56,13 +56,14 @@ public class AdvancementData extends SavedData {
     return pCompound;
   }
 
-  @Override
+  // TODO: This needs to become, annoyingly enough, a mixin.
+/*  @Override
   public void save(File pFile, HolderLookup.Provider provider) {
     if (isDirty()) {
       pFile.getParentFile().mkdirs();
     }
     super.save(pFile, provider);
-  }
+  }*/
 
   public static class UUIDPair {
     @NotNull

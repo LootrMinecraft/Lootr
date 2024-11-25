@@ -5,10 +5,14 @@ import net.minecraft.world.level.storage.DimensionDataStorage;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
+import java.nio.file.Path;
 import java.util.Map;
 
 @Mixin(DimensionDataStorage.class)
-public interface MixinDimensionDataStorage {
+public interface AccessorDimensionDataStorage {
   @Accessor
   Map<String, SavedData> getCache();
+
+  @Accessor
+  Path getDataFolder ();
 }

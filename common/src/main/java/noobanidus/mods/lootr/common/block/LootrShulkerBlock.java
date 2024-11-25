@@ -3,6 +3,7 @@ package noobanidus.mods.lootr.common.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.BlockTags;
@@ -80,8 +81,8 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
   @Override
   public BlockState playerWillDestroy(Level pLevel, BlockPos pPos, BlockState pState, Player pPlayer) {
     this.spawnDestroyParticles(pLevel, pPlayer, pPos, pState);
-    if (pState.is(BlockTags.GUARDED_BY_PIGLINS)) {
-      PiglinAi.angerNearbyPiglins(pPlayer, false);
+    if (pState.is(BlockTags.GUARDED_BY_PIGLINS) && pLevel instanceof ServerLevel sLevel) {
+      PiglinAi.angerNearbyPiglins(sLevel, pPlayer, false);
     }
 
     pLevel.gameEvent(pPlayer, GameEvent.BLOCK_DESTROY, pPos);

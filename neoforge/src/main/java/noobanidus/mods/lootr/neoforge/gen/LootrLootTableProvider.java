@@ -57,17 +57,20 @@ public class LootrLootTableProvider {
     @Override
     public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> biConsumer) {
       this.generate();
-      HashSet<ResourceKey> set = new HashSet<ResourceKey>();
+      HashSet<ResourceKey<LootTable>> set = new HashSet<>();
       for (Block block : List.of(ModBlocks.CHEST.get(), ModBlocks.BARREL.get(), ModBlocks.INVENTORY.get(), ModBlocks.TRAPPED_CHEST.get(), ModBlocks.SHULKER.get(), ModBlocks.TROPHY.get())) {
-        ResourceKey resourceKey = block.getLootTable();
-        if (resourceKey == BuiltInLootTables.EMPTY || !set.add(resourceKey)) {
-          continue;
-        }
-        LootTable.Builder builder = this.map.remove(resourceKey);
-        if (builder == null) {
-          throw new IllegalStateException(String.format(Locale.ROOT, "Missing loottable '%s' for '%s'", resourceKey.location(), BuiltInRegistries.BLOCK.getKey(block)));
-        }
-        biConsumer.accept((ResourceKey<LootTable>)resourceKey, builder);
+        // TODO: This
+        block.getLootTable().ifPresent(resourceKey -> {
+
+          if (!set.add(resourceKey)) {
+            return;
+          }
+          LootTable.Builder builder = this.map.remove(resourceKey);
+          if (builder == null) {
+            throw new IllegalStateException(String.format(Locale.ROOT, "Missing loottable '%s' for '%s'", resourceKey.location(), BuiltInRegistries.BLOCK.getKey(block)));
+          }
+          biConsumer.accept(resourceKey, builder);
+        });
       }
       if (!this.map.isEmpty()) {
         throw new IllegalStateException("Created block loot tables for non-blocks: " + this.map.keySet());

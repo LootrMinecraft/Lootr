@@ -28,6 +28,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.GameProfileCache;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -55,7 +56,7 @@ import noobanidus.mods.lootr.common.data.DataStorage;
 import noobanidus.mods.lootr.common.data.LootrInventory;
 import noobanidus.mods.lootr.common.data.LootrSavedData;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
-import noobanidus.mods.lootr.common.mixins.MixinBaseContainerBlockEntity;
+import noobanidus.mods.lootr.common.mixins.AccessorBaseContainerBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -108,7 +109,8 @@ public class CommandLootr {
       table = incomingTable;
     }
     if (block == null) {
-      LootrChestMinecartEntity cart = new LootrChestMinecartEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+      @SuppressWarnings("unchecked") LootrChestMinecartEntity cart = new LootrChestMinecartEntity((EntityType<LootrChestMinecartEntity>) LootrRegistry.getMinecart(), world);
+      cart.setPos(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
       Entity e = c.getEntity();
       if (e != null) {
         cart.setYRot(e.getYRot());
@@ -234,7 +236,7 @@ public class CommandLootr {
         if (!(blockEntity instanceof BaseContainerBlockEntity container)) {
           c.getSource().sendSuccess(() -> Component.literal("Please stand on the container you wish to convert."), false);
         }
-        NonNullList<ItemStack> reference = ((MixinBaseContainerBlockEntity) blockEntity).invokeGetItems();
+        NonNullList<ItemStack> reference = ((AccessorBaseContainerBlockEntity) blockEntity).invokeGetItems();
         BlockState newState = updateBlockState(state, LootrRegistry.getInventoryBlock().defaultBlockState());
         NonNullList<ItemStack> custom = copyItemList(reference);
         level.removeBlockEntity(pos);
@@ -441,8 +443,8 @@ public class CommandLootr {
             }
           }
           BlockState state = blockEntity.getBlockState();
-          if (!state.is(LootrTags.Blocks.CUSTOM_ELIGIBLE) && !blockEntity.getType().builtInRegistryHolder().is(LootrTags.BlockEntity.CUSTOM_INELIGIBlE)) {
-            NonNullList<ItemStack> reference = ((MixinBaseContainerBlockEntity) blockEntity).invokeGetItems();
+          if (!state.is(LootrTags.Blocks.CUSTOM_ELIGIBLE) && !blockEntity.getType().builtInRegistryHolder().is(LootrTags.BlockEntity.CUSTOM_INELIGIBLE)) {
+            NonNullList<ItemStack> reference = ((AccessorBaseContainerBlockEntity) blockEntity).invokeGetItems();
             BlockState newState = updateBlockState(state, LootrRegistry.getInventoryBlock().defaultBlockState());
             NonNullList<ItemStack> custom = copyItemList(reference);
             level.removeBlockEntity(pos);

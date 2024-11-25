@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.fabric.init;
 
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -19,11 +20,11 @@ public class ModBlockEntities {
     Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrAPI.rl("lootr_inventory"), LOOTR_INVENTORY);
   }
 
-  public static final BlockEntityType<LootrChestBlockEntity> LOOTR_CHEST = BlockEntityType.Builder.of(LootrChestBlockEntity::new, ModBlocks.CHEST).build(null);
-  public static final BlockEntityType<LootrFabricBarrelBlockEntity> LOOTR_BARREL = BlockEntityType.Builder.of(LootrFabricBarrelBlockEntity::new, ModBlocks.BARREL).build(null);
-  public static final BlockEntityType<LootrTrappedChestBlockEntity> LOOTR_TRAPPED_CHEST = BlockEntityType.Builder.of(LootrTrappedChestBlockEntity::new, ModBlocks.TRAPPED_CHEST).build(null);
-  public static final BlockEntityType<LootrShulkerBlockEntity> LOOTR_SHULKER = BlockEntityType.Builder.of(LootrShulkerBlockEntity::new, ModBlocks.SHULKER).build(null);
-  public static final BlockEntityType<LootrInventoryBlockEntity> LOOTR_INVENTORY = BlockEntityType.Builder.of(LootrInventoryBlockEntity::new, ModBlocks.INVENTORY).build(null);
+  public static final BlockEntityType<LootrChestBlockEntity> LOOTR_CHEST = FabricBlockEntityTypeBuilder.create(LootrChestBlockEntity::new, ModBlocks.CHEST).build(null);
+  public static final BlockEntityType<LootrFabricBarrelBlockEntity> LOOTR_BARREL = FabricBlockEntityTypeBuilder.create(LootrFabricBarrelBlockEntity::new, ModBlocks.BARREL).build(null);
+  public static final BlockEntityType<LootrTrappedChestBlockEntity> LOOTR_TRAPPED_CHEST = FabricBlockEntityTypeBuilder.create(LootrTrappedChestBlockEntity::new, ModBlocks.TRAPPED_CHEST).build(null);
+  public static final BlockEntityType<LootrShulkerBlockEntity> LOOTR_SHULKER = FabricBlockEntityTypeBuilder.create(LootrShulkerBlockEntity::new, ModBlocks.SHULKER).build(null);
+  public static final BlockEntityType<LootrInventoryBlockEntity> LOOTR_INVENTORY = FabricBlockEntityTypeBuilder.create(LootrInventoryBlockEntity::new, ModBlocks.INVENTORY).build(null);
 
 
 }

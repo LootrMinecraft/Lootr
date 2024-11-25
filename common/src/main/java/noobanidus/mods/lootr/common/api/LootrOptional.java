@@ -22,8 +22,7 @@ public class LootrOptional {
 
   @Nullable
   public static ILootrBlockEntity getBlockEntity(BlockEntity blockEntity) {
-    Holder<BlockEntityType<?>> holder = blockEntity.getType().builtInRegistryHolder();
-    if (holder == null || !holder.is(LootrTags.BlockEntity.LOOTR_OBJECT)) {
+    if (!LootrTags.BlockEntity.isTagged(blockEntity, LootrTags.BlockEntity.LOOTR_OBJECT)) {
       return null;
     }
 

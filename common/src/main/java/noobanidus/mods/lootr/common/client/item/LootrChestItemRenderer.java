@@ -12,6 +12,7 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.block.entity.LootrChestBlockEntity;
+import noobanidus.mods.lootr.common.client.entity.LootrCartRenderState;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
 
 public class LootrChestItemRenderer extends BlockEntityWithoutLevelRenderer {
@@ -43,10 +44,9 @@ public class LootrChestItemRenderer extends BlockEntityWithoutLevelRenderer {
     this.blockEntityRenderDispatcher.renderItem(blockEntity, p_108832_, p_108833_, p_108834_, p_108835_);
   }
 
-  public void renderByMinecart(LootrChestMinecartEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight) {
-    // Don't change this to `hasClientOpened`
+  public void renderByMinecart(LootrCartRenderState entity, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight) {
     boolean open = blockEntity.isClientOpened();
-    blockEntity.setClientOpened(entity.isClientOpened());
+    blockEntity.setClientOpened(entity.open);
     this.blockEntityRenderDispatcher.renderItem(blockEntity, matrixStack, buffer, combinedLight, OverlayTexture.NO_OVERLAY);
     blockEntity.setClientOpened(open);
   }

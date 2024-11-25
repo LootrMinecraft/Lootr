@@ -21,11 +21,11 @@ public class ModBlockEntities {
     REGISTER.register(bus);
   }
 
-  public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LootrChestBlockEntity>> LOOTR_CHEST = REGISTER.register("lootr_chest", () -> BlockEntityType.Builder.of(LootrChestBlockEntity::new, LootrRegistry.getChestBlock()).build(null));
-  public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LootrTrappedChestBlockEntity>> LOOTR_TRAPPED_CHEST = REGISTER.register("lootr_trapped_chest", () -> BlockEntityType.Builder.of(LootrTrappedChestBlockEntity::new, LootrRegistry.getTrappedChestBlock()).build(null));
-  public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LootrNeoForgeBarrelBlockEntity>> LOOTR_BARREL = REGISTER.register("lootr_barrel", () -> BlockEntityType.Builder.of(LootrNeoForgeBarrelBlockEntity::new, LootrRegistry.getBarrelBlock()).build(null));
-  public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LootrInventoryBlockEntity>> LOOTR_INVENTORY = REGISTER.register("lootr_inventory", () -> BlockEntityType.Builder.of(LootrInventoryBlockEntity::new, LootrRegistry.getInventoryBlock()).build(null));
-  public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LootrShulkerBlockEntity>> LOOTR_SHULKER = REGISTER.register("lootr_shulker", () -> BlockEntityType.Builder.of(LootrShulkerBlockEntity::new, LootrRegistry.getShulkerBlock()).build(null));
+  public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LootrChestBlockEntity>> LOOTR_CHEST = REGISTER.register("lootr_chest", () -> new BlockEntityType<>(LootrChestBlockEntity::new, LootrRegistry.getChestBlock()));
+  public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LootrTrappedChestBlockEntity>> LOOTR_TRAPPED_CHEST = REGISTER.register("lootr_trapped_chest", () -> new BlockEntityType<>(LootrTrappedChestBlockEntity::new, LootrRegistry.getTrappedChestBlock()));
+  public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LootrNeoForgeBarrelBlockEntity>> LOOTR_BARREL = REGISTER.register("lootr_barrel", () -> new BlockEntityType<>(LootrNeoForgeBarrelBlockEntity::new, LootrRegistry.getBarrelBlock()));
+  public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LootrInventoryBlockEntity>> LOOTR_INVENTORY = REGISTER.register("lootr_inventory", () -> new BlockEntityType<>(LootrInventoryBlockEntity::new, LootrRegistry.getInventoryBlock()));
+  public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LootrShulkerBlockEntity>> LOOTR_SHULKER = REGISTER.register("lootr_shulker", () -> new BlockEntityType<>(LootrShulkerBlockEntity::new, LootrRegistry.getShulkerBlock()));
 
 
 }

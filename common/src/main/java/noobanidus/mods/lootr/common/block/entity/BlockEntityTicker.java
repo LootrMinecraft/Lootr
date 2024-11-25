@@ -125,14 +125,16 @@ public class BlockEntityTicker {
         }
 
         if (level.getServer().getWorldData().worldGenOptions().generateStructures()) {
-          Registry<Structure> registry = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
+          Registry<Structure> registry = level.registryAccess().lookupOrThrow(Registries.STRUCTURE);
           ChunkPos thisPos = new ChunkPos(entry.getPosition());
-          if (registry.getTag(LootrTags.Structure.STRUCTURE_BLACKLIST).filter(tag -> tag.size() != 0).isPresent()) {
+          HolderSet<Structure> structureBlacklist = registry.getOrThrow(LootrTags.Structure.STRUCTURE_BLACKLIST);
+          HolderSet<Structure> structureWhitelist = registry.getOrThrow(LootrTags.Structure.STRUCTURE_WHITELIST);
+          if (structureBlacklist.size() != 0) {
             if (LootrAPI.isTaggedStructurePresent(level, thisPos, LootrTags.Structure.STRUCTURE_BLACKLIST, entry.getPosition())) {
               toRemove.add(entry);
               continue;
             }
-          } else if (registry.getTag(LootrTags.Structure.STRUCTURE_WHITELIST).filter(tag -> tag.size() != 0).isPresent()) {
+          } else if (structureWhitelist.size() != 0) {
             if (!LootrAPI.isTaggedStructurePresent(level, thisPos, LootrTags.Structure.STRUCTURE_WHITELIST, entry.getPosition())) {
               toRemove.add(entry);
               continue;

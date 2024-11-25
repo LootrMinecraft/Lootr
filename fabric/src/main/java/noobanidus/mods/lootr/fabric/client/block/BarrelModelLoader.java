@@ -38,16 +38,17 @@ public class BarrelModelLoader implements ModelLoadingPlugin, ModelResolver {
   public @Nullable UnbakedModel resolveModel(ModelResolver.Context context) {
     ResourceLocation resourceId = context.id();
     if (resourceId.equals(LOOTR_BARREL_MODEL_UNOPENED)) {
-      return new BarrelModel(context.getOrLoadModel(LOOTR_OPENED_BARREL), context.getOrLoadModel(LOOTR_BARREL_UNOPENED), context.getOrLoadModel(VANILLA), context.getOrLoadModel(OLD_LOOTR_OPENED_BARREL), context.getOrLoadModel(OLD_LOOTR_BARREL_UNOPENED));
+      return new BarrelModel(LOOTR_OPENED_BARREL, LOOTR_BARREL_UNOPENED, VANILLA, OLD_LOOTR_OPENED_BARREL, OLD_LOOTR_BARREL_UNOPENED);
     } else if (resourceId.equals(LOOTR_BARREL_MODEL_OPENED)) {
-      return new BarrelModel(context.getOrLoadModel(LOOTR_OPENED_BARREL_OPEN), context.getOrLoadModel(LOOTR_BARREL_UNOPENED_OPEN), context.getOrLoadModel(VANILLA_OPEN), context.getOrLoadModel(OLD_LOOTR_OPENED_BARREL_OPEN), context.getOrLoadModel(OLD_LOOTR_BARREL_UNOPENED_OPEN));
+      return new BarrelModel(LOOTR_OPENED_BARREL_OPEN, LOOTR_BARREL_UNOPENED_OPEN, VANILLA_OPEN, OLD_LOOTR_OPENED_BARREL_OPEN, OLD_LOOTR_BARREL_UNOPENED_OPEN);
     } else {
       return null;
     }
   }
 
   @Override
-  public void onInitializeModelLoader(ModelLoadingPlugin.Context pluginContext) {
+  public void initialize(ModelLoadingPlugin.Context pluginContext)
+  {
     pluginContext.resolveModel().register(this);
   }
 }

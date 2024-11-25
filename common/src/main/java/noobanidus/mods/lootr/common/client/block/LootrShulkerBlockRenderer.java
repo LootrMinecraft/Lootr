@@ -1,8 +1,11 @@
-package noobanidus.mods.lootr.fabric.client.block;
+package noobanidus.mods.lootr.common.client.block;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.Model;
 import net.minecraft.client.model.ShulkerModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.geom.ModelPart;
@@ -11,13 +14,17 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.ShulkerBoxRenderer;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.Direction;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
+import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.block.entity.LootrShulkerBlockEntity;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @SuppressWarnings("deprecation")
@@ -26,11 +33,11 @@ public class LootrShulkerBlockRenderer implements BlockEntityRenderer<LootrShulk
   public static final Material MATERIAL2 = new Material(Sheets.SHULKER_SHEET, LootrAPI.rl("shulker_opened"));
   public static final Material MATERIAL3 = new Material(Sheets.SHULKER_SHEET, LootrAPI.rl("old_shulker"));
   public static final Material MATERIAL4 = new Material(Sheets.SHULKER_SHEET, LootrAPI.rl("old_shulker_opened"));
-  private final ShulkerModel<?> model;
+  private final ShulkerBoxModel model;
   private UUID playerId;
 
   public LootrShulkerBlockRenderer(BlockEntityRendererProvider.Context context) {
-    this.model = new ShulkerModel<>(context.bakeLayer(ModelLayers.SHULKER));
+    this.model = new ShulkerBoxModel(context.bakeLayer(ModelLayers.SHULKER));
   }
 
   protected Material getMaterial(LootrShulkerBlockEntity blockEntity) {
@@ -48,28 +55,43 @@ public class LootrShulkerBlockRenderer implements BlockEntityRenderer<LootrShulk
   }
 
   @Override
-  public void render(LootrShulkerBlockEntity pBlockEntity, float pPartialTicks, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pCombinedLight, int pCombinedOverlay) {
+  public void render(LootrShulkerBlockEntity shulkerBoxBlockEntity, float f, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int j) {
     Direction direction = Direction.UP;
-    if (pBlockEntity.hasLevel()) {
-      BlockState blockstate = pBlockEntity.getLevel().getBlockState(pBlockEntity.getBlockPos());
-      if (blockstate.getBlock() instanceof ShulkerBoxBlock) {
-        direction = blockstate.getValue(ShulkerBoxBlock.FACING);
+    if (shulkerBoxBlockEntity.hasLevel()) {
+      BlockState blockState = shulkerBoxBlockEntity.getLevel().getBlockState(shulkerBoxBlockEntity.getBlockPos());
+      if (blockState.getBlock() instanceof ShulkerBoxBlock) {
+        direction = (Direction)blockState.getValue(ShulkerBoxBlock.FACING);
       }
     }
 
-    Material material = getMaterial(pBlockEntity);
+    Material material = getMaterial(shulkerBoxBlockEntity);
 
-    pMatrixStack.pushPose();
-    pMatrixStack.translate(0.5D, 0.5D, 0.5D);
-    pMatrixStack.scale(0.9995F, 0.9995F, 0.9995F);
-    pMatrixStack.mulPose(direction.getRotation());
-    pMatrixStack.scale(1.0F, -1.0F, -1.0F);
-    pMatrixStack.translate(0.0D, -1.0D, 0.0D);
-    ModelPart modelpart = this.model.getLid();
-    modelpart.setPos(0.0F, 24.0F - pBlockEntity.getProgress(pPartialTicks) * 0.5F * 16.0F, 0.0F);
-    modelpart.yRot = 270.0F * pBlockEntity.getProgress(pPartialTicks) * ((float) Math.PI / 180F);
-    VertexConsumer vertexconsumer = material.buffer(pBuffer, RenderType::entityCutoutNoCull);
-    this.model.renderToBuffer(pMatrixStack, vertexconsumer, pCombinedLight, pCombinedOverlay);
-    pMatrixStack.popPose();
+    poseStack.pushPose();
+    poseStack.translate(0.5F, 0.5F, 0.5F);
+    float g = 0.9995F;
+    poseStack.scale(0.9995F, 0.9995F, 0.9995F);
+    poseStack.mulPose(direction.getRotation());
+    poseStack.scale(1.0F, -1.0F, -1.0F);
+    poseStack.translate(0.0F, -1.0F, 0.0F);
+    this.model.animate(shulkerBoxBlockEntity, f);
+    ShulkerBoxModel var10002 = this.model;
+    Objects.requireNonNull(var10002);
+    VertexConsumer vertexConsumer = material.buffer(multiBufferSource, var10002::renderType);
+    this.model.renderToBuffer(poseStack, vertexConsumer, i, j);
+    poseStack.popPose();
+  }
+
+  private static class ShulkerBoxModel extends Model {
+    private final ModelPart lid;
+
+    public ShulkerBoxModel(ModelPart modelPart) {
+      super(modelPart, RenderType::entityCutoutNoCull);
+      this.lid = modelPart.getChild("lid");
+    }
+
+    public void animate(LootrShulkerBlockEntity shulkerBoxBlockEntity, float f) {
+      this.lid.setPos(0.0F, 24.0F - shulkerBoxBlockEntity.getProgress(f) * 0.5F * 16.0F, 0.0F);
+      this.lid.yRot = 270.0F * shulkerBoxBlockEntity.getProgress(f) * 0.017453292F;
+    }
   }
 }

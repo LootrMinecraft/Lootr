@@ -237,12 +237,4 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
 
     return false;
   }
-
-  @Override
-  public void save(File pFile, HolderLookup.Provider provider) {
-    if (isDirty()) {
-      pFile.getParentFile().mkdirs();
-    }
-    super.save(pFile, provider);
-  }
 }

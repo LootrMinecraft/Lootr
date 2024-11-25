@@ -62,7 +62,7 @@ public record AbstractMinecartContainerLootrInfoProvider(
 
   @Override
   public ResourceKey<LootTable> getInfoLootTable() {
-    return minecart.getLootTable();
+    return minecart.getContainerLootTable();
   }
 
   @Override
@@ -93,7 +93,7 @@ public record AbstractMinecartContainerLootrInfoProvider(
 
   @Override
   public long getInfoLootSeed() {
-    return minecart.getLootTableSeed();
+    return minecart.getContainerLootTableSeed();
   }
 
   @Override

@@ -188,7 +188,7 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
   }
 
   protected void playSound(BlockState pState, SoundEvent pSound) {
-    Vec3i vec3i = pState.getValue(BarrelBlock.FACING).getNormal();
+    Vec3i vec3i = pState.getValue(BarrelBlock.FACING).getUnitVec3i();
     double d0 = (double) this.worldPosition.getX() + 0.5D + (double) vec3i.getX() / 2.0D;
     double d1 = (double) this.worldPosition.getY() + 0.5D + (double) vec3i.getY() / 2.0D;
     double d2 = (double) this.worldPosition.getZ() + 0.5D + (double) vec3i.getZ() / 2.0D;

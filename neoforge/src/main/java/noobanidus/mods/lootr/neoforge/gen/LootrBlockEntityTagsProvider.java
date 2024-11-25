@@ -22,7 +22,7 @@ public class LootrBlockEntityTagsProvider extends IntrinsicHolderTagsProvider<Bl
   protected void addTags(HolderLookup.Provider provider) {
     tag(LootrTags.BlockEntity.LOOTR_OBJECT);
     tag(LootrTags.BlockEntity.TRAPPED).add(LootrRegistry.getTrappedChestBlockEntity());
-    tag(LootrTags.BlockEntity.CUSTOM_INELIGIBlE);
+    tag(LootrTags.BlockEntity.CUSTOM_INELIGIBLE);
   }
 
   @Override

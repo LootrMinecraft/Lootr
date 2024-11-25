@@ -90,11 +90,12 @@ public class TickingData extends SavedData {
     return pCompound;
   }
 
-  @Override
+  // TODO: This needs to become a mixin
+/*  @Override
   public void save(File pFile, HolderLookup.Provider provider) {
     if (isDirty()) {
       pFile.getParentFile().mkdirs();
     }
     super.save(pFile, provider);
-  }
+  }*/
 }

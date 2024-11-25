@@ -1,5 +1,8 @@
 package noobanidus.mods.lootr.common.api.registry;
 
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stat;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.CreativeModeTab;
@@ -8,11 +11,33 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
+import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.advancement.IAdvancementTrigger;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.advancement.ILootedStatTrigger;
 
 public class LootrRegistry {
+  public static final ResourceLocation CHEST = LootrAPI.rl("lootr_chest");
+  public static final ResourceLocation TRAPPED_CHEST = LootrAPI.rl("lootr_trapped_chest");
+  public static final ResourceLocation BARREL = LootrAPI.rl("lootr_barrel");
+  public static final ResourceLocation INVENTORY = LootrAPI.rl("lootr_inventory");
+  public static final ResourceLocation TROPHY = LootrAPI.rl("trophy");
+  public static final ResourceLocation SHULKER = LootrAPI.rl("lootr_shulker");
+
+  public static final ResourceKey<Block> CHEST_BLOCK_KEY = ResourceKey.create(Registries.BLOCK, CHEST);
+  public static final ResourceKey<Block> TRAPPED_CHEST_BLOCK_KEY = ResourceKey.create(Registries.BLOCK, TRAPPED_CHEST);
+  public static final ResourceKey<Block> BARREL_BLOCK_KEY = ResourceKey.create(Registries.BLOCK, BARREL);
+  public static final ResourceKey<Block> INVENTORY_BLOCK_KEY = ResourceKey.create(Registries.BLOCK, INVENTORY);
+  public static final ResourceKey<Block> TROPHY_BLOCK_KEY = ResourceKey.create(Registries.BLOCK, TROPHY);
+  public static final ResourceKey<Block> SHULKER_BLOCK_KEY = ResourceKey.create(Registries.BLOCK, SHULKER);
+
+  public static final ResourceKey<Item> CHEST_ITEM_KEY = ResourceKey.create(Registries.ITEM, CHEST);
+  public static final ResourceKey<Item> TRAPPED_CHEST_ITEM_KEY = ResourceKey.create(Registries.ITEM, TRAPPED_CHEST);
+  public static final ResourceKey<Item> BARREL_ITEM_KEY = ResourceKey.create(Registries.ITEM, BARREL);
+  public static final ResourceKey<Item> INVENTORY_ITEM_KEY = ResourceKey.create(Registries.ITEM, INVENTORY);
+  public static final ResourceKey<Item> TROPHY_ITEM_KEY = ResourceKey.create(Registries.ITEM, TROPHY);
+  public static final ResourceKey<Item> SHULKER_ITEM_KEY = ResourceKey.create(Registries.ITEM, SHULKER);
+
   public static ILootrRegistry INSTANCE = null;
 
   public static boolean isReady () {

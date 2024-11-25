@@ -12,7 +12,7 @@ import noobanidus.mods.lootr.common.api.DataToCopy;
 import noobanidus.mods.lootr.common.api.IPlatformAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
-import noobanidus.mods.lootr.common.mixins.MixinBaseContainerBlockEntity;
+import noobanidus.mods.lootr.common.mixins.AccessorBaseContainerBlockEntity;
 import noobanidus.mods.lootr.neoforge.network.toClient.PacketCloseCart;
 import noobanidus.mods.lootr.neoforge.network.toClient.PacketCloseContainer;
 import noobanidus.mods.lootr.neoforge.network.toClient.PacketOpenCart;
@@ -63,7 +63,7 @@ public class PlatformAPIImpl implements IPlatformAPI {
   public DataToCopy copySpecificData(BlockEntity oldBlockEntity) {
     LockCode code = LockCode.NO_LOCK;
     if (oldBlockEntity instanceof BaseContainerBlockEntity baseContainer) {
-      code = ((MixinBaseContainerBlockEntity) baseContainer).getLockKey();
+      code = ((AccessorBaseContainerBlockEntity) baseContainer).getLockKey();
     }
     return new DataToCopy(oldBlockEntity.getPersistentData(), code);
   }
@@ -74,7 +74,7 @@ public class PlatformAPIImpl implements IPlatformAPI {
       newBlockEntity.getPersistentData().merge(data.data());
     }
     if (newBlockEntity instanceof BaseContainerBlockEntity baseContainer) {
-      ((MixinBaseContainerBlockEntity) baseContainer).setLockKey(data.lockCode());
+      ((AccessorBaseContainerBlockEntity) baseContainer).setLockKey(data.lockCode());
     }
   }
 

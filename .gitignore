@@ -35,3 +35,12 @@ forge*changelog.txt
 # Misc
 CHANGELOG_OLD.md
 oxipng.exe
+.architectury-transformer/
+
+*.un~
+
+*.gradle~
+
+gradle.properties~
+
+gradle/wrapper/gradle-wrapper.properties~

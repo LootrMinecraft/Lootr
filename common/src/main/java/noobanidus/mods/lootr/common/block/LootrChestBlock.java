@@ -12,7 +12,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -33,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class LootrChestBlock extends ChestBlock {
   public LootrChestBlock(Properties properties) {
-    super(properties, LootrRegistry::getChestBlockEntity);
+    super(LootrRegistry::getChestBlockEntity, properties);
   }
 
   @Override
@@ -60,12 +61,12 @@ public class LootrChestBlock extends ChestBlock {
   }
 
   @Override
-  public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
-    if (stateIn.getValue(WATERLOGGED)) {
-      worldIn.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
+  protected BlockState updateShape(BlockState blockState, LevelReader levelReader, ScheduledTickAccess scheduledTickAccess, BlockPos blockPos, Direction direction, BlockPos blockPos2, BlockState blockState2, RandomSource randomSource) {
+    if (blockState.getValue(WATERLOGGED)) {
+      scheduledTickAccess.scheduleTick(blockPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelReader));
     }
 
-    return stateIn;
+    return blockState;
   }
 
   @Override

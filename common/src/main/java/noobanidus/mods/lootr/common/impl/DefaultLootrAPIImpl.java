@@ -121,7 +121,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
       provider.performUpdate(player);
     }
     player.openMenu(menuProvider);
-    PiglinAi.angerNearbyPiglins(player, true);
+    PiglinAi.angerNearbyPiglins(player.serverLevel(), player, true);
   }
 
   @Override
@@ -276,8 +276,8 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
 
   @Override
   public boolean isTaggedStructurePresent(ServerLevel level, ChunkPos chunkPos, TagKey<Structure> tag, BlockPos pos) {
-    Registry<Structure> registry = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
-    List<StructureStart> starts = level.structureManager().startsForStructure(chunkPos, o -> registry.getHolder(registry.getId(o)).map(b -> b.is(tag)).orElse(false));
+    Registry<Structure> registry = level.registryAccess().lookupOrThrow(Registries.STRUCTURE);
+    List<StructureStart> starts = level.structureManager().startsForStructure(chunkPos, o -> registry.get(registry.getId(o)).map(b -> b.is(tag)).orElse(false));
     for (StructureStart start : starts) {
       BoundingBox extended = start.getBoundingBox().inflatedBy(8);
       if (extended.isInside(pos)) {
@@ -299,6 +299,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
         }*/
       }
     }
+    // "Piecewise checks" are stolen from TelepathicGrunt
     if (LootrAPI.performPiecewiseCheck()) {
       for (StructureStart start : starts) {
         for (StructurePiece piece : start.getPieces()) {

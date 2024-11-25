@@ -31,6 +31,6 @@ public interface IPlatformAPI {
     entity2.setXRot(entity1.getXRot());
     entity2.setYRot(entity1.getYRot());
     entity2.setYHeadRot(entity1.getYHeadRot());
-    entity2.setLootTable(entity1.getLootTable(), entity1.getLootTableSeed());
+    entity2.setLootTable(entity1.getContainerLootTable(), entity1.getContainerLootTableSeed());
   }
 }
