@@ -21,9 +21,7 @@ import noobanidus.mods.lootr.neoforge.network.PacketHandler;
 // TODO: Ideas/important things to be implemented
 // - Display notices after containers are closed
 // - or use toasts
-// - bring back decay/refresh structures
 // - lockouts?
-// - dropping loot when breaking chests
 @Mod("lootr")
 public class Lootr {
   public static Lootr instance;
