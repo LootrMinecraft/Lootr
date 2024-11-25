@@ -15,6 +15,8 @@ import java.util.Map;
 import java.util.Set;
 
 // "Proof of concept"
+// But we use services instead. {@link noobanidus.mods.lootr.common.impl.LootrServiceRegistry}
+@Deprecated
 public class LootrOptional {
   private static final Map<Class<? extends BlockEntity>, MethodHandle> blockEntityMap = new HashMap<>();
   private static final Set<Class<? extends BlockEntity>> invalidBlockEntities = new HashSet<>();
