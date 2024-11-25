@@ -21,6 +21,7 @@ public class LootrEntityTagsProvider extends EntityTypeTagsProvider {
     tag(LootrTags.Entity.CONVERT_CARTS).add(EntityType.CHEST_MINECART);
     //noinspection unchecked
     tag(LootrTags.Entity.CONVERT_ENTITIES).addTags(LootrTags.Entity.CONVERT_CARTS);
+    tag(LootrTags.Entity.CONVERT_BLACKLIST);
   }
 
   @Override

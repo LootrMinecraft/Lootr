@@ -27,6 +27,9 @@ public class HandleCart {
       return;
     }
     Entity entity = event.getEntity();
+    if (entity.getType().is(LootrTags.Entity.CONVERT_BLACKLIST)) {
+      return;
+    }
     if (entity.getType().is(LootrTags.Entity.CONVERT_ENTITIES) && entity instanceof AbstractMinecartContainer cart) {
       if (cart.getLootTable() == null || LootrAPI.isLootTableBlacklisted(cart.getContainerLootTable())) {
         return;

@@ -35,6 +35,9 @@ public class MixinPersistentEntitySectionManager {
     if (LootrAPI.isDimensionBlocked(level.dimension())) {
       return;
     }
+    if (entity.getType().is(LootrTags.Entity.CONVERT_BLACKLIST)) {
+      return;
+    }
     if (entity.getType().is(LootrTags.Entity.CONVERT_ENTITIES) && entity instanceof AbstractMinecartContainer cart) {
       if (cart.getContainerLootTable() != null && !LootrAPI.isLootTableBlacklisted(cart.getContainerLootTable())) {
         @SuppressWarnings("unchecked") LootrChestMinecartEntity lootrCart = new LootrChestMinecartEntity((EntityType<LootrChestMinecartEntity>) LootrRegistry.getMinecart(), cart.level());

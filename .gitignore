@@ -44,3 +44,5 @@ oxipng.exe
 gradle.properties~
 
 gradle/wrapper/gradle-wrapper.properties~
+
+common/src/generated/resources/.cache/

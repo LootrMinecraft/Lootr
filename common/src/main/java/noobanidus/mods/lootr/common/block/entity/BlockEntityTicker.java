@@ -147,6 +147,10 @@ public class BlockEntityTicker {
           toRemove.add(entry);
           continue;
         }
+        if (LootrTags.BlockEntity.isTagged(be, LootrTags.BlockEntity.CONVERT_BLACKLIST)) {
+          toRemove.add(entry);
+          continue;
+        }
         if (be.getLootTable() == null || LootrAPI.isLootTableBlacklisted(be.getLootTable())) {
           toRemove.add(entry);
           continue;
