@@ -8,45 +8,23 @@ import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
-import noobanidus.mods.lootr.common.api.ILootrAPI;
-import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.MenuBuilder;
 import noobanidus.mods.lootr.common.api.client.ClientTextureType;
-import noobanidus.mods.lootr.common.api.data.DefaultLootFiller;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
-import noobanidus.mods.lootr.common.api.data.ILootrSavedData;
-import noobanidus.mods.lootr.common.api.data.LootFiller;
-import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
-import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
-import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
-import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
-import noobanidus.mods.lootr.common.data.DataStorage;
 import noobanidus.mods.lootr.common.impl.DefaultLootrAPIImpl;
-import noobanidus.mods.lootr.common.impl.LootrServiceRegistry;
 import noobanidus.mods.lootr.neoforge.config.ConfigManager;
 import noobanidus.mods.lootr.neoforge.event.HandleChunk;
-import noobanidus.mods.lootr.neoforge.network.client.ClientHandlers;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class LootrAPIImpl extends DefaultLootrAPIImpl {
@@ -86,12 +64,12 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   }
 
   @Override
-  public boolean isBlastResistant () {
+  public boolean isBlastResistant() {
     return ConfigManager.BLAST_RESISTANT.get();
   }
 
   @Override
-  public boolean isBlastImmune () {
+  public boolean isBlastImmune() {
     return ConfigManager.BLAST_IMMUNE.get();
   }
 
@@ -112,7 +90,7 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   }
 
   @Override
-  public boolean shouldPowerComparators () {
+  public boolean shouldPowerComparators() {
     return ConfigManager.POWER_COMPARATORS.get();
   }
 
@@ -122,12 +100,12 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   }
 
   @Override
-  public int getNotificationDelay () {
+  public int getNotificationDelay() {
     return ConfigManager.NOTIFICATION_DELAY.get();
   }
 
   @Override
-  public boolean isNotificationsEnabled () {
+  public boolean isNotificationsEnabled() {
     return !ConfigManager.DISABLE_NOTIFICATIONS.get();
   }
 
@@ -178,17 +156,17 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   }
 
   @Override
-  public Set<ResourceKey<Level>> getDimensionWhitelist () {
+  public Set<ResourceKey<Level>> getDimensionWhitelist() {
     return ConfigManager.getDimensionWhitelist();
   }
 
   @Override
-  public Set<ResourceKey<LootTable>> getLootTableBlacklist () {
+  public Set<ResourceKey<LootTable>> getLootTableBlacklist() {
     return ConfigManager.getLootBlacklist();
   }
 
   @Override
-  public Set<String> getLootModidBlacklist () {
+  public Set<String> getLootModidBlacklist() {
     return ConfigManager.getLootModids();
   }
 
@@ -253,7 +231,7 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   }
 
   @Override
-  public boolean shouldCheckWorldBorder () {
+  public boolean shouldCheckWorldBorder() {
     return ConfigManager.CHECK_WORLD_BORDER.get();
   }
 
@@ -283,7 +261,7 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   }
 
   @Override
-  public boolean shouldDecayAll () {
+  public boolean shouldDecayAll() {
     return ConfigManager.DECAY_ALL.get();
   }
 
@@ -293,7 +271,7 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   }
 
   @Override
-  public boolean shouldRefreshAll () {
+  public boolean shouldRefreshAll() {
     return ConfigManager.REFRESH_ALL.get();
   }
 
@@ -333,7 +311,7 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   }
 
   @Override
-  public boolean isFakePlayerBreakEnabled () {
+  public boolean isFakePlayerBreakEnabled() {
     return ConfigManager.ENABLE_FAKE_PLAYER_BREAK.get();
   }
 
@@ -343,22 +321,22 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   }
 
   @Override
-  public boolean shouldPerformDecayWhileTicking () {
+  public boolean shouldPerformDecayWhileTicking() {
     return ConfigManager.PERFORM_DECAY_WHILE_TICKING.get();
   }
 
   @Override
-  public boolean shouldPerformRefreshWhileTicking () {
+  public boolean shouldPerformRefreshWhileTicking() {
     return ConfigManager.PERFORM_REFRESH_WHILE_TICKING.get();
   }
 
   @Override
-  public boolean shouldStartDecayWhileTicking () {
+  public boolean shouldStartDecayWhileTicking() {
     return ConfigManager.START_DECAY_WHILE_TICKING.get();
   }
 
   @Override
-  public boolean shouldStartRefreshWhileTicking () {
+  public boolean shouldStartRefreshWhileTicking() {
     return ConfigManager.START_REFRESH_WHILE_TICKING.get();
   }
 
@@ -379,7 +357,7 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   }
 
   @Override
-  public boolean anyUnloadedChunks (ResourceKey<Level> dimension, Set<ChunkPos> chunks) {
+  public boolean anyUnloadedChunks(ResourceKey<Level> dimension, Set<ChunkPos> chunks) {
     synchronized (HandleChunk.LOADED_CHUNKS) {
       Set<ChunkPos> syncedChunks = HandleChunk.LOADED_CHUNKS.get(dimension);
       if (syncedChunks == null || syncedChunks.isEmpty()) {
