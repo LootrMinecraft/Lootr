@@ -54,10 +54,10 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
 
   @Override
   public float getExplosionResistance(Block block, float defaultResistance) {
-    if (ConfigManager.get().breaking.blast_resistant) {
-      return 16.0f;
-    } else if (ConfigManager.get().breaking.blast_immune) {
+    if (ConfigManager.get().breaking.blast_immune) {
       return Float.MAX_VALUE;
+    } else if (ConfigManager.get().breaking.blast_resistant) {
+      return 16.0f;
     } else {
       return defaultResistance;
     }
