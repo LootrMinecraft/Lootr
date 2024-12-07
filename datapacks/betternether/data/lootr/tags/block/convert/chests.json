@@ -1,0 +1,48 @@
+{
+  "values": [
+    {
+      "id": "betternether:nether_reed_chest",
+      "required": false
+    },
+    {
+      "id": "betternether:stalagnate_chest",
+      "required": false
+    },
+    {
+      "id": "betternether:willow_chest",
+      "required": false
+    },
+    {
+      "id": "betternether:wart_chest",
+      "required": false
+    },
+    {
+      "id": "betternether:warped_chest",
+      "required": false
+    },
+    {
+      "id": "betternether:crimson_chest",
+      "required": false
+    },
+    {
+      "id": "betternether:rubeus_chest",
+      "required": false
+    },
+    {
+      "id": "betternether:mushroom_fir_chest",
+      "required": false
+    },
+    {
+      "id": "betternether:nether_mushroom_chest",
+      "required": false
+    },
+    {
+      "id": "betternether:anchor_tree_chest",
+      "required": false
+    },
+    {
+      "id": "betternether:nether_sakura_chest",
+      "required": false
+    }
+  ]
+}

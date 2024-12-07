@@ -1,0 +1,44 @@
+{
+  "values": [
+    {
+      "id": "betterend:mossy_glowshroom_barrel",
+      "required": false
+    },
+    {
+      "id": "betterend:end_lotus_barrel",
+      "required": false
+    },
+    {
+      "id": "betterend:pythadendron_barrel",
+      "required": false
+    },
+    {
+      "id": "betterend:lacugrove_barrel",
+      "required": false
+    },
+    {
+      "id": "betterend:dragon_tree_barrel",
+      "required": false
+    },
+    {
+      "id": "betterend:tenanea_barrel",
+      "required": false
+    },
+    {
+      "id": "betterend:helix_tree_barrel",
+      "required": false
+    },
+    {
+      "id": "betterend:umbrella_tree_barrel",
+      "required": false
+    },
+    {
+      "id": "betterend:jellyshroom_barrel",
+      "required": false
+    },
+    {
+      "id": "betterend:lucernia_barrel",
+      "required": false
+    }
+  ]
+}
