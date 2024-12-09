@@ -13,14 +13,14 @@
   "lootr.message.refresh_in": "Этот контейнер обновит своё содержимое через %s секунд.",
   "lootr.message.refresh_start": "Контейнер обновится с новым содержимым через %s секунд!",
   "lootr.message.invalid_table": "Таблица добычи для этого контейнера [%s] стала пустой, и добыча не могла быть сгенерирована. Проверьте `latest.log` на наличие ошибок.",
-  "lootr.message.invalid_block": "The container that you have tried to open is invalid as it has not generated its identifier.",
+  "lootr.message.invalid_block": "Контейнер, который вы попытались открыть, недействителен, так как он не сгенерировал свой идентификатор.",
   "block.lootr.lootr_chest": "Сундук с добычей",
   "block.lootr.lootr_trapped_chest": "Сундук с добычей",
   "block.lootr.lootr_barrel": "Бочка с добычей",
   "block.lootr.lootr_inventory": "Сундук с добычей",
   "block.lootr.lootr_shulker": "Шалкеровый ящик с добычей",
   "block.lootr.trophy": "Столетний трофей",
-  "entity.lootr.lootr_minecart": "Вагонетка с сундуком с добычей",
+  "entity.lootr.lootr_minecart": "Грузовая вагонетка",
   "lootr.commands.usage": "/lootr barrel | barrel <loot-table> | chest | chest <loot-table> | cart | cart <loot-table> | shulker | shulker <loot-table> | convert | custom <id> | refresh | decay",
   "lootr.commands.create": "Создано: %s в %s, используя таблицу добычи %s.",
   "lootr.commands.summon": "Создана вагонетка с сундуком с добычей в %s, используя таблицу добычи %s.",
@@ -100,5 +100,5 @@
   "text.autoconfig.lootr.option.decay.start_tick_decay": "Начинать распад при такте контейнеров",
   "text.autoconfig.lootr.option.refresh.perform_tick_refresh": "Выполнять обновление при такте контейнеров",
   "text.autoconfig.lootr.option.refresh.start_tick_refresh": "Начинать обновление при такте контейнеров",
-  "text.autoconfig.lootr.option.conversion.rename_container_block_entities": "Переименовать существующие блочные сущности контейнеров"
+  "text.autoconfig.lootr.option.conversion.rename_container_block_entities": "Переименовывать существующие контейнеры блочных сущностей"
 }
