@@ -1,43 +1,43 @@
 {
   "values": [
     {
-      "id": "betterend:mossy_glowshroom_chest",
+      "id": "better_end:mossy_glowshroom_chest",
       "required": false
     },
     {
-      "id": "betterend:end_lotus_chest",
+      "id": "better_end:end_lotus_chest",
       "required": false
     },
     {
-      "id": "betterend:pythadendron_chest",
+      "id": "better_end:pythadendron_chest",
       "required": false
     },
     {
-      "id": "betterend:lacugrove_chest",
+      "id": "better_end:lacugrove_chest",
       "required": false
     },
     {
-      "id": "betterend:dragon_tree_chest",
+      "id": "better_end:dragon_tree_chest",
       "required": false
     },
     {
-      "id": "betterend:tenanea_chest",
+      "id": "better_end:tenanea_chest",
       "required": false
     },
     {
-      "id": "betterend:helix_tree_chest",
+      "id": "better_end:helix_tree_chest",
       "required": false
     },
     {
-      "id": "betterend:umbrella_tree_chest",
+      "id": "better_end:umbrella_tree_chest",
       "required": false
     },
     {
-      "id": "betterend:jellyshroom_chest",
+      "id": "better_end:jellyshroom_chest",
       "required": false
     },
     {
-      "id": "betterend:lucernia_chest",
+      "id": "better_end:lucernia_chest",
       "required": false
     }
   ]

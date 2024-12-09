@@ -40,24 +40,5 @@ public class LootrDataGenerators {
     generator.addProvider(event.includeServer(), new LootrStructureTagsProvider(output, provider, helper));
     generator.addProvider(event.includeClient(), new LootrLangProvider(output));
     generator.addProvider(event.includeServer(), new AdvancementProvider(output, provider, helper, List.of(new LootrAdvancementGenerator())));
-
-    Path datapacks = generator.getPackOutput().getOutputFolder().getParent().getParent().getParent().getParent().resolve("datapacks"); // a hack
-
-    // Data pack generation
-    DataGenerator betterEndGenerator = new DataGenerator(datapacks.resolve("betterend"), DetectedVersion.tryDetectVersion(), true);
-    betterEndGenerator.addProvider(event.includeServer(), new LootrBetterEndBlockTagProvider(betterEndGenerator.getPackOutput(), provider, helper));
-    betterEndGenerator.addProvider(event.includeServer(),
-    new PackMetadataGenerator(betterEndGenerator.getPackOutput()).add(PackMetadataSection.TYPE, new PackMetadataSection(Component.literal("Lootr Compatibility for BetterEnd"),15, Optional.empty())));
-
-    DataGenerator betterNetherGenerator = new DataGenerator(datapacks.resolve("betternether"), DetectedVersion.tryDetectVersion(), true);
-    betterNetherGenerator.addProvider(event.includeServer(), new LootrBetterNetherBlockTagProvider(betterNetherGenerator.getPackOutput(), provider, helper));
-    betterNetherGenerator.addProvider(event.includeServer(),
-        new PackMetadataGenerator(betterNetherGenerator.getPackOutput()).add(PackMetadataSection.TYPE, new PackMetadataSection(Component.literal("Lootr Compatibility for BetterNether"),15, Optional.empty())));
-    try {
-      betterEndGenerator.run();
-      betterNetherGenerator.run();
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
   }
 }
