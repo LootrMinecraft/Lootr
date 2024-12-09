@@ -1,7 +1,7 @@
 project_identifier: lootr
 base_path: .
 files:
-  - source: /common/src/main/resources/assets/lootr/lang/en_us.json
+  - source: /common/src/generated/resources/assets/lootr/lang/en_us.json
     translation: /common/src/main/resources/assets/lootr/lang/%locale_with_underscore%.json
     languages_mapping:
       locale_with_underscore:
