@@ -24,14 +24,21 @@ import net.zestyblaze.lootr.api.LootrAPI;
 import net.zestyblaze.lootr.api.blockentity.ILootBlockEntity;
 import net.zestyblaze.lootr.blocks.entities.LootrChestBlockEntity;
 import net.zestyblaze.lootr.config.LootrModConfig;
+import net.zestyblaze.lootr.registry.LootrBlockEntityInit;
 
 import java.util.UUID;
 
 @SuppressWarnings("deprecation")
 public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootBlockEntity> extends ChestRenderer<T> {
   private UUID playerId = null;
-  public static final Material MATERIAL = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(LootrAPI.MODID, "chest"));
-  public static final Material MATERIAL2 = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(LootrAPI.MODID, "chest_opened"));
+  public static final Material CHEST = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(LootrAPI.MODID, "chest"));
+  public static final Material CHEST_OPENED = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(LootrAPI.MODID, "chest_opened"));
+  public static final Material OLD_CHEST = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(LootrAPI.MODID, "old_chest"));
+  public static final Material OLD_CHEST_OPENED = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(LootrAPI.MODID, "old_chest_opened"));
+  public static final Material TRAPPED_CHEST = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(LootrAPI.MODID, "chest_trapped_chest"));
+  public static final Material TRAPPED_CHEST_OPENED = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(LootrAPI.MODID, "chest_trapped_opened"));
+  public static final Material OLD_TRAPPED_CHEST = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(LootrAPI.MODID, "old_chest_trapped"));
+  public static final Material OLD_TRAPPED_CHEST_OPENED = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(LootrAPI.MODID, "old_chest_trapped_opened"));
   private final ModelPart lid;
   private final ModelPart bottom;
   private final ModelPart lock;
@@ -75,21 +82,71 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootBloc
     if (LootrModConfig.isVanillaTextures()) {
       return Sheets.CHEST_LOCATION;
     }
+    boolean o = LootrModConfig.isOldTextures();
+    boolean t = tile.getType() == LootrBlockEntityInit.SPECIAL_TRAPPED_LOOT_CHEST;
     if(playerId == null) {
       Player player = Minecraft.getInstance().player;
       if(player != null) {
         playerId = player.getUUID();
       } else {
-        return MATERIAL;
+        if (o) {
+          if (t) {
+            return OLD_TRAPPED_CHEST;
+          } else {
+            return OLD_CHEST;
+          }
+        } else {
+          if (t) {
+            return TRAPPED_CHEST;
+          } else {
+            return CHEST;
+          }
+        }
       }
     }
     if(tile.isOpened()) {
-      return MATERIAL2;
+      if (o) {
+        if (t) {
+          return OLD_TRAPPED_CHEST_OPENED;
+        } else {
+          return OLD_CHEST_OPENED;
+        }
+      } else {
+        if (t) {
+          return TRAPPED_CHEST_OPENED;
+        } else {
+          return CHEST_OPENED;
+        }
+      }
     }
     if(tile.getOpeners().contains(playerId)) {
-      return MATERIAL2;
+      if (o) {
+        if (t) {
+          return OLD_TRAPPED_CHEST_OPENED;
+        } else {
+          return OLD_CHEST_OPENED;
+        }
+      } else {
+        if (t) {
+          return TRAPPED_CHEST_OPENED;
+        } else {
+          return CHEST_OPENED;
+        }
+      }
     } else {
-      return MATERIAL;
+      if (o) {
+        if (t) {
+          return OLD_TRAPPED_CHEST;
+        } else {
+          return OLD_CHEST;
+        }
+      } else {
+        if (t) {
+          return TRAPPED_CHEST;
+        } else {
+          return CHEST;
+        }
+      }
     }
   }
 }

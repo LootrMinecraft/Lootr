@@ -42,11 +42,15 @@ public class BarrelModel implements UnbakedModel {
   private final UnbakedModel opened;
   private final UnbakedModel unopened;
   private final UnbakedModel vanilla;
+  private final UnbakedModel old_opened;
+  private final UnbakedModel old_unopened;
 
-  public BarrelModel(UnbakedModel opened, UnbakedModel unopened, UnbakedModel vanilla) {
+  public BarrelModel(UnbakedModel opened, UnbakedModel unopened, UnbakedModel vanilla, UnbakedModel old_opened, UnbakedModel old_unopened) {
     this.opened = opened;
     this.unopened = unopened;
     this.vanilla = vanilla;
+    this.old_opened = old_opened;
+    this.old_unopened = old_unopened;
   }
 
   private Collection<ResourceLocation> dependencies = null;
@@ -64,7 +68,7 @@ public class BarrelModel implements UnbakedModel {
   @Override
   public Collection<Material> getMaterials(Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
     if (materials == null) {
-      this.materials = Streams.concat(this.opened.getMaterials(modelGetter, missingTextureErrors).stream(), this.unopened.getMaterials(modelGetter, missingTextureErrors).stream(), this.vanilla.getMaterials(modelGetter, missingTextureErrors).stream()).collect(Collectors.toSet());
+      this.materials = Streams.concat(this.opened.getMaterials(modelGetter, missingTextureErrors).stream(), this.unopened.getMaterials(modelGetter, missingTextureErrors).stream(), this.vanilla.getMaterials(modelGetter, missingTextureErrors).stream(), this.old_opened.getMaterials(modelGetter, missingTextureErrors).stream(), this.old_unopened.getMaterials(modelGetter, missingTextureErrors).stream()).collect(Collectors.toSet());
     }
 
     return materials;
@@ -73,18 +77,22 @@ public class BarrelModel implements UnbakedModel {
   @Nullable
   @Override
   public BakedModel bake(ModelBakery modelBakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState transform, ResourceLocation location) {
-    return new BakedBarrelModel(opened.bake(modelBakery, spriteGetter, transform, location), unopened.bake(modelBakery, spriteGetter, transform, location), vanilla.bake(modelBakery, spriteGetter, transform, location));
+    return new BakedBarrelModel(opened.bake(modelBakery, spriteGetter, transform, location), unopened.bake(modelBakery, spriteGetter, transform, location), vanilla.bake(modelBakery, spriteGetter, transform, location), old_opened.bake(modelBakery, spriteGetter, transform, location), old_unopened.bake(modelBakery, spriteGetter, transform, location));
   }
 
   public static class BakedBarrelModel implements BakedModel, FabricBakedModel {
     private final BakedModel opened;
     private final BakedModel unopened;
     private final BakedModel vanilla;
+    private final BakedModel old_opened;
+    private final BakedModel old_unopened;
 
-    public BakedBarrelModel(BakedModel opened, BakedModel unopened, BakedModel vanilla) {
+    public BakedBarrelModel(BakedModel opened, BakedModel unopened, BakedModel vanilla, BakedModel old_opened, BakedModel old_unopened) {
       this.opened = opened;
       this.unopened = unopened;
       this.vanilla = vanilla;
+      this.old_opened = old_opened;
+      this.old_unopened = old_unopened;
     }
 
     @Override
@@ -95,14 +103,15 @@ public class BarrelModel implements UnbakedModel {
     @Override
     public void emitBlockQuads(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context) {
       BlockEntity blockEntity = blockView.getBlockEntity(pos);
-      BakedModel model = opened;
+      boolean o = LootrModConfig.isOldTextures();
+      BakedModel model = o ? old_opened : opened;
       if (LootrModConfig.isVanillaTextures()) {
         model = vanilla;
       } else {
         if (blockEntity instanceof ILootBlockEntity lootContainer) {
           LocalPlayer player = Minecraft.getInstance().player;
           if (player == null || !lootContainer.getOpeners().contains(player.getUUID())) {
-            model = unopened;
+            model = o ? old_unopened : unopened;
           }
         }
       }
@@ -135,7 +144,11 @@ public class BarrelModel implements UnbakedModel {
       if (LootrModConfig.isVanillaTextures()) {
         return vanilla.getQuads(state, side, rand);
       } else {
-        return unopened.getQuads(state, side, rand);
+        if (LootrModConfig.isOldTextures()) {
+          return old_unopened.getQuads(state, side, rand);
+        } else {
+          return unopened.getQuads(state, side, rand);
+        }
       }
     }
 
@@ -192,12 +205,20 @@ public class BarrelModel implements UnbakedModel {
     private static final ResourceLocation VANILLA = new ResourceLocation("minecraft", "block/barrel");
     private static final ResourceLocation VANILLA_OPEN = new ResourceLocation("minecraft", "block/barrel_open");
 
+    // Old unopened models
+    private static final ResourceLocation OLD_LOOTR_BARREL_UNOPENED = new ResourceLocation(LootrAPI.MODID, "block/old_lootr_barrel_unopened");
+    private static final ResourceLocation OLD_LOOTR_BARREL_UNOPENED_OPEN = new ResourceLocation(LootrAPI.MODID, "block/old_lootr_barrel_unopened_open");
+
+    // Old opened models
+    private static final ResourceLocation OLD_LOOTR_OPENED_BARREL = new ResourceLocation(LootrAPI.MODID, "block/old_lootr_opened_barrel");
+    private static final ResourceLocation OLD_LOOTR_OPENED_BARREL_OPEN = new ResourceLocation(LootrAPI.MODID, "block/old_lootr_opened_barrel_open");
+
     @Override
     public @Nullable UnbakedModel loadModelResource(ResourceLocation resourceId, ModelProviderContext context) throws ModelProviderException {
       if (resourceId.equals(LOOTR_BARREL_MODEL_UNOPENED)) {
-        return new BarrelModel(context.loadModel(LOOTR_OPENED_BARREL), context.loadModel(LOOTR_BARREL_UNOPENED), context.loadModel(VANILLA));
+        return new BarrelModel(context.loadModel(LOOTR_OPENED_BARREL), context.loadModel(LOOTR_BARREL_UNOPENED), context.loadModel(VANILLA), context.loadModel(OLD_LOOTR_OPENED_BARREL), context.loadModel(OLD_LOOTR_BARREL_UNOPENED));
       } else if (resourceId.equals(LOOTR_BARREL_MODEL_OPENED)) {
-        return new BarrelModel(context.loadModel(LOOTR_OPENED_BARREL_OPEN), context.loadModel(LOOTR_BARREL_UNOPENED_OPEN), context.loadModel(VANILLA_OPEN));
+        return new BarrelModel(context.loadModel(LOOTR_OPENED_BARREL_OPEN), context.loadModel(LOOTR_BARREL_UNOPENED_OPEN), context.loadModel(VANILLA_OPEN),  context.loadModel(OLD_LOOTR_OPENED_BARREL_OPEN), context.loadModel(OLD_LOOTR_BARREL_UNOPENED_OPEN));
       } else {
         return null;
       }

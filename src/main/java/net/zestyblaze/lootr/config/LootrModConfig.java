@@ -157,6 +157,7 @@ public class LootrModConfig implements ConfigData {
 
   public static class Vanilla {
     public boolean vanilla_textures = false;
+    public boolean old_textures = false;
   }
 
   private static Set<String> validateStringList(List<String> incomingList, String listKey) {
@@ -370,6 +371,10 @@ public class LootrModConfig implements ConfigData {
 
   public static boolean isVanillaTextures() {
     return get().vanilla.vanilla_textures;
+  }
+
+  public static boolean isOldTextures () {
+    return get().vanilla.old_textures;
   }
 
   public static Set<String> getDimensionModidWhitelist() {

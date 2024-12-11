@@ -28,6 +28,8 @@ import java.util.UUID;
 public class LootrShulkerBlockRenderer implements BlockEntityRenderer<LootrShulkerBlockEntity> {
     public static final Material MATERIAL = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(LootrAPI.MODID, "shulker"));
     public static final Material MATERIAL2 = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(LootrAPI.MODID, "shulker_opened"));
+    public static final Material MATERIAL3 = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(LootrAPI.MODID, "old_shulker"));
+    public static final Material MATERIAL4 = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(LootrAPI.MODID, "old_shulker_opened"));
     private UUID playerId;
 
     private final ShulkerModel<?> model;
@@ -40,18 +42,19 @@ public class LootrShulkerBlockRenderer implements BlockEntityRenderer<LootrShulk
         if(LootrModConfig.get().vanilla.vanilla_textures) {
             return Sheets.DEFAULT_SHULKER_TEXTURE_LOCATION;
         }
+        boolean o = LootrModConfig.isOldTextures();
         if(playerId == null) {
             Minecraft mc = Minecraft.getInstance();
             if (mc.player == null) {
-                return MATERIAL;
+                return o ? MATERIAL3 : MATERIAL;
             } else {
                 playerId = mc.player.getUUID();
             }
         }
         if(tile.getOpeners().contains(playerId)) {
-            return MATERIAL2;
+            return o ? MATERIAL4 : MATERIAL2;
         } else {
-            return MATERIAL;
+            return o ? MATERIAL3 : MATERIAL;
         }
     }
 

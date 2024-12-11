@@ -21,11 +21,19 @@ public class MixinTextureAtlas {
   @Inject(method = "prepareToStitch", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiling/ProfilerFiller;popPush(Ljava/lang/String;)V", shift = At.Shift.AFTER, ordinal = 0), locals = LocalCapture.CAPTURE_FAILHARD)
   private void preStitch(ResourceManager resourceManager, Stream<ResourceLocation> spriteStream, ProfilerFiller profiler, int i, CallbackInfoReturnable<TextureAtlas.Preparations> cir, Set<ResourceLocation> spriteSet) {
     TextureAtlas atlas = (TextureAtlas) (Object) this;
-    if(atlas.location().equals(TextureAtlas.LOCATION_BLOCKS)) {
-      spriteSet.add(LootrChestBlockRenderer.MATERIAL.texture());
-      spriteSet.add(LootrChestBlockRenderer.MATERIAL2.texture());
+    if (atlas.location().equals(TextureAtlas.LOCATION_BLOCKS)) {
+      spriteSet.add(LootrChestBlockRenderer.CHEST.texture());
+      spriteSet.add(LootrChestBlockRenderer.CHEST_OPENED.texture());
+      spriteSet.add(LootrChestBlockRenderer.OLD_CHEST.texture());
+      spriteSet.add(LootrChestBlockRenderer.OLD_CHEST_OPENED.texture());
+      spriteSet.add(LootrChestBlockRenderer.TRAPPED_CHEST.texture());
+      spriteSet.add(LootrChestBlockRenderer.TRAPPED_CHEST_OPENED.texture());
+      spriteSet.add(LootrChestBlockRenderer.OLD_TRAPPED_CHEST.texture());
+      spriteSet.add(LootrChestBlockRenderer.OLD_TRAPPED_CHEST_OPENED.texture());
       spriteSet.add(LootrShulkerBlockRenderer.MATERIAL.texture());
       spriteSet.add(LootrShulkerBlockRenderer.MATERIAL2.texture());
+      spriteSet.add(LootrShulkerBlockRenderer.MATERIAL3.texture());
+      spriteSet.add(LootrShulkerBlockRenderer.MATERIAL4.texture());
     }
   }
 }
