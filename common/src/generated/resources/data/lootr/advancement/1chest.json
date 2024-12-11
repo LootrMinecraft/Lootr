@@ -1,0 +1,26 @@
+{
+  "parent": "lootr:root",
+  "criteria": {
+    "opened_chest": {
+      "trigger": "lootr:chest_opened"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "lootr.advancements.1chest.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "lootr:lootr_chest"
+    },
+    "title": {
+      "translate": "lootr.advancements.1chest.title"
+    }
+  },
+  "requirements": [
+    [
+      "opened_chest"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,29 @@
+{
+  "parent": "lootr:1chest",
+  "criteria": {
+    "opened_10": {
+      "conditions": {
+        "score": 10
+      },
+      "trigger": "lootr:score"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "lootr.advancements.10loot.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:gold_block"
+    },
+    "title": {
+      "translate": "lootr.advancements.10loot.title"
+    }
+  },
+  "requirements": [
+    [
+      "opened_10"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

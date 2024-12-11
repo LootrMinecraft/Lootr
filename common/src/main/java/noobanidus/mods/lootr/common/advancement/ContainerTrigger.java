@@ -2,11 +2,15 @@ package noobanidus.mods.lootr.common.advancement;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
+import net.minecraft.advancements.critereon.KilledTrigger;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
+import noobanidus.mods.lootr.common.api.advancement.ITrigger;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -19,6 +23,11 @@ public class ContainerTrigger extends SimpleCriterionTrigger<ContainerTrigger.Tr
   @Override
   public Codec<TriggerInstance> codec() {
     return TriggerInstance.CODEC;
+  }
+
+  public static Criterion<ContainerTrigger.TriggerInstance> looted(ITrigger trigger) {
+    return ((ContainerTrigger) trigger.getTrigger()).createCriterion(new
+       TriggerInstance(Optional.empty()));
   }
 
   public record TriggerInstance(

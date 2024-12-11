@@ -1,0 +1,28 @@
+{
+  "criteria": {
+    "always_true": {
+      "trigger": "minecraft:tick"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "minecraft:textures/block/dark_oak_log.png",
+    "description": {
+      "translate": "lootr.advancements.root.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:chest"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "lootr.advancements.root.title"
+    }
+  },
+  "requirements": [
+    [
+      "always_true"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -21,6 +21,7 @@ import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.neoforge.init.ModBlocks;
 
 import java.util.HashSet;
@@ -83,14 +84,21 @@ public class LootrLootTableProvider {
     }
 
     @Override
-    public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> p_249643_) {
-      p_249643_.accept(
+    public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> consumer) {
+      consumer.accept(
           LootrAPI.ELYTRA_CHEST,
           LootTable.lootTable()
               .withPool(
                   LootPool.lootPool()
                       .setRolls(ConstantValue.exactly(1))
                       .add(LootItem.lootTableItem(Items.ELYTRA).apply(SetItemCountFunction.setCount(ConstantValue.exactly(1))))));
+      consumer.accept(
+          LootrAPI.TROPHY_REWARD,
+          LootTable.lootTable()
+              .withPool(
+                  LootPool.lootPool()
+                      .setRolls(ConstantValue.exactly(1))
+                      .add(LootItem.lootTableItem(LootrRegistry.getTrophyBlock()).apply(SetItemCountFunction.setCount(ConstantValue.exactly(1))))));
     }
   }
 }

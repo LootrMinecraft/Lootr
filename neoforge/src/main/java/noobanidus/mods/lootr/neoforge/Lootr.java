@@ -22,7 +22,8 @@ import noobanidus.mods.lootr.neoforge.network.PacketHandler;
 // - Display notices after containers are closed
 // - or use toasts
 // - lockouts?
-@Mod("lootr")
+// - dropping loot when breaking chests
+@Mod(value=LootrAPI.MODID)
 public class Lootr {
   public static Lootr instance;
   private final PacketHandler packetHandler;

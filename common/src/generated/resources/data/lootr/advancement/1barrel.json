@@ -1,0 +1,26 @@
+{
+  "parent": "lootr:root",
+  "criteria": {
+    "opened_barrel": {
+      "trigger": "lootr:barrel_opened"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "lootr.advancements.1barrel.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "lootr:lootr_barrel"
+    },
+    "title": {
+      "translate": "lootr.advancements.1barrel.title"
+    }
+  },
+  "requirements": [
+    [
+      "opened_barrel"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,35 @@
+{
+  "parent": "lootr:50loot",
+  "criteria": {
+    "opened_100": {
+      "conditions": {
+        "score": 100
+      },
+      "trigger": "lootr:score"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "lootr.advancements.100loot.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "minecraft:netherite_block"
+    },
+    "title": {
+      "translate": "lootr.advancements.100loot.title"
+    }
+  },
+  "requirements": [
+    [
+      "opened_100"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "lootr:reward/trophy"
+    ]
+  },
+  "sends_telemetry_event": true
+}

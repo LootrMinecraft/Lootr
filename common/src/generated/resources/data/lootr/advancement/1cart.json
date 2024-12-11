@@ -1,0 +1,26 @@
+{
+  "parent": "lootr:root",
+  "criteria": {
+    "opened_cart": {
+      "trigger": "lootr:cart_opened"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "lootr.advancements.1cart.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:chest_minecart"
+    },
+    "title": {
+      "translate": "lootr.advancements.1cart.title"
+    }
+  },
+  "requirements": [
+    [
+      "opened_cart"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

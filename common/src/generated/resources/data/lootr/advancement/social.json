@@ -1,0 +1,58 @@
+{
+  "parent": "lootr:1chest",
+  "criteria": {
+    "opened_barrel": {
+      "conditions": {
+        "advancement": "lootr:1barrel"
+      },
+      "trigger": "lootr:advancement"
+    },
+    "opened_cart": {
+      "conditions": {
+        "advancement": "lootr:1cart"
+      },
+      "trigger": "lootr:advancement"
+    },
+    "opened_chest": {
+      "conditions": {
+        "advancement": "lootr:1chest"
+      },
+      "trigger": "lootr:advancement"
+    },
+    "opened_shulker": {
+      "conditions": {
+        "advancement": "lootr:1shulker"
+      },
+      "trigger": "lootr:advancement"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "lootr.advancements.social.description"
+    },
+    "frame": "challenge",
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "minecraft:enchanted_golden_apple"
+    },
+    "title": {
+      "translate": "lootr.advancements.social.title"
+    }
+  },
+  "requirements": [
+    [
+      "opened_chest"
+    ],
+    [
+      "opened_barrel"
+    ],
+    [
+      "opened_cart"
+    ],
+    [
+      "opened_shulker"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

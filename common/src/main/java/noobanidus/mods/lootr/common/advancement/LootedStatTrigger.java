@@ -2,6 +2,7 @@ package noobanidus.mods.lootr.common.advancement;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
@@ -19,6 +20,10 @@ public class LootedStatTrigger extends SimpleCriterionTrigger<LootedStatTrigger.
   @Override
   public Codec<LootedStatTrigger.TriggerInstance> codec() {
     return TriggerInstance.CODEC;
+  }
+
+  public static Criterion<TriggerInstance> looted(int count) {
+    return ((LootedStatTrigger) LootrRegistry.getStatTrigger().getTrigger()).createCriterion(new TriggerInstance(Optional.empty(), MinMaxBounds.Ints.exactly(count)));
   }
 
   public record TriggerInstance(Optional<ContextAwarePredicate> player,

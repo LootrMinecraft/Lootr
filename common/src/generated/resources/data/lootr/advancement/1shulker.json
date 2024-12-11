@@ -1,0 +1,26 @@
+{
+  "parent": "lootr:root",
+  "criteria": {
+    "opened_shulker": {
+      "trigger": "lootr:shulker_opened"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "lootr.advancements.1shulker.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "lootr:lootr_shulker"
+    },
+    "title": {
+      "translate": "lootr.advancements.1shulker.title"
+    }
+  },
+  "requirements": [
+    [
+      "opened_shulker"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
