@@ -35,7 +35,7 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootBloc
   public static final Material CHEST_OPENED = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(LootrAPI.MODID, "chest_opened"));
   public static final Material OLD_CHEST = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(LootrAPI.MODID, "old_chest"));
   public static final Material OLD_CHEST_OPENED = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(LootrAPI.MODID, "old_chest_opened"));
-  public static final Material TRAPPED_CHEST = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(LootrAPI.MODID, "chest_trapped_chest"));
+  public static final Material TRAPPED_CHEST = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(LootrAPI.MODID, "chest_trapped"));
   public static final Material TRAPPED_CHEST_OPENED = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(LootrAPI.MODID, "chest_trapped_opened"));
   public static final Material OLD_TRAPPED_CHEST = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(LootrAPI.MODID, "old_chest_trapped"));
   public static final Material OLD_TRAPPED_CHEST_OPENED = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(LootrAPI.MODID, "old_chest_trapped_opened"));
