@@ -13,8 +13,8 @@ loom {
         runs {
             all {}
 
-            data {
-                data()
+            clientData {
+                clientData()
                 programArgs("--all", "--mod", "lootr")
                 programArgs("--existing", project(":common").file("src/main/resources").absolutePath)
                 programArgs("--output", project(":common").file("src/generated/resources").absolutePath)
