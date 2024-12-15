@@ -39,7 +39,7 @@ public class BarrelModelLoader implements ModelLoadingPlugin {
   public void initialize(ModelLoadingPlugin.Context pluginContext) {
     pluginContext.addModels(LOOTR_BARREL_MODEL_UNOPENED, LOOTR_BARREL_MODEL_OPENED);
     pluginContext.modifyModelOnLoad()
-        .register(Event.DEFAULT_PHASE, // TODO: Is this the right phrase?
+        .register(ModelModifier.OVERRIDE_PHASE, // TODO: Is this the right phrase?
         new ModelModifier.OnLoad() {
           @Override
           public @Nullable UnbakedModel modifyModelOnLoad(@Nullable UnbakedModel model, Context context) {
@@ -49,7 +49,7 @@ public class BarrelModelLoader implements ModelLoadingPlugin {
             } else if (resourceId.equals(LOOTR_BARREL_MODEL_OPENED)) {
               return new BarrelModel(LOOTR_OPENED_BARREL_OPEN, LOOTR_BARREL_UNOPENED_OPEN, VANILLA_OPEN, OLD_LOOTR_OPENED_BARREL_OPEN, OLD_LOOTR_BARREL_UNOPENED_OPEN);
             } else {
-              return null;
+              return model;
             }
           }
         }

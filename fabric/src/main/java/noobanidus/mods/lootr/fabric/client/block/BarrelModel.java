@@ -30,12 +30,6 @@ public class BarrelModel implements UnbakedModel {
   private final ResourceLocation oldOpenedLocation;
   private final ResourceLocation oldUnopenedLocation;
   private final ResourceLocation parentLocation;
-
-  private UnbakedModel opened;
-  private UnbakedModel unopened;
-  private UnbakedModel vanilla;
-  private UnbakedModel old_opened;
-  private UnbakedModel old_unopened;
   private UnbakedModel parent;
 
   public BarrelModel(ResourceLocation opened, ResourceLocation unopened, ResourceLocation vanilla, ResourceLocation old_opened, ResourceLocation old_unopened) {
@@ -44,16 +38,16 @@ public class BarrelModel implements UnbakedModel {
     this.vanillaLocation = vanilla;
     this.oldOpenedLocation = old_opened;
     this.oldUnopenedLocation = old_unopened;
-    this.parentLocation = ResourceLocation.withDefaultNamespace("block/block");
+    this.parentLocation = ResourceLocation.withDefaultNamespace("block/cube_bottom_all");
   }
 
   @Override
   public void resolveDependencies(Resolver resolver) {
-    this.opened = resolver.resolve(this.openedLocation);
-    this.unopened = resolver.resolve(this.unopenedLocation);
-    this.vanilla = resolver.resolve(this.vanillaLocation);
-    this.old_opened = resolver.resolve(this.oldOpenedLocation);
-    this.old_unopened = resolver.resolve(this.oldUnopenedLocation);
+    resolver.resolve(this.openedLocation);
+    resolver.resolve(this.unopenedLocation);
+    resolver.resolve(this.vanillaLocation);
+    resolver.resolve(this.oldOpenedLocation);
+    resolver.resolve(this.oldUnopenedLocation);
     this.parent = resolver.resolve(this.parentLocation);
   }
 
@@ -65,7 +59,7 @@ public class BarrelModel implements UnbakedModel {
 
   @Override
   public BakedModel bake(TextureSlots textureSlots, ModelBaker modelBaker, ModelState modelState, boolean bl, boolean bl2, ItemTransforms itemTransforms) {
-    return new BakedBarrelModel(opened.bake(textureSlots, modelBaker, modelState, bl, bl2, itemTransforms), unopened.bake(textureSlots, modelBaker, modelState, bl, bl2, itemTransforms), vanilla.bake(textureSlots, modelBaker, modelState, bl, bl2, itemTransforms), old_opened.bake(textureSlots, modelBaker, modelState, bl, bl2, itemTransforms), old_unopened.bake(textureSlots, modelBaker, modelState, bl, bl2, itemTransforms));
+    return new BakedBarrelModel(modelBaker.bake(this.openedLocation, modelState), modelBaker.bake(this.unopenedLocation, modelState), modelBaker.bake(this.vanillaLocation, modelState), modelBaker.bake(this.oldOpenedLocation, modelState), modelBaker.bake(this.oldUnopenedLocation, modelState), itemTransforms);
   }
 
   public static class BakedBarrelModel implements BakedModel, FabricBakedModel {
@@ -75,7 +69,7 @@ public class BarrelModel implements UnbakedModel {
     private final BakedModel old_opened;
     private final BakedModel old_unopened;
 
-    public BakedBarrelModel(BakedModel opened, BakedModel unopened, BakedModel vanilla, BakedModel old_opened, BakedModel old_unopened) {
+    public BakedBarrelModel(BakedModel opened, BakedModel unopened, BakedModel vanilla, BakedModel old_opened, BakedModel old_unopened, ItemTransforms transforms) {
       this.opened = opened;
       this.unopened = unopened;
       this.vanilla = vanilla;
@@ -134,7 +128,7 @@ public class BarrelModel implements UnbakedModel {
 
     @Override
     public ItemTransforms getTransforms() {
-      return ItemTransforms.NO_TRANSFORMS;
+      return this.unopened.getTransforms();
     }
   }
 }
