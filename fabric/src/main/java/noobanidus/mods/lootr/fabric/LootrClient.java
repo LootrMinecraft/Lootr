@@ -5,18 +5,20 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
-import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.SpecialBlockRendererRegistry;
+import net.fabricmc.fabric.impl.client.rendering.SpecialBlockRendererRegistryImpl;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.special.SpecialModelRenderers;
+import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.client.block.LootrChestBlockRenderer;
 import noobanidus.mods.lootr.common.client.entity.LootrChestCartRenderer;
+import noobanidus.mods.lootr.common.client.special.LootrChestSpecialRenderer;
+import noobanidus.mods.lootr.common.client.special.LootrShulkerSpecialRenderer;
 import noobanidus.mods.lootr.fabric.client.block.BarrelModelLoader;
-import noobanidus.mods.lootr.fabric.client.block.LootrChestBlockRenderer;
 import noobanidus.mods.lootr.common.client.block.LootrShulkerBlockRenderer;
-import noobanidus.mods.lootr.fabric.client.item.LootrChestItemRenderer;
-import noobanidus.mods.lootr.fabric.client.item.LootrShulkerItemRenderer;
-import noobanidus.mods.lootr.fabric.client.item.LootrTrappedChestItemRenderer;
 import noobanidus.mods.lootr.fabric.init.ModBlockEntities;
 import noobanidus.mods.lootr.fabric.init.ModBlocks;
 import noobanidus.mods.lootr.fabric.init.ModEntities;
@@ -31,16 +33,18 @@ public class LootrClient implements ClientModInitializer {
     BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.BARREL, RenderType.cutoutMipped());
 
     BlockEntityRenderers.register(ModBlockEntities.LOOTR_CHEST, LootrChestBlockRenderer::new);
-    BuiltinItemRendererRegistry.INSTANCE.register(ModBlocks.CHEST, LootrChestItemRenderer.getInstance());
+    SpecialBlockRendererRegistry.register(ModBlocks.CHEST, LootrChestSpecialRenderer.Unbaked.chest());
+    SpecialModelRenderers.ID_MAPPER.put(LootrAPI.rl("chest"), LootrChestSpecialRenderer.Unbaked.MAP_CODEC);
 
     BlockEntityRenderers.register(ModBlockEntities.LOOTR_TRAPPED_CHEST, LootrChestBlockRenderer::new);
-    BuiltinItemRendererRegistry.INSTANCE.register(ModBlocks.TRAPPED_CHEST, LootrTrappedChestItemRenderer.getInstance());
+    SpecialBlockRendererRegistry.register(ModBlocks.TRAPPED_CHEST, LootrChestSpecialRenderer.Unbaked.trappedChest());
 
     BlockEntityRenderers.register(ModBlockEntities.LOOTR_INVENTORY, LootrChestBlockRenderer::new);
-    BuiltinItemRendererRegistry.INSTANCE.register(ModBlocks.INVENTORY, LootrChestItemRenderer.getInstance());
+    SpecialBlockRendererRegistry.register(ModBlocks.INVENTORY, LootrChestSpecialRenderer.Unbaked.chest());
 
     BlockEntityRenderers.register(ModBlockEntities.LOOTR_SHULKER, LootrShulkerBlockRenderer::new);
-    BuiltinItemRendererRegistry.INSTANCE.register(ModBlocks.SHULKER, LootrShulkerItemRenderer.getInstance());
+    SpecialBlockRendererRegistry.register(ModBlocks.SHULKER, LootrShulkerSpecialRenderer.Unbaked.shulker());
+    SpecialModelRenderers.ID_MAPPER.put(LootrAPI.rl("shulker"), LootrShulkerSpecialRenderer.Unbaked.MAP_CODEC);
 
     ModelLoadingPlugin.register(BarrelModelLoader.INSTANCE);
 

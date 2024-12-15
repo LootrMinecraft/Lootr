@@ -1,7 +1,6 @@
 package noobanidus.mods.lootr.neoforge.setup;
 
 import net.minecraft.client.model.geom.ModelLayers;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.api.distmarker.Dist;
@@ -9,28 +8,26 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
-import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
-import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
+import net.neoforged.neoforge.client.event.RegisterSpecialModelRendererEvent;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.block.entity.LootrChestBlockEntity;
 import noobanidus.mods.lootr.common.block.entity.LootrInventoryBlockEntity;
 import noobanidus.mods.lootr.common.block.entity.LootrShulkerBlockEntity;
 import noobanidus.mods.lootr.common.block.entity.LootrTrappedChestBlockEntity;
+import noobanidus.mods.lootr.common.client.block.LootrChestBlockRenderer;
 import noobanidus.mods.lootr.common.client.block.LootrShulkerBlockRenderer;
 import noobanidus.mods.lootr.common.client.entity.LootrChestCartRenderer;
-import noobanidus.mods.lootr.common.client.item.LootrChestItemRenderer;
-import noobanidus.mods.lootr.common.client.item.LootrShulkerItemRenderer;
-import noobanidus.mods.lootr.common.client.item.LootrTrappedChestItemRenderer;
+import noobanidus.mods.lootr.common.client.special.LootrChestSpecialRenderer;
+import noobanidus.mods.lootr.common.client.special.LootrShulkerSpecialRenderer;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.neoforge.client.block.BarrelModel;
-import noobanidus.mods.lootr.neoforge.client.block.LootrChestBlockRenderer;
 
 @EventBusSubscriber(modid = LootrAPI.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 public class ClientSetup {
 
   @SubscribeEvent
-  public static void modelRegister(ModelEvent.RegisterGeometryLoaders event) {
+  public static void modelRegister(ModelEvent.RegisterLoaders event) {
     event.register(LootrAPI.rl("barrel"), BarrelModel.Loader.INSTANCE);
   }
 
@@ -46,26 +43,8 @@ public class ClientSetup {
   }
 
   @SubscribeEvent
-  public static void registerClientExtensions(RegisterClientExtensionsEvent event) {
-    IClientItemExtensions chest = new IClientItemExtensions() {
-      @Override
-      public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-        return LootrChestItemRenderer.getInstance();
-      }
-    };
-    event.registerItem(new IClientItemExtensions() {
-      @Override
-      public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-        return LootrShulkerItemRenderer.getInstance();
-      }
-    }, LootrRegistry.getShulkerItem());
-    event.registerItem(new IClientItemExtensions() {
-      @Override
-      public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-        return LootrTrappedChestItemRenderer.getInstance();
-      }
-    }, LootrRegistry.getTrappedChestItem());
-    event.registerItem(chest, LootrRegistry.getChestItem());
-    event.registerItem(chest, LootrRegistry.getInventoryItem());
+  public static void registerSpecialModels(RegisterSpecialModelRendererEvent event) {
+    event.register(LootrAPI.rl("chest"), LootrChestSpecialRenderer.Unbaked.MAP_CODEC);
+    event.register(LootrAPI.rl("shulker"), LootrShulkerSpecialRenderer.Unbaked.MAP_CODEC);
   }
 }

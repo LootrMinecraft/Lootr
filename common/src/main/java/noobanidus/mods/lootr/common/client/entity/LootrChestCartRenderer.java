@@ -1,21 +1,17 @@
 package noobanidus.mods.lootr.common.client.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.AbstractMinecartRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.MinecartRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.Vec3;
-import noobanidus.mods.lootr.common.client.item.LootrChestItemRenderer;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
 
 public class LootrChestCartRenderer<T extends LootrChestMinecartEntity> extends AbstractMinecartRenderer<T, LootrCartRenderState> {
+
+
   public LootrChestCartRenderer(EntityRendererProvider.Context context, ModelLayerLocation modelLayerLocation) {
     super(context, modelLayerLocation);
   }
@@ -23,14 +19,13 @@ public class LootrChestCartRenderer<T extends LootrChestMinecartEntity> extends 
   @Override
   public void render(LootrCartRenderState pEntity, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight) {
     super.render(pEntity, pMatrixStack, pBuffer, pPackedLight);
-
-    //LootrChestItemRenderer.getInstance().renderByMinecart(pEntity, pMatrixStack, pBuffer, pPackedLight);
   }
 
   @Override
   protected void renderMinecartContents(LootrCartRenderState minecartRenderState, BlockState blockState, PoseStack poseStack, MultiBufferSource multiBufferSource, int i) {
-    //super.renderMinecartContents(minecartRenderState, blockState, poseStack, multiBufferSource, i);
-    LootrChestItemRenderer.getInstance().renderByMinecart(minecartRenderState, poseStack, multiBufferSource, i);
+    super.renderMinecartContents(minecartRenderState, blockState, poseStack, multiBufferSource, i);
+    // TODO:
+    // LootrChestItemRenderer.getInstance().renderByMinecart(minecartRenderState, poseStack, multiBufferSource, i);
   }
 
   @Override

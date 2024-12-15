@@ -90,7 +90,7 @@ public interface ILootrAPI {
   // Determine analog signal from configuration
   int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos, int defaultSignal);
 
-  // Determine if comparators should be powered when containers are opened
+  // Determine if comparators should be powered when containers are trapped
   boolean shouldPowerComparators();
 
   // Determine if notifications should be made by checking the remaining time

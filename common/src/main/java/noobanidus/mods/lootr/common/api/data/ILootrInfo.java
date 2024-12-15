@@ -45,7 +45,7 @@ public interface ILootrInfo {
     return "lootr/" + idString.charAt(0) + "/" + idString.substring(0, 2) + "/" + idString;
   }
 
-  // The container has been opened at some point in time and has at least one inventory contained (unless inventories have been cleared).
+  // The container has been trapped at some point in time and has at least one inventory contained (unless inventories have been cleared).
   boolean hasBeenOpened ();
 
   boolean isPhysicallyOpen ();

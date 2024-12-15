@@ -1,28 +1,26 @@
 package noobanidus.mods.lootr.fabric.client.block;
 
-import net.fabricmc.fabric.api.renderer.v1.Renderer;
-import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
-import net.fabricmc.fabric.api.renderer.v1.material.RenderMaterial;
+import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
+import net.fabricmc.fabric.api.client.model.loading.v1.FabricBakedModelManager;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
-import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
-import net.minecraft.client.renderer.block.model.BakedOverrides;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.block.model.TextureSlots;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class BarrelModel implements UnbakedModel {
@@ -50,8 +48,8 @@ public class BarrelModel implements UnbakedModel {
   }
 
   @Override
-  public BakedModel bake(ModelBaker modelBakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState transform) {
-    return new BakedBarrelModel(modelBakery.bake(opened, transform), modelBakery.bake(unopened, transform), modelBakery.bake(vanilla, transform), modelBakery.bake(old_opened, transform), modelBakery.bake(old_unopened, transform));
+  public BakedModel bake(TextureSlots textureSlots, ModelBaker modelBaker, ModelState modelState, boolean bl, boolean bl2, ItemTransforms itemTransforms) {
+    return new BakedBarrelModel(modelBaker.bake(opened, modelState), modelBaker.bake(unopened, modelState), modelBaker.bake(vanilla, modelState), modelBaker.bake(old_opened, modelState), modelBaker.bake(old_unopened, modelState));
   }
 
   public static class BakedBarrelModel implements BakedModel, FabricBakedModel {
@@ -75,7 +73,7 @@ public class BarrelModel implements UnbakedModel {
     }
 
     @Override
-    public void emitBlockQuads(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context) {
+    public void emitBlockQuads(QuadEmitter emitter, BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, Predicate<@Nullable Direction> cullTest) {
       Object data = blockView.getBlockEntityRenderData(pos);
       BakedModel model = LootrAPI.isOldTextures() ? old_unopened : unopened;
       if (LootrAPI.isVanillaTextures()) {
@@ -84,27 +82,7 @@ public class BarrelModel implements UnbakedModel {
         model = LootrAPI.isOldTextures() ? old_opened : opened;
       }
 
-      if (model != null) {
-        QuadEmitter emitter = context.getEmitter();
-        Renderer renderer = RendererAccess.INSTANCE.getRenderer();
-        if (renderer != null) {
-          RenderMaterial material = renderer.materialById(RenderMaterial.MATERIAL_STANDARD);
-          for (Direction dir : Direction.values()) {
-            for (BakedQuad quad : model.getQuads(state, dir, randomSupplier.get())) {
-              emitter.fromVanilla(quad, material, dir);
-              emitter.emit();
-            }
-          }
-          for (BakedQuad quad : model.getQuads(state, null, randomSupplier.get())) {
-            emitter.fromVanilla(quad, material, null);
-            emitter.emit();
-          }
-        }
-      }
-    }
-
-    @Override
-    public void emitItemQuads(ItemStack stack, Supplier<RandomSource> randomSupplier, RenderContext context) {
+      model.emitBlockQuads(emitter, blockView, state, pos, randomSupplier, cullTest);
     }
 
     @Override
@@ -134,11 +112,6 @@ public class BarrelModel implements UnbakedModel {
     }
 
     @Override
-    public boolean isCustomRenderer() {
-      return true;
-    }
-
-    @Override
     public TextureAtlasSprite getParticleIcon() {
       return this.unopened.getParticleIcon();
     }
@@ -146,11 +119,6 @@ public class BarrelModel implements UnbakedModel {
     @Override
     public ItemTransforms getTransforms() {
       return ItemTransforms.NO_TRANSFORMS;
-    }
-
-    @Override
-    public BakedOverrides overrides() {
-      return BakedOverrides.EMPTY;
     }
   }
 }

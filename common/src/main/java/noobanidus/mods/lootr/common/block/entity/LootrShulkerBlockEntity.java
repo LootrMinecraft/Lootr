@@ -121,13 +121,14 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   public AABB getBoundingBox(BlockState pState) {
-    return Shulker.getProgressAabb(1.0F, pState.getValue(ShulkerBoxBlock.FACING), 0.5F * this.getProgress(1.0F));
+    Vec3 vec3 = new Vec3(0.5, 0.0, 0.5);
+    return Shulker.getProgressAabb(1.0F, pState.getValue(ShulkerBoxBlock.FACING), 0.5F * this.getProgress(1.0F), vec3);
   }
 
   private void moveCollidedEntities(Level pLevel, BlockPos pPos, BlockState pState) {
     if (pState.getBlock() instanceof ShulkerBoxBlock) {
       Direction direction = pState.getValue(ShulkerBoxBlock.FACING);
-      AABB aabb = Shulker.getProgressDeltaAabb(1.0F, direction, this.progressOld, this.progress).move(pPos);
+      AABB aabb = Shulker.getProgressDeltaAabb(1.0F, direction, this.progressOld, this.progress, getBlockPos().getBottomCenter());
       List<Entity> list = pLevel.getEntities(null, aabb);
       for (Entity entity : list) {
         if (entity.getPistonPushReaction() != PushReaction.IGNORE) {
@@ -225,10 +226,9 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   @Override
-  public void saveToItem(ItemStack itemstack, HolderLookup.Provider provider) {
-    savingToItem = true;
-    super.saveToItem(itemstack, provider);
-    savingToItem = false;
+  public void removeComponentsFromTag(CompoundTag compoundTag) {
+    super.removeComponentsFromTag(compoundTag);
+    compoundTag.remove("LootrId");
   }
 
   @Override

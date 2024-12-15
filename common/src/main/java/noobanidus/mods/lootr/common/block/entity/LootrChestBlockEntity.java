@@ -138,10 +138,9 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   }
 
   @Override
-  public void saveToItem(ItemStack itemstack, HolderLookup.Provider provider) {
-    savingToItem = true;
-    super.saveToItem(itemstack, provider);
-    savingToItem = false;
+  public void removeComponentsFromTag(CompoundTag compoundTag) {
+    super.removeComponentsFromTag(compoundTag);
+    compoundTag.remove("LootrId");
   }
 
   @Override

@@ -34,7 +34,6 @@ public class LootrShulkerBlockRenderer implements BlockEntityRenderer<LootrShulk
   public static final Material MATERIAL3 = new Material(Sheets.SHULKER_SHEET, LootrAPI.rl("old_shulker"));
   public static final Material MATERIAL4 = new Material(Sheets.SHULKER_SHEET, LootrAPI.rl("old_shulker_opened"));
   private final ShulkerBoxModel model;
-  private UUID playerId;
 
   public LootrShulkerBlockRenderer(BlockEntityRendererProvider.Context context) {
     this.model = new ShulkerBoxModel(context.bakeLayer(ModelLayers.SHULKER));
@@ -48,9 +47,9 @@ public class LootrShulkerBlockRenderer implements BlockEntityRenderer<LootrShulk
       return MATERIAL2;
     }
     if (blockEntity.hasClientOpened(Minecraft.getInstance().player.getUUID())) {
-      return LootrAPI.isOldTextures() ? MATERIAL3 : MATERIAL;
-    } else {
       return LootrAPI.isOldTextures() ? MATERIAL4 : MATERIAL2;
+    } else {
+      return LootrAPI.isOldTextures() ? MATERIAL3 : MATERIAL;
     }
   }
 
@@ -81,7 +80,7 @@ public class LootrShulkerBlockRenderer implements BlockEntityRenderer<LootrShulk
     poseStack.popPose();
   }
 
-  private static class ShulkerBoxModel extends Model {
+  public static class ShulkerBoxModel extends Model {
     private final ModelPart lid;
 
     public ShulkerBoxModel(ModelPart modelPart) {
@@ -92,6 +91,11 @@ public class LootrShulkerBlockRenderer implements BlockEntityRenderer<LootrShulk
     public void animate(LootrShulkerBlockEntity shulkerBoxBlockEntity, float f) {
       this.lid.setPos(0.0F, 24.0F - shulkerBoxBlockEntity.getProgress(f) * 0.5F * 16.0F, 0.0F);
       this.lid.yRot = 270.0F * shulkerBoxBlockEntity.getProgress(f) * 0.017453292F;
+    }
+
+    public void animate (float f) {
+      this.lid.setPos(0.0f, 24.0f - f * 0.5f * 16.0f, 0.0f);
+      this.lid.yRot = 270.0f * f * (float) (Math.PI/180);
     }
   }
 }

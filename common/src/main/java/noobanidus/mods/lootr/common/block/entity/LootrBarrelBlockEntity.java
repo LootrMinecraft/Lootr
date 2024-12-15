@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Vec3i;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
@@ -23,6 +24,7 @@ import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BarrelBlock;
+import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
@@ -133,10 +135,10 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
   }
 
   @Override
-  public void saveToItem(ItemStack itemstack, HolderLookup.Provider provider) {
-    savingToItem = true;
-    super.saveToItem(itemstack, provider);
-    savingToItem = false;
+  public void removeComponentsFromTag(CompoundTag compoundTag) {
+    super.removeComponentsFromTag(compoundTag);
+    compoundTag.remove("LootrId");
+    // TODO: ???
   }
 
   @Override

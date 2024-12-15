@@ -38,12 +38,12 @@ public class ClientHandlers {
   public static void handleOpenCart(int entityId) {
     Level level = Minecraft.getInstance().level;
     if (level == null) {
-      LootrAPI.LOG.info("Unable to mark entity with id '" + entityId + "' as opened as level is null.");
+      LootrAPI.LOG.info("Unable to mark entity with id '" + entityId + "' as trapped as level is null.");
       return;
     }
     Entity cart = level.getEntity(entityId);
     if (cart == null) {
-      LootrAPI.LOG.info("Unable to mark entity with id '" + entityId + "' as opened as entity is null.");
+      LootrAPI.LOG.info("Unable to mark entity with id '" + entityId + "' as trapped as entity is null.");
       return;
     }
 
