@@ -1,0 +1,13 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "minecraft:item/chest",
+    "model": {
+      "type": "lootr:chest",
+      "texture": "lootr:chest",
+      "old_texture": "lootr:old_chest",
+      "vanilla_texture": "minecraft:entity/chest/normal",
+      "openness": 0.0
+    }
+  }
+}

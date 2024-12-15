@@ -1,15 +1,15 @@
 package noobanidus.mods.lootr.fabric.client.block;
 
-import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
-import net.fabricmc.fabric.api.client.model.loading.v1.FabricBakedModelManager;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.block.model.TextureSlots;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.*;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelBaker;
+import net.minecraft.client.resources.model.ModelState;
+import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -24,32 +24,48 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class BarrelModel implements UnbakedModel {
-  private final ResourceLocation opened;
-  private final ResourceLocation unopened;
-  private final ResourceLocation vanilla;
-  private final ResourceLocation old_opened;
-  private final ResourceLocation old_unopened;
+  private final ResourceLocation openedLocation;
+  private final ResourceLocation unopenedLocation;
+  private final ResourceLocation vanillaLocation;
+  private final ResourceLocation oldOpenedLocation;
+  private final ResourceLocation oldUnopenedLocation;
+  private final ResourceLocation parentLocation;
+
+  private UnbakedModel opened;
+  private UnbakedModel unopened;
+  private UnbakedModel vanilla;
+  private UnbakedModel old_opened;
+  private UnbakedModel old_unopened;
+  private UnbakedModel parent;
 
   public BarrelModel(ResourceLocation opened, ResourceLocation unopened, ResourceLocation vanilla, ResourceLocation old_opened, ResourceLocation old_unopened) {
-    this.opened = opened;
-    this.unopened = unopened;
-    this.vanilla = vanilla;
-    this.old_opened = old_opened;
-    this.old_unopened = old_unopened;
+    this.openedLocation = opened;
+    this.unopenedLocation = unopened;
+    this.vanillaLocation = vanilla;
+    this.oldOpenedLocation = old_opened;
+    this.oldUnopenedLocation = old_unopened;
+    this.parentLocation = ResourceLocation.withDefaultNamespace("block/block");
   }
 
   @Override
   public void resolveDependencies(Resolver resolver) {
-    resolver.resolve(this.opened);
-    resolver.resolve(this.unopened);
-    resolver.resolve(this.vanilla);
-    resolver.resolve(this.old_opened);
-    resolver.resolve(this.old_unopened);
+    this.opened = resolver.resolve(this.openedLocation);
+    this.unopened = resolver.resolve(this.unopenedLocation);
+    this.vanilla = resolver.resolve(this.vanillaLocation);
+    this.old_opened = resolver.resolve(this.oldOpenedLocation);
+    this.old_unopened = resolver.resolve(this.oldUnopenedLocation);
+    this.parent = resolver.resolve(this.parentLocation);
+  }
+
+  @Nullable
+  @Override
+  public UnbakedModel getParent() {
+    return this.parent;
   }
 
   @Override
   public BakedModel bake(TextureSlots textureSlots, ModelBaker modelBaker, ModelState modelState, boolean bl, boolean bl2, ItemTransforms itemTransforms) {
-    return new BakedBarrelModel(modelBaker.bake(opened, modelState), modelBaker.bake(unopened, modelState), modelBaker.bake(vanilla, modelState), modelBaker.bake(old_opened, modelState), modelBaker.bake(old_unopened, modelState));
+    return new BakedBarrelModel(opened.bake(textureSlots, modelBaker, modelState, bl, bl2, itemTransforms), unopened.bake(textureSlots, modelBaker, modelState, bl, bl2, itemTransforms), vanilla.bake(textureSlots, modelBaker, modelState, bl, bl2, itemTransforms), old_opened.bake(textureSlots, modelBaker, modelState, bl, bl2, itemTransforms), old_unopened.bake(textureSlots, modelBaker, modelState, bl, bl2, itemTransforms));
   }
 
   public static class BakedBarrelModel implements BakedModel, FabricBakedModel {

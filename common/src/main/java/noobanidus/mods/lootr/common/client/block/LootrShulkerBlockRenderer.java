@@ -59,7 +59,7 @@ public class LootrShulkerBlockRenderer implements BlockEntityRenderer<LootrShulk
     if (shulkerBoxBlockEntity.hasLevel()) {
       BlockState blockState = shulkerBoxBlockEntity.getLevel().getBlockState(shulkerBoxBlockEntity.getBlockPos());
       if (blockState.getBlock() instanceof ShulkerBoxBlock) {
-        direction = (Direction)blockState.getValue(ShulkerBoxBlock.FACING);
+        direction = blockState.getValue(ShulkerBoxBlock.FACING);
       }
     }
 

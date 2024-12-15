@@ -1,0 +1,13 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "minecraft:item/shulker_box",
+    "model": {
+      "type": "lootr:shulker",
+      "texture": "lootr:shulker",
+      "old_texture": "lootr:old_shulker",
+      "openness": 0.0,
+      "orientation": "up"
+    }
+  }
+}

@@ -35,6 +35,8 @@ public class BarrelModel implements ExtendedUnbakedModel {
   private final ResourceLocation old_unopened;
   private final StandardModelParameters parameters;
 
+  private UnbakedModel parent;
+
   public BarrelModel(StandardModelParameters parameters, ResourceLocation opened, ResourceLocation unopened, ResourceLocation vanilla, ResourceLocation old_unopened, ResourceLocation old_opened) {
     this.parameters = parameters;
     this.opened = opened;
@@ -90,6 +92,13 @@ public class BarrelModel implements ExtendedUnbakedModel {
     modelGetter.resolve(vanilla);
     modelGetter.resolve(old_opened);
     modelGetter.resolve(old_unopened);
+    this.parent = modelGetter.resolve(parameters.parent());
+  }
+
+  @Nullable
+  @Override
+  public UnbakedModel getParent() {
+    return this.parent;
   }
 
   private static final class BarrelBakedModel implements IDynamicBakedModel {

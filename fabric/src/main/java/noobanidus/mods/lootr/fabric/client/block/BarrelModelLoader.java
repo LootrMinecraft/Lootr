@@ -39,7 +39,7 @@ public class BarrelModelLoader implements ModelLoadingPlugin {
   public void initialize(ModelLoadingPlugin.Context pluginContext) {
     pluginContext.addModels(LOOTR_BARREL_MODEL_UNOPENED, LOOTR_BARREL_MODEL_OPENED);
     pluginContext.modifyModelOnLoad()
-        .register(Event.DEFAULT_PHASE,
+        .register(Event.DEFAULT_PHASE, // TODO: Is this the right phrase?
         new ModelModifier.OnLoad() {
           @Override
           public @Nullable UnbakedModel modifyModelOnLoad(@Nullable UnbakedModel model, Context context) {
