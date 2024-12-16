@@ -307,6 +307,7 @@ public class ConfigManager implements ConfigData {
     return !get().notifications.disable_notifications && (delay == -1 || remaining <= delay);
   }
 
+  // TODO: Why isn't this being used?
   public static boolean shouldPerformPiecewiseCheck () {
     return get().conversion.perform_piecewise_check;
   }
@@ -319,6 +320,7 @@ public class ConfigManager implements ConfigData {
     return get().client.new_textures;
   }
 
+  // TODO: Generify this
   public static BlockState replacement(BlockState original) {
     if (replacements == null) {
       replacements = new HashMap<>();
