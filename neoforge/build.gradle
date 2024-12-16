@@ -58,7 +58,11 @@ processResources {
     inputs.property "version", project.version
 
     filesMatching("META-INF/neoforge.mods.toml") {
-        expand "version": project.version
+        def startVersion = project.property("version_compat_start");
+        def stopVersion = project.property("version_compat_stop");
+        def versionRange = "${startVersion},${stopVersion}"
+
+        expand ("version": project.version, "versionRange": versionRange)
     }
 
     from(project(":common").sourceSets["generated"].resources) {

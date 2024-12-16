@@ -19,7 +19,7 @@ license="https://github.com/noobanidus/Lootr/blob/1.16/LICENSE"
 [[dependencies.lootr]]
     modId="minecraft"
     type="required"
-    versionRange="[1.21,)"
+    versionRange="${versionRange}"
 
  [[dependencies.lootr]]
     modId="neoforge"
