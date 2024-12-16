@@ -116,10 +116,10 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
 
   @Override
   public ClientTextureType getTextureType() {
-    if (ConfigManager.isNewTextures()) {
-      return ClientTextureType.NEW;
-    } else if (ConfigManager.isVanillaTextures()) {
+    if (ConfigManager.isVanillaTextures()) {
       return ClientTextureType.VANILLA;
+    } else if (ConfigManager.isNewTextures()) {
+      return ClientTextureType.NEW;
     } else {
       return ClientTextureType.OLD;
     }
