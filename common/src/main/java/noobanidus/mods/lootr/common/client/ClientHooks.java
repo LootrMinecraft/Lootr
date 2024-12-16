@@ -21,4 +21,11 @@ public class ClientHooks {
     SectionPos pos = SectionPos.of(position);
     Minecraft.getInstance().levelRenderer.setSectionDirty(pos.x(), pos.y(), pos.z());
   }
+
+  public static void refreshSection () {
+    Player player = getPlayer();
+    if (player != null) {
+      clearCache(player.blockPosition());
+    }
+  }
 }

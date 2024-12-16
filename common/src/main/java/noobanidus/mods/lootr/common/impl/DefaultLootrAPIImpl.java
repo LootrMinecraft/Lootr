@@ -21,6 +21,7 @@ import net.minecraft.world.level.levelgen.structure.*;
 import noobanidus.mods.lootr.common.api.ILootrAPI;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.MenuBuilder;
+import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.data.DefaultLootFiller;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.ILootrSavedData;
@@ -340,6 +341,23 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
       if (inventory != null) {
         Containers.dropContents(level, pos, inventory);
       }
+    }
+  }
+
+  @Override
+  public void refreshSections() {
+    MinecraftServer server = getServer();
+    if (server == null) {
+      // Defer to the client
+      return;
+    }
+
+    if (server.isSingleplayer() || !server.isDedicatedServer()) {
+      // Defer to the client
+    }
+
+    for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+      PlatformAPI.refreshPlayerSection(player);
     }
   }
 }

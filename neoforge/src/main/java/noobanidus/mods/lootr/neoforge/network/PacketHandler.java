@@ -7,10 +7,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.neoforge.network.toClient.PacketCloseCart;
-import noobanidus.mods.lootr.neoforge.network.toClient.PacketCloseContainer;
-import noobanidus.mods.lootr.neoforge.network.toClient.PacketOpenCart;
-import noobanidus.mods.lootr.neoforge.network.toClient.PacketOpenContainer;
+import noobanidus.mods.lootr.neoforge.network.toClient.*;
 
 /* Shamelessly crib from Mekanism until it works
  * Original source: https://github.com/mekanism/Mekanism/blob/1.21.x/src/main/java/mekanism/common/network/BasePacketHandler.java
@@ -34,6 +31,7 @@ public class PacketHandler {
     registrar.play(PacketOpenContainer.TYPE, PacketOpenContainer.STREAM_CODEC);
     registrar.play(PacketCloseCart.TYPE, PacketCloseCart.STREAM_CODEC);
     registrar.play(PacketCloseContainer.TYPE, PacketCloseContainer.STREAM_CODEC);
+    registrar.play(PacketRefreshSection.TYPE, PacketRefreshSection.STREAM_CODEC);
   }
 
   protected record PacketRegistrar(PayloadRegistrar registrar, boolean toServer) {

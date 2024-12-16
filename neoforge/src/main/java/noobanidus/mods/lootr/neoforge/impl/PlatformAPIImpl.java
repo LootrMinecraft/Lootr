@@ -13,10 +13,7 @@ import noobanidus.mods.lootr.common.api.IPlatformAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.common.mixins.AccessorBaseContainerBlockEntity;
-import noobanidus.mods.lootr.neoforge.network.toClient.PacketCloseCart;
-import noobanidus.mods.lootr.neoforge.network.toClient.PacketCloseContainer;
-import noobanidus.mods.lootr.neoforge.network.toClient.PacketOpenCart;
-import noobanidus.mods.lootr.neoforge.network.toClient.PacketOpenContainer;
+import noobanidus.mods.lootr.neoforge.network.toClient.*;
 
 public class PlatformAPIImpl implements IPlatformAPI {
   @Override
@@ -82,5 +79,10 @@ public class PlatformAPIImpl implements IPlatformAPI {
   public void copyEntityData(AbstractMinecartContainer entity1, AbstractMinecartContainer entity2) {
     IPlatformAPI.super.copyEntityData(entity1, entity2);
     entity2.getPersistentData().merge(entity1.getPersistentData());
+  }
+
+  @Override
+  public void refreshPlayerSection(ServerPlayer player) {
+    PacketDistributor.sendToPlayer(player, PacketRefreshSection.INSTANCE);
   }
 }

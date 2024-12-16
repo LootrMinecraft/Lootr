@@ -13,10 +13,7 @@ import noobanidus.mods.lootr.common.api.IPlatformAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.common.mixins.AccessorBaseContainerBlockEntity;
-import noobanidus.mods.lootr.fabric.network.to_client.PacketCloseCart;
-import noobanidus.mods.lootr.fabric.network.to_client.PacketCloseContainer;
-import noobanidus.mods.lootr.fabric.network.to_client.PacketOpenCart;
-import noobanidus.mods.lootr.fabric.network.to_client.PacketOpenContainer;
+import noobanidus.mods.lootr.fabric.network.to_client.*;
 
 public class PlatformAPIImpl implements IPlatformAPI {
   @Override
@@ -85,5 +82,10 @@ public class PlatformAPIImpl implements IPlatformAPI {
     if (newBlockEntity instanceof BaseContainerBlockEntity baseContainer) {
       ((AccessorBaseContainerBlockEntity) baseContainer).setLockKey(data.lockCode());
     }
+  }
+
+  @Override
+  public void refreshPlayerSection(ServerPlayer player) {
+    ServerPlayNetworking.send(player, PacketRefreshSection.INSTANCE);
   }
 }

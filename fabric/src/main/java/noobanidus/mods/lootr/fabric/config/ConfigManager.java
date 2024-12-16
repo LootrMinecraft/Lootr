@@ -96,6 +96,7 @@ public class ConfigManager implements ConfigData {
     REFRESH_DIMS = null;
     REFRESH_MODS = null;
     REFRESH_TABLES = null;
+    LootrAPI.refreshSections();
   }
 
   private static Set<String> validateStringList(Collection<String> incomingList, String listKey) {

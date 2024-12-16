@@ -33,4 +33,6 @@ public interface IPlatformAPI {
     entity2.setYHeadRot(entity1.getYHeadRot());
     entity2.setLootTable(entity1.getContainerLootTable(), entity1.getContainerLootTableSeed());
   }
+
+  void refreshPlayerSection (ServerPlayer player);
 }

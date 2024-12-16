@@ -25,6 +25,7 @@ import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
+import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 
@@ -201,6 +202,8 @@ public class ConfigManager {
       REFRESH_DIMS = null;
       REFRESH_MODS = null;
       REFRESH_TABLES = null;
+    } else if (event.getConfig().getType() == ModConfig.Type.CLIENT) {
+      LootrAPI.refreshSections();
     }
   }
 

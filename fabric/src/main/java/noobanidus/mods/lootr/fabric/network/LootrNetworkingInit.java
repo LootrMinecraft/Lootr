@@ -8,10 +8,7 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.common.client.ClientHooks;
-import noobanidus.mods.lootr.fabric.network.to_client.PacketCloseCart;
-import noobanidus.mods.lootr.fabric.network.to_client.PacketCloseContainer;
-import noobanidus.mods.lootr.fabric.network.to_client.PacketOpenCart;
-import noobanidus.mods.lootr.fabric.network.to_client.PacketOpenContainer;
+import noobanidus.mods.lootr.fabric.network.to_client.*;
 
 public class LootrNetworkingInit {
   public static void registerClientNetwork() {
@@ -48,6 +45,15 @@ public class LootrNetworkingInit {
             blockEntity.setClientOpened(true);
             ClientHooks.clearCache(position);
           }
+        }
+      });
+    });
+
+    ClientPlayNetworking.registerGlobalReceiver(PacketRefreshSection.TYPE, (payload, context) -> {
+      context.client().execute(() -> {
+        if (context.client().player != null && context.client().player.level() != null) {
+          BlockPos position = context.client().player.blockPosition();
+          ClientHooks.clearCache(position);
         }
       });
     });

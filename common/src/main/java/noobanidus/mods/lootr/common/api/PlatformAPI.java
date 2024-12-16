@@ -52,4 +52,8 @@ public class PlatformAPI {
   public static void copyEntityData (AbstractMinecartContainer entity1, AbstractMinecartContainer entity2) {
     INSTANCE.copyEntityData(entity1, entity2);
   }
+
+  public static void refreshPlayerSection (ServerPlayer player) {
+    INSTANCE.refreshPlayerSection(player);
+  }
 }

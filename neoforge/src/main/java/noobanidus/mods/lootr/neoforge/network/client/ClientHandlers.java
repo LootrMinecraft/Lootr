@@ -72,4 +72,11 @@ public class ClientHandlers {
     }
     ClientHooks.clearCache(pos);
   }
+
+  public static void handleRefresh () {
+    Player player = Minecraft.getInstance().player;
+    if (player != null) {
+      ClientHooks.clearCache(player.blockPosition());
+    }
+  }
 }

@@ -2,6 +2,7 @@ package noobanidus.mods.lootr.common.api;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.core.SectionPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -257,6 +258,8 @@ public interface ILootrAPI {
   boolean isTaggedStructurePresent (ServerLevel level, ChunkPos chunkPos, TagKey<Structure> tag, BlockPos pos);
 
   void playerDestroyed (Level level, Player player, BlockPos pos, @Nullable BlockEntity blockEntity);
+
+  void refreshSections ();
 }
 
 
