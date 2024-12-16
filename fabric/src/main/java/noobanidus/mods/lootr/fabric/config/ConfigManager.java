@@ -26,6 +26,7 @@ import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Config(name = LootrAPI.MODID)
@@ -97,7 +98,7 @@ public class ConfigManager implements ConfigData {
     REFRESH_TABLES = null;
   }
 
-  private static Set<String> validateStringList(List<String> incomingList, String listKey) {
+  private static Set<String> validateStringList(Collection<String> incomingList, String listKey) {
     Set<String> validatedList = new HashSet<>();
     for (String entry : incomingList) {
       if (entry == null || entry.isEmpty()) {
@@ -109,29 +110,40 @@ public class ConfigManager implements ConfigData {
     return validatedList;
   }
 
-  private static Set<ResourceKey<Level>> validateDimensions(List<String> incomingList, String listKey) {
-    Set<ResourceKey<Level>> validatedList = new HashSet<>();
+  private static Set<ResourceKey<Level>> validateDimensions(Collection<String> incomingList, String listKey) {
+    return validateResourceKeyList(incomingList, listKey, o -> ResourceKey.create(Registries.DIMENSION, o));
+  }
+
+  private static <T> Set<ResourceKey<T>> validateResourceKeyList (Collection<String> incomingList, String listKey, Function<ResourceLocation, ResourceKey<T>> builder) {
+    Set<ResourceKey<T>> validatedList = new HashSet<>();
     for (String entry : incomingList) {
       if (entry == null || entry.isEmpty()) {
-        throw new RuntimeException("Error found when validating a configuration list for '" + listKey + "'. One of the entries is null or empty and cannot be converted to a dimension identifier.");
+        throw new RuntimeException("Error found when validating a configuration list for '" + listKey + "'. One of the entries is null or empty and cannot be converted to a ResourceLocation.");
       }
+      ResourceLocation location;
       try {
-        validatedList.add(ResourceKey.create(Registries.DIMENSION, ResourceLocation.withDefaultNamespace(entry)));
+        location = ResourceLocation.parse(entry);
       } catch (Exception e) {
-        throw new RuntimeException("Error found when validating a configuration list for '" + listKey + "'. The value found in the list, '" + entry + "', is not a valid dimension identifier.", e);
+        throw new RuntimeException("Error found when validating a configuration list for '" + listKey + "'. The value found in the list, '" + entry + "', is not a valid ResourceLocation.", e);
+      }
+
+      try {
+        validatedList.add(builder.apply(location));
+      } catch (Exception e) {
+        throw new RuntimeException("Error found when validating a configuration list for '" + listKey + "'. The value found in the list, '" + entry + "', is not valid to create a ResourceKey.", e);
       }
     }
     return validatedList;
   }
 
-  private static Set<ResourceLocation> validateResourceLocationList(List<String> incomingList, String listKey) {
+  private static Set<ResourceLocation> validateResourceLocationList(Collection<String> incomingList, String listKey) {
     Set<ResourceLocation> validatedList = new HashSet<>();
     for (String entry : incomingList) {
       if (entry == null || entry.isEmpty()) {
         throw new RuntimeException("Error found when validating a configuration list for '" + listKey + "'. One of the entries is null or empty and cannot be converted to a ResourceLocation.");
       }
       try {
-        validatedList.add(ResourceLocation.withDefaultNamespace(entry));
+        validatedList.add(ResourceLocation.parse(entry));
       } catch (Exception e) {
         throw new RuntimeException("Error found when validating a configuration list for '" + listKey + "'. The value found in the list, '" + entry + "', is not a valid ResourceLocation.", e);
       }
@@ -145,49 +157,49 @@ public class ConfigManager implements ConfigData {
 
   public static Set<ResourceKey<Level>> getDimensionWhitelist() {
     if (DIM_WHITELIST == null) {
-      DIM_WHITELIST = get().lists.dimension_whitelist.stream().map(o -> ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(o))).collect(Collectors.toSet());
+      DIM_WHITELIST = validateDimensions(get().lists.dimension_whitelist, "dimension_whitelist");
     }
     return DIM_WHITELIST;
   }
 
   public static Set<String> getDimensionModidWhitelist() {
     if (MODID_DIM_WHITELIST == null) {
-      MODID_DIM_WHITELIST = get().lists.modid_dimension_whitelist.stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
+      MODID_DIM_WHITELIST = validateStringList(get().lists.modid_dimension_whitelist, "modid_dimension_whitelist");
     }
     return MODID_DIM_WHITELIST;
   }
 
   public static Set<ResourceKey<Level>> getDimensionBlacklist() {
     if (DIM_BLACKLIST == null) {
-      DIM_BLACKLIST = get().lists.dimension_blacklist.stream().map(o -> ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(o))).collect(Collectors.toSet());
+      DIM_BLACKLIST = validateDimensions(get().lists.dimension_blacklist, "dimension_blacklist");
     }
     return DIM_BLACKLIST;
   }
 
   public static Set<String> getDimensionModidBlacklist() {
     if (MODID_DIM_BLACKLIST == null) {
-      MODID_DIM_BLACKLIST = get().lists.modid_dimension_blacklist.stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
+      MODID_DIM_BLACKLIST = validateStringList(get().lists.modid_dimension_blacklist, "modid_dimension_blacklist");
     }
     return MODID_DIM_BLACKLIST;
   }
 
   public static Set<ResourceKey<Level>> getDecayDimensions() {
     if (DECAY_DIMS == null) {
-      DECAY_DIMS = get().decay.decay_dimensions.stream().map(o -> ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(o))).collect(Collectors.toSet());
+      DECAY_DIMS = validateDimensions(get().decay.decay_dimensions, "decay_dimensions");
     }
     return DECAY_DIMS;
   }
 
   public static Set<ResourceKey<Level>> getRefreshDimensions() {
     if (REFRESH_DIMS == null) {
-      REFRESH_DIMS = get().refresh.refresh_dimensions.stream().map(o -> ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(o))).collect(Collectors.toSet());
+      REFRESH_DIMS = validateDimensions(get().refresh.refresh_dimensions, "refresh_dimensions");
     }
     return REFRESH_DIMS;
   }
 
   public static Set<ResourceKey<LootTable>> getLootBlacklist() {
     if (LOOT_BLACKLIST == null) {
-      LOOT_BLACKLIST = get().lists.loot_table_blacklist.stream().map(o -> ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse(o))).collect(Collectors.toSet());
+      LOOT_BLACKLIST = validateResourceKeyList(get().lists.loot_table_blacklist, "loot_blacklist", o -> ResourceKey.create(Registries.LOOT_TABLE, o));
       // Fixes for #79 and #74
       PROBLEMATIC_CHESTS.forEach(o -> LOOT_BLACKLIST.add(ResourceKey.create(Registries.LOOT_TABLE, o)));
     }
@@ -196,7 +208,7 @@ public class ConfigManager implements ConfigData {
 
   public static Set<String> getLootModidsBlacklist() {
     if (LOOT_MODIDS == null) {
-      LOOT_MODIDS = get().lists.loot_modid_blacklist.stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
+      LOOT_MODIDS = validateStringList(get().lists.loot_modid_blacklist, "loot_modid_blacklist");
     }
     return LOOT_MODIDS;
   }
@@ -211,28 +223,28 @@ public class ConfigManager implements ConfigData {
 
   public static Set<ResourceKey<LootTable>> getDecayingTables() {
     if (DECAY_TABLES == null) {
-      DECAY_TABLES = get().decay.decay_loot_tables.stream().map(o -> ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse(o))).collect(Collectors.toSet());
+      DECAY_TABLES = validateResourceKeyList(get().decay.decay_loot_tables, "decay_loot_tables", o -> ResourceKey.create(Registries.LOOT_TABLE, o));
     }
     return DECAY_TABLES;
   }
 
   public static Set<String> getDecayMods() {
     if (DECAY_MODS == null) {
-      DECAY_MODS = get().decay.decay_modids.stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
+      DECAY_MODS = validateStringList(get().decay.decay_modids, "decay_mods");
     }
     return DECAY_MODS;
   }
 
   public static Set<ResourceKey<LootTable>> getRefreshingTables() {
     if (REFRESH_TABLES == null) {
-      REFRESH_TABLES = get().refresh.refresh_loot_tables.stream().map(o -> ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse(o))).collect(Collectors.toSet());
+      REFRESH_TABLES = validateResourceKeyList(get().refresh.refresh_loot_tables, "refresh_tables", o -> ResourceKey.create(Registries.LOOT_TABLE, o));
     }
     return REFRESH_TABLES;
   }
 
   public static Set<String> getRefreshMods() {
     if (REFRESH_MODS == null) {
-      REFRESH_MODS = get().refresh.refresh_modids.stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
+      REFRESH_MODS = validateStringList(get().refresh.refresh_modids, "refresh_modids");
     }
     return REFRESH_MODS;
   }
