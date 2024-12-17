@@ -47,7 +47,6 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
     if (pBlockEntity.getAnimationStatus() != ShulkerBoxBlockEntity.AnimationStatus.CLOSED) {
       return true;
     } else {
-      // TODO: Check this
       AABB aabb = Shulker.getProgressDeltaAabb(1.0f, pState.getValue(FACING), 0.0F, 0.5F, pPos.getBottomCenter()).deflate(1.0E-6D);
       return pLevel.noCollision(aabb);
     }

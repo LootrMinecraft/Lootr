@@ -60,7 +60,6 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   private ShulkerBoxBlockEntity.AnimationStatus animationStatus = ShulkerBoxBlockEntity.AnimationStatus.CLOSED;
   private float progress;
   private float progressOld;
-  private boolean savingToItem = false;
 
   public LootrShulkerBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
     super(LootrRegistry.getShulkerBlockEntity(), pWorldPosition, pBlockState);
@@ -230,7 +229,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   protected void saveAdditional(CompoundTag compound, HolderLookup.Provider provider) {
     super.saveAdditional(compound, provider);
     this.trySaveLootTable(compound);
-    if (!LootrAPI.shouldDiscard() && !savingToItem) {
+    if (!LootrAPI.shouldDiscard()) {
       compound.putUUID("LootrId", getInfoUUID());
     }
   }

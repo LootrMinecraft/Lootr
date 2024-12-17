@@ -73,7 +73,6 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
     }
   };
   protected boolean clientOpened;
-  private boolean savingToItem = false;
 
   protected LootrChestBlockEntity(BlockEntityType<?> p_155327_, BlockPos p_155328_, BlockState p_155329_) {
     super(p_155327_, p_155328_, p_155329_);
@@ -147,7 +146,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   protected void saveAdditional(CompoundTag compound, HolderLookup.Provider provider) {
     super.saveAdditional(compound, provider);
     this.trySaveLootTable(compound);
-    if (!LootrAPI.shouldDiscard() && !savingToItem) {
+    if (!LootrAPI.shouldDiscard()) {
       compound.putUUID("LootrId", getInfoUUID());
     }
   }

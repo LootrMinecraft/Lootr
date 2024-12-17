@@ -76,7 +76,6 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
     }
   };
   protected boolean clientOpened = false;
-  private boolean savingToItem = false;
 
   public LootrBarrelBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
     super(LootrRegistry.getBarrelBlockEntity(), pWorldPosition, pBlockState);
@@ -138,14 +137,13 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
   public void removeComponentsFromTag(CompoundTag compoundTag) {
     super.removeComponentsFromTag(compoundTag);
     compoundTag.remove("LootrId");
-    // TODO: ???
   }
 
   @Override
   protected void saveAdditional(CompoundTag compound, HolderLookup.Provider provider) {
     super.saveAdditional(compound, provider);
     this.trySaveLootTable(compound);
-    if (!LootrAPI.shouldDiscard() && !savingToItem) {
+    if (!LootrAPI.shouldDiscard()) {
       compound.putUUID("LootrId", getInfoUUID());
     }
   }
