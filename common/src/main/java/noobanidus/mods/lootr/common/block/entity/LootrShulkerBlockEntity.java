@@ -72,11 +72,6 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
     this.updateAnimation(level, pos, state);
   }
 
-  @Override
-  public void manuallySetLootTable(ResourceKey<LootTable> table, long seed) {
-    setLootTable(table, seed);
-  }
-
   private static void doNeighborUpdates(Level pLevel, BlockPos pPos, BlockState pState) {
     pState.updateNeighbourShapes(pLevel, pPos, 3);
     pLevel.updateNeighborsAt(pPos, pState.getBlock());

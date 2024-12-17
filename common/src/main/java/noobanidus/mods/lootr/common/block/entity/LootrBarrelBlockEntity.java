@@ -293,11 +293,6 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
   }
 
   @Override
-  public void manuallySetLootTable(ResourceKey<LootTable> table, long seed) {
-    setLootTable(table, seed);
-  }
-
-  @Override
   public String getInfoKey() {
     if (cachedId == null) {
       cachedId = ILootrInfo.generateInfoKey(getInfoUUID());
