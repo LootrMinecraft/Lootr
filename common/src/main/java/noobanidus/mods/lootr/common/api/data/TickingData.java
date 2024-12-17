@@ -89,13 +89,4 @@ public class TickingData extends SavedData {
     pCompound.put("result", decayList);
     return pCompound;
   }
-
-  // TODO: This needs to become a mixin
-/*  @Override
-  public void save(File pFile, HolderLookup.Provider provider) {
-    if (isDirty()) {
-      pFile.getParentFile().mkdirs();
-    }
-    super.save(pFile, provider);
-  }*/
 }
