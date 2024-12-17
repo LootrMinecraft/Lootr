@@ -86,7 +86,6 @@ subprojects {
             type = STABLE
             changelog = changelogText
 
-            // TODO
             displayName = "lootr-${name}-${rootProject.minecraft_version}-${rootProject.mod_version}"
             version = "${rootProject.mod_version}"
             modLoaders.add(name)
