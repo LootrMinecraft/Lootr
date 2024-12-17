@@ -9,18 +9,22 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.block.state.properties.Property;
+import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class Replacements {
   // TODO: This needs to be cleared whenever tags are refreshed
+  private static Set<Block> ignore = null;
   private static Map<Block, Block> replacements = null;
 
   public static void clearReplacements() {
     replacements = null;
+    ignore = null;
   }
 
   public static BlockState replacement(BlockState original) {
@@ -32,6 +36,10 @@ public class Replacements {
       return null;
     }
 
+    if (ignore.contains(original.getBlock())) {
+      return null;
+    }
+
     if (replacements == null) {
       replacements = new HashMap<>();
     }
@@ -39,6 +47,9 @@ public class Replacements {
     if (replacements.get(original.getBlock()) == null && original.is(LootrTags.Blocks.CONVERT_BLOCK)) {
       if (original.getBlock() instanceof EntityBlock entityBlock) {
         BlockEntity be = entityBlock.newBlockEntity(BlockPos.ZERO, original);
+        if (LootrAPI.resolveBlockEntity(be) != null) {
+          ignore.add(original.getBlock());
+        }
         if (be instanceof RandomizableContainerBlockEntity) {
           if (original.is(LootrTags.Blocks.CONVERT_TRAPPED_CHESTS)) {
             replacements.put(original.getBlock(), LootrRegistry.getTrappedChestBlock());
@@ -64,6 +75,8 @@ public class Replacements {
       }
       return state;
     }
+
+    ignore.add(original.getBlock());
 
     return null;
   }
