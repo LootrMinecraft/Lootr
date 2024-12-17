@@ -356,9 +356,9 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
     }
 
     // TODO: This honestly isn't even required because there's no server-side method to control the configuration however there may be a requirement in the future.
-    for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+/*    for (ServerPlayer player : server.getPlayerList().getPlayers()) {
       PlatformAPI.refreshPlayerSection(player);
-    }
+    }*/
   }
 
   @Override
