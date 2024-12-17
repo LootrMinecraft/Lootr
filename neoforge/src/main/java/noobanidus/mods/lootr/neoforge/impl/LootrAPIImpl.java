@@ -19,6 +19,7 @@ import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.common.api.client.ClientTextureType;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
+import noobanidus.mods.lootr.common.config.Replacements;
 import noobanidus.mods.lootr.common.impl.DefaultLootrAPIImpl;
 import noobanidus.mods.lootr.neoforge.config.ConfigManager;
 import noobanidus.mods.lootr.neoforge.event.HandleChunk;
@@ -343,12 +344,6 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   @Override
   public boolean performPiecewiseCheck() {
     return ConfigManager.shouldPerformPiecewiseCheck();
-  }
-
-  @Override
-  @Nullable
-  public BlockState replacementBlockState(BlockState original) {
-    return ConfigManager.replacement(original);
   }
 
   @Override

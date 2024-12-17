@@ -1,22 +1,11 @@
 package noobanidus.mods.lootr.neoforge.config;
 
-import com.electronwill.nightconfig.core.file.CommentedFileConfig;
-import com.electronwill.nightconfig.core.io.WritingMode;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.ChestBlock;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.ChestType;
-import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -25,15 +14,12 @@ import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
-import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
-import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.config.ConfigManagerBase;
+import noobanidus.mods.lootr.common.config.Replacements;
 
-import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 @EventBusSubscriber(modid = LootrAPI.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class ConfigManager extends ConfigManagerBase {
@@ -102,8 +88,6 @@ public class ConfigManager extends ConfigManagerBase {
   private static Set<ResourceKey<Level>> REFRESH_DIMS = null;
   private static Set<ResourceKey<LootTable>> LOOT_BLACKLIST = null;
   private static Set<String> LOOT_MODIDS = null;
-  // TODO: This needs to be cleared whenever tags are refreshed
-  private static Map<Block, Block> replacements = null;
 
   static {
     COMMON_BUILDER.push("conversion").comment("configuration options for the conversion of chests");
@@ -183,7 +167,7 @@ public class ConfigManager extends ConfigManagerBase {
 
   public static void configEvent(ModConfigEvent event) {
     if (event.getConfig().getType() == ModConfig.Type.COMMON) {
-      replacements = null;
+      Replacements.clearReplacements();
       MODID_DIM_WHITELIST = null;
       MODID_DIM_BLACKLIST = null;
       DIM_WHITELIST = null;
@@ -367,60 +351,5 @@ public class ConfigManager extends ConfigManagerBase {
 
   public static boolean shouldPerformPiecewiseCheck () {
     return PERFORM_PIECEWISE_CHECK.get();
-  }
-
-  public static BlockState replacement(BlockState original) {
-    if (original.is(LootrTags.Blocks.CONVERT_BLACKLIST)) {
-      return null;
-    }
-
-    if (original.is(LootrTags.Blocks.CONTAINERS)) {
-      return null;
-    }
-
-    if (replacements == null) {
-      replacements = new HashMap<>();
-    }
-
-    if (replacements.get(original.getBlock()) == null && original.is(LootrTags.Blocks.CONVERT_BLOCK)) {
-      if (original.getBlock() instanceof EntityBlock entityBlock) {
-        BlockEntity be = entityBlock.newBlockEntity(BlockPos.ZERO, original);
-        if (be instanceof RandomizableContainerBlockEntity) {
-          if (original.is(LootrTags.Blocks.CONVERT_TRAPPED_CHESTS)) {
-            replacements.put(original.getBlock(), LootrRegistry.getTrappedChestBlock());
-          } else if (original.is(LootrTags.Blocks.CONVERT_BARRELS)) {
-            replacements.put(original.getBlock(), LootrRegistry.getBarrelBlock());
-          } else if (original.is(LootrTags.Blocks.CONVERT_CHESTS)) {
-            replacements.put(original.getBlock(), LootrRegistry.getChestBlock());
-          } else if (original.is(LootrTags.Blocks.CONVERT_SHULKERS)) {
-            replacements.put(original.getBlock(), LootrRegistry.getShulkerBlock());
-          }
-        }
-      }
-    }
-
-    Block replacement = replacements.get(original.getBlock());
-
-    if (replacement != null) {
-      BlockState state = replacement.defaultBlockState();
-      for (Property<?> prop : original.getProperties()) {
-        if (state.hasProperty(prop)) {
-          state = safeReplace(state, original, prop);
-        }
-      }
-      return state;
-    }
-
-    return null;
-  }
-
-  private static <V extends Comparable<V>> BlockState safeReplace(BlockState state, BlockState original, Property<V> property) {
-    if (property == ChestBlock.TYPE && state.hasProperty(property)) {
-      return state.setValue(ChestBlock.TYPE, ChestType.SINGLE);
-    }
-    if (original.hasProperty(property) && state.hasProperty(property)) {
-      return state.setValue(property, original.getValue(property));
-    }
-    return state;
   }
 }

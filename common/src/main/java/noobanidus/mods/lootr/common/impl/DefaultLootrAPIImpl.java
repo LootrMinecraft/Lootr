@@ -17,6 +17,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.*;
 import noobanidus.mods.lootr.common.api.ILootrAPI;
 import noobanidus.mods.lootr.common.api.LootrAPI;
@@ -30,6 +31,7 @@ import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.common.config.Replacements;
 import noobanidus.mods.lootr.common.data.DataStorage;
 import org.jetbrains.annotations.Nullable;
 
@@ -359,5 +361,11 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
     for (ServerPlayer player : server.getPlayerList().getPlayers()) {
       PlatformAPI.refreshPlayerSection(player);
     }
+  }
+
+  @Override
+  @Nullable
+  public BlockState replacementBlockState(BlockState original) {
+    return Replacements.replacement(original);
   }
 }

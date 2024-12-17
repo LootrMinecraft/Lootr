@@ -4,31 +4,20 @@ import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.ChestBlock;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.ChestType;
-import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
-import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.config.ConfigManagerBase;
+import noobanidus.mods.lootr.common.config.Replacements;
 
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Config(name = LootrAPI.MODID)
 public class ConfigManager extends ConfigManagerBase implements ConfigData {
@@ -59,10 +48,7 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
   @ConfigEntry.Gui.Excluded
   private static Set<ResourceKey<LootTable>> LOOT_BLACKLIST = null;
   @ConfigEntry.Gui.Excluded
-  private static Map<Block, Block> replacements = null;
-  @ConfigEntry.Gui.Excluded
   private static Set<String> LOOT_MODIDS = null;
-
 
   @ConfigEntry.Gui.CollapsibleObject
   public Debug debug = new Debug();
@@ -84,7 +70,7 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
   public Client client = new Client();
 
   public static void reset() {
-    replacements = null;
+    Replacements.clearReplacements();
     MODID_DIM_WHITELIST = null;
     MODID_DIM_BLACKLIST = null;
     DIM_WHITELIST = null;
@@ -267,57 +253,6 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
 
   public static boolean isNewTextures () {
     return get().client.new_textures;
-  }
-
-  // TODO: Generify this
-  public static BlockState replacement(BlockState original) {
-    if (replacements == null) {
-      replacements = new HashMap<>();
-    }
-
-    Block replacement = replacements.get(original.getBlock());
-    if (replacement == null && original.is(LootrTags.Blocks.CONVERT_BLOCK)) {
-      if (original.getBlock() instanceof EntityBlock entityBlock) {
-        BlockEntity be = entityBlock.newBlockEntity(BlockPos.ZERO, original);
-        if (be instanceof RandomizableContainerBlockEntity) {
-          if (original.is(LootrTags.Blocks.CONVERT_TRAPPED_CHESTS)) {
-            replacements.put(original.getBlock(), LootrRegistry.getTrappedChestBlock());
-          } else if (original.is(LootrTags.Blocks.CONVERT_BARRELS)) {
-            replacements.put(original.getBlock(), LootrRegistry.getBarrelBlock());
-          } else if (original.is(LootrTags.Blocks.CONVERT_CHESTS)) {
-            replacements.put(original.getBlock(), LootrRegistry.getChestBlock());
-          } else if (original.is(LootrTags.Blocks.CONVERT_SHULKERS)) {
-            replacements.put(original.getBlock(), LootrRegistry.getShulkerBlock());
-          }
-        }
-      }
-      replacement = replacements.get(original.getBlock());
-    }
-
-    if (replacement != null) {
-      return copyProperties(replacement.defaultBlockState(), original);
-    }
-
-    return null;
-  }
-
-  private static BlockState copyProperties(BlockState state, BlockState original) {
-    for (Property<?> prop : original.getProperties()) {
-      if (state.hasProperty(prop)) {
-        state = safeReplace(state, original, prop);
-      }
-    }
-    return state;
-  }
-
-  private static <V extends Comparable<V>> BlockState safeReplace(BlockState state, BlockState original, Property<V> property) {
-    if (property == ChestBlock.TYPE && state.hasProperty(property)) {
-      return state.setValue(ChestBlock.TYPE, ChestType.SINGLE);
-    }
-    if (original.hasProperty(property) && state.hasProperty(property)) {
-      return state.setValue(property, original.getValue(property));
-    }
-    return state;
   }
 
   public static class Debug {

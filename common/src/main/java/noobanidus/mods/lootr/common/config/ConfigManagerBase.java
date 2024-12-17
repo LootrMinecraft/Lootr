@@ -6,9 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
 public class ConfigManagerBase {
