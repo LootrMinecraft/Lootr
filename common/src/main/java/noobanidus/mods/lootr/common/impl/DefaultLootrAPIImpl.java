@@ -31,6 +31,7 @@ import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.common.client.ClientHooks;
 import noobanidus.mods.lootr.common.config.Replacements;
 import noobanidus.mods.lootr.common.data.DataStorage;
 import org.jetbrains.annotations.Nullable;
@@ -349,15 +350,12 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   @Override
   public void refreshSections() {
     MinecraftServer server = getServer();
-    if (server == null) {
-      // Defer to the client
+    if (server == null || server.isSingleplayer() || !server.isDedicatedServer()) {
+      ClientHooks.refreshSection();
       return;
     }
 
-    if (server.isSingleplayer() || !server.isDedicatedServer()) {
-      // Defer to the client
-    }
-
+    // TODO: This honestly isn't even required because there's no server-side method to control the configuration however there may be a requirement in the future.
     for (ServerPlayer player : server.getPlayerList().getPlayers()) {
       PlatformAPI.refreshPlayerSection(player);
     }
