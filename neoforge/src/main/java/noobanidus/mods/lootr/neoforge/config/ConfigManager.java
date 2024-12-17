@@ -28,6 +28,7 @@ import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.common.config.ConfigManagerBase;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -35,7 +36,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @EventBusSubscriber(modid = LootrAPI.MODID, bus = EventBusSubscriber.Bus.MOD)
-public class ConfigManager {
+public class ConfigManager extends ConfigManagerBase {
   public static final ModConfigSpec.BooleanValue REPORT_UNRESOLVED_TABLES;
   public static final ModConfigSpec.BooleanValue RANDOMISE_SEED;
   public static final ModConfigSpec.BooleanValue DISABLE;
@@ -52,6 +53,7 @@ public class ConfigManager {
   public static final ModConfigSpec.ConfigValue<List<? extends String>> DIMENSION_WHITELIST;
   public static final ModConfigSpec.ConfigValue<List<? extends String>> DIMENSION_BLACKLIST;
   public static final ModConfigSpec.ConfigValue<List<? extends String>> LOOT_TABLE_BLACKLIST;
+  public static final ModConfigSpec.ConfigValue<List<? extends String>> PROBLEMATIC_LOOT_TABLES;
   public static final ModConfigSpec.ConfigValue<List<? extends String>> LOOT_MODID_BLACKLIST;
   public static final ModConfigSpec.ConfigValue<List<? extends String>> MODID_DIMENSION_WHITELIST;
   public static final ModConfigSpec.ConfigValue<List<? extends String>> MODID_DIMENSION_BLACKLIST;
@@ -84,8 +86,6 @@ public class ConfigManager {
   public static final ModConfigSpec.BooleanValue NEW_TEXTURES;
   private static final ModConfigSpec.Builder COMMON_BUILDER = new ModConfigSpec.Builder();
   private static final ModConfigSpec.Builder CLIENT_BUILDER = new ModConfigSpec.Builder();
-
-  private static final List<ResourceLocation> PROBLEMATIC_CHESTS = Arrays.asList(LootrAPI.rl("twilightforest", "structures/stronghold_boss"), LootrAPI.rl("atum", "chests/pharaoh"));
   public static ModConfigSpec COMMON_CONFIG;
   public static ModConfigSpec CLIENT_CONFIG;
 
@@ -126,6 +126,7 @@ public class ConfigManager {
     MODID_DIMENSION_WHITELIST = COMMON_BUILDER.comment("list of dimensions by modid that loot chest should be replaced in (default: blank, allowing all modids, format e.g., [\"minecraft", "othermod\"])").defineList("modid_dimension_whitelist", empty, modidValidator);
     LOOT_TABLE_BLACKLIST = COMMON_BUILDER.comment("list of loot tables which shouldn't be converted (in the format of [\"modid:loot_table\", \"othermodid:other_loot_table\"])").defineList("loot_table_blacklist", empty, validator);
     LOOT_MODID_BLACKLIST = COMMON_BUILDER.comment("list of modids whose loot tables shouldn't be converted (in the format of [\"modid\", \"other_modid\"])").defineList("loot_modid_blacklist", empty, modidValidator);
+    PROBLEMATIC_LOOT_TABLES = COMMON_BUILDER.comment("list of loot tables whose conversion causes problems (in the same format as `loot_table_tlacklist`)").defineList("problematic_loot_tables", LootrAPI.PROBLEMATIC_CHESTS.stream().map(ResourceLocation::toString).toList(), validator);
     COMMON_BUILDER.pop();
     COMMON_BUILDER.push("breaking").comment("configuration options for breaking containers");
     DISABLE_BREAK = COMMON_BUILDER.comment("prevent the destruction of Lootr chests except while sneaking in creative mode").define("disable_break", false);
@@ -149,7 +150,6 @@ public class ConfigManager {
     DECAY_LOOT_TABLES = COMMON_BUILDER.comment("list of loot tables which will decay (default blank, meaning no chests decay, in the format of (in the format of [\"modid:loot_table\", \"othermodid:other_loot_table\"])").defineList("decay_loot_tables", empty, validator);
     DECAY_MODIDS = COMMON_BUILDER.comment("list of mod IDs whose loot tables will decay (default blank, meaning no chests decay, in the format [\"modid\", \"othermodid\"])").defineList("decay_modids", empty, o -> o instanceof String);
     DECAY_DIMENSIONS = COMMON_BUILDER.comment("list of dimensions where loot chests should automatically decay (default: blank, e.g., [\"minecraft:the_nether\", \"minecraft:the_end\"])").defineList("decay_dimensions", empty, validator);
-    //DECAY_STRUCTURES = COMMON_BUILDER.comment("list of structures in which loot chests should automatically decay (in the format of [\"modid:structure_name\", \"modid:other_structure_name\"])").defineList("decay_structures", empty, validator);
     PERFORM_DECAY_WHILE_TICKING = COMMON_BUILDER.comment("containers that have already been marked as decaying will be decayed during level tick as well as when next trapped").define("perform_decay_while_ticking", true);
     START_DECAY_WHILE_TICKING = COMMON_BUILDER.comment("containers that have not yet been marked as decaying will be marked for decay during level tick as well as when next trapped").define("start_decay_while_ticking", false);
     DECAY_ALL = COMMON_BUILDER.comment("overriding decay_loot_tables, decay_modids and decay_dimensions: all chests will decay after being trapped for the first time").define("decay_all", false);
@@ -159,7 +159,6 @@ public class ConfigManager {
     REFRESH_LOOT_TABLES = COMMON_BUILDER.comment("list of loot tables which will refresh (default blank, meaning no chests refresh, in the format of [\"modid:loot_table\", \"othermodid:loot_table\"])").defineList("refresh_loot_tables", empty, validator);
     REFRESH_MODIDS = COMMON_BUILDER.comment("list of mod IDs whose loot tables will refresh (default blank, meaning no chests refresh, in the format of [\"modid\", \"othermodid\"])").defineList("refresh_modids", empty, o -> o instanceof String);
     REFRESH_DIMENSIONS = COMMON_BUILDER.comment("list of dimensions where loot chests should automatically refresh (default: blank, e.g., [\"minecraft:overworld\", \"othermod:otherdimension\"])").defineList("refresh_dimensions", empty, validator);
-    //REFRESH_STRUCTURES = COMMON_BUILDER.comment("list of structures in which loot chests should automatically refresh (in the format of [\"modid:structure_name\", \"othermodid:other_structure_name\"])").defineList("refresh_structures", empty, validator);
     PERFORM_REFRESH_WHILE_TICKING = COMMON_BUILDER.comment("containers that have already been marked as refreshing will be refreshed during level tick as well as when next trapped").define("perform_refresh_while_ticking", true);
     START_REFRESH_WHILE_TICKING = COMMON_BUILDER.comment("containers that have not yet been marked as refreshing will be marked for refresh during level tick as well as when next trapped").define("start_refresh_while_ticking", true);
     REFRESH_ALL = COMMON_BUILDER.comment("overriding refresh_loot_tables, refresh_modids and refresh_dimensions: all chests will refresh after being trapped for the first time").define("refresh_all", false);
@@ -170,11 +169,6 @@ public class ConfigManager {
     NEW_TEXTURES = CLIENT_BUILDER.comment("set to true to use the new Lootr textures").define("new_textures", true);
     CLIENT_BUILDER.pop();
     CLIENT_CONFIG = CLIENT_BUILDER.build();
-  }
-
-  public static void loadConfig(ModConfigSpec spec, Path path) {
-    CommentedFileConfig configData = CommentedFileConfig.builder(path).sync().autosave().writingMode(WritingMode.REPLACE).build();
-    configData.load();
   }
 
   @SubscribeEvent
@@ -209,58 +203,62 @@ public class ConfigManager {
 
   public static Set<ResourceKey<Level>> getDimensionWhitelist() {
     if (DIM_WHITELIST == null) {
-      DIM_WHITELIST = DIMENSION_WHITELIST.get().stream().map(o -> ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(o))).collect(Collectors.toSet());
+      DIM_WHITELIST = validateDimensions(DIMENSION_WHITELIST.get(), "dimension_whitelist");
     }
     return DIM_WHITELIST;
   }
 
   public static Set<String> getDimensionModidWhitelist() {
     if (MODID_DIM_WHITELIST == null) {
-      MODID_DIM_WHITELIST = MODID_DIMENSION_WHITELIST.get().stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
+      MODID_DIM_WHITELIST = validateStringList(MODID_DIMENSION_WHITELIST.get(), "modid_dimension_whitelist");
     }
     return MODID_DIM_WHITELIST;
   }
 
   public static Set<ResourceKey<Level>> getDimensionBlacklist() {
     if (DIM_BLACKLIST == null) {
-      DIM_BLACKLIST = DIMENSION_BLACKLIST.get().stream().map(o -> ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(o))).collect(Collectors.toSet());
+      DIM_BLACKLIST = validateDimensions(DIMENSION_BLACKLIST.get(), "dimension_blacklist");
     }
     return DIM_BLACKLIST;
   }
 
   public static Set<String> getDimensionModidBlacklist() {
     if (MODID_DIM_BLACKLIST == null) {
-      MODID_DIM_BLACKLIST = MODID_DIMENSION_BLACKLIST.get().stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
+      MODID_DIM_BLACKLIST = validateStringList(MODID_DIMENSION_BLACKLIST.get(), "modid_dimension_blacklist");
     }
     return MODID_DIM_BLACKLIST;
   }
 
   public static Set<ResourceKey<Level>> getDecayDimensions() {
     if (DECAY_DIMS == null) {
-      DECAY_DIMS = DECAY_DIMENSIONS.get().stream().map(o -> ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(o))).collect(Collectors.toSet());
+      DECAY_DIMS = validateDimensions(DECAY_DIMENSIONS.get(), "decay_dimensions");
     }
     return DECAY_DIMS;
   }
 
   public static Set<ResourceKey<Level>> getRefreshDimensions() {
     if (REFRESH_DIMS == null) {
-      REFRESH_DIMS = REFRESH_DIMENSIONS.get().stream().map(o -> ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(o))).collect(Collectors.toSet());
+      REFRESH_DIMS = validateDimensions(REFRESH_DIMENSIONS.get(), "refresh_dimensions");
     }
     return REFRESH_DIMS;
   }
 
+  private static Set<ResourceKey<LootTable>> getProblematicChests () {
+    return validateResourceKeyList(PROBLEMATIC_LOOT_TABLES.get(), "problematic_loot_tables", o -> ResourceKey.create(Registries.LOOT_TABLE, o));
+  }
+
   public static Set<ResourceKey<LootTable>> getLootBlacklist() {
     if (LOOT_BLACKLIST == null) {
-      LOOT_BLACKLIST = LOOT_TABLE_BLACKLIST.get().stream().map(o -> ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse(o))).collect(Collectors.toSet());
+      LOOT_BLACKLIST = validateResourceKeyList(LOOT_TABLE_BLACKLIST.get(), "loot_table_blacklist", o -> ResourceKey.create(Registries.LOOT_TABLE, o));
       // Fixes for #79 and #74
-      PROBLEMATIC_CHESTS.forEach(o -> LOOT_BLACKLIST.add(ResourceKey.create(Registries.LOOT_TABLE, o)));
+      LOOT_BLACKLIST.addAll(getProblematicChests());
     }
     return LOOT_BLACKLIST;
   }
 
   public static Set<String> getLootModids() {
     if (LOOT_MODIDS == null) {
-      LOOT_MODIDS = LOOT_MODID_BLACKLIST.get().stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
+      LOOT_MODIDS = validateStringList(LOOT_MODID_BLACKLIST.get(), "loot_modid_blacklist");
     }
     return LOOT_MODIDS;
   }
@@ -275,28 +273,28 @@ public class ConfigManager {
 
   public static Set<ResourceKey<LootTable>> getDecayingTables() {
     if (DECAY_TABLES == null) {
-      DECAY_TABLES = DECAY_LOOT_TABLES.get().stream().map(o -> ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse(o))).collect(Collectors.toSet());
+      DECAY_TABLES = validateResourceKeyList(DECAY_LOOT_TABLES.get(), "decay_loot_tables", o -> ResourceKey.create(Registries.LOOT_TABLE, o));
     }
     return DECAY_TABLES;
   }
 
   public static Set<String> getDecayMods() {
     if (DECAY_MODS == null) {
-      DECAY_MODS = DECAY_MODIDS.get().stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
+      DECAY_MODS = validateStringList(DECAY_MODIDS.get(), "decay_modids");
     }
     return DECAY_MODS;
   }
 
   public static Set<ResourceKey<LootTable>> getRefreshingTables() {
     if (REFRESH_TABLES == null) {
-      REFRESH_TABLES = REFRESH_LOOT_TABLES.get().stream().map(o -> ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse(o))).collect(Collectors.toSet());
+      REFRESH_TABLES = validateResourceKeyList(REFRESH_LOOT_TABLES.get(), "refreshing_loot_tables", o -> ResourceKey.create(Registries.LOOT_TABLE, o));
     }
     return REFRESH_TABLES;
   }
 
   public static Set<String> getRefreshMods() {
     if (REFRESH_MODS == null) {
-      REFRESH_MODS = REFRESH_MODIDS.get().stream().map(o -> o.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
+      REFRESH_MODS = validateStringList(REFRESH_MODIDS.get(), "refresh_modids");
     }
     return REFRESH_MODS;
   }

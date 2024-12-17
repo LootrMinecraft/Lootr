@@ -342,7 +342,7 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
 
   @Override
   public boolean performPiecewiseCheck() {
-    return ConfigManager.PERFORM_PIECEWISE_CHECK.get();
+    return ConfigManager.shouldPerformPiecewiseCheck();
   }
 
   @Override

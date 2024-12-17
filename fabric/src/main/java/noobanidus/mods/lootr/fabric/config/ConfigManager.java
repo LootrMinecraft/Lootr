@@ -24,13 +24,14 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.common.config.ConfigManagerBase;
 
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Config(name = LootrAPI.MODID)
-public class ConfigManager implements ConfigData {
+public class ConfigManager extends ConfigManagerBase implements ConfigData {
   @ConfigEntry.Gui.Excluded
   private static final List<ResourceLocation> PROBLEMATIC_CHESTS = Arrays.asList(ResourceLocation.fromNamespaceAndPath("atum", "chests/pharaoh"), ResourceLocation.fromNamespaceAndPath("twilightforest", "structures/stronghold_boss"));
 
@@ -97,59 +98,6 @@ public class ConfigManager implements ConfigData {
     REFRESH_MODS = null;
     REFRESH_TABLES = null;
     LootrAPI.refreshSections();
-  }
-
-  private static Set<String> validateStringList(Collection<String> incomingList, String listKey) {
-    Set<String> validatedList = new HashSet<>();
-    for (String entry : incomingList) {
-      if (entry == null || entry.isEmpty()) {
-        LootrAPI.LOG.error("Error found when validating a configuration list for '" + listKey + "'. One of the entries is null or empty and cannot be converted to a String.");
-        continue;
-      }
-      validatedList.add(entry);
-    }
-    return validatedList;
-  }
-
-  private static Set<ResourceKey<Level>> validateDimensions(Collection<String> incomingList, String listKey) {
-    return validateResourceKeyList(incomingList, listKey, o -> ResourceKey.create(Registries.DIMENSION, o));
-  }
-
-  private static <T> Set<ResourceKey<T>> validateResourceKeyList (Collection<String> incomingList, String listKey, Function<ResourceLocation, ResourceKey<T>> builder) {
-    Set<ResourceKey<T>> validatedList = new HashSet<>();
-    for (String entry : incomingList) {
-      if (entry == null || entry.isEmpty()) {
-        throw new RuntimeException("Error found when validating a configuration list for '" + listKey + "'. One of the entries is null or empty and cannot be converted to a ResourceLocation.");
-      }
-      ResourceLocation location;
-      try {
-        location = ResourceLocation.parse(entry);
-      } catch (Exception e) {
-        throw new RuntimeException("Error found when validating a configuration list for '" + listKey + "'. The value found in the list, '" + entry + "', is not a valid ResourceLocation.", e);
-      }
-
-      try {
-        validatedList.add(builder.apply(location));
-      } catch (Exception e) {
-        throw new RuntimeException("Error found when validating a configuration list for '" + listKey + "'. The value found in the list, '" + entry + "', is not valid to create a ResourceKey.", e);
-      }
-    }
-    return validatedList;
-  }
-
-  private static Set<ResourceLocation> validateResourceLocationList(Collection<String> incomingList, String listKey) {
-    Set<ResourceLocation> validatedList = new HashSet<>();
-    for (String entry : incomingList) {
-      if (entry == null || entry.isEmpty()) {
-        throw new RuntimeException("Error found when validating a configuration list for '" + listKey + "'. One of the entries is null or empty and cannot be converted to a ResourceLocation.");
-      }
-      try {
-        validatedList.add(ResourceLocation.parse(entry));
-      } catch (Exception e) {
-        throw new RuntimeException("Error found when validating a configuration list for '" + listKey + "'. The value found in the list, '" + entry + "', is not a valid ResourceLocation.", e);
-      }
-    }
-    return validatedList;
   }
 
   public static ConfigManager get() {
