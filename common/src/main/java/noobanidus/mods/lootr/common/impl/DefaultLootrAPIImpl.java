@@ -352,7 +352,6 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
     MinecraftServer server = getServer();
     if (server == null || server.isSingleplayer() || !server.isDedicatedServer()) {
       ClientHooks.refreshSection();
-      return;
     }
 
     // TODO: This honestly isn't even required because there's no server-side method to control the configuration however there may be a requirement in the future.
