@@ -21,14 +21,14 @@ import noobanidus.mods.lootr.common.client.entity.LootrChestCartRenderer;
 import noobanidus.mods.lootr.common.client.special.LootrChestSpecialRenderer;
 import noobanidus.mods.lootr.common.client.special.LootrShulkerSpecialRenderer;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
-import noobanidus.mods.lootr.neoforge.client.block.BarrelModel;
+import noobanidus.mods.lootr.neoforge.client.block.BarrelModelLoader;
 
 @EventBusSubscriber(modid = LootrAPI.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 public class ClientSetup {
 
   @SubscribeEvent
   public static void modelRegister(ModelEvent.RegisterLoaders event) {
-    event.register(LootrAPI.rl("barrel"), BarrelModel.Loader.INSTANCE);
+    event.register(LootrAPI.rl("barrel"), BarrelModelLoader.getInstance());
   }
 
   @SuppressWarnings("unchecked")

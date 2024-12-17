@@ -14,6 +14,7 @@ import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -34,6 +35,10 @@ public class Replacements {
 
     if (original.is(LootrTags.Blocks.CONTAINERS)) {
       return null;
+    }
+
+    if (ignore == null) {
+      ignore = new HashSet<>();
     }
 
     if (ignore.contains(original.getBlock())) {

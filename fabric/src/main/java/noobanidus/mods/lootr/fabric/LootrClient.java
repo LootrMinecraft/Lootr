@@ -46,7 +46,7 @@ public class LootrClient implements ClientModInitializer {
     SpecialBlockRendererRegistry.register(ModBlocks.SHULKER, LootrShulkerSpecialRenderer.Unbaked.shulker());
     SpecialModelRenderers.ID_MAPPER.put(LootrAPI.rl("shulker"), LootrShulkerSpecialRenderer.Unbaked.MAP_CODEC);
 
-    ModelLoadingPlugin.register(BarrelModelLoader.INSTANCE);
+    ModelLoadingPlugin.register(BarrelModelLoader.getInstance());
 
     EntityRendererRegistry.register(ModEntities.LOOTR_MINECART_ENTITY, (context) -> new LootrChestCartRenderer<>(context, ModelLayers.CHEST_MINECART));
   }
