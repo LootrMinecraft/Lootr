@@ -21,8 +21,10 @@ import noobanidus.mods.lootr.neoforge.network.PacketHandler;
 // TODO: Ideas/important things to be implemented
 // - Display notices after containers are closed
 // - or use toasts
-// - bring back decay/refresh structures
 // - lockouts?
+// - Fake player loot generation?
+// - FILTER FRAMEWORK!
+// - Configurable block tag for "blocking" blocks
 @Mod(value=LootrAPI.MODID)
 public class Lootr {
   public static Lootr instance;
