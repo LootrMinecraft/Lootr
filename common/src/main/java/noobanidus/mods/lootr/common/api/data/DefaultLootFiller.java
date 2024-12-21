@@ -54,7 +54,7 @@ public class DefaultLootFiller implements LootFiller {
         builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
       }
 
-      loottable.fill(inventory, builder.create(LootContextParamSets.CHEST), LootrAPI.getLootSeed(seed));
+      LootFiller.super.fill(provider, player, loottable, inventory, builder.create(LootContextParamSets.CHEST), seed);
     }
   }
 }
