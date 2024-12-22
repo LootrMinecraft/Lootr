@@ -13,7 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.zestyblaze.lootr.block.entities.LootrShulkerBlockEntity;
 import net.zestyblaze.lootr.init.ModBlocks;
 
-public class LootrShulkerItemRenderer extends BlockEntityWithoutLevelRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer {
+public class LootrShulkerItemRenderer extends BlockEntityWithoutLevelRenderer {
   private static LootrShulkerItemRenderer INSTANCE = null;
 
   private BlockEntityRenderDispatcher blockEntityRenderDispatcher;
@@ -36,14 +36,13 @@ public class LootrShulkerItemRenderer extends BlockEntityWithoutLevelRenderer im
     return INSTANCE;
   }
 
-  @Override
-  public void renderByItem(ItemStack stack, ItemDisplayContext mode, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
-    getBlockEntityRenderDispatcher().renderItem(tile, matrixStack, buffer, combinedLight, combinedOverlay);
+  public BuiltinItemRendererRegistry.DynamicItemRenderer getDynamicItemRenderer() {
+    return this::renderByItem;
   }
 
   @Override
-  public void render(ItemStack stack, ItemDisplayContext mode, PoseStack matrices, MultiBufferSource vertexConsumers, int light, int overlay) {
-    renderByItem(stack, mode, matrices, vertexConsumers, light, overlay);
+  public void renderByItem(ItemStack stack, ItemDisplayContext mode, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
+    getBlockEntityRenderDispatcher().renderItem(tile, matrixStack, buffer, combinedLight, combinedOverlay);
   }
 
   private BlockEntityRenderDispatcher getBlockEntityRenderDispatcher() {
