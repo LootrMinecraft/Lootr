@@ -8,6 +8,7 @@
     "MixinDimensionDataStorage",
     "MixinEndCityPieces$EndCityPiece",
     "MixinLevelChunk",
+    "MixinLootTable",
     "MixinPoiType",
     "MixinPoiTypes",
     "MixinStructureTemplate",

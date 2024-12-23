@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.common.impl;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -9,11 +10,11 @@ import noobanidus.mods.lootr.common.api.ILootrBlockEntityConverter;
 import noobanidus.mods.lootr.common.api.ILootrEntityConverter;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
+import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
+import noobanidus.mods.lootr.common.api.filter.ILootrFilterProvider;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.ServiceLoader;
+import java.util.*;
 import java.util.function.Function;
 
 public class LootrServiceRegistry {
@@ -21,6 +22,7 @@ public class LootrServiceRegistry {
 
   private final Map<BlockEntityType<?>, Function<?, ?>> blockEntityConverterMap = new Object2ObjectOpenHashMap<>();
   private final Map<EntityType<?>, Function<?, ?>> entityConverterMap = new Object2ObjectOpenHashMap<>();
+  private final List<ILootrFilter> filters = new ObjectArrayList<>();
 
   @SuppressWarnings("rawtypes")
   public LootrServiceRegistry () {
@@ -34,6 +36,12 @@ public class LootrServiceRegistry {
     for (ILootrEntityConverter<?> converter2 : loader2) {
       entityConverterMap.put(converter2.getEntityType(), converter2);
     }
+
+    ServiceLoader<ILootrFilterProvider> loader3 = ServiceLoader.load(ILootrFilterProvider.class);
+    for (ILootrFilterProvider provider : loader3) {
+      filters.addAll(provider.getFilters());
+    }
+    filters.sort(Comparator.comparingInt(ILootrFilter::getPriority));
   }
 
   public static LootrServiceRegistry getInstance () {
@@ -77,5 +85,9 @@ public class LootrServiceRegistry {
       return null;
     }
     return converter.apply(entity);
+  }
+
+  public static List<ILootrFilter> getFilters () {
+    return getInstance().filters;
   }
 }

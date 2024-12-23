@@ -30,6 +30,7 @@ import noobanidus.mods.lootr.common.api.data.LootFiller;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
+import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.client.ClientHooks;
 import noobanidus.mods.lootr.common.config.Replacements;
@@ -363,5 +364,10 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   @Nullable
   public BlockState replacementBlockState(BlockState original) {
     return Replacements.replacement(original);
+  }
+
+  @Override
+  public List<ILootrFilter> getFilters() {
+    return LootrServiceRegistry.getFilters();
   }
 }

@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.common.api.data;
 
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -23,7 +24,10 @@ public interface LootFiller {
    */
   void unpackLootTable(@NotNull ILootrInfoProvider provider, @NotNull Player player, Container inventory);
 
-  default void fill (ILootrInfoProvider provider, Player player, LootTable lootTable, Container container, LootParams parameters, long seed) {
-    lootTable.fill(container, parameters, seed);
+  default void fill (ILootrInfoProvider provider, Player player, ResourceKey<LootTable> lootTableKey, LootTable lootTable, Container container, LootParams parameters, long seed) {
+    DefaultLootFiller.performFill(provider, player, lootTableKey, lootTable, container, parameters, seed);
+  }
+
+  record LootFillerState (ILootrInfoProvider provider, Player player, ResourceKey<LootTable> lootTableKey, LootTable lootTable, Container container, LootParams parameters, long seed) {
   }
 }

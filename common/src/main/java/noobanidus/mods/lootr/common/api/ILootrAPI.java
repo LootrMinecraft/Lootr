@@ -29,6 +29,7 @@ import noobanidus.mods.lootr.common.api.data.LootFiller;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
+import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -260,6 +261,8 @@ public interface ILootrAPI {
   void playerDestroyed (Level level, Player player, BlockPos pos, @Nullable BlockEntity blockEntity);
 
   void refreshSections ();
+
+  List<ILootrFilter> getFilters ();
 }
 
 
