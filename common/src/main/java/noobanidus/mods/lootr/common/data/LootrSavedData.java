@@ -7,10 +7,12 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.saveddata.SavedData;
+import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.*;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,6 +30,29 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
   private final Map<UUID, LootrInventory> inventories = new HashMap<>();
   private final Set<UUID> openers = new ObjectLinkedOpenHashSet<>();
   private final Set<UUID> actualOpeners = new ObjectLinkedOpenHashSet<>();
+
+  private int lastTick = -1;
+
+  private static final int TICK_DELAY = 20 * 60 * 3; // Safely unload after 3 minutes
+
+  public static int getCurrentTick () {
+    MinecraftServer server = LootrAPI.getServer();
+    return server.getTickCount();
+  }
+
+  public boolean shouldUnload () {
+    if (lastTick == -1) {
+      return false;
+    }
+
+    int diff = getCurrentTick() - lastTick;
+
+    if (diff < 0) {
+      return false;
+    }
+
+    return diff > TICK_DELAY;
+  }
 
   protected LootrSavedData(ILootrInfo info) {
     this.info = BaseLootrInfo.copy(info);
