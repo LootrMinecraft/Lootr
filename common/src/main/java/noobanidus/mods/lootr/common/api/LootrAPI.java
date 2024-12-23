@@ -29,6 +29,7 @@ import noobanidus.mods.lootr.common.api.data.LootFiller;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
+import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.ApiStatus;
@@ -436,5 +437,9 @@ public class LootrAPI {
 
   public static void refreshSections () {
     INSTANCE.refreshSections();
+  }
+
+  public static List<ILootrFilter> getFilters () {
+    return INSTANCE.getFilters();
   }
 }

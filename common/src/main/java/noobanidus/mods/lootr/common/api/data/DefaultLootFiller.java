@@ -13,12 +13,19 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import org.jetbrains.annotations.Nullable;
 
 public class DefaultLootFiller implements LootFiller {
   private static DefaultLootFiller INSTANCE = new DefaultLootFiller();
+  private static LootFillerState state = null;
 
   public static DefaultLootFiller getInstance() {
     return INSTANCE;
+  }
+
+  @Nullable
+  public static LootFillerState getFillerState () {
+    return state;
   }
 
   @Override
@@ -54,7 +61,13 @@ public class DefaultLootFiller implements LootFiller {
         builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
       }
 
-      LootFiller.super.fill(provider, player, loottable, inventory, builder.create(LootContextParamSets.CHEST), seed);
+      LootFiller.super.fill(provider, player, lootTable, loottable, inventory, builder.create(LootContextParamSets.CHEST), seed);
     }
+  }
+
+  public static void performFill (ILootrInfoProvider provider, Player player, ResourceKey<LootTable> lootTableKey, LootTable lootTable, Container container, LootParams parameters, long seed) {
+    state = new LootFillerState(provider, player, lootTableKey, lootTable, container, parameters, seed);
+    lootTable.fill(container, parameters, seed);
+    state = null;
   }
 }
