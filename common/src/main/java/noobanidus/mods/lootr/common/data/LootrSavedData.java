@@ -37,6 +37,9 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
 
   public static int getCurrentTick () {
     MinecraftServer server = LootrAPI.getServer();
+    if (server == null) {
+      return -1;
+    }
     return server.getTickCount();
   }
 
@@ -239,6 +242,7 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
   public void refresh() {
     inventories.clear();
     hasBeenOpened = false;
+    markChanged();
   }
 
   // This is triggered in createInventory and reset in refresh.
@@ -261,6 +265,12 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
     }
 
     return false;
+  }
+
+  @Override
+  public void setDirty() {
+    super.setDirty();
+    this.lastTick = getCurrentTick();
   }
 
   @Override
