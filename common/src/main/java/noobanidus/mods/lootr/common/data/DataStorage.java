@@ -15,7 +15,7 @@ import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.LootFiller;
 import noobanidus.mods.lootr.common.api.data.TickingData;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
-import noobanidus.mods.lootr.common.mixins.MixinDimensionDataStorage;
+import noobanidus.mods.lootr.common.mixins.AccessorMixinDimensionDataStorage;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -247,12 +247,12 @@ public class DataStorage {
       if (datum == LootrDummyData.INSTANCE) {
         // Failed to load so clear it from the cache
         LootrAPI.LOG.error("Failed to load data for " + file + ", removing from cache.");
-        ((MixinDimensionDataStorage) data).getCache().remove(file);
+        ((AccessorMixinDimensionDataStorage) data).getCache().remove(file);
         continue;
       }
       if (!(datum instanceof LootrSavedData lootrSavedData)) {
         LootrAPI.LOG.error("Data for " + file + " is not a LootrSavedData instance.");
-        ((MixinDimensionDataStorage) data).getCache().remove(file);
+        ((AccessorMixinDimensionDataStorage) data).getCache().remove(file);
         continue;
       }
 

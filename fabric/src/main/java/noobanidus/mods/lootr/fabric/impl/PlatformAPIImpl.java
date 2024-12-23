@@ -12,7 +12,7 @@ import noobanidus.mods.lootr.common.api.DataToCopy;
 import noobanidus.mods.lootr.common.api.IPlatformAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
-import noobanidus.mods.lootr.common.mixins.MixinBaseContainerBlockEntity;
+import noobanidus.mods.lootr.common.mixins.AccessorMixinBaseContainerBlockEntity;
 import noobanidus.mods.lootr.fabric.network.to_client.*;
 
 public class PlatformAPIImpl implements IPlatformAPI {
@@ -72,7 +72,7 @@ public class PlatformAPIImpl implements IPlatformAPI {
   public DataToCopy copySpecificData(BlockEntity oldBlockEntity) {
     LockCode key = LockCode.NO_LOCK;
     if (oldBlockEntity instanceof BaseContainerBlockEntity baseContainer) {
-      key = ((MixinBaseContainerBlockEntity) baseContainer).getLockKey();
+      key = ((AccessorMixinBaseContainerBlockEntity) baseContainer).getLockKey();
     }
     return new DataToCopy(null, key);
   }
@@ -80,7 +80,7 @@ public class PlatformAPIImpl implements IPlatformAPI {
   @Override
   public void restoreSpecificData(DataToCopy data, BlockEntity newBlockEntity) {
     if (newBlockEntity instanceof BaseContainerBlockEntity baseContainer) {
-      ((MixinBaseContainerBlockEntity) baseContainer).setLockKey(data.lockCode());
+      ((AccessorMixinBaseContainerBlockEntity) baseContainer).setLockKey(data.lockCode());
     }
   }
 

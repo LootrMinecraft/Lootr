@@ -55,7 +55,7 @@ import noobanidus.mods.lootr.common.data.DataStorage;
 import noobanidus.mods.lootr.common.data.LootrInventory;
 import noobanidus.mods.lootr.common.data.LootrSavedData;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
-import noobanidus.mods.lootr.common.mixins.MixinBaseContainerBlockEntity;
+import noobanidus.mods.lootr.common.mixins.AccessorMixinBaseContainerBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -234,7 +234,7 @@ public class CommandLootr {
         if (!(blockEntity instanceof BaseContainerBlockEntity container)) {
           c.getSource().sendSuccess(() -> Component.literal("Please stand on the container you wish to convert."), false);
         }
-        NonNullList<ItemStack> reference = ((MixinBaseContainerBlockEntity) blockEntity).invokeGetItems();
+        NonNullList<ItemStack> reference = ((AccessorMixinBaseContainerBlockEntity) blockEntity).invokeGetItems();
         BlockState newState = updateBlockState(state, LootrRegistry.getInventoryBlock().defaultBlockState());
         NonNullList<ItemStack> custom = copyItemList(reference);
         level.removeBlockEntity(pos);
@@ -442,7 +442,7 @@ public class CommandLootr {
           }
           BlockState state = blockEntity.getBlockState();
           if (!state.is(LootrTags.Blocks.CUSTOM_ELIGIBLE) && !blockEntity.getType().builtInRegistryHolder().is(LootrTags.BlockEntity.CUSTOM_INELIGIBlE)) {
-            NonNullList<ItemStack> reference = ((MixinBaseContainerBlockEntity) blockEntity).invokeGetItems();
+            NonNullList<ItemStack> reference = ((AccessorMixinBaseContainerBlockEntity) blockEntity).invokeGetItems();
             BlockState newState = updateBlockState(state, LootrRegistry.getInventoryBlock().defaultBlockState());
             NonNullList<ItemStack> custom = copyItemList(reference);
             level.removeBlockEntity(pos);

@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(VehicleEntity.class)
-public interface MixinVehicleEntity {
+public interface AccessorMixinVehicleEntity {
   @Invoker
   Item invokeGetDropItem();
 }
