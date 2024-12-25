@@ -27,6 +27,8 @@ public class LootrTags {
 
     public static final TagKey<Block> CATS_CAN_BLOCK = tag("cats_can_block");
 
+    public static final TagKey<Block> NON_BLOCKING = tag("non_blocking");
+
     static TagKey<Block> tag(String name) {
       return TagKey.create(Registries.BLOCK, LootrAPI.rl(name));
     }
