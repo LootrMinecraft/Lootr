@@ -29,6 +29,7 @@ public class LootrBlockTagProvider extends BlockTagsProvider {
     tag(Tags.Blocks.CHESTS_WOODEN).add(LootrRegistry.getChestBlock(), LootrRegistry.getInventoryBlock());
     tag(Tags.Blocks.CHESTS_TRAPPED).add(LootrRegistry.getTrappedChestBlock());
     tag(Tags.Blocks.BARRELS).add(LootrRegistry.getBarrelBlock());
+    tag(LootrTags.Blocks.NON_BLOCKING); //.add(Blocks.SPAWNER);
 
     tag(LootrTags.Blocks.BARRELS).add(LootrRegistry.getBarrelBlock());
     tag(LootrTags.Blocks.CHESTS).add(LootrRegistry.getChestBlock(), LootrRegistry.getInventoryBlock());
