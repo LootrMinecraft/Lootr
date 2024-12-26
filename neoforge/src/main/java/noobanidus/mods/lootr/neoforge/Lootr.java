@@ -22,7 +22,6 @@ import noobanidus.mods.lootr.neoforge.network.PacketHandler;
 // - Display notices after containers are closed
 // - or use toasts
 // - lockouts?
-// - Fake player loot generation?
 @Mod(value=LootrAPI.MODID)
 public class Lootr {
   public static Lootr instance;
