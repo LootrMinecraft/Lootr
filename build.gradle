@@ -75,6 +75,9 @@ subprojects {
         changelogText += getExecOutput(['git', 'log', "--pretty=tformat:- %s [(%h)](${gitRepo}/commit/%h)", '' + gitPrevCommit + '..' + gitCommit])
     }
 
+    // Limit the changelog to 500 characters
+    changelogText = changelogText.take(500)
+
 
     if (uploadSettings != null && uploadDependencies != null) {
 
