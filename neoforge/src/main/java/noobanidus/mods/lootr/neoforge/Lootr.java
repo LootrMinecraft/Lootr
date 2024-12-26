@@ -23,8 +23,6 @@ import noobanidus.mods.lootr.neoforge.network.PacketHandler;
 // - or use toasts
 // - lockouts?
 // - Fake player loot generation?
-// - FILTER FRAMEWORK!
-// - Configurable block tag for "blocking" blocks
 @Mod(value=LootrAPI.MODID)
 public class Lootr {
   public static Lootr instance;
