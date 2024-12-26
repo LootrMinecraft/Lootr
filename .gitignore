@@ -35,3 +35,8 @@ forge*changelog.txt
 # Misc
 CHANGELOG_OLD.md
 oxipng.exe
+
+common/src/generated/resources/.cache/*
+datapacks/*/.cache/
+datapacks/*/*.zip
+datapacks/*.zip
