@@ -1,7 +1,6 @@
 package noobanidus.mods.lootr.common.api;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -22,7 +21,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.client.ClientTextureType;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
@@ -34,10 +32,12 @@ import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 public class LootrAPI {
   public static final Logger LOG = LogManager.getLogger();

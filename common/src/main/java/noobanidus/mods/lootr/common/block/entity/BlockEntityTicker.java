@@ -2,20 +2,17 @@ package noobanidus.mods.lootr.common.block.entity;
 
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.DataToCopy;
 import noobanidus.mods.lootr.common.api.LootrAPI;
@@ -23,10 +20,7 @@ import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.Set;
-import java.util.function.Predicate;
 
 public class BlockEntityTicker {
   private final static Object listLock = new Object();

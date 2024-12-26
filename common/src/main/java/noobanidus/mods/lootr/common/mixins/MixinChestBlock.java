@@ -1,6 +1,5 @@
 package noobanidus.mods.lootr.common.mixins;
 
-import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.ChestBlock;

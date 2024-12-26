@@ -18,7 +18,9 @@ import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.config.ConfigManagerBase;
 import noobanidus.mods.lootr.common.config.Replacements;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 
 @EventBusSubscriber(modid = LootrAPI.MODID, bus = EventBusSubscriber.Bus.MOD)

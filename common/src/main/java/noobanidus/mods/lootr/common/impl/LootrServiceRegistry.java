@@ -14,7 +14,10 @@ import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilterProvider;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.ServiceLoader;
 import java.util.function.Function;
 
 public class LootrServiceRegistry {

@@ -1,10 +1,6 @@
 package noobanidus.mods.lootr.common.mixins;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;

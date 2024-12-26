@@ -21,7 +21,6 @@ import net.minecraft.world.level.block.state.properties.ChestType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
-import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.block.entity.LootrChestBlockEntity;
 
 @SuppressWarnings("deprecation")

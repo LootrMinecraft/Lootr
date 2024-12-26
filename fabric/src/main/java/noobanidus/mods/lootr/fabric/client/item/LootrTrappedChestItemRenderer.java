@@ -7,14 +7,11 @@ import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
-import noobanidus.mods.lootr.common.block.entity.LootrChestBlockEntity;
 import noobanidus.mods.lootr.common.block.entity.LootrTrappedChestBlockEntity;
-import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
 
 public class LootrTrappedChestItemRenderer extends BlockEntityWithoutLevelRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer {
   private static LootrTrappedChestItemRenderer INSTANCE = null;
