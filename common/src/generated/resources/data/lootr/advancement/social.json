@@ -18,12 +18,6 @@
         "advancement": "lootr:1chest"
       },
       "trigger": "lootr:advancement"
-    },
-    "opened_shulker": {
-      "conditions": {
-        "advancement": "lootr:1shulker"
-      },
-      "trigger": "lootr:advancement"
     }
   },
   "display": {
@@ -49,9 +43,6 @@
     ],
     [
       "opened_cart"
-    ],
-    [
-      "opened_shulker"
     ]
   ],
   "sends_telemetry_event": true
