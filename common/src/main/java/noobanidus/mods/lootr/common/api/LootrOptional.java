@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+@Deprecated
 // "Proof of concept"
 public class LootrOptional {
   private static final Map<Class<? extends BlockEntity>, MethodHandle> blockEntityMap = new HashMap<>();
