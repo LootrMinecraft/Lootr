@@ -36,13 +36,16 @@ public class LootrBlockTagProvider extends BlockTagsProvider {
     tag(LootrTags.Blocks.SHULKERS).add(LootrRegistry.getShulkerBlock());
     //noinspection unchecked
     tag(LootrTags.Blocks.CONTAINERS).addTags(LootrTags.Blocks.BARRELS, LootrTags.Blocks.CHESTS, LootrTags.Blocks.TRAPPED_CHESTS, LootrTags.Blocks.SHULKERS);
+    tag(LootrTags.Blocks.BLOCKS).addTag(LootrTags.Blocks.CONTAINERS);
 
     tag(LootrTags.Blocks.CONVERT_BARRELS).add(Blocks.BARREL).addTag(Tags.Blocks.BARRELS);
     tag(LootrTags.Blocks.CONVERT_CHESTS).add(Blocks.CHEST).addTag(Tags.Blocks.CHESTS_WOODEN);
     tag(LootrTags.Blocks.CONVERT_TRAPPED_CHESTS).add(Blocks.TRAPPED_CHEST).addTag(Tags.Blocks.CHESTS_TRAPPED);
     tag(LootrTags.Blocks.CONVERT_SHULKERS).add(Blocks.SHULKER_BOX);
+    tag(LootrTags.Blocks.CONVERT_SAND).add(Blocks.SUSPICIOUS_SAND);
+    tag(LootrTags.Blocks.CONVERT_GRAVEL).add(Blocks.SUSPICIOUS_GRAVEL);
     //noinspection unchecked
-    tag(LootrTags.Blocks.CONVERT_BLOCK).addTags(LootrTags.Blocks.CONVERT_BARRELS, LootrTags.Blocks.CONVERT_CHESTS, LootrTags.Blocks.CONVERT_TRAPPED_CHESTS, LootrTags.Blocks.CONVERT_SHULKERS);
+    tag(LootrTags.Blocks.CONVERT_BLOCK).addTags(LootrTags.Blocks.CONVERT_BARRELS, LootrTags.Blocks.CONVERT_CHESTS, LootrTags.Blocks.CONVERT_TRAPPED_CHESTS, LootrTags.Blocks.CONVERT_SHULKERS, LootrTags.Blocks.CONVERT_SAND, LootrTags.Blocks.CONVERT_GRAVEL);
 
     tag(LootrTags.Blocks.CONVERT_BLACKLIST);
 
