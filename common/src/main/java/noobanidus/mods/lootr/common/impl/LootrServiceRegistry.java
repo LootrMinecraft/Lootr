@@ -6,12 +6,16 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import noobanidus.mods.lootr.common.api.ILootrBlockEntityConverter;
 import noobanidus.mods.lootr.common.api.ILootrEntityConverter;
+import noobanidus.mods.lootr.common.api.IReplaceableBlockEntityConverter;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilterProvider;
+import noobanidus.mods.lootr.common.api.replacement.IReplaceableBlockEntity;
+import noobanidus.mods.lootr.common.api.replacement.RandomizableContainerWrapper;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
@@ -23,12 +27,27 @@ import java.util.function.Function;
 public class LootrServiceRegistry {
   private static LootrServiceRegistry INSTANCE;
 
+  private static final IReplaceableBlockEntityConverter NO_CONVERTER = new IReplaceableBlockEntityConverter() {
+    @Override
+    public IReplaceableBlockEntity apply(BlockEntity blockEntity) {
+      return null;
+    }
+
+    @Override
+    public boolean canConvert(BlockEntity blockEntity) {
+      return false;
+    }
+  };
+
   private final Map<BlockEntityType<?>, Function<?, ?>> blockEntityConverterMap = new Object2ObjectOpenHashMap<>();
   private final Map<EntityType<?>, Function<?, ?>> entityConverterMap = new Object2ObjectOpenHashMap<>();
+  private final Map<BlockEntityType<?>, IReplaceableBlockEntityConverter> replacementConversionMap = new Object2ObjectOpenHashMap<>();
+  private final List<IReplaceableBlockEntityConverter> replacementConverters = new ObjectArrayList<>();
+
   private final List<ILootrFilter> filters = new ObjectArrayList<>();
 
   @SuppressWarnings("rawtypes")
-  public LootrServiceRegistry () {
+  public LootrServiceRegistry() {
     ServiceLoader<ILootrBlockEntityConverter> loader = ServiceLoader.load(ILootrBlockEntityConverter.class);
 
     for (ILootrBlockEntityConverter<?> converter : loader) {
@@ -45,9 +64,17 @@ public class LootrServiceRegistry {
       filters.addAll(provider.getFilters());
     }
     filters.sort(Comparator.comparingInt(ILootrFilter::getPriority));
+
+    ServiceLoader<IReplaceableBlockEntityConverter> loader4 = ServiceLoader.load(IReplaceableBlockEntityConverter.class);
+    for (IReplaceableBlockEntityConverter converter : loader4) {
+      replacementConverters.add(converter);
+      if (converter.getBlockEntityType() != null) {
+        replacementConversionMap.put(converter.getBlockEntityType(), converter);
+      }
+    }
   }
 
-  public static LootrServiceRegistry getInstance () {
+  public static LootrServiceRegistry getInstance() {
     if (INSTANCE == null) {
       INSTANCE = new LootrServiceRegistry();
     }
@@ -71,7 +98,7 @@ public class LootrServiceRegistry {
     if (blockEntity == null) {
       return null;
     }
-    Function<T, ILootrBlockEntity> converter = getBlockEntity( blockEntity.getType());
+    Function<T, ILootrBlockEntity> converter = getBlockEntity(blockEntity.getType());
     if (converter == null) {
       return null;
     }
@@ -79,7 +106,7 @@ public class LootrServiceRegistry {
   }
 
   @Nullable
-  public static <T extends Entity> ILootrCart convertEntity (T entity) {
+  public static <T extends Entity> ILootrCart convertEntity(T entity) {
     if (entity == null) {
       return null;
     }
@@ -90,7 +117,51 @@ public class LootrServiceRegistry {
     return converter.apply(entity);
   }
 
-  public static List<ILootrFilter> getFilters () {
+  public static List<ILootrFilter> getFilters() {
     return getInstance().filters;
+  }
+
+  public static List<IReplaceableBlockEntityConverter> getConverters() {
+    return getInstance().replacementConverters;
+  }
+
+  public static boolean hasConverterForReplacement(BlockEntity blockEntity) {
+    if (blockEntity instanceof RandomizableContainerBlockEntity) {
+      return true;
+    }
+
+    if (getInstance().replacementConversionMap.containsKey(blockEntity.getType())) {
+      return true;
+    }
+
+    for (IReplaceableBlockEntityConverter converter : getConverters()) {
+      if (converter.canConvert(blockEntity)) {
+        getInstance().replacementConversionMap.put(blockEntity.getType(), converter);
+        return true;
+      }
+    }
+
+    getInstance().replacementConversionMap.put(blockEntity.getType(), NO_CONVERTER);
+    return false;
+  }
+
+  public static IReplaceableBlockEntity convertForReplacement(BlockEntity blockEntity) {
+    if (blockEntity instanceof RandomizableContainerBlockEntity randomizableContainerBlockEntity) {
+      return new RandomizableContainerWrapper(randomizableContainerBlockEntity);
+    }
+
+    if (getInstance().replacementConversionMap.containsKey(blockEntity.getType())) {
+      return getInstance().replacementConversionMap.get(blockEntity.getType()).apply(blockEntity);
+    }
+
+    for (IReplaceableBlockEntityConverter converter : getConverters()) {
+      if (converter.canConvert(blockEntity)) {
+        getInstance().replacementConversionMap.put(blockEntity.getType(), converter);
+        return converter.apply(blockEntity);
+      }
+    }
+
+    getInstance().replacementConversionMap.put(blockEntity.getType(), NO_CONVERTER);
+    return null;
   }
 }

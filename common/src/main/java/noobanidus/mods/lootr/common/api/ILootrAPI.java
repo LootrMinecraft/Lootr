@@ -26,6 +26,7 @@ import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
+import noobanidus.mods.lootr.common.api.replacement.IReplaceableBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -259,6 +260,11 @@ public interface ILootrAPI {
   void refreshSections ();
 
   List<ILootrFilter> getFilters ();
+
+  @Nullable
+  IReplaceableBlockEntity convertForReplacement (BlockEntity blockEntity);
+
+  boolean hasConverterForReplacement (BlockEntity blockEntity);
 }
 
 

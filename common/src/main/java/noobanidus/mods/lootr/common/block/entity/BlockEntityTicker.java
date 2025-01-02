@@ -19,6 +19,7 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
+import noobanidus.mods.lootr.common.api.replacement.IReplaceableBlockEntity;
 
 import java.util.Set;
 
@@ -135,11 +136,16 @@ public class BlockEntityTicker {
         }
 
         BlockEntity blockEntity = level.getBlockEntity(entry.getPosition());
-        if (!(blockEntity instanceof RandomizableContainerBlockEntity be) || LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity) {
+        if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity) {
           toRemove.add(entry);
           continue;
         }
-        if (be.getLootTable() == null || LootrAPI.isLootTableBlacklisted(be.getLootTable())) {
+        IReplaceableBlockEntity ire = LootrAPI.convertForReplacement(blockEntity);
+        if (ire == null) {
+          toRemove.add(entry);
+          continue;
+        }
+        if (ire.getLootTable() == null || LootrAPI.isLootTableBlacklisted(ire.getLootTable())) {
           toRemove.add(entry);
           continue;
         }
@@ -150,17 +156,19 @@ public class BlockEntityTicker {
           continue;
         }
         // Save specific data. Currently, this includes the LockCode (all platforms), along with NeoForge's getPersistentData.
-        DataToCopy data = PlatformAPI.copySpecificData(be);
-        ResourceKey<LootTable> table = be.getLootTable();
-        long seed = be.getLootTableSeed();
+        DataToCopy data = PlatformAPI.copySpecificData(blockEntity);
+        ResourceKey<LootTable> table = ire.getLootTable();
+        long seed = ire.getSeed();
         // IMPORTANT: Clear loot table to prevent loot drop when container is destroyed
-        be.setLootTable(null);
+        ire.setLootTable(null);
         level.destroyBlock(entry.getPosition(), false);
         level.setBlock(entry.getPosition(), replacement, 2);
         BlockEntity newBlockEntity = level.getBlockEntity(entry.getPosition());
         PlatformAPI.restoreSpecificData(data, newBlockEntity);
-        if (LootrAPI.resolveBlockEntity(newBlockEntity) instanceof ILootrBlockEntity && newBlockEntity instanceof RandomizableContainerBlockEntity rbe) {
-          rbe.setLootTable(table, seed);
+        IReplaceableBlockEntity ire2 = LootrAPI.convertForReplacement(newBlockEntity);
+        if (LootrAPI.resolveBlockEntity(newBlockEntity) instanceof ILootrBlockEntity && ire2 != null) {
+          ire2.setLootTable(table);
+          ire2.setLootSeed(seed);
         } else {
           LootrAPI.LOG.error("replacement " + replacement + " is not an ILootrBlockEntity " + entry.getDimension() + " at " + entry.getPosition());
         }

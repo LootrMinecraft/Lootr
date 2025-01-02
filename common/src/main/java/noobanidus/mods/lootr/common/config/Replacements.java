@@ -55,7 +55,7 @@ public class Replacements {
         if (LootrAPI.resolveBlockEntity(be) != null) {
           ignore.add(original.getBlock());
         }
-        if (be instanceof RandomizableContainerBlockEntity) {
+        if (LootrAPI.hasConverterForReplacement(be)) {
           if (original.is(LootrTags.Blocks.CONVERT_TRAPPED_CHESTS)) {
             replacements.put(original.getBlock(), LootrRegistry.getTrappedChestBlock());
           } else if (original.is(LootrTags.Blocks.CONVERT_BARRELS)) {

@@ -30,6 +30,7 @@ import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
+import noobanidus.mods.lootr.common.api.replacement.IReplaceableBlockEntity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
@@ -441,5 +442,14 @@ public class LootrAPI {
 
   public static List<ILootrFilter> getFilters () {
     return INSTANCE.getFilters();
+  }
+
+  @Nullable
+  public static IReplaceableBlockEntity convertForReplacement (BlockEntity blockEntity) {
+    return INSTANCE.convertForReplacement(blockEntity);
+  }
+
+  public static boolean hasConverterForReplacement (BlockEntity blockEntity) {
+    return INSTANCE.hasConverterForReplacement(blockEntity);
   }
 }
