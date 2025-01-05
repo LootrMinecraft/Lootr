@@ -151,6 +151,15 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
     if (!LootrAPI.shouldDiscard() && !savingToItem) {
       compound.putUUID("LootrId", getInfoUUID());
     }
+    if (level != null && level.isClientSide()) {
+      if (clientOpeners != null && !clientOpeners.isEmpty()) {
+        ListTag list = new ListTag();
+        for (UUID opener : clientOpeners) {
+          list.add(NbtUtils.createUUID(opener));
+        }
+        compound.put("LootrOpeners", list);
+      }
+    }
   }
 
   @Override
