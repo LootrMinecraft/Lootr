@@ -10,7 +10,6 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import noobanidus.mods.lootr.common.api.ILootrBlockEntityConverter;
 import noobanidus.mods.lootr.common.api.ILootrEntityConverter;
 import noobanidus.mods.lootr.common.api.IReplaceableBlockEntityConverter;
-import noobanidus.mods.lootr.common.api.IReplacementProvider;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
@@ -44,7 +43,6 @@ public class LootrServiceRegistry {
   private final Map<EntityType<?>, Function<?, ?>> entityConverterMap = new Object2ObjectOpenHashMap<>();
   private final Map<BlockEntityType<?>, IReplaceableBlockEntityConverter> replacementConversionMap = new Object2ObjectOpenHashMap<>();
   private final List<IReplaceableBlockEntityConverter> replacementConverters = new ObjectArrayList<>();
-  private final List<IReplacementProvider> replacementProviders = new ObjectArrayList<>();
 
   private final List<ILootrFilter> filters = new ObjectArrayList<>();
 
@@ -73,11 +71,6 @@ public class LootrServiceRegistry {
       if (converter.getBlockEntityType() != null) {
         replacementConversionMap.put(converter.getBlockEntityType(), converter);
       }
-    }
-
-    ServiceLoader<IReplacementProvider> loader5 = ServiceLoader.load(IReplacementProvider.class);
-    for (IReplacementProvider provider : loader5) {
-      replacementProviders.add(provider);
     }
   }
 
@@ -130,10 +123,6 @@ public class LootrServiceRegistry {
 
   public static List<IReplaceableBlockEntityConverter> getConverters() {
     return getInstance().replacementConverters;
-  }
-
-  public static List<IReplacementProvider> getReplacementProviders () {
-    return getInstance().replacementProviders;
   }
 
   public static boolean hasConverterForReplacement(BlockEntity blockEntity) {

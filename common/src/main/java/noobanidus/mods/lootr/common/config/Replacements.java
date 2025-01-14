@@ -9,7 +9,6 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.block.state.properties.Property;
-import noobanidus.mods.lootr.common.api.IReplacementProvider;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
@@ -23,24 +22,10 @@ public class Replacements {
   // TODO: This needs to be cleared whenever tags are refreshed
   private static Set<Block> ignore = null;
   private static Map<Block, Block> replacements = null;
-  private static Map<Block, IReplacementProvider.StateMapper> stateMappers = null;
-
-  public static IReplacementProvider DEFAULT_TAGGED_PROVIDER = new IReplacementProvider() {
-    @Override
-    public Block replacementBlockFor(Block original, BlockEntity blockEntity) {
-      return replacement(original).getBlock();
-    }
-
-    @Override
-    public IReplacementProvider.StateMapper stateMapperForBlock(Block original) {
-      return (originalState, blockEntity) -> replacement(originalState);
-    }
-  };
 
   public static void clearReplacements() {
     replacements = null;
     ignore = null;
-    stateMappers = null;
   }
 
   public static BlockState replacement(BlockState original) {
@@ -64,20 +49,13 @@ public class Replacements {
       replacements = new HashMap<>();
     }
 
-    // We only support blocks tagged as `CONVERT_BLOCK`
     if (replacements.get(original.getBlock()) == null && original.is(LootrTags.Blocks.CONVERT_BLOCK)) {
-      // We only support EntityBlock derivatives
       if (original.getBlock() instanceof EntityBlock entityBlock) {
         BlockEntity be = entityBlock.newBlockEntity(BlockPos.ZERO, original);
-        // If it already resolves to a block entity, skip it
         if (LootrAPI.resolveBlockEntity(be) != null) {
           ignore.add(original.getBlock());
         }
-        // We only support block entities that have a converter
         if (LootrAPI.hasConverterForReplacement(be)) {
-
-
-          // Default replacements, checking trapped chests before normal chests
           if (original.is(LootrTags.Blocks.CONVERT_TRAPPED_CHESTS)) {
             replacements.put(original.getBlock(), LootrRegistry.getTrappedChestBlock());
           } else if (original.is(LootrTags.Blocks.CONVERT_BARRELS)) {
@@ -94,12 +72,11 @@ public class Replacements {
     Block replacement = replacements.get(original.getBlock());
 
     if (replacement != null) {
-      BlockState state;
-      IReplacementProvider.StateMapper mapper = stateMappers.get(replacement);
-      if (mapper != null) {
-        state = mapper.map(replacement.defaultBlockState(), original, null);
-      } else {
-        state = DefaultStateMapper.INSTANCE.map(replacement.defaultBlockState(), original, null);
+      BlockState state = replacement.defaultBlockState();
+      for (Property<?> prop : original.getProperties()) {
+        if (state.hasProperty(prop)) {
+          state = safeReplace(state, original, prop);
+        }
       }
       return state;
     }
@@ -109,7 +86,7 @@ public class Replacements {
     return null;
   }
 
-  public static <V extends Comparable<V>> BlockState safeReplace(BlockState state, BlockState original, Property<V> property) {
+  private static <V extends Comparable<V>> BlockState safeReplace(BlockState state, BlockState original, Property<V> property) {
     if (property == ChestBlock.TYPE && state.hasProperty(property)) {
       return state.setValue(ChestBlock.TYPE, ChestType.SINGLE);
     }
