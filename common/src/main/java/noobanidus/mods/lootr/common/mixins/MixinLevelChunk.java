@@ -19,7 +19,7 @@ public class MixinLevelChunk {
       return;
     }
 
-    if (LootrAPI.hasConverterForReplacement(entity) && !(LootrAPI.resolveBlockEntity(entity) instanceof ILootrBlockEntity)) {
+    if (entity instanceof RandomizableContainerBlockEntity && !(LootrAPI.resolveBlockEntity(entity) instanceof ILootrBlockEntity)) {
       LevelChunk level = (LevelChunk) (Object) this;
       if (level.getLevel().isClientSide()) {
         return;
