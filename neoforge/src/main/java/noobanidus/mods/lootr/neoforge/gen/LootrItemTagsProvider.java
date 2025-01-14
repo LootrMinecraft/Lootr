@@ -25,8 +25,6 @@ public class LootrItemTagsProvider extends ItemTagsProvider {
     tag(LootrTags.Items.SHULKERS).add(LootrRegistry.getShulkerItem());
     //noinspection unchecked
     tag(LootrTags.Items.CONTAINERS).addTags(LootrTags.Items.BARRELS, LootrTags.Items.CHESTS, LootrTags.Items.TRAPPED_CHESTS, LootrTags.Items.SHULKERS);
-    //noinspection unchecked
-    tag(LootrTags.Items.BLOCKS).addTags(LootrTags.Items.CONTAINERS);
   }
 
   @Override
