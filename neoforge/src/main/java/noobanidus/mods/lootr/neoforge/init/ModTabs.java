@@ -14,7 +14,7 @@ public class ModTabs {
   private static final DeferredRegister<CreativeModeTab> REGISTER = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, LootrAPI.MODID);
 
   public static final DeferredHolder<CreativeModeTab, CreativeModeTab> LOOTR = REGISTER.register("lootr", () -> CreativeModeTab.builder()
-      .title(Component.translatable("itemGroup.lootr"))
+      .title(Component.translatable("itemGroup.lootr.lootr"))
       .icon(() -> new ItemStack(LootrRegistry.getTrophyItem()))
       .displayItems((p, output) -> {
         output.accept(LootrRegistry.getTrophyBlock());
