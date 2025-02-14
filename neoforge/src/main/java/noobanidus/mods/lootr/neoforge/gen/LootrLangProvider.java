@@ -36,6 +36,7 @@ public class LootrLangProvider extends LanguageProvider {
     add(LootrRegistry.getShulkerBlock(), "Loot Shulker");
     add(LootrRegistry.getInventoryBlock(), "Loot Chest");
     add(LootrRegistry.getMinecart(), "Minecart with Loot Chest");
+    add(LootrRegistry.getTrophyBlock(), "Centennial Trophy");
     add("lootr.commands.create", "Created a Lootr %s at %s using the loot table %s.");
     add("lootr.commands.summon", "Summoned a Lootr Cart at %s using the loot table %s.");
     add("lootr.commands.blockpos", "%s,%s,%s");
@@ -60,7 +61,7 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.advancements.social.description", "Open one of every Lootr container type!");
     add("lootr.advancements.root.title", "Belongs in a Museum");
     add("lootr.advancements.root.description", "Bring instanced, per-player Loot into your world.");
-    add("itemGroup.lootr.lootr", "Lootr");
+    add("itemGroup.lootr", "Lootr");
     add("text.autoconfig.lootr.title", "Lootr");
     var debug = "Debug";
     var report_invalid_tables = "Report Invalid Tables";
