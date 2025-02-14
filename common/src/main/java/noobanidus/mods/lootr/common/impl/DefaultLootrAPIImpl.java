@@ -138,6 +138,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
       return;
     }
 
+    // TODO: Refactor this to avoid loading the data save unnecessarily
     if (provider.hasBeenOpened() && LootrAPI.shouldPerformDecayWhileTicking() && LootrAPI.isDecayed(provider)) {
       provider.performDecay();
       LootrAPI.removeDecayed(provider);

@@ -36,7 +36,7 @@ public class LootrLangProvider extends LanguageProvider {
     add(LootrRegistry.getShulkerBlock(), "Loot Shulker");
     add(LootrRegistry.getInventoryBlock(), "Loot Chest");
     add(LootrRegistry.getMinecart(), "Minecart with Loot Chest");
-    add(LootrRegistry.getTrophyItem(), "Centennial Trophy");
+    add(LootrRegistry.getTrophyBlock(), "Centennial Trophy");
     add("lootr.commands.create", "Created a Lootr %s at %s using the loot table %s.");
     add("lootr.commands.summon", "Summoned a Lootr Cart at %s using the loot table %s.");
     add("lootr.commands.blockpos", "%s,%s,%s");
