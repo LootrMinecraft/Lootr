@@ -4,6 +4,7 @@
   "block.lootr.lootr_inventory": "Coffre de Butin",
   "block.lootr.lootr_shulker": "Shulker de Butin",
   "block.lootr.lootr_trapped_chest": "Coffre de Butin",
+  "block.lootr.trophy": "Trophée du Centenaire",
   "entity.lootr.lootr_minecart": "Wagonnet de Stockage",
   "itemGroup.lootr.lootr": "Lootr",
   "lootr.advancements.100loot.description": "Ouvrez 100 conteneurs de butin instanciés, par joueur, et récupérez vos récompenses !",

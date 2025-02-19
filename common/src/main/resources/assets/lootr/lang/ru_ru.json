@@ -4,6 +4,7 @@
   "block.lootr.lootr_inventory": "Сундук с добычей",
   "block.lootr.lootr_shulker": "Шалкеровый ящик с добычей",
   "block.lootr.lootr_trapped_chest": "Сундук с добычей",
+  "block.lootr.trophy": "Столетний трофей",
   "entity.lootr.lootr_minecart": "Грузовая вагонетка с добычей",
   "itemGroup.lootr.lootr": "Добытчик",
   "lootr.advancements.100loot.description": "Откройте 100 индивидуальных контейнеров с добычей.",

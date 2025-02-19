@@ -4,6 +4,7 @@
   "block.lootr.lootr_inventory": "전리품 상자",
   "block.lootr.lootr_shulker": "전리품 셜커",
   "block.lootr.lootr_trapped_chest": "전리품 상자",
+  "block.lootr.trophy": "Centennial Trophy",
   "entity.lootr.lootr_minecart": "상자가 실린 광산 수레",
   "itemGroup.lootr.lootr": "Lootr",
   "lootr.advancements.100loot.description": "Open 100 instanced, per-player Loot containers and collect your rewards!",

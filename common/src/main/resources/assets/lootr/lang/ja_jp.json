@@ -4,6 +4,7 @@
   "block.lootr.lootr_inventory": "お宝チェスト",
   "block.lootr.lootr_shulker": "お宝シュルカーボックス",
   "block.lootr.lootr_trapped_chest": "お宝チェスト",
+  "block.lootr.trophy": "百年祭トロフィー",
   "entity.lootr.lootr_minecart": "チェスト付きのトロッコ",
   "itemGroup.lootr.lootr": "Lootr",
   "lootr.advancements.100loot.description": "宝箱を100個開けて、報酬を手に入れよう！",
