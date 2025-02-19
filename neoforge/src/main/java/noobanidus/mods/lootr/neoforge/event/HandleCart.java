@@ -31,7 +31,7 @@ public class HandleCart {
       return;
     }
     if (entity.getType().is(LootrTags.Entity.CONVERT_ENTITIES) && entity instanceof AbstractMinecartContainer cart) {
-      if (cart.getLootTable() == null || LootrAPI.isLootTableBlacklisted(cart.getContainerLootTable())) {
+      if (cart.getContainerLootTable() == null || LootrAPI.isLootTableBlacklisted(cart.getContainerLootTable())) {
         return;
       }
       @SuppressWarnings("unchecked") LootrChestMinecartEntity lootrCart = new LootrChestMinecartEntity((EntityType<LootrChestMinecartEntity>) LootrRegistry.getMinecart(), cart.level());
