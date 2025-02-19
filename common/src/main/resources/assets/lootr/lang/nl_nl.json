@@ -4,6 +4,7 @@
   "block.lootr.lootr_inventory": "Loot Chest",
   "block.lootr.lootr_shulker": "Loot Shulker",
   "block.lootr.lootr_trapped_chest": "Loot Chest",
+  "block.lootr.trophy": "Centennial Trophy",
   "entity.lootr.lootr_minecart": "Minecart with Chest",
   "itemGroup.lootr.lootr": "Lootr",
   "lootr.advancements.100loot.description": "Open 100 instanced, per-player Loot containers and collect your rewards!",
