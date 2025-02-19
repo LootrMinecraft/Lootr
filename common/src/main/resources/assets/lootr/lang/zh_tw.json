@@ -4,6 +4,7 @@
   "block.lootr.lootr_inventory": "戰利品箱",
   "block.lootr.lootr_shulker": "戰利品界伏盒",
   "block.lootr.lootr_trapped_chest": "戰利品箱",
+  "block.lootr.trophy": "百年紀念獎盃",
   "entity.lootr.lootr_minecart": "儲物箱礦車",
   "itemGroup.lootr.lootr": "Lootr",
   "lootr.advancements.100loot.description": "開啟 100 個每個玩家專屬的戰利品容器並收集你的獎勵！",
