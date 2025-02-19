@@ -15,7 +15,7 @@ public class ModItems {
   public static final BlockItem SHULKER = new BlockItem(ModBlocks.SHULKER, new Item.Properties().setId(LootrRegistry.SHULKER_ITEM_KEY));
   public static final BlockItem INVENTORY = new BlockItem(ModBlocks.INVENTORY, new Item.Properties().setId(LootrRegistry.INVENTORY_ITEM_KEY));
 
-  public static final BlockItem TROPHY = new BlockItem(ModBlocks.TROPHY, new Item.Properties().rarity(Rarity.EPIC).setId(LootrRegistry.TROPHY_ITEM_KEY));
+  public static final BlockItem TROPHY = new BlockItem(ModBlocks.TROPHY, new Item.Properties().rarity(Rarity.EPIC).setId(LootrRegistry.TROPHY_ITEM_KEY).useBlockDescriptionPrefix());
 
   public static void registerItems() {
     Registry.register(BuiltInRegistries.ITEM, LootrRegistry.CHEST, CHEST);

@@ -19,7 +19,7 @@ public class ModItems {
   public static final DeferredItem<BlockItem> BARREL = REGISTER.registerItem(LootrRegistry.BARREL.getPath(), (p) -> new BlockItem(LootrRegistry.getBarrelBlock(), p), new Item.Properties().setId(LootrRegistry.BARREL_ITEM_KEY));
   public static final DeferredItem<BlockItem> INVENTORY = REGISTER.registerItem(LootrRegistry.INVENTORY.getPath(), (p) -> new BlockItem(LootrRegistry.getInventoryBlock(), p), new Item.Properties().setId(LootrRegistry.INVENTORY_ITEM_KEY));
   public static final DeferredItem<BlockItem> SHULKER = REGISTER.registerItem(LootrRegistry.SHULKER.getPath(), (p) -> new BlockItem(LootrRegistry.getShulkerBlock(), p), new Item.Properties().setId(LootrRegistry.SHULKER_ITEM_KEY));
-  public static final DeferredItem<BlockItem> TROPHY = REGISTER.registerItem(LootrRegistry.TROPHY.getPath(), (p) -> new BlockItem(LootrRegistry.getTrophyBlock(), p), new Item.Properties().rarity(Rarity.EPIC).setId(LootrRegistry.TROPHY_ITEM_KEY));
+  public static final DeferredItem<BlockItem> TROPHY = REGISTER.registerItem(LootrRegistry.TROPHY.getPath(), (p) -> new BlockItem(LootrRegistry.getTrophyBlock(), p), new Item.Properties().rarity(Rarity.EPIC).setId(LootrRegistry.TROPHY_ITEM_KEY).useBlockDescriptionPrefix());
 
   public static void register(IEventBus bus) {
     REGISTER.register(bus);
