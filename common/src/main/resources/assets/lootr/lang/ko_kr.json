@@ -100,7 +100,7 @@
   "tag.block.lootr.chests": "전리품 상자",
   "tag.block.lootr.containers": "전리품 컨테이너",
   "tag.block.lootr.shulkers": "전리품 셜커",
-  "tag.block.lootr.trapped_chests": "Trapped Lootr Chests",
+  "tag.block.lootr.trapped_chests": "전리품 덫 상자",
   "text.autoconfig.lootr.option.breaking": "블록 파괴",
   "text.autoconfig.lootr.option.breaking.blast_immune": "폭발에 면역",
   "text.autoconfig.lootr.option.breaking.blast_resistant": "폭발 저항",
