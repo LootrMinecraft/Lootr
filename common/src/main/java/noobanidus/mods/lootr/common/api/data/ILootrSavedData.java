@@ -25,8 +25,6 @@ import java.util.UUID;
 // level, block entity, etc.
 public interface ILootrSavedData extends IRedirect<ILootrInfo>, ILootrInfo, IOpeners, IMarkChanged {
 
-  boolean shouldUpdate ();
-
   void update (ILootrInfo info);
 
   void refresh();

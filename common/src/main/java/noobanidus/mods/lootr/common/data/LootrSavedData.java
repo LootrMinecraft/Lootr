@@ -9,11 +9,13 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.StringUtil;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.saveddata.SavedData;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.*;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -25,7 +27,6 @@ import java.util.function.Supplier;
 
 public class LootrSavedData extends SavedData implements ILootrSavedData {
   private boolean hasBeenOpened;
-  private boolean justLoaded;
   private ILootrInfo info;
   private final Map<UUID, LootrInventory> inventories = new HashMap<>();
   private final Set<UUID> openers = new ObjectLinkedOpenHashSet<>();
@@ -58,13 +59,15 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
   }
 
   protected LootrSavedData(ILootrInfo info) {
-    this.info = BaseLootrInfo.copy(info);
-    this.justLoaded = false;
+    this(info, false);
   }
 
   protected LootrSavedData(ILootrInfo info, boolean noCopy) {
-    this.info = info;
-    this.justLoaded = true;
+    if (noCopy) {
+      this.info = info;
+    } else {
+      this.info = BaseLootrInfo.copy(info);
+    }
   }
 
   public static Supplier<LootrSavedData> fromInfo(ILootrInfo info) {
@@ -226,16 +229,11 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
   }
 
   @Override
-  public boolean shouldUpdate() {
-    return justLoaded;
-  }
-
-  @Override
   public void update(ILootrInfo info) {
-    if (shouldUpdate() || info.getInfoPos() != getInfoPos() || info.getInfoDimension() != getInfoDimension()) {
+    BaseLootrInfo infoCopy = BaseLootrInfo.copy(info);
+    if (!infoCopy.equals(this.info)) {
       markChanged();
       this.info = info;
-      justLoaded = false;
     }
   }
 
@@ -272,6 +270,10 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
   public void setDirty() {
     super.setDirty();
     this.lastTick = getCurrentTick();
+    // TODO: Debugging for data being marked dirty
+    LootrAPI.LOG.error("SavedData setDirty was called for {}.", getInfoKey());
+    String stackTrace = StringUtils.join(Thread.currentThread().getStackTrace(), "\n");
+    LootrAPI.LOG.error("Stack trace: {}", stackTrace);
   }
 
   @Override

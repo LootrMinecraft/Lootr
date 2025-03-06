@@ -47,10 +47,15 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
   private final NonNullList<ItemStack> items = NonNullList.withSize(27, ItemStack.EMPTY);
   private final Set<UUID> clientOpeners = new ObjectLinkedOpenHashSet<>();
   protected UUID infoId = null;
+  protected boolean hasBeenOpened = false;
   private String cachedId;
   private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
     @Override
     protected void onOpen(Level level, BlockPos pos, BlockState state) {
+      if (!LootrBarrelBlockEntity.this.hasBeenOpened) {
+        LootrBarrelBlockEntity.this.hasBeenOpened = true;
+        LootrBarrelBlockEntity.this.markChanged();
+      }
       LootrBarrelBlockEntity.this.playSound(state, SoundEvents.BARREL_OPEN);
       LootrBarrelBlockEntity.this.updateBlockState(state, true);
     }
@@ -120,6 +125,9 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
     if (compound.hasUUID("LootrId")) {
       this.infoId = compound.getUUID("LootrId");
     }
+    if (compound.contains("LootrHasBeenOpened", Tag.TAG_BYTE)) {
+      this.hasBeenOpened = compound.getBoolean("LootrHasBeenOpened");
+    }
     if (this.infoId == null) {
       getInfoUUID();
     }
@@ -146,6 +154,7 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
     if (!LootrAPI.shouldDiscard() && !savingToItem) {
       compound.putUUID("LootrId", getInfoUUID());
     }
+    compound.putBoolean("LootrHasBeenOpened", this.hasBeenOpened);
     if (level != null && level.isClientSide()) {
       if (clientOpeners != null && !clientOpeners.isEmpty()) {
         ListTag list = new ListTag();
@@ -210,6 +219,11 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
   public void markChanged() {
     setChanged();
     markDataChanged();
+  }
+
+  @Override
+  public boolean hasBeenOpened() {
+    return hasBeenOpened;
   }
 
   @Override

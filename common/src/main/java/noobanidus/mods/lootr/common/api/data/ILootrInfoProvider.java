@@ -90,16 +90,6 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
     return null;
   }
 
-  @Override
-  default boolean hasBeenOpened() {
-    ILootrSavedData data = LootrAPI.getData(this);
-    if (data == null) {
-      return false;
-    }
-
-    return data.hasBeenOpened();
-  }
-
   @Nullable
   default IContainerTrigger getTrigger() {
     return null;
