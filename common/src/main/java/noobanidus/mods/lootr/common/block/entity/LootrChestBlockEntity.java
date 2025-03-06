@@ -43,11 +43,16 @@ import java.util.UUID;
 public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlockEntity {
   private final ChestLidController chestLidController = new ChestLidController();
   protected UUID infoId;
+  protected boolean hasBeenOpened = false;
   private String cachedId;
   private final Set<UUID> clientOpeners = new ObjectLinkedOpenHashSet<>();
   private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
     @Override
     protected void onOpen(Level level, BlockPos pos, BlockState state) {
+      if (!LootrChestBlockEntity.this.hasBeenOpened) {
+        LootrChestBlockEntity.this.hasBeenOpened = true;
+        LootrChestBlockEntity.this.markChanged();
+      }
       LootrChestBlockEntity.playSound(level, pos, state, SoundEvents.CHEST_OPEN);
     }
 
@@ -124,6 +129,9 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
     if (compound.hasUUID("LootrId")) {
       this.infoId = compound.getUUID("LootrId");
     }
+    if (compound.contains("LootrHasBeenOpened", Tag.TAG_BYTE)) {
+      this.hasBeenOpened = compound.getBoolean("LootrHasBeenOpened");
+    }
     if (this.infoId == null) {
       getInfoUUID();
     }
@@ -148,6 +156,16 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
     this.trySaveLootTable(compound);
     if (!LootrAPI.shouldDiscard()) {
       compound.putUUID("LootrId", getInfoUUID());
+    }
+    compound.putBoolean("LootrHasBeenOpened", this.hasBeenOpened);
+    if (level != null && level.isClientSide()) {
+      if (clientOpeners != null && !clientOpeners.isEmpty()) {
+        ListTag list = new ListTag();
+        for (UUID opener : clientOpeners) {
+          list.add(NbtUtils.createUUID(opener));
+        }
+        compound.put("LootrOpeners", list);
+      }
     }
   }
 
@@ -252,6 +270,11 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
       cachedId = ILootrInfo.generateInfoKey(getInfoUUID());
     }
     return cachedId;
+  }
+
+  @Override
+  public boolean hasBeenOpened() {
+    return hasBeenOpened;
   }
 
   @Override

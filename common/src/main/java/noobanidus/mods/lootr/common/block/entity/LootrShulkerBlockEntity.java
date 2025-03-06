@@ -52,6 +52,7 @@ import java.util.UUID;
 public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity implements ILootrBlockEntity {
   private final NonNullList<ItemStack> itemStacks = NonNullList.withSize(27, ItemStack.EMPTY);
   protected UUID infoId;
+  protected boolean hasBeenOpened = false;
   private String cachedId;
 
   private final Set<UUID> clientOpeners = new ObjectLinkedOpenHashSet<>();
@@ -165,6 +166,12 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   @Override
   public void startOpen(Player pPlayer) {
     if (!this.remove && !pPlayer.isSpectator()) {
+      if (!hasBeenOpened) {
+        hasBeenOpened = true;
+        markChanged();
+      }
+
+
       if (this.openCount < 0) {
         this.openCount = 0;
       }
@@ -207,6 +214,9 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
     if (compound.hasUUID("LootrId")) {
       this.infoId = compound.getUUID("LootrId");
     }
+    if (compound.contains("LootrHasBeenOpened", Tag.TAG_BYTE)) {
+      this.hasBeenOpened = compound.getBoolean("LootrHasBeenOpened");
+    }
     if (this.infoId == null) {
       getInfoUUID();
     }
@@ -231,6 +241,16 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
     this.trySaveLootTable(compound);
     if (!LootrAPI.shouldDiscard()) {
       compound.putUUID("LootrId", getInfoUUID());
+    }
+    compound.putBoolean("LootrHasBeenOpened", this.hasBeenOpened);
+    if (level != null && level.isClientSide()) {
+      if (clientOpeners != null && !clientOpeners.isEmpty()) {
+        ListTag list = new ListTag();
+        for (UUID opener : clientOpeners) {
+          list.add(NbtUtils.createUUID(opener));
+        }
+        compound.put("LootrOpeners", list);
+      }
     }
   }
 
@@ -276,6 +296,11 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
       cachedId = ILootrInfo.generateInfoKey(getInfoUUID());
     }
     return cachedId;
+  }
+
+  @Override
+  public boolean hasBeenOpened() {
+    return hasBeenOpened;
   }
 
   @Override

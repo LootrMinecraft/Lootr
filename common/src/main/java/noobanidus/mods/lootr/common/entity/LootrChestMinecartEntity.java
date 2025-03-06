@@ -46,6 +46,7 @@ import java.util.UUID;
 public class LootrChestMinecartEntity extends AbstractMinecartContainer implements ILootrCart {
   private static BlockState cartNormal = null;
   private final Set<UUID> clientOpeners = new ObjectLinkedOpenHashSet<>();
+  private boolean hasBeenOpened = false;
   private boolean opened = false;
   private String cachedId;
 
@@ -179,6 +180,10 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   @Override
   public void startOpen(Player player) {
     if (!player.isSpectator()) {
+      if (!hasBeenOpened) {
+        hasBeenOpened = true;
+        markChanged();
+      }
       performOpen((ServerPlayer) player);
     }
   }
@@ -265,6 +270,11 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
       cachedId = ILootrInfo.generateInfoKey(getInfoUUID());
     }
     return cachedId;
+  }
+
+  @Override
+  public boolean hasBeenOpened() {
+    return hasBeenOpened;
   }
 
   @Override

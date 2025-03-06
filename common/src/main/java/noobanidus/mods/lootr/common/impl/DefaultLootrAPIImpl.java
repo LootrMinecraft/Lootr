@@ -142,7 +142,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
       provider.performDecay();
       LootrAPI.removeDecayed(provider);
       return;
-    } else if (provider.hasBeenOpened() && LootrAPI.shouldStartDecayWhileTicking() && !LootrAPI.isDecayed(provider)) {
+    } else if (LootrAPI.shouldStartDecayWhileTicking() && !LootrAPI.isDecayed(provider) && provider.hasBeenOpened()) {
       int decayValue = LootrAPI.getRemainingDecayValue(provider);
       if (decayValue == -1) {
         if (LootrAPI.isDecaying(provider)) {
@@ -150,13 +150,13 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
         }
       }
     }
-    if (provider.hasBeenOpened() && LootrAPI.shouldPerformRefreshWhileTicking() && LootrAPI.isRefreshed(provider)) {
+    if (LootrAPI.shouldPerformRefreshWhileTicking() && LootrAPI.isRefreshed(provider) && provider.hasBeenOpened()) {
       provider.performRefresh();
       provider.performClose();
       LootrAPI.removeRefreshed(provider);
       provider.performUpdate();
     }
-    if (provider.hasBeenOpened() && LootrAPI.shouldStartRefreshWhileTicking() && !LootrAPI.isRefreshed(provider)) {
+    if (LootrAPI.shouldStartRefreshWhileTicking() && !LootrAPI.isRefreshed(provider) && provider.hasBeenOpened()) {
       int refreshValue = LootrAPI.getRemainingRefreshValue(provider);
       if (refreshValue == -1) {
         if (LootrAPI.isRefreshing(provider)) {
