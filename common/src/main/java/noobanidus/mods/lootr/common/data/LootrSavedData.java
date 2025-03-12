@@ -270,10 +270,6 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
   public void setDirty() {
     super.setDirty();
     this.lastTick = getCurrentTick();
-/*    // TODO: Debugging for data being marked dirty
-    LootrAPI.LOG.error("SavedData setDirty was called for {}.", getInfoKey());
-    String stackTrace = StringUtils.join(Thread.currentThread().getStackTrace(), "\n");
-    LootrAPI.LOG.error("Stack trace: {}", stackTrace);*/
   }
 
   @Override
