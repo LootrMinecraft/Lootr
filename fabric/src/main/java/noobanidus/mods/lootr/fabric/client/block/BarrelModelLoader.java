@@ -37,6 +37,12 @@ public class BarrelModelLoader implements ModelLoadingPlugin, ModelResolver {
   @Override
   public @Nullable UnbakedModel resolveModel(ModelResolver.Context context) {
     ResourceLocation resourceId = context.id();
+    // Fix for #613:
+    // It seems possible for other mods to try loading resource locations dynamically from maps
+    // which end up being null. Thus, we check for null here to avoid causing crashes.
+    if (resourceId == null) {
+      return null;
+    }
     if (resourceId.equals(LOOTR_BARREL_MODEL_UNOPENED)) {
       return new BarrelModel(context.getOrLoadModel(LOOTR_OPENED_BARREL), context.getOrLoadModel(LOOTR_BARREL_UNOPENED), context.getOrLoadModel(VANILLA), context.getOrLoadModel(OLD_LOOTR_OPENED_BARREL), context.getOrLoadModel(OLD_LOOTR_BARREL_UNOPENED));
     } else if (resourceId.equals(LOOTR_BARREL_MODEL_OPENED)) {
