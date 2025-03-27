@@ -33,7 +33,7 @@ public class LootrShulkerBlockRenderer implements BlockEntityRenderer<LootrShulk
     if (LootrAPI.isVanillaTextures()) {
       return Sheets.DEFAULT_SHULKER_TEXTURE_LOCATION;
     }
-    if (blockEntity.isClientOpened()) {
+    if (!blockEntity.isClientOpened()) {
       return LootrAPI.isOldTextures() ? MATERIAL3 : MATERIAL;
     } else {
       return LootrAPI.isOldTextures() ? MATERIAL4 : MATERIAL2;

@@ -40,7 +40,7 @@ public class LootrShulkerBlockRenderer implements BlockEntityRenderer<LootrShulk
     if (Minecraft.getInstance().player == null) {
       return MATERIAL2;
     }
-    if (blockEntity.hasClientOpened(Minecraft.getInstance().player.getUUID())) {
+    if (!blockEntity.hasClientOpened(Minecraft.getInstance().player.getUUID())) {
       return LootrAPI.isOldTextures() ? MATERIAL3 : MATERIAL;
     } else {
       return LootrAPI.isOldTextures() ? MATERIAL4 : MATERIAL2;
