@@ -49,6 +49,9 @@ public class BarrelModelLoader implements ModelLoadingPlugin {
               @Override
               public @Nullable UnbakedModel modifyModelOnLoad(@Nullable UnbakedModel model, Context context) {
                 ResourceLocation resourceId = context.id();
+                if (resourceId == null) {
+                  return model;
+                }
                 if (resourceId.equals(LOOTR_BARREL_MODEL_UNOPENED)) {
                   return new BarrelModel(BakedBarrelModel::new, PARENT, LOOTR_OPENED_BARREL, LOOTR_BARREL_UNOPENED, VANILLA, OLD_LOOTR_BARREL_UNOPENED, OLD_LOOTR_OPENED_BARREL);
                 } else if (resourceId.equals(LOOTR_BARREL_MODEL_OPENED)) {
