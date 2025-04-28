@@ -10,6 +10,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.commands.arguments.coordinates.Vec3Argument;
@@ -29,10 +30,12 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.GameProfileCache;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
@@ -117,7 +120,9 @@ public class CommandLootr {
       }
       cart.setLootTable(table, world.getRandom().nextLong());
       world.addFreshEntity(cart);
-      c.sendSuccess(() -> Component.translatable("lootr.commands.summon", ComponentUtils.wrapInSquareBrackets(Component.translatable("lootr.commands.blockpos", pos.getX(), pos.getY(), pos.getZ()).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.GREEN)).withBold(true))), table.toString()), false);
+      c.sendSuccess(() -> Component.translatable("lootr.commands.summon", ComponentUtils.wrapInSquareBrackets(Component.translatable("lootr.commands.blockpos", pos.getX(), pos.getY(), pos.getZ())
+          .setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.GREEN))
+              .withBold(true))), table.toString()), false);
     } else {
       BlockState placementState = block.defaultBlockState();
       Entity e = c.getEntity();
@@ -140,7 +145,9 @@ public class CommandLootr {
       if (world.getBlockEntity(pos) instanceof RandomizableContainerBlockEntity randomizableBe) {
         randomizableBe.setLootTable(table, world.getRandom().nextLong());
       }
-      c.sendSuccess(() -> Component.translatable("lootr.commands.create", Component.translatable(block.getDescriptionId()), ComponentUtils.wrapInSquareBrackets(Component.translatable("lootr.commands.blockpos", pos.getX(), pos.getY(), pos.getZ()).setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.GREEN)).withBold(true))), table.toString()), false);
+      c.sendSuccess(() -> Component.translatable("lootr.commands.create", Component.translatable(block.getDescriptionId()), ComponentUtils.wrapInSquareBrackets(Component.translatable("lootr.commands.blockpos", pos.getX(), pos.getY(), pos.getZ())
+          .setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.GREEN))
+              .withBold(true))), table.toString()), false);
     }
   }
 
@@ -164,7 +171,8 @@ public class CommandLootr {
   }
 
   private RequiredArgumentBuilder<CommandSourceStack, String> suggestProfiles() {
-    return Commands.argument("profile", StringArgumentType.string()).suggests((c, build) -> SharedSuggestionProvider.suggest(getProfiles(), build));
+    return Commands.argument("profile", StringArgumentType.string())
+        .suggests((c, build) -> SharedSuggestionProvider.suggest(getProfiles(), build));
   }
 
   public LiteralArgumentBuilder<CommandSourceStack> builder(LiteralArgumentBuilder<CommandSourceStack> builder) {
@@ -207,11 +215,13 @@ public class CommandLootr {
       String playerName = StringArgumentType.getString(c, "profile");
       Optional<GameProfile> opt_profile = c.getSource().getServer().getProfileCache().get(playerName);
       if (!opt_profile.isPresent()) {
-        c.getSource().sendFailure(Component.literal("Invalid player name: " + playerName + ", profile not found in the cache."));
+        c.getSource()
+            .sendFailure(Component.literal("Invalid player name: " + playerName + ", profile not found in the cache."));
         return 0;
       }
       GameProfile profile = opt_profile.get();
-      c.getSource().sendSuccess(() -> Component.literal(LootrAPI.clearPlayerLoot(profile.getId()) ? "Cleared stored inventories for " + playerName : "No stored inventories for " + playerName + " to clear"), true);
+      c.getSource()
+          .sendSuccess(() -> Component.literal(LootrAPI.clearPlayerLoot(profile.getId()) ? "Cleared stored inventories for " + playerName : "No stored inventories for " + playerName + " to clear"), true);
       return 1;
     })));
     builder.then(Commands.literal("cart").executes(c -> {
@@ -234,7 +244,8 @@ public class CommandLootr {
       } else {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (!(blockEntity instanceof BaseContainerBlockEntity container)) {
-          c.getSource().sendSuccess(() -> Component.literal("Please stand on the container you wish to convert."), false);
+          c.getSource()
+              .sendSuccess(() -> Component.literal("Please stand on the container you wish to convert."), false);
         }
         NonNullList<ItemStack> reference = ((AccessorBaseContainerBlockEntity) blockEntity).invokeGetItems();
         BlockState newState = updateBlockState(state, LootrRegistry.getInventoryBlock().defaultBlockState());
@@ -243,7 +254,8 @@ public class CommandLootr {
         level.setBlockAndUpdate(pos, newState);
         BlockEntity te = level.getBlockEntity(pos);
         if (!(te instanceof LootrInventoryBlockEntity inventory)) {
-          c.getSource().sendSuccess(() -> Component.literal("Unable to convert chest, BlockState is not a Lootr Inventory block."), false);
+          c.getSource()
+              .sendSuccess(() -> Component.literal("Unable to convert chest, BlockState is not a Lootr Inventory block."), false);
         } else {
           inventory.setCustomInventory(custom);
           inventory.setChanged();
@@ -259,7 +271,8 @@ public class CommandLootr {
       String playerName = StringArgumentType.getString(c, "profile");
       Optional<GameProfile> opt_profile = c.getSource().getServer().getProfileCache().get(playerName);
       if (!opt_profile.isPresent()) {
-        c.getSource().sendFailure(Component.literal("Invalid player name: " + playerName + ", profile not found in the cache."));
+        c.getSource()
+            .sendFailure(Component.literal("Invalid player name: " + playerName + ", profile not found in the cache."));
         return 0;
       }
       GameProfile profile = opt_profile.get();
@@ -351,7 +364,8 @@ public class CommandLootr {
       if (ibe == null) {
         c.getSource().sendSuccess(() -> Component.literal("Please stand on a valid Lootr container."), false);
       } else {
-        c.getSource().sendSuccess(() -> Component.literal("The ID of this inventory is: ").append(ComponentUtils.copyOnClickText(ibe.getInfoUUID().toString())), false);
+        c.getSource().sendSuccess(() -> Component.literal("The ID of this inventory is: ")
+            .append(ComponentUtils.copyOnClickText(ibe.getInfoUUID().toString())), false);
       }
       return 1;
     }));
@@ -366,7 +380,8 @@ public class CommandLootr {
       ILootrBlockEntity ibe = LootrAPI.resolveBlockEntity(be);
       if (ibe != null) {
         LootrAPI.setRefreshing(ibe);
-        c.getSource().sendSuccess(() -> Component.literal("Container with ID " + (ibe).getInfoUUID() + " has been set to refresh with a delay of " + LootrAPI.getRefreshValue()), false);
+        c.getSource()
+            .sendSuccess(() -> Component.literal("Container with ID " + (ibe).getInfoUUID() + " has been set to refresh with a delay of " + LootrAPI.getRefreshValue()), false);
       } else {
         c.getSource().sendSuccess(() -> Component.literal("Please stand on a valid Lootr container."), false);
       }
@@ -384,7 +399,8 @@ public class CommandLootr {
       ILootrBlockEntity ibe = LootrAPI.resolveBlockEntity(be);
       if (ibe != null) {
         LootrAPI.setDecaying(ibe);
-        c.getSource().sendSuccess(() -> Component.literal("Container with ID " + (ibe).getInfoUUID() + " has been set to decay with a delay of " + LootrAPI.getDecayValue()), false);
+        c.getSource()
+            .sendSuccess(() -> Component.literal("Container with ID " + (ibe).getInfoUUID() + " has been set to decay with a delay of " + LootrAPI.getDecayValue()), false);
       } else {
         c.getSource().sendSuccess(() -> Component.literal("Please stand on a valid Lootr container."), false);
       }
@@ -398,74 +414,93 @@ public class CommandLootr {
       if (ibe != null) {
         Set<UUID> openers = ibe.getActualOpeners();
         if (openers != null) {
-          c.getSource().sendSuccess(() -> Component.literal("BlockEntity at location " + position + " has " + openers.size() + " openers. UUIDs as follows:"), true);
+          c.getSource()
+              .sendSuccess(() -> Component.literal("BlockEntity at location " + position + " has " + openers.size() + " openers. UUIDs as follows:"), true);
           for (UUID uuid : openers) {
             Optional<GameProfile> prof = c.getSource().getServer().getProfileCache().get(uuid);
-            c.getSource().sendSuccess(() -> Component.literal("UUID: " + uuid + ", user profile: " + (prof.isPresent() ? prof.get().getName() : "null")), true);
+            c.getSource()
+                .sendSuccess(() -> Component.literal("UUID: " + uuid + ", user profile: " + (prof.isPresent() ? prof.get()
+                    .getName() : "null")), true);
           }
         }
       } else {
-        c.getSource().sendSuccess(() -> Component.literal("No Lootr block entity exists at location: " + position), false);
+        c.getSource()
+            .sendSuccess(() -> Component.literal("No Lootr block entity exists at location: " + position), false);
       }
       return 1;
     })));
-    builder.then(Commands.literal("convert").then(Commands.argument("from", BlockPosArgument.blockPos()).then(Commands.argument("to", BlockPosArgument.blockPos()).executes(context -> {
-      BoundingBox bounds = BoundingBox.fromCorners(BlockPosArgument.getLoadedBlockPos(context, "from"), BlockPosArgument.getLoadedBlockPos(context, "to"));
-      ChunkPos start = new ChunkPos(new BlockPos(bounds.minX(), bounds.minY(), bounds.minZ()));
-      ChunkPos stop = new ChunkPos(new BlockPos(bounds.maxX(), bounds.maxY(), bounds.maxZ()));
-      List<ChunkPos> positions = new ArrayList<>();
-      for (int x = start.x; x <= stop.x; x++) {
-        for (int z = start.z; z <= stop.z; z++) {
-          positions.add(new ChunkPos(x, z));
-        }
-      }
-      ServerLevel level = context.getSource().getLevel();
-      for (ChunkPos chunkPos : positions) {
-        LevelChunk chunk = level.getChunk(chunkPos.x, chunkPos.z);
-        List<BlockPos> convertableBlocks = new ArrayList<>();
-        for (BlockPos pos : chunk.getBlockEntitiesPos()) {
-          if (!bounds.isInside(pos)) {
-            continue;
+    builder.then(Commands.literal("convert").then(Commands.argument("from", BlockPosArgument.blockPos())
+        .then(Commands.argument("to", BlockPosArgument.blockPos()).executes(context -> {
+          BoundingBox bounds = BoundingBox.fromCorners(BlockPosArgument.getLoadedBlockPos(context, "from"), BlockPosArgument.getLoadedBlockPos(context, "to"));
+          ChunkPos start = new ChunkPos(new BlockPos(bounds.minX(), bounds.minY(), bounds.minZ()));
+          ChunkPos stop = new ChunkPos(new BlockPos(bounds.maxX(), bounds.maxY(), bounds.maxZ()));
+          List<ChunkPos> positions = new ArrayList<>();
+          for (int x = start.x; x <= stop.x; x++) {
+            for (int z = start.z; z <= stop.z; z++) {
+              positions.add(new ChunkPos(x, z));
+            }
           }
-          convertableBlocks.add(pos);
-        }
-        if (convertableBlocks.isEmpty()) {
-          continue;
-        }
-        for (BlockPos pos : convertableBlocks) {
-          BlockEntity blockEntity = chunk.getBlockEntity(pos, LevelChunk.EntityCreationType.IMMEDIATE);
-          if (!(blockEntity instanceof BaseContainerBlockEntity)) {
-            continue;
-          }
-          if (blockEntity instanceof RandomizableContainerBlockEntity lootContainer) {
-            if (lootContainer.getLootTable() != null) {
+          ServerLevel level = context.getSource().getLevel();
+          for (ChunkPos chunkPos : positions) {
+            LevelChunk chunk = level.getChunk(chunkPos.x, chunkPos.z);
+            List<BlockPos> convertableBlocks = new ArrayList<>();
+            for (BlockPos pos : chunk.getBlockEntitiesPos()) {
+              if (!bounds.isInside(pos)) {
+                continue;
+              }
+              convertableBlocks.add(pos);
+            }
+            if (convertableBlocks.isEmpty()) {
               continue;
             }
-          }
-          BlockState state = blockEntity.getBlockState();
-          if (!state.is(LootrTags.Blocks.CUSTOM_ELIGIBLE) && !blockEntity.getType().builtInRegistryHolder().is(LootrTags.BlockEntity.CUSTOM_INELIGIBLE)) {
-            NonNullList<ItemStack> reference = ((AccessorBaseContainerBlockEntity) blockEntity).invokeGetItems();
-            BlockState newState = updateBlockState(state, LootrRegistry.getInventoryBlock().defaultBlockState());
-            NonNullList<ItemStack> custom = copyItemList(reference);
-            level.removeBlockEntity(pos);
-            level.setBlockAndUpdate(pos, newState);
-            BlockEntity te = level.getBlockEntity(pos);
-            if (!(te instanceof LootrInventoryBlockEntity inventory)) {
-              context.getSource().sendSuccess(() -> Component.literal("Unable to convert chest, BlockState is not a Lootr Inventory block."), false);
-            } else {
-              inventory.setCustomInventory(custom);
-              inventory.setChanged();
+            for (BlockPos pos : convertableBlocks) {
+              BlockEntity blockEntity = chunk.getBlockEntity(pos, LevelChunk.EntityCreationType.IMMEDIATE);
+              if (!(blockEntity instanceof BaseContainerBlockEntity)) {
+                continue;
+              }
+              if (blockEntity instanceof RandomizableContainerBlockEntity lootContainer) {
+                if (lootContainer.getLootTable() != null) {
+                  continue;
+                }
+              }
+              BlockState state = blockEntity.getBlockState();
+              if (!state.is(LootrTags.Blocks.CUSTOM_ELIGIBLE) && !blockEntity.getType().builtInRegistryHolder()
+                  .is(LootrTags.BlockEntity.CUSTOM_INELIGIBLE)) {
+                NonNullList<ItemStack> reference = ((AccessorBaseContainerBlockEntity) blockEntity).invokeGetItems();
+                BlockState newState = updateBlockState(state, LootrRegistry.getInventoryBlock().defaultBlockState());
+                NonNullList<ItemStack> custom = copyItemList(reference);
+                level.removeBlockEntity(pos);
+                level.setBlockAndUpdate(pos, newState);
+                BlockEntity te = level.getBlockEntity(pos);
+                if (!(te instanceof LootrInventoryBlockEntity inventory)) {
+                  context.getSource()
+                      .sendSuccess(() -> Component.literal("Unable to convert chest, BlockState is not a Lootr Inventory block."), false);
+                } else {
+                  inventory.setCustomInventory(custom);
+                  inventory.setChanged();
+                }
+              }
             }
           }
-        }
-      }
 
-      return 1;
-    }))));
+          return 1;
+        }))));
+    builder.then(Commands.literal("cclear")
+        .then(Commands.argument("entities", EntityArgument.entities()).executes(c -> {
+          Collection<? extends Entity> entities = EntityArgument.getEntities(c, "entities");
+          for (Entity entity : entities) {
+            if (entity instanceof Player player) {
+              String name = player.getScoreboardName();
+              c.getSource()
+                  .sendSuccess(() -> Component.literal(DataStorage.clearInventories(player.getUUID()) ? "Cleared stored inventories for " + name : "No stored inventories for " + name + " to clear"), true);
+            }
+          }
+          return 1;
+        })));
     return builder;
   }
 
-  private static BlockState updateBlockState (BlockState oldState, BlockState newState) {
+  private static BlockState updateBlockState(BlockState oldState, BlockState newState) {
     if (oldState.hasProperty(BlockStateProperties.FACING) && newState.hasProperty(BlockStateProperties.FACING)) {
       newState = newState.setValue(BlockStateProperties.FACING, oldState.getValue(BlockStateProperties.FACING));
     }
