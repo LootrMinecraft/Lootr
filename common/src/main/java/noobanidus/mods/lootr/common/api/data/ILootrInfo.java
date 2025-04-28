@@ -140,7 +140,7 @@ public interface ILootrInfo {
     if (tag.contains("blockType", CompoundTag.TAG_INT)) {
       blockType = LootrBlockType.values()[tag.getInt("blockType")];
     }
-    BlockPos pos = NbtUtils.readBlockPos(tag, "position").orElseThrow();
+    BlockPos pos = NbtUtils.readBlockPos(tag, "position").orElse(BlockPos.ZERO);
     UUID uuid = tag.getUUID("uuid");
     ResourceKey<Level> dimension = ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(tag.getString("dimension")));
     int size = tag.getInt("size");
