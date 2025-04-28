@@ -12,6 +12,7 @@ import net.minecraft.util.StringUtil;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.saveddata.SavedData;
+import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.*;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
@@ -162,9 +163,10 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
 
   @Override
   public LootrInventory createInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler) {
-
     LootrInventory result = new LootrInventory(this, provider.buildInitialInventory());
-    filler.unpackLootTable(provider, player, result);
+    if (!LootrAPI.isFakePlayer(player)) {
+      filler.unpackLootTable(provider, player, result);
+    }
     inventories.put(player.getUUID(), result);
     hasBeenOpened = true;
     setDirty();
