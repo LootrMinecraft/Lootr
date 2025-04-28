@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(BaseContainerBlockEntity.class)
-public interface AccessorBaseContainerBlockEntity {
+public interface AccessorMixinBaseContainerBlockEntity {
   @Invoker
   NonNullList<ItemStack> invokeGetItems();
 

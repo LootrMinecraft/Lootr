@@ -22,7 +22,7 @@ public class MixinServerChunkCache {
       return;
     }
 
-    Path lootrDirectory = ((AccessorDimensionDataStorage) cache.getDataStorage()).getDataFolder().resolve("lootr");
+    Path lootrDirectory = ((AccessorMixinDimensionDataStorage) cache.getDataStorage()).getDataFolder().resolve("lootr");
     try {
       FileUtil.createDirectoriesSafe(lootrDirectory);
 

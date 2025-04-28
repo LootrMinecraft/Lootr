@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.util.Map;
 
 @Mixin(DimensionDataStorage.class)
-public interface AccessorDimensionDataStorage {
+public interface AccessorMixinDimensionDataStorage {
   @Accessor
   Map<String, SavedData> getCache();
 
