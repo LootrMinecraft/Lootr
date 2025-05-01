@@ -272,7 +272,6 @@ public class DataStorage {
 
   private static class LootrDummyData extends SavedData {
     public static final LootrDummyData INSTANCE = new LootrDummyData();
-    public static final CompoundTag EMPTY = new CompoundTag();
 
     public LootrDummyData() {
       super();
@@ -280,7 +279,7 @@ public class DataStorage {
 
     @Override
     public CompoundTag save(CompoundTag p_77763_, HolderLookup.Provider p_323640_) {
-      return EMPTY;
+      return new CompoundTag();
     }
   }
 }
