@@ -4,7 +4,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.EntityTypeTagsProvider;
 import net.minecraft.world.entity.EntityType;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import org.jetbrains.annotations.Nullable;
@@ -12,8 +11,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.CompletableFuture;
 
 public class LootrEntityTagsProvider extends EntityTypeTagsProvider {
-  public LootrEntityTagsProvider(PackOutput arg, CompletableFuture<HolderLookup.Provider> completableFuture,@Nullable ExistingFileHelper existingFileHelper) {
-    super(arg, completableFuture, LootrAPI.MODID, existingFileHelper);
+  public LootrEntityTagsProvider(PackOutput arg, CompletableFuture<HolderLookup.Provider> completableFuture) {
+    super(arg, completableFuture, LootrAPI.MODID);
   }
 
   @Override

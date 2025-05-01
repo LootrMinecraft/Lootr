@@ -3,7 +3,6 @@ package noobanidus.mods.lootr.neoforge.gen;
 import net.minecraft.client.renderer.texture.atlas.sources.SingleFile;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.common.data.SpriteSourceProvider;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.client.block.LootrChestBlockRenderer;
@@ -13,8 +12,8 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 public class LootrAtlasGenerator extends SpriteSourceProvider {
-  public LootrAtlasGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, ExistingFileHelper fileHelper) {
-    super(output, lookupProvider, LootrAPI.MODID, fileHelper);
+  public LootrAtlasGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
+    super(output, lookupProvider, LootrAPI.MODID);
   }
 
   @Override
