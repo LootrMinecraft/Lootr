@@ -3,6 +3,7 @@ package noobanidus.mods.lootr.common.api.data;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
@@ -127,23 +128,24 @@ public interface ILootrInfo {
     }
   }
 
+  // TODO: Codec
   static ILootrInfo loadInfoFromTag(CompoundTag tag, HolderLookup.Provider provider) {
     LootrInfoType infoType = LootrInfoType.CONTAINER_BLOCK_ENTITY;
-    if (tag.contains("type", CompoundTag.TAG_INT)) {
-      infoType = LootrInfoType.values()[tag.getInt("type")];
-    } else if (tag.contains("entity") && tag.getBoolean("entity")) {
+    if (tag.contains("type")) {
+      infoType = LootrInfoType.values()[tag.getIntOr("type", 0)];
+    } else if (tag.getBooleanOr("entity", false)) {
       infoType = LootrInfoType.CONTAINER_ENTITY;
     } else {
       LootrAPI.LOG.error("Couldn't deduce the infoType of LootrInfo from tag: {}", tag);
     }
     LootrBlockType blockType = null;
-    if (tag.contains("blockType", CompoundTag.TAG_INT)) {
-      blockType = LootrBlockType.values()[tag.getInt("blockType")];
+    if (tag.contains("blockType")) {
+      blockType = LootrBlockType.values()[tag.getIntOr("blockType", 0)];
     }
-    BlockPos pos = NbtUtils.readBlockPos(tag, "position").orElse(BlockPos.ZERO);
-    UUID uuid = tag.getUUID("uuid");
-    ResourceKey<Level> dimension = ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(tag.getString("dimension")));
-    int size = tag.getInt("size");
+    BlockPos pos = tag.read("position", BlockPos.CODEC).orElse(BlockPos.ZERO);
+    UUID uuid = tag.read("uuid", UUIDUtil.CODEC).orElseThrow();
+    ResourceKey<Level> dimension = ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(tag.getString("dimension").orElseThrow()));
+    int size = tag.getInt("size").orElseThrow();
     Component name = null;
     if (tag.contains("name")) {
       name = Component.Serializer.fromJson(tag.getString("name"), provider);

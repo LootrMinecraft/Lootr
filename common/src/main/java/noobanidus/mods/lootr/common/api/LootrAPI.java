@@ -11,7 +11,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.TicketType;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.Unit;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
@@ -46,7 +45,7 @@ public class LootrAPI {
   public static final String NETWORK_VERSION = "lootr-1.21.0-1";
   public static final ResourceKey<LootTable> ELYTRA_CHEST = ResourceKey.create(Registries.LOOT_TABLE, LootrAPI.rl("chests/elytra"));
   public static final ResourceKey<LootTable> TROPHY_REWARD = ResourceKey.create(Registries.LOOT_TABLE, LootrAPI.rl("reward/trophy"));
-  public static final TicketType<Unit> LOOTR_ENTITY_TICK_TICKET = TicketType.create("lootr_entity_tick_ticket", (unit1, unit2) -> 0, 300);
+  public static final TicketType LOOTR_ENTITY_TICK_TICKET = new TicketType(300, false, TicketType.TicketUse.LOADING); //.create("lootr_entity_tick_ticket", (unit1, unit2) -> 0, 300);
   @ApiStatus.Internal
   public static final List<String> _lootr$digits = Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f");
   public static final List<ResourceLocation> PROBLEMATIC_CHESTS = Arrays.asList(LootrAPI.rl("twilightforest", "structures/stronghold_boss"), LootrAPI.rl("atum", "chests/pharaoh"));
@@ -54,7 +53,7 @@ public class LootrAPI {
   public static ILootrAPI INSTANCE = null;
   public static boolean shouldDiscardIdAndOpeners;
 
-  public static boolean isReady () {
+  public static boolean isReady() {
     return INSTANCE != null;
   }
 
@@ -130,7 +129,7 @@ public class LootrAPI {
     return INSTANCE.isOldTextures();
   }
 
-  public static boolean isNewTextures () {
+  public static boolean isNewTextures() {
     return INSTANCE.isNewTextures();
   }
 
@@ -315,7 +314,7 @@ public class LootrAPI {
     return INSTANCE.isFakePlayerBreakEnabled();
   }
 
-  public static boolean shouldDropPlayerLoot () {
+  public static boolean shouldDropPlayerLoot() {
     return INSTANCE.shouldDropPlayerLoot();
   }
 
@@ -422,27 +421,27 @@ public class LootrAPI {
     return INSTANCE.anyUnloadedChunks(dimension, chunks);
   }
 
-  public static <T extends BlockEntity> ILootrBlockEntity resolveBlockEntity (T blockEntity) {
+  public static <T extends BlockEntity> ILootrBlockEntity resolveBlockEntity(T blockEntity) {
     return INSTANCE.resolveBlockEntity(blockEntity);
   }
 
-  public static <T extends Entity> ILootrCart resolveEntity (T entity) {
+  public static <T extends Entity> ILootrCart resolveEntity(T entity) {
     return INSTANCE.resolveEntity(entity);
   }
 
-  public static boolean isTaggedStructurePresent (ServerLevel level, ChunkPos chunkPos, TagKey<Structure> tag, BlockPos pos) {
+  public static boolean isTaggedStructurePresent(ServerLevel level, ChunkPos chunkPos, TagKey<Structure> tag, BlockPos pos) {
     return INSTANCE.isTaggedStructurePresent(level, chunkPos, tag, pos);
   }
 
-  public static void playerDestroyed (Level level, Player player, BlockPos blockPos, @Nullable BlockEntity blockEntity) {
+  public static void playerDestroyed(Level level, Player player, BlockPos blockPos, @Nullable BlockEntity blockEntity) {
     INSTANCE.playerDestroyed(level, player, blockPos, blockEntity);
   }
 
-  public static void refreshSections () {
+  public static void refreshSections() {
     INSTANCE.refreshSections();
   }
 
-  public static List<ILootrFilter> getFilters () {
+  public static List<ILootrFilter> getFilters() {
     return INSTANCE.getFilters();
   }
 }

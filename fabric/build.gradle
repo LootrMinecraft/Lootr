@@ -1,140 +1,186 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "7.1.2"
+    id 'fabric-loom' version '1.10-SNAPSHOT'
 }
 
-architectury {
-    platformSetupLoomIde()
-    fabric()
-}
-
-loom {
-    accessWidenerPath = project(":common").loom.accessWidenerPath
-}
-
-configurations {
-    common
-    shadowCommon // Don't use shadow from the shadow plugin because we don't want IDEA to index this.
-    compileClasspath.extendsFrom common
-    runtimeClasspath.extendsFrom common
-    developmentFabric.extendsFrom common
+repositories {
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "ParchmentMC"
+                url = "https://maven.parchmentmc.org"
+            }
+        }
+        filter {
+            includeGroupAndSubgroups("org.parchmentmc")
+        }
+    }
+    exclusiveContent {
+        forRepository {
+            maven {
+                url = "https://maven.terraformersmc.com/releases"
+            }
+        }
+        filter {
+            includeGroupAndSubgroups("com.terraformersmc")
+        }
+    }
 }
 
 dependencies {
-    // REQUIRED
-    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
-    modApi "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings(loom.layered {
+        it.officialMojangMappings()
+        it.parchment("org.parchmentmc.data:parchment-${project.parchment_minecraft_version}:${project.parchment_mappings_version}@zip")
+    })
+    compileOnly(project.project(":common")) {
+        transitive = false
+    }
 
-    common(project(path: ":common", configuration: "namedElements")) { transitive false }
-    shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
+    modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
+    // COMPAT
+    modCompileOnly("com.terraformersmc:modmenu:${project.mod_menu_version}") {
+        transitive = false
+    }
+    modLocalRuntime("com.terraformersmc:modmenu:${project.mod_menu_version}") {
+        transitive = false
+    }
 
     modCompileOnly("me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config}")
-    modRuntimeOnly("me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config}")
+    //modLocalRuntime("me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config}")
+}
 
-    modCompileOnly("maven.modrinth:modmenu:${rootProject.mod_menu}")
-    modRuntimeOnly("maven.modrinth:modmenu:${rootProject.mod_menu}")
+publishMods {
+    file = tasks.remapJar.archiveFile
+    modLoaders.add("fabric")
 
-    //modLocalRuntime("com.telepathicgrunt:CommandStructures-Fabric:${project.commandstructures_fabric}")
-    //modLocalRuntime("com.telepathicgrunt:StructureVoidToggle-Fabric:${project.structurevoidtoggle_fabric}")
+    var env = System.getenv()
+
+    def gitRepo = getExecOutput(['git', 'remote', 'get-url', 'origin'])
+    def gitCommit = getExecOutput(['git', 'log', '-n', '1', '--pretty=tformat:%h'])
+    def gitPrevCommit = project.findProperty("git_previous_commit") ?: env["GIT_PREVIOUS_COMMIT"]
+
+    var changelogText = ""
+
+    if (gitCommit && gitPrevCommit) {
+        changelogText += getExecOutput(['git', 'log', "--pretty=tformat:- %s [(%h)](${gitRepo}/commit/%h)", '' + gitPrevCommit + '..' + gitCommit])
+    }
+
+    // Limit the changelog to 500 characters
+    changelogText = changelogText.take(500)
+
+    def uploadDependencies = [
+            "fabric-api": true,
+            "cloth-config": true
+    ]
+
+    if (project.hasProperty('curseforge_id_fabric')) {
+        curseforge('curseforgeFabric') {
+            accessToken = project.findProperty("curse_auth")
+            projectId = project.findProperty('curseforge_id')
+            announcementTitle = "Lootr ${rootProject.minecraft_version}-${rootProject.mod_version} for Fabric on CurseForge"
+            minecraftVersions.add(project.minecraft_version)
+            changelog = changelogText
+
+            uploadDependencies.each { dep, required ->
+                if (required) {
+                    requires(dep)
+                } else {
+                    optional(dep)
+                }
+            }
+        }
+    }
+
+    if (project.hasProperty('modrinth_id_fabric')) {
+        modrinth('modrinthFabric') {
+            accessToken = project.findProperty("modrinth_auth")
+            projectId = project.findProperty('modrinth_id')
+            announcementTitle = "Lootr ${rootProject.minecraft_version}-${rootProject.mod_version} for Fabric on Modrinth"
+            minecraftVersions.add(project.minecraft_version)
+            changelog = changelogText
+
+            dependencies {
+                uploadDependencies.each { dep, required ->
+                    if (required) {
+                        requires(dep)
+                    } else {
+                        optional(dep)
+                    }
+                }
+            }
+        }
+    }
+
+    if (project.hasProperty("curse_discord_webhook")) {
+         discord {
+             webhookUrl = project.findProperty("curse_discord_webhook")
+             username = "Lootr Update"
+         }
+    }
+}
+
+loom {
+    mods {
+        "${mod_id}" {
+            // Tell Loom about each source set used by your mod here. This ensures that your mod's classes are properly transformed by Loader.
+            sourceSet sourceSets.main
+            sourceSet project.project(":common").sourceSets.main
+        }
+    }
+
+    def awFile = project.file("src/main/resources/${mod_id}.accesswidener")
+    if (awFile.exists()) {
+        accessWidenerPath.set(awFile)
+    }
+
+    mixin {
+        useLegacyMixinAp = false
+    }
+
+    runs {
+        configureEach {
+            runDir("run")
+            ideConfigGenerated(true)
+        }
+
+        client {
+            client()
+            setConfigName("Fabric Client")
+
+            if (project.hasProperty('mc_uuid')) {
+                programArg("--uuid=${project.findProperty('mc_uuid')}")
+            }
+
+            if (project.hasProperty('mc_username')) {
+                programArg("--username=${project.findProperty('mc_username')}")
+            }
+
+            if (project.hasProperty('mc_java_agent_path')) {
+                vmArg("-javaagent:${project.findProperty('mc_java_agent_path')}")
+            }
+        }
+
+        server {
+            server()
+            setConfigName("Fabric Server")
+        }
+    }
+}
+
+tasks.named("compileJava", JavaCompile) {
+    source(project.project(":common").sourceSets.main.allJava)
+}
+
+tasks.named("javadoc", Javadoc).configure {
+    source(project.project(":common").sourceSets.main.allJava)
+}
+
+tasks.named("sourcesJar", Jar) {
+    from(project.project(":common").sourceSets.main.allSource)
 }
 
 processResources {
-    inputs.property "version", project.version
-
-    filesMatching("fabric.mod.json") {
-        def startVersion = project.property("version_compat_start");
-        def stopVersion = project.property("version_compat_stop");
-        def versionRange = ">=${startVersion} <=${stopVersion}"
-
-        expand ("version": project.version, "versionRange": versionRange)
-    }
-
-    from(project(":common").sourceSets["generated"].resources) {
-        exclude(".cache")
-    }
+    from project.project(":common").sourceSets.main.resources
 }
-
-shadowJar {
-    exclude "architectury.common.json"
-    exclude "resources/"
-    configurations = [project.configurations.shadowCommon]
-    archiveClassifier.set("dev-shadow")
-}
-
-remapJar {
-    injectAccessWidener = true
-    inputFile.set shadowJar.archiveFile
-    dependsOn shadowJar
-    archiveClassifier.set(null)
-}
-
-jar {
-    archiveClassifier.set("dev")
-}
-
-sourcesJar {
-    def commonSources = project(":common").sourcesJar
-    dependsOn commonSources
-    from commonSources.archiveFile.map { zipTree(it) }
-}
-
-components.java {
-    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
-        skip()
-    }
-}
-
-def ENV = System.getenv()
-
-publishing {
-    tasks.publish.dependsOn build
-
-    publications {
-        mavenJava(MavenPublication) {
-
-            artifactId project.archivesBaseName
-            artifact remapJar
-            artifact project.sourcesJar {
-                archiveClassifier.set('sources')
-            }
-
-            pom {
-                name = 'Lootr'
-                description = 'Friendly loot for everyone.'
-                url = 'https://github.com/LootrMinecraft/Lootr'
-
-                scm {
-                    connection = 'git:https://github.com/LootrMinecraft/Lootr.git'
-                    developerConnection = 'git:https://github.com/LootrMinecraft/Lootr.git'
-                    url = 'https://github.com/LootrMinecraft/Lootr'
-                }
-
-                licenses {
-                    license {
-                        name = 'MIT License'
-                        url = 'https://opensource.org/licenses/MIT'
-                    }
-                }
-
-                developers {
-                    developer {
-                        id = 'noobanidus'
-                        name = 'Noobanidus'
-                        email = 'noobanidus+spam@gmail.com'
-                    }
-                }
-            }
-        }
-    }
-
-    repositories {
-        maven {
-            url "file:///" + System.getenv("local_maven")
-        }
-    }
-}
-
-task buildAndRelease{}
-tasks.build.mustRunAfter tasks.clean
-tasks.publish.mustRunAfter tasks.build
-tasks.publishMods.mustRunAfter tasks.publish
-tasks.buildAndRelease.dependsOn(tasks.clean, tasks.build, tasks.publish, tasks.publishMods)

@@ -9,6 +9,7 @@
     "ZestyBlaze",
     "embeddedt"
   ],
+  "accessWidener": "lootr.accesswidener",
   "contact": {
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/lootr-fabric",
     "sources": "https://github.com/noobanidus/Lootr/tree/fabric-1.19.4",

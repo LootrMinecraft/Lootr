@@ -7,6 +7,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.level.saveddata.SavedDataType;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraft.world.level.storage.LevelResource;
 import noobanidus.mods.lootr.common.api.LootrAPI;
@@ -29,9 +30,13 @@ import java.util.stream.Stream;
 
 @SuppressWarnings("unused")
 public class DataStorage {
-  public static final String ADVANCEMENTS = "lootr/Lootr-AdvancementData";
-  public static final String DECAYS = "lootr/Lootr-DecayData";
-  public static final String REFRESHES = "lootr/Lootr-RefreshData";
+  public static final String ADVANCEMENTS_ID = "lootr/Lootr-AdvancementData";
+  public static final String DECAYS_ID = "lootr/Lootr-DecayData";
+  public static final String REFRESHES_ID = "lootr/Lootr-RefreshData";
+
+  public static final SavedDataType<TickingData> DECAYS = new SavedDataType<>(DECAYS_ID, TickingData::new, TickingData.CODEC, null);
+  public static final SavedDataType<TickingData> REFRESHES = new SavedDataType<>(REFRESHES_ID, TickingData::new, TickingData.CODEC, null);
+  public static final SavedDataType<AdvancementData> ADVANCEMENTS = new SavedDataType<>(ADVANCEMENTS_ID, AdvancementData::new, AdvancementData.CODEC, null);
 
   @ApiStatus.Internal
   @Nullable
@@ -63,7 +68,7 @@ public class DataStorage {
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot determine if advancement has been awarded.");
       return false;
     }
-    AdvancementData data = manager.computeIfAbsent(AdvancementData.FACTORY, ADVANCEMENTS);
+    AdvancementData data = manager.computeIfAbsent(ADVANCEMENTS);
     return data.contains(player.getUUID(), uuid);
   }
 
@@ -79,7 +84,7 @@ public class DataStorage {
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot award advancement.");
       return;
     }
-    AdvancementData data = manager.computeIfAbsent(AdvancementData.FACTORY, ADVANCEMENTS);
+    AdvancementData data = manager.computeIfAbsent(ADVANCEMENTS);
     data.add(player.getUUID(), id);
   }
 
@@ -90,7 +95,7 @@ public class DataStorage {
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot determine the decay value for " + provider.getInfoUUID() + ".");
       return -1;
     }
-    TickingData data = manager.computeIfAbsent(TickingData.FACTORY, DECAYS);
+    TickingData data = manager.computeIfAbsent(DECAYS);
     return data.getValue(provider.getInfoUUID());
   }
 
@@ -101,7 +106,7 @@ public class DataStorage {
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot determine the decay value for " + provider.getInfoUUID() + ".");
       return false;
     }
-    TickingData data = manager.computeIfAbsent(TickingData.FACTORY, DECAYS);
+    TickingData data = manager.computeIfAbsent(DECAYS);
     return data.isComplete(provider.getInfoUUID());
   }
 
@@ -112,7 +117,7 @@ public class DataStorage {
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot set the decay value for " + provider.getInfoUUID() + ".");
       return;
     }
-    TickingData data = manager.computeIfAbsent(TickingData.FACTORY, DECAYS);
+    TickingData data = manager.computeIfAbsent(DECAYS);
     data.setValue(provider.getInfoUUID(), LootrAPI.getDecayValue());
   }
 
@@ -123,7 +128,7 @@ public class DataStorage {
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr remove the decay value for " + provider.getInfoUUID() + ".");
       return;
     }
-    TickingData data = manager.computeIfAbsent(TickingData.FACTORY, DECAYS);
+    TickingData data = manager.computeIfAbsent(DECAYS);
     data.remove(provider.getInfoUUID());
   }
 
@@ -134,8 +139,8 @@ public class DataStorage {
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot iterate and tick decay.");
       return;
     }
-    manager.computeIfAbsent(TickingData.FACTORY, DECAYS).tick();
-    manager.computeIfAbsent(TickingData.FACTORY, REFRESHES).tick();
+    manager.computeIfAbsent(DECAYS).tick();
+    manager.computeIfAbsent(REFRESHES).tick();
   }
 
   @ApiStatus.Internal
@@ -145,7 +150,7 @@ public class DataStorage {
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot determine the refresh value for " + provider.getInfoUUID() + ".");
       return -1;
     }
-    TickingData data = manager.computeIfAbsent(TickingData.FACTORY, REFRESHES);
+    TickingData data = manager.computeIfAbsent(REFRESHES);
     return data.getValue(provider.getInfoUUID());
   }
 
@@ -156,7 +161,7 @@ public class DataStorage {
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot determine the refresh value for " + provider.getInfoUUID() + ".");
       return false;
     }
-    TickingData data = manager.computeIfAbsent(TickingData.FACTORY, REFRESHES);
+    TickingData data = manager.computeIfAbsent(REFRESHES);
     return data.isComplete(provider.getInfoUUID());
   }
 
@@ -167,7 +172,7 @@ public class DataStorage {
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot set the refresh value for " + provider.getInfoUUID() + ".");
       return;
     }
-    TickingData data = manager.computeIfAbsent(TickingData.FACTORY, REFRESHES);
+    TickingData data = manager.computeIfAbsent(REFRESHES);
     data.setValue(provider.getInfoUUID(), LootrAPI.getRefreshValue());
   }
 
@@ -178,7 +183,7 @@ public class DataStorage {
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr remove the refresh value for " + provider.getInfoUUID() + ".");
       return;
     }
-    TickingData data = manager.computeIfAbsent(TickingData.FACTORY, REFRESHES);
+    TickingData data = manager.computeIfAbsent(REFRESHES);
     data.remove(provider.getInfoUUID());
   }
 
