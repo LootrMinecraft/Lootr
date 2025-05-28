@@ -4,7 +4,6 @@
   "package": "noobanidus.mods.lootr.fabric.mixins",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "MixinBlockEntity",
     "MixinPersistentEntitySectionManager",
     "MixinPlayerAdvancements",
     "MixinReloadableServerResources"

@@ -1,7 +1,8 @@
 package noobanidus.mods.lootr.fabric.mixins;
 
+import net.minecraft.server.level.ChunkMap;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.Unit;
+import net.minecraft.server.level.Ticket;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.vehicle.AbstractMinecartContainer;
@@ -13,6 +14,7 @@ import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.entity.EntityTicker;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
+import noobanidus.mods.lootr.fabric.init.ModTicketTypes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -46,7 +48,9 @@ public class MixinPersistentEntitySectionManager {
         cir.setReturnValue(false);
         cir.cancel();
         if (!level.getServer().isSameThread()) {
-          level.getChunkSource().addRegionTicket(LootrAPI.LOOTR_ENTITY_TICK_TICKET, lootrCart.chunkPosition(), 1, Unit.INSTANCE);
+          level.getServer().execute(() -> {
+            level.getChunkSource().addTicket(new Ticket(ModTicketTypes.ENTITY_TICKET_TYPE, ChunkMap.FORCED_TICKET_LEVEL), lootrCart.chunkPosition());
+          });
           LootrAPI.LOG.error("Minecart with Loot table created off main thread. Falling back on EntityTicker.");
           EntityTicker.addEntity(lootrCart);
         } else {

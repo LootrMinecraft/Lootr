@@ -19,19 +19,16 @@ public class BarrelModel implements UnbakedModel {
   private final ItemTransforms itemTransforms;
   private final TextureSlots.Data textures;
 
-  private final BakedBarrelModelBuilder builder;
-
   private boolean useParent;
 
   private UnbakedModel parent;
 
-  public BarrelModel(BakedBarrelModelBuilder builder, ResourceLocation parent, ResourceLocation opened, ResourceLocation unopened, ResourceLocation vanilla, ResourceLocation old_unopened, ResourceLocation old_opened) {
-    this(builder, true, GuiLight.SIDE, ItemTransforms.NO_TRANSFORMS, TextureSlots.Data.EMPTY, parent, opened, unopened, vanilla, old_unopened, old_opened);
+  public BarrelModel(ResourceLocation parent, ResourceLocation opened, ResourceLocation unopened, ResourceLocation vanilla, ResourceLocation old_unopened, ResourceLocation old_opened) {
+    this(true, GuiLight.SIDE, ItemTransforms.NO_TRANSFORMS, TextureSlots.Data.EMPTY, parent, opened, unopened, vanilla, old_unopened, old_opened);
     this.useParent = true;
   }
 
-  public BarrelModel(BakedBarrelModelBuilder builder, boolean ambientOcclusion, GuiLight guiLight, ItemTransforms transforms, TextureSlots.Data textures, ResourceLocation parent, ResourceLocation opened, ResourceLocation unopened, ResourceLocation vanilla, ResourceLocation old_unopened, ResourceLocation old_opened) {
-    this.builder = builder;
+  public BarrelModel(boolean ambientOcclusion, GuiLight guiLight, ItemTransforms transforms, TextureSlots.Data textures, ResourceLocation parent, ResourceLocation opened, ResourceLocation unopened, ResourceLocation vanilla, ResourceLocation old_unopened, ResourceLocation old_opened) {
     this.opened = opened;
     this.unopened = unopened;
     this.vanilla = vanilla;
@@ -47,10 +44,10 @@ public class BarrelModel implements UnbakedModel {
 
   @Nullable
   @Override
-  public Boolean getAmbientOcclusion() {
+  public Boolean ambientOcclusion() {
     if (this.useParent) {
       if (this.parent != null) {
-        return this.parent.getAmbientOcclusion();
+        return this.parent.ambientOcclusion();
       } else {
         return true;
       }
@@ -61,10 +58,10 @@ public class BarrelModel implements UnbakedModel {
 
   @Nullable
   @Override
-  public GuiLight getGuiLight() {
+  public GuiLight guiLight() {
     if (this.useParent) {
       if (this.parent != null) {
-        return this.parent.getGuiLight();
+        return this.parent.guiLight();
       } else {
         return GuiLight.SIDE;
       }
@@ -75,10 +72,10 @@ public class BarrelModel implements UnbakedModel {
 
   @Nullable
   @Override
-  public ItemTransforms getTransforms() {
+  public ItemTransforms transforms() {
     if (this.useParent) {
       if (this.parent != null) {
-        return this.parent.getTransforms();
+        return this.parent.transforms();
       } else {
         return ItemTransforms.NO_TRANSFORMS;
       }
@@ -88,10 +85,10 @@ public class BarrelModel implements UnbakedModel {
   }
 
   @Override
-  public TextureSlots.Data getTextureSlots() {
+  public TextureSlots.Data textureSlots() {
     if (this.useParent) {
       if (this.parent != null) {
-        return this.parent.getTextureSlots();
+        return this.parent.textureSlots();
       } else {
         return TextureSlots.Data.EMPTY;
       }
@@ -101,30 +98,10 @@ public class BarrelModel implements UnbakedModel {
 
   }
 
-  @Override
-  public BakedModel bake(TextureSlots textures, ModelBaker baker, ModelState modelState, boolean useAmbientOcclusion, boolean usesBlockLight, ItemTransforms itemTransforms) {
-    return builder.build(useAmbientOcclusion, usesBlockLight, textures.getMaterial("particle"), baker.bake(opened, modelState), baker.bake(unopened, modelState), baker.bake(vanilla, modelState), baker.bake(old_opened, modelState), baker.bake(old_unopened, modelState), itemTransforms);
-  }
-
-  @Override
-  public void resolveDependencies(UnbakedModel.Resolver modelGetter) {
-    modelGetter.resolve(opened);
-    modelGetter.resolve(unopened);
-    modelGetter.resolve(vanilla);
-    modelGetter.resolve(old_opened);
-    modelGetter.resolve(old_unopened);
-    this.parent = modelGetter.resolve(parentLocation);
-  }
-
   @Nullable
   @Override
-  public UnbakedModel getParent() {
-    return this.parent;
-  }
-
-  @FunctionalInterface
-  public interface BakedBarrelModelBuilder {
-    BakedModel build(boolean ambientOcclusion, boolean isSideLit, Material particle, BakedModel opened, BakedModel unopened, BakedModel vanilla, BakedModel old_opened, BakedModel old_unopened, ItemTransforms cameraTransforms);
+  public ResourceLocation parent() {
+    return this.parentLocation;
   }
 }
 

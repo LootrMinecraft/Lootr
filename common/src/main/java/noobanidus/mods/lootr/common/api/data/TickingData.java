@@ -1,33 +1,32 @@
 package noobanidus.mods.lootr.common.api.data;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.level.saveddata.SavedDataType;
 
+import java.util.List;
 import java.util.UUID;
 
 public class TickingData extends SavedData {
-  public static final SavedData.Factory<TickingData> FACTORY = new Factory<>(TickingData::new, TickingData::load, null);
   private final Object2IntMap<UUID> tickMap = new Object2IntOpenHashMap<>();
+
+  public static final Codec<TickingData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+          UUIDIntEntry.ENTRY_CODEC.listOf().fieldOf("entries").forGetter(data -> data.tickMap.object2IntEntrySet().stream().map(e -> new UUIDIntEntry(e.getKey(), e.getIntValue())).toList())
+  ).apply(instance, TickingData::new));
+  public static final SavedDataType<TickingData> TYPE_DECAYS = new SavedDataType<>("lootr_decays", TickingData::new, TickingData.CODEC, null);
+  public static final SavedDataType<TickingData> TYPE_REFRESHES = new SavedDataType<>("lootr_refreshes", TickingData::new, TickingData.CODEC, null);
 
   public TickingData() {
     tickMap.defaultReturnValue(-1);
   }
 
-  public static TickingData load(CompoundTag pCompound, HolderLookup.Provider provider) {
-    TickingData data = new TickingData();
-    data.tickMap.clear();
-    data.tickMap.defaultReturnValue(-1);
-    ListTag decayList = pCompound.getList("result", Tag.TAG_COMPOUND);
-    for (int i = 0; i < decayList.size(); i++) {
-      CompoundTag thisTag = decayList.getCompound(i);
-      data.tickMap.put(thisTag.getUUID("id"), thisTag.getInt("value"));
-    }
-    return data;
+  private TickingData(List<UUIDIntEntry> list) {
+    this();
+    list.forEach(e -> tickMap.put(e.uuid, e.value));
   }
 
   public boolean isComplete(UUID id) {
@@ -76,16 +75,12 @@ public class TickingData extends SavedData {
     }
   }
 
-  @Override
-  public CompoundTag save(CompoundTag pCompound, HolderLookup.Provider provider) {
-    ListTag decayList = new ListTag();
-    for (Object2IntMap.Entry<UUID> entry : tickMap.object2IntEntrySet()) {
-      CompoundTag thisTag = new CompoundTag();
-      thisTag.putUUID("id", entry.getKey());
-      thisTag.putInt("value", entry.getIntValue());
-      decayList.add(thisTag);
-    }
-    pCompound.put("result", decayList);
-    return pCompound;
+  private record UUIDIntEntry(UUID uuid, int value) {
+    private static final Codec<UUIDIntEntry> ENTRY_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            UUIDUtil.CODEC.fieldOf("id").forGetter(UUIDIntEntry::uuid),
+            Codec.INT.fieldOf("value").forGetter(UUIDIntEntry::value)
+    ).apply(instance, UUIDIntEntry::new));
   }
+
+  // Codec for each entry
 }

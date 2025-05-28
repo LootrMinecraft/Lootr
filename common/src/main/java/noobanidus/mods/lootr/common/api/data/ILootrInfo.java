@@ -1,20 +1,25 @@
 package noobanidus.mods.lootr.common.api.data;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -23,6 +28,8 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Locale;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface ILootrInfo {
@@ -106,72 +113,33 @@ public interface ILootrInfo {
     return NonNullList.withSize(getInfoContainerSize(), ItemStack.EMPTY);
   }
 
-  default void saveInfoToTag(CompoundTag tag, HolderLookup.Provider provider) {
-    tag.putInt("type", getInfoType().ordinal());
-    tag.putInt("blockType", getInfoBlockType().ordinal());
-    tag.put("position", NbtUtils.writeBlockPos(getInfoPos()));
-    tag.putString("key", getInfoKey());
-    tag.putString("dimension", getInfoDimension().location().toString());
-    tag.putUUID("uuid", getInfoUUID());
-    tag.putInt("size", getInfoContainerSize());
-    if (getInfoLootTable() != null) {
-      tag.putString("table", getInfoLootTable().location().toString());
-      tag.putLong("seed", getInfoLootSeed());
-    }
-    if (getInfoDisplayName() != null) {
-      tag.putString("name", Component.Serializer.toJson(getInfoDisplayName(), provider));
-    }
-    if (isInfoReferenceInventory()) {
-      tag.putInt("referenceSize", getInfoReferenceInventory().size());
-      tag.put("reference", ContainerHelper.saveAllItems(new CompoundTag(), getInfoReferenceInventory(), true, provider));
-    }
-  }
+  Codec<ILootrInfo> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+          LootrBlockType.CODEC.fieldOf("blockType").forGetter(ILootrInfo::getInfoBlockType),
+          LootrInfoType.CODEC.fieldOf("type").forGetter(ILootrInfo::getInfoType),
+          UUIDUtil.CODEC.fieldOf("uuid").forGetter(ILootrInfo::getInfoUUID),
+          Codec.STRING.fieldOf("key").forGetter(ILootrInfo::getInfoKey),
+          BlockPos.CODEC.fieldOf("position").forGetter(ILootrInfo::getInfoPos),
+          // Optional display name
+          ComponentSerialization.CODEC.optionalFieldOf("name").forGetter(i -> Optional.ofNullable(i.getInfoDisplayName())),
+          ResourceLocation.CODEC.xmap(loc -> ResourceKey.create(Registries.DIMENSION, loc), ResourceKey::location).fieldOf("dimension").forGetter(ILootrInfo::getInfoDimension),
+          Codec.INT.fieldOf("size").forGetter(ILootrInfo::getInfoContainerSize),
+          ItemStack.OPTIONAL_CODEC.listOf().xmap(list -> NonNullList.of(ItemStack.EMPTY, list.toArray(new ItemStack[0])), list -> list).optionalFieldOf("reference").forGetter(info -> info.isInfoReferenceInventory() ? Optional.ofNullable(info.getInfoReferenceInventory()) : Optional.empty()),
+          // Optional loot table and seed
+          ResourceLocation.CODEC.xmap(loc -> ResourceKey.create(Registries.LOOT_TABLE, loc), ResourceKey::location).optionalFieldOf("table").forGetter(i -> Optional.ofNullable(i.getInfoLootTable())),
+          Codec.LONG.optionalFieldOf("seed").forGetter(info ->
+                  info.getInfoLootTable() != null ? Optional.of(info.getInfoLootSeed()) : Optional.empty()
+          )
+  ).apply(instance, BaseLootrInfo::new));
 
-  static ILootrInfo loadInfoFromTag(CompoundTag tag, HolderLookup.Provider provider) {
-    LootrInfoType infoType = LootrInfoType.CONTAINER_BLOCK_ENTITY;
-    if (tag.contains("type", CompoundTag.TAG_INT)) {
-      infoType = LootrInfoType.values()[tag.getInt("type")];
-    } else if (tag.contains("entity") && tag.getBoolean("entity")) {
-      infoType = LootrInfoType.CONTAINER_ENTITY;
-    } else {
-      LootrAPI.LOG.error("Couldn't deduce the infoType of LootrInfo from tag: {}", tag);
-    }
-    LootrBlockType blockType = null;
-    if (tag.contains("blockType", CompoundTag.TAG_INT)) {
-      blockType = LootrBlockType.values()[tag.getInt("blockType")];
-    }
-    BlockPos pos = NbtUtils.readBlockPos(tag, "position").orElse(BlockPos.ZERO);
-    UUID uuid = tag.getUUID("uuid");
-    ResourceKey<Level> dimension = ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(tag.getString("dimension")));
-    int size = tag.getInt("size");
-    Component name = null;
-    if (tag.contains("name")) {
-      name = Component.Serializer.fromJson(tag.getString("name"), provider);
-    }
-    NonNullList<ItemStack> reference = null;
-    if (tag.contains("reference") && tag.contains("referenceSize")) {
-      reference = NonNullList.withSize(tag.getInt("referenceSize"), ItemStack.EMPTY);
-      ContainerHelper.loadAllItems(tag.getCompound("reference"), reference, provider);
-      blockType = LootrBlockType.INVENTORY;
-    }
-    if (blockType == null) {
-      if (infoType == LootrInfoType.CONTAINER_ENTITY) {
-        blockType = LootrBlockType.ENTITY;
-      } else {
-        blockType = LootrBlockType.CHEST;
-      }
-    }
-    ResourceKey<LootTable> table = null;
-    long seed = -1;
-    if (tag.contains("table")) {
-      table = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse(tag.getString("table")));
-      seed = tag.getLong("seed");
-    }
-    return new BaseLootrInfo(blockType, infoType, uuid, ILootrInfo.generateInfoKey(uuid), pos, name, dimension, size, reference, table, seed);
-  }
-
-  enum LootrInfoType {
+  enum LootrInfoType implements StringRepresentable {
     CONTAINER_BLOCK_ENTITY,
     CONTAINER_ENTITY;
+
+    @Override
+    public String getSerializedName() {
+      return name().toLowerCase(Locale.ROOT);
+    }
+
+    public static final Codec<LootrInfoType> CODEC = StringRepresentable.fromEnum(LootrInfoType::values);
   }
 }

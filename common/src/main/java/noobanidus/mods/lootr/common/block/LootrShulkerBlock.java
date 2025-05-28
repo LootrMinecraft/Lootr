@@ -7,6 +7,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.entity.monster.piglin.PiglinAi;
@@ -91,21 +92,8 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
   }
 
   @Override
-  public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
-    if (!pState.is(pNewState.getBlock())) {
-      BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-      if (blockentity instanceof LootrShulkerBlockEntity) {
-        pLevel.updateNeighbourForOutputSignal(pPos, pState.getBlock());
-      }
-
-      if (pState.hasBlockEntity() && (!pState.is(pNewState.getBlock()) || !pNewState.hasBlockEntity())) {
-        pLevel.removeBlockEntity(pPos);
-      }
-    }
-  }
-
-  @Override
-  public void appendHoverText(ItemStack p_56193_, Item.TooltipContext p_339693_, List<Component> p_56195_, TooltipFlag p_56196_) {
+  protected void affectNeighborsAfterRemoval(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, boolean bl) {
+    Containers.updateNeighboursAfterDestroy(blockState, serverLevel, blockPos);
   }
 
   @Override

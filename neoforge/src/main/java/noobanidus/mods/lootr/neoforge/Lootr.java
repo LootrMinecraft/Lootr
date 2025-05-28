@@ -46,6 +46,7 @@ public class Lootr {
     ModLoot.register(modBus);
     ModStats.register(modBus);
     ModAdvancements.register(modBus);
+    ModTicketTypes.register(modBus);
     this.packetHandler = new PacketHandler(modBus);
   }
 

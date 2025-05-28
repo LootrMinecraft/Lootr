@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
@@ -126,22 +127,13 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider) {
     super.loadAdditional(compound, provider);
     this.tryLoadLootTable(compound);
-    if (compound.hasUUID("LootrId")) {
-      this.infoId = compound.getUUID("LootrId");
-    }
-    if (compound.contains("LootrHasBeenOpened", Tag.TAG_BYTE)) {
-      this.hasBeenOpened = compound.getBoolean("LootrHasBeenOpened");
-    }
+    compound.read("LootrId", UUIDUtil.CODEC).ifPresent(uuid -> this.infoId = uuid);
+    compound.getBoolean("LootrHasBeenOpened").ifPresent(b -> this.hasBeenOpened = b);
     if (this.infoId == null) {
       getInfoUUID();
     }
     clientOpeners.clear();
-    if (compound.contains("LootrOpeners")) {
-      ListTag list = compound.getList("LootrOpeners", CompoundTag.TAG_INT_ARRAY);
-      for (Tag thisTag : list) {
-        clientOpeners.add(NbtUtils.loadUUID(thisTag));
-      }
-    }
+    compound.read("LootrOpeners", UUIDUtil.CODEC_SET).ifPresent(clientOpeners::addAll);
   }
 
   @Override
@@ -155,16 +147,12 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
     super.saveAdditional(compound, provider);
     this.trySaveLootTable(compound);
     if (!LootrAPI.shouldDiscard()) {
-      compound.putUUID("LootrId", getInfoUUID());
+      compound.store("LootrId", UUIDUtil.CODEC, getInfoUUID());
     }
     compound.putBoolean("LootrHasBeenOpened", this.hasBeenOpened);
     if (level != null && level.isClientSide()) {
       if (clientOpeners != null && !clientOpeners.isEmpty()) {
-        ListTag list = new ListTag();
-        for (UUID opener : clientOpeners) {
-          list.add(NbtUtils.createUUID(opener));
-        }
-        compound.put("LootrOpeners", list);
+        compound.store("LootrOpeners", UUIDUtil.CODEC_SET, clientOpeners);
       }
     }
   }
@@ -213,13 +201,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
     saveAdditional(result, provider);
     Set<UUID> currentOpeners = getVisualOpeners();
     if (currentOpeners != null) {
-      ListTag list = new ListTag();
-      for (UUID opener : Sets.intersection(currentOpeners, LootrAPI.getPlayerIds())) {
-        list.add(NbtUtils.createUUID(opener));
-      }
-      if (!list.isEmpty()) {
-        result.put("LootrOpeners", list);
-      }
+      result.store("LootrOpeners", UUIDUtil.CODEC_SET, Sets.intersection(currentOpeners, LootrAPI.getPlayerIds()));
     }
     return result;
   }

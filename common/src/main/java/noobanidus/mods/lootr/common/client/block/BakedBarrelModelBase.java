@@ -1,30 +1,27 @@
 package noobanidus.mods.lootr.common.client.block;
 
-import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.BlockModelPart;
+import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.Material;
-import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.block.state.BlockState;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public abstract class BakedBarrelModelBase implements BakedModel {
+public abstract class BakedBarrelModelBase implements BlockStateModel {
   protected final boolean ambientOcclusion;
   protected final boolean isSideLit;
   protected final Material particle;
-  protected final BakedModel opened;
-  protected final BakedModel unopened;
-  protected final BakedModel vanilla;
-  protected final BakedModel old_opened;
-  protected final BakedModel old_unopened;
+  protected final BlockStateModel opened;
+  protected final BlockStateModel unopened;
+  protected final BlockStateModel vanilla;
+  protected final BlockStateModel old_opened;
+  protected final BlockStateModel old_unopened;
   protected final ItemTransforms cameraTransforms;
 
-  public BakedBarrelModelBase(boolean ambientOcclusion, boolean isSideLit, Material particle, BakedModel opened, BakedModel unopened, BakedModel vanilla, BakedModel old_opened, BakedModel old_unopened, ItemTransforms cameraTransforms) {
+  public BakedBarrelModelBase(boolean ambientOcclusion, boolean isSideLit, Material particle, BlockStateModel opened, BlockStateModel unopened, BlockStateModel vanilla, BlockStateModel old_opened, BlockStateModel old_unopened, ItemTransforms cameraTransforms) {
     this.isSideLit = isSideLit;
     this.cameraTransforms = cameraTransforms;
     this.ambientOcclusion = ambientOcclusion;
@@ -36,44 +33,23 @@ public abstract class BakedBarrelModelBase implements BakedModel {
     this.old_unopened = old_unopened;
   }
 
-
   @Override
-  public boolean useAmbientOcclusion() {
-    return ambientOcclusion;
-  }
-
-  @Override
-  public boolean isGui3d() {
-    return true;
-  }
-
-  @Override
-  public boolean usesBlockLight() {
-    return isSideLit;
-  }
-
-  @Override
-  public TextureAtlasSprite getParticleIcon() {
+  public TextureAtlasSprite particleIcon() {
     if (LootrAPI.isVanillaTextures()) {
-      return vanilla.getParticleIcon();
+      return vanilla.particleIcon();
     } else {
-      return LootrAPI.isOldTextures() ? old_opened.getParticleIcon() : opened.getParticleIcon();
+      return LootrAPI.isOldTextures() ? old_opened.particleIcon() : opened.particleIcon();
     }
   }
 
   @Override
-  public ItemTransforms getTransforms() {
-    return cameraTransforms;
-  }
-
-  @Override
-  public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand) {
+  public void collectParts(RandomSource randomSource, List<BlockModelPart> list) {
     if (LootrAPI.isVanillaTextures()) {
-      return vanilla.getQuads(state, side, rand);
+      vanilla.collectParts(randomSource, list);
     } else if (LootrAPI.isNewTextures()) {
-      return unopened.getQuads(state, side, rand);
+      unopened.collectParts(randomSource, list);
     } else {
-      return old_unopened.getQuads(state, side, rand);
+      old_unopened.collectParts(randomSource, list);
     }
   }
 }

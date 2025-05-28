@@ -22,13 +22,6 @@ public class LootrDataGenerators {
 
     generator.addProvider(true, new LootrAtlasGenerator(output, provider));
     generator.addProvider(true, new LootrLangProvider(output));
-  }
-
-  @SubscribeEvent
-  public static void gatherServerData(GatherDataEvent.Server event) {
-    DataGenerator generator = event.getGenerator();
-    PackOutput output = event.getGenerator().getPackOutput();
-    CompletableFuture<HolderLookup.Provider> provider = event.getLookupProvider();
 
     LootrBlockTagProvider blocks;
     generator.addProvider(true, blocks = new LootrBlockTagProvider(output, provider));

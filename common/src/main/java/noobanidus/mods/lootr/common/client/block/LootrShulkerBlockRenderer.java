@@ -15,6 +15,7 @@ import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.block.entity.LootrShulkerBlockEntity;
 
@@ -47,7 +48,7 @@ public class LootrShulkerBlockRenderer implements BlockEntityRenderer<LootrShulk
   }
 
   @Override
-  public void render(LootrShulkerBlockEntity shulkerBoxBlockEntity, float f, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int j) {
+  public void render(LootrShulkerBlockEntity shulkerBoxBlockEntity, float f, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int j, Vec3 cameraPos) {
     Direction direction = Direction.UP;
     if (shulkerBoxBlockEntity.hasLevel()) {
       BlockState blockState = shulkerBoxBlockEntity.getLevel().getBlockState(shulkerBoxBlockEntity.getBlockPos());

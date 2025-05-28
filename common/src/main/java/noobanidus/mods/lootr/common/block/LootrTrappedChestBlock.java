@@ -84,7 +84,7 @@ public class LootrTrappedChestBlock extends ChestBlock {
 
   @Override
   public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
-    return AABB;
+    return LootrChestBlock.SHAPE;
   }
 
   @Override

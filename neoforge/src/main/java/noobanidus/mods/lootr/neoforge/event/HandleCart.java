@@ -1,7 +1,8 @@
 package noobanidus.mods.lootr.neoforge.event;
 
+import net.minecraft.server.level.ChunkMap;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.Unit;
+import net.minecraft.server.level.Ticket;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.vehicle.AbstractMinecartContainer;
@@ -14,6 +15,7 @@ import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.entity.EntityTicker;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
+import noobanidus.mods.lootr.neoforge.init.ModTicketTypes;
 
 // TODO: Centralize this
 @EventBusSubscriber(modid = LootrAPI.MODID)
@@ -39,7 +41,9 @@ public class HandleCart {
       PlatformAPI.copyEntityData(cart, lootrCart);
       event.setCanceled(true);
       if (!level.getServer().isSameThread()) {
-        level.getChunkSource().addRegionTicket(LootrAPI.LOOTR_ENTITY_TICK_TICKET, lootrCart.chunkPosition(), 1, Unit.INSTANCE);
+        level.getServer().execute(() -> {
+          level.getChunkSource().addTicket(new Ticket(ModTicketTypes.ENTITY_TICKET_TYPE.get(), ChunkMap.FORCED_TICKET_LEVEL), lootrCart.chunkPosition());
+        });
         LootrAPI.LOG.error("Minecart with Loot table created off main thread. Falling back on EntityTicker.");
         EntityTicker.addEntity(lootrCart);
       } else {

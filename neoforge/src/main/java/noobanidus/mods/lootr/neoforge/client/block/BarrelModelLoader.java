@@ -27,6 +27,6 @@ public final class BarrelModelLoader implements UnbakedModelLoader<BarrelModel> 
     ResourceLocation old_opened = ResourceLocation.parse(GsonHelper.getAsJsonObject(modelContents, "old_opened").get("parent").getAsString());
     StandardModelParameters parameters = StandardModelParameters.parse(modelContents, deserializationContext);
     boolean ambientOcclusion = parameters.ambientOcclusion() != null && parameters.ambientOcclusion();
-    return new BarrelModel(BakedBarrelModel::new, ambientOcclusion, parameters.guiLight(), parameters.itemTransforms(), parameters.textures(), parameters.parent(), opened, unopened, vanilla, old_unopened, old_opened);
+    return new BarrelModel(ambientOcclusion, parameters.guiLight(), parameters.itemTransforms(), parameters.textures(), parameters.parent(), opened, unopened, vanilla, old_unopened, old_opened);
   }
 }
