@@ -25,13 +25,16 @@ public class LootrInventory implements ILootrInventory {
   private ILootrSavedData info;
   private MenuBuilder menuBuilder = null;
 
-  public LootrInventory(ILootrSavedData info, NonNullList<ItemStack> contents) {
-    this.info = info;
+  public LootrInventory(NonNullList<ItemStack> contents) {
     if (!contents.isEmpty()) {
       this.contents = contents;
     } else {
       this.contents = info.buildInitialInventory();
     }
+  }
+
+  void setLootrSavedData(ILootrSavedData savedData) {
+    this.info = savedData;
   }
 
   public void setMenuBuilder(MenuBuilder builder) {

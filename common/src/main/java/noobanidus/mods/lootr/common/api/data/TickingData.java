@@ -25,6 +25,12 @@ public class TickingData extends SavedData {
 
   private final Object2IntMap<UUID> tickMap = new Object2IntOpenHashMap<>();
 
+  public static final Codec<TickingData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+          UUIDIntEntry.ENTRY_CODEC.listOf().fieldOf("entries").forGetter(data -> data.tickMap.object2IntEntrySet().stream().map(e -> new UUIDIntEntry(e.getKey(), e.getIntValue())).toList())
+  ).apply(instance, TickingData::new));
+  public static final SavedDataType<TickingData> TYPE_DECAYS = new SavedDataType<>("lootr_decays", TickingData::new, TickingData.CODEC, null);
+  public static final SavedDataType<TickingData> TYPE_REFRESHES = new SavedDataType<>("lootr_refreshes", TickingData::new, TickingData.CODEC, null);
+
   public TickingData() {
     this.tickMap.defaultReturnValue(-1);
   }

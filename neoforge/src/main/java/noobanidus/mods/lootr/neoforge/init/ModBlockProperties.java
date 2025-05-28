@@ -1,6 +1,6 @@
 package noobanidus.mods.lootr.neoforge.init;
 
-import net.neoforged.neoforge.client.model.data.ModelProperty;
+import net.neoforged.neoforge.model.data.ModelProperty;
 
 public class ModBlockProperties {
 

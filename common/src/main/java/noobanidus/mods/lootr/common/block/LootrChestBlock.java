@@ -14,6 +14,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -33,6 +34,8 @@ import noobanidus.mods.lootr.common.block.entity.LootrChestBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
 public class LootrChestBlock extends ChestBlock {
+  static final VoxelShape SHAPE = Block.column(14.0, 0.0, 14.0);
+
   public LootrChestBlock(Properties properties) {
     super(LootrRegistry::getChestBlockEntity, properties);
   }
@@ -71,7 +74,7 @@ public class LootrChestBlock extends ChestBlock {
 
   @Override
   public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
-    return AABB;
+    return SHAPE;
   }
 
   @Override

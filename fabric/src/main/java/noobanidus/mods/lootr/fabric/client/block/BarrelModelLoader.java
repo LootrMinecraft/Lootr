@@ -42,7 +42,8 @@ public class BarrelModelLoader implements ModelLoadingPlugin {
 
   @Override
   public void initialize(ModelLoadingPlugin.Context pluginContext) {
-    pluginContext.addModels(LOOTR_BARREL_MODEL_UNOPENED, LOOTR_BARREL_MODEL_OPENED);
+    // TODO
+    //pluginContext.addModels(LOOTR_BARREL_MODEL_UNOPENED, LOOTR_BARREL_MODEL_OPENED);
     pluginContext.modifyModelOnLoad()
         .register(ModelModifier.OVERRIDE_PHASE, // TODO: Is this the right phrase?
             new ModelModifier.OnLoad() {
@@ -53,9 +54,9 @@ public class BarrelModelLoader implements ModelLoadingPlugin {
                   return model;
                 }
                 if (resourceId.equals(LOOTR_BARREL_MODEL_UNOPENED)) {
-                  return new BarrelModel(BakedBarrelModel::new, PARENT, LOOTR_OPENED_BARREL, LOOTR_BARREL_UNOPENED, VANILLA, OLD_LOOTR_BARREL_UNOPENED, OLD_LOOTR_OPENED_BARREL);
+                  return new BarrelModel(PARENT, LOOTR_OPENED_BARREL, LOOTR_BARREL_UNOPENED, VANILLA, OLD_LOOTR_BARREL_UNOPENED, OLD_LOOTR_OPENED_BARREL);
                 } else if (resourceId.equals(LOOTR_BARREL_MODEL_OPENED)) {
-                  return new BarrelModel(BakedBarrelModel::new, PARENT, LOOTR_OPENED_BARREL_OPEN, LOOTR_BARREL_UNOPENED_OPEN, VANILLA_OPEN, OLD_LOOTR_BARREL_UNOPENED_OPEN, OLD_LOOTR_OPENED_BARREL_OPEN);
+                  return new BarrelModel(PARENT, LOOTR_OPENED_BARREL_OPEN, LOOTR_BARREL_UNOPENED_OPEN, VANILLA_OPEN, OLD_LOOTR_BARREL_UNOPENED_OPEN, OLD_LOOTR_OPENED_BARREL_OPEN);
                 } else {
                   return model;
                 }

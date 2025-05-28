@@ -28,9 +28,9 @@ public class LootrInventoryBlockEntity extends LootrChestBlockEntity {
   public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider) {
     super.loadAdditional(compound, provider);
     if (compound.contains("customInventory") && compound.contains("customSize")) {
-      int size = compound.getInt("customSize");
+      int size = compound.getIntOr("customSize", 0);
       this.customInventory = NonNullList.withSize(size, ItemStack.EMPTY);
-      ContainerHelper.loadAllItems(compound.getCompound("customInventory"), this.customInventory, provider);
+      ContainerHelper.loadAllItems(compound.getCompoundOrEmpty("customInventory"), this.customInventory, provider);
     }
   }
 

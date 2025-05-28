@@ -16,6 +16,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
@@ -70,7 +71,7 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootrBlo
   }
 
   @Override
-  public void render(T blockEntity, float f, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int j) {
+  public void render(T blockEntity, float f, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int j, Vec3 vec3) {
     Level level = blockEntity.getLevel();
     boolean bl = level != null;
     BlockState blockState = bl ? blockEntity.getBlockState() : LootrRegistry.getChestBlock().defaultBlockState().setValue(ChestBlock.FACING, Direction.SOUTH);

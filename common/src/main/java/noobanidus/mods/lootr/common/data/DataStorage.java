@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.common.data;
 
+import com.mojang.serialization.Codec;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
@@ -194,7 +195,7 @@ public class DataStorage {
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot fetch data for " + provider.getInfoDimension() + " at " + provider.getInfoPos() + " with ID " + provider.getInfoUUID() + " and cannot continue.");
       return null;
     }
-    LootrSavedData result = manager.computeIfAbsent(new SavedData.Factory<>(LootrSavedData.fromInfo(provider), LootrSavedData::load, null), provider.getInfoKey());
+    LootrSavedData result = manager.computeIfAbsent(new SavedDataType<>(provider.getInfoKey(), LootrSavedData.fromInfo(provider), LootrSavedData.CODEC, null));
     result.update(provider);
     return result;
   }
@@ -248,7 +249,7 @@ public class DataStorage {
     int count = 0;
 
     for (String file : files) {
-      SavedData datum = data.get(new SavedData.Factory<>(() -> LootrDummyData.INSTANCE, LootrSavedData::load, null), file);
+      SavedData datum = data.get(new SavedDataType<>(file, () -> LootrDummyData.INSTANCE, (Codec<SavedData>)(Object)LootrSavedData.CODEC, null));
       if (datum == LootrDummyData.INSTANCE) {
         // Failed to load so clear it from the cache
         LootrAPI.LOG.error("Failed to load data for " + file + ", removing from cache.");
@@ -280,11 +281,6 @@ public class DataStorage {
 
     public LootrDummyData() {
       super();
-    }
-
-    @Override
-    public CompoundTag save(CompoundTag p_77763_, HolderLookup.Provider p_323640_) {
-      return new CompoundTag();
     }
   }
 }

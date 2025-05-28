@@ -36,5 +36,6 @@ public class Lootr implements ModInitializer {
     LootrEventsInit.registerEvents();
     ModStats.registerStats();
     ModAdvancements.registerAdvancements();
+    ModTicketTypes.registerTicketTypes();
   }
 }
