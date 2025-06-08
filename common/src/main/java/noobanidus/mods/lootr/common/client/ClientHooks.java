@@ -18,11 +18,13 @@ public class ClientHooks {
   }
 
   public static void clearCache(BlockPos position) {
-    SectionPos pos = SectionPos.of(position);
-    Minecraft.getInstance().levelRenderer.setSectionDirty(pos.x(), pos.y(), pos.z());
+    final SectionPos pos = SectionPos.of(position);
+    Minecraft.getInstance().submit(() -> {
+      Minecraft.getInstance().levelRenderer.setSectionDirty(pos.x(), pos.y(), pos.z());
+    });
   }
 
-  public static void refreshSection () {
+  public static void refreshSection() {
     Player player = getPlayer();
     if (player != null) {
       clearCache(player.blockPosition());

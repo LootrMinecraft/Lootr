@@ -8,7 +8,7 @@ license="https://github.com/noobanidus/Lootr/blob/1.16/LICENSE"
     displayName="Lootr"
     displayURL="https://minecraft.curseforge.com/projects/lootr"
     authors="Noobanidus"
-    description="Makes loot chest loot per-user."
+    description="Generates unique loot for each player that opens a loot container."
 
 [[mixins]]
     config="lootr-common.mixins.json"
