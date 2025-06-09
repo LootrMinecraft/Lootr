@@ -48,7 +48,7 @@ dependencies {
     }
 
     modCompileOnly("me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config}")
-    //modLocalRuntime("me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config}")
+    modLocalRuntime("me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config}")
 }
 
 publishMods {
@@ -183,4 +183,8 @@ tasks.named("sourcesJar", Jar) {
 
 processResources {
     from project.project(":common").sourceSets.main.resources
+
+    from(project(":common").sourceSets["generated"].resources) {
+        exclude(".cache")
+    }
 }

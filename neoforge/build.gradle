@@ -69,7 +69,7 @@ neoForge {
         mappingsVersion = project.parchment_mappings_version
     }
 
-    def atFile = project.file("src/main/resources/META-INF/accesstransformer.cfg")
+    def atFile = project.file("src/main/resources/META-INF/accesstransformer_neoforge.cfg")
     if (atFile.exists()) {
         accessTransformers {
             from atFile
@@ -146,4 +146,8 @@ tasks.named("sourcesJar", Jar) {
 
 processResources {
     from project.project(":common").sourceSets.main.resources
+
+    from(project(":common").sourceSets["generated"].resources) {
+        exclude(".cache")
+    }
 }
