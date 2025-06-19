@@ -35,7 +35,7 @@ publishMods {
 
     if (project.hasProperty('curseforge_id_neoforge')) {
         curseforge('curseforgeNeoForge') {
-            platform = "curseforge"
+            type = ALPHA
             accessToken = project.findProperty("curse_auth")
             projectId = project.findProperty('curseforge_id_neoforge')
             announcementTitle = "Lootr ${rootProject.minecraft_version}-${rootProject.mod_version} for NeoForge on CurseForge"
@@ -46,9 +46,9 @@ publishMods {
 
     if (project.hasProperty('modrinth_id_fabric')) {
         modrinth('modrinthNeoForge') {
-            platform = "modrinth"
+            type = ALPHA
             accessToken = project.findProperty("modrinth_auth")
-            projectId = project.findProperty('modrinth_id')
+            projectId = project.findProperty('modrinth_id_neoforge')
             announcementTitle = "Lootr ${rootProject.minecraft_version}-${rootProject.mod_version} for NeoForge on Modrinth"
             minecraftVersions.add(project.minecraft_version)
             changelog = changelogText
@@ -59,6 +59,7 @@ publishMods {
         discord {
             webhookUrl = project.findProperty("curse_discord_webhook")
             username = "Lootr Update"
+            content = changelog.map { "A new version of Lootr has been released!" }
         }
     }
 }

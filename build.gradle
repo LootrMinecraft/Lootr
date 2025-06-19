@@ -107,7 +107,7 @@ subprojects {
     }
     
 
-    version = "${rootProject.mod_version}-${rootProject.minecraft_version}-${name}"
+    version = "${name}-${rootProject.minecraft_version}-${rootProject.mod_version}"
 
     repositories {}
 
