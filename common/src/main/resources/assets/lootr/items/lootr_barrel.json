@@ -1,7 +1,0 @@
-{
-  "model": {
-    "type": "minecraft:model",
-    "model": "lootr:block/lootr_barrel",
-    "base": "minecraft:item/barrel"
-  }
-}

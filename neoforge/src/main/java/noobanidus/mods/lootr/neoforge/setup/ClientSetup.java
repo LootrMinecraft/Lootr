@@ -8,6 +8,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
+import net.neoforged.neoforge.client.event.RegisterBlockStateModels;
 import net.neoforged.neoforge.client.event.RegisterSpecialModelRendererEvent;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
@@ -21,14 +22,14 @@ import noobanidus.mods.lootr.common.client.entity.LootrChestCartRenderer;
 import noobanidus.mods.lootr.common.client.special.LootrChestSpecialRenderer;
 import noobanidus.mods.lootr.common.client.special.LootrShulkerSpecialRenderer;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
-import noobanidus.mods.lootr.neoforge.client.block.BarrelModelLoader;
+import noobanidus.mods.lootr.neoforge.client.block.UnbakedBarrelBlockStateModel;
 
 @EventBusSubscriber(modid = LootrAPI.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 public class ClientSetup {
 
   @SubscribeEvent
-  public static void modelRegister(ModelEvent.RegisterLoaders event) {
-    event.register(LootrAPI.rl("barrel"), BarrelModelLoader.getInstance());
+  public static void registerBlockStateModels (RegisterBlockStateModels event) {
+    event.registerModel(LootrAPI.rl("barrel"), UnbakedBarrelBlockStateModel.CODEC);
   }
 
   @SuppressWarnings("unchecked")

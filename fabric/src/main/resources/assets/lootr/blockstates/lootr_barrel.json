@@ -1,0 +1,40 @@
+{
+  "variants": {
+    "facing=down,open=false": {
+      "fabric:type": "lootr:barrel"
+    },
+    "facing=up,open=false": {
+      "fabric:type": "lootr:barrel"
+    },
+    "facing=north,open=false": {
+      "fabric:type": "lootr:barrel"
+    },
+    "facing=south,open=false": {
+      "fabric:type": "lootr:barrel"
+    },
+    "facing=west,open=false": {
+      "fabric:type": "lootr:barrel"
+    },
+    "facing=east,open=false": {
+      "fabric:type": "lootr:barrel"
+    },
+    "facing=down,open=true": {
+      "fabric:type": "lootr:barrel"
+    },
+    "facing=up,open=true": {
+      "fabric:type": "lootr:barrel"
+    },
+    "facing=north,open=true": {
+      "fabric:type": "lootr:barrel"
+    },
+    "facing=south,open=true": {
+      "fabric:type": "lootr:barrel"
+    },
+    "facing=west,open=true": {
+      "fabric:type": "lootr:barrel"
+    },
+    "facing=east,open=true": {
+      "fabric:type": "lootr:barrel"
+    }
+  }
+}

@@ -4,6 +4,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.model.loading.v1.CustomUnbakedBlockStateModel;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.SpecialBlockRendererRegistry;
@@ -17,7 +18,7 @@ import noobanidus.mods.lootr.common.client.block.LootrShulkerBlockRenderer;
 import noobanidus.mods.lootr.common.client.entity.LootrChestCartRenderer;
 import noobanidus.mods.lootr.common.client.special.LootrChestSpecialRenderer;
 import noobanidus.mods.lootr.common.client.special.LootrShulkerSpecialRenderer;
-import noobanidus.mods.lootr.fabric.client.block.BarrelModelLoader;
+import noobanidus.mods.lootr.fabric.client.block.UnbakedBarrelBlockStateModel;
 import noobanidus.mods.lootr.fabric.init.ModBlockEntities;
 import noobanidus.mods.lootr.fabric.init.ModBlocks;
 import noobanidus.mods.lootr.fabric.init.ModEntities;
@@ -45,7 +46,7 @@ public class LootrClient implements ClientModInitializer {
     SpecialBlockRendererRegistry.register(ModBlocks.SHULKER, LootrShulkerSpecialRenderer.Unbaked.shulker());
     SpecialModelRenderers.ID_MAPPER.put(LootrAPI.rl("shulker"), LootrShulkerSpecialRenderer.Unbaked.MAP_CODEC);
 
-    ModelLoadingPlugin.register(BarrelModelLoader.getInstance());
+    CustomUnbakedBlockStateModel.register(LootrAPI.rl("barrel"), UnbakedBarrelBlockStateModel.CODEC);
 
     EntityRendererRegistry.register(ModEntities.LOOTR_MINECART_ENTITY, (context) -> new LootrChestCartRenderer<>(context, ModelLayers.CHEST_MINECART));
   }

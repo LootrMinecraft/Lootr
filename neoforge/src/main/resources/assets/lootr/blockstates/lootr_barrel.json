@@ -1,0 +1,40 @@
+{
+  "variants": {
+    "facing=down,open=false": {
+      "type": "lootr:barrel"
+    },
+    "facing=up,open=false": {
+      "type": "lootr:barrel"
+    },
+    "facing=north,open=false": {
+      "type": "lootr:barrel"
+    },
+    "facing=south,open=false": {
+      "type": "lootr:barrel"
+    },
+    "facing=west,open=false": {
+      "type": "lootr:barrel"
+    },
+    "facing=east,open=false": {
+      "type": "lootr:barrel"
+    },
+    "facing=down,open=true": {
+      "type": "lootr:barrel"
+    },
+    "facing=up,open=true": {
+      "type": "lootr:barrel"
+    },
+    "facing=north,open=true": {
+      "type": "lootr:barrel"
+    },
+    "facing=south,open=true": {
+      "type": "lootr:barrel"
+    },
+    "facing=west,open=true": {
+      "type": "lootr:barrel"
+    },
+    "facing=east,open=true": {
+      "type": "lootr:barrel"
+    }
+  }
+}
