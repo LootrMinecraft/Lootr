@@ -35,6 +35,7 @@ publishMods {
 
     if (project.hasProperty('curseforge_id_neoforge')) {
         curseforge('curseforgeNeoForge') {
+            platform = "curseforge"
             accessToken = project.findProperty("curse_auth")
             projectId = project.findProperty('curseforge_id_neoforge')
             announcementTitle = "Lootr ${rootProject.minecraft_version}-${rootProject.mod_version} for NeoForge on CurseForge"
@@ -45,6 +46,7 @@ publishMods {
 
     if (project.hasProperty('modrinth_id_fabric')) {
         modrinth('modrinthNeoForge') {
+            platform = "modrinth"
             accessToken = project.findProperty("modrinth_auth")
             projectId = project.findProperty('modrinth_id')
             announcementTitle = "Lootr ${rootProject.minecraft_version}-${rootProject.mod_version} for NeoForge on Modrinth"
