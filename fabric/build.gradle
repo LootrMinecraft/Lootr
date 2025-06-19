@@ -77,7 +77,9 @@ publishMods {
 
     if (project.hasProperty('curseforge_id_fabric')) {
         curseforge('curseforgeFabric') {
+
             type = ALPHA
+            displayName = "lootr-fabric-${rootProject.minecraft_version}-${rootProject.mod_version}"
             accessToken = project.findProperty("curse_auth")
             projectId = project.findProperty('curseforge_id_fabric')
             announcementTitle = "Lootr ${rootProject.minecraft_version}-${rootProject.mod_version} for Fabric on CurseForge"
@@ -97,6 +99,7 @@ publishMods {
     if (project.hasProperty('modrinth_id_fabric')) {
         modrinth('modrinthFabric') {
             type = ALPHA
+            displayName = "lootr-fabric-${rootProject.minecraft_version}-${rootProject.mod_version}"
             accessToken = project.findProperty("modrinth_auth")
             projectId = project.findProperty('modrinth_id_fabric')
             announcementTitle = "Lootr ${rootProject.minecraft_version}-${rootProject.mod_version} for Fabric on Modrinth"
@@ -119,7 +122,7 @@ publishMods {
          discord {
              webhookUrl = project.findProperty("curse_discord_webhook")
              username = "Lootr Update"
-             content = changelog.map { "A new version of Lootr has been released!" }
+             content = "A new version of Lootr has been released!\n\n${changelogText.take(500)}"
          }
     }
 }
