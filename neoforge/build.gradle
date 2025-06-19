@@ -37,6 +37,7 @@ publishMods {
         curseforge('curseforgeNeoForge') {
             type = ALPHA
 
+            projectSlug = "lootr"
             displayName = "lootr-neoforge-${rootProject.minecraft_version}-${rootProject.mod_version}"
             accessToken = project.findProperty("curse_auth")
             projectId = project.findProperty('curseforge_id_neoforge')

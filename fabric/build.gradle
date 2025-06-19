@@ -78,6 +78,7 @@ publishMods {
     if (project.hasProperty('curseforge_id_fabric')) {
         curseforge('curseforgeFabric') {
 
+            projectSlug = "lootr-fabric"
             type = ALPHA
             displayName = "lootr-fabric-${rootProject.minecraft_version}-${rootProject.mod_version}"
             accessToken = project.findProperty("curse_auth")
