@@ -6,7 +6,7 @@
   },
   "display": {
     "announce_to_chat": false,
-    "background": "minecraft:textures/block/dark_oak_log.png",
+    "background": "minecraft:block/dark_oak_log",
     "description": {
       "translate": "lootr.advancements.root.description"
     },

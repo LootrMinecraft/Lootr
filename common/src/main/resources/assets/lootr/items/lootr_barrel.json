@@ -1,0 +1,35 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "lootr:config_type",
+
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "lootr:block/lootr_barrel_unopened"
+    },
+
+    "cases": [
+      {
+        "when": "default",
+        "model": {
+          "type": "minecraft:model",
+          "model": "lootr:block/lootr_barrel_unopened"
+        }
+      },
+      {
+        "when": "old",
+        "model": {
+          "type": "minecraft:model",
+          "model": "lootr:block/old_lootr_barrel_unopened"
+        }
+      },
+      {
+        "when": "vanilla",
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:block/barrel"
+        }
+      }
+    ]
+  }
+}

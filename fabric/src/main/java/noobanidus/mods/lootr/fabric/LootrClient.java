@@ -11,11 +11,13 @@ import net.fabricmc.fabric.api.client.rendering.v1.SpecialBlockRendererRegistry;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.item.properties.select.SelectItemModelProperties;
 import net.minecraft.client.renderer.special.SpecialModelRenderers;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.client.block.LootrChestBlockRenderer;
 import noobanidus.mods.lootr.common.client.block.LootrShulkerBlockRenderer;
 import noobanidus.mods.lootr.common.client.entity.LootrChestCartRenderer;
+import noobanidus.mods.lootr.common.client.select.SelectConfigType;
 import noobanidus.mods.lootr.common.client.special.LootrChestSpecialRenderer;
 import noobanidus.mods.lootr.common.client.special.LootrShulkerSpecialRenderer;
 import noobanidus.mods.lootr.fabric.client.block.UnbakedBarrelBlockStateModel;
@@ -49,5 +51,7 @@ public class LootrClient implements ClientModInitializer {
     CustomUnbakedBlockStateModel.register(LootrAPI.rl("barrel"), UnbakedBarrelBlockStateModel.CODEC);
 
     EntityRendererRegistry.register(ModEntities.LOOTR_MINECART_ENTITY, (context) -> new LootrChestCartRenderer<>(context, ModelLayers.CHEST_MINECART));
+
+    SelectItemModelProperties.ID_MAPPER.put(LootrAPI.rl("config_type"), SelectConfigType.TYPE);
   }
 }

@@ -123,11 +123,9 @@ neoForge {
             programArguments.add('--nogui')
         }
 
-        serverData {
-            serverData()
-            programArguments.add("--all --mod lootr")
-            programArguments.add("--existing ${project.project(":common").file("src/main/resources").absolutePath}")
-            programArguments.add("--output ${project.project(":common").file("src/main/generated/resources").absolutePath}")
+        clientData {
+            clientData()
+            programArguments.addAll '--all', '--mod', 'lootr', '--existing', project.project(":common").file("src/main/resources").absolutePath, '--output', project.project(":common").file("src/generated/resources").absolutePath
         }
     }
 }
