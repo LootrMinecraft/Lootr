@@ -4,7 +4,7 @@ issueTrackerURL="https://github.com/noobanidus/Lootr/issues"
 license="https://github.com/noobanidus/Lootr/blob/1.16/LICENSE"
 [[mods]]
     modId="lootr"
-    version="${version}"
+    version="${mod_version}"
     displayName="Lootr"
     displayURL="https://minecraft.curseforge.com/projects/lootr"
     authors="Noobanidus"

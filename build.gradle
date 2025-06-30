@@ -120,6 +120,7 @@ subprojects {
 
         def expandProps = [
                 "version"              : project.version,
+                "mod_version"          : project.mod_version,
                 "maven_group_id"       : project.mod_group_id,
                 "mod_id"               : project.mod_id,
                 "mod_display_name"     : project.mod_name,
