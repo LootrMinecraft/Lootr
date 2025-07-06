@@ -12,7 +12,7 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-@EventBusSubscriber(modid = LootrAPI.MODID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = LootrAPI.MODID)
 public class LootrDataGenerators {
   @SubscribeEvent
   public static void gatherData(GatherDataEvent.Client event) {
@@ -25,7 +25,7 @@ public class LootrDataGenerators {
 
     LootrBlockTagProvider blocks;
     generator.addProvider(true, blocks = new LootrBlockTagProvider(output, provider));
-    generator.addProvider(true, new LootrItemTagsProvider(output, provider, blocks.contentsGetter()));
+    generator.addProvider(true, new LootrItemTagsProvider(output, provider));
     generator.addProvider(true, LootrLootTableProvider.create(output, provider));
     generator.addProvider(true, new LootrEntityTagsProvider(output, provider));
     generator.addProvider(true, new LootrBlockEntityTagsProvider(output, provider));

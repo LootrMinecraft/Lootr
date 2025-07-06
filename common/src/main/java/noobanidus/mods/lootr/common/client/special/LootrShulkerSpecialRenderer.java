@@ -8,6 +8,7 @@ import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.blockentity.ShulkerBoxRenderer;
 import net.minecraft.client.renderer.special.NoDataSpecialModelRenderer;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
 import net.minecraft.client.resources.model.Material;
@@ -17,6 +18,9 @@ import net.minecraft.world.item.ItemDisplayContext;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.client.block.LootrShulkerBlockRenderer;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
+
+import java.util.Set;
 
 public class LootrShulkerSpecialRenderer implements NoDataSpecialModelRenderer {
   private final LootrShulkerBlockRenderer.ShulkerBoxModel boxModel;
@@ -33,6 +37,12 @@ public class LootrShulkerSpecialRenderer implements NoDataSpecialModelRenderer {
 
   @Override
   public void render(ItemDisplayContext itemDisplayContext, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int j, boolean bl) {
+    prepareModel(poseStack, this.orientation, this.openness);
+    boxModel.renderToBuffer(poseStack, material.buffer(multiBufferSource, boxModel::renderType), i, j);
+    poseStack.popPose();
+  }
+
+  private void prepareModel (PoseStack poseStack, Direction orientation, float openness) {
     poseStack.pushPose();
     poseStack.translate(0.5f, 0.5f, 0.5f);
     poseStack.scale(0.9995f, 0.9995f, 0.9995f);
@@ -40,8 +50,13 @@ public class LootrShulkerSpecialRenderer implements NoDataSpecialModelRenderer {
     poseStack.scale(1.0f, -1.0f, -1.0f);
     poseStack.translate(0.0f, -1.0f, 0.0f);
     boxModel.animate(openness);
-    boxModel.renderToBuffer(poseStack, material.buffer(multiBufferSource, boxModel::renderType), i, j);
-    poseStack.popPose();
+  }
+
+  @Override
+  public void getExtents(Set<Vector3f> p_428206_) {
+    PoseStack posestack = new PoseStack();
+    this.prepareModel(posestack, this.orientation, this.openness);
+    this.boxModel.root().getExtentsForGui(posestack, p_428206_);
   }
 
   public record Unbaked(ResourceLocation texture, ResourceLocation oldTexture, float openness, Direction orientation) implements SpecialModelRenderer.Unbaked {

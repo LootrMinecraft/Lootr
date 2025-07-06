@@ -10,6 +10,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import noobanidus.mods.lootr.common.api.ILootrBlockEntityConverter;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
@@ -25,21 +27,20 @@ public class LootrInventoryBlockEntity extends LootrChestBlockEntity {
   }
 
   @Override
-  public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider) {
-    super.loadAdditional(compound, provider);
-    if (compound.contains("customInventory") && compound.contains("customSize")) {
-      int size = compound.getIntOr("customSize", 0);
+  protected void loadAdditional(ValueInput compound) {
+    super.loadAdditional(compound);
+    compound.getInt("customSize").ifPresent(size -> {
       this.customInventory = NonNullList.withSize(size, ItemStack.EMPTY);
-      ContainerHelper.loadAllItems(compound.getCompoundOrEmpty("customInventory"), this.customInventory, provider);
-    }
+      LootrAPI.loadAllItems(compound, this.customInventory, "customInventory");
+    });
   }
 
   @Override
-  protected void saveAdditional(CompoundTag compound, HolderLookup.Provider provider) {
-    super.saveAdditional(compound, provider);
+  protected void saveAdditional(ValueOutput compound) {
+    super.saveAdditional(compound);
     if (this.customInventory != null) {
       compound.putInt("customSize", this.customInventory.size());
-      compound.put("customInventory", ContainerHelper.saveAllItems(new CompoundTag(), this.customInventory, provider));
+      LootrAPI.saveAllItems(compound, this.customInventory, true, "customInventory");
     }
   }
 

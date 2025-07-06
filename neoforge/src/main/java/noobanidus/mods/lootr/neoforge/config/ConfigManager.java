@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
-@EventBusSubscriber(modid = LootrAPI.MODID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = LootrAPI.MODID)
 public class ConfigManager extends ConfigManagerBase {
   public static final ModConfigSpec.BooleanValue REPORT_UNRESOLVED_TABLES;
   public static final ModConfigSpec.BooleanValue RANDOMISE_SEED;

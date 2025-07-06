@@ -28,6 +28,4 @@ public interface ILootrInventory extends Container, MenuProvider {
   NonNullList<ItemStack> getInventoryContents();
 
   void setMenuBuilder(MenuBuilder builder);
-
-  CompoundTag saveToTag(HolderLookup.Provider provider);
 }

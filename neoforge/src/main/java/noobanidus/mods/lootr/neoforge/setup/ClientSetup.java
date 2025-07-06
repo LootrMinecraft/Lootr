@@ -22,7 +22,7 @@ import noobanidus.mods.lootr.common.client.special.LootrShulkerSpecialRenderer;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.neoforge.client.block.UnbakedBarrelBlockStateModel;
 
-@EventBusSubscriber(modid = LootrAPI.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = LootrAPI.MODID, value = Dist.CLIENT)
 public class ClientSetup {
 
   @SubscribeEvent

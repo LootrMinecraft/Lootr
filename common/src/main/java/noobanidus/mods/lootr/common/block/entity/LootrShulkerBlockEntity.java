@@ -34,6 +34,8 @@ import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -210,11 +212,11 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   @Override
-  public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider) {
-    super.loadAdditional(compound, provider);
+  protected void loadAdditional(ValueInput compound) {
+    super.loadAdditional(compound);
     this.tryLoadLootTable(compound);
     compound.read("LootrId", UUIDUtil.CODEC).ifPresent(uuid -> this.infoId = uuid);
-    compound.getBoolean("LootrHasBeenOpened").ifPresent(b -> this.hasBeenOpened = b);
+    this.hasBeenOpened = compound.getBooleanOr("LootrHasBeenOpened", false);
     if (this.infoId == null) {
       getInfoUUID();
     }
@@ -223,14 +225,14 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   @Override
-  public void removeComponentsFromTag(CompoundTag compoundTag) {
+  public void removeComponentsFromTag(ValueOutput compoundTag) {
     super.removeComponentsFromTag(compoundTag);
-    compoundTag.remove("LootrId");
+    compoundTag.discard("LootrId");
   }
 
   @Override
-  protected void saveAdditional(CompoundTag compound, HolderLookup.Provider provider) {
-    super.saveAdditional(compound, provider);
+  protected void saveAdditional(ValueOutput compound) {
+    super.saveAdditional(compound);
     this.trySaveLootTable(compound);
     if (!LootrAPI.shouldDiscard()) {
       compound.store("LootrId", UUIDUtil.CODEC, getInfoUUID());
@@ -301,7 +303,6 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   @NotNull
   public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
     CompoundTag result = super.getUpdateTag(provider);
-    saveAdditional(result, provider);
     Set<UUID> currentOpeners = getVisualOpeners();
     if (currentOpeners != null) {
       result.store("LootrOpeners", UUIDUtil.CODEC_SET, Sets.intersection(currentOpeners, LootrAPI.getPlayerIds()));

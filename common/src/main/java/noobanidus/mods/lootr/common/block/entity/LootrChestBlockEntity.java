@@ -26,6 +26,8 @@ import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.ILootrBlockEntityConverter;
 import noobanidus.mods.lootr.common.api.LootrAPI;
@@ -124,11 +126,11 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   }
 
   @Override
-  public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider) {
-    super.loadAdditional(compound, provider);
+  protected void loadAdditional(ValueInput compound) {
+    super.loadAdditional(compound);
     this.tryLoadLootTable(compound);
     compound.read("LootrId", UUIDUtil.CODEC).ifPresent(uuid -> this.infoId = uuid);
-    compound.getBoolean("LootrHasBeenOpened").ifPresent(b -> this.hasBeenOpened = b);
+    this.hasBeenOpened = compound.getBooleanOr("LootrHasBeenOpened", false);
     if (this.infoId == null) {
       getInfoUUID();
     }
@@ -137,14 +139,14 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   }
 
   @Override
-  public void removeComponentsFromTag(CompoundTag compoundTag) {
+  public void removeComponentsFromTag(ValueOutput compoundTag) {
     super.removeComponentsFromTag(compoundTag);
-    compoundTag.remove("LootrId");
+    compoundTag.discard("LootrId");
   }
 
   @Override
-  protected void saveAdditional(CompoundTag compound, HolderLookup.Provider provider) {
-    super.saveAdditional(compound, provider);
+  protected void saveAdditional(ValueOutput compound) {
+    super.saveAdditional(compound);
     this.trySaveLootTable(compound);
     if (!LootrAPI.shouldDiscard()) {
       compound.store("LootrId", UUIDUtil.CODEC, getInfoUUID());
@@ -198,7 +200,6 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   @NotNull
   public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
     CompoundTag result = super.getUpdateTag(provider);
-    saveAdditional(result, provider);
     Set<UUID> currentOpeners = getVisualOpeners();
     if (currentOpeners != null) {
       result.store("LootrOpeners", UUIDUtil.CODEC_SET, Sets.intersection(currentOpeners, LootrAPI.getPlayerIds()));

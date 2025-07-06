@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.common.block.entity;
 
 import com.google.common.collect.Sets;
+import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -17,6 +18,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -29,6 +31,9 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.TagValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.ILootrBlockEntityConverter;
 import noobanidus.mods.lootr.common.api.LootrAPI;
@@ -40,11 +45,14 @@ import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 
 import java.util.Set;
 import java.util.UUID;
 
 public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity implements ILootrBlockEntity {
+  private static Logger LOGGER = LogUtils.getLogger();
+
   private final NonNullList<ItemStack> items = NonNullList.withSize(27, ItemStack.EMPTY);
   private final Set<UUID> clientOpeners = new ObjectLinkedOpenHashSet<>();
   protected UUID infoId = null;
@@ -119,27 +127,27 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
 
   @SuppressWarnings("Duplicates")
   @Override
-  public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider) {
-    super.loadAdditional(compound, provider);
-    this.tryLoadLootTable(compound);
-    compound.read("LootrId", UUIDUtil.CODEC).ifPresent(uuid -> this.infoId = uuid);
-    compound.getBoolean("LootrHasBeenOpened").ifPresent(b -> this.hasBeenOpened = b);
+  public void loadAdditional(ValueInput input) {
+    super.loadAdditional(input);
+    this.tryLoadLootTable(input);
+    input.read("LootrId", UUIDUtil.CODEC).ifPresent(uuid -> this.infoId = uuid);
+    this.hasBeenOpened = input.getBooleanOr("LootrHasBeenOpened", false);
     if (this.infoId == null) {
       getInfoUUID();
     }
     clientOpeners.clear();
-    compound.read("LootrOpeners", UUIDUtil.CODEC_SET).ifPresent(clientOpeners::addAll);
+    input.read("LootrOpeners", UUIDUtil.CODEC_SET).ifPresent(clientOpeners::addAll);
   }
 
   @Override
-  public void removeComponentsFromTag(CompoundTag compoundTag) {
-    super.removeComponentsFromTag(compoundTag);
-    compoundTag.remove("LootrId");
+  public void removeComponentsFromTag(ValueOutput output) {
+    super.removeComponentsFromTag(output);
+    output.discard("LootrId");
   }
 
   @Override
-  protected void saveAdditional(CompoundTag compound, HolderLookup.Provider provider) {
-    super.saveAdditional(compound, provider);
+  protected void saveAdditional(ValueOutput compound) {
+    super.saveAdditional(compound);
     this.trySaveLootTable(compound);
     if (!LootrAPI.shouldDiscard()) {
       compound.store("LootrId", UUIDUtil.CODEC, getInfoUUID());
@@ -229,7 +237,6 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
   @NotNull
   public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
     CompoundTag result = super.getUpdateTag(provider);
-    saveAdditional(result, provider);
     Set<UUID> currentOpeners = getVisualOpeners();
     if (currentOpeners != null) {
       result.store("LootrOpeners", UUIDUtil.CODEC_SET, Sets.intersection(currentOpeners, LootrAPI.getPlayerIds()));

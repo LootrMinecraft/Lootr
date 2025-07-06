@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-@EventBusSubscriber(modid = LootrAPI.MODID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = LootrAPI.MODID)
 public class LootrCompatDataGenerators {
   private static final List<DataGenerator> generators = new ArrayList<>();
 

@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.common.api;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -11,8 +12,10 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.TicketType;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.ItemStackWithSlot;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -20,6 +23,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.client.ClientTextureType;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
@@ -443,5 +448,28 @@ public class LootrAPI {
 
   public static List<ILootrFilter> getFilters() {
     return INSTANCE.getFilters();
+  }
+
+  public static void saveAllItems(ValueOutput output, NonNullList<ItemStack> items, boolean discard, String tagName) {
+    ValueOutput.TypedOutputList<ItemStackWithSlot> typedoutputlist = output.list(tagName, ItemStackWithSlot.CODEC);
+
+    for (int i = 0; i < items.size(); i++) {
+      ItemStack itemstack = items.get(i);
+      if (!itemstack.isEmpty()) {
+        typedoutputlist.add(new ItemStackWithSlot(i, itemstack));
+      }
+    }
+
+    if (typedoutputlist.isEmpty() && !discard) {
+      output.discard(tagName);
+    }
+  }
+
+  public static void loadAllItems(ValueInput output, NonNullList<ItemStack> items, String tagName) {
+    for (ItemStackWithSlot itemstackwithslot : output.listOrEmpty(tagName, ItemStackWithSlot.CODEC)) {
+      if (itemstackwithslot.isValidInContainer(items.size())) {
+        items.set(itemstackwithslot.slot(), itemstackwithslot.stack());
+      }
+    }
   }
 }

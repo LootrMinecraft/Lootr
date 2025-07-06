@@ -42,13 +42,6 @@ public class LootrInventory implements ILootrInventory {
   }
 
   @Override
-  public CompoundTag saveToTag(HolderLookup.Provider provider) {
-    CompoundTag result = new CompoundTag();
-    ContainerHelper.saveAllItems(result, this.contents, provider);
-    return result;
-  }
-
-  @Override
   public int getContainerSize() {
     return info.getInfoContainerSize();
   }

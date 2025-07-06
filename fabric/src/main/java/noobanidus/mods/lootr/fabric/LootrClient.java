@@ -3,14 +3,15 @@ package noobanidus.mods.lootr.fabric;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.model.loading.v1.CustomUnbakedBlockStateModel;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
+import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.SpecialBlockRendererRegistry;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.client.renderer.item.properties.select.SelectItemModelProperties;
 import net.minecraft.client.renderer.special.SpecialModelRenderers;
 import noobanidus.mods.lootr.common.api.LootrAPI;
@@ -32,7 +33,7 @@ public class LootrClient implements ClientModInitializer {
   public void onInitializeClient() {
     LootrNetworkingInit.registerClientNetwork();
 
-    BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.BARREL, RenderType.cutoutMipped());
+    BlockRenderLayerMap.putBlock(ModBlocks.BARREL, ChunkSectionLayer.CUTOUT_MIPPED);
 
     BlockEntityRenderers.register(ModBlockEntities.LOOTR_CHEST, LootrChestBlockRenderer::new);
     SpecialBlockRendererRegistry.register(ModBlocks.CHEST, LootrChestSpecialRenderer.Unbaked.chest());

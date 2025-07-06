@@ -125,7 +125,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
       provider.performUpdate(player);
     }
     player.openMenu(menuProvider);
-    PiglinAi.angerNearbyPiglins(player.serverLevel(), player, true);
+    PiglinAi.angerNearbyPiglins(player.level(), player, true);
   }
 
   @Override
