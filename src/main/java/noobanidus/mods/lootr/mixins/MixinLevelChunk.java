@@ -19,7 +19,7 @@ public class MixinLevelChunk {
       return;
     }
 
-    if (entity instanceof RandomizableContainerBlockEntity && !(entity instanceof ILootBlockEntity)) {
+    if (entity instanceof RandomizableContainerBlockEntity incoming && !(entity instanceof ILootBlockEntity)) {
       LevelChunk level = (LevelChunk) (Object) this;
       if (level.getLevel().isClientSide()) {
         return;
@@ -31,7 +31,7 @@ public class MixinLevelChunk {
         return;
       }
 
-      TileTicker.addEntry(level.getLevel(), entity.getBlockPos());
+      TileTicker.addEntry(incoming, level.getLevel(), entity.getBlockPos());
     }
   }
 }

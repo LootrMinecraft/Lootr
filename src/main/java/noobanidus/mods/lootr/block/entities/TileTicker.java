@@ -33,7 +33,7 @@ public class TileTicker {
   private final static Set<Entry> pendingEntries = new ObjectLinkedOpenHashSet<>();
   private static boolean tickingList = false;
 
-  public static void addEntry(Level level, BlockPos position) {
+  public static void addEntry(RandomizableContainerBlockEntity incoming ,Level level, BlockPos position) {
     if (ConfigManager.DISABLE.get()) {
       return;
     }
@@ -69,6 +69,10 @@ public class TileTicker {
 
         chunks.add(newPos);
       }
+    }
+
+    if (incoming.lootTable == null || ConfigManager.isBlacklisted(incoming.lootTable)) {
+      return;
     }
 
     Entry newEntry = new Entry(dimension, position, chunks, ServerLifecycleHooks.getCurrentServer().getTickCount());
