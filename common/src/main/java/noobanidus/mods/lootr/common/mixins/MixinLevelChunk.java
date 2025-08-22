@@ -19,7 +19,7 @@ public class MixinLevelChunk {
       return;
     }
 
-    if (entity instanceof RandomizableContainerBlockEntity && !(LootrAPI.resolveBlockEntity(entity) instanceof ILootrBlockEntity)) {
+    if (entity instanceof RandomizableContainerBlockEntity incoming && !(LootrAPI.resolveBlockEntity(entity) instanceof ILootrBlockEntity)) {
       LevelChunk level = (LevelChunk) (Object) this;
       if (level.getLevel().isClientSide()) {
         return;
@@ -28,7 +28,7 @@ public class MixinLevelChunk {
       // not converted. When the world border changes, you will
       // need to restart the server.
       if (LootrAPI.isWorldBorderSafe(level.getLevel(), entity.getBlockPos())) {
-        BlockEntityTicker.addEntry(level.getLevel(), entity.getBlockPos());
+        BlockEntityTicker.addEntry(incoming ,level.getLevel(), entity.getBlockPos());
       }
     }
   }

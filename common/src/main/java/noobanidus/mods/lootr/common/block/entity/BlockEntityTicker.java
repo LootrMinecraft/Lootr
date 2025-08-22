@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.common.block.entity;
 
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
@@ -25,11 +26,11 @@ import java.util.Set;
 public class BlockEntityTicker {
   private final static Object listLock = new Object();
   private final static Object worldLock = new Object();
-  private final static Set<Entry> blockEntityEntries = new ObjectLinkedOpenHashSet<>();
-  private final static Set<Entry> pendingEntries = new ObjectLinkedOpenHashSet<>();
+  private final static Set<Entry> blockEntityEntries = new ObjectOpenHashSet<>();
+  private final static Set<Entry> pendingEntries = new ObjectOpenHashSet<>();
   private static boolean tickingList = false;
 
-  public static void addEntry(Level level, BlockPos position) {
+  public static void addEntry(RandomizableContainerBlockEntity incoming, Level level, BlockPos position) {
     if (LootrAPI.isDisabled()) {
       return;
     }
@@ -65,6 +66,10 @@ public class BlockEntityTicker {
       }
     }
 
+    if (incoming.getLootTable() == null || LootrAPI.isLootTableBlacklisted(incoming.getLootTable())) {
+      return;
+    }
+
     Entry newEntry = new Entry(dimension, position, chunks, LootrAPI.getCurrentTicks());
     synchronized (listLock) {
       if (tickingList) {
@@ -79,11 +84,11 @@ public class BlockEntityTicker {
     if (LootrAPI.isDisabled()) {
       return;
     }
-    Set<Entry> toRemove = new ObjectLinkedOpenHashSet<>();
+    Set<Entry> toRemove = new ObjectOpenHashSet<>();
     Set<Entry> copy;
     synchronized (listLock) {
       tickingList = true;
-      copy = new ObjectLinkedOpenHashSet<>(blockEntityEntries);
+      copy = new ObjectOpenHashSet<>(blockEntityEntries);
       tickingList = false;
     }
     synchronized (worldLock) {
