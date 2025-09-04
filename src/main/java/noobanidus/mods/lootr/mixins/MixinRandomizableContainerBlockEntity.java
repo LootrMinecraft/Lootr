@@ -1,8 +1,12 @@
 package noobanidus.mods.lootr.mixins;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import net.minecraftforge.server.ServerLifecycleHooks;
+import noobanidus.mods.lootr.Lootr;
+import noobanidus.mods.lootr.api.LootrAPI;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.block.entities.TileTicker;
 import noobanidus.mods.lootr.config.ConfigManager;
@@ -21,14 +25,23 @@ public class MixinRandomizableContainerBlockEntity {
 
     RandomizableContainerBlockEntity incoming = (RandomizableContainerBlockEntity) (Object) this;
 
-    if (!incoming.hasLevel() || incoming instanceof ILootBlockEntity) {
+    if (incoming instanceof ILootBlockEntity) {
       return;
     }
 
     Level level = incoming.getLevel();
 
     if (level == null) {
-      return; // This should be false because `hasLevel`
+      // This is over-protective because most instances of `setLootTable` are in structure post-processing which means the block entity should have already been promoted. In testing, specifically with `/lootr chest`, the block entity's level is already set by the time `setLootTable` is called so this is overprotective.
+      MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+      if (server == null) {
+        // We're probably on the client side so do nothing
+        return;
+      }
+
+      // Otherwise, try to guess that we're on the overworld. This isn't ideal but I assume the majority of the time, this will be the overworld.
+      level = server.overworld();
+      LootrAPI.LOG.error("Block entity at {} had its loot table set before its level was set. It's not possible to determine its dimension, so presuming the overworld.", incoming.getBlockPos());
     }
 
     if (level.isClientSide()) {
