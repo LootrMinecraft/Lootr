@@ -32,6 +32,7 @@ public class TileTicker {
   private final static Set<Entry> tileEntries = new ObjectLinkedOpenHashSet<>();
   private final static Set<Entry> pendingEntries = new ObjectLinkedOpenHashSet<>();
   private static boolean tickingList = false;
+  private static boolean alertedLargeQuantity = false;
 
   public static void addEntry(RandomizableContainerBlockEntity incoming ,Level level, BlockPos position) {
     if (ConfigManager.DISABLE.get()) {
@@ -71,16 +72,26 @@ public class TileTicker {
       }
     }
 
-    if (incoming.lootTable == null || ConfigManager.isBlacklisted(incoming.lootTable)) {
-      return;
+    if (ConfigManager.AGGRESSIVE_MODE.get()) {
+      if (incoming.lootTable == null || ConfigManager.isBlacklisted(incoming.lootTable)) {
+        return;
+      }
     }
 
     Entry newEntry = new Entry(dimension, position, chunks, ServerLifecycleHooks.getCurrentServer().getTickCount());
     synchronized (listLock) {
       if (tickingList) {
         pendingEntries.add(newEntry);
+        if (pendingEntries.size() > 100 && !alertedLargeQuantity && !ConfigManager.AGGRESSIVE_MODE.get()) {
+          LootrAPI.LOG.error("There are over 100 entries in the pending conversion list without aggressive mode enabled. This may cause TPS issues. If TPS issues persist after first launch, consider enabling aggressive mode in the configuration.");
+          alertedLargeQuantity = true;
+        }
       } else {
         tileEntries.add(newEntry);
+        if (tileEntries.size() > 100 && !alertedLargeQuantity && !ConfigManager.AGGRESSIVE_MODE.get()) {
+          LootrAPI.LOG.error("There are over 100 entries in the conversion list without aggressive mode enabled. This may cause TPS issues. If TPS issues persist after first launch, consider enabling aggressive mode in the configuration.");
+          alertedLargeQuantity = true;
+        }
       }
     }
   }

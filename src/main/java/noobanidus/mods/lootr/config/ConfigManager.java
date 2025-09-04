@@ -49,6 +49,7 @@ public class ConfigManager {
   public static final ForgeConfigSpec.BooleanValue CONVERT_ELYTRAS;
   public static final ForgeConfigSpec.BooleanValue CONVERT_WOODEN_CHESTS;
   public static final ForgeConfigSpec.BooleanValue CONVERT_TRAPPED_CHESTS;
+  public static final ForgeConfigSpec.BooleanValue AGGRESSIVE_MODE;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> ADDITIONAL_CHESTS;
   public static final ForgeConfigSpec.ConfigValue<List<? extends String>> ADDITIONAL_TRAPPED_CHESTS;
   // Breaking
@@ -123,6 +124,7 @@ public class ConfigManager {
     List<? extends String> empty = Collections.emptyList();
     Predicate<Object> validator = o -> o instanceof String && ((String) o).contains(":");
     Predicate<Object> modidValidator = o -> o instanceof String && !((String) o).contains(":");
+    AGGRESSIVE_MODE = COMMON_BUILDER.comment("if true, all block entities will be checked before being added to the ticker for an eligible loot table. enable this if a huge quantity of containers are clogging the conversion system; note that aggressive mode may prevent certain chests from properly converted even though eligible").define("aggressive_mode", false);
     REPORT_UNRESOLVED_TABLES = COMMON_BUILDER.comment("lootr will automatically log all unresolved tables (i.e., for containers that have a loot table associated with them but, for whatever reason, the lookup for this table returns empty). setting this option to true additionally informs players when they open containers.").define("report_unresolved_tables", false);
     ADDITIONAL_CHESTS = COMMON_BUILDER.comment("a list of additional chests that should be converted (in the format of [\"modid:name\", \"modid:other_name\"], must be a tile entity instance of RandomizableContainerBlockEntity)").defineList("additional_chests", empty, validator);
     ADDITIONAL_TRAPPED_CHESTS = COMMON_BUILDER.comment("a list of additional trapped chests that should be converted (in the format of [\"modid:name\", \"modid:other_name\"], must be a tile entity instance of RandomizableContainerBlockEntity)").defineList("additional_trapped_chests", empty, validator);
