@@ -12,8 +12,8 @@
   "lootr.message.refreshed": "O conteúdo do contêiner é renovado ao seu toque!",
   "lootr.message.refresh_in": "Este contêiner renovará seu conteúdo em %s segundos.",
   "lootr.message.refresh_start": "O contêiner será renovado com novos conteúdos em %s segundos!",
-  "lootr.message.invalid_table": "Error with mod [%s]! The loot table for this container [%s] could not be found and loot was not generated. Please check your `latest.log` for loading errors.",
-  "lootr.message.invalid_block": "The container that you have tried to open is invalid as it has not generated its identifier.",
+  "lootr.message.invalid_table": "Erro com o mod [%s]! A tabela de loot para este contêiner [%s] não foi encontrada e o loot não foi gerado. Verifique seu `latest.log` para erros de carregamento.",
+  "lootr.message.invalid_block": "O contêiner que você tentou abrir é inválido porque não gerou seu identificador.",
   "block.lootr.lootr_chest": "Baú de loot",
   "block.lootr.lootr_trapped_chest": "Baú de loot",
   "block.lootr.lootr_barrel": "Barril de loot",
@@ -21,7 +21,7 @@
   "block.lootr.lootr_shulker": "Shulker de loot",
   "block.lootr.trophy": "Troféu centenário",
   "entity.lootr.lootr_minecart": "Carrinho com baú",
-  "lootr.commands.usage": "/lootr barrel | barrel <loot-table> | chest | chest <loot-table> | cart | cart <loot-table> | shulker | shulker <loot-table> | convert | custom <id> | refresh | decay",
+  "lootr.commands.usage": "/lootr barrel | barrel <loot-table> | chest | chest <loot-table> | cart | cart <loot-table> | shulker | shulker <loot-table> | trapped_chest | trapped_chest <loot-table> | custom | refresh | decay | open_as <player> | open_as_uuid <uuid> | id | openers",
   "lootr.commands.create": "Criou um Lootr %s em %s usando a tabela de loot %s.",
   "lootr.commands.summon": "Invocou um carrinho de Lootr em %s usando a tabela de loot %s.",
   "lootr.commands.blockpos": "%s,%s,%s",
@@ -46,8 +46,8 @@
   "lootr.advancements.social.description": "Abra um de cada tipo de contêiner de loot instanciado, por jogador, no mundo!",
   "lootr.advancements.root.title": "Pertence a um museu",
   "lootr.advancements.root.description": "Traga loot instanciado, por jogador, para seu mundo.",
-  "lootr.advancements.1337loot.title": "/\\/\\4$73R 10073R",
-  "lootr.advancements.1337loot.description": "Open a total of 1337 containers! Wow!",
+  "lootr.advancements.1337loot.title": "/\\4$73R 10073R",
+  "lootr.advancements.1337loot.description": "Abra um total de 1337 Contêineres! Uau!",
   "itemGroup.lootr": "Lootr",
-  "item.lootr.crown": "Crown of the Master Looter"
+  "item.lootr.crown": "Coroa do Loot Mestre"
 }
