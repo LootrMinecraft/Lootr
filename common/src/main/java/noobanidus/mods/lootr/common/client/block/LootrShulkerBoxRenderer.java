@@ -55,6 +55,7 @@ public class LootrShulkerBoxRenderer implements BlockEntityRenderer<LootrShulker
   @Override
   public void extractRenderState(LootrShulkerBlockEntity blockEntity, LootrShulkerBoxRenderState state, float partialTicks, Vec3 position, @Nullable ModelFeatureRenderer.CrumblingOverlay overlay) {
     BlockEntityRenderer.super.extractRenderState(blockEntity, state, partialTicks, position, overlay);
+    state.progress = blockEntity.getProgress(partialTicks);
     state.direction = blockEntity.getBlockState().getValueOrElse(ShulkerBoxBlock.FACING, Direction.UP);
     state.vanilla = LootrAPI.isVanillaTextures();
     state.classic = LootrAPI.isOldTextures();

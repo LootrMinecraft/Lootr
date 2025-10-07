@@ -14,7 +14,7 @@ import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 
 public interface ILootrBlockEntity extends ILootrInfoProvider {
   static <T extends BlockEntity> void ticker (Level level, BlockPos pos, BlockState state, T blockEntity) {
-    if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity t && t.hasLootTable()) {
+    if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity t && (t.hasLootTable() || level.isClientSide())) {
       t.defaultTick(level, pos, state);
     }
   }
