@@ -10,14 +10,15 @@ import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.special.ChestSpecialRenderer;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
 import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.MaterialSet;
 import net.minecraft.resources.ResourceLocation;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.client.block.LootrChestBlockRenderer;
 import org.jetbrains.annotations.Nullable;
 
 public class LootrChestSpecialRenderer extends ChestSpecialRenderer {
-  public LootrChestSpecialRenderer(ChestModel chestModel, Material material, float f) {
-    super(chestModel, material, f);
+  public LootrChestSpecialRenderer(MaterialSet materials, ChestModel chestModel, Material material, float f) {
+    super(materials, chestModel, material, f);
   }
 
   public record Unbaked(ResourceLocation texture, ResourceLocation oldTexture, ResourceLocation vanillaTexture, float openness) implements SpecialModelRenderer.Unbaked {
@@ -44,8 +45,8 @@ public class LootrChestSpecialRenderer extends ChestSpecialRenderer {
 
     @Nullable
     @Override
-    public SpecialModelRenderer<?> bake(EntityModelSet entityModelSet) {
-      ChestModel model = new ChestModel(entityModelSet.bakeLayer(ModelLayers.CHEST));
+    public SpecialModelRenderer<?> bake(BakingContext context) {
+      ChestModel model = new ChestModel(context.entityModelSet().bakeLayer(ModelLayers.CHEST));
       Material material;
       if (LootrAPI.isVanillaTextures()) {
         material = new Material(Sheets.CHEST_SHEET, vanillaTexture);
@@ -54,7 +55,7 @@ public class LootrChestSpecialRenderer extends ChestSpecialRenderer {
       } else {
         material = new Material(Sheets.CHEST_SHEET, texture);
       }
-      return new LootrChestSpecialRenderer(model, material, openness);
+      return new LootrChestSpecialRenderer(context.materials(), model, material, openness);
     }
 
     @Override
