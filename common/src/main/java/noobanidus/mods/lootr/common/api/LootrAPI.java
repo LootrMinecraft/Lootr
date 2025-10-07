@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.common.api;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -118,8 +119,13 @@ public class LootrAPI {
     return INSTANCE.getDestroyProgress(state, player, level, position, defaultProgress);
   }
 
+  @Deprecated
   public static int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos, int defaultSignal) {
-    return INSTANCE.getAnalogOutputSignal(pBlockState, pLevel, pPos, defaultSignal);
+    return getAnalogOutputSignal(pBlockState, pLevel, pPos, defaultSignal, null);
+  }
+
+  public static int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos, int defaultSignal, Direction direction) {
+    return INSTANCE.getAnalogOutputSignal(pBlockState, pLevel, pPos, defaultSignal, direction);
   }
 
   public static boolean shouldPowerComparators() {

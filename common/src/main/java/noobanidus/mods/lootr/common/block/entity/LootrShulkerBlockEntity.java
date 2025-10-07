@@ -18,6 +18,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.ContainerUser;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.monster.Shulker;
@@ -168,35 +169,39 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   @Override
-  public void startOpen(Player pPlayer) {
-    if (!this.remove && !pPlayer.isSpectator()) {
-      if (!hasBeenOpened) {
-        hasBeenOpened = true;
-        markChanged();
-      }
+  public void startOpen(ContainerUser user) {
+    if (user instanceof Player pPlayer) {
+      if (!this.remove && !pPlayer.isSpectator()) {
+        if (!hasBeenOpened) {
+          hasBeenOpened = true;
+          markChanged();
+        }
 
 
-      if (this.openCount < 0) {
-        this.openCount = 0;
-      }
+        if (this.openCount < 0) {
+          this.openCount = 0;
+        }
 
-      this.openCount++;
-      this.level.blockEvent(this.worldPosition, this.getBlockState().getBlock(), 1, this.openCount);
-      if (this.openCount == 1) {
-        this.level.gameEvent(pPlayer, GameEvent.CONTAINER_OPEN, this.worldPosition);
-        this.level.playSound(null, this.worldPosition, SoundEvents.SHULKER_BOX_OPEN, SoundSource.BLOCKS, 0.5F, this.level.random.nextFloat() * 0.1F + 0.9F);
+        this.openCount++;
+        this.level.blockEvent(this.worldPosition, this.getBlockState().getBlock(), 1, this.openCount);
+        if (this.openCount == 1) {
+          this.level.gameEvent(pPlayer, GameEvent.CONTAINER_OPEN, this.worldPosition);
+          this.level.playSound(null, this.worldPosition, SoundEvents.SHULKER_BOX_OPEN, SoundSource.BLOCKS, 0.5F, this.level.random.nextFloat() * 0.1F + 0.9F);
+        }
       }
     }
   }
 
   @Override
-  public void stopOpen(Player pPlayer) {
-    if (!this.remove && !pPlayer.isSpectator()) {
-      this.openCount--;
-      this.level.blockEvent(this.worldPosition, this.getBlockState().getBlock(), 1, this.openCount);
-      if (this.openCount <= 0) {
-        this.level.gameEvent(pPlayer, GameEvent.CONTAINER_CLOSE, this.worldPosition);
-        this.level.playSound(null, this.worldPosition, SoundEvents.SHULKER_BOX_CLOSE, SoundSource.BLOCKS, 0.5F, this.level.random.nextFloat() * 0.1F + 0.9F);
+  public void stopOpen(ContainerUser user) {
+    if (user instanceof Player pPlayer) {
+      if (!this.remove && !pPlayer.isSpectator()) {
+        this.openCount--;
+        this.level.blockEvent(this.worldPosition, this.getBlockState().getBlock(), 1, this.openCount);
+        if (this.openCount <= 0) {
+          this.level.gameEvent(pPlayer, GameEvent.CONTAINER_CLOSE, this.worldPosition);
+          this.level.playSound(null, this.worldPosition, SoundEvents.SHULKER_BOX_CLOSE, SoundSource.BLOCKS, 0.5F, this.level.random.nextFloat() * 0.1F + 0.9F);
+        }
       }
     }
   }

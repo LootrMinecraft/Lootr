@@ -13,6 +13,7 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.ContainerUser;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Inventory;
@@ -177,13 +178,15 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
   @Override
-  public void startOpen(Player player) {
-    if (!player.isSpectator()) {
-      if (!hasBeenOpened) {
-        hasBeenOpened = true;
-        markChanged();
+  public void startOpen(ContainerUser opener) {
+    if (opener instanceof ServerPlayer player) {
+      if (!player.isSpectator()) {
+        if (!hasBeenOpened) {
+          hasBeenOpened = true;
+          markChanged();
+        }
+        performOpen(player);
       }
-      performOpen((ServerPlayer) player);
     }
   }
 

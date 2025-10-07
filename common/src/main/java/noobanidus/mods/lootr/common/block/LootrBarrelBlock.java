@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.common.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
@@ -87,8 +88,8 @@ public abstract class LootrBarrelBlock extends BarrelBlock {
   }
 
   @Override
-  public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos) {
-    return LootrAPI.getAnalogOutputSignal(pBlockState, pLevel, pPos, 0);
+  public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos, Direction direction) {
+    return LootrAPI.getAnalogOutputSignal(pBlockState, pLevel, pPos, 0, direction);
   }
 
   @Override

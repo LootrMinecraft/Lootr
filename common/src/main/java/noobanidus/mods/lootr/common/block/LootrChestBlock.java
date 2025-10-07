@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -37,7 +38,7 @@ public class LootrChestBlock extends ChestBlock {
   static final VoxelShape SHAPE = Block.column(14.0, 0.0, 14.0);
 
   public LootrChestBlock(Properties properties) {
-    super(LootrRegistry::getChestBlockEntity, properties);
+    super(LootrRegistry::getChestBlockEntity, SoundEvents.CHEST_OPEN, SoundEvents.CHEST_CLOSE, properties);
   }
 
   @Override
@@ -106,8 +107,8 @@ public class LootrChestBlock extends ChestBlock {
   }
 
   @Override
-  public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos) {
-    return LootrAPI.getAnalogOutputSignal(pBlockState, pLevel, pPos, 0);
+  public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos, Direction direction) {
+    return LootrAPI.getAnalogOutputSignal(pBlockState, pLevel, pPos, 0, direction);
   }
 
   @Override

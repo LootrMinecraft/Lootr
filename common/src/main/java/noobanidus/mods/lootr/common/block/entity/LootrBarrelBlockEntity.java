@@ -19,6 +19,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.ProblemReporter;
+import net.minecraft.world.entity.ContainerUser;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -80,7 +81,7 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
     }
 
     @Override
-    protected boolean isOwnContainer(Player player) {
+    public boolean isOwnContainer(Player player) {
       if (player.containerMenu instanceof ChestMenu chestMenu && chestMenu.getContainer() instanceof ILootrInventory data) {
         return data.getInfo().getInfoUUID().equals(LootrBarrelBlockEntity.this.getInfoUUID());
       }
@@ -176,16 +177,20 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
   }
 
   @Override
-  public void startOpen(Player pPlayer) {
-    if (!this.remove && !pPlayer.isSpectator()) {
-      this.openersCounter.incrementOpeners(pPlayer, this.getLevel(), this.getBlockPos(), this.getBlockState());
+  public void startOpen(ContainerUser user) {
+    if (user instanceof Player pPlayer) {
+      if (!this.remove && !pPlayer.isSpectator()) {
+        this.openersCounter.incrementOpeners(pPlayer, this.getLevel(), this.getBlockPos(), this.getBlockState(), user.getContainerInteractionRange());
+      }
     }
   }
 
   @Override
-  public void stopOpen(Player pPlayer) {
-    if (!this.remove && !pPlayer.isSpectator()) {
-      this.openersCounter.decrementOpeners(pPlayer, this.getLevel(), this.getBlockPos(), this.getBlockState());
+  public void stopOpen(ContainerUser user) {
+    if (user instanceof Player pPlayer) {
+      if (!this.remove && !pPlayer.isSpectator()) {
+        this.openersCounter.decrementOpeners(pPlayer, this.getLevel(), this.getBlockPos(), this.getBlockState());
+      }
     }
   }
 

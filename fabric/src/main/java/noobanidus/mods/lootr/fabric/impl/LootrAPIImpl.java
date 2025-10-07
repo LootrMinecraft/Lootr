@@ -3,6 +3,7 @@ package noobanidus.mods.lootr.fabric.impl;
 import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
@@ -22,6 +23,7 @@ import noobanidus.mods.lootr.common.impl.DefaultLootrAPIImpl;
 import noobanidus.mods.lootr.fabric.config.ConfigManager;
 import noobanidus.mods.lootr.fabric.event.HandleChunk;
 import noobanidus.mods.lootr.fabric.event.LootrEventsInit;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
@@ -81,7 +83,7 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   }
 
   @Override
-  public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos, int defaultSignal) {
+  public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos, int defaultSignal, @Nullable Direction direction) {
     if (shouldPowerComparators()) {
       return 1;
     }

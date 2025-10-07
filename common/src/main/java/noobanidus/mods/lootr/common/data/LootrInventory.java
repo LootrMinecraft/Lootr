@@ -6,6 +6,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.entity.ContainerUser;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.ContainerEntity;
@@ -157,19 +158,19 @@ public class LootrInventory implements ILootrInventory {
   }
 
   @Override
-  public void startOpen(Player player) {
+  public void startOpen(ContainerUser user) {
     Container container = info.getInfoContainer();
     if (container != null) {
-      container.startOpen(player);
+      container.startOpen(user);
     }
   }
 
   @Override
-  public void stopOpen(Player player) {
+  public void stopOpen(ContainerUser user) {
     setChanged();
     Container container = info.getInfoContainer();
     if (container != null) {
-      container.stopOpen(player);
+      container.stopOpen(user);
     }
   }
 
