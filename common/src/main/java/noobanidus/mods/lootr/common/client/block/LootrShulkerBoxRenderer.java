@@ -29,7 +29,7 @@ import org.joml.Vector3f;
 import java.util.Set;
 
 @SuppressWarnings("deprecation")
-public class LootrShulkerBlockRenderer implements BlockEntityRenderer<LootrShulkerBlockEntity, LootrShulkerBoxRenderState> {
+public class LootrShulkerBoxRenderer implements BlockEntityRenderer<LootrShulkerBlockEntity, LootrShulkerBoxRenderState> {
 
   public static final Material MATERIAL = new Material(Sheets.SHULKER_SHEET, LootrAPI.rl("shulker"));
   public static final Material MATERIAL2 = new Material(Sheets.SHULKER_SHEET, LootrAPI.rl("shulker_opened"));
@@ -39,15 +39,15 @@ public class LootrShulkerBlockRenderer implements BlockEntityRenderer<LootrShulk
   private final MaterialSet materials;
   private final ShulkerBoxModel model;
 
-  public LootrShulkerBlockRenderer(BlockEntityRendererProvider.Context context) {
+  public LootrShulkerBoxRenderer(BlockEntityRendererProvider.Context context) {
     this(context.entityModelSet(), context.materials());
   }
 
-  public LootrShulkerBlockRenderer(SpecialModelRenderer.BakingContext context) {
+  public LootrShulkerBoxRenderer(SpecialModelRenderer.BakingContext context) {
     this(context.entityModelSet(), context.materials());
   }
 
-  public LootrShulkerBlockRenderer(EntityModelSet modelSet, MaterialSet materials) {
+  public LootrShulkerBoxRenderer(EntityModelSet modelSet, MaterialSet materials) {
     this.materials = materials;
     this.model = new ShulkerBoxModel(modelSet.bakeLayer(ModelLayers.SHULKER_BOX));
   }

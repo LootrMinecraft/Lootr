@@ -1,30 +1,36 @@
 package noobanidus.mods.lootr.common.client.block;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ChestModel;
 import net.minecraft.client.model.geom.ModelLayers;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.renderer.blockentity.ChestRenderer;
+import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
+import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.MaterialSet;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
-import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.block.entity.LootrChestBlockEntity;
+import noobanidus.mods.lootr.common.client.block.state.LootrChestBlockRenderState;
+import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings({"NullableProblems", "deprecation"})
-public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootrBlockEntity> extends ChestRenderer<T> {
+public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootrBlockEntity> implements BlockEntityRenderer<T, LootrChestBlockRenderState> {
   public static final Material MATERIAL = new Material(Sheets.CHEST_SHEET, LootrAPI.rl("chest"));
   public static final Material MATERIAL2 = new Material(Sheets.CHEST_SHEET, LootrAPI.rl("chest_opened"));
   public static final Material MATERIAL3 = new Material(Sheets.CHEST_SHEET, LootrAPI.rl("chest_trapped"));
@@ -35,9 +41,10 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootrBlo
   public static final Material OLD_MATERIAL4 = new Material(Sheets.CHEST_SHEET, LootrAPI.rl("old_chest_trapped_opened"));
 
   private final ChestModel singleModel;
+  private final MaterialSet materials;
 
   public LootrChestBlockRenderer(BlockEntityRendererProvider.Context context) {
-    super(context);
+    this.materials = context.materials();
     this.singleModel = new ChestModel(context.bakeLayer(ModelLayers.CHEST));
   }
 
@@ -64,32 +71,55 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootrBlo
     }
   }
 
-  protected Material getMaterial(T blockEntity) {
-    boolean trapped = blockEntity.getType().builtInRegistryHolder().is(LootrTags.BlockEntity.TRAPPED);
-    boolean opened = Minecraft.getInstance().player != null && blockEntity.hasClientOpened(Minecraft.getInstance().player.getUUID());
-    return getMaterial(trapped, opened);
+  protected Material getMaterial(LootrChestBlockRenderState state) {
+    return getMaterial(state.trapped, state.visuallyOpen);
   }
 
   @Override
-  public void render(T blockEntity, float f, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int j, Vec3 vec3) {
-    Level level = blockEntity.getLevel();
-    boolean bl = level != null;
-    BlockState blockState = bl ? blockEntity.getBlockState() : LootrRegistry.getChestBlock().defaultBlockState().setValue(ChestBlock.FACING, Direction.SOUTH);
-    poseStack.pushPose();
-    float g = blockState.getValue(ChestBlock.FACING).toYRot();
-    poseStack.translate(0.5F, 0.5F, 0.5F);
-    poseStack.mulPose(Axis.YP.rotationDegrees(-g));
-    poseStack.translate(-0.5F, -0.5F, -0.5F);
-    float h = 1.0f - blockEntity.getOpenNess(f);
-    h = 1.0F - h * h * h;
-    Material material = getMaterial(blockEntity);
-    VertexConsumer vertexConsumer = material.buffer(multiBufferSource, RenderType::entityCutout);
-    this.render(poseStack, vertexConsumer, this.singleModel, h, i, j);
-    poseStack.popPose();
+  public LootrChestBlockRenderState createRenderState() {
+    return new LootrChestBlockRenderState();
   }
 
-  private void render(PoseStack poseStack, VertexConsumer vertexConsumer, ChestModel chestModel, float f, int i, int j) {
-    chestModel.setupAnim(f);
-    chestModel.renderToBuffer(poseStack, vertexConsumer, i, j);
+  @Override
+  public void extractRenderState(T blockEntity, LootrChestBlockRenderState renderState, float partialTick, Vec3 cameraPosition, @Nullable ModelFeatureRenderer.CrumblingOverlay breakProgress) {
+    BlockEntityRenderer.super.extractRenderState(blockEntity, renderState, partialTick, cameraPosition, breakProgress);
+    boolean flag = blockEntity.getLevel() != null;
+    BlockState blockstate = flag ? blockEntity.getBlockState() : Blocks.CHEST.defaultBlockState()
+        .setValue(ChestBlock.FACING, Direction.SOUTH);
+    renderState.type = blockstate.hasProperty(ChestBlock.TYPE) ? blockstate.getValue(ChestBlock.TYPE) : ChestType.SINGLE;
+    renderState.angle = blockstate.getValue(ChestBlock.FACING).toYRot();
+    renderState.open = blockEntity.getOpenNess(partialTick);
+    renderState.trapped = blockEntity.getBlockState().is(LootrTags.Blocks.TRAPPED_CHESTS);
+    renderState.vanilla = LootrAPI.isVanillaTextures();
+    renderState.classic = LootrAPI.isOldTextures();
+    renderState.visuallyOpen = Minecraft.getInstance().player != null && blockEntity.hasClientOpened(Minecraft.getInstance().player.getUUID());
+    renderState.angle = blockstate.getValue(ChestBlock.FACING).toYRot();
+  }
+
+  @Override
+  public void submit(LootrChestBlockRenderState renderState, PoseStack poseStack, SubmitNodeCollector nodeCollector, CameraRenderState cameraRenderState) {
+    poseStack.pushPose();
+    poseStack.translate(0.5F, 0.5F, 0.5F);
+    poseStack.mulPose(Axis.YP.rotationDegrees(-renderState.angle));
+    poseStack.translate(-0.5F, -0.5F, -0.5F);
+    float f = renderState.open;
+    f = 1.0F - f;
+    f = 1.0F - f * f * f;
+    Material material = getMaterial(renderState);
+    RenderType rendertype = material.renderType(RenderType::entityCutout);
+    TextureAtlasSprite textureatlassprite = this.materials.get(material);
+    nodeCollector.submitModel(
+        this.singleModel,
+        f,
+        poseStack,
+        rendertype,
+        renderState.lightCoords,
+        OverlayTexture.NO_OVERLAY,
+        -1,
+        textureatlassprite,
+        0,
+        renderState.breakProgress
+    );
+    poseStack.popPose();
   }
 }

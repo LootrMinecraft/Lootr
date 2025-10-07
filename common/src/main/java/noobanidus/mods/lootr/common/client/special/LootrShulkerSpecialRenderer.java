@@ -13,19 +13,19 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.client.block.LootrShulkerBlockRenderer;
+import noobanidus.mods.lootr.common.client.block.LootrShulkerBoxRenderer;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 import java.util.Set;
 
 public class LootrShulkerSpecialRenderer implements NoDataSpecialModelRenderer {
-  private final LootrShulkerBlockRenderer renderer;
+  private final LootrShulkerBoxRenderer renderer;
   private final Material material;
   private final float openness;
   private final Direction orientation;
 
-  public LootrShulkerSpecialRenderer(LootrShulkerBlockRenderer renderer, Material material, float openness, Direction direction) {
+  public LootrShulkerSpecialRenderer(LootrShulkerBoxRenderer renderer, Material material, float openness, Direction direction) {
     this.renderer = renderer;
     this.material = material;
     this.openness = openness;
@@ -58,13 +58,13 @@ public class LootrShulkerSpecialRenderer implements NoDataSpecialModelRenderer {
     }
 
     public static Unbaked shulker() {
-      return new Unbaked(LootrShulkerBlockRenderer.MATERIAL.texture(), LootrShulkerBlockRenderer.MATERIAL3.texture());
+      return new Unbaked(LootrShulkerBoxRenderer.MATERIAL.texture(), LootrShulkerBoxRenderer.MATERIAL3.texture());
     }
 
     @Nullable
     @Override
     public SpecialModelRenderer<?> bake(SpecialModelRenderer.BakingContext context) {
-      LootrShulkerBlockRenderer model = new LootrShulkerBlockRenderer(context);
+      LootrShulkerBoxRenderer model = new LootrShulkerBoxRenderer(context);
       Material material;
       if (LootrAPI.isVanillaTextures()) {
         material = Sheets.DEFAULT_SHULKER_TEXTURE_LOCATION;
