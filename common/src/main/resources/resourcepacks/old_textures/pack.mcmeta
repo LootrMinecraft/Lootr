@@ -1,7 +1,10 @@
 {
   "pack": {
     "description": "Lootr - Old Textures",
-    "pack_format": 26,
-    "supported_formats": [0, 1000000]
+    "max_format": [
+      88,
+      0
+    ],
+    "min_format": 88
   }
 }
