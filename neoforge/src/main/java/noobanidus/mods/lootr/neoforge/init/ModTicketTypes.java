@@ -10,7 +10,7 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 public class ModTicketTypes {
     private static final DeferredRegister<TicketType> REGISTER = DeferredRegister.create(BuiltInRegistries.TICKET_TYPE, LootrAPI.MODID);
 
-    public static final DeferredHolder<TicketType, TicketType> ENTITY_TICKET_TYPE = REGISTER.register(LootrAPI.LOOTR_ENTITY_TICK_TICKET.location().getPath(), () -> new TicketType(300L, true, TicketType.TicketUse.LOADING_AND_SIMULATION));
+    public static final DeferredHolder<TicketType, TicketType> ENTITY_TICKET_TYPE = REGISTER.register(LootrAPI.LOOTR_ENTITY_TICK_TICKET.location().getPath(), () -> new TicketType(300L, TicketType.FLAG_LOADING | TicketType.FLAG_SIMULATION, true));
 
     public static void register(IEventBus bus) {
         REGISTER.register(bus);

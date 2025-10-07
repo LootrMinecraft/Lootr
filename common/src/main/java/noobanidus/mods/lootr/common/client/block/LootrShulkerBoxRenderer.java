@@ -92,7 +92,7 @@ public class LootrShulkerBoxRenderer implements BlockEntityRenderer<LootrShulker
     this.submit(pose, collector, state.lightCoords, OverlayTexture.NO_OVERLAY, state.direction, state.progress, state.breakProgress, material, 0);
   }
 
-  public void submit(PoseStack poseStack, SubmitNodeCollector nodeCollector, int packedLight, int packedOverlay, Direction direction, float progress, @javax.annotation.Nullable ModelFeatureRenderer.CrumblingOverlay crumblingOverlay, Material material, int outlineColor) {
+  public void submit(PoseStack poseStack, SubmitNodeCollector nodeCollector, int packedLight, int packedOverlay, Direction direction, float progress, @Nullable ModelFeatureRenderer.CrumblingOverlay crumblingOverlay, Material material, int outlineColor) {
     poseStack.pushPose();
     this.prepareModel(poseStack, direction, progress);
     nodeCollector.submitModel(this.model, progress, poseStack, material.renderType(this.model::renderType), packedLight, packedOverlay, -1, this.materials.get(material), outlineColor, crumblingOverlay);
