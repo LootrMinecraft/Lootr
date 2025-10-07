@@ -4,11 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.client.model.geom.EntityModelSet;
-import net.minecraft.client.model.geom.ModelLayers;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
-import net.minecraft.client.renderer.blockentity.ShulkerBoxRenderer;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.special.NoDataSpecialModelRenderer;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
 import net.minecraft.client.resources.model.Material;
@@ -23,43 +20,30 @@ import org.joml.Vector3f;
 import java.util.Set;
 
 public class LootrShulkerSpecialRenderer implements NoDataSpecialModelRenderer {
-  private final LootrShulkerBlockRenderer.ShulkerBoxModel boxModel;
+  private final LootrShulkerBlockRenderer renderer;
   private final Material material;
   private final float openness;
   private final Direction orientation;
 
-  public LootrShulkerSpecialRenderer(LootrShulkerBlockRenderer.ShulkerBoxModel boxModel, Material material, float openness, Direction direction) {
-    this.boxModel = boxModel;
+  public LootrShulkerSpecialRenderer(LootrShulkerBlockRenderer renderer, Material material, float openness, Direction direction) {
+    this.renderer = renderer;
     this.material = material;
     this.openness = openness;
     this.orientation = direction;
   }
 
   @Override
-  public void render(ItemDisplayContext itemDisplayContext, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int j, boolean bl) {
-    prepareModel(poseStack, this.orientation, this.openness);
-    boxModel.renderToBuffer(poseStack, material.buffer(multiBufferSource, boxModel::renderType), i, j);
-    poseStack.popPose();
-  }
-
-  private void prepareModel (PoseStack poseStack, Direction orientation, float openness) {
-    poseStack.pushPose();
-    poseStack.translate(0.5f, 0.5f, 0.5f);
-    poseStack.scale(0.9995f, 0.9995f, 0.9995f);
-    poseStack.mulPose(orientation.getRotation());
-    poseStack.scale(1.0f, -1.0f, -1.0f);
-    poseStack.translate(0.0f, -1.0f, 0.0f);
-    boxModel.animate(openness);
+  public void submit(ItemDisplayContext displayContext, PoseStack poseStack, SubmitNodeCollector nodeCollector, int packedLight, int packedOverlay, boolean hasFoil, int outlineColor) {
+    this.renderer.submit(poseStack, nodeCollector, packedLight, packedOverlay, this.orientation, this.openness, null, this.material, outlineColor);
   }
 
   @Override
   public void getExtents(Set<Vector3f> p_428206_) {
-    PoseStack posestack = new PoseStack();
-    this.prepareModel(posestack, this.orientation, this.openness);
-    this.boxModel.root().getExtentsForGui(posestack, p_428206_);
+    this.renderer.getExtents(this.orientation, this.openness, p_428206_);
   }
 
-  public record Unbaked(ResourceLocation texture, ResourceLocation oldTexture, float openness, Direction orientation) implements SpecialModelRenderer.Unbaked {
+  public record Unbaked(ResourceLocation texture, ResourceLocation oldTexture, float openness,
+                        Direction orientation) implements SpecialModelRenderer.Unbaked {
     public static final MapCodec<Unbaked> MAP_CODEC = RecordCodecBuilder.mapCodec(
         instance -> instance.group(
             ResourceLocation.CODEC.fieldOf("texture").forGetter(Unbaked::texture),
@@ -69,18 +53,18 @@ public class LootrShulkerSpecialRenderer implements NoDataSpecialModelRenderer {
         ).apply(instance, LootrShulkerSpecialRenderer.Unbaked::new)
     );
 
-    public Unbaked (ResourceLocation texture, ResourceLocation oldTexture) {
+    public Unbaked(ResourceLocation texture, ResourceLocation oldTexture) {
       this(texture, oldTexture, 0.0f, Direction.UP);
     }
 
-    public static Unbaked shulker () {
+    public static Unbaked shulker() {
       return new Unbaked(LootrShulkerBlockRenderer.MATERIAL.texture(), LootrShulkerBlockRenderer.MATERIAL3.texture());
     }
 
     @Nullable
     @Override
-    public SpecialModelRenderer<?> bake(EntityModelSet entityModelSet) {
-      LootrShulkerBlockRenderer.ShulkerBoxModel model = new LootrShulkerBlockRenderer.ShulkerBoxModel(entityModelSet.bakeLayer(ModelLayers.SHULKER));
+    public SpecialModelRenderer<?> bake(SpecialModelRenderer.BakingContext context) {
+      LootrShulkerBlockRenderer model = new LootrShulkerBlockRenderer(context);
       Material material;
       if (LootrAPI.isVanillaTextures()) {
         material = Sheets.DEFAULT_SHULKER_TEXTURE_LOCATION;
