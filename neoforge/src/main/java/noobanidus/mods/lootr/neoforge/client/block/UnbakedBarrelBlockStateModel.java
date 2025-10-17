@@ -116,6 +116,16 @@ public class UnbakedBarrelBlockStateModel implements CustomUnbakedBlockStateMode
 
     @Override
     public void collectParts(BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource random, List<BlockModelPart> parts) {
+      if (state.isAir()) {
+        if (LootrAPI.isVanillaTextures()) {
+          vanilla[Direction.NORTH.ordinal()].collectParts(level, pos, state, random, parts);
+        } else if (LootrAPI.isOldTextures()) {
+          oldLootrBarrelUnopened[Direction.NORTH.ordinal()].collectParts(level, pos, state, random, parts);
+        } else {
+          lootrBarrelUnopened[Direction.NORTH.ordinal()].collectParts(level, pos, state, random, parts);
+        }
+        return;
+      }
       boolean visuallyOpen = level.getModelData(pos).get(ModBlockProperties.OPENED) == Boolean.TRUE;
       boolean open = state.getValue(BarrelBlock.OPEN);
       int facing = state.getValue(BarrelBlock.FACING).ordinal();
