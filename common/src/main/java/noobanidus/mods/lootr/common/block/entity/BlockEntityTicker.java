@@ -21,6 +21,7 @@ import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 
+import java.util.Iterator;
 import java.util.Set;
 
 public class BlockEntityTicker {
@@ -28,7 +29,6 @@ public class BlockEntityTicker {
   private final static Object worldLock = new Object();
   private final static Set<Entry> blockEntityEntries = new ObjectOpenHashSet<>();
   private final static Set<Entry> pendingEntries = new ObjectOpenHashSet<>();
-  private static boolean tickingList = false;
 
   public static void addEntry(RandomizableContainerBlockEntity incoming, Level level, BlockPos position) {
     if (LootrAPI.isDisabled()) {
@@ -72,11 +72,7 @@ public class BlockEntityTicker {
 
     Entry newEntry = new Entry(dimension, position, chunks, LootrAPI.getCurrentTicks());
     synchronized (listLock) {
-      if (tickingList) {
-        pendingEntries.add(newEntry);
-      } else {
-        blockEntityEntries.add(newEntry);
-      }
+      pendingEntries.add(newEntry);
     }
   }
 
@@ -84,23 +80,18 @@ public class BlockEntityTicker {
     if (LootrAPI.isDisabled()) {
       return;
     }
-    Set<Entry> toRemove = new ObjectOpenHashSet<>();
-    Set<Entry> copy;
-    synchronized (listLock) {
-      tickingList = true;
-      copy = new ObjectOpenHashSet<>(blockEntityEntries);
-      tickingList = false;
-    }
     synchronized (worldLock) {
       MinecraftServer server = LootrAPI.getServer();
       if (server == null) {
         LootrAPI.LOG.error("MinecraftServer was null during ServerTickEvent!");
         return;
       }
-      for (Entry entry : copy) {
+      Iterator<Entry> iterator = blockEntityEntries.iterator();
+      while (iterator.hasNext()) {
+        Entry entry = iterator.next();
         ServerLevel level = server.getLevel(entry.getDimension());
         if (level == null || LootrAPI.hasExpired(entry.age(server)) || (!LootrAPI.isWorldBorderSafe(level, entry.getPosition()))) {
-          toRemove.add(entry);
+          iterator.remove();
           continue;
         }
 
@@ -128,12 +119,13 @@ public class BlockEntityTicker {
           ChunkPos thisPos = new ChunkPos(entry.getPosition());
           if (registry.getTag(LootrTags.Structure.STRUCTURE_BLACKLIST).filter(tag -> tag.size() != 0).isPresent()) {
             if (LootrAPI.isTaggedStructurePresent(level, thisPos, LootrTags.Structure.STRUCTURE_BLACKLIST, entry.getPosition())) {
-              toRemove.add(entry);
+              iterator.remove();
               continue;
             }
-          } else if (registry.getTag(LootrTags.Structure.STRUCTURE_WHITELIST).filter(tag -> tag.size() != 0).isPresent()) {
+          } else if (registry.getTag(LootrTags.Structure.STRUCTURE_WHITELIST).filter(tag -> tag.size() != 0)
+              .isPresent()) {
             if (!LootrAPI.isTaggedStructurePresent(level, thisPos, LootrTags.Structure.STRUCTURE_WHITELIST, entry.getPosition())) {
-              toRemove.add(entry);
+              iterator.remove();
               continue;
             }
           }
@@ -141,17 +133,17 @@ public class BlockEntityTicker {
 
         BlockEntity blockEntity = level.getBlockEntity(entry.getPosition());
         if (!(blockEntity instanceof RandomizableContainerBlockEntity be) || LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity) {
-          toRemove.add(entry);
+          iterator.remove();
           continue;
         }
         if (be.getLootTable() == null || LootrAPI.isLootTableBlacklisted(be.getLootTable())) {
-          toRemove.add(entry);
+          iterator.remove();
           continue;
         }
         BlockState stateAt = level.getBlockState(entry.getPosition());
         BlockState replacement = LootrAPI.replacementBlockState(stateAt);
         if (replacement == null) {
-          toRemove.add(entry);
+          iterator.remove();
           continue;
         }
         // Save specific data. Currently, this includes the LockCode (all platforms), along with NeoForge's getPersistentData.
@@ -167,44 +159,29 @@ public class BlockEntityTicker {
         if (LootrAPI.resolveBlockEntity(newBlockEntity) instanceof ILootrBlockEntity && newBlockEntity instanceof RandomizableContainerBlockEntity rbe) {
           rbe.setLootTable(table, seed);
         } else {
-          LootrAPI.LOG.error("replacement " + replacement + " is not an ILootrBlockEntity " + entry.getDimension() + " at " + entry.getPosition());
+          LootrAPI.LOG.error("replacement {} is not an ILootrBlockEntity {} at {}", replacement, entry.getDimension(), entry.getPosition());
         }
 
-        toRemove.add(entry);
+        iterator.remove();
       }
     }
     synchronized (listLock) {
-      tickingList = true;
-      blockEntityEntries.removeAll(toRemove);
       blockEntityEntries.addAll(pendingEntries);
-      tickingList = false;
       pendingEntries.clear();
     }
   }
 
-  public static class Entry {
-    private final ResourceKey<Level> dimension;
-    private final BlockPos position;
-    private final Set<ChunkPos> chunks;
-    private final long addedAt;
-
-    public Entry(ResourceKey<Level> dimension, BlockPos position, Set<ChunkPos> chunks, long addedAt) {
-      this.dimension = dimension;
-      this.position = position;
-      this.chunks = chunks;
-      this.addedAt = addedAt;
-    }
-
+  public record Entry(ResourceKey<Level> dimension, BlockPos position, Set<ChunkPos> chunks, long addedAt) {
     public ResourceKey<Level> getDimension() {
-      return dimension;
+      return dimension();
     }
 
     public BlockPos getPosition() {
-      return position;
+      return position();
     }
 
     public Set<ChunkPos> getChunkPositions() {
-      return chunks;
+      return chunks();
     }
 
     public long age(MinecraftServer server) {
