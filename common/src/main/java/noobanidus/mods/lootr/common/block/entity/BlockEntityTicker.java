@@ -44,7 +44,7 @@ public class BlockEntityTicker {
 
     ChunkPos chunkPos = new ChunkPos(position);
 
-    Set<ChunkPos> chunks = new ObjectLinkedOpenHashSet<>();
+    Set<ChunkPos> chunks = new ObjectOpenHashSet<>();
     chunks.add(chunkPos);
 
     int oX = chunkPos.x;
