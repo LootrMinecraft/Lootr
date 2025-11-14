@@ -98,10 +98,14 @@ public class BlockEntityTicker {
         continue;
       }
 
+      // There's a significant level of "duplication" here:
+      // This check consults the actual chunk source.
       if (!level.getChunkSource().hasChunk(entry.getPosition().getX() >> 4, entry.getPosition().getZ() >> 4)) {
         continue;
       }
 
+      // And for all chunks in a 5x5 area. Modifying a block entity or block
+      // will cause it to propagate ticks, etc, which can cause chunk loading.
       boolean skip = false;
       for (ChunkPos chunkPos : entry.getChunkPositions()) {
         if (!level.getChunkSource().hasChunk(chunkPos.x, chunkPos.z)) {
@@ -113,6 +117,8 @@ public class BlockEntityTicker {
         continue;
       }
 
+      // We also check against `HandleChunk`'s internal list of loaded chunks.
+      // Hence the duplication.
       if (LootrAPI.anyUnloadedChunks(entry.getDimension(), entry.getChunkPositions())) {
         continue;
       }
