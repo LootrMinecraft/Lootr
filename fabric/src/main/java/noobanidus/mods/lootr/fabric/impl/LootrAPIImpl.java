@@ -20,9 +20,10 @@ import noobanidus.mods.lootr.common.api.client.ClientTextureType;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.impl.DefaultLootrAPIImpl;
 import noobanidus.mods.lootr.fabric.config.ConfigManager;
-import noobanidus.mods.lootr.fabric.event.HandleChunk;
+import noobanidus.mods.lootr.common.chunk.LoadedChunks;
 import noobanidus.mods.lootr.fabric.event.LootrEventsInit;
 
+import java.util.Collection;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -235,16 +236,6 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   }
 
   @Override
-  public int getMaximumAge() {
-    return ConfigManager.get().conversion.max_entry_age;
-  }
-
-  @Override
-  public boolean hasExpired(long time) {
-    return time > getMaximumAge();
-  }
-
-  @Override
   public boolean shouldConvertMineshafts() {
     return ConfigManager.get().conversion.convert_mineshafts;
   }
@@ -353,18 +344,7 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   }
 
   @Override
-  public boolean anyUnloadedChunks(ResourceKey<Level> dimension, Set<ChunkPos> chunks) {
-    Set<ChunkPos> syncedChunks = HandleChunk.LOADED_CHUNKS.get(dimension);
-    if (syncedChunks == null || syncedChunks.isEmpty()) {
-      return true;
-    }
-
-    for (ChunkPos myPos : chunks) {
-      if (!syncedChunks.contains(myPos)) {
-        return true;
-      }
-    }
-
-    return false;
+  public boolean anyUnloadedChunks(ResourceKey<Level> dimension, Collection<ChunkPos> chunks) {
+    return LoadedChunks.anyUnloadedChunks(dimension, chunks);
   }
 }

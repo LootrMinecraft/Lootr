@@ -28,6 +28,7 @@ import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -166,10 +167,6 @@ public interface ILootrAPI {
 
   boolean shouldCheckWorldBorder();
 
-  int getMaximumAge();
-
-  boolean hasExpired(long time);
-
   boolean shouldConvertMineshafts();
 
   boolean shouldConvertElytras();
@@ -246,8 +243,9 @@ public interface ILootrAPI {
 
   void handleProviderTick(@Nullable ILootrInfoProvider provider);
 
-  boolean anyUnloadedChunks(ResourceKey<Level> dimension, Set<ChunkPos> chunks);
+  boolean anyUnloadedChunks(ResourceKey<Level> dimension, Collection<ChunkPos> chunks);
 
+  @Nullable
   <T extends BlockEntity> ILootrBlockEntity resolveBlockEntity (T blockEntity);
 
   <T extends Entity> ILootrCart resolveEntity (T entity);
