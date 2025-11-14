@@ -64,7 +64,7 @@ public class BlockEntityTicker {
       }
     }
 
-    if (incoming.getLootTable() == null || LootrAPI.isLootTableBlacklisted(incoming.getLootTable())) {
+    if (incoming.getLootTable() != null && LootrAPI.isLootTableBlacklisted(incoming.getLootTable())) {
       return;
     }
 
