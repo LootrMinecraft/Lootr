@@ -20,7 +20,6 @@ import noobanidus.mods.lootr.common.api.client.ClientTextureType;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.impl.DefaultLootrAPIImpl;
 import noobanidus.mods.lootr.fabric.config.ConfigManager;
-import noobanidus.mods.lootr.fabric.event.HandleChunk;
 import noobanidus.mods.lootr.fabric.event.LootrEventsInit;
 
 import java.util.Set;
@@ -350,21 +349,5 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
             .getNamespace(), lootTable.toString())
         .setStyle(!isMessageStylesEnabled() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED))
             .withBold(true));
-  }
-
-  @Override
-  public boolean anyUnloadedChunks(ResourceKey<Level> dimension, Set<ChunkPos> chunks) {
-    Set<ChunkPos> syncedChunks = HandleChunk.LOADED_CHUNKS.get(dimension);
-    if (syncedChunks == null || syncedChunks.isEmpty()) {
-      return true;
-    }
-
-    for (ChunkPos myPos : chunks) {
-      if (!syncedChunks.contains(myPos)) {
-        return true;
-      }
-    }
-
-    return false;
   }
 }
