@@ -26,7 +26,6 @@ import java.util.Set;
 
 public class BlockEntityTicker {
   private final static Object listLock = new Object();
-  private final static Object worldLock = new Object();
   private final static Set<Entry> blockEntityEntries = new ObjectOpenHashSet<>();
   private final static Set<Entry> pendingEntries = new ObjectOpenHashSet<>();
 
@@ -80,90 +79,88 @@ public class BlockEntityTicker {
     if (LootrAPI.isDisabled()) {
       return;
     }
-    synchronized (worldLock) {
-      MinecraftServer server = LootrAPI.getServer();
-      if (server == null) {
-        LootrAPI.LOG.error("MinecraftServer was null during ServerTickEvent!");
-        return;
-      }
-      Iterator<Entry> iterator = blockEntityEntries.iterator();
-      while (iterator.hasNext()) {
-        Entry entry = iterator.next();
-        ServerLevel level = server.getLevel(entry.getDimension());
-        if (level == null || LootrAPI.hasExpired(entry.age(server)) || (!LootrAPI.isWorldBorderSafe(level, entry.getPosition()))) {
-          iterator.remove();
-          continue;
-        }
-
-        if (!level.getChunkSource().hasChunk(entry.getPosition().getX() >> 4, entry.getPosition().getZ() >> 4)) {
-          continue;
-        }
-
-        boolean skip = false;
-        for (ChunkPos chunkPos : entry.getChunkPositions()) {
-          if (!level.getChunkSource().hasChunk(chunkPos.x, chunkPos.z)) {
-            skip = true;
-            break;
-          }
-        }
-        if (skip) {
-          continue;
-        }
-
-        if (LootrAPI.anyUnloadedChunks(entry.getDimension(), entry.getChunkPositions())) {
-          continue;
-        }
-
-        if (level.getServer().getWorldData().worldGenOptions().generateStructures()) {
-          Registry<Structure> registry = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
-          ChunkPos thisPos = new ChunkPos(entry.getPosition());
-          if (registry.getTag(LootrTags.Structure.STRUCTURE_BLACKLIST).filter(tag -> tag.size() != 0).isPresent()) {
-            if (LootrAPI.isTaggedStructurePresent(level, thisPos, LootrTags.Structure.STRUCTURE_BLACKLIST, entry.getPosition())) {
-              iterator.remove();
-              continue;
-            }
-          } else if (registry.getTag(LootrTags.Structure.STRUCTURE_WHITELIST).filter(tag -> tag.size() != 0)
-              .isPresent()) {
-            if (!LootrAPI.isTaggedStructurePresent(level, thisPos, LootrTags.Structure.STRUCTURE_WHITELIST, entry.getPosition())) {
-              iterator.remove();
-              continue;
-            }
-          }
-        }
-
-        BlockEntity blockEntity = level.getBlockEntity(entry.getPosition());
-        if (!(blockEntity instanceof RandomizableContainerBlockEntity be) || LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity) {
-          iterator.remove();
-          continue;
-        }
-        if (be.getLootTable() == null || LootrAPI.isLootTableBlacklisted(be.getLootTable())) {
-          iterator.remove();
-          continue;
-        }
-        BlockState stateAt = level.getBlockState(entry.getPosition());
-        BlockState replacement = LootrAPI.replacementBlockState(stateAt);
-        if (replacement == null) {
-          iterator.remove();
-          continue;
-        }
-        // Save specific data. Currently, this includes the LockCode (all platforms), along with NeoForge's getPersistentData.
-        DataToCopy data = PlatformAPI.copySpecificData(be);
-        ResourceKey<LootTable> table = be.getLootTable();
-        long seed = be.getLootTableSeed();
-        // IMPORTANT: Clear loot table to prevent loot drop when container is destroyed
-        be.setLootTable(null);
-        level.destroyBlock(entry.getPosition(), false);
-        level.setBlock(entry.getPosition(), replacement, 2);
-        BlockEntity newBlockEntity = level.getBlockEntity(entry.getPosition());
-        PlatformAPI.restoreSpecificData(data, newBlockEntity);
-        if (LootrAPI.resolveBlockEntity(newBlockEntity) instanceof ILootrBlockEntity && newBlockEntity instanceof RandomizableContainerBlockEntity rbe) {
-          rbe.setLootTable(table, seed);
-        } else {
-          LootrAPI.LOG.error("replacement {} is not an ILootrBlockEntity {} at {}", replacement, entry.getDimension(), entry.getPosition());
-        }
-
+    MinecraftServer server = LootrAPI.getServer();
+    if (server == null) {
+      LootrAPI.LOG.error("MinecraftServer was null during ServerTickEvent!");
+      return;
+    }
+    Iterator<Entry> iterator = blockEntityEntries.iterator();
+    while (iterator.hasNext()) {
+      Entry entry = iterator.next();
+      ServerLevel level = server.getLevel(entry.getDimension());
+      if (level == null || LootrAPI.hasExpired(entry.age(server)) || (!LootrAPI.isWorldBorderSafe(level, entry.getPosition()))) {
         iterator.remove();
+        continue;
       }
+
+      if (!level.getChunkSource().hasChunk(entry.getPosition().getX() >> 4, entry.getPosition().getZ() >> 4)) {
+        continue;
+      }
+
+      boolean skip = false;
+      for (ChunkPos chunkPos : entry.getChunkPositions()) {
+        if (!level.getChunkSource().hasChunk(chunkPos.x, chunkPos.z)) {
+          skip = true;
+          break;
+        }
+      }
+      if (skip) {
+        continue;
+      }
+
+      if (LootrAPI.anyUnloadedChunks(entry.getDimension(), entry.getChunkPositions())) {
+        continue;
+      }
+
+      if (level.getServer().getWorldData().worldGenOptions().generateStructures()) {
+        Registry<Structure> registry = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
+        ChunkPos thisPos = new ChunkPos(entry.getPosition());
+        if (registry.getTag(LootrTags.Structure.STRUCTURE_BLACKLIST).filter(tag -> tag.size() != 0).isPresent()) {
+          if (LootrAPI.isTaggedStructurePresent(level, thisPos, LootrTags.Structure.STRUCTURE_BLACKLIST, entry.getPosition())) {
+            iterator.remove();
+            continue;
+          }
+        } else if (registry.getTag(LootrTags.Structure.STRUCTURE_WHITELIST).filter(tag -> tag.size() != 0)
+            .isPresent()) {
+          if (!LootrAPI.isTaggedStructurePresent(level, thisPos, LootrTags.Structure.STRUCTURE_WHITELIST, entry.getPosition())) {
+            iterator.remove();
+            continue;
+          }
+        }
+      }
+
+      BlockEntity blockEntity = level.getBlockEntity(entry.getPosition());
+      if (!(blockEntity instanceof RandomizableContainerBlockEntity be) || LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity) {
+        iterator.remove();
+        continue;
+      }
+      if (be.getLootTable() == null || LootrAPI.isLootTableBlacklisted(be.getLootTable())) {
+        iterator.remove();
+        continue;
+      }
+      BlockState stateAt = level.getBlockState(entry.getPosition());
+      BlockState replacement = LootrAPI.replacementBlockState(stateAt);
+      if (replacement == null) {
+        iterator.remove();
+        continue;
+      }
+      // Save specific data. Currently, this includes the LockCode (all platforms), along with NeoForge's getPersistentData.
+      DataToCopy data = PlatformAPI.copySpecificData(be);
+      ResourceKey<LootTable> table = be.getLootTable();
+      long seed = be.getLootTableSeed();
+      // IMPORTANT: Clear loot table to prevent loot drop when container is destroyed
+      be.setLootTable(null);
+      level.destroyBlock(entry.getPosition(), false);
+      level.setBlock(entry.getPosition(), replacement, 2);
+      BlockEntity newBlockEntity = level.getBlockEntity(entry.getPosition());
+      PlatformAPI.restoreSpecificData(data, newBlockEntity);
+      if (LootrAPI.resolveBlockEntity(newBlockEntity) instanceof ILootrBlockEntity && newBlockEntity instanceof RandomizableContainerBlockEntity rbe) {
+        rbe.setLootTable(table, seed);
+      } else {
+        LootrAPI.LOG.error("replacement {} is not an ILootrBlockEntity {} at {}", replacement, entry.getDimension(), entry.getPosition());
+      }
+
+      iterator.remove();
     }
     synchronized (listLock) {
       blockEntityEntries.addAll(pendingEntries);
