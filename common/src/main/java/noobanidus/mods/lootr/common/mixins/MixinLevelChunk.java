@@ -24,12 +24,7 @@ public class MixinLevelChunk {
       if (level.getLevel().isClientSide()) {
         return;
       }
-      // By default block entities outside of the world border are
-      // not converted. When the world border changes, you will
-      // need to restart the server.
-      if (LootrAPI.isWorldBorderSafe(level.getLevel(), entity.getBlockPos())) {
-        BlockEntityTicker.addEntry(incoming ,level.getLevel(), entity.getBlockPos());
-      }
+      BlockEntityTicker.addEntry(incoming, level.getLevel(), entity.getBlockPos());
     }
   }
 }

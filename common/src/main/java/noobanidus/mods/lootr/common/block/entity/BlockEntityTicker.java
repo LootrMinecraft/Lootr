@@ -33,6 +33,13 @@ public class BlockEntityTicker {
       return;
     }
 
+    // By default block entities outside of the world border are
+    // not converted. When the world border changes, you will
+    // need to restart the server.
+    if (!LootrAPI.isWorldBorderSafe(level, position)) {
+      return;
+    }
+
     if (LootrAPI.getServer() == null) {
       return;
     }
