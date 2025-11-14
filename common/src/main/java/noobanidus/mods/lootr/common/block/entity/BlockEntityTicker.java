@@ -49,6 +49,10 @@ public class BlockEntityTicker {
       return;
     }
 
+    if (incoming.getLootTable() != null && LootrAPI.isLootTableBlacklisted(incoming.getLootTable())) {
+      return;
+    }
+
     ChunkPos chunkPos = new ChunkPos(position);
 
     Set<ChunkPos> chunks = new ObjectOpenHashSet<>();
@@ -56,7 +60,6 @@ public class BlockEntityTicker {
 
     int oX = chunkPos.x;
     int oZ = chunkPos.z;
-    chunks.add(chunkPos);
 
     for (int x = -2; x <= 2; x++) {
       for (int z = -2; z <= 2; z++) {
@@ -69,10 +72,6 @@ public class BlockEntityTicker {
 
         chunks.add(newPos);
       }
-    }
-
-    if (incoming.getLootTable() != null && LootrAPI.isLootTableBlacklisted(incoming.getLootTable())) {
-      return;
     }
 
     Entry newEntry = new Entry(dimension, position, chunks, LootrAPI.getCurrentTicks());
