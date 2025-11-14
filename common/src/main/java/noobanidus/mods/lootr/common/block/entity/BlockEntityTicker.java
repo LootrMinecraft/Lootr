@@ -25,7 +25,6 @@ import java.util.Iterator;
 import java.util.Set;
 
 public class BlockEntityTicker {
-  private final static Object listLock = new Object();
   private final static Set<Entry> blockEntityEntries = new ObjectOpenHashSet<>();
   private final static Set<Entry> pendingEntries = new ObjectOpenHashSet<>();
 
@@ -70,7 +69,7 @@ public class BlockEntityTicker {
     }
 
     Entry newEntry = new Entry(dimension, position, chunks, LootrAPI.getCurrentTicks());
-    synchronized (listLock) {
+    synchronized (pendingEntries) {
       pendingEntries.add(newEntry);
     }
   }
@@ -162,7 +161,7 @@ public class BlockEntityTicker {
 
       iterator.remove();
     }
-    synchronized (listLock) {
+    synchronized (pendingEntries) {
       blockEntityEntries.addAll(pendingEntries);
       pendingEntries.clear();
     }
