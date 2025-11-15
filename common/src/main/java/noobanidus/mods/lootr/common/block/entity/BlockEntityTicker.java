@@ -103,6 +103,19 @@ public class BlockEntityTicker {
     }
   }
 
+  private static boolean checkStructureValidity(ServerLevel level, ChunkPos chunkPos, BlockPos position) {
+    if (!level.getServer().getWorldData().worldGenOptions().generateStructures()) {
+      return true;
+    }
+    Registry<Structure> registry = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
+    if (registry.getTag(LootrTags.Structure.STRUCTURE_BLACKLIST).filter(tag -> tag.size() != 0).isPresent()) {
+      return !LootrAPI.isTaggedStructurePresent(level, chunkPos, LootrTags.Structure.STRUCTURE_BLACKLIST, position);
+    } else if (registry.getTag(LootrTags.Structure.STRUCTURE_WHITELIST).filter(tag -> tag.size() != 0).isPresent()) {
+      return LootrAPI.isTaggedStructurePresent(level, chunkPos, LootrTags.Structure.STRUCTURE_WHITELIST, position);
+    }
+    return true;
+  }
+
   private static void replaceEntitiesInChunk(ServerLevel level, Entry entry) {
     for (BlockPos entityPos : entry.entityPositions()) {
       if (!checkStructureValidity(level, entry.chunkPos(), entityPos)) {
@@ -141,19 +154,6 @@ public class BlockEntityTicker {
     } else {
       LootrAPI.LOG.error("replacement {} is not an ILootrBlockEntity {} at {}", replacement, level.dimension(), entityPos);
     }
-  }
-
-  private static boolean checkStructureValidity(ServerLevel level, ChunkPos chunkPos, BlockPos position) {
-    if (!level.getServer().getWorldData().worldGenOptions().generateStructures()) {
-        return true;
-    }
-    Registry<Structure> registry = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
-    if (registry.getTag(LootrTags.Structure.STRUCTURE_BLACKLIST).filter(tag -> tag.size() != 0).isPresent()) {
-		return !LootrAPI.isTaggedStructurePresent(level, chunkPos, LootrTags.Structure.STRUCTURE_BLACKLIST, position);
-    } else if (registry.getTag(LootrTags.Structure.STRUCTURE_WHITELIST).filter(tag -> tag.size() != 0).isPresent()) {
-		return LootrAPI.isTaggedStructurePresent(level, chunkPos, LootrTags.Structure.STRUCTURE_WHITELIST, position);
-    }
-    return true;
   }
 
   @Nullable
