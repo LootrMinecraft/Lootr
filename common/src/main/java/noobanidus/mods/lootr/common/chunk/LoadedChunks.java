@@ -7,7 +7,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.chunk.LevelChunk;
 
-import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,9 +25,18 @@ public class LoadedChunks {
     }
   }
 
-  public static boolean anyUnloadedChunks(ResourceKey<Level> dimension, Collection<ChunkPos> chunks) {
-    Set<ChunkPos> syncedChunks = LOADED_CHUNKS.get(dimension);
-    return syncedChunks == null || !syncedChunks.containsAll(chunks);
+  public static void onChunkUnload(LevelAccessor level, LevelChunk chunk) {
+    if (!level.isClientSide()) {
+      ResourceKey<Level> dimension = chunk.getLevel().dimension();
+      Set<ChunkPos> chunkSet = LOADED_CHUNKS.get(dimension);
+      if (chunkSet != null) {
+        chunkSet.remove(chunk.getPos());
+      }
+    }
+  }
+
+  public static Set<ChunkPos> getLoadedChunks(ResourceKey<Level> dimension) {
+    return Collections.unmodifiableSet(LOADED_CHUNKS.get(dimension));
   }
 
   public static void clear() {

@@ -35,7 +35,6 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -407,10 +406,6 @@ public class LootrAPI {
 
   public static void handleProviderTick(@Nullable ILootrInfoProvider provider) {
     INSTANCE.handleProviderTick(provider);
-  }
-
-  public static boolean anyUnloadedChunks(ResourceKey<Level> dimension, Collection<ChunkPos> chunks) {
-    return INSTANCE.anyUnloadedChunks(dimension, chunks);
   }
 
   @Nullable

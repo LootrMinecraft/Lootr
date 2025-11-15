@@ -243,8 +243,6 @@ public interface ILootrAPI {
 
   void handleProviderTick(@Nullable ILootrInfoProvider provider);
 
-  boolean anyUnloadedChunks(ResourceKey<Level> dimension, Collection<ChunkPos> chunks);
-
   @Nullable
   <T extends BlockEntity> ILootrBlockEntity resolveBlockEntity (T blockEntity);
 

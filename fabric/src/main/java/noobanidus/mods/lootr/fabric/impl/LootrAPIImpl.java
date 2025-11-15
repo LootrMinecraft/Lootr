@@ -342,9 +342,4 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
         .setStyle(!isMessageStylesEnabled() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED))
             .withBold(true));
   }
-
-  @Override
-  public boolean anyUnloadedChunks(ResourceKey<Level> dimension, Collection<ChunkPos> chunks) {
-    return LoadedChunks.anyUnloadedChunks(dimension, chunks);
-  }
 }

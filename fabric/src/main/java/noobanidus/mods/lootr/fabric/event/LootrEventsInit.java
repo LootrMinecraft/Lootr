@@ -40,6 +40,7 @@ public class LootrEventsInit {
     });
 
     ServerChunkEvents.CHUNK_LOAD.register(LoadedChunks::onChunkLoad);
+    ServerChunkEvents.CHUNK_UNLOAD.register(LoadedChunks::onChunkUnload);
 
     PlayerBlockBreakEvents.BEFORE.register(HandleBreak::beforeBlockBreak);
 

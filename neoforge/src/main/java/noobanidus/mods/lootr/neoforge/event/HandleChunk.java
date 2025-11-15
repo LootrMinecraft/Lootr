@@ -21,6 +21,14 @@ public class HandleChunk {
   }
 
   @SubscribeEvent
+  public static void onChunkUnload(ChunkEvent.Unload event) {
+    if (event.getChunk() instanceof LevelChunk levelChunk) {
+      LevelAccessor level = event.getLevel();
+      LoadedChunks.onChunkUnload(level, levelChunk);
+    }
+  }
+
+  @SubscribeEvent
   public static void onServerStarted(ServerAboutToStartEvent event) {
     LoadedChunks.clear();
   }

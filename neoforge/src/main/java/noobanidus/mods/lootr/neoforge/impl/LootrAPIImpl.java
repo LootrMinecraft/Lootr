@@ -339,9 +339,4 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   public Component getInvalidTableComponent(ResourceKey<LootTable> lootTable) {
     return Component.translatable("lootr.message.invalid_table", lootTable.location().getNamespace(), lootTable.toString()).setStyle(ConfigManager.DISABLE_MESSAGE_STYLES.get() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED)).withBold(true));
   }
-
-  @Override
-  public boolean anyUnloadedChunks(ResourceKey<Level> dimension, Collection<ChunkPos> chunks) {
-    return LoadedChunks.anyUnloadedChunks(dimension, chunks);
-  }
 }
