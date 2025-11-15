@@ -11,7 +11,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -20,10 +19,8 @@ import noobanidus.mods.lootr.common.api.client.ClientTextureType;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.impl.DefaultLootrAPIImpl;
 import noobanidus.mods.lootr.fabric.config.ConfigManager;
-import noobanidus.mods.lootr.common.chunk.LoadedChunks;
 import noobanidus.mods.lootr.fabric.event.LootrEventsInit;
 
-import java.util.Collection;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 

@@ -20,7 +20,6 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
-import noobanidus.mods.lootr.common.chunk.LoadedChunks;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -106,9 +105,8 @@ public class BlockEntityTicker {
 
   public record Entry(ResourceKey<Level> dimension, ChunkPos chunkPos, List<BlockPos> entityPositions) {
     public ChunkLoadStatus getChunkLoadStatus(ServerLevel level) {
-        Set<ChunkPos> loadedChunks = LoadedChunks.getLoadedChunks(dimension);
         ChunkSource chunkSource = level.getChunkSource();
-        if (!LootrAPI.isWorldBorderSafe(level, chunkPos) || !loadedChunks.contains(chunkPos) || !chunkSource.hasChunk(chunkPos.x, chunkPos.z)) {
+        if (!LootrAPI.isWorldBorderSafe(level, chunkPos) || !chunkSource.hasChunk(chunkPos.x, chunkPos.z)) {
           return ChunkLoadStatus.UNLOADED;
         }
 
@@ -124,10 +122,7 @@ public class BlockEntityTicker {
             if (!LootrAPI.isWorldBorderSafe(level, pos)) {
               continue;
             }
-            if (loadedChunks.contains(pos) != chunkSource.hasChunk(x, z)) {
-              LootrAPI.LOG.error("disagreement between loaded chunks and chunkSource\npos: {} loadedChunks: {}, chunkSource: {}", pos, loadedChunks.contains(pos), chunkSource.hasChunk(x, z));
-            }
-            if (!loadedChunks.contains(pos) || !chunkSource.hasChunk(x, z)) {
+            if (!chunkSource.hasChunk(x, z)) {
               return ChunkLoadStatus.SURROUNDING_CHUNKS_NOT_LOADED;
             }
           }
