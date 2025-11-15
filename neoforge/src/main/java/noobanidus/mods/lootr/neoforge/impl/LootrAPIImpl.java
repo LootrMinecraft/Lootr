@@ -236,16 +236,6 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   }
 
   @Override
-  public int getMaximumAge() {
-    return ConfigManager.MAXIMUM_AGE.get();
-  }
-
-  @Override
-  public boolean hasExpired(long time) {
-    return time > ConfigManager.MAXIMUM_AGE.get();
-  }
-
-  @Override
   public boolean shouldConvertMineshafts() {
     return ConfigManager.CONVERT_MINESHAFTS.get();
   }
