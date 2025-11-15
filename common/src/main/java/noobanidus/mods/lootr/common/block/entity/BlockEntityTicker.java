@@ -103,58 +103,6 @@ public class BlockEntityTicker {
     }
   }
 
-  public record Entry(ResourceKey<Level> dimension, ChunkPos chunkPos, List<BlockPos> entityPositions) {
-    public ChunkLoadStatus getChunkLoadStatus(ServerLevel level) {
-        ChunkSource chunkSource = level.getChunkSource();
-        if (!LootrAPI.isWorldBorderSafe(level, chunkPos) || !chunkSource.hasChunk(chunkPos.x, chunkPos.z)) {
-          return ChunkLoadStatus.UNLOADED;
-        }
-
-        for (int x = chunkPos.x - 2; x <= chunkPos.x + 2; x++) {
-          for (int z = chunkPos.z - 2; z <= chunkPos.z + 2; z++) {
-            if (x == chunkPos.x && z == chunkPos.z) {
-              // this case is already checked above
-              continue;
-            }
-            ChunkPos pos = new ChunkPos(x, z);
-            // This has the potential to force-load chunks on the main thread
-            // by ignoring the loading state of chunks outside the world border.
-            if (!LootrAPI.isWorldBorderSafe(level, pos)) {
-              continue;
-            }
-            if (!chunkSource.hasChunk(x, z)) {
-              return ChunkLoadStatus.SURROUNDING_CHUNKS_NOT_LOADED;
-            }
-          }
-        }
-        return ChunkLoadStatus.FULLY_LOADED;
-      }
-
-      @Override
-      public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Entry entry = (Entry) o;
-
-        if (!dimension.equals(entry.dimension)) return false;
-        return chunkPos.equals(entry.chunkPos);
-      }
-
-      @Override
-      public int hashCode() {
-        int result = dimension.hashCode();
-        result = 31 * result + chunkPos.hashCode();
-        return result;
-      }
-    }
-
-  public enum ChunkLoadStatus {
-    UNLOADED,
-    SURROUNDING_CHUNKS_NOT_LOADED,
-    FULLY_LOADED,
-  }
-
   private static void replaceEntitiesInChunk(ServerLevel level, Entry entry) {
     for (BlockPos entityPos : entry.entityPositions()) {
       if (!checkStructureValidity(level, entry.chunkPos(), entityPos)) {
@@ -218,5 +166,57 @@ public class BlockEntityTicker {
       return null;
     }
     return dimension;
+  }
+
+  public record Entry(ResourceKey<Level> dimension, ChunkPos chunkPos, List<BlockPos> entityPositions) {
+    public ChunkLoadStatus getChunkLoadStatus(ServerLevel level) {
+      ChunkSource chunkSource = level.getChunkSource();
+      if (!LootrAPI.isWorldBorderSafe(level, chunkPos) || !chunkSource.hasChunk(chunkPos.x, chunkPos.z)) {
+        return ChunkLoadStatus.UNLOADED;
+      }
+
+      for (int x = chunkPos.x - 2; x <= chunkPos.x + 2; x++) {
+        for (int z = chunkPos.z - 2; z <= chunkPos.z + 2; z++) {
+          if (x == chunkPos.x && z == chunkPos.z) {
+            // this case is already checked above
+            continue;
+          }
+          ChunkPos pos = new ChunkPos(x, z);
+          // This has the potential to force-load chunks on the main thread
+          // by ignoring the loading state of chunks outside the world border.
+          if (!LootrAPI.isWorldBorderSafe(level, pos)) {
+            continue;
+          }
+          if (!chunkSource.hasChunk(x, z)) {
+            return ChunkLoadStatus.SURROUNDING_CHUNKS_NOT_LOADED;
+          }
+        }
+      }
+      return ChunkLoadStatus.FULLY_LOADED;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+
+      Entry entry = (Entry) o;
+
+      if (!dimension.equals(entry.dimension)) return false;
+      return chunkPos.equals(entry.chunkPos);
+    }
+
+    @Override
+    public int hashCode() {
+      int result = dimension.hashCode();
+      result = 31 * result + chunkPos.hashCode();
+      return result;
+    }
+  }
+
+  public enum ChunkLoadStatus {
+    UNLOADED,
+    SURROUNDING_CHUNKS_NOT_LOADED,
+    FULLY_LOADED,
   }
 }
