@@ -6,6 +6,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.FullChunkStatus;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -13,6 +14,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkSource;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.DataToCopy;
@@ -171,7 +173,7 @@ public class BlockEntityTicker {
   public record Entry(ResourceKey<Level> dimension, ChunkPos chunkPos, List<BlockPos> entityPositions) {
     public ChunkLoadStatus getChunkLoadStatus(ServerLevel level) {
       ChunkSource chunkSource = level.getChunkSource();
-      if (!LootrAPI.isWorldBorderSafe(level, chunkPos) || !chunkSource.hasChunk(chunkPos.x, chunkPos.z)) {
+      if (!LootrAPI.isWorldBorderSafe(level, chunkPos) || !isChunkLoadedAndTicking(level, chunkSource, chunkPos.x, chunkPos.z)) {
         return ChunkLoadStatus.UNLOADED;
       }
 
@@ -187,12 +189,23 @@ public class BlockEntityTicker {
           if (!LootrAPI.isWorldBorderSafe(level, pos)) {
             continue;
           }
-          if (!chunkSource.hasChunk(x, z)) {
+          if (!isChunkLoadedAndTicking(level, chunkSource, x, z)) {
             return ChunkLoadStatus.SURROUNDING_CHUNKS_NOT_LOADED;
           }
         }
       }
       return ChunkLoadStatus.FULLY_LOADED;
+    }
+
+    private static boolean isChunkLoadedAndTicking(ServerLevel level, ChunkSource chunkSource, int chunkX, int chunkZ) {
+      if (!chunkSource.hasChunk(chunkX, chunkZ)) {
+        return false;
+      }
+      LevelChunk chunk = chunkSource.getChunkNow(chunkX, chunkZ);
+      if (chunk == null) {
+        return false;
+      }
+      return chunk.getFullStatus().isOrAfter(FullChunkStatus.BLOCK_TICKING) && level.areEntitiesLoaded(ChunkPos.asLong(chunkX, chunkZ));
     }
 
     @Override
