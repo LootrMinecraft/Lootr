@@ -1,7 +1,6 @@
 package noobanidus.mods.lootr.common.block.entity;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
@@ -30,9 +29,16 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-public class BlockEntityTicker {
-  private final static Set<Entry> blockEntityEntries = new ObjectOpenHashSet<>();
-  private final static Map<Entry, Entry> pendingEntries = new Object2ObjectOpenHashMap<>();
+public final class BlockEntityTicker {
+  private static final Map<ResourceKey<Level>, BlockEntityTicker> TICKERS = new Object2ObjectOpenHashMap<>();
+
+  private final ResourceKey<Level> levelKey;
+  private final Map<ChunkPos, Entry> blockEntityEntries = new Object2ObjectOpenHashMap<>();
+  private final Map<ChunkPos, Entry> pendingEntries = new Object2ObjectOpenHashMap<>();
+
+  private BlockEntityTicker(ResourceKey<Level> levelKey) {
+    this.levelKey = levelKey;
+  }
 
   public static void addEntity(BlockEntity entity, Level level, ChunkPos chunkPos) {
     if (LootrAPI.isDisabled()) {
@@ -42,21 +48,33 @@ public class BlockEntityTicker {
     if (dimension == null) {
       return;
     }
+
+    BlockEntityTicker ticker;
+    synchronized (TICKERS) {
+      ticker = TICKERS.computeIfAbsent(dimension, BlockEntityTicker::new);
+    }
+
+    ticker.addEntity(level, entity, chunkPos);
+  }
+
+  private void addEntity(Level level, BlockEntity entity, ChunkPos chunkPos) {
     if (!LootrAPI.isWorldBorderSafe(level, chunkPos)) {
       return;
     }
+
     if (!isValidEntity(entity)) {
       return;
     }
 
-    Entry entry = new Entry(dimension, chunkPos, new HashSet<>());
     synchronized (pendingEntries) {
-      Entry previousEntry = pendingEntries.get(entry);
+      Entry previousEntry = pendingEntries.get(chunkPos);
       if (previousEntry != null) {
         previousEntry.entityPositions.add(entity.getBlockPos());
       } else {
-        entry.entityPositions.add(entity.getBlockPos());
-        pendingEntries.put(entry, entry);
+        HashSet<BlockPos> entityPositions = new HashSet<>();
+        entityPositions.add(entity.getBlockPos());
+        Entry entry = new Entry(chunkPos, entityPositions);
+        pendingEntries.put(chunkPos, entry);
       }
     }
   }
@@ -76,16 +94,19 @@ public class BlockEntityTicker {
       return;
     }
 
-    Iterator<Entry> iterator = blockEntityEntries.iterator();
-    while (iterator.hasNext()) {
-      Entry entry = iterator.next();
-
-      ServerLevel level = server.getLevel(entry.dimension());
+    for (BlockEntityTicker ticker : TICKERS.values()) {
+      ServerLevel level = server.getLevel(ticker.levelKey);
       if (level == null) {
-        iterator.remove();
         continue;
       }
+      ticker.onServerLevelTick(level);
+    }
+  }
 
+  private void onServerLevelTick(ServerLevel level) {
+    Iterator<Entry> iterator = blockEntityEntries.values().iterator();
+    while (iterator.hasNext()) {
+      Entry entry = iterator.next();
       switch (entry.getChunkLoadStatus(level)) {
         case UNLOADED -> {
           // the chunk has unloaded. this entry is no longer valid, and it will be added again if the chunk loads again.
@@ -102,7 +123,13 @@ public class BlockEntityTicker {
     }
 
     synchronized (pendingEntries) {
-      blockEntityEntries.addAll(pendingEntries.keySet());
+      for (Entry entry : pendingEntries.values()) {
+        blockEntityEntries.merge(entry.chunkPos, entry, (entry1, entry2) -> {
+          entry1.entityPositions.addAll(entry2.entityPositions);
+          return entry1;
+        });
+      }
+
       pendingEntries.clear();
     }
   }
@@ -172,7 +199,7 @@ public class BlockEntityTicker {
     return dimension;
   }
 
-  public record Entry(ResourceKey<Level> dimension, ChunkPos chunkPos, Set<BlockPos> entityPositions) {
+  public record Entry(ChunkPos chunkPos, Set<BlockPos> entityPositions) {
     public ChunkLoadStatus getChunkLoadStatus(ServerLevel level) {
       ChunkSource chunkSource = level.getChunkSource();
       if (!LootrAPI.isWorldBorderSafe(level, chunkPos) || !isChunkLoadedAndTicking(level, chunkSource, chunkPos.x, chunkPos.z)) {
@@ -216,16 +243,12 @@ public class BlockEntityTicker {
       if (o == null || getClass() != o.getClass()) return false;
 
       Entry entry = (Entry) o;
-
-      if (!dimension.equals(entry.dimension)) return false;
       return chunkPos.equals(entry.chunkPos);
     }
 
     @Override
     public int hashCode() {
-      int result = dimension.hashCode();
-      result = 31 * result + chunkPos.hashCode();
-      return result;
+      return chunkPos.hashCode();
     }
   }
 
