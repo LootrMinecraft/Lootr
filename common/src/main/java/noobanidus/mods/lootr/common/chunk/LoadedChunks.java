@@ -36,7 +36,8 @@ public class LoadedChunks {
   }
 
   public static Set<ChunkPos> getLoadedChunks(ResourceKey<Level> dimension) {
-    return Collections.unmodifiableSet(LOADED_CHUNKS.get(dimension));
+    Set<ChunkPos> set = LOADED_CHUNKS.computeIfAbsent(dimension, k -> ConcurrentHashMap.newKeySet());
+    return Collections.unmodifiableSet(set);
   }
 
   public static void clear() {
