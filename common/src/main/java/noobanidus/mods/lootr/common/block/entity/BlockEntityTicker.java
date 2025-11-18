@@ -113,7 +113,7 @@ public final class BlockEntityTicker {
           iterator.remove();
         }
         case NOT_FULLY_LOADED -> {
-          // keep waiting for the chunk to start ticking
+          // keep waiting for the chunk to be fully loaded
         }
         case SURROUNDING_CHUNKS_NOT_LOADED -> {
           // keep waiting for the surrounding chunks to load
