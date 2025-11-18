@@ -6,7 +6,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.FullChunkStatus;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -14,7 +13,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkSource;
-import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.DataToCopy;
@@ -22,6 +20,7 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
+import noobanidus.mods.lootr.common.chunk.LoadedChunks;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
@@ -104,15 +103,16 @@ public final class BlockEntityTicker {
   }
 
   private void onServerLevelTick(ServerLevel level) {
+    Set<ChunkPos> loadedChunks = LoadedChunks.getLoadedChunks(level.dimension());
     Iterator<Entry> iterator = blockEntityEntries.values().iterator();
     while (iterator.hasNext()) {
       Entry entry = iterator.next();
-      switch (entry.getChunkLoadStatus(level)) {
+      switch (entry.getChunkLoadStatus(level, loadedChunks)) {
         case UNLOADED -> {
           // the chunk has unloaded. this entry is no longer valid, and it will be added again if the chunk loads again.
           iterator.remove();
         }
-        case NOT_TICKING -> {
+        case NOT_FULLY_LOADED -> {
           // keep waiting for the chunk to start ticking
         }
         case SURROUNDING_CHUNKS_NOT_LOADED -> {
@@ -203,13 +203,13 @@ public final class BlockEntityTicker {
   }
 
   public record Entry(ChunkPos chunkPos, Set<BlockPos> entityPositions) {
-    public ChunkLoadStatus getChunkLoadStatus(ServerLevel level) {
+    public ChunkLoadStatus getChunkLoadStatus(ServerLevel level, Set<ChunkPos> loadedChunks) {
       ChunkSource chunkSource = level.getChunkSource();
       if (!LootrAPI.isWorldBorderSafe(level, chunkPos) || !chunkSource.hasChunk(chunkPos.x, chunkPos.z)) {
         return ChunkLoadStatus.UNLOADED;
       }
-      if (!isChunkTicking(level, chunkSource, chunkPos.x, chunkPos.z)) {
-        return ChunkLoadStatus.NOT_TICKING;
+      if (!loadedChunks.contains(chunkPos)) {
+        return ChunkLoadStatus.NOT_FULLY_LOADED;
       }
 
       for (int x = chunkPos.x - 2; x <= chunkPos.x + 2; x++) {
@@ -224,27 +224,19 @@ public final class BlockEntityTicker {
           if (!LootrAPI.isWorldBorderSafe(level, pos)) {
             continue;
           }
-          if (!chunkSource.hasChunk(x, z) || !isChunkTicking(level, chunkSource, x, z)) {
+          if (!loadedChunks.contains(pos)) {
             return ChunkLoadStatus.SURROUNDING_CHUNKS_NOT_LOADED;
           }
         }
       }
       return ChunkLoadStatus.COMPLETE;
     }
-
-    private static boolean isChunkTicking(ServerLevel level, ChunkSource chunkSource, int chunkX, int chunkZ) {
-      LevelChunk chunk = chunkSource.getChunkNow(chunkX, chunkZ);
-      if (chunk == null) {
-        return false;
-      }
-      return chunk.getFullStatus().isOrAfter(FullChunkStatus.BLOCK_TICKING) && level.areEntitiesLoaded(ChunkPos.asLong(chunkX, chunkZ));
-    }
   }
 
   public enum ChunkLoadStatus {
     UNLOADED,
     SURROUNDING_CHUNKS_NOT_LOADED,
-    NOT_TICKING,
+    NOT_FULLY_LOADED,
     COMPLETE
   }
 }
