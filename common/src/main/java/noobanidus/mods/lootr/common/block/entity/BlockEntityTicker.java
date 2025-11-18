@@ -160,8 +160,12 @@ public final class BlockEntityTicker {
           continue;
       }
       ResourceKey<LootTable> table = be.getLootTable();
-      if (table == null || LootrAPI.isLootTableBlacklisted(table)) {
-          continue;
+      if (table == null) {
+        LootrAPI.LOG.warn("randomizable container \"{}\" has no loot table in {} ({})", be.getName(), level.dimension(), entityPos);
+        continue;
+      }
+      if (LootrAPI.isLootTableBlacklisted(table)) {
+        continue;
       }
       BlockState stateAt = level.getBlockState(entityPos);
       BlockState replacement = LootrAPI.replacementBlockState(stateAt);
