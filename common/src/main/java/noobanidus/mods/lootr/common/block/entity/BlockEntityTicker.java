@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.common.block.entity;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
@@ -24,17 +25,16 @@ import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class BlockEntityTicker {
   private final static Set<Entry> blockEntityEntries = new ObjectOpenHashSet<>();
-  private final static Set<Entry> pendingEntries = new ObjectOpenHashSet<>();
+  private final static Map<Entry, Entry> pendingEntries = new Object2ObjectOpenHashMap<>();
 
-  public static void addChunkEntities(Collection<BlockEntity> entities, Level level, ChunkPos chunkPos) {
+  public static void addEntity(BlockEntity entity, Level level, ChunkPos chunkPos) {
     if (LootrAPI.isDisabled()) {
       return;
     }
@@ -45,28 +45,30 @@ public class BlockEntityTicker {
     if (!LootrAPI.isWorldBorderSafe(level, chunkPos)) {
       return;
     }
-
-    List<BlockPos> entityPositions = new ArrayList<>();
-    for (BlockEntity entity : entities) {
-      if (!(entity instanceof RandomizableContainerBlockEntity validEntity)) {
-        continue;
-      }
-      if (LootrAPI.resolveBlockEntity(validEntity) instanceof ILootrBlockEntity) {
-        continue;
-      }
-      if (validEntity.getLootTable() == null || LootrAPI.isLootTableBlacklisted(validEntity.getLootTable())) {
-        continue;
-      }
-
-      entityPositions.add(validEntity.getBlockPos());
+    if (!isValidEntity(entity)) {
+      return;
     }
 
-    if (!entityPositions.isEmpty()) {
-      Entry entry = new Entry(dimension, chunkPos, entityPositions);
-      synchronized (pendingEntries) {
-        pendingEntries.add(entry);
+    Entry entry = new Entry(dimension, chunkPos, new HashSet<>());
+    synchronized (pendingEntries) {
+      Entry previousEntry = pendingEntries.get(entry);
+      if (previousEntry != null) {
+        previousEntry.entityPositions.add(entity.getBlockPos());
+      } else {
+        entry.entityPositions.add(entity.getBlockPos());
+        pendingEntries.put(entry, entry);
       }
     }
+  }
+
+  private static boolean isValidEntity(BlockEntity entity) {
+    if (!(entity instanceof RandomizableContainerBlockEntity validEntity)) {
+      return false;
+    }
+    if (LootrAPI.resolveBlockEntity(validEntity) instanceof ILootrBlockEntity) {
+      return false;
+    }
+    return validEntity.getLootTable() != null && !LootrAPI.isLootTableBlacklisted(validEntity.getLootTable());
   }
 
   public static void onServerTick(MinecraftServer server) {
@@ -100,7 +102,7 @@ public class BlockEntityTicker {
     }
 
     synchronized (pendingEntries) {
-      blockEntityEntries.addAll(pendingEntries);
+      blockEntityEntries.addAll(pendingEntries.keySet());
       pendingEntries.clear();
     }
   }
@@ -170,7 +172,7 @@ public class BlockEntityTicker {
     return dimension;
   }
 
-  public record Entry(ResourceKey<Level> dimension, ChunkPos chunkPos, List<BlockPos> entityPositions) {
+  public record Entry(ResourceKey<Level> dimension, ChunkPos chunkPos, Set<BlockPos> entityPositions) {
     public ChunkLoadStatus getChunkLoadStatus(ServerLevel level) {
       ChunkSource chunkSource = level.getChunkSource();
       if (!LootrAPI.isWorldBorderSafe(level, chunkPos) || !isChunkLoadedAndTicking(level, chunkSource, chunkPos.x, chunkPos.z)) {

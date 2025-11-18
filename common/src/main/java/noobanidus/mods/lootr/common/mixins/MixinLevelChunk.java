@@ -13,13 +13,12 @@ import java.util.Collection;
 
 @Mixin(LevelChunk.class)
 public class MixinLevelChunk {
-  @Inject(method = "registerAllBlockEntitiesAfterLevelLoad", at = @At(value = "HEAD"))
-  private void LootrRegisterAllBlockEntitiesAfterLevelLoad(CallbackInfo ci) {
+  @Inject(method = "updateBlockEntityTicker", at = @At(value = "HEAD"))
+  private void LootrUpdateBlockEntityTicker(BlockEntity entity, CallbackInfo cir) {
     if (LootrAPI.isDisabled()) {
       return;
     }
     LevelChunk level = (LevelChunk) (Object) this;
-    Collection<BlockEntity> blockEntities = level.getBlockEntities().values();
-    BlockEntityTicker.addChunkEntities(blockEntities, level.getLevel(), level.getPos());
+    BlockEntityTicker.addEntity(entity, level.getLevel(), level.getPos());
   }
 }
