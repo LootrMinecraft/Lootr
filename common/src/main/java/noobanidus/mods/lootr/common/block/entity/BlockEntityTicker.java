@@ -112,10 +112,13 @@ public final class BlockEntityTicker {
           // the chunk has unloaded. this entry is no longer valid, and it will be added again if the chunk loads again.
           iterator.remove();
         }
+        case NOT_TICKING -> {
+          // keep waiting for the chunk to start ticking
+        }
         case SURROUNDING_CHUNKS_NOT_LOADED -> {
           // keep waiting for the surrounding chunks to load
         }
-        case FULLY_LOADED -> {
+        case COMPLETE -> {
           replaceEntitiesInChunk(level, entry);
           iterator.remove();
         }
@@ -202,8 +205,11 @@ public final class BlockEntityTicker {
   public record Entry(ChunkPos chunkPos, Set<BlockPos> entityPositions) {
     public ChunkLoadStatus getChunkLoadStatus(ServerLevel level) {
       ChunkSource chunkSource = level.getChunkSource();
-      if (!LootrAPI.isWorldBorderSafe(level, chunkPos) || !isChunkLoadedAndTicking(level, chunkSource, chunkPos.x, chunkPos.z)) {
+      if (!LootrAPI.isWorldBorderSafe(level, chunkPos) || !chunkSource.hasChunk(chunkPos.x, chunkPos.z)) {
         return ChunkLoadStatus.UNLOADED;
+      }
+      if (!isChunkTicking(level, chunkSource, chunkPos.x, chunkPos.z)) {
+        return ChunkLoadStatus.NOT_TICKING;
       }
 
       for (int x = chunkPos.x - 2; x <= chunkPos.x + 2; x++) {
@@ -218,43 +224,27 @@ public final class BlockEntityTicker {
           if (!LootrAPI.isWorldBorderSafe(level, pos)) {
             continue;
           }
-          if (!isChunkLoadedAndTicking(level, chunkSource, x, z)) {
+          if (!chunkSource.hasChunk(x, z) || !isChunkTicking(level, chunkSource, x, z)) {
             return ChunkLoadStatus.SURROUNDING_CHUNKS_NOT_LOADED;
           }
         }
       }
-      return ChunkLoadStatus.FULLY_LOADED;
+      return ChunkLoadStatus.COMPLETE;
     }
 
-    private static boolean isChunkLoadedAndTicking(ServerLevel level, ChunkSource chunkSource, int chunkX, int chunkZ) {
-      if (!chunkSource.hasChunk(chunkX, chunkZ)) {
-        return false;
-      }
+    private static boolean isChunkTicking(ServerLevel level, ChunkSource chunkSource, int chunkX, int chunkZ) {
       LevelChunk chunk = chunkSource.getChunkNow(chunkX, chunkZ);
       if (chunk == null) {
         return false;
       }
       return chunk.getFullStatus().isOrAfter(FullChunkStatus.BLOCK_TICKING) && level.areEntitiesLoaded(ChunkPos.asLong(chunkX, chunkZ));
     }
-
-    @Override
-    public boolean equals(Object o) {
-      if (this == o) return true;
-      if (o == null || getClass() != o.getClass()) return false;
-
-      Entry entry = (Entry) o;
-      return chunkPos.equals(entry.chunkPos);
-    }
-
-    @Override
-    public int hashCode() {
-      return chunkPos.hashCode();
-    }
   }
 
   public enum ChunkLoadStatus {
     UNLOADED,
     SURROUNDING_CHUNKS_NOT_LOADED,
-    FULLY_LOADED,
+    NOT_TICKING,
+    COMPLETE
   }
 }
