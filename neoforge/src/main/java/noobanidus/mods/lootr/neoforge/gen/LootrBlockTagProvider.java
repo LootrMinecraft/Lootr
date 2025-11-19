@@ -47,6 +47,11 @@ public class LootrBlockTagProvider extends BlockTagsProvider {
     tag(LootrTags.Blocks.CONVERT_BLACKLIST);
 
     tag(LootrTags.Blocks.CUSTOM_ELIGIBLE).add(Blocks.BARREL, Blocks.CHEST);
+
+    //noinspection unchecked
+    tag(LootrTags.Blocks.INTERACT_WHITELIST_BLOCKS).addTags(LootrTags.Blocks.BARRELS, LootrTags.Blocks.CHESTS, LootrTags.Blocks.TRAPPED_CHESTS, LootrTags.Blocks.SHULKERS);
+
+    tag(LootrTags.Blocks.INTERACT_WHITELIST).addTag(LootrTags.Blocks.INTERACT_WHITELIST_BLOCKS);
   }
 
   @Override

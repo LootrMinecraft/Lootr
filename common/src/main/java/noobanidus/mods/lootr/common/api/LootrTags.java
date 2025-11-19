@@ -28,8 +28,15 @@ public class LootrTags {
 
     public static final TagKey<Block> NON_BLOCKING = tag("non_blocking");
 
+    public static final TagKey<Block> INTERACT_WHITELIST_BLOCKS = tag("interact_whitelist_blocks");
+    public static final TagKey<Block> INTERACT_WHITELIST = tag("ftbchunks", "interact_whitelist");
+
     static TagKey<Block> tag(String name) {
       return TagKey.create(Registries.BLOCK, LootrAPI.rl(name));
+    }
+
+    static TagKey<Block> tag(String namespace, String name) {
+      return TagKey.create(Registries.BLOCK, LootrAPI.rl(namespace, name));
     }
   }
 
