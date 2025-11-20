@@ -14,6 +14,7 @@
     "MixinLootTable",
     "MixinPoiType",
     "MixinPoiTypes",
+    "MixinServerGamePacketListenerImpl",
     "MixinStructureTemplate"
   ],
   "client": [
