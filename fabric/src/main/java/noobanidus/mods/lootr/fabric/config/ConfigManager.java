@@ -266,7 +266,6 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
   }
 
   public static class Conversion {
-    public int max_entry_age = 60 * 20 * 15;
     public boolean disable = false;
     public boolean convert_elytras = true;
     public boolean convert_mineshafts = true;

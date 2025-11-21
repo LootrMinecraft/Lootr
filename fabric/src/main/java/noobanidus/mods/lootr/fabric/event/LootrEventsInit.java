@@ -13,6 +13,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.block.entity.BlockEntityTicker;
+import noobanidus.mods.lootr.common.chunk.LoadedChunks;
 import noobanidus.mods.lootr.common.command.CommandLootr;
 import noobanidus.mods.lootr.common.data.DataStorage;
 import noobanidus.mods.lootr.common.entity.EntityTicker;
@@ -24,20 +25,22 @@ public class LootrEventsInit {
   public static void registerEvents() {
     ServerLifecycleEvents.SERVER_STARTING.register(server -> {
       serverInstance = server;
-      HandleChunk.onServerStarted();
+      LoadedChunks.clear();
     });
 
     ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
       serverInstance = null;
+      LoadedChunks.clear();
     });
 
     ServerTickEvents.END_SERVER_TICK.register(server -> {
       DataStorage.doTick();
-      BlockEntityTicker.onServerTick();
+      BlockEntityTicker.onServerTick(server);
       EntityTicker.onServerTick();
     });
 
-    ServerChunkEvents.CHUNK_LOAD.register(HandleChunk::onChunkLoad);
+    ServerChunkEvents.CHUNK_LOAD.register(LoadedChunks::onChunkLoad);
+    ServerChunkEvents.CHUNK_UNLOAD.register(LoadedChunks::onChunkUnload);
 
     PlayerBlockBreakEvents.BEFORE.register(HandleBreak::beforeBlockBreak);
 

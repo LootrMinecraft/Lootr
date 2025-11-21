@@ -268,6 +268,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
+  @Nullable
   public final <T extends BlockEntity> ILootrBlockEntity resolveBlockEntity(T blockEntity) {
     return LootrServiceRegistry.convertBlockEntity(blockEntity);
   }
