@@ -10,7 +10,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -21,7 +20,6 @@ import noobanidus.mods.lootr.common.api.client.ClientTextureType;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.impl.DefaultLootrAPIImpl;
 import noobanidus.mods.lootr.neoforge.config.ConfigManager;
-import noobanidus.mods.lootr.neoforge.event.HandleChunkImpl;
 
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
@@ -232,16 +230,6 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   @Override
   public boolean shouldCheckWorldBorder() {
     return ConfigManager.CHECK_WORLD_BORDER.get();
-  }
-
-  @Override
-  public int getMaximumAge() {
-    return ConfigManager.MAXIMUM_AGE.get();
-  }
-
-  @Override
-  public boolean hasExpired(long time) {
-    return time > ConfigManager.MAXIMUM_AGE.get();
   }
 
   @Override

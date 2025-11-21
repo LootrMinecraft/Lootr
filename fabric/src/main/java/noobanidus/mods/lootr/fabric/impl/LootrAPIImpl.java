@@ -11,7 +11,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -231,16 +230,6 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   @Override
   public boolean shouldCheckWorldBorder() {
     return ConfigManager.get().conversion.world_border;
-  }
-
-  @Override
-  public int getMaximumAge() {
-    return ConfigManager.get().conversion.max_entry_age;
-  }
-
-  @Override
-  public boolean hasExpired(long time) {
-    return time > getMaximumAge();
   }
 
   @Override

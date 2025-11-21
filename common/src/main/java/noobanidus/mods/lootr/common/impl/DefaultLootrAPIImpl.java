@@ -4,7 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -35,7 +34,6 @@ import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.client.ClientHooks;
 import noobanidus.mods.lootr.common.config.Replacements;
 import noobanidus.mods.lootr.common.data.DataStorage;
-import noobanidus.mods.lootr.common.event.HandleChunk;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
@@ -270,6 +268,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
+  @Nullable
   public final <T extends BlockEntity> ILootrBlockEntity resolveBlockEntity(T blockEntity) {
     return LootrServiceRegistry.convertBlockEntity(blockEntity);
   }
@@ -371,10 +370,5 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   @Override
   public List<ILootrFilter> getFilters() {
     return LootrServiceRegistry.getFilters();
-  }
-
-  @Override
-  public boolean anyUnloadedChunks(ResourceKey<Level> dimension, Set<ChunkPos> chunks) {
-    return HandleChunk.anyUnloaded(dimension, chunks);
   }
 }
