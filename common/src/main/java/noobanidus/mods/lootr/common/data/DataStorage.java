@@ -6,13 +6,18 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraft.world.level.storage.LevelResource;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.data.*;
+import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
+import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.chunk.LoadedChunks;
 import noobanidus.mods.lootr.common.mixins.AccessorMixinDimensionDataStorage;
@@ -267,14 +272,27 @@ public class DataStorage {
 
       if (lootrSavedData.clearInventories(id)) {
         count++;
-        if (!lootrSavedData.getInfoBlockType().equals(LootrBlockType.ENTITY)) {
-          ServerLevel level = server.getLevel(lootrSavedData.getInfoDimension());
-          if (level != null) {
-            ServerChunkCache chunkCache = level.getChunkSource();
-            ChunkPos chunkPos = new ChunkPos(lootrSavedData.getInfoPos());
-            if (chunkCache.hasChunk(chunkPos.x, chunkPos.z) && LoadedChunks.getLoadedChunks(lootrSavedData.getInfoDimension())
-                .contains(chunkPos)) {
-
+        ServerLevel level = server.getLevel(lootrSavedData.getInfoDimension());
+        if (level != null) {
+          ServerChunkCache chunkCache = level.getChunkSource();
+          ChunkPos chunkPos = new ChunkPos(lootrSavedData.getInfoPos());
+          if (chunkCache.hasChunk(chunkPos.x, chunkPos.z) && LoadedChunks.getLoadedChunks(lootrSavedData.getInfoDimension())
+              .contains(chunkPos)) {
+            if (lootrSavedData.getInfoBlockType() == LootrBlockType.ENTITY) {
+              Entity entity = level.getEntity(lootrSavedData.getInfoUUID());
+              if (entity instanceof ILootrCart cart) {
+                cart.removeVisualOpener(id);
+                cart.markChanged();
+                PlatformAPI.performCartClose(cart);
+              }
+            } else {
+              BlockEntity entity = level.getBlockEntity(lootrSavedData.getInfoPos());
+              if (LootrAPI.resolveBlockEntity(entity) instanceof ILootrBlockEntity blockEntity) {
+                blockEntity.removeVisualOpener(id);
+                blockEntity.markChanged();
+                PlatformAPI.performBlockClose(blockEntity);
+                blockEntity.performUpdate();
+              }
             }
           }
         }
