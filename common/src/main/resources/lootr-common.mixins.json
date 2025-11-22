@@ -5,7 +5,6 @@
   "mixins": [
     "AccessorMixinBaseContainerBlockEntity",
     "AccessorMixinDimensionDataStorage",
-    "AccessorMixinVehicleEntity",
     "MixinCatSitOnBlockGoal",
     "MixinChestBlock",
     "MixinEndCityPieces$EndCityPiece",
