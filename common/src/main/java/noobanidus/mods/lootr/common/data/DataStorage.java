@@ -282,15 +282,14 @@ public class DataStorage {
               Entity entity = level.getEntity(lootrSavedData.getInfoUUID());
               if (entity instanceof ILootrCart cart) {
                 cart.removeVisualOpener(id);
-                cart.markChanged();
-                PlatformAPI.performCartClose(cart);
+                cart.performClose();
+                cart.performUpdate();
               }
             } else {
               BlockEntity entity = level.getBlockEntity(lootrSavedData.getInfoPos());
               if (LootrAPI.resolveBlockEntity(entity) instanceof ILootrBlockEntity blockEntity) {
                 blockEntity.removeVisualOpener(id);
-                blockEntity.markChanged();
-                PlatformAPI.performBlockClose(blockEntity);
+                blockEntity.performClose();
                 blockEntity.performUpdate();
               }
             }
