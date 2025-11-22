@@ -28,7 +28,7 @@ public class MixinLevelChunk {
       // not converted. When the world border changes, you will
       // need to restart the server.
       if (LootrAPI.isWorldBorderSafe(level.getLevel(), entity.getBlockPos())) {
-        BlockEntityTicker.addEntry(incoming ,level.getLevel(), entity.getBlockPos());
+        BlockEntityTicker.addEntry(incoming, level.getLevel(), entity.getBlockPos());
       }
     }
   }

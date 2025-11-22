@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.common.mixins;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
@@ -20,8 +21,8 @@ import java.util.List;
 
 @Mixin(LootTable.class)
 public class MixinLootTable {
-  @Inject(method = "fill", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/storage/loot/LootTable;shuffleAndSplitItems(Lit/unimi/dsi/fastutil/objects/ObjectArrayList;ILnet/minecraft/util/RandomSource;)V"), locals = LocalCapture.CAPTURE_FAILHARD)
-  private void LootrFill(Container container, LootParams lootParams, long l, CallbackInfo ci, LootContext lootContext, ObjectArrayList<ItemStack> items, RandomSource random, List<Integer> slotList) {
+  @Inject(method = "fill", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/storage/loot/LootTable;shuffleAndSplitItems(Lit/unimi/dsi/fastutil/objects/ObjectArrayList;ILnet/minecraft/util/RandomSource;)V"))
+  private void LootrFill(Container container, LootParams lootParams, long l, CallbackInfo ci, @Local LootContext lootContext, @Local ObjectArrayList<ItemStack> items, @Local RandomSource random) {
     for (ILootrFilter filter : LootrAPI.getFilters()) {
       if (filter.mutate(items, DefaultLootFiller.getFillerState(), lootContext, random)) {
         break;
