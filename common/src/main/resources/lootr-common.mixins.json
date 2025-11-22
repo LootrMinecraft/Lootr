@@ -8,7 +8,6 @@
     "AccessorMixinVehicleEntity",
     "MixinCatSitOnBlockGoal",
     "MixinChestBlock",
-    "MixinDimensionDataStorage",
     "MixinEndCityPieces$EndCityPiece",
     "MixinLevelChunk",
     "MixinLootTable",
