@@ -3,18 +3,18 @@ package noobanidus.mods.lootr.common.data;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraft.world.level.storage.LevelResource;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.data.AdvancementData;
-import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
-import noobanidus.mods.lootr.common.api.data.LootFiller;
-import noobanidus.mods.lootr.common.api.data.TickingData;
+import noobanidus.mods.lootr.common.api.data.*;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
+import noobanidus.mods.lootr.common.chunk.LoadedChunks;
 import noobanidus.mods.lootr.common.mixins.AccessorMixinDimensionDataStorage;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -230,7 +230,7 @@ public class DataStorage {
       paths.forEach(path -> {
         if (Files.isRegularFile(path)) {
           String fileName = path.getFileName().toString();
-          if (fileName.startsWith("Lootr-")) {
+          if (fileName.startsWith("lootr-")) {
             return;
           }
           files.add("lootr/" + fileName.charAt(0) + "/" + fileName.substring(0, 2) + "/" + fileName.replace(".dat", ""));
@@ -240,30 +240,50 @@ public class DataStorage {
       return false;
     }
 
+    for (String cache : ((AccessorMixinDimensionDataStorage) data).getCache().keySet()) {
+      if (cache.startsWith("lootr") && !files.contains(cache)) {
+        files.add(cache);
+      }
+    }
+
     int count = 0;
 
     for (String file : files) {
       SavedData datum = data.get(new SavedData.Factory<>(() -> LootrDummyData.INSTANCE, LootrSavedData::load, null), file);
       if (datum == LootrDummyData.INSTANCE) {
         // Failed to load so clear it from the cache
-        LootrAPI.LOG.error("Failed to load data for " + file + ", removing from cache.");
+        LootrAPI.LOG.error("Failed to load data for {}, removing from cache.", file);
         ((AccessorMixinDimensionDataStorage) data).getCache().remove(file);
         continue;
       }
       if (!(datum instanceof LootrSavedData lootrSavedData)) {
-        LootrAPI.LOG.error("Data for " + file + " is not a LootrSavedData instance.");
+        LootrAPI.LOG.error("Data for {} is not a LootrSavedData instance.", file);
         ((AccessorMixinDimensionDataStorage) data).getCache().remove(file);
+        continue;
+      }
+      if (!lootrSavedData.hasBeenOpened()) {
         continue;
       }
 
       if (lootrSavedData.clearInventories(id)) {
         count++;
+        if (!lootrSavedData.getInfoBlockType().equals(LootrBlockType.ENTITY)) {
+          ServerLevel level = server.getLevel(lootrSavedData.getInfoDimension());
+          if (level != null) {
+            ServerChunkCache chunkCache = level.getChunkSource();
+            ChunkPos chunkPos = new ChunkPos(lootrSavedData.getInfoPos());
+            if (chunkCache.hasChunk(chunkPos.x, chunkPos.z) && LoadedChunks.getLoadedChunks(lootrSavedData.getInfoDimension())
+                .contains(chunkPos)) {
+
+            }
+          }
+        }
       }
     }
 
     if (count > 0) {
       data.save();
-      LootrAPI.LOG.info("Cleared " + count + " inventories for play UUID " + id.toString());
+      LootrAPI.LOG.info("Cleared {} inventories for play UUID {}", count, id.toString());
       return true;
     }
 
