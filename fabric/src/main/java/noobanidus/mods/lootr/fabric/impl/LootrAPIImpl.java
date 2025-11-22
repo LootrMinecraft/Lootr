@@ -11,19 +11,15 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.client.ClientTextureType;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
-import noobanidus.mods.lootr.common.config.Replacements;
 import noobanidus.mods.lootr.common.impl.DefaultLootrAPIImpl;
 import noobanidus.mods.lootr.fabric.config.ConfigManager;
-import noobanidus.mods.lootr.fabric.event.HandleChunk;
 import noobanidus.mods.lootr.fabric.event.LootrEventsInit;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
@@ -237,16 +233,6 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   }
 
   @Override
-  public int getMaximumAge() {
-    return ConfigManager.get().conversion.max_entry_age;
-  }
-
-  @Override
-  public boolean hasExpired(long time) {
-    return time > getMaximumAge();
-  }
-
-  @Override
   public boolean shouldConvertMineshafts() {
     return ConfigManager.get().conversion.convert_mineshafts;
   }
@@ -348,24 +334,9 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
 
   @Override
   public Component getInvalidTableComponent(ResourceKey<LootTable> lootTable) {
-    return Component.translatable("lootr.message.invalid_table", lootTable.location().getNamespace(), lootTable.toString()).setStyle(!isMessageStylesEnabled() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED)).withBold(true));
-  }
-
-  @Override
-  public boolean anyUnloadedChunks(ResourceKey<Level> dimension, Set<ChunkPos> chunks) {
-    synchronized (HandleChunk.LOADED_CHUNKS) {
-      Set<ChunkPos> syncedChunks = HandleChunk.LOADED_CHUNKS.get(dimension);
-      if (syncedChunks == null || syncedChunks.isEmpty()) {
-        return true;
-      }
-
-      for (ChunkPos myPos : chunks) {
-        if (!syncedChunks.contains(myPos)) {
-          return true;
-        }
-      }
-    }
-
-    return false;
+    return Component.translatable("lootr.message.invalid_table", lootTable.location()
+            .getNamespace(), lootTable.toString())
+        .setStyle(!isMessageStylesEnabled() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED))
+            .withBold(true));
   }
 }

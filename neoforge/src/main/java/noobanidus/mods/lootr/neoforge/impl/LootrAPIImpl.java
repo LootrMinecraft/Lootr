@@ -10,7 +10,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -21,7 +20,6 @@ import noobanidus.mods.lootr.common.api.client.ClientTextureType;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.impl.DefaultLootrAPIImpl;
 import noobanidus.mods.lootr.neoforge.config.ConfigManager;
-import noobanidus.mods.lootr.neoforge.event.HandleChunk;
 
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
@@ -235,16 +233,6 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   }
 
   @Override
-  public int getMaximumAge() {
-    return ConfigManager.MAXIMUM_AGE.get();
-  }
-
-  @Override
-  public boolean hasExpired(long time) {
-    return time > ConfigManager.MAXIMUM_AGE.get();
-  }
-
-  @Override
   public boolean shouldConvertMineshafts() {
     return ConfigManager.CONVERT_MINESHAFTS.get();
   }
@@ -347,23 +335,5 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   @Override
   public Component getInvalidTableComponent(ResourceKey<LootTable> lootTable) {
     return Component.translatable("lootr.message.invalid_table", lootTable.location().getNamespace(), lootTable.toString()).setStyle(ConfigManager.DISABLE_MESSAGE_STYLES.get() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED)).withBold(true));
-  }
-
-  @Override
-  public boolean anyUnloadedChunks(ResourceKey<Level> dimension, Set<ChunkPos> chunks) {
-    synchronized (HandleChunk.LOADED_CHUNKS) {
-      Set<ChunkPos> syncedChunks = HandleChunk.LOADED_CHUNKS.get(dimension);
-      if (syncedChunks == null || syncedChunks.isEmpty()) {
-        return true;
-      }
-
-      for (ChunkPos myPos : chunks) {
-        if (!syncedChunks.contains(myPos)) {
-          return true;
-        }
-      }
-    }
-
-    return false;
   }
 }

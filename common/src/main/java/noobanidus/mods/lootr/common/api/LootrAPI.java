@@ -240,14 +240,6 @@ public class LootrAPI {
     return INSTANCE.shouldCheckWorldBorder();
   }
 
-  public static int getMaximumAge() {
-    return INSTANCE.getMaximumAge();
-  }
-
-  public static boolean hasExpired(long time) {
-    return INSTANCE.hasExpired(time);
-  }
-
   public static boolean shouldConvertMineshafts() {
     return INSTANCE.shouldConvertMineshafts();
   }
@@ -336,6 +328,7 @@ public class LootrAPI {
     return INSTANCE.performPiecewiseCheck();
   }
 
+  @Nullable
   public static BlockState replacementBlockState(BlockState original) {
     return INSTANCE.replacementBlockState(original);
   }
@@ -415,10 +408,7 @@ public class LootrAPI {
     INSTANCE.handleProviderTick(provider);
   }
 
-  public static boolean anyUnloadedChunks(ResourceKey<Level> dimension, Set<ChunkPos> chunks) {
-    return INSTANCE.anyUnloadedChunks(dimension, chunks);
-  }
-
+  @Nullable
   public static <T extends BlockEntity> ILootrBlockEntity resolveBlockEntity (T blockEntity) {
     return INSTANCE.resolveBlockEntity(blockEntity);
   }
