@@ -300,7 +300,7 @@ public class DataStorage {
 
     if (count > 0) {
       data.save();
-      LootrAPI.LOG.info("Cleared {} inventories for play UUID {}", count, id.toString());
+      LootrAPI.LOG.info("Cleared {} inventories for player UUID {}", count, id.toString());
       return true;
     }
 
