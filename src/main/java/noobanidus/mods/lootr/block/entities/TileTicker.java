@@ -1,6 +1,6 @@
 package noobanidus.mods.lootr.block.entities;
 
-import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
@@ -29,12 +29,12 @@ import java.util.Set;
 public class TileTicker {
   private final static Object listLock = new Object();
   private final static Object worldLock = new Object();
-  private final static Set<Entry> tileEntries = new ObjectLinkedOpenHashSet<>();
-  private final static Set<Entry> pendingEntries = new ObjectLinkedOpenHashSet<>();
+  private final static Set<Entry> tileEntries = new ObjectOpenHashSet<>();
+  private final static Set<Entry> pendingEntries = new ObjectOpenHashSet<>();
   private static boolean tickingList = false;
   private static boolean alertedLargeQuantity = false;
 
-  public static void addEntry(RandomizableContainerBlockEntity incoming ,Level level, BlockPos position) {
+  public static void addEntry(RandomizableContainerBlockEntity incoming, Level level, BlockPos position) {
     if (ConfigManager.DISABLE.get()) {
       return;
     }
@@ -52,7 +52,7 @@ public class TileTicker {
 
     WorldBorder border = level.getWorldBorder();
 
-    Set<ChunkPos> chunks = new ObjectLinkedOpenHashSet<>();
+    Set<ChunkPos> chunks = new ObjectOpenHashSet<>();
     chunks.add(chunkPos);
 
     int oX = chunkPos.x;
@@ -104,18 +104,19 @@ public class TileTicker {
     if (ConfigManager.DISABLE.get()) {
       return;
     }
-    Set<Entry> toRemove = new ObjectLinkedOpenHashSet<>();
+    Set<Entry> toRemove = new ObjectOpenHashSet<>();
     Set<Entry> copy;
     synchronized (listLock) {
       tickingList = true;
-      copy = new ObjectLinkedOpenHashSet<>(tileEntries);
+      copy = new ObjectOpenHashSet<>(tileEntries);
       tickingList = false;
     }
     synchronized (worldLock) {
       MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
       for (Entry entry : copy) {
         ServerLevel level = server.getLevel(entry.getDimension());
-        if (level == null || entry.age(server) > ConfigManager.MAXIMUM_AGE.get() || (ConfigManager.CHECK_WORLD_BORDER.get() && !level.getWorldBorder().isWithinBounds(entry.getPosition()))) {
+        if (level == null || entry.age(server) > ConfigManager.MAXIMUM_AGE.get() || (ConfigManager.CHECK_WORLD_BORDER.get() && !level.getWorldBorder()
+            .isWithinBounds(entry.getPosition()))) {
           toRemove.add(entry);
           continue;
         }
@@ -179,7 +180,7 @@ public class TileTicker {
           if (blockEntity instanceof ILootBlockEntity) {
             baseEntity.setLootTable(table, seed);
           } else {
-            LootrAPI.LOG.error("replacement " + replacement + " is not an ILootTile " + entry.getDimension() + " at " + entry.getPosition());
+            LootrAPI.LOG.error("replacement {} is not an ILootTile {} at {}", replacement, entry.getDimension(), entry.getPosition());
           }
         }
 
