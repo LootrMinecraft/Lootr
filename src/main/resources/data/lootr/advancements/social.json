@@ -33,12 +33,6 @@
       "conditions": {
         "advancement": "lootr:1cart"
       }
-    },
-    "opened_shulker": {
-      "trigger": "lootr:advancement",
-      "conditions": {
-        "advancement": "lootr:1shulker"
-      }
     }
   }
 }
