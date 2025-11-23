@@ -82,14 +82,14 @@ public class TileTicker {
     synchronized (listLock) {
       if (tickingList) {
         pendingEntries.add(newEntry);
-        if (pendingEntries.size() > 100 && !alertedLargeQuantity && !ConfigManager.AGGRESSIVE_MODE.get()) {
-          LootrAPI.LOG.error("There are over 100 entries in the pending conversion list without aggressive mode enabled. This may cause TPS issues. If TPS issues persist after first launch, consider enabling aggressive mode in the configuration.");
+        if (pendingEntries.size() > 5000 && !alertedLargeQuantity && !ConfigManager.AGGRESSIVE_MODE.get()) {
+          LootrAPI.LOG.error("There are over 5000 entries in the pending conversion list. IF THIS IS CAUSING ONGOING TPS ISSUES, consider enabling aggressive mode in the configuration.");
           alertedLargeQuantity = true;
         }
       } else {
         tileEntries.add(newEntry);
-        if (tileEntries.size() > 100 && !alertedLargeQuantity && !ConfigManager.AGGRESSIVE_MODE.get()) {
-          LootrAPI.LOG.error("There are over 100 entries in the conversion list without aggressive mode enabled. This may cause TPS issues. If TPS issues persist after first launch, consider enabling aggressive mode in the configuration.");
+        if (tileEntries.size() > 5000 && !alertedLargeQuantity && !ConfigManager.AGGRESSIVE_MODE.get()) {
+          LootrAPI.LOG.error("There are over 5000 entries in the pending conversion list. IF THIS IS CAUSING ONGOING TPS ISSUES, consider enabling aggressive mode in the configuration.");
           alertedLargeQuantity = true;
         }
       }
