@@ -20,8 +20,15 @@ public class LootrTags {
     public static final TagKey<Block> BARRELS = tag("barrels");
     public static final TagKey<Block> CONTAINERS = tag("containers");
 
+    public static final TagKey<Block> INTERACT_WHITELIST_BLOCKS = tag("interact_whitelist_blocks");
+    public static final TagKey<Block> INTERACT_WHITELIST = tag("ftbchunks", "interact_whitelist");
+
     static TagKey<Block> tag(String name) {
       return TagKey.create(Registries.BLOCK, new ResourceLocation(LootrAPI.MODID, name));
+    }
+
+    static TagKey<Block> tag(String namespace, String name) {
+      return TagKey.create(Registries.BLOCK, new ResourceLocation(namespace, name));
     }
   }
 
