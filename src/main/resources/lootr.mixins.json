@@ -10,6 +10,7 @@
     "MixinPoiType",
     "MixinPoiTypes",
     "MixinRandomizableContainerBlockEntity",
+    "MixinServerGamePacketListenerImpl",
     "MixinStructureTemplate"
   ],
   "client": [
