@@ -15,7 +15,7 @@ import net.zestyblaze.lootr.block.entities.LootrChestBlockEntity;
 import net.zestyblaze.lootr.entity.LootrChestMinecartEntity;
 import net.zestyblaze.lootr.init.ModBlocks;
 
-public class LootrChestItemRenderer extends BlockEntityWithoutLevelRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer {
+public class LootrChestItemRenderer extends BlockEntityWithoutLevelRenderer {
   private static LootrChestItemRenderer INSTANCE = null;
 
   private BlockEntityRenderDispatcher blockEntityRenderDispatcher;
@@ -39,13 +39,13 @@ public class LootrChestItemRenderer extends BlockEntityWithoutLevelRenderer impl
     return INSTANCE;
   }
 
+  public BuiltinItemRendererRegistry.DynamicItemRenderer getDynamicItemRenderer() {
+    return this::renderByItem;
+  }
+
   @Override
   public void renderByItem(ItemStack stack, ItemDisplayContext mode, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
     getBlockEntityRenderDispatcher().renderItem(tile, matrixStack, buffer, combinedLight, combinedOverlay);
-  }
-
-  public void render(ItemStack stack, ItemDisplayContext mode, PoseStack matrices, MultiBufferSource vertexConsumers, int light, int overlay) {
-    renderByItem(stack, mode, matrices, vertexConsumers, light, overlay);
   }
 
   public void renderByMinecart(LootrChestMinecartEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight) {
