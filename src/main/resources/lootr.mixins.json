@@ -5,12 +5,13 @@
   "compatibilityLevel": "JAVA_16",
   "mixins": [
     "MixinCatSitOnBlockGoal",
+    "MixinEndCityPieces$EndCityPiece",
     "MixinLevelChunk",
     "MixinPersistentEntitySectionManager",
     "MixinPlayerAdvancements",
-    "MixinEndCityPieces$EndCityPiece",
     "MixinPoiType",
     "MixinPoiTypes",
+    "MixinServerGamePacketListenerImpl",
     "MixinStructureTemplate"
   ],
   "client": [

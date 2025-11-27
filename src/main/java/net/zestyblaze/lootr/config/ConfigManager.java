@@ -389,6 +389,7 @@ public class ConfigManager implements ConfigData {
   }
 
   public static class Breaking {
+    public boolean bypass_spawn_protection = true;
     public boolean enable_break = false;
     public boolean enable_fake_player_break = false;
     public boolean disable_break = false;
