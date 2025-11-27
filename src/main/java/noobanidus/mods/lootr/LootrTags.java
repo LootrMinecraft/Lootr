@@ -24,8 +24,15 @@ public class LootrTags {
 
     public static final TagKey<Block> CONVERT_BLOCK = tag("convert/blocks");
 
+    public static final TagKey<Block> INTERACT_WHITELIST_BLOCKS = tag("interact_whitelist_blocks");
+    public static final TagKey<Block> INTERACT_WHITELIST = tag("ftbchunks", "interact_whitelist");
+
     static TagKey<Block> tag(String name) {
       return BlockTags.create(new ResourceLocation(LootrAPI.MODID, name));
+    }
+
+    static TagKey<Block> tag(String namespace, String name) {
+      return BlockTags.create(new ResourceLocation(namespace, name));
     }
   }
 
