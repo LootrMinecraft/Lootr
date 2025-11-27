@@ -1,6 +1,5 @@
 {
-    "replace": false,
-    "values": [
-        "minecraft:shulker_box"
-    ]
+  "values": [
+    "minecraft:shulker_box"
+  ]
 }

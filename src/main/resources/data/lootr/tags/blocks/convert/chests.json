@@ -1,6 +1,5 @@
 {
-    "replace": false,
-    "values": [
-        "minecraft:chest"
-    ]
+  "values": [
+    "minecraft:chest"
+  ]
 }
