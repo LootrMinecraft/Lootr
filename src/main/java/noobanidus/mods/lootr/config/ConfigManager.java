@@ -107,6 +107,7 @@ public class ConfigManager {
   public static final ForgeConfigSpec.BooleanValue DISABLE_NOTIFICATIONS;
   public static final ForgeConfigSpec.BooleanValue DISABLE_MESSAGE_STYLES;
   public static final ForgeConfigSpec.BooleanValue TRAPPED_CUSTOM;
+  public static final ForgeConfigSpec.BooleanValue BYPASS_SPAWN_PROTECTION;
 
   // Client-only
   public static final ForgeConfigSpec.BooleanValue VANILLA_TEXTURES;
@@ -178,6 +179,7 @@ public class ConfigManager {
     REFRESH_DIMENSIONS = COMMON_BUILDER.comment("list of dimensions where loot chests should automatically refresh (default: blank, e.g., [\"minecraft:overworld\", \"othermod:otherdimension\"])").defineList("refresh_dimensions", empty, validator);
     REFRESH_STRUCTURES = COMMON_BUILDER.comment("list of structures in which loot chests should automatically refresh (in the format of [\"modid:structure_name\", \"othermodid:other_structure_name\"])").defineList("refresh_structures", empty, validator);
     REFRESH_ALL = COMMON_BUILDER.comment("overriding refresh_loot_tables, refresh_modids and refresh_dimensions: all chests will refresh after being opened for the first time").define("refresh_all", false);
+    BYPASS_SPAWN_PROTECTION = COMMON_BUILDER.comment("allow Lootr chests to be opened in spawn protected areas").define("bypass_spawn_protection", true);
 
     COMMON_CONFIG = COMMON_BUILDER.build();
     VANILLA_TEXTURES = CLIENT_BUILDER.comment("set to true to use vanilla textures instead of Lootr special textures. Note: this will prevent previously opened chests from rendering differently").define("vanilla_textures", false);
