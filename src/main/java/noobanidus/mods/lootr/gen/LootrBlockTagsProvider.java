@@ -21,6 +21,9 @@ public class LootrBlockTagsProvider extends BlockTagsProvider {
     tag(LootrTags.Blocks.SHULKERS).add(ModBlocks.SHULKER);
     //noinspection unchecked
     tag(LootrTags.Blocks.CONTAINERS).addTags(LootrTags.Blocks.BARRELS, LootrTags.Blocks.CHESTS, LootrTags.Blocks.TRAPPED_CHESTS, LootrTags.Blocks.SHULKERS);
+
+    tag(LootrTags.Blocks.INTERACT_WHITELIST_BLOCKS).addTags(LootrTags.Blocks.BARRELS, LootrTags.Blocks.CHESTS, LootrTags.Blocks.TRAPPED_CHESTS, LootrTags.Blocks.SHULKERS);
+    tag(LootrTags.Blocks.INTERACT_WHITELIST).addTags(LootrTags.Blocks.INTERACT_WHITELIST_BLOCKS);
   }
 
   @Override

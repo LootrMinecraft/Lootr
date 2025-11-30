@@ -15,8 +15,15 @@ public class LootrTags {
     public static Tags.IOptionalNamedTag<Block> BARRELS = tag("barrels");
     public static Tags.IOptionalNamedTag<Block> CONTAINERS = tag("containers");
 
+    public static Tags.IOptionalNamedTag<Block> INTERACT_WHITELIST_BLOCKS = tag("interact_whitelist_blocks");
+    public static Tags.IOptionalNamedTag<Block> INTERACT_WHITELIST = tag("ftbchunks", "interact_whitelist");
+
     static Tags.IOptionalNamedTag<Block> tag(String name) {
       return BlockTags.createOptional(new ResourceLocation(Lootr.MODID, name));
+    }
+
+    static Tags.IOptionalNamedTag<Block> tag(String namespace, String name) {
+      return BlockTags.createOptional(new ResourceLocation(namespace, name));
     }
   }
 
