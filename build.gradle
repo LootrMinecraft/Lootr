@@ -44,7 +44,6 @@ apply from: 'gradle/mysticalworld.gradle'
 apply from: 'gradle/patchouli.gradle'
 apply from: 'gradle/shadow.gradle'
 apply from: 'gradle/stables.gradle'
-apply from: 'gradle/top.gradle'
 apply from: 'gradle/minify_jsons.gradle'
 
 // Load publishing modules
@@ -52,3 +51,25 @@ apply from: 'gradle/maven.gradle'
 apply from: 'gradle/signing.gradle'
 apply from: 'gradle/curseforge.gradle'
 apply from: 'gradle/version_checker.gradle'
+
+tasks.register("tagVersion") {
+    doLast {
+        def tagName = "forge-${minecraft_version}-${version}"
+
+        def existing = getExecOutput(["git", "tag", "--list", tagName])
+        if (existing == tagName) {
+            println "Tag $tagName already exists. Skipping."
+            return
+        }
+
+        println "Creating git tag $tagName"
+        exec {
+            commandLine "git", "tag", tagName
+        }
+
+        // Optional: push tag
+        // exec {
+        //     commandLine "git", "push", "origin", tagName
+        // }
+    }
+}
