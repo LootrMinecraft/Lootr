@@ -114,6 +114,12 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
   @Override
+  public void tick() {
+    super.tick();
+    LootrAPI.handleProviderTick(this);
+  }
+
+  @Override
   public Item getDropItem() {
     return Items.CHEST_MINECART;
   }
