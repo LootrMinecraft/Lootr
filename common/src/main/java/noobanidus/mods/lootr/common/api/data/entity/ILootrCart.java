@@ -1,7 +1,12 @@
 package noobanidus.mods.lootr.common.api.data.entity;
 
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.vehicle.MinecartChest;
 import net.minecraft.world.entity.vehicle.VehicleEntity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 
@@ -36,5 +41,25 @@ public interface ILootrCart extends ILootrInfoProvider {
   @Override
   default void performClose() {
     PlatformAPI.performCartClose(this);
+  }
+
+  @Override
+  default void performDecay() {
+    Level level = getInfoLevel();
+    if (level == null || level.isClientSide()) {
+      return;
+    }
+    boolean replaceWhenDecayed = LootrAPI.shouldReplaceWhenDecayed();
+    VehicleEntity entity = asEntity();
+    if (replaceWhenDecayed) {
+      MinecartChest newCart = EntityType.CHEST_MINECART.create(level);
+      if (newCart != null) {
+        newCart.setPos(entity.position());
+        newCart.setXRot(entity.getXRot());
+        newCart.setYRot(entity.getYRot());
+        level.addFreshEntity(newCart);
+      }
+    }
+    entity.discard();
   }
 }
