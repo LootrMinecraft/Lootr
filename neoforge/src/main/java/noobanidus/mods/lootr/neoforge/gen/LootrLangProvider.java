@@ -62,6 +62,7 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.advancements.root.title", "Belongs in a Museum");
     add("lootr.advancements.root.description", "Bring instanced, per-player Loot into your world.");
     add("itemGroup.lootr", "Lootr");
+    add("itemGroup.lootr.lootr", "Lootr");
     add("text.autoconfig.lootr.title", "Lootr");
     var debug = "Debug";
     var report_invalid_tables = "Report Invalid Tables";
@@ -71,6 +72,7 @@ public class LootrLangProvider extends LanguageProvider {
     var max_entry_age = "Maximum Block Entity Age";
     var disable = "Disable Conversion";
     var elytra = "Convert Elytra Item Frames";
+    var spawn = "Bypass Spawn Protection";
     var convert_mineshafts = "Convert Mineshaft Chest Carts";
     var world_border = "Disable Conversion Outside World Border";
     var breaking = "Breaking";
@@ -124,6 +126,7 @@ public class LootrLangProvider extends LanguageProvider {
     add("text.autoconfig.lootr.option.conversion.max_entry_age", max_entry_age);
     add("text.autoconfig.lootr.option.conversion.disable", disable);
     add("text.autoconfig.lootr.option.conversion.convert_elytra", elytra);
+    add("text.autoconfig.lootr.option.conversion.bypass_spawn_protection", spawn);
     add("text.autoconfig.lootr.option.conversion.world_border", world_border);
     add("text.autoconfig.lootr.option.breaking", breaking);
     add("text.autoconfig.lootr.option.breaking.enable_break", enable_break);
@@ -175,6 +178,7 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.configuration.conversion", conversion);
     add("lootr.configuration.refresh", refresh);
     add("lootr.configuration.breaking", breaking);
+    add("lootr.configuration.problematic_loot_tables", "Problematic Loot Tables");
     var redstone = "Redstone Power";
     add("lootr.configuration.power", redstone);
     add("lootr.configuration.notifications", notifications);
@@ -184,7 +188,8 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.configuration.max_age", max_entry_age);
     add("lootr.configuration.disable", disable);
     add("lootr.configuration.convert_mineshafts", convert_mineshafts);
-    add("lootr.configuration.convert_elytra", elytra);
+    add("lootr.configuration.convert_elytras", elytra);
+    add("lootr.configuration.bypass_spawn_protection", spawn);
     add("lootr.configuration.report_unresolved_tables", report_unresolved_tables);
     add("lootr.configuration.check_world_border", world_border);
     add("lootr.configuration.perform_piecewise_check", perform_piecewise_check);

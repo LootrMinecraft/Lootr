@@ -9,7 +9,7 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 
 public class ModTabs {
   public static final CreativeModeTab LOOTR_TAB = CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
-      .title(Component.translatable("itemGroup.lootr.lootr"))
+      .title(Component.translatable("itemGroup.lootr"))
       .icon(() -> new ItemStack(ModBlocks.TROPHY))
       .displayItems((p, output) -> {
         output.accept(ModBlocks.TROPHY);
