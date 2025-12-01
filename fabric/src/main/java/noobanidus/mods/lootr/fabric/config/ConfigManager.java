@@ -304,6 +304,7 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
     public List<String> decay_modids = List.of();
     public List<String> decay_loot_tables = List.of();
     public List<String> decay_dimensions = List.of();
+    public boolean replace_when_decayed = false;
   }
 
   public static class Refresh {

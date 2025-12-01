@@ -338,6 +338,11 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   }
 
   @Override
+  public boolean shouldReplaceWhenDecayed() {
+    return ConfigManager.get().decay.replace_when_decayed;
+  }
+
+  @Override
   public Component getInvalidTableComponent(ResourceKey<LootTable> lootTable) {
     return Component.translatable("lootr.message.invalid_table", lootTable.location()
             .getNamespace(), lootTable.toString())

@@ -261,6 +261,8 @@ public interface ILootrAPI {
   List<ILootrFilter> getFilters ();
 
   boolean shouldBypassSpawnProtection ();
+
+  boolean shouldReplaceWhenDecayed ();
 }
 
 

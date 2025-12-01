@@ -97,6 +97,7 @@ public class LootrLangProvider extends LanguageProvider {
     var decay_modids = "Decay ModIDs";
     var decay_loot_tables = "Decay Loot Tables";
     var decay_dimensions = "Decay Dimensions";
+    var replace_when_decayed = "Replace When Decayed";
     var refresh = "Refresh";
     var refresh_value = "Refresh Value";
     var refresh_all = "Refresh All";
@@ -150,6 +151,7 @@ public class LootrLangProvider extends LanguageProvider {
     add("text.autoconfig.lootr.option.decay.decay_modids", decay_modids);
     add("text.autoconfig.lootr.option.decay.decay_loot_tables", decay_loot_tables);
     add("text.autoconfig.lootr.option.decay.decay_dimensions", decay_dimensions);
+    add("text.autoconfig.lootr.option.decay.replace_when_decayed", replace_when_decayed);
     add("text.autoconfig.lootr.option.refresh", refresh);
     add("text.autoconfig.lootr.option.refresh.refresh_value", refresh_value);
     add("text.autoconfig.lootr.option.refresh.refresh_all", refresh_all);
@@ -229,5 +231,6 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.configuration.textures", "Client Textures");
     add("lootr.configuration.vanilla_textures", vanilla_textures);
     add("lootr.configuration.new_textures", old_textures);
+    add("lootr.configuration.replace_when_decayed", replace_when_decayed);
   }
 }

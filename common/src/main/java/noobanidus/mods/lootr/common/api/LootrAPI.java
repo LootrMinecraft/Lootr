@@ -440,4 +440,8 @@ public class LootrAPI {
   public static boolean shouldBypassSpawnProtection () {
     return INSTANCE.shouldBypassSpawnProtection();
   }
+
+  public static boolean shouldReplaceWhenDecayed () {
+    return INSTANCE.shouldReplaceWhenDecayed();
+  }
 }

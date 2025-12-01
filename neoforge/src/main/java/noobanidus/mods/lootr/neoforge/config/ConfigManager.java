@@ -54,6 +54,7 @@ public class ConfigManager extends ConfigManagerBase {
   public static final ModConfigSpec.ConfigValue<List<? extends String>> DECAY_MODIDS;
   public static final ModConfigSpec.ConfigValue<List<? extends String>> DECAY_LOOT_TABLES;
   public static final ModConfigSpec.ConfigValue<List<? extends String>> DECAY_DIMENSIONS;
+  public static final ModConfigSpec.BooleanValue REPLACE_WHEN_DECAYED;
   // Refresh
   public static final ModConfigSpec.IntValue REFRESH_VALUE;
   public static final ModConfigSpec.BooleanValue REFRESH_ALL;
@@ -138,6 +139,7 @@ public class ConfigManager extends ConfigManagerBase {
     DECAY_LOOT_TABLES = COMMON_BUILDER.comment("list of loot tables which will decay (default blank, meaning no chests decay, in the format of (in the format of [\"modid:loot_table\", \"othermodid:other_loot_table\"])").defineList("decay_loot_tables", empty, validator);
     DECAY_MODIDS = COMMON_BUILDER.comment("list of mod IDs whose loot tables will decay (default blank, meaning no chests decay, in the format [\"modid\", \"othermodid\"])").defineList("decay_modids", empty, o -> o instanceof String);
     DECAY_DIMENSIONS = COMMON_BUILDER.comment("list of dimensions where loot chests should automatically decay (default: blank, e.g., [\"minecraft:the_nether\", \"minecraft:the_end\"])").defineList("decay_dimensions", empty, validator);
+    REPLACE_WHEN_DECAYED = COMMON_BUILDER.comment("when true, decayed containers will be replaced with their equivalent vanilla block instead of being removed").define("replace_when_decayed", false);
     PERFORM_DECAY_WHILE_TICKING = COMMON_BUILDER.comment("containers that have already been marked as decaying will be decayed during level tick as well as when next trapped").define("perform_decay_while_ticking", true);
     START_DECAY_WHILE_TICKING = COMMON_BUILDER.comment("containers that have not yet been marked as decaying will be marked for decay during level tick as well as when next trapped").define("start_decay_while_ticking", false);
     DECAY_ALL = COMMON_BUILDER.comment("overriding decay_loot_tables, decay_modids and decay_dimensions: all chests will decay after being trapped for the first time").define("decay_all", false);
