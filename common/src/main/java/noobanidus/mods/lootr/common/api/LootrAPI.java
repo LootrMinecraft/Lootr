@@ -432,4 +432,8 @@ public class LootrAPI {
   public static List<ILootrFilter> getFilters () {
     return INSTANCE.getFilters();
   }
+
+  public static boolean shouldBypassSpawnProtection () {
+    return INSTANCE.shouldBypassSpawnProtection();
+  }
 }

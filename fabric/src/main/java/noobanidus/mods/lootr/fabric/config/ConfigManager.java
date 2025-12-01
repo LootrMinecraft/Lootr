@@ -271,6 +271,7 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
     public boolean convert_mineshafts = true;
     public boolean world_border = false;
     public boolean perform_piecewise_check = true;
+    public boolean bypass_spawn_protection = true;
   }
 
   public static class Breaking {

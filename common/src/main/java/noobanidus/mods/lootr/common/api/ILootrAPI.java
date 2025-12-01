@@ -255,6 +255,8 @@ public interface ILootrAPI {
   void refreshSections ();
 
   List<ILootrFilter> getFilters ();
+
+  boolean shouldBypassSpawnProtection ();
 }
 
 

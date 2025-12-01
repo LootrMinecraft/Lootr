@@ -333,6 +333,11 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   }
 
   @Override
+  public boolean shouldBypassSpawnProtection() {
+    return ConfigManager.get().conversion.bypass_spawn_protection;
+  }
+
+  @Override
   public Component getInvalidTableComponent(ResourceKey<LootTable> lootTable) {
     return Component.translatable("lootr.message.invalid_table", lootTable.location()
             .getNamespace(), lootTable.toString())

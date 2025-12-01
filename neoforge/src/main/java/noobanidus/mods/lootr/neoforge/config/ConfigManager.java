@@ -32,6 +32,7 @@ public class ConfigManager extends ConfigManagerBase {
   public static final ModConfigSpec.BooleanValue CONVERT_MINESHAFTS;
   public static final ModConfigSpec.BooleanValue CONVERT_ELYTRAS;
   public static final ModConfigSpec.BooleanValue PERFORM_PIECEWISE_CHECK;
+  public static final ModConfigSpec.BooleanValue BYPASS_SPAWN_PROTECTION;
   // Breaking
   public static final ModConfigSpec.BooleanValue DISABLE_BREAK;
   public static final ModConfigSpec.BooleanValue ENABLE_BREAK;
@@ -95,6 +96,7 @@ public class ConfigManager extends ConfigManagerBase {
     COMMON_BUILDER.push("conversion").comment("configuration options for the conversion of chests");
     RANDOMISE_SEED = COMMON_BUILDER.comment("determine whether or not loot generated is the same for all players using the provided seed, or randomised per player").define("randomise_seed", true);
     MAXIMUM_AGE = COMMON_BUILDER.comment("the maximum age for containers; entries above this age will be discarded [default: 60 * 20 * 15, fifteen minutes] [note: the value 6000 will be corrected to 18000. if you wish to use 6000, please use 6001 or 5999.]").defineInRange("max_age", 60 * 20 * 15, 0, Integer.MAX_VALUE);
+    BYPASS_SPAWN_PROTECTION = COMMON_BUILDER.comment("if true, accessing a Lootr container will bypass spawn protection").define("bypass_spawn_protection", true);
     DISABLE = COMMON_BUILDER.comment("if true, no chests will be converted").define("disable", false);
     CONVERT_MINESHAFTS = COMMON_BUILDER.comment("whether or not mineshaft chest minecarts should be converted to standard loot chests").define("convert_mineshafts", true);
     CONVERT_ELYTRAS = COMMON_BUILDER.comment("whether or not the Elytra item frame should be converted into a standard loot chest with a guaranteed elytra").define("convert_elytras", true);
