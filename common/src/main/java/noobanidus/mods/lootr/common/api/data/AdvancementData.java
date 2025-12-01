@@ -11,7 +11,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+@Deprecated
 public class AdvancementData extends SavedData {
+  @Deprecated
   public static final SavedData.Factory<AdvancementData> FACTORY = new SavedData.Factory<>(AdvancementData::new, AdvancementData::load, null);
   private final Set<UUIDPair> data = new HashSet<>();
 
