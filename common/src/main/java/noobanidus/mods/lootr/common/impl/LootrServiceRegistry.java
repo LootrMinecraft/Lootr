@@ -2,16 +2,24 @@ package noobanidus.mods.lootr.common.impl;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootTable;
+import noobanidus.mods.lootr.common.api.ILootrAPI;
 import noobanidus.mods.lootr.common.api.ILootrBlockEntityConverter;
 import noobanidus.mods.lootr.common.api.ILootrEntityConverter;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilterProvider;
+import noobanidus.mods.lootr.common.api.postprocess.ILootrPostProcessor;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
@@ -26,25 +34,32 @@ public class LootrServiceRegistry {
   private final Map<BlockEntityType<?>, Function<?, ?>> blockEntityConverterMap = new Object2ObjectOpenHashMap<>();
   private final Map<EntityType<?>, Function<?, ?>> entityConverterMap = new Object2ObjectOpenHashMap<>();
   private final List<ILootrFilter> filters = new ObjectArrayList<>();
+  private final List<ILootrPostProcessor> postProcessors = new ObjectArrayList<>();
 
   @SuppressWarnings("rawtypes")
   public LootrServiceRegistry () {
-    ServiceLoader<ILootrBlockEntityConverter> loader = ServiceLoader.load(ILootrBlockEntityConverter.class);
+    ClassLoader classLoader = ILootrAPI.class.getClassLoader();
+    ServiceLoader<ILootrBlockEntityConverter> loader = ServiceLoader.load(ILootrBlockEntityConverter.class, classLoader);
 
     for (ILootrBlockEntityConverter<?> converter : loader) {
       blockEntityConverterMap.put(converter.getBlockEntityType(), converter);
     }
 
-    ServiceLoader<ILootrEntityConverter> loader2 = ServiceLoader.load(ILootrEntityConverter.class);
+    ServiceLoader<ILootrEntityConverter> loader2 = ServiceLoader.load(ILootrEntityConverter.class ,classLoader);
     for (ILootrEntityConverter<?> converter2 : loader2) {
       entityConverterMap.put(converter2.getEntityType(), converter2);
     }
 
-    ServiceLoader<ILootrFilterProvider> loader3 = ServiceLoader.load(ILootrFilterProvider.class);
+    ServiceLoader<ILootrFilterProvider> loader3 = ServiceLoader.load(ILootrFilterProvider.class, classLoader);
     for (ILootrFilterProvider provider : loader3) {
       filters.addAll(provider.getFilters());
     }
     filters.sort(Comparator.comparingInt(ILootrFilter::getPriority));
+
+    ServiceLoader<ILootrPostProcessor> loader4 = ServiceLoader.load(ILootrPostProcessor.class, classLoader);
+    for (ILootrPostProcessor processor : loader4) {
+      postProcessors.add(processor);
+    }
   }
 
   public static LootrServiceRegistry getInstance () {
@@ -92,5 +107,11 @@ public class LootrServiceRegistry {
 
   public static List<ILootrFilter> getFilters () {
     return getInstance().filters;
+  }
+
+  public static void postProcess (ServerLevel level, BlockPos position, RandomizableContainerBlockEntity newBlockEntity, BlockState originalState, BlockState newState, ResourceKey<LootTable> lootTable) {
+    for (ILootrPostProcessor processor : getInstance().postProcessors) {
+      processor.process(level, position, newBlockEntity, originalState, newState, lootTable);
+    }
   }
 }
