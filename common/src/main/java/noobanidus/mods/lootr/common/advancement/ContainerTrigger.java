@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public class ContainerTrigger extends SimpleCriterionTrigger<ContainerTrigger.TriggerInstance> implements IContainerTrigger {
   public void trigger(ServerPlayer player, UUID condition) {
-    this.trigger(player, (instance) -> instance.test(player, condition));
+    this.trigger(player, TriggerInstance::test);
   }
 
   @Override
@@ -32,13 +32,8 @@ public class ContainerTrigger extends SimpleCriterionTrigger<ContainerTrigger.Tr
       Optional<ContextAwarePredicate> player) implements SimpleCriterionTrigger.SimpleInstance {
     public static final Codec<TriggerInstance> CODEC = RecordCodecBuilder.create(codec -> codec.group(ContextAwarePredicate.CODEC.optionalFieldOf("player").forGetter(TriggerInstance::player)).apply(codec, TriggerInstance::new));
 
-    public boolean test(ServerPlayer player, UUID container) {
-      if (LootrAPI.isAwarded(container, player)) {
-        return false;
-      } else {
-        LootrAPI.award(container, player);
-        return true;
-      }
+    public boolean test() {
+      return true;
     }
   }
 }

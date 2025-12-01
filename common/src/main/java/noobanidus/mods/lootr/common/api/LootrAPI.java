@@ -348,18 +348,22 @@ public class LootrAPI {
     return INSTANCE.getData(provider);
   }
 
+  @Deprecated
   public static boolean isAwarded(ILootrInfoProvider provider, ServerPlayer player) {
     return INSTANCE.isAwarded(provider, player);
   }
 
+  @Deprecated
   public static boolean isAwarded(UUID uuid, ServerPlayer player) {
     return INSTANCE.isAwarded(uuid, player);
   }
 
+  @Deprecated
   public static void award(ILootrInfoProvider provider, ServerPlayer player) {
     INSTANCE.award(provider, player);
   }
 
+  @Deprecated
   public static void award(UUID id, ServerPlayer player) {
     INSTANCE.award(id, player);
   }

@@ -206,16 +206,20 @@ public interface ILootrAPI {
 
   boolean performPiecewiseCheck ();
 
+  @Deprecated
   default boolean isAwarded(ILootrInfoProvider provider, ServerPlayer player) {
     return isAwarded(provider.getInfoUUID(), player);
   }
 
+  @Deprecated
   boolean isAwarded(UUID uuid, ServerPlayer player);
 
+  @Deprecated
   default void award(ILootrInfoProvider provider, ServerPlayer player) {
     award(provider.getInfoUUID(), player);
   }
 
+  @Deprecated
   void award(UUID id, ServerPlayer player);
 
   int getRemainingDecayValue(ILootrInfoProvider provider);

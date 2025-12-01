@@ -14,7 +14,6 @@ import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraft.world.level.storage.LevelResource;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.data.*;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
@@ -34,6 +33,7 @@ import java.util.stream.Stream;
 
 @SuppressWarnings("unused")
 public class DataStorage {
+  @Deprecated
   public static final String ADVANCEMENTS = "lootr/Lootr-AdvancementData";
   public static final String DECAYS = "lootr/Lootr-DecayData";
   public static final String REFRESHES = "lootr/Lootr-RefreshData";
@@ -57,35 +57,40 @@ public class DataStorage {
   }
 
   @ApiStatus.Internal
+  @Deprecated
   public static boolean isAwarded(ILootrInfoProvider provider, ServerPlayer player) {
     return isAwarded(provider.getInfoUUID(), player);
   }
 
   @ApiStatus.Internal
+  @Deprecated
   public static boolean isAwarded(UUID uuid, ServerPlayer player) {
-    DimensionDataStorage manager = DataStorage.getDataStorage();
+    return false;
+/*    DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot determine if advancement has been awarded.");
       return false;
     }
     AdvancementData data = manager.computeIfAbsent(AdvancementData.FACTORY, ADVANCEMENTS);
-    return data.contains(player.getUUID(), uuid);
+    return data.contains(player.getUUID(), uuid);*/
   }
 
   @ApiStatus.Internal
+  @Deprecated
   public static void award(ILootrInfoProvider provider, ServerPlayer player) {
     award(provider.getInfoUUID(), player);
   }
 
   @ApiStatus.Internal
+  @Deprecated
   public static void award(UUID id, ServerPlayer player) {
-    DimensionDataStorage manager = DataStorage.getDataStorage();
+/*    DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot award advancement.");
       return;
     }
     AdvancementData data = manager.computeIfAbsent(AdvancementData.FACTORY, ADVANCEMENTS);
-    data.add(player.getUUID(), id);
+    data.add(player.getUUID(), id);*/
   }
 
   @ApiStatus.Internal

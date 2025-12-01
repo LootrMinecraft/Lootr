@@ -222,6 +222,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
     return DataStorage.isAwarded(uuid, player);
   }
 
+  @Deprecated
   @Override
   public final void award(UUID id, ServerPlayer player) {
     DataStorage.award(id, player);
