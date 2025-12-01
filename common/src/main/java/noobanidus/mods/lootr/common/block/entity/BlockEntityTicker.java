@@ -9,6 +9,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -183,8 +184,7 @@ public final class BlockEntityTicker {
     long seed = be.getLootTableSeed();
     // IMPORTANT: Clear loot table to prevent loot drop when container is destroyed
     be.setLootTable(null);
-    level.destroyBlock(entityPos, false);
-    level.setBlock(entityPos, replacement, 2);
+    level.setBlock(entityPos, replacement, Block.UPDATE_CLIENTS);
     BlockEntity newBlockEntity = level.getBlockEntity(entityPos);
     PlatformAPI.restoreSpecificData(data, newBlockEntity);
     if (LootrAPI.resolveBlockEntity(newBlockEntity) instanceof ILootrBlockEntity && newBlockEntity instanceof RandomizableContainerBlockEntity rbe) {
