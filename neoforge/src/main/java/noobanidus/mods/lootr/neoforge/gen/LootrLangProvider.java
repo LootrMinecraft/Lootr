@@ -125,7 +125,7 @@ public class LootrLangProvider extends LanguageProvider {
     add("text.autoconfig.lootr.option.conversion", conversion);
     add("text.autoconfig.lootr.option.conversion.max_entry_age", max_entry_age);
     add("text.autoconfig.lootr.option.conversion.disable", disable);
-    add("text.autoconfig.lootr.option.conversion.convert_elytra", elytra);
+    add("text.autoconfig.lootr.option.conversion.convert_elytras", elytra);
     add("text.autoconfig.lootr.option.conversion.bypass_spawn_protection", spawn);
     add("text.autoconfig.lootr.option.conversion.world_border", world_border);
     add("text.autoconfig.lootr.option.breaking", breaking);
@@ -136,6 +136,7 @@ public class LootrLangProvider extends LanguageProvider {
     add("text.autoconfig.lootr.option.breaking.blast_resistant", blast_resistant);
     add("text.autoconfig.lootr.option.breaking.blast_immune", blast_immune);
     add("text.autoconfig.lootr.option.breaking.trapped_custom", trapped_custom);
+    add("text.autoconfig.lootr.option.breaking.should_drop_player_loot", should_drop_player_loot);
     add("text.autoconfig.lootr.option.lists", lists);
     add("text.autoconfig.lootr.option.lists.dimension_whitelist", dimension_whitelist);
     add("text.autoconfig.lootr.option.lists.dimension_blacklist", dimension_blacklist);
@@ -162,6 +163,7 @@ public class LootrLangProvider extends LanguageProvider {
     add("text.autoconfig.lootr.option.client", client);
     add("text.autoconfig.lootr.option.client.vanilla_textures", vanilla_textures);
     add("text.autoconfig.lootr.option.client.old_textures", old_textures);
+    add("text.autoconfig.lootr.option.client.new_textures", new_textures);
     add("text.autoconfig.lootr.option.debug.report_unresolved_tables", report_unresolved_tables);
     add("text.autoconfig.lootr.option.conversion.convert_mineshafts", convert_mineshafts);
     add("text.autoconfig.lootr.option.decay.perform_tick_decay", perform_tick_decay);
