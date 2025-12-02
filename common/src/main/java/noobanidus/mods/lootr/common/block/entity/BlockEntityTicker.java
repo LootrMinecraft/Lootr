@@ -22,7 +22,6 @@ import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.chunk.LoadedChunks;
-import noobanidus.mods.lootr.common.impl.LootrServiceRegistry;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
@@ -155,11 +154,11 @@ public final class BlockEntityTicker {
   private static void replaceEntitiesInChunk(ServerLevel level, Entry entry) {
     for (BlockPos entityPos : entry.entityPositions()) {
       if (!checkStructureValidity(level, entry.chunkPos(), entityPos)) {
-          continue;
+        continue;
       }
       BlockEntity blockEntity = level.getBlockEntity(entityPos);
       if (!(blockEntity instanceof RandomizableContainerBlockEntity be) || LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity) {
-          continue;
+        continue;
       }
       ResourceKey<LootTable> table = be.getLootTable();
       if (table == null) {
@@ -172,7 +171,7 @@ public final class BlockEntityTicker {
       BlockState stateAt = level.getBlockState(entityPos);
       BlockState replacement = LootrAPI.replacementBlockState(stateAt);
       if (replacement == null) {
-          continue;
+        continue;
       }
 
       replaceEntity(level, entityPos, be, replacement, table);
@@ -180,7 +179,7 @@ public final class BlockEntityTicker {
   }
 
   private static void replaceEntity(ServerLevel level, BlockPos entityPos, RandomizableContainerBlockEntity be, BlockState replacement, ResourceKey<LootTable> table) {
-    LootrServiceRegistry.preProcess(level, entityPos, be, replacement, table);
+    LootrAPI.preProcess(level, entityPos, be, replacement, table);
     // Save specific data. Currently, this includes the LockCode (all platforms), along with NeoForge's getPersistentData.
     DataToCopy data = PlatformAPI.copySpecificData(be);
     long seed = be.getLootTableSeed();
@@ -191,7 +190,7 @@ public final class BlockEntityTicker {
     PlatformAPI.restoreSpecificData(data, newBlockEntity);
     if (LootrAPI.resolveBlockEntity(newBlockEntity) instanceof ILootrBlockEntity && newBlockEntity instanceof RandomizableContainerBlockEntity rbe) {
       rbe.setLootTable(table, seed);
-      LootrServiceRegistry.postProcess(level, entityPos, rbe, replacement, table);
+      LootrAPI.postProcess(level, entityPos, rbe, replacement, table);
     } else {
       LootrAPI.LOG.error("replacement {} is not an ILootrBlockEntity {} at {}", replacement, level.dimension(), entityPos);
     }

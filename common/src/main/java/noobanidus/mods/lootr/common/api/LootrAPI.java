@@ -19,6 +19,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -30,6 +31,8 @@ import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
+import noobanidus.mods.lootr.common.api.processor.ILootrPostProcessor;
+import noobanidus.mods.lootr.common.api.processor.ILootrPreProcessor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
@@ -437,11 +440,31 @@ public class LootrAPI {
     return INSTANCE.getFilters();
   }
 
+  public static List<ILootrPreProcessor> getPreProcessors () {
+    return INSTANCE.getPreProcessors();
+  }
+
+  public static List<ILootrPostProcessor> getPostProcessors () {
+    return INSTANCE.getPostProcessors();
+  }
+
   public static boolean shouldBypassSpawnProtection () {
     return INSTANCE.shouldBypassSpawnProtection();
   }
 
   public static boolean shouldReplaceWhenDecayed () {
     return INSTANCE.shouldReplaceWhenDecayed();
+  }
+
+  public static void postProcess (ServerLevel level, BlockPos position, RandomizableContainerBlockEntity newBlockEntity, BlockState newState, ResourceKey<LootTable> lootTable) {
+    for (ILootrPostProcessor processor : getPostProcessors()) {
+      processor.process(level, position, newBlockEntity, newState, lootTable);
+    }
+  }
+
+  public static void preProcess (ServerLevel level, BlockPos position, RandomizableContainerBlockEntity oldBlockEntity, BlockState newState, ResourceKey<LootTable> lootTable) {
+    for (ILootrPreProcessor processor : getPreProcessors()) {
+      processor.process(level, position, oldBlockEntity, newState, lootTable);
+    }
   }
 }

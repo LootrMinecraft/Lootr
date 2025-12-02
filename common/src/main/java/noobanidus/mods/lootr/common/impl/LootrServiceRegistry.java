@@ -39,7 +39,7 @@ public class LootrServiceRegistry {
   private final List<ILootrPreProcessor> preProcessors = new ObjectArrayList<>();
 
   @SuppressWarnings("rawtypes")
-  public LootrServiceRegistry () {
+  public LootrServiceRegistry() {
     ClassLoader classLoader = ILootrAPI.class.getClassLoader();
     ServiceLoader<ILootrBlockEntityConverter> loader = ServiceLoader.load(ILootrBlockEntityConverter.class, classLoader);
 
@@ -47,7 +47,7 @@ public class LootrServiceRegistry {
       blockEntityConverterMap.put(converter.getBlockEntityType(), converter);
     }
 
-    ServiceLoader<ILootrEntityConverter> loader2 = ServiceLoader.load(ILootrEntityConverter.class ,classLoader);
+    ServiceLoader<ILootrEntityConverter> loader2 = ServiceLoader.load(ILootrEntityConverter.class, classLoader);
     for (ILootrEntityConverter<?> converter2 : loader2) {
       entityConverterMap.put(converter2.getEntityType(), converter2);
     }
@@ -69,7 +69,7 @@ public class LootrServiceRegistry {
     }
   }
 
-  public static LootrServiceRegistry getInstance () {
+  public static LootrServiceRegistry getInstance() {
     if (INSTANCE == null) {
       INSTANCE = new LootrServiceRegistry();
     }
@@ -89,11 +89,11 @@ public class LootrServiceRegistry {
   }
 
   @Nullable
-  public static <T extends BlockEntity> ILootrBlockEntity convertBlockEntity(T blockEntity) {
+  static <T extends BlockEntity> ILootrBlockEntity convertBlockEntity(T blockEntity) {
     if (blockEntity == null) {
       return null;
     }
-    Function<T, ILootrBlockEntity> converter = getBlockEntity( blockEntity.getType());
+    Function<T, ILootrBlockEntity> converter = getBlockEntity(blockEntity.getType());
     if (converter == null) {
       return null;
     }
@@ -101,7 +101,7 @@ public class LootrServiceRegistry {
   }
 
   @Nullable
-  public static <T extends Entity> ILootrCart convertEntity (T entity) {
+  static <T extends Entity> ILootrCart convertEntity(T entity) {
     if (entity == null) {
       return null;
     }
@@ -112,19 +112,15 @@ public class LootrServiceRegistry {
     return converter.apply(entity);
   }
 
-  public static List<ILootrFilter> getFilters () {
+  static List<ILootrFilter> getFilters() {
     return getInstance().filters;
   }
 
-  public static void postProcess (ServerLevel level, BlockPos position, RandomizableContainerBlockEntity newBlockEntity, BlockState newState, ResourceKey<LootTable> lootTable) {
-    for (ILootrPostProcessor processor : getInstance().postProcessors) {
-      processor.process(level, position, newBlockEntity, newState, lootTable);
-    }
+  static List<ILootrPreProcessor> getPreProcessors() {
+    return getInstance().preProcessors;
   }
 
-  public static void preProcess (ServerLevel level, BlockPos position, RandomizableContainerBlockEntity oldBlockEntity, BlockState newState, ResourceKey<LootTable> lootTable) {
-    for (ILootrPreProcessor processor : getInstance().preProcessors) {
-      processor.process(level, position, oldBlockEntity, newState, lootTable);
-    }
+  static List<ILootrPostProcessor> getPostProcessors() {
+    return getInstance().postProcessors;
   }
 }
