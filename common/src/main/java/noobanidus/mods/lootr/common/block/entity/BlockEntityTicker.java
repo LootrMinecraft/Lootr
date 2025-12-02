@@ -11,6 +11,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BrushableBlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkSource;
@@ -22,12 +23,15 @@ import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.chunk.LoadedChunks;
+import noobanidus.mods.lootr.common.mixins.AccessorMixinBrushableBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public final class BlockEntityTicker {
   private static final Map<ResourceKey<Level>, BlockEntityTicker> TICKERS = new Object2ObjectOpenHashMap<>();
@@ -151,18 +155,42 @@ public final class BlockEntityTicker {
     return true;
   }
 
+  private static void wipeLootTable (BlockEntity blockEntity) {
+    if (blockEntity instanceof RandomizableContainerBlockEntity rbe) {
+      rbe.setLootTable(null);
+    }
+  }
+
+  private static void setLootTable (BlockEntity blockEntity, ResourceKey<LootTable> table, long seed) {
+    if (blockEntity instanceof RandomizableContainerBlockEntity rbe) {
+      rbe.setLootTable(table, seed);
+    } else if (blockEntity instanceof BrushableBlockEntity bbe) {
+      bbe.setLootTable(table, seed);
+    }
+  }
+
   private static void replaceEntitiesInChunk(ServerLevel level, Entry entry) {
     for (BlockPos entityPos : entry.entityPositions()) {
       if (!checkStructureValidity(level, entry.chunkPos(), entityPos)) {
         continue;
       }
       BlockEntity blockEntity = level.getBlockEntity(entityPos);
-      if (!(blockEntity instanceof RandomizableContainerBlockEntity be) || LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity) {
+      ResourceKey<LootTable> table;
+      long seed;
+      if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity) {
         continue;
       }
-      ResourceKey<LootTable> table = be.getLootTable();
+      if (blockEntity instanceof RandomizableContainerBlockEntity rbe) {
+        table = rbe.getLootTable();
+        seed = rbe.getLootTableSeed();
+      } else if (blockEntity instanceof BrushableBlockEntity bbe) {
+        table = ((AccessorMixinBrushableBlockEntity)bbe).lootr$getLootTable();
+        seed = ((AccessorMixinBrushableBlockEntity)bbe).lootr$getLootTableSeed();
+      } else {
+        continue;
+      }
       if (table == null) {
-        LootrAPI.LOG.warn("randomizable container \"{}\" has no loot table in {} ({})", be.getName(), level.dimension(), entityPos);
+        LootrAPI.LOG.warn("Potential block entity has no loot table in {} ({})", level.dimension(), entityPos);
         continue;
       }
       if (LootrAPI.isLootTableBlacklisted(table)) {
@@ -174,23 +202,22 @@ public final class BlockEntityTicker {
         continue;
       }
 
-      replaceEntity(level, entityPos, be, replacement, table);
+      replaceEntity(level, entityPos, blockEntity, replacement, table, seed);
     }
   }
 
-  private static void replaceEntity(ServerLevel level, BlockPos entityPos, RandomizableContainerBlockEntity be, BlockState replacement, ResourceKey<LootTable> table) {
-    long seed = be.getLootTableSeed();
+  private static void replaceEntity(ServerLevel level, BlockPos entityPos, BlockEntity be, BlockState replacement, ResourceKey<LootTable> table, long seed) {
     LootrAPI.preProcess(level, entityPos, be, replacement, table, seed);
     // Save specific data. Currently, this includes the LockCode (all platforms), along with NeoForge's getPersistentData.
     DataToCopy data = PlatformAPI.copySpecificData(be);
     // IMPORTANT: Clear loot table to prevent loot drop when container is destroyed
-    be.setLootTable(null);
+    wipeLootTable(be);
     level.setBlock(entityPos, replacement, Block.UPDATE_CLIENTS);
     BlockEntity newBlockEntity = level.getBlockEntity(entityPos);
     PlatformAPI.restoreSpecificData(data, newBlockEntity);
-    if (LootrAPI.resolveBlockEntity(newBlockEntity) instanceof ILootrBlockEntity && newBlockEntity instanceof RandomizableContainerBlockEntity rbe) {
-      rbe.setLootTable(table, seed);
-      LootrAPI.postProcess(level, entityPos, rbe, replacement, table, seed);
+    if (LootrAPI.resolveBlockEntity(newBlockEntity) instanceof ILootrBlockEntity ibe) {
+      setLootTable(ibe.asBlockEntity(), table, seed);
+      LootrAPI.postProcess(level, entityPos, ibe.asBlockEntity(), replacement, table, seed);
     } else {
       LootrAPI.LOG.error("replacement {} is not an ILootrBlockEntity {} at {}", replacement, level.dimension(), entityPos);
     }
