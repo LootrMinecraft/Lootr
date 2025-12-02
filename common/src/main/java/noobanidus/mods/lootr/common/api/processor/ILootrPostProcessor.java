@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.common.api.postprocess;
+package noobanidus.mods.lootr.common.api.processor;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
@@ -8,5 +8,5 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
 
 public interface ILootrPostProcessor {
-  void process (ServerLevel level, BlockPos position, RandomizableContainerBlockEntity newBlockEntity, BlockState originalState, BlockState newState, ResourceKey<LootTable> lootTable);
+  void process (ServerLevel level, BlockPos position, RandomizableContainerBlockEntity newBlockEntity, BlockState newState, ResourceKey<LootTable> lootTable);
 }

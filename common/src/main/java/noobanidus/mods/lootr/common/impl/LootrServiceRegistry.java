@@ -19,7 +19,7 @@ import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilterProvider;
-import noobanidus.mods.lootr.common.api.postprocess.ILootrPostProcessor;
+import noobanidus.mods.lootr.common.api.processor.ILootrPostProcessor;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
@@ -109,9 +109,9 @@ public class LootrServiceRegistry {
     return getInstance().filters;
   }
 
-  public static void postProcess (ServerLevel level, BlockPos position, RandomizableContainerBlockEntity newBlockEntity, BlockState originalState, BlockState newState, ResourceKey<LootTable> lootTable) {
+  public static void postProcess (ServerLevel level, BlockPos position, RandomizableContainerBlockEntity newBlockEntity, BlockState newState, ResourceKey<LootTable> lootTable) {
     for (ILootrPostProcessor processor : getInstance().postProcessors) {
-      processor.process(level, position, newBlockEntity, originalState, newState, lootTable);
+      processor.process(level, position, newBlockEntity, newState, lootTable);
     }
   }
 }

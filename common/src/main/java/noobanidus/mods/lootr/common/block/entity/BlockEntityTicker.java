@@ -175,11 +175,11 @@ public final class BlockEntityTicker {
           continue;
       }
 
-      replaceEntity(level, entityPos, be, stateAt, replacement, table);
+      replaceEntity(level, entityPos, be, replacement, table);
     }
   }
 
-  private static void replaceEntity(ServerLevel level, BlockPos entityPos, RandomizableContainerBlockEntity be, BlockState original, BlockState replacement, ResourceKey<LootTable> table) {
+  private static void replaceEntity(ServerLevel level, BlockPos entityPos, RandomizableContainerBlockEntity be, BlockState replacement, ResourceKey<LootTable> table) {
     // Save specific data. Currently, this includes the LockCode (all platforms), along with NeoForge's getPersistentData.
     DataToCopy data = PlatformAPI.copySpecificData(be);
     long seed = be.getLootTableSeed();
@@ -190,7 +190,7 @@ public final class BlockEntityTicker {
     PlatformAPI.restoreSpecificData(data, newBlockEntity);
     if (LootrAPI.resolveBlockEntity(newBlockEntity) instanceof ILootrBlockEntity && newBlockEntity instanceof RandomizableContainerBlockEntity rbe) {
       rbe.setLootTable(table, seed);
-      LootrServiceRegistry.postProcess(level, entityPos, rbe, original, replacement, table);
+      LootrServiceRegistry.postProcess(level, entityPos, rbe, replacement, table);
     } else {
       LootrAPI.LOG.error("replacement {} is not an ILootrBlockEntity {} at {}", replacement, level.dimension(), entityPos);
     }
