@@ -31,15 +31,19 @@ public class DefaultLootFiller implements LootFiller {
   @Override
   public void unpackLootTable(ILootrInfoProvider provider, Player player, Container inventory) {
     Level level = provider.getInfoLevel();
+    if (level == null || level.isClientSide() || level.getServer() == null) {
+      LootrAPI.LOG.error("Unable to fill loot container as the level is null, client-side, or the server is null!");
+      return;
+    }
     BlockPos pos = provider.getInfoPos();
     ResourceKey<LootTable> lootTable = provider.getInfoLootTable();
-    if (provider.isInfoReferenceInventory()) {
+    if (provider.isInfoReferenceInventory() && provider.getInfoReferenceInventory() != null) {
         for (int i = 0; i < provider.getInfoReferenceInventory().size(); i++) {
           inventory.setItem(i, provider.getInfoReferenceInventory().get(i).copy());
         }
     } else if (lootTable == null) {
-      LootrAPI.LOG.error("Unable to fill loot container in " + level.dimension().location() + " at " + pos + " as the loot table is null and the provider is not a reference inventory!");
-      // Unknown TODO: what exactly was supposed to be done here?
+      LootrAPI.LOG.error("Unable to fill loot container in {} at {} as the loot table is null and the provider is not a reference inventory!", level.dimension()
+          .location(), pos);
     } else {
       long seed = LootrAPI.getLootSeed(provider.getInfoLootSeed());
       LootTable loottable = level.getServer().reloadableRegistries().getLootTable(lootTable);
@@ -66,6 +70,7 @@ public class DefaultLootFiller implements LootFiller {
     }
   }
 
+  // This is used to allow for storing the state during the loot filling process, allowing for our loot table mixin to apply
   public static void performFill (ILootrInfoProvider provider, Player player, ResourceKey<LootTable> lootTableKey, LootTable lootTable, Container container, LootParams parameters, long seed) {
     state = new LootFillerState(provider, player, lootTableKey, lootTable, container, parameters, seed);
     lootTable.fill(container, parameters, seed);
