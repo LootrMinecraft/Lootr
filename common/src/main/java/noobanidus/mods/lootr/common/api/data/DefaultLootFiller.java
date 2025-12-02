@@ -45,7 +45,8 @@ public class DefaultLootFiller implements LootFiller {
       LootTable loottable = level.getServer().reloadableRegistries().getLootTable(lootTable);
 
       if (loottable == LootTable.EMPTY) {
-        LootrAPI.LOG.error("Unable to fill loot container in " + level.dimension().location() + " at " + pos + " as the loot table '" + lootTable.location() + "' couldn't be resolved! Please search the loot table in `latest.log` to see if there are errors in loading.");
+        LootrAPI.LOG.error("Unable to fill loot container in {} at {} as the loot table '{}' couldn't be resolved! Please search the loot table in `latest.log` to see if there are errors in loading.", level.dimension()
+            .location(), pos, lootTable.location());
         if (LootrAPI.reportUnresolvedTables()) {
           player.displayClientMessage(LootrAPI.getInvalidTableComponent(lootTable), false);
         }
