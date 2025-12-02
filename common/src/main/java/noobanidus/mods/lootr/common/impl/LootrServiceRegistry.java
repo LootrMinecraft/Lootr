@@ -20,6 +20,7 @@ import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilterProvider;
 import noobanidus.mods.lootr.common.api.processor.ILootrPostProcessor;
+import noobanidus.mods.lootr.common.api.processor.ILootrPreProcessor;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
@@ -35,6 +36,7 @@ public class LootrServiceRegistry {
   private final Map<EntityType<?>, Function<?, ?>> entityConverterMap = new Object2ObjectOpenHashMap<>();
   private final List<ILootrFilter> filters = new ObjectArrayList<>();
   private final List<ILootrPostProcessor> postProcessors = new ObjectArrayList<>();
+  private final List<ILootrPreProcessor> preProcessors = new ObjectArrayList<>();
 
   @SuppressWarnings("rawtypes")
   public LootrServiceRegistry () {
@@ -59,6 +61,11 @@ public class LootrServiceRegistry {
     ServiceLoader<ILootrPostProcessor> loader4 = ServiceLoader.load(ILootrPostProcessor.class, classLoader);
     for (ILootrPostProcessor processor : loader4) {
       postProcessors.add(processor);
+    }
+
+    ServiceLoader<ILootrPreProcessor> loader5 = ServiceLoader.load(ILootrPreProcessor.class, classLoader);
+    for (ILootrPreProcessor processor : loader5) {
+      preProcessors.add(processor);
     }
   }
 
@@ -112,6 +119,12 @@ public class LootrServiceRegistry {
   public static void postProcess (ServerLevel level, BlockPos position, RandomizableContainerBlockEntity newBlockEntity, BlockState newState, ResourceKey<LootTable> lootTable) {
     for (ILootrPostProcessor processor : getInstance().postProcessors) {
       processor.process(level, position, newBlockEntity, newState, lootTable);
+    }
+  }
+
+  public static void preProcess (ServerLevel level, BlockPos position, RandomizableContainerBlockEntity oldBlockEntity, BlockState newState, ResourceKey<LootTable> lootTable) {
+    for (ILootrPreProcessor processor : getInstance().preProcessors) {
+      processor.process(level, position, oldBlockEntity, newState, lootTable);
     }
   }
 }

@@ -180,6 +180,7 @@ public final class BlockEntityTicker {
   }
 
   private static void replaceEntity(ServerLevel level, BlockPos entityPos, RandomizableContainerBlockEntity be, BlockState replacement, ResourceKey<LootTable> table) {
+    LootrServiceRegistry.preProcess(level, entityPos, be, replacement, table);
     // Save specific data. Currently, this includes the LockCode (all platforms), along with NeoForge's getPersistentData.
     DataToCopy data = PlatformAPI.copySpecificData(be);
     long seed = be.getLootTableSeed();
