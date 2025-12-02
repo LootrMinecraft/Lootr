@@ -22,6 +22,7 @@ import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.chunk.LoadedChunks;
+import noobanidus.mods.lootr.common.impl.LootrServiceRegistry;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
@@ -174,11 +175,11 @@ public final class BlockEntityTicker {
           continue;
       }
 
-      replaceEntity(level, entityPos, be, replacement, table);
+      replaceEntity(level, entityPos, be, stateAt, replacement, table);
     }
   }
 
-  private static void replaceEntity(Level level, BlockPos entityPos, RandomizableContainerBlockEntity be, BlockState replacement, ResourceKey<LootTable> table) {
+  private static void replaceEntity(ServerLevel level, BlockPos entityPos, RandomizableContainerBlockEntity be, BlockState original, BlockState replacement, ResourceKey<LootTable> table) {
     // Save specific data. Currently, this includes the LockCode (all platforms), along with NeoForge's getPersistentData.
     DataToCopy data = PlatformAPI.copySpecificData(be);
     long seed = be.getLootTableSeed();
@@ -189,6 +190,7 @@ public final class BlockEntityTicker {
     PlatformAPI.restoreSpecificData(data, newBlockEntity);
     if (LootrAPI.resolveBlockEntity(newBlockEntity) instanceof ILootrBlockEntity && newBlockEntity instanceof RandomizableContainerBlockEntity rbe) {
       rbe.setLootTable(table, seed);
+      LootrServiceRegistry.postProcess(level, entityPos, rbe, original, replacement, table);
     } else {
       LootrAPI.LOG.error("replacement {} is not an ILootrBlockEntity {} at {}", replacement, level.dimension(), entityPos);
     }
