@@ -62,6 +62,9 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
       player.openMenu(null);
       return;
     }
+    if (provider.getInfoLevel() == null || provider.getInfoLevel().isClientSide()) {
+      return;
+    }
 
     if (provider.getInfoUUID() == null) {
       player.displayClientMessage(Component.translatable("lootr.message.invalid_block").setStyle(LootrAPI.getInvalidStyle()), true);
@@ -135,6 +138,10 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
     }
 
     if (provider.getInfoUUID() == null) {
+      return;
+    }
+
+    if (provider.getInfoLevel() == null || provider.getInfoLevel().isClientSide()) {
       return;
     }
 
