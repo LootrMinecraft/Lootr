@@ -456,15 +456,15 @@ public class LootrAPI {
     return INSTANCE.shouldReplaceWhenDecayed();
   }
 
-  public static void postProcess (ServerLevel level, BlockPos position, RandomizableContainerBlockEntity newBlockEntity, BlockState newState, ResourceKey<LootTable> lootTable) {
+  public static void postProcess (ServerLevel level, BlockPos position, BlockEntity newBlockEntity, BlockState newState, ResourceKey<LootTable> lootTable, long lootTableSeed) {
     for (ILootrPostProcessor processor : getPostProcessors()) {
-      processor.process(level, position, newBlockEntity, newState, lootTable);
+      processor.process(level, position, newBlockEntity, newState, lootTable, lootTableSeed);
     }
   }
 
-  public static void preProcess (ServerLevel level, BlockPos position, RandomizableContainerBlockEntity oldBlockEntity, BlockState newState, ResourceKey<LootTable> lootTable) {
+  public static void preProcess (ServerLevel level, BlockPos position, BlockEntity oldBlockEntity, BlockState newState, ResourceKey<LootTable> lootTable, long lootTableSeed) {
     for (ILootrPreProcessor processor : getPreProcessors()) {
-      processor.process(level, position, oldBlockEntity, newState, lootTable);
+      processor.process(level, position, oldBlockEntity, newState, lootTable, lootTableSeed);
     }
   }
 }

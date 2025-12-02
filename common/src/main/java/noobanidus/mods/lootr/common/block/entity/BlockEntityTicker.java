@@ -179,10 +179,10 @@ public final class BlockEntityTicker {
   }
 
   private static void replaceEntity(ServerLevel level, BlockPos entityPos, RandomizableContainerBlockEntity be, BlockState replacement, ResourceKey<LootTable> table) {
-    LootrAPI.preProcess(level, entityPos, be, replacement, table);
+    long seed = be.getLootTableSeed();
+    LootrAPI.preProcess(level, entityPos, be, replacement, table, seed);
     // Save specific data. Currently, this includes the LockCode (all platforms), along with NeoForge's getPersistentData.
     DataToCopy data = PlatformAPI.copySpecificData(be);
-    long seed = be.getLootTableSeed();
     // IMPORTANT: Clear loot table to prevent loot drop when container is destroyed
     be.setLootTable(null);
     level.setBlock(entityPos, replacement, Block.UPDATE_CLIENTS);
@@ -190,7 +190,7 @@ public final class BlockEntityTicker {
     PlatformAPI.restoreSpecificData(data, newBlockEntity);
     if (LootrAPI.resolveBlockEntity(newBlockEntity) instanceof ILootrBlockEntity && newBlockEntity instanceof RandomizableContainerBlockEntity rbe) {
       rbe.setLootTable(table, seed);
-      LootrAPI.postProcess(level, entityPos, rbe, replacement, table);
+      LootrAPI.postProcess(level, entityPos, rbe, replacement, table, seed);
     } else {
       LootrAPI.LOG.error("replacement {} is not an ILootrBlockEntity {} at {}", replacement, level.dimension(), entityPos);
     }
