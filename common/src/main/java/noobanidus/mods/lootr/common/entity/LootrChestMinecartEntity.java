@@ -116,7 +116,9 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   @Override
   public void tick() {
     super.tick();
-    LootrAPI.handleProviderTick(this);
+    if (!this.level().isClientSide()) {
+      LootrAPI.handleProviderTick(this);
+    }
   }
 
   @Override
