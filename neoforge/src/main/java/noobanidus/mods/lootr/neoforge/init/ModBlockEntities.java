@@ -7,10 +7,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
-import noobanidus.mods.lootr.common.block.entity.LootrChestBlockEntity;
-import noobanidus.mods.lootr.common.block.entity.LootrInventoryBlockEntity;
-import noobanidus.mods.lootr.common.block.entity.LootrShulkerBlockEntity;
-import noobanidus.mods.lootr.common.block.entity.LootrTrappedChestBlockEntity;
+import noobanidus.mods.lootr.common.block.entity.*;
 import noobanidus.mods.lootr.neoforge.block.entity.LootrNeoForgeBarrelBlockEntity;
 
 @SuppressWarnings("DataFlowIssue")
@@ -26,6 +23,7 @@ public class ModBlockEntities {
   public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LootrNeoForgeBarrelBlockEntity>> LOOTR_BARREL = REGISTER.register("lootr_barrel", () -> BlockEntityType.Builder.of(LootrNeoForgeBarrelBlockEntity::new, LootrRegistry.getBarrelBlock()).build(null));
   public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LootrInventoryBlockEntity>> LOOTR_INVENTORY = REGISTER.register("lootr_inventory", () -> BlockEntityType.Builder.of(LootrInventoryBlockEntity::new, LootrRegistry.getInventoryBlock()).build(null));
   public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LootrShulkerBlockEntity>> LOOTR_SHULKER = REGISTER.register("lootr_shulker", () -> BlockEntityType.Builder.of(LootrShulkerBlockEntity::new, LootrRegistry.getShulkerBlock()).build(null));
+  public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LootrBrushableBlockEntity>> LOOTR_BRUSHABLE_BLOCK = REGISTER.register("lootr_brushable_block", () -> BlockEntityType.Builder.of(LootrBrushableBlockEntity::new).build(null)); // TODO: Blocks -- can we rely on the NeoForge event?
 
 
 }

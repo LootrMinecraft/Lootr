@@ -39,6 +39,8 @@ public interface ILootrRegistry {
 
   EntityType<?> getMinecart();
 
+  BlockEntityType<?> getBrushableBlockEntity ();
+
   BlockEntityType<?> getBarrelBlockEntity();
 
   BlockEntityType<? extends ChestBlockEntity> getChestBlockEntity();

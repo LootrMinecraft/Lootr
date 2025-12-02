@@ -6,6 +6,7 @@
     "AccessorMixinBaseContainerBlockEntity",
     "AccessorMixinBrushableBlockEntity",
     "AccessorMixinDimensionDataStorage",
+    "AccessorMixinFallingBlockEntity",
     "MixinCatSitOnBlockGoal",
     "MixinChestBlock",
     "MixinEndCityPieces$EndCityPiece",

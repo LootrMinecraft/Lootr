@@ -126,4 +126,8 @@ public class LootrRegistry {
   public static CreativeModeTab getTab() {
     return INSTANCE.getTab();
   }
+
+  public static BlockEntityType<?> getBrushableBlockEntity() {
+    return INSTANCE.getBrushableBlockEntity();
+  }
 }

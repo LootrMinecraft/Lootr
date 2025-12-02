@@ -16,10 +16,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -27,8 +26,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BrushableBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.BrushableBlockEntity;
-import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -38,6 +35,8 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
+import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.common.mixins.AccessorMixinFallingBlockEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -68,7 +67,33 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
   private long lootTableSeed;
 
   public LootrBrushableBlockEntity(BlockPos blockPos, BlockState blockState) {
-    super(BlockEntityType.BRUSHABLE_BLOCK, blockPos, blockState);
+    super(LootrRegistry.getBrushableBlockEntity(), blockPos, blockState);
+  }
+
+  public static FallingBlockEntity fall(ServerLevel level, BlockPos blockPos, BlockState blockState, LootrBrushableBlockEntity brushableBlockEntity) {
+    FallingBlockEntity fallingBlockEntity = new FallingBlockEntity(EntityType.FALLING_BLOCK, level);
+    double d = (double) blockPos.getX() + 0.5;
+    double e = blockPos.getY();
+    double f = (double) blockPos.getZ() + 0.5;
+    ((AccessorMixinFallingBlockEntity)fallingBlockEntity).lootr$setBlockState(blockState.hasProperty(BlockStateProperties.WATERLOGGED) ? blockState.setValue(BlockStateProperties.WATERLOGGED, Boolean.FALSE) : blockState);
+    fallingBlockEntity.blocksBuilding = true;
+    fallingBlockEntity.setPos(d, e, f);
+    fallingBlockEntity.setDeltaMovement(Vec3.ZERO);
+    fallingBlockEntity.xo = d;
+    fallingBlockEntity.yo = e;
+    fallingBlockEntity.zo = f;
+    fallingBlockEntity.blockData = brushableBlockEntity.getFallData(level.registryAccess());
+    fallingBlockEntity.setStartPos(fallingBlockEntity.blockPosition());
+    level.setBlock(blockPos, blockState.getFluidState().createLegacyBlock(), 3);
+    level.addFreshEntity(fallingBlockEntity);
+    return fallingBlockEntity;
+
+  }
+
+  private CompoundTag getFallData(HolderLookup.Provider provider) {
+    CompoundTag tag = new CompoundTag();
+    saveAdditional(tag, provider);
+    return tag;
   }
 
   public boolean brush(long l, Player player, Direction direction) {
@@ -101,7 +126,8 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
   }
 
   public void unpackLootTable(Player player) {
-    if (this.lootTable != null && this.level != null && !this.level.isClientSide() && this.level.getServer() != null) {
+    // NO-OP
+/*    if (this.lootTable != null && this.level != null && !this.level.isClientSide() && this.level.getServer() != null) {
       LootTable lootTable = this.level.getServer().reloadableRegistries().getLootTable(this.lootTable);
       if (player instanceof ServerPlayer serverPlayer) {
         CriteriaTriggers.GENERATE_LOOT.trigger(serverPlayer, this.lootTable);
@@ -124,7 +150,7 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
       };
       this.lootTable = null;
       this.setChanged();
-    }
+    }*/
   }
 
   private void brushingCompleted(Player player) {
@@ -341,4 +367,6 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
   public long getInfoLootSeed() {
     return 0;
   }
+
+
 }

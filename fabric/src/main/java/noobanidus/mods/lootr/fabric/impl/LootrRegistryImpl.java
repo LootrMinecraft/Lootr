@@ -106,6 +106,11 @@ public class LootrRegistryImpl implements ILootrRegistry {
   }
 
   @Override
+  public BlockEntityType<?> getBrushableBlockEntity() {
+    return ModBlockEntities.LOOTR_BRUSHABLE_BLOCK;
+  }
+
+  @Override
   public IAdvancementTrigger getAdvancementTrigger() {
     return ModAdvancements.ADVANCEMENT;
   }

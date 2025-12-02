@@ -13,7 +13,6 @@ import net.minecraft.world.level.block.BrushableBlock;
 import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BrushableBlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -57,12 +56,14 @@ public class LootrBrushableBlock extends BrushableBlock {
   @Override
   public void tick(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, RandomSource randomSource) {
     BlockEntity var6 = serverLevel.getBlockEntity(blockPos);
-    if (var6 instanceof LootrBrushableBlockEntity brushableBlockEntity) {
-      brushableBlockEntity.checkReset();
+    if (!(var6 instanceof LootrBrushableBlockEntity brushableBlockEntity)) {
+      return;
     }
 
+    brushableBlockEntity.checkReset();
+
     if (FallingBlock.isFree(serverLevel.getBlockState(blockPos.below())) && blockPos.getY() >= serverLevel.getMinBuildHeight()) {
-      FallingBlockEntity.fall(serverLevel, blockPos, blockState);
+      LootrBrushableBlockEntity.fall(serverLevel, blockPos, blockState, brushableBlockEntity);
     }
   }
 
