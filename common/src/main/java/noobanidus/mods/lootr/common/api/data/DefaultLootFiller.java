@@ -16,7 +16,7 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import org.jetbrains.annotations.Nullable;
 
 public class DefaultLootFiller implements LootFiller {
-  private static DefaultLootFiller INSTANCE = new DefaultLootFiller();
+  private static final DefaultLootFiller INSTANCE = new DefaultLootFiller();
   private static LootFillerState state = null;
 
   public static DefaultLootFiller getInstance() {
