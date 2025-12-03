@@ -31,8 +31,7 @@ import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
-import noobanidus.mods.lootr.common.api.processor.ILootrPostProcessor;
-import noobanidus.mods.lootr.common.api.processor.ILootrPreProcessor;
+import noobanidus.mods.lootr.common.api.processor.*;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.client.ClientHooks;
 import noobanidus.mods.lootr.common.config.Replacements;
@@ -392,13 +391,23 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  public List<ILootrPreProcessor> getPreProcessors() {
-    return LootrServiceRegistry.getPreProcessors();
+  public List<ILootrBlockEntityProcessor.Pre> getBlockEntityPreProcessors() {
+    return LootrServiceRegistry.getBlockEntityPreProcessors();
   }
 
   @Override
-  public List<ILootrPostProcessor> getPostProcessors() {
-    return LootrServiceRegistry.getPostProcessors();
+  public List<ILootrBlockEntityProcessor.Post> getBlockEntityPostProcessors() {
+    return LootrServiceRegistry.getBlockEntityPostProcessors();
+  }
+
+  @Override
+  public List<ILootrEntityProcessor.Pre> getEntityPreProcessors() {
+    return LootrServiceRegistry.getEntityPreProcessors();
+  }
+
+  @Override
+  public List<ILootrEntityProcessor.Post> getEntityPostProcessors() {
+    return LootrServiceRegistry.getEntityPostProcessors();
   }
 
   @Nullable

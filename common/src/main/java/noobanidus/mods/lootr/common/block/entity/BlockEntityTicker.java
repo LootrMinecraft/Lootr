@@ -21,6 +21,7 @@ import noobanidus.mods.lootr.common.api.DataToCopy;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
+import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.chunk.LoadedChunks;
 import noobanidus.mods.lootr.common.mixins.AccessorMixinBrushableBlockEntity;
@@ -84,14 +85,15 @@ public final class BlockEntityTicker {
   }
 
   private static boolean isValidEntity(BlockEntity entity) {
-
-    if (!(entity instanceof RandomizableContainerBlockEntity validEntity)) {
+    if (LootrAPI.resolveBlockEntity(entity) instanceof ILootrBlockEntity) {
       return false;
     }
-    if (LootrAPI.resolveBlockEntity(validEntity) instanceof ILootrBlockEntity) {
+    ILootrDataAdapter<BlockEntity> adapter = LootrAPI.findAdapter(entity);
+    if (adapter == null) {
       return false;
     }
-    return validEntity.getLootTable() != null && !LootrAPI.isLootTableBlacklisted(validEntity.getLootTable());
+    ResourceKey<LootTable> lootTable = adapter.getLootTable(entity);
+    return lootTable != null && !LootrAPI.isLootTableBlacklisted(lootTable);
   }
 
   public static void onServerTick(MinecraftServer server) {
@@ -156,40 +158,23 @@ public final class BlockEntityTicker {
     return true;
   }
 
-  private static void wipeLootTable (BlockEntity blockEntity) {
-    if (blockEntity instanceof RandomizableContainerBlockEntity rbe) {
-      rbe.setLootTable(null);
-    }
-  }
-
-  private static void setLootTable (BlockEntity blockEntity, ResourceKey<LootTable> table, long seed) {
-    if (blockEntity instanceof RandomizableContainerBlockEntity rbe) {
-      rbe.setLootTable(table, seed);
-    } else if (blockEntity instanceof BrushableBlockEntity bbe) {
-      bbe.setLootTable(table, seed);
-    }
-  }
-
   private static void replaceEntitiesInChunk(ServerLevel level, Entry entry) {
     for (BlockPos entityPos : entry.entityPositions()) {
       if (!checkStructureValidity(level, entry.chunkPos(), entityPos)) {
         continue;
       }
       BlockEntity blockEntity = level.getBlockEntity(entityPos);
-      ResourceKey<LootTable> table;
-      long seed;
       if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity) {
         continue;
       }
-      if (blockEntity instanceof RandomizableContainerBlockEntity rbe) {
-        table = rbe.getLootTable();
-        seed = rbe.getLootTableSeed();
-      } else if (blockEntity instanceof BrushableBlockEntity bbe) {
-        table = ((AccessorMixinBrushableBlockEntity)bbe).lootr$getLootTable();
-        seed = ((AccessorMixinBrushableBlockEntity)bbe).lootr$getLootTableSeed();
-      } else {
+
+      ILootrDataAdapter<BlockEntity> adapter = LootrAPI.findAdapter(blockEntity);
+      // I'm not sure how we could've reached this stage.
+      if (adapter == null) {
         continue;
       }
+      ResourceKey<LootTable> table = adapter.getLootTable(blockEntity);
+      long seed = adapter.getLootSeed(blockEntity);
       if (table == null) {
         LootrAPI.LOG.warn("Potential block entity has no loot table in {} ({})", level.dimension(), entityPos);
         continue;
@@ -203,21 +188,21 @@ public final class BlockEntityTicker {
         continue;
       }
 
-      replaceEntity(level, entityPos, blockEntity, replacement, table, seed);
+      replaceEntity(level, entityPos, adapter, blockEntity, replacement, table, seed);
     }
   }
 
-  private static void replaceEntity(ServerLevel level, BlockPos entityPos, BlockEntity be, BlockState replacement, ResourceKey<LootTable> table, long seed) {
+  private static void replaceEntity(ServerLevel level, BlockPos entityPos, ILootrDataAdapter<BlockEntity> adapter, BlockEntity be, BlockState replacement, ResourceKey<LootTable> table, long seed) {
     LootrAPI.preProcess(level, entityPos, be, replacement, table, seed);
     // Save specific data. Currently, this includes the LockCode (all platforms), along with NeoForge's getPersistentData.
     DataToCopy data = PlatformAPI.copySpecificData(be);
     // IMPORTANT: Clear loot table to prevent loot drop when container is destroyed
-    wipeLootTable(be);
+    adapter.setLootTable(be, null, 0);
     level.setBlock(entityPos, replacement, Block.UPDATE_CLIENTS);
     BlockEntity newBlockEntity = level.getBlockEntity(entityPos);
     PlatformAPI.restoreSpecificData(data, newBlockEntity);
     if (LootrAPI.resolveBlockEntity(newBlockEntity) instanceof ILootrBlockEntity ibe) {
-      setLootTable(ibe.asBlockEntity(), table, seed);
+      adapter.setLootTable(ibe.asBlockEntity(), table, seed);
       LootrAPI.postProcess(level, entityPos, ibe.asBlockEntity(), replacement, table, seed);
     } else {
       LootrAPI.LOG.error("replacement {} is not an ILootrBlockEntity {} at {}", replacement, level.dimension(), entityPos);

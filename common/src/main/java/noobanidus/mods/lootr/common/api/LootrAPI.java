@@ -31,8 +31,7 @@ import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
-import noobanidus.mods.lootr.common.api.processor.ILootrPostProcessor;
-import noobanidus.mods.lootr.common.api.processor.ILootrPreProcessor;
+import noobanidus.mods.lootr.common.api.processor.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
@@ -440,12 +439,20 @@ public class LootrAPI {
     return INSTANCE.getFilters();
   }
 
-  public static List<ILootrPreProcessor> getPreProcessors() {
-    return INSTANCE.getPreProcessors();
+  public static List<ILootrBlockEntityProcessor.Pre> getBlockEntityPreProcessors() {
+    return INSTANCE.getBlockEntityPreProcessors();
   }
 
-  public static List<ILootrPostProcessor> getPostProcessors() {
-    return INSTANCE.getPostProcessors();
+  public static List<ILootrBlockEntityProcessor.Post> getBlockEntityPostProcessors() {
+    return INSTANCE.getBlockEntityPostProcessors();
+  }
+
+  public static List<ILootrEntityProcessor.Pre> getEntityPreProcessors() {
+    return INSTANCE.getEntityPreProcessors();
+  }
+
+  public static List<ILootrEntityProcessor.Post> getEntityPostProcessors() {
+    return INSTANCE.getEntityPostProcessors();
   }
 
   public static boolean shouldBypassSpawnProtection() {
@@ -457,13 +464,13 @@ public class LootrAPI {
   }
 
   public static void postProcess(ServerLevel level, BlockPos position, BlockEntity newBlockEntity, BlockState newState, ResourceKey<LootTable> lootTable, long lootTableSeed) {
-    for (ILootrPostProcessor processor : getPostProcessors()) {
+    for (ILootrBlockEntityProcessor.Post processor : getBlockEntityPostProcessors()) {
       processor.process(level, position, newBlockEntity, newState, lootTable, lootTableSeed);
     }
   }
 
   public static void preProcess(ServerLevel level, BlockPos position, BlockEntity oldBlockEntity, BlockState newState, ResourceKey<LootTable> lootTable, long lootTableSeed) {
-    for (ILootrPreProcessor processor : getPreProcessors()) {
+    for (ILootrBlockEntityProcessor.Pre processor : getBlockEntityPreProcessors()) {
       processor.process(level, position, oldBlockEntity, newState, lootTable, lootTableSeed);
     }
   }

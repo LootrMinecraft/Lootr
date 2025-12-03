@@ -27,8 +27,7 @@ import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
-import noobanidus.mods.lootr.common.api.processor.ILootrPostProcessor;
-import noobanidus.mods.lootr.common.api.processor.ILootrPreProcessor;
+import noobanidus.mods.lootr.common.api.processor.*;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -262,8 +261,10 @@ public interface ILootrAPI {
   void refreshSections ();
 
   List<ILootrFilter> getFilters ();
-  List<ILootrPreProcessor> getPreProcessors ();
-  List<ILootrPostProcessor> getPostProcessors ();
+  List<ILootrBlockEntityProcessor.Pre> getBlockEntityPreProcessors ();
+  List<ILootrBlockEntityProcessor.Post> getBlockEntityPostProcessors ();
+  List<ILootrEntityProcessor.Pre> getEntityPreProcessors ();
+  List<ILootrEntityProcessor.Post> getEntityPostProcessors ();
   @Nullable
   <T> ILootrDataAdapter<T> findAdapter (T type);
 

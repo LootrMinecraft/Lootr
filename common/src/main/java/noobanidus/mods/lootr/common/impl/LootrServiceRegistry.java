@@ -15,8 +15,7 @@ import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilterProvider;
-import noobanidus.mods.lootr.common.api.processor.ILootrPostProcessor;
-import noobanidus.mods.lootr.common.api.processor.ILootrPreProcessor;
+import noobanidus.mods.lootr.common.api.processor.*;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
@@ -31,8 +30,10 @@ public class LootrServiceRegistry {
   private final Map<BlockEntityType<?>, Function<?, ?>> blockEntityConverterMap = new Object2ObjectOpenHashMap<>();
   private final Map<EntityType<?>, Function<?, ?>> entityConverterMap = new Object2ObjectOpenHashMap<>();
   private final List<ILootrFilter> filters = new ObjectArrayList<>();
-  private final List<ILootrPostProcessor> postProcessors = new ObjectArrayList<>();
-  private final List<ILootrPreProcessor> preProcessors = new ObjectArrayList<>();
+  private final List<ILootrBlockEntityProcessor.Post> blockEntityPostProcessors = new ObjectArrayList<>();
+  private final List<ILootrBlockEntityProcessor.Pre> blockEntityPreProcessors = new ObjectArrayList<>();
+  private final List<ILootrEntityProcessor.Pre> entityPreProcessors = new ObjectArrayList<>();
+  private final List<ILootrEntityProcessor.Post> entityPostProcessors = new ObjectArrayList<>();
   private final AdapterMap adapterMap = new AdapterMap();
 
   @SuppressWarnings("rawtypes")
@@ -55,14 +56,24 @@ public class LootrServiceRegistry {
     }
     filters.sort(Comparator.comparingInt(ILootrFilter::getPriority));
 
-    ServiceLoader<ILootrPostProcessor> loader4 = ServiceLoader.load(ILootrPostProcessor.class, classLoader);
-    for (ILootrPostProcessor processor : loader4) {
-      postProcessors.add(processor);
+    ServiceLoader<ILootrBlockEntityProcessor.Post> loader4 = ServiceLoader.load(ILootrBlockEntityProcessor.Post.class, classLoader);
+    for (ILootrBlockEntityProcessor.Post processor : loader4) {
+      blockEntityPostProcessors.add(processor);
     }
 
-    ServiceLoader<ILootrPreProcessor> loader5 = ServiceLoader.load(ILootrPreProcessor.class, classLoader);
-    for (ILootrPreProcessor processor : loader5) {
-      preProcessors.add(processor);
+    ServiceLoader<ILootrBlockEntityProcessor.Pre> loader7 = ServiceLoader.load(ILootrBlockEntityProcessor.Pre.class, classLoader);
+    for (ILootrBlockEntityProcessor.Pre processor : loader7) {
+      blockEntityPreProcessors.add(processor);
+    }
+
+    ServiceLoader<ILootrEntityProcessor.Pre> loader5 = ServiceLoader.load(ILootrEntityProcessor.Pre.class, classLoader);
+    for (ILootrEntityProcessor.Pre processor : loader5) {
+      entityPreProcessors.add(processor);
+    }
+
+    ServiceLoader<ILootrEntityProcessor.Post> loader8 = ServiceLoader.load(ILootrEntityProcessor.Post.class, classLoader);
+    for (ILootrEntityProcessor.Post processor : loader8) {
+      entityPostProcessors.add(processor);
     }
 
     ServiceLoader<ILootrDataAdapter> loader6 = ServiceLoader.load(ILootrDataAdapter.class, classLoader);
@@ -118,13 +129,23 @@ public class LootrServiceRegistry {
     return getInstance().filters;
   }
 
-  static List<ILootrPreProcessor> getPreProcessors() {
-    return getInstance().preProcessors;
+  static List<ILootrEntityProcessor.Pre> getEntityPreProcessors() {
+    return getInstance().entityPreProcessors;
   }
 
-  static List<ILootrPostProcessor> getPostProcessors() {
-    return getInstance().postProcessors;
+  static List<ILootrBlockEntityProcessor.Pre> getBlockEntityPreProcessors () {
+    return getInstance().blockEntityPreProcessors;
   }
+
+  static List<ILootrEntityProcessor.Post> getEntityPostProcessors () {
+    return getInstance().entityPostProcessors;
+  }
+
+  static List<ILootrBlockEntityProcessor.Post> getBlockEntityPostProcessors () {
+    return getInstance().blockEntityPostProcessors;
+  }
+
+
 
   @Nullable
   static <T> ILootrDataAdapter<T> findAdapter (T type) {
