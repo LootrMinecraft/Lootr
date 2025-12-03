@@ -19,10 +19,10 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.storage.loot.LootTable;
+import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.api.client.ClientTextureType;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.ILootrSavedData;
@@ -54,7 +54,7 @@ public class LootrAPI {
   public static ILootrAPI INSTANCE = null;
   public static boolean shouldDiscardIdAndOpeners;
 
-  public static boolean isReady () {
+  public static boolean isReady() {
     return INSTANCE != null;
   }
 
@@ -130,7 +130,7 @@ public class LootrAPI {
     return INSTANCE.isOldTextures();
   }
 
-  public static boolean isNewTextures () {
+  public static boolean isNewTextures() {
     return INSTANCE.isNewTextures();
   }
 
@@ -307,7 +307,7 @@ public class LootrAPI {
     return INSTANCE.isFakePlayerBreakEnabled();
   }
 
-  public static boolean shouldDropPlayerLoot () {
+  public static boolean shouldDropPlayerLoot() {
     return INSTANCE.shouldDropPlayerLoot();
   }
 
@@ -416,55 +416,59 @@ public class LootrAPI {
   }
 
   @Nullable
-  public static <T extends BlockEntity> ILootrBlockEntity resolveBlockEntity (T blockEntity) {
+  public static <T extends BlockEntity> ILootrBlockEntity resolveBlockEntity(T blockEntity) {
     return INSTANCE.resolveBlockEntity(blockEntity);
   }
 
-  public static <T extends Entity> ILootrCart resolveEntity (T entity) {
+  public static <T extends Entity> ILootrCart resolveEntity(T entity) {
     return INSTANCE.resolveEntity(entity);
   }
 
-  public static boolean isTaggedStructurePresent (ServerLevel level, ChunkPos chunkPos, TagKey<Structure> tag, BlockPos pos) {
+  public static boolean isTaggedStructurePresent(ServerLevel level, ChunkPos chunkPos, TagKey<Structure> tag, BlockPos pos) {
     return INSTANCE.isTaggedStructurePresent(level, chunkPos, tag, pos);
   }
 
-  public static void playerDestroyed (Level level, Player player, BlockPos blockPos, @Nullable BlockEntity blockEntity) {
+  public static void playerDestroyed(Level level, Player player, BlockPos blockPos, @Nullable BlockEntity blockEntity) {
     INSTANCE.playerDestroyed(level, player, blockPos, blockEntity);
   }
 
-  public static void refreshSections () {
+  public static void refreshSections() {
     INSTANCE.refreshSections();
   }
 
-  public static List<ILootrFilter> getFilters () {
+  public static List<ILootrFilter> getFilters() {
     return INSTANCE.getFilters();
   }
 
-  public static List<ILootrPreProcessor> getPreProcessors () {
+  public static List<ILootrPreProcessor> getPreProcessors() {
     return INSTANCE.getPreProcessors();
   }
 
-  public static List<ILootrPostProcessor> getPostProcessors () {
+  public static List<ILootrPostProcessor> getPostProcessors() {
     return INSTANCE.getPostProcessors();
   }
 
-  public static boolean shouldBypassSpawnProtection () {
+  public static boolean shouldBypassSpawnProtection() {
     return INSTANCE.shouldBypassSpawnProtection();
   }
 
-  public static boolean shouldReplaceWhenDecayed () {
+  public static boolean shouldReplaceWhenDecayed() {
     return INSTANCE.shouldReplaceWhenDecayed();
   }
 
-  public static void postProcess (ServerLevel level, BlockPos position, BlockEntity newBlockEntity, BlockState newState, ResourceKey<LootTable> lootTable, long lootTableSeed) {
+  public static void postProcess(ServerLevel level, BlockPos position, BlockEntity newBlockEntity, BlockState newState, ResourceKey<LootTable> lootTable, long lootTableSeed) {
     for (ILootrPostProcessor processor : getPostProcessors()) {
       processor.process(level, position, newBlockEntity, newState, lootTable, lootTableSeed);
     }
   }
 
-  public static void preProcess (ServerLevel level, BlockPos position, BlockEntity oldBlockEntity, BlockState newState, ResourceKey<LootTable> lootTable, long lootTableSeed) {
+  public static void preProcess(ServerLevel level, BlockPos position, BlockEntity oldBlockEntity, BlockState newState, ResourceKey<LootTable> lootTable, long lootTableSeed) {
     for (ILootrPreProcessor processor : getPreProcessors()) {
       processor.process(level, position, oldBlockEntity, newState, lootTable, lootTableSeed);
     }
+  }
+
+  public static <T> ILootrDataAdapter<T> findAdapter(T type) {
+    return INSTANCE.findAdapter(type);
   }
 }

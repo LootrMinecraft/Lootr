@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.storage.loot.LootTable;
+import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.api.client.ClientTextureType;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.ILootrSavedData;
@@ -263,6 +264,7 @@ public interface ILootrAPI {
   List<ILootrFilter> getFilters ();
   List<ILootrPreProcessor> getPreProcessors ();
   List<ILootrPostProcessor> getPostProcessors ();
+  <T> ILootrDataAdapter<T> findAdapter (T type);
 
   boolean shouldBypassSpawnProtection ();
 

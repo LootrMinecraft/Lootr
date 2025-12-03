@@ -1,9 +1,9 @@
-package noobanidus.mods.lootr.common.impl;
+package noobanidus.mods.lootr.common.impl.adapter;
 
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
-import noobanidus.mods.lootr.common.api.ILootrDataAdapter;
+import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 
 public class RandomizableContainerBlockEntityAdapter implements ILootrDataAdapter<RandomizableContainerBlockEntity> {
 

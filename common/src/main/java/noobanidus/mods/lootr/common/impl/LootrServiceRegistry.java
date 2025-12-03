@@ -2,19 +2,15 @@ package noobanidus.mods.lootr.common.impl;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.ILootrAPI;
 import noobanidus.mods.lootr.common.api.ILootrBlockEntityConverter;
 import noobanidus.mods.lootr.common.api.ILootrEntityConverter;
+import noobanidus.mods.lootr.common.api.adapter.AdapterMap;
+import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
@@ -37,6 +33,7 @@ public class LootrServiceRegistry {
   private final List<ILootrFilter> filters = new ObjectArrayList<>();
   private final List<ILootrPostProcessor> postProcessors = new ObjectArrayList<>();
   private final List<ILootrPreProcessor> preProcessors = new ObjectArrayList<>();
+  private final AdapterMap adapterMap = new AdapterMap();
 
   @SuppressWarnings("rawtypes")
   public LootrServiceRegistry() {
@@ -66,6 +63,11 @@ public class LootrServiceRegistry {
     ServiceLoader<ILootrPreProcessor> loader5 = ServiceLoader.load(ILootrPreProcessor.class, classLoader);
     for (ILootrPreProcessor processor : loader5) {
       preProcessors.add(processor);
+    }
+
+    ServiceLoader<ILootrDataAdapter> loader6 = ServiceLoader.load(ILootrDataAdapter.class, classLoader);
+    for (ILootrDataAdapter<?> adapter : loader6) {
+      adapterMap.register(adapter);
     }
   }
 
@@ -122,5 +124,9 @@ public class LootrServiceRegistry {
 
   static List<ILootrPostProcessor> getPostProcessors() {
     return getInstance().postProcessors;
+  }
+
+  static <T> ILootrDataAdapter<T> findAdapter (T type) {
+    return getInstance().adapterMap.findAdapter(type);
   }
 }
