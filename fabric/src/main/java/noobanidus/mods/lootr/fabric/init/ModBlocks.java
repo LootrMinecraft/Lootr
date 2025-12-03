@@ -30,17 +30,12 @@ public class ModBlocks {
   };
   public static final LootrShulkerBlock SHULKER = new LootrShulkerBlock(BlockBehaviour.Properties.of().strength(2.5f).dynamicShape().noOcclusion().isSuffocating(posPredicate).isViewBlocking(posPredicate));
 
-  public static final LootrBrushableBlock SUSPICIOUS_SAND = new LootrBrushableBlock(((BrushableBlock)Blocks.SUSPICIOUS_SAND).getBrushSound(), ((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushCompletedSound(), BlockBehaviour.Properties.ofFullCopy(Blocks.SUSPICIOUS_SAND));
-  public static final LootrBrushableBlock SUSPICIOUS_GRAVEL = new LootrBrushableBlock(((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushSound(), ((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushCompletedSound(), BlockBehaviour.Properties.ofFullCopy(Blocks.SUSPICIOUS_GRAVEL));
-
   public static void registerBlocks() {
     Registry.register(BuiltInRegistries.BLOCK, LootrAPI.rl("lootr_chest"), CHEST);
     Registry.register(BuiltInRegistries.BLOCK, LootrAPI.rl("lootr_barrel"), BARREL);
     Registry.register(BuiltInRegistries.BLOCK, LootrAPI.rl("lootr_trapped_chest"), TRAPPED_CHEST);
     Registry.register(BuiltInRegistries.BLOCK, LootrAPI.rl("lootr_shulker"), SHULKER);
     Registry.register(BuiltInRegistries.BLOCK, LootrAPI.rl("lootr_inventory"), INVENTORY);
-    Registry.register(BuiltInRegistries.BLOCK, LootrAPI.rl("suspicious_sand"), SUSPICIOUS_SAND);
-    Registry.register(BuiltInRegistries.BLOCK, LootrAPI.rl("suspicious_gravel"), SUSPICIOUS_GRAVEL);
     Registry.register(BuiltInRegistries.BLOCK, LootrAPI.rl("trophy"), TROPHY);
   }
 }

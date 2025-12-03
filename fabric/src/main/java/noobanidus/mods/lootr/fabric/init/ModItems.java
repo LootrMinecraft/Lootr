@@ -14,9 +14,6 @@ public class ModItems {
   public static final BlockItem SHULKER = new BlockItem(ModBlocks.SHULKER, new Item.Properties());
   public static final BlockItem INVENTORY = new BlockItem(ModBlocks.INVENTORY, new Item.Properties());
 
-  public static final BlockItem SUSPICIOUS_SAND = new BlockItem(ModBlocks.SUSPICIOUS_SAND, new Item.Properties());
-  public static final BlockItem SUSPICIOUS_GRAVEL = new BlockItem(ModBlocks.SUSPICIOUS_GRAVEL, new Item.Properties());
-
   public static final BlockItem TROPHY = new BlockItem(ModBlocks.TROPHY, new Item.Properties().rarity(Rarity.EPIC));
 
   public static void registerItems() {
@@ -26,7 +23,5 @@ public class ModItems {
     Registry.register(BuiltInRegistries.ITEM, LootrAPI.rl("lootr_shulker"), SHULKER);
     Registry.register(BuiltInRegistries.ITEM, LootrAPI.rl("lootr_inventory"), INVENTORY);
     Registry.register(BuiltInRegistries.ITEM, LootrAPI.rl("trophy"), TROPHY);
-    Registry.register(BuiltInRegistries.ITEM, LootrAPI.rl("suspicious_sand"), SUSPICIOUS_SAND);
-    Registry.register(BuiltInRegistries.ITEM, LootrAPI.rl("suspicious_gravel"), SUSPICIOUS_GRAVEL);
   }
 }
