@@ -1,20 +1,23 @@
 package noobanidus.mods.lootr.common.api.adapter;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class AdapterMap {
-  private final Map<Class<?>, ILootrDataAdapter<?>> byClass = new Object2ObjectOpenHashMap<>();
+  private final Map<Class<?>, ILootrDataAdapter<?>> byClass = new ConcurrentHashMap<>();
   private final List<ILootrDataAdapter<?>> allAdapters = new ArrayList<>();
-  private final Set<Class<?>> noAdapter = new HashSet<>();
+  private final Set<Class<?>> noAdapter = ConcurrentHashMap.newKeySet();
 
   public AdapterMap() {
   }
 
-  public void register (ILootrDataAdapter<?> adapter) {
-    Class<?> clazz = adapter.getAssignableClass();
+  public <T> void register(ILootrDataAdapter<T> adapter) {
+    Class<T> clazz = adapter.getAssignableClass();
     for (ILootrDataAdapter<?> otherAdapter : allAdapters) {
       Class<?> otherClazz = otherAdapter.getAssignableClass();
       if (clazz.isAssignableFrom(otherClazz) || otherClazz.isAssignableFrom(clazz)) {
@@ -22,24 +25,28 @@ public class AdapterMap {
       }
     }
     allAdapters.add(adapter);
+    byClass.clear();
+    noAdapter.clear();
   }
 
   @Nullable
-  public <T> ILootrDataAdapter<T> findAdapter (T type) {
+  public <T> ILootrDataAdapter<T> findAdapter(T type) {
+    if (type == null) {
+      return null;
+
+    }
     Class<?> clazz = type.getClass();
     if (noAdapter.contains(clazz)) {
       return null;
     }
-    ILootrDataAdapter<?> potentialAdapter = byClass.get(clazz);
-    if (potentialAdapter == null) {
+    ILootrDataAdapter<?> potentialAdapter = byClass.computeIfAbsent(clazz, clazz2 -> {
       for (ILootrDataAdapter<?> adapter : allAdapters) {
-        if (adapter.getAssignableClass().isInstance(type)) {
-          byClass.put(clazz, adapter);
-          potentialAdapter = adapter;
-          break;
+        if (adapter.getAssignableClass().isAssignableFrom(clazz2)) {
+          return adapter;
         }
       }
-    }
+      return null;
+    });
     if (potentialAdapter == null) {
       noAdapter.add(clazz);
       return null;
