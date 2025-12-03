@@ -7,7 +7,10 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
-import noobanidus.mods.lootr.common.block.entity.*;
+import noobanidus.mods.lootr.common.block.entity.LootrChestBlockEntity;
+import noobanidus.mods.lootr.common.block.entity.LootrInventoryBlockEntity;
+import noobanidus.mods.lootr.common.block.entity.LootrShulkerBlockEntity;
+import noobanidus.mods.lootr.common.block.entity.LootrTrappedChestBlockEntity;
 import noobanidus.mods.lootr.neoforge.block.entity.LootrNeoForgeBarrelBlockEntity;
 
 @SuppressWarnings("DataFlowIssue")

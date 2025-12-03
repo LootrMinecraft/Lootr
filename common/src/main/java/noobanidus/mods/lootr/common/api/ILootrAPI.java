@@ -27,10 +27,10 @@ import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
-import noobanidus.mods.lootr.common.api.processor.*;
+import noobanidus.mods.lootr.common.api.processor.ILootrBlockEntityProcessor;
+import noobanidus.mods.lootr.common.api.processor.ILootrEntityProcessor;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;

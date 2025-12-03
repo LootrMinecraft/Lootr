@@ -104,7 +104,7 @@ public class LootrRegistryImpl implements ILootrRegistry {
   public EntityType<?> getMinecart() {
     return ModEntities.LOOTR_MINECART_ENTITY;
   }
-  
+
   @Override
   public IAdvancementTrigger getAdvancementTrigger() {
     return ModAdvancements.ADVANCEMENT;
