@@ -1,4 +1,3 @@
 noobanidus.mods.lootr.common.impl.adapter.BrushableBlockEntityAdapter
 noobanidus.mods.lootr.common.impl.adapter.MinecartChestAdapter
 noobanidus.mods.lootr.common.impl.adapter.RandomizableContainerBlockEntityAdapter
-noobanidus.mods.lootr.common.impl.adapter.LootrChestMinecartEntityAdapter

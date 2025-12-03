@@ -9,6 +9,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
+import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
 
 public interface IPlatformAPI {
   void performCartOpen(ILootrCart cart, ServerPlayer player);
@@ -40,14 +41,14 @@ public interface IPlatformAPI {
     }
   }
 
-  default void copyEntityData (ILootrDataAdapter<Entity> adapter, Entity entity1, Entity entity2) {
+  default void copyEntityData (ILootrDataAdapter<Entity> adapter, Entity entity1, LootrChestMinecartEntity entity2) {
     entity2.setXRot(entity1.getXRot());
     entity2.setYRot(entity1.getYRot());
     entity2.setYHeadRot(entity1.getYHeadRot());
     ResourceKey<LootTable> lootTable = adapter.getLootTable(entity1);
     long seed = adapter.getLootSeed(entity1);
     if (lootTable != null) {
-      adapter.setLootTable(entity2, lootTable, seed);
+      entity2.setLootTable(lootTable, seed);
     }
   }
 
