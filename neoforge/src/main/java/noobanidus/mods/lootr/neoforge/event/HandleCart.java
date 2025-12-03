@@ -1,16 +1,19 @@
 package noobanidus.mods.lootr.neoforge.event;
 
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.Unit;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.vehicle.AbstractMinecartContainer;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.LogicalSide;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.util.LogicalSidedProvider;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
-import noobanidus.mods.lootr.common.entity.EntityTicker;
+import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
 
 @EventBusSubscriber(modid = LootrAPI.MODID)
@@ -24,20 +27,23 @@ public class HandleCart {
       return;
     }
     Entity entity = event.getEntity();
-    if (entity.getType().is(LootrTags.Entity.CONVERT_ENTITIES) && entity instanceof AbstractMinecartContainer cart) {
-      if (cart.getLootTable() == null || LootrAPI.isLootTableBlacklisted(cart.getLootTable())) {
+    if (entity.getType().is(LootrTags.Entity.CONVERT_ENTITIES)) {
+      ILootrDataAdapter<Entity> adapter = LootrAPI.findAdapter(entity);
+      if (adapter == null) {
+        LootrAPI.LOG.error("No adapter found for entity '{}' even though it is tagged for conversion.", entity);
         return;
       }
-      LootrChestMinecartEntity lootrCart = new LootrChestMinecartEntity(cart.level(), cart.getX(), cart.getY(), cart.getZ());
-      PlatformAPI.copyEntityData(cart, lootrCart);
-      event.setCanceled(true);
-      if (!level.getServer().isSameThread()) {
-        level.getChunkSource().addRegionTicket(LootrAPI.LOOTR_ENTITY_TICK_TICKET, lootrCart.chunkPosition(), 1, Unit.INSTANCE);
-        LootrAPI.LOG.error("Minecart with Loot table created off main thread. Falling back on EntityTicker.");
-        EntityTicker.addEntity(lootrCart);
-      } else {
-        level.addFreshEntity(lootrCart);
+      ResourceKey<LootTable> lootTable = adapter.getLootTable(entity);
+      if (lootTable == null || LootrAPI.isLootTableBlacklisted(lootTable)) {
+        return;
       }
+
+      LootrChestMinecartEntity lootrCart = new LootrChestMinecartEntity(entity.level(), entity.getX(), entity.getY(), entity.getZ());
+      PlatformAPI.copyEntityData(adapter, entity, lootrCart);
+      event.setCanceled(true);
+
+      var executor = LogicalSidedProvider.WORKQUEUE.get(LogicalSide.SERVER);
+      executor.tell(new TickTask(0, () -> event.getLevel().addFreshEntity(lootrCart)));
     }
   }
 }

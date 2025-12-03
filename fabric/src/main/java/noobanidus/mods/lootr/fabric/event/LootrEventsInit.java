@@ -16,7 +16,6 @@ import noobanidus.mods.lootr.common.block.entity.BlockEntityTicker;
 import noobanidus.mods.lootr.common.chunk.LoadedChunks;
 import noobanidus.mods.lootr.common.command.CommandLootr;
 import noobanidus.mods.lootr.common.data.DataStorage;
-import noobanidus.mods.lootr.common.entity.EntityTicker;
 
 public class LootrEventsInit {
   public static MinecraftServer serverInstance;
@@ -36,7 +35,6 @@ public class LootrEventsInit {
     ServerTickEvents.END_SERVER_TICK.register(server -> {
       DataStorage.doTick();
       BlockEntityTicker.onServerTick(server);
-      EntityTicker.onServerTick();
     });
 
     ServerChunkEvents.CHUNK_LOAD.register(LoadedChunks::onChunkLoad);

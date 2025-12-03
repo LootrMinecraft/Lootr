@@ -1,8 +1,10 @@
 package noobanidus.mods.lootr.common.api;
 
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.vehicle.AbstractMinecartContainer;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 
@@ -51,6 +53,10 @@ public class PlatformAPI {
 
   public static void copyEntityData (AbstractMinecartContainer entity1, AbstractMinecartContainer entity2) {
     INSTANCE.copyEntityData(entity1, entity2);
+  }
+
+  public static void copyEntityData (ILootrDataAdapter<Entity> adapter, Entity entity1, Entity entity2) {
+    INSTANCE.copyEntityData(adapter, entity1, entity2);
   }
 
   public static void refreshPlayerSection (ServerPlayer player) {
