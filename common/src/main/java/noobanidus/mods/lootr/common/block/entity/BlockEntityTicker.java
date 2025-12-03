@@ -84,6 +84,7 @@ public final class BlockEntityTicker {
   }
 
   private static boolean isValidEntity(BlockEntity entity) {
+
     if (!(entity instanceof RandomizableContainerBlockEntity validEntity)) {
       return false;
     }

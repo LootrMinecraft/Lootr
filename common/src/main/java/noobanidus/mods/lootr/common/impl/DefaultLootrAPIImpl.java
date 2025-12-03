@@ -401,6 +401,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
     return LootrServiceRegistry.getPostProcessors();
   }
 
+  @Nullable
   @Override
   public <T> ILootrDataAdapter<T> findAdapter(T type) {
     return LootrServiceRegistry.findAdapter(type);

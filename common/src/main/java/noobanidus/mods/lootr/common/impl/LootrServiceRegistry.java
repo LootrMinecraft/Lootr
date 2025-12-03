@@ -126,6 +126,7 @@ public class LootrServiceRegistry {
     return getInstance().postProcessors;
   }
 
+  @Nullable
   static <T> ILootrDataAdapter<T> findAdapter (T type) {
     return getInstance().adapterMap.findAdapter(type);
   }

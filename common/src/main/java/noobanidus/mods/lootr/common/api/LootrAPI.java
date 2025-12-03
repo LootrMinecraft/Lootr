@@ -468,6 +468,7 @@ public class LootrAPI {
     }
   }
 
+  @Nullable
   public static <T> ILootrDataAdapter<T> findAdapter(T type) {
     return INSTANCE.findAdapter(type);
   }

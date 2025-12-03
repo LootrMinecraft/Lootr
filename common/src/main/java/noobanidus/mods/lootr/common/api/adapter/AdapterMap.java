@@ -8,6 +8,7 @@ import java.util.*;
 public class AdapterMap {
   private final Map<Class<?>, ILootrDataAdapter<?>> byClass = new Object2ObjectOpenHashMap<>();
   private final List<ILootrDataAdapter<?>> allAdapters = new ArrayList<>();
+  private final Set<Class<?>> noAdapter = new HashSet<>();
 
   public AdapterMap() {
   }
@@ -23,8 +24,12 @@ public class AdapterMap {
     allAdapters.add(adapter);
   }
 
+  @Nullable
   public <T> ILootrDataAdapter<T> findAdapter (T type) {
     Class<?> clazz = type.getClass();
+    if (noAdapter.contains(clazz)) {
+      return null;
+    }
     ILootrDataAdapter<?> potentialAdapter = byClass.get(clazz);
     if (potentialAdapter == null) {
       for (ILootrDataAdapter<?> adapter : allAdapters) {
@@ -36,7 +41,8 @@ public class AdapterMap {
       }
     }
     if (potentialAdapter == null) {
-      throw new IllegalStateException("No potential adapter found for '" + clazz + "'");
+      noAdapter.add(clazz);
+      return null;
     }
     //noinspection unchecked
     return (ILootrDataAdapter<T>) potentialAdapter;
