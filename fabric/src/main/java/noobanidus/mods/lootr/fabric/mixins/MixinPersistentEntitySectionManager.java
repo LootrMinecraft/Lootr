@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.fabric.mixins;
 
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.entity.EntityAccess;
@@ -49,11 +50,7 @@ public class MixinPersistentEntitySectionManager {
 
       cir.setReturnValue(false);
       cir.cancel();
-      if (!level.getServer().isSameThread()) {
-        LootrAPI.LOG.error("Minecart with Loot table was added off-thread!", new Exception());
-      } else {
-        level.addFreshEntity(lootrCart);
-      }
+      level.getServer().tell(new TickTask(0, () -> level.addFreshEntity(lootrCart)));
     }
   }
 }
