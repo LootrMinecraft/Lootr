@@ -37,10 +37,15 @@ public class HandleCart {
       if (lootTable == null || LootrAPI.isLootTableBlacklisted(lootTable)) {
         return;
       }
+      long seed = adapter.getLootSeed(entity);
+
+      LootrAPI.preProcess(level, entity, lootTable, seed);
 
       LootrChestMinecartEntity lootrCart = new LootrChestMinecartEntity(entity.level(), entity.getX(), entity.getY(), entity.getZ());
       PlatformAPI.copyEntityData(adapter, entity, lootrCart);
       event.setCanceled(true);
+
+      LootrAPI.postProcess(level, lootrCart, lootTable, seed);
 
       var executor = LogicalSidedProvider.WORKQUEUE.get(LogicalSide.SERVER);
       executor.tell(new TickTask(0, () -> event.getLevel().addFreshEntity(lootrCart)));

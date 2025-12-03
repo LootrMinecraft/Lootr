@@ -44,9 +44,14 @@ public class MixinPersistentEntitySectionManager {
       if (lootTable == null || LootrAPI.isLootTableBlacklisted(lootTable)) {
         return;
       }
+      long seed = adapter.getLootSeed(entity);
+
+      LootrAPI.preProcess(level, entity, lootTable, seed);
 
       LootrChestMinecartEntity lootrCart = new LootrChestMinecartEntity(entity.level(), entity.getX(), entity.getY(), entity.getZ());
       PlatformAPI.copyEntityData(adapter, entity, lootrCart);
+
+      LootrAPI.postProcess(level, lootrCart, lootTable, seed);
 
       cir.setReturnValue(false);
       cir.cancel();

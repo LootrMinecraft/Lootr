@@ -475,6 +475,20 @@ public class LootrAPI {
     }
   }
 
+  public static void postProcess(ServerLevel level, Entity newBlockEntity, ResourceKey<LootTable> lootTable, long lootTableSeed) {
+    BlockPos pos = newBlockEntity.blockPosition();
+    for (ILootrEntityProcessor.Post processor : getEntityPostProcessors()) {
+      processor.process(level, pos, newBlockEntity, null, lootTable, lootTableSeed);
+    }
+  }
+
+  public static void preProcess(ServerLevel level, Entity newBlockEntity, ResourceKey<LootTable> lootTable, long lootTableSeed) {
+    BlockPos pos = newBlockEntity.blockPosition();
+    for (ILootrEntityProcessor.Pre processor : getEntityPreProcessors()) {
+      processor.process(level, pos, newBlockEntity, null, lootTable, lootTableSeed);
+    }
+  }
+
   @Nullable
   public static <T> ILootrDataAdapter<T> findAdapter(T type) {
     return INSTANCE.findAdapter(type);
