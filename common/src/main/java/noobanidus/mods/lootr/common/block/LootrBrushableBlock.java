@@ -8,10 +8,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.BrushableBlock;
-import net.minecraft.world.level.block.FallingBlock;
-import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -26,8 +23,8 @@ import org.jetbrains.annotations.Nullable;
 public class LootrBrushableBlock extends BrushableBlock {
   public static final IntegerProperty DUSTED = BlockStateProperties.DUSTED;
 
-  public LootrBrushableBlock(Block block, SoundEvent soundEvent, SoundEvent soundEvent2, BlockBehaviour.Properties properties) {
-    super(block, soundEvent, soundEvent2, properties);
+  public LootrBrushableBlock(SoundEvent soundEvent, SoundEvent soundEvent2, BlockBehaviour.Properties properties) {
+    super(Blocks.AIR, soundEvent, soundEvent2, properties);
   }
 
   @Override

@@ -46,6 +46,16 @@ public class LootrRegistryImpl implements ILootrRegistry {
   }
 
   @Override
+  public Block getSuspiciousSand() {
+    return ModBlocks.SUSPICIOUS_SAND;
+  }
+
+  @Override
+  public Block getSuspiciousGravel() {
+    return ModBlocks.SUSPICIOUS_GRAVEL;
+  }
+
+  @Override
   public BlockEntityType<?> getBarrelBlockEntity() {
     return ModBlockEntities.LOOTR_BARREL;
   }
@@ -98,6 +108,16 @@ public class LootrRegistryImpl implements ILootrRegistry {
   @Override
   public Item getShulkerItem() {
     return ModItems.SHULKER;
+  }
+
+  @Override
+  public Item getSuspiciousSandItem() {
+    return ModItems.SUSPICIOUS_SAND;
+  }
+
+  @Override
+  public Item getSuspiciousGravelItem() {
+    return ModItems.SUSPICIOUS_GRAVEL;
   }
 
   @Override
