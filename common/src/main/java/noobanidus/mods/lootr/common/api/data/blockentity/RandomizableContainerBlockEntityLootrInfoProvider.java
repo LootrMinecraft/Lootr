@@ -27,15 +27,12 @@ public record RandomizableContainerBlockEntityLootrInfoProvider(
 
   @Override
   public LootrBlockType getInfoBlockType() {
-    if (blockEntity instanceof BarrelBlockEntity) {
-      return LootrBlockType.BARREL;
-    } else if (blockEntity instanceof TrappedChestBlockEntity) {
-      return LootrBlockType.TRAPPED_CHEST;
-    } else if (blockEntity instanceof ShulkerBoxBlockEntity) {
-      return LootrBlockType.SHULKER;
-    } else {
-      return LootrBlockType.CHEST;
-    }
+    return switch (blockEntity) {
+      case BarrelBlockEntity ignored -> LootrBlockType.BARREL;
+      case TrappedChestBlockEntity ignored -> LootrBlockType.TRAPPED_CHEST;
+      case ShulkerBoxBlockEntity ignored -> LootrBlockType.SHULKER;
+      default -> LootrBlockType.CHEST;
+    };
   }
 
   @Override

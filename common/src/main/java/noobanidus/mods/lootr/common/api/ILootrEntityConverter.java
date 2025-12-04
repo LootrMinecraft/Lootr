@@ -5,6 +5,8 @@ import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 
 import java.util.function.Function;
 
+// TODO: I can technically get away with renaming this from "Converter"
+// as it doesn't actually convert, it just wraps/resolves.
 /**
  * Converts an object (of any type) into an ILootrCart.
  * <br />
