@@ -30,7 +30,7 @@ public class AdapterMap {
   }
 
   @Nullable
-  public <T> ILootrDataAdapter<T> findAdapter(T type) {
+  public <T> ILootrDataAdapter<T> getAdapter(T type) {
     if (type == null) {
       return null;
 

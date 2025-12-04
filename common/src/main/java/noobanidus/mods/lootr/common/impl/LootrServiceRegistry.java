@@ -167,7 +167,7 @@ public class LootrServiceRegistry {
   }
 
   @Nullable
-  static <T> ILootrDataAdapter<T> findAdapter (T type) {
-    return getInstance().adapterMap.findAdapter(type);
+  static <T> ILootrDataAdapter<T> getAdapter(T type) {
+    return getInstance().adapterMap.getAdapter(type);
   }
 }

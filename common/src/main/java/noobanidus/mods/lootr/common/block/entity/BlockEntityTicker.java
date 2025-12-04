@@ -83,7 +83,7 @@ public final class BlockEntityTicker {
     if (LootrAPI.resolveBlockEntity(entity) instanceof ILootrBlockEntity) {
       return false;
     }
-    ILootrDataAdapter<BlockEntity> adapter = LootrAPI.findAdapter(entity);
+    ILootrDataAdapter<BlockEntity> adapter = LootrAPI.getAdapter(entity);
     if (adapter == null) {
       return false;
     }
@@ -163,7 +163,7 @@ public final class BlockEntityTicker {
         continue;
       }
 
-      ILootrDataAdapter<BlockEntity> adapter = LootrAPI.findAdapter(blockEntity);
+      ILootrDataAdapter<BlockEntity> adapter = LootrAPI.getAdapter(blockEntity);
       // I'm not sure how we could've reached this stage.
       if (adapter == null) {
         continue;

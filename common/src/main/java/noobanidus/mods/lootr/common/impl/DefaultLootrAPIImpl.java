@@ -421,7 +421,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
 
   @Nullable
   @Override
-  public <T> ILootrDataAdapter<T> findAdapter(T type) {
-    return LootrServiceRegistry.findAdapter(type);
+  public <T> ILootrDataAdapter<T> getAdapter(T type) {
+    return LootrServiceRegistry.getAdapter(type);
   }
 }

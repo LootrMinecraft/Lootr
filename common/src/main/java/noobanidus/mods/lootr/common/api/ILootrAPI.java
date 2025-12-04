@@ -268,7 +268,7 @@ public interface ILootrAPI {
   List<ILootrEntityProcessor.Pre> getEntityPreProcessors ();
   List<ILootrEntityProcessor.Post> getEntityPostProcessors ();
   @Nullable
-  <T> ILootrDataAdapter<T> findAdapter (T type);
+  <T> ILootrDataAdapter<T> getAdapter(T type);
 
   boolean shouldBypassSpawnProtection ();
 
