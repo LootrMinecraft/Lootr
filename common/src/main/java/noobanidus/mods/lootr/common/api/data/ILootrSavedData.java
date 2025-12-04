@@ -20,29 +20,28 @@ import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 
 /**
- *
+ * There is considerable overlap between this and ILootrInfoProvider
+ * The info providers are always *instances* of something (even if it
+ * is a custom class), whereas the SavedData never has an associated
+ * level, block entity, etc.
  */
-// There is considerable overlap between this and ILootrInfoProvider
-// The info providers are always *instances* of something (even if it
-// is a custom class), whereas the SavedData never has an associated
-// level, block entity, etc.
 public interface ILootrSavedData extends IRedirect<ILootrInfo>, ILootrInfo, IOpeners, IMarkChanged {
 
-  void update (ILootrInfo info);
+  void update(ILootrInfo info);
 
   void refresh();
 
-  default boolean clearInventories (ServerPlayer player) {
+  default boolean clearInventories(ServerPlayer player) {
     return clearInventories(player.getUUID());
   }
 
-  boolean clearInventories (UUID id);
+  boolean clearInventories(UUID id);
 
   default ILootrInventory getInventory(ServerPlayer player) {
     return getInventory(player.getUUID());
   }
 
-  default ILootrInventory getOrCreateInventory (ILootrInfoProvider provider, ServerPlayer player, LootFiller filler) {
+  default ILootrInventory getOrCreateInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler) {
     ILootrInventory result = getInventory(player);
     if (result != null) {
       return result;
@@ -61,7 +60,7 @@ public interface ILootrSavedData extends IRedirect<ILootrInfo>, ILootrInfo, IOpe
   }
 
   @Override
-  default LootrBlockType getInfoBlockType () {
+  default LootrBlockType getInfoBlockType() {
     return getRedirect().getInfoBlockType();
   }
 
