@@ -19,6 +19,10 @@ import java.util.function.Function;
  * returns itself (thus meaning that the output of `apply` is the same
  * as the input), this is not a requirement and there may be no relationship between
  * them.
+ * <br />
+ * These are specifically for instances where you want to optionally support Lootr
+ * if it is also installed, but otherwise want to function as a normal block entity
+ * with Vanilla-esque (i.e., single loot generation) when it is not installed.*
  **/
 public interface ILootrEntityConverter<T> extends Function<T, ILootrCart> {
   @Override
