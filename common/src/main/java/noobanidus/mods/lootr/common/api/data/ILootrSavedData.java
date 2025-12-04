@@ -19,6 +19,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
+/**
+ *
+ */
 // There is considerable overlap between this and ILootrInfoProvider
 // The info providers are always *instances* of something (even if it
 // is a custom class), whereas the SavedData never has an associated

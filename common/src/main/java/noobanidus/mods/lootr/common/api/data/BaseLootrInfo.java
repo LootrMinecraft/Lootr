@@ -12,7 +12,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public record BaseLootrInfo(LootrBlockType blockType, LootrInfoType infoType, UUID uuid, String cachedKey, BlockPos pos, Component name, ResourceKey<Level> dimension,
+/**
+ * This is a canonical, immutable implementation of ILootrInfo.
+ * <br />
+ * It is specifically used to store data in `LootrSavedData`.
+ */
+public record BaseLootrInfo(LootrBlockType blockType, LootrInfoType infoType, UUID uuid, String cachedKey, BlockPos pos, @Nullable Component name, ResourceKey<Level> dimension,
                             int containerSize, NonNullList<ItemStack> customInventory, ResourceKey<LootTable> table, long seed) implements ILootrInfo {
   public static BaseLootrInfo copy(ILootrInfo info) {
     return new BaseLootrInfo(info.getInfoBlockType(), info.getInfoType(), info.getInfoUUID(), info.getInfoKey(), info.getInfoPos(), info.getInfoDisplayName(), info.getInfoDimension(), info.getInfoContainerSize(), info.getInfoReferenceInventory(), info.getInfoLootTable(), info.getInfoLootSeed());
@@ -54,8 +59,12 @@ public record BaseLootrInfo(LootrBlockType blockType, LootrInfoType infoType, UU
   }
 
   @Override
-  public @Nullable Component getInfoDisplayName() {
-    return name();
+  public Component getInfoDisplayName() {
+    if (name == null) {
+      return Component.empty();
+    }
+
+    return name;
   }
 
   @Override

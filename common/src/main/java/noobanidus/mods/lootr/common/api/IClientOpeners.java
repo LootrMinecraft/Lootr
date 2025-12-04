@@ -1,11 +1,13 @@
 package noobanidus.mods.lootr.common.api;
 
 import noobanidus.mods.lootr.common.api.annotation.ClientOnly;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 import java.util.UUID;
 
+@ApiStatus.Internal
 public interface IClientOpeners extends IOpeners {
   @ClientOnly
   @Nullable

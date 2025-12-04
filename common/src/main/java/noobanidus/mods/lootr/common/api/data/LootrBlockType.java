@@ -3,6 +3,11 @@ package noobanidus.mods.lootr.common.api.data;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
+/**
+ * TODO: This actually needs to be migrated, either to a custom
+ * registry or some other method in order to allow add-on mods to
+ * create custom containers that have replacements.
+ */
 public enum LootrBlockType {
   CHEST(Blocks.CHEST),
   TRAPPED_CHEST(Blocks.TRAPPED_CHEST),

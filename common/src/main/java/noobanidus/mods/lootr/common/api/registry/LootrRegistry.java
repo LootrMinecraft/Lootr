@@ -12,6 +12,9 @@ import noobanidus.mods.lootr.common.api.advancement.IAdvancementTrigger;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.advancement.ILootedStatTrigger;
 
+/**
+ * Platform-independent way to access registered objects.
+ */
 public class LootrRegistry {
   public static ILootrRegistry INSTANCE = null;
 

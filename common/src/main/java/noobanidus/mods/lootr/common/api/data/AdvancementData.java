@@ -11,6 +11,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * No longer used nor required.
+ */
 @Deprecated
 public class AdvancementData extends SavedData {
   @Deprecated

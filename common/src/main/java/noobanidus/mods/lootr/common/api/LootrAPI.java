@@ -47,6 +47,8 @@ import java.util.UUID;
  * <br />
  * Beware that this is only initialized during mod creation. Accessing the API too early
  * will result in a NullPointerException.
+ * <br />
+ * All non-platform methods are implemented in DefaultLootrAPIImpl.
  */
 public class LootrAPI {
   public static final Logger LOG = LogManager.getLogger();

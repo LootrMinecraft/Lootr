@@ -21,6 +21,15 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * This is the commonly used interface for accessing Lootr containers.
+ * That said, implementations generally extend ILootrBlockEntity or ILootrCart,
+ * as these provide more functionality.
+ * <br />
+ * This interface should, however, be used whenever a function interacts
+ * with a Lootr container but doesn't need to know about what the actual type is.
+ * e.g., LootrAPI::handleProviderOpen.
+ */
 public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
   static ILootrInfoProvider of(BlockPos pos, Level level) {
     if (level.isClientSide()) {

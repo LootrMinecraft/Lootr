@@ -10,7 +10,9 @@ import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
+import org.jetbrains.annotations.ApiStatus;
 
+@ApiStatus.Internal
 public interface IPlatformAPI {
   void performCartOpen(ILootrCart cart, ServerPlayer player);
 

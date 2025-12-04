@@ -29,12 +29,14 @@ import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
 import noobanidus.mods.lootr.common.api.processor.ILootrBlockEntityProcessor;
 import noobanidus.mods.lootr.common.api.processor.ILootrEntityProcessor;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+@ApiStatus.Internal
 public interface ILootrAPI {
   // Platform-independent implementations
   Set<UUID> getPlayerIds();

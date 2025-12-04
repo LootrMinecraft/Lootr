@@ -20,11 +20,25 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
+/**
+ * The base class for all Lootr information holders.
+ * <br />
+ * This specifically stores information regarding both the container
+ * (and its type), as well as its location in the world (and this value
+ * is updated every time the container is accessed), loot table,
+ * seed, etc, but it is *not necessarily* equivalent to the actual
+ * object storing the information (such as the block entity or entity).
+ * <br />
+ * In theory, there is no need for anyone to ever implement this directly.
+ * Instead, implement ILootrInfoProvider, ILootrCart or ILootrBlockEntity.
+ */
+@ApiStatus.Internal
 public interface ILootrInfo {
   LootrBlockType getInfoBlockType();
 

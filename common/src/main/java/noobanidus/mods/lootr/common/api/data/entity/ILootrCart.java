@@ -9,6 +9,11 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 
+/**
+ * The default entity-based implementation of ILootrInfo.
+ * <br />
+ * TODO: "VehicleEntity" as its most common base class might be problematic.
+ */
 public interface ILootrCart extends ILootrInfoProvider {
   @Override
   default LootrInfoType getInfoType() {
@@ -50,6 +55,7 @@ public interface ILootrCart extends ILootrInfoProvider {
     }
     boolean replaceWhenDecayed = LootrAPI.shouldReplaceWhenDecayed();
     VehicleEntity entity = asEntity();
+    // TODO: Handle custom entity de-conversion
     if (replaceWhenDecayed) {
       MinecartChest newCart = EntityType.CHEST_MINECART.create(level);
       if (newCart != null) {

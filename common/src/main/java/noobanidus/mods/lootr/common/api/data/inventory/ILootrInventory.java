@@ -11,6 +11,10 @@ import noobanidus.mods.lootr.common.api.MenuBuilder;
 import noobanidus.mods.lootr.common.api.data.ILootrInfo;
 import noobanidus.mods.lootr.common.api.data.ILootrSavedData;
 
+/**
+ * This interface represents an actual "inventory" specific to
+ * a player. It is provided by `LootrAPI::getInventory`.
+ */
 public interface ILootrInventory extends Container, MenuProvider {
   ILootrInfo getInfo();
 
@@ -18,7 +22,11 @@ public interface ILootrInventory extends Container, MenuProvider {
 
   @Override
   default Component getDisplayName() {
-    return getInfo().getInfoDisplayName();
+    Component name = getInfo().getInfoDisplayName();
+    if (name == null) {
+      return Component.empty();
+    }
+    return name;
   }
 
   NonNullList<ItemStack> getInventoryContents();
