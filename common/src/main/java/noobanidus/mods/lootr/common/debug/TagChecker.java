@@ -3,7 +3,7 @@ package noobanidus.mods.lootr.common.debug;
 import net.minecraft.core.registries.BuiltInRegistries;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
-import noobanidus.mods.lootr.common.config.Replacements;
+import noobanidus.mods.lootr.common.impl.LootrServiceRegistry;
 
 public class TagChecker {
   private static void standardError() {
@@ -11,7 +11,7 @@ public class TagChecker {
   }
 
   public static void checkTags() {
-    Replacements.clearReplacements();
+    LootrServiceRegistry.clearReplacements();
     BuiltInRegistries.BLOCK.getTag(LootrTags.Blocks.CONVERT_BARRELS).ifPresentOrElse(tag -> {
       if (tag.size() == 0) {
         LootrAPI.LOG.error("[Lootr Tag Error] Block tag `lootr:convert/barrels` is empty. Barrels will not be converted to Lootr barrels. If this is intentional, you can disregard this message.");

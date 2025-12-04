@@ -4,8 +4,10 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import noobanidus.mods.lootr.common.api.ILootrAPI;
 import noobanidus.mods.lootr.common.api.ILootrBlockEntityConverter;
 import noobanidus.mods.lootr.common.api.ILootrEntityConverter;
@@ -17,6 +19,8 @@ import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilterProvider;
 import noobanidus.mods.lootr.common.api.processor.ILootrBlockEntityProcessor;
 import noobanidus.mods.lootr.common.api.processor.ILootrEntityProcessor;
+import noobanidus.mods.lootr.common.api.replacement.BlockReplacementMap;
+import noobanidus.mods.lootr.common.api.replacement.ILootrBlockReplacementProvider;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
@@ -36,6 +40,7 @@ public class LootrServiceRegistry {
   private final List<ILootrEntityProcessor.Pre> entityPreProcessors = new ObjectArrayList<>();
   private final List<ILootrEntityProcessor.Post> entityPostProcessors = new ObjectArrayList<>();
   private final AdapterMap adapterMap = new AdapterMap();
+  private final BlockReplacementMap replacementMap = new BlockReplacementMap();
 
   @SuppressWarnings("rawtypes")
   public LootrServiceRegistry() {
@@ -55,7 +60,7 @@ public class LootrServiceRegistry {
     for (ILootrFilterProvider provider : loader3) {
       filters.addAll(provider.getFilters());
     }
-    filters.sort(Comparator.comparingInt(ILootrFilter::getPriority));
+    filters.sort(Comparator.comparingInt(ILootrFilter::getPriority).reversed());
 
     ServiceLoader<ILootrBlockEntityProcessor.Post> loader4 = ServiceLoader.load(ILootrBlockEntityProcessor.Post.class, classLoader);
     for (ILootrBlockEntityProcessor.Post processor : loader4) {
@@ -81,6 +86,13 @@ public class LootrServiceRegistry {
     for (ILootrDataAdapter<?> adapter : loader6) {
       adapterMap.register(adapter);
     }
+
+    ServiceLoader<ILootrBlockReplacementProvider> loader9 = ServiceLoader.load(ILootrBlockReplacementProvider.class, classLoader);
+    for (ILootrBlockReplacementProvider provider : loader9) {
+      replacementMap.register(provider);
+    }
+
+    replacementMap.sort();
   }
 
   public static LootrServiceRegistry getInstance() {
@@ -146,7 +158,13 @@ public class LootrServiceRegistry {
     return getInstance().blockEntityPostProcessors;
   }
 
+  static BlockState getReplacementBlockState (BlockState block) {
+    return getInstance().replacementMap.getReplacement(block);
+  }
 
+  public static void clearReplacements() {
+    getInstance().replacementMap.clear();
+  }
 
   @Nullable
   static <T> ILootrDataAdapter<T> findAdapter (T type) {

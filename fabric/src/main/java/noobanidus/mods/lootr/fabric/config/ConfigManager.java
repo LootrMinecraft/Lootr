@@ -15,7 +15,7 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.config.ConfigManagerBase;
-import noobanidus.mods.lootr.common.config.Replacements;
+import noobanidus.mods.lootr.common.impl.LootrServiceRegistry;
 
 import java.util.Arrays;
 import java.util.List;
@@ -72,7 +72,7 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
   public Client client = new Client();
 
   public static void reset() {
-    Replacements.clearReplacements();
+    LootrServiceRegistry.clearReplacements();
     MODID_DIM_WHITELIST = null;
     MODID_DIM_BLACKLIST = null;
     DIM_WHITELIST = null;

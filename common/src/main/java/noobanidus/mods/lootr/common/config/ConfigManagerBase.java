@@ -16,7 +16,7 @@ public class ConfigManagerBase {
     Set<String> validatedList = new HashSet<>();
     for (String entry : incomingList) {
       if (entry == null || entry.isEmpty()) {
-        LootrAPI.LOG.error("Error found when validating a configuration list for '" + listKey + "'. One of the entries is null or empty and cannot be converted to a String.");
+        LootrAPI.LOG.error("Error found when validating a configuration list for '{}'. One of the entries is null or empty and cannot be converted to a String.", listKey);
         continue;
       }
       validatedList.add(entry);

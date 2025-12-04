@@ -35,7 +35,6 @@ import noobanidus.mods.lootr.common.api.processor.ILootrBlockEntityProcessor;
 import noobanidus.mods.lootr.common.api.processor.ILootrEntityProcessor;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.client.ClientHooks;
-import noobanidus.mods.lootr.common.config.Replacements;
 import noobanidus.mods.lootr.common.data.DataStorage;
 import org.jetbrains.annotations.Nullable;
 
@@ -386,7 +385,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   @Override
   @Nullable
   public BlockState replacementBlockState(BlockState original) {
-    return Replacements.replacement(original);
+    return LootrServiceRegistry.getReplacementBlockState(original);
   }
 
   @Override
