@@ -80,7 +80,7 @@ public final class BlockEntityTicker {
   }
 
   private static boolean isValidEntity(BlockEntity entity) {
-    if (LootrAPI.resolveBlockEntity(entity) instanceof ILootrBlockEntity) {
+    if (entity instanceof ILootrBlockEntity || LootrAPI.resolveBlockEntity(entity) instanceof ILootrBlockEntity) {
       return false;
     }
     ILootrDataAdapter<BlockEntity> adapter = LootrAPI.getAdapter(entity);
