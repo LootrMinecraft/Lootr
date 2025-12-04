@@ -9,6 +9,11 @@ import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
 
+/**
+ This contains platform-specific (i.e., NeoForge/Fabric) methods.
+ <br />
+ It is separate from LootrAPI simply just because.
+ **/
 public class PlatformAPI {
   public static IPlatformAPI INSTANCE;
 

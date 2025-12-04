@@ -42,12 +42,19 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * This is the standard access to the platform-specific implementations of ILootrAPI.
+ * <br />
+ * Beware that this is only initialized during mod creation. Accessing the API too early
+ * will result in a NullPointerException.
+ */
 public class LootrAPI {
   public static final Logger LOG = LogManager.getLogger();
   public static final String MODID = "lootr";
   public static final String NETWORK_VERSION = "lootr-1.21.0-1";
   public static final ResourceKey<LootTable> ELYTRA_CHEST = ResourceKey.create(Registries.LOOT_TABLE, LootrAPI.rl("chests/elytra"));
   public static final ResourceKey<LootTable> TROPHY_REWARD = ResourceKey.create(Registries.LOOT_TABLE, LootrAPI.rl("reward/trophy"));
+  @Deprecated
   public static final TicketType<Unit> LOOTR_ENTITY_TICK_TICKET = TicketType.create("lootr_entity_tick_ticket", (unit1, unit2) -> 0, 300);
   public static final List<ResourceLocation> PROBLEMATIC_CHESTS = Arrays.asList(LootrAPI.rl("twilightforest", "structures/stronghold_boss"), LootrAPI.rl("atum", "chests/pharaoh"));
 
