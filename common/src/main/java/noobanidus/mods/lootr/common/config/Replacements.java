@@ -49,13 +49,14 @@ public class Replacements {
       replacements = new HashMap<>();
     }
 
-    if (replacements.get(original.getBlock()) == null && original.is(LootrTags.Blocks.CONVERT_BLOCK)) {
+    if (original.is(LootrTags.Blocks.CONVERT_BLOCK) && replacements.get(original.getBlock()) == null) {
       if (original.getBlock() instanceof EntityBlock entityBlock) {
         BlockEntity be = entityBlock.newBlockEntity(BlockPos.ZERO, original);
         if (LootrAPI.resolveBlockEntity(be) != null) {
           ignore.add(original.getBlock());
         }
-        if (be instanceof RandomizableContainerBlockEntity) {
+        if (LootrAPI.findAdapter(be) != null) {
+/*        if (be instanceof RandomizableContainerBlockEntity) {*/
           if (original.is(LootrTags.Blocks.CONVERT_TRAPPED_CHESTS)) {
             replacements.put(original.getBlock(), LootrRegistry.getTrappedChestBlock());
           } else if (original.is(LootrTags.Blocks.CONVERT_BARRELS)) {
