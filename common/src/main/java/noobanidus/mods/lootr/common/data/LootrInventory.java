@@ -141,7 +141,11 @@ public class LootrInventory implements ILootrInventory {
 
   @Override
   public Component getDisplayName() {
-    return info.getInfoDisplayName();
+    Component component = info.getInfoDisplayName();
+    if (component == null) {
+      return Component.empty();
+    }
+    return component;
   }
 
   @Nullable
