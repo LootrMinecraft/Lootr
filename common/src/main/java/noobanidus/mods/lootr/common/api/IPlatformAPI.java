@@ -42,14 +42,15 @@ public interface IPlatformAPI {
     }
   }
 
-  default void copyEntityData (ILootrDataAdapter<Entity> adapter, Entity entity1, LootrChestMinecartEntity entity2) {
+  default void copyEntityData (ILootrDataAdapter<Entity> adapter, Entity entity1, ILootrCart entity3) {
+    Entity entity2 = entity3.asEntity();
     entity2.setXRot(entity1.getXRot());
     entity2.setYRot(entity1.getYRot());
     entity2.setYHeadRot(entity1.getYHeadRot());
     ResourceKey<LootTable> lootTable = adapter.getLootTable(entity1);
     long seed = adapter.getLootSeed(entity1);
-    if (lootTable != null) {
-      entity2.setLootTable(lootTable, seed);
+    if (lootTable != null && entity2 instanceof AbstractMinecartContainer entity4) {
+      entity4.setLootTable(lootTable, seed);
     }
   }
 
