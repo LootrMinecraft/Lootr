@@ -342,7 +342,7 @@ public class LootrAPI {
   }
 
   @Nullable
-  public static ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler, MenuBuilder builder) {
+  public static ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler, @Nullable  MenuBuilder builder) {
     return INSTANCE.getInventory(provider, player, filler, builder);
   }
 

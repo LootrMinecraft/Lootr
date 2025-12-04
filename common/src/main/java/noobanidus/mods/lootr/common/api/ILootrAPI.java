@@ -64,7 +64,7 @@ public interface ILootrAPI {
 
   // Get specified inventory using menubuilder
   @Nullable
-  ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler, MenuBuilder builder);
+  ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler, @Nullable MenuBuilder builder);
 
   // Get saved data for specific provider
   @Nullable

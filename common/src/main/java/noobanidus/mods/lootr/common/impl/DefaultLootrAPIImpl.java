@@ -217,9 +217,9 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  public final ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler, MenuBuilder menuBuilder) {
+  public final ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler, @Nullable MenuBuilder menuBuilder) {
     ILootrInventory inventory = DataStorage.getInventory(provider, player, filler);
-    if (inventory != null) {
+    if (inventory != null && menuBuilder != null) {
       inventory.setMenuBuilder(menuBuilder);
     }
     return inventory;
