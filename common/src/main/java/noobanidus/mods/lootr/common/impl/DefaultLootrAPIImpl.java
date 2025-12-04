@@ -57,6 +57,11 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
 
   @Override
   public final void handleProviderOpen(@Nullable ILootrInfoProvider provider, ServerPlayer player) {
+    handleProviderOpen(provider, player, null);
+  }
+
+  @Override
+  public final void handleProviderOpen(@Nullable ILootrInfoProvider provider, ServerPlayer player, @Nullable MenuBuilder menuBuilder) {
     if (provider == null) {
       return;
     }
@@ -121,7 +126,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
             .setStyle(LootrAPI.getRefreshStyle()), true);
       }
     }
-    MenuProvider menuProvider = LootrAPI.getInventory(provider, player, DefaultLootFiller.getInstance());
+    MenuProvider menuProvider = LootrAPI.getInventory(provider, player, DefaultLootFiller.getInstance(), menuBuilder);
     if (menuProvider == null) {
       return;
     }
@@ -212,6 +217,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
+  @Deprecated
   public final ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler) {
     return DataStorage.getInventory(provider, player, filler);
   }
@@ -362,7 +368,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
     }
 
     if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrInfoProvider provider && player instanceof ServerPlayer serverPlayer) {
-      ILootrInventory inventory = getInventory(provider, serverPlayer, DefaultLootFiller.getInstance());
+      ILootrInventory inventory = getInventory(provider, serverPlayer, DefaultLootFiller.getInstance(), null);
       if (inventory != null) {
         Containers.dropContents(level, pos, inventory);
       }

@@ -337,6 +337,7 @@ public class LootrAPI {
   }
 
   @Nullable
+  @Deprecated // Prefer getInventory with MenuBuilder
   public static ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler) {
     return INSTANCE.getInventory(provider, player, filler);
   }

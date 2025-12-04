@@ -247,6 +247,8 @@ public interface ILootrAPI {
 
   void handleProviderOpen(@Nullable ILootrInfoProvider provider, ServerPlayer player);
 
+  void handleProviderOpen(@Nullable ILootrInfoProvider provider, ServerPlayer player, MenuBuilder menuBuilder);
+
   void handleProviderTick(@Nullable ILootrInfoProvider provider);
 
   @Nullable
