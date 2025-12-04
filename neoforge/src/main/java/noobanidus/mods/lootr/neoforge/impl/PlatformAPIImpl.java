@@ -76,6 +76,7 @@ public class PlatformAPIImpl implements IPlatformAPI {
   }
 
   @Override
+  @Deprecated
   public void copyEntityData(AbstractMinecartContainer entity1, AbstractMinecartContainer entity2) {
     IPlatformAPI.super.copyEntityData(entity1, entity2);
     entity2.getPersistentData().merge(entity1.getPersistentData());

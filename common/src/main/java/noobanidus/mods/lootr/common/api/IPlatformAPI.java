@@ -32,6 +32,7 @@ public interface IPlatformAPI {
 
   void restoreSpecificData(DataToCopy data, BlockEntity newBlockEntity);
 
+  @Deprecated
   default void copyEntityData (AbstractMinecartContainer entity1, AbstractMinecartContainer entity2) {
     entity2.setXRot(entity1.getXRot());
     entity2.setYRot(entity1.getYRot());
