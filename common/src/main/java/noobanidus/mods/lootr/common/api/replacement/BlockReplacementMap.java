@@ -54,9 +54,9 @@ public class BlockReplacementMap {
 
 
     BlockState replacement = result.defaultBlockState();
-    for (Property<?> prop : state.getProperties()) {
+    for (Property<?> prop : replacement.getProperties()) {
       if (state.hasProperty(prop)) {
-        state = safeReplace(state, state, prop);
+        replacement = safeReplace(replacement, state, prop);
       }
     }
     return replacement;
