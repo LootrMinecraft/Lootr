@@ -5,6 +5,21 @@ import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 
 import java.util.function.Function;
 
+/**
+ * Converts an object (of any type) into an ILootrCart.
+ * <br />
+ * Converters are loaded via services. Specifically, the class implementing this
+ * converter should be listed (fully qualified name) in a file located at:
+ * META-INF/services/noobanidus.mods.lootr.common.api.ILootrEntityConverter
+ * <br />
+ * These converters are then used to resolve entities into ILootrCart
+ * rather than using specific "instanceof" checks or casts.
+ * <br />
+ * While the default implementations of this (i.e., LootrChestMinecartEntity$DefaultEntityConverter)
+ * returns itself (thus meaning that the output of `apply` is the same
+ * as the input), this is not a requirement and there may be no relationship between
+ * them.
+ **/
 public interface ILootrEntityConverter<T> extends Function<T, ILootrCart> {
   @Override
   ILootrCart apply (T entity);
