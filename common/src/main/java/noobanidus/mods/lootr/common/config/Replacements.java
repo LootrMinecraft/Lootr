@@ -5,7 +5,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.block.state.properties.Property;
@@ -56,7 +55,7 @@ public class Replacements {
           ignore.add(original.getBlock());
         }
         if (LootrAPI.findAdapter(be) != null) {
-/*        if (be instanceof RandomizableContainerBlockEntity) {*/
+          /*        if (be instanceof RandomizableContainerBlockEntity) {*/
           if (original.is(LootrTags.Blocks.CONVERT_TRAPPED_CHESTS)) {
             replacements.put(original.getBlock(), LootrRegistry.getTrappedChestBlock());
           } else if (original.is(LootrTags.Blocks.CONVERT_BARRELS)) {
