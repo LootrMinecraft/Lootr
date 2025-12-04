@@ -69,6 +69,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
       return;
     }
 
+    //noinspection ConstantValue
     if (provider.getInfoUUID() == null) {
       player.displayClientMessage(Component.translatable("lootr.message.invalid_block")
           .setStyle(LootrAPI.getInvalidStyle()), true);
@@ -147,6 +148,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
       return;
     }
 
+    //noinspection ConstantValue
     if (provider.getInfoUUID() == null) {
       return;
     }
