@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import noobanidus.mods.lootr.common.api.ILootrAPI;
 import noobanidus.mods.lootr.common.api.ILootrBlockEntityConverter;
 import noobanidus.mods.lootr.common.api.ILootrEntityConverter;
+import noobanidus.mods.lootr.common.api.ILootrType;
 import noobanidus.mods.lootr.common.api.adapter.AdapterMap;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
@@ -22,10 +23,7 @@ import noobanidus.mods.lootr.common.api.replacement.BlockReplacementMap;
 import noobanidus.mods.lootr.common.api.replacement.ILootrBlockReplacementProvider;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.ServiceLoader;
+import java.util.*;
 import java.util.function.Function;
 
 public class LootrServiceRegistry {
@@ -40,6 +38,7 @@ public class LootrServiceRegistry {
   private final List<ILootrEntityProcessor.Post> entityPostProcessors = new ObjectArrayList<>();
   private final AdapterMap adapterMap = new AdapterMap();
   private final BlockReplacementMap replacementMap = new BlockReplacementMap();
+  private final Map<String, ILootrType> typeMap = new Object2ObjectOpenHashMap<>();
 
   @SuppressWarnings("rawtypes")
   public LootrServiceRegistry() {
@@ -92,6 +91,12 @@ public class LootrServiceRegistry {
     }
 
     replacementMap.sort();
+
+    ServiceLoader<ILootrType> loader10 = ServiceLoader.load(ILootrType.class, classLoader);
+    for (ILootrType type : loader10) {
+      typeMap.put(type.getName(), type);
+      type.callback();
+    }
   }
 
   public static LootrServiceRegistry getInstance() {
@@ -168,5 +173,10 @@ public class LootrServiceRegistry {
   @Nullable
   static <T> ILootrDataAdapter<T> getAdapter(T type) {
     return getInstance().adapterMap.getAdapter(type);
+  }
+
+  @Nullable
+  static ILootrType getType (String type) {
+    return getInstance().typeMap.get(type);
   }
 }

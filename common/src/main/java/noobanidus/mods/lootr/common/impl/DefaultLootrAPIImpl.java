@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.*;
 import noobanidus.mods.lootr.common.api.ILootrAPI;
+import noobanidus.mods.lootr.common.api.ILootrType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.MenuBuilder;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
@@ -423,5 +424,10 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   @Override
   public <T> ILootrDataAdapter<T> getAdapter(T type) {
     return LootrServiceRegistry.getAdapter(type);
+  }
+
+  @Override
+  public ILootrType getType(String type) {
+    return LootrServiceRegistry.getType(type);
   }
 }

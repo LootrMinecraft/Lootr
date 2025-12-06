@@ -504,4 +504,9 @@ public class LootrAPI {
   public static <T> ILootrDataAdapter<T> getAdapter(T type) {
     return INSTANCE.getAdapter(type);
   }
+
+  @Nullable
+  public static ILootrType getType (String type) {
+    return INSTANCE.getType(type);
+  }
 }
