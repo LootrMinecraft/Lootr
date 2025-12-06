@@ -31,6 +31,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.ILootrBlockEntityConverter;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.NBTConstants;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.data.ILootrInfo;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
@@ -122,18 +123,18 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
   public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider) {
     super.loadAdditional(compound, provider);
     this.tryLoadLootTable(compound);
-    if (compound.hasUUID("LootrId")) {
-      this.infoId = compound.getUUID("LootrId");
+    if (compound.hasUUID(NBTConstants.ENTITY_ID)) {
+      this.infoId = compound.getUUID(NBTConstants.ENTITY_ID);
     }
-    if (compound.contains("LootrHasBeenOpened", Tag.TAG_BYTE)) {
-      this.hasBeenOpened = compound.getBoolean("LootrHasBeenOpened");
+    if (compound.contains(NBTConstants.HAS_BEEN_OPENED, Tag.TAG_BYTE)) {
+      this.hasBeenOpened = compound.getBoolean(NBTConstants.HAS_BEEN_OPENED);
     }
     if (this.infoId == null) {
       getInfoUUID();
     }
     clientOpeners.clear();
-    if (compound.contains("LootrOpeners")) {
-      ListTag list = compound.getList("LootrOpeners", CompoundTag.TAG_INT_ARRAY);
+    if (compound.contains(NBTConstants.OPENERS)) {
+      ListTag list = compound.getList(NBTConstants.OPENERS, CompoundTag.TAG_INT_ARRAY);
       for (Tag thisTag : list) {
         clientOpeners.add(NbtUtils.loadUUID(thisTag));
       }
@@ -152,16 +153,16 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
     super.saveAdditional(compound, provider);
     this.trySaveLootTable(compound);
     if (!LootrAPI.shouldDiscard() && !savingToItem) {
-      compound.putUUID("LootrId", getInfoUUID());
+      compound.putUUID(NBTConstants.ENTITY_ID, getInfoUUID());
     }
-    compound.putBoolean("LootrHasBeenOpened", this.hasBeenOpened);
+    compound.putBoolean(NBTConstants.HAS_BEEN_OPENED, this.hasBeenOpened);
     if (level != null && level.isClientSide()) {
       if (clientOpeners != null && !clientOpeners.isEmpty()) {
         ListTag list = new ListTag();
         for (UUID opener : clientOpeners) {
           list.add(NbtUtils.createUUID(opener));
         }
-        compound.put("LootrOpeners", list);
+        compound.put(NBTConstants.OPENERS, list);
       }
     }
   }
@@ -253,7 +254,7 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
         list.add(NbtUtils.createUUID(opener));
       }
       if (!list.isEmpty()) {
-        result.put("LootrOpeners", list);
+        result.put(NBTConstants.OPENERS, list);
       }
     }
     return result;

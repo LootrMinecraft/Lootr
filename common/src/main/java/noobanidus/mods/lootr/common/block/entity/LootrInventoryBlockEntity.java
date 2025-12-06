@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import noobanidus.mods.lootr.common.api.ILootrBlockEntityConverter;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.NBTConstants;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
@@ -27,10 +28,10 @@ public class LootrInventoryBlockEntity extends LootrChestBlockEntity {
   @Override
   public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider) {
     super.loadAdditional(compound, provider);
-    if (compound.contains("customInventory") && compound.contains("customSize")) {
-      int size = compound.getInt("customSize");
+    if (compound.contains(NBTConstants.CUSTOM_INVENTORY) && compound.contains(NBTConstants.CUSTOM_SIZE)) {
+      int size = compound.getInt(NBTConstants.CUSTOM_SIZE);
       this.customInventory = NonNullList.withSize(size, ItemStack.EMPTY);
-      ContainerHelper.loadAllItems(compound.getCompound("customInventory"), this.customInventory, provider);
+      ContainerHelper.loadAllItems(compound.getCompound(NBTConstants.CUSTOM_INVENTORY), this.customInventory, provider);
     }
   }
 
@@ -38,8 +39,8 @@ public class LootrInventoryBlockEntity extends LootrChestBlockEntity {
   protected void saveAdditional(CompoundTag compound, HolderLookup.Provider provider) {
     super.saveAdditional(compound, provider);
     if (this.customInventory != null) {
-      compound.putInt("customSize", this.customInventory.size());
-      compound.put("customInventory", ContainerHelper.saveAllItems(new CompoundTag(), this.customInventory, provider));
+      compound.putInt(NBTConstants.CUSTOM_SIZE, this.customInventory.size());
+      compound.put(NBTConstants.CUSTOM_INVENTORY, ContainerHelper.saveAllItems(new CompoundTag(), this.customInventory, provider));
     }
   }
 
