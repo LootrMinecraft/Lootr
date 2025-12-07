@@ -34,7 +34,11 @@ public interface ILootrBlockEntity extends ILootrInfoProvider {
   }
 
   default BlockEntity asBlockEntity () {
-    return ((BlockEntity) this);
+    if (this instanceof BlockEntity entity) {
+      return entity;
+    }
+
+    throw new NullPointerException("ILootrBlockEntity implementation is not a BlockEntity and doesn't provide asBlockEntity()!");
   }
 
   @Override
