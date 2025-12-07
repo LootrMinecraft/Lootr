@@ -22,13 +22,12 @@ public interface ILootrCart extends ILootrInfoProvider {
     return LootrInfoType.CONTAINER_ENTITY;
   }
 
-  @Nullable
   default Entity asEntity () {
     if (this instanceof Entity entity) {
       return entity;
     }
 
-    return null;
+    throw new NullPointerException("ILootrCart implementation is not an Entity and doesn't provide asEntity()!");
   }
 
   @Override
@@ -58,7 +57,7 @@ public interface ILootrCart extends ILootrInfoProvider {
       return;
     }
     boolean replaceWhenDecayed = LootrAPI.shouldReplaceWhenDecayed();
-    VehicleEntity entity = asEntity();
+    Entity entity = asEntity();
     if (replaceWhenDecayed) {
       EntityType<?> type = getInfoNewType().getReplacementEntity();
       if (type != null) {

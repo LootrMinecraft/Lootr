@@ -46,10 +46,6 @@ public interface IPlatformAPI {
 
   default void copyEntityData (ILootrDataAdapter<Entity> adapter, Entity entity1, ILootrCart entity3) {
     Entity entity2 = entity3.asEntity();
-    if (entity2 == null) {
-      LootrAPI.LOG.error("Unable to copy data from entity {} to {}, destination is not an entity!", entity1, entity3);
-      return;
-    }
     entity2.setXRot(entity1.getXRot());
     entity2.setYRot(entity1.getYRot());
     entity2.setYHeadRot(entity1.getYHeadRot());
