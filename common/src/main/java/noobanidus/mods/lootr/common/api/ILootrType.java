@@ -9,6 +9,15 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import noobanidus.mods.lootr.common.api.data.ILootrInfo;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Defines the type of a Lootr container.
+ * <br />
+ * Can be accessed via LootrAPI.getType(String name). Alternately, you can
+ * include a `callback` function, which will be called when the service is
+ * loaded and stored in the type map.
+ * <br />
+ * This supersedes the now deprecated LootrBlockType and LootrInfoType.
+ */
 public interface ILootrType {
   String getName();
 
