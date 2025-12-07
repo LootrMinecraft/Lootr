@@ -26,6 +26,7 @@ public class LootrTrappedChestBlockEntity extends LootrChestBlockEntity {
   }
 
   @Override
+  @Deprecated
   public LootrBlockType getInfoBlockType() {
     return LootrBlockType.TRAPPED_CHEST;
   }

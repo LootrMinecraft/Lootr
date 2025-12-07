@@ -299,7 +299,7 @@ public class DataStorage {
           ChunkPos chunkPos = new ChunkPos(lootrSavedData.getInfoPos());
           if (chunkCache.hasChunk(chunkPos.x, chunkPos.z) && LoadedChunks.getLoadedChunks(lootrSavedData.getInfoDimension())
               .contains(chunkPos)) {
-            if (lootrSavedData.getInfoBlockType() == LootrBlockType.ENTITY) {
+            if (lootrSavedData.getInfoNewType().isEntity()) {
               Entity entity = level.getEntity(lootrSavedData.getInfoUUID());
               if (entity instanceof ILootrCart cart) {
                 cart.removeVisualOpener(id);

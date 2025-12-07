@@ -1,15 +1,9 @@
 package noobanidus.mods.lootr.common.block.entity;
 
-import com.google.common.collect.Sets;
-import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceKey;
@@ -21,15 +15,15 @@ import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.storage.loot.LootTable;
-import noobanidus.mods.lootr.common.api.*;
+import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
+import noobanidus.mods.lootr.common.api.ILootrBlockEntityConverter;
+import noobanidus.mods.lootr.common.api.ILootrType;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
-import noobanidus.mods.lootr.common.api.data.ILootrInfo;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
+import noobanidus.mods.lootr.common.api.data.SimpleLootrEntity;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.data.LootrInventory;
@@ -40,16 +34,14 @@ import java.util.Set;
 import java.util.UUID;
 
 public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlockEntity {
+  protected final SimpleLootrEntity simpleLootrEntity = new SimpleLootrEntity(this::getVisualOpeners, 27);
+
   private final ChestLidController chestLidController = new ChestLidController();
-  protected UUID infoId;
-  protected boolean hasBeenOpened = false;
-  private String cachedId;
-  private final Set<UUID> clientOpeners = new ObjectLinkedOpenHashSet<>();
   private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
     @Override
     protected void onOpen(Level level, BlockPos pos, BlockState state) {
-      if (!LootrChestBlockEntity.this.hasBeenOpened) {
-        LootrChestBlockEntity.this.hasBeenOpened = true;
+      if (!LootrChestBlockEntity.this.hasBeenOpened()) {
+        LootrChestBlockEntity.this.simpleLootrEntity.setHasBeenOpened();
         LootrChestBlockEntity.this.markChanged();
       }
       LootrChestBlockEntity.playSound(level, pos, state, SoundEvents.CHEST_OPEN);
@@ -76,8 +68,6 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
       return false;
     }
   };
-  protected boolean clientOpened;
-  private boolean savingToItem = false;
 
   protected LootrChestBlockEntity(BlockEntityType<?> p_155327_, BlockPos p_155328_, BlockState p_155329_) {
     super(p_155327_, p_155328_, p_155329_);
@@ -93,73 +83,25 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
     chestLidController.tickLid();
   }
 
-  protected static void playSound(Level pLevel, BlockPos pPos, BlockState pState, SoundEvent pSound) {
-    double d0 = (double) pPos.getX() + 0.5D;
-    double d1 = (double) pPos.getY() + 0.5D;
-    double d2 = (double) pPos.getZ() + 0.5D;
-
-    pLevel.playSound(null, d0, d1, d2, pSound, SoundSource.BLOCKS, 0.5F, pLevel.random.nextFloat() * 0.1F + 0.9F);
-  }
-
-  // TODO: Provide access to this in ILootrBlockEntity
-  public static int getOpenCount(BlockGetter pLevel, BlockPos pPos) {
-    BlockState blockstate = pLevel.getBlockState(pPos);
-    if (blockstate.hasBlockEntity()) {
-      BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-      if (blockentity instanceof LootrChestBlockEntity chest) {
-        return chest.openersCounter.getOpenerCount();
-      }
-    }
-
-    return 0;
-  }
-
   @Override
   public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider) {
     super.loadAdditional(compound, provider);
     this.tryLoadLootTable(compound);
-    if (compound.hasUUID(NBTConstants.ENTITY_ID)) {
-      this.infoId = compound.getUUID(NBTConstants.ENTITY_ID);
-    }
-    if (compound.contains(NBTConstants.HAS_BEEN_OPENED, Tag.TAG_BYTE)) {
-      this.hasBeenOpened = compound.getBoolean(NBTConstants.HAS_BEEN_OPENED);
-    }
-    if (this.infoId == null) {
-      getInfoUUID();
-    }
-    clientOpeners.clear();
-    if (compound.contains(NBTConstants.OPENERS)) {
-      ListTag list = compound.getList(NBTConstants.OPENERS, CompoundTag.TAG_INT_ARRAY);
-      for (Tag thisTag : list) {
-        clientOpeners.add(NbtUtils.loadUUID(thisTag));
-      }
-    }
+    this.simpleLootrEntity.loadAdditional(compound, provider);
   }
 
   @Override
   public void saveToItem(ItemStack itemstack, HolderLookup.Provider provider) {
-    savingToItem = true;
+    this.simpleLootrEntity.setSavingToItem(true);
     super.saveToItem(itemstack, provider);
-    savingToItem = false;
+    this.simpleLootrEntity.setSavingToItem(false);
   }
 
   @Override
   protected void saveAdditional(CompoundTag compound, HolderLookup.Provider provider) {
     super.saveAdditional(compound, provider);
     this.trySaveLootTable(compound);
-    if (!LootrAPI.shouldDiscard() && !savingToItem) {
-      compound.putUUID(NBTConstants.ENTITY_ID, getInfoUUID());
-    }
-    compound.putBoolean(NBTConstants.HAS_BEEN_OPENED, this.hasBeenOpened);
-    if (level != null && level.isClientSide()) {
-      if (clientOpeners != null && !clientOpeners.isEmpty()) {
-        ListTag list = new ListTag();
-        for (UUID opener : clientOpeners) {
-          list.add(NbtUtils.createUUID(opener));
-        }
-        compound.put(NBTConstants.OPENERS, list);
-      }
-    }
+    this.simpleLootrEntity.saveAdditional(compound, provider, level != null && level.isClientSide());
   }
 
   @Override
@@ -177,7 +119,6 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
     if (!this.remove && !pPlayer.isSpectator()) {
       this.openersCounter.incrementOpeners(pPlayer, this.getLevel(), this.getBlockPos(), this.getBlockState());
     }
-
   }
 
   @Override
@@ -203,17 +144,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   @NotNull
   public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
     CompoundTag result = super.getUpdateTag(provider);
-    saveAdditional(result, provider);
-    Set<UUID> currentOpeners = getVisualOpeners();
-    if (currentOpeners != null) {
-      ListTag list = new ListTag();
-      for (UUID opener : Sets.intersection(currentOpeners, LootrAPI.getPlayerIds())) {
-        list.add(NbtUtils.createUUID(opener));
-      }
-      if (!list.isEmpty()) {
-        result.put(NBTConstants.OPENERS, list);
-      }
-    }
+    this.simpleLootrEntity.fillUpdateTag(result, provider, level != null && level.isClientSide());
     return result;
   }
 
@@ -229,7 +160,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
 
   @Override
   public @Nullable Set<UUID> getClientOpeners() {
-    return clientOpeners;
+    return this.simpleLootrEntity.getClientOpeners();
   }
 
   @Override
@@ -252,23 +183,17 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   @Override
   @NotNull
   public UUID getInfoUUID() {
-    if (this.infoId == null) {
-      this.infoId = UUID.randomUUID();
-    }
-    return this.infoId;
+    return this.simpleLootrEntity.getInfoUUID();
   }
 
   @Override
   public String getInfoKey() {
-    if (cachedId == null) {
-      cachedId = ILootrInfo.generateInfoKey(getInfoUUID());
-    }
-    return cachedId;
+    return this.simpleLootrEntity.getInfoKey();
   }
 
   @Override
   public boolean hasBeenOpened() {
-    return hasBeenOpened;
+    return this.simpleLootrEntity.hasBeenOpened();
   }
 
   @Override
@@ -277,12 +202,12 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   }
 
   public boolean isClientOpened() {
-    return clientOpened;
+    return this.simpleLootrEntity.isClientOpened();
   }
 
   @Override
   public void setClientOpened(boolean opened) {
-    this.clientOpened = opened;
+    this.simpleLootrEntity.setClientOpened(opened);
   }
 
   @Override
@@ -307,7 +232,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
 
   @Override
   public int getInfoContainerSize() {
-    return getContainerSize();
+    return this.simpleLootrEntity.getInfoContainerSize();
   }
 
   @Override
@@ -338,6 +263,26 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   @Override
   public @Nullable IContainerTrigger getTrigger() {
     return LootrRegistry.getChestTrigger();
+  }
+
+  public static int getOpenCount(BlockGetter pLevel, BlockPos pPos) {
+    BlockState blockstate = pLevel.getBlockState(pPos);
+    if (blockstate.hasBlockEntity()) {
+      BlockEntity blockentity = pLevel.getBlockEntity(pPos);
+      if (blockentity instanceof LootrChestBlockEntity chest) {
+        return chest.openersCounter.getOpenerCount();
+      }
+    }
+
+    return 0;
+  }
+
+  protected static void playSound(Level pLevel, BlockPos pPos, BlockState pState, SoundEvent pSound) {
+    double d0 = (double) pPos.getX() + 0.5D;
+    double d1 = (double) pPos.getY() + 0.5D;
+    double d2 = (double) pPos.getZ() + 0.5D;
+
+    pLevel.playSound(null, d0, d1, d2, pSound, SoundSource.BLOCKS, 0.5F, pLevel.random.nextFloat() * 0.1F + 0.9F);
   }
 
   public static class DefaultBlockEntityConverter implements ILootrBlockEntityConverter<LootrChestBlockEntity> {

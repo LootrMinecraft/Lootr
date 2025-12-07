@@ -7,11 +7,15 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.ChestType;
+import net.minecraft.world.level.block.state.properties.Property;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
+import noobanidus.mods.lootr.common.api.replacement.BlockReplacementMap;
 
 public interface ILootrBlockEntity extends ILootrInfoProvider {
   static <T extends BlockEntity> void ticker (Level level, BlockPos pos, BlockState state, T blockEntity) {
@@ -86,10 +90,21 @@ public interface ILootrBlockEntity extends ILootrInfoProvider {
     if (level == null || level.isClientSide()) {
       return;
     }
+    // TODO: Put this somewhere else
+    BlockState stateAt = level.getBlockState(getInfoPos());
     boolean replaceWhenDecayed = LootrAPI.shouldReplaceWhenDecayed();
     level.destroyBlock(getInfoPos(), !replaceWhenDecayed);
     if (replaceWhenDecayed) {
-      level.setBlock(getInfoPos(), getInfoBlockType().getBlock().defaultBlockState(), Block.UPDATE_CLIENTS);
+      Block replacementBlock = getInfoNewType().getReplacementBlock();
+      if (replacementBlock != null) {
+        BlockState replacementState = replacementBlock.defaultBlockState();
+        for (Property<?> prop : replacementState.getProperties()) {
+          if (stateAt.hasProperty(prop)) {
+            replacementState = BlockReplacementMap.safeReplace(replacementState, stateAt, prop);
+          }
+        }
+        level.setBlock(getInfoPos(), replacementState, Block.UPDATE_CLIENTS);
+      }
     }
   }
 

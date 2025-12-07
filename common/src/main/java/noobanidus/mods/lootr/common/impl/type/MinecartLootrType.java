@@ -26,4 +26,9 @@ public class MinecartLootrType implements ILootrType {
   public void callback() {
     BuiltInLootrTypes.MINECART = this;
   }
+
+  @Override
+  public boolean isEntity() {
+    return true;
+  }
 }

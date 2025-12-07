@@ -33,6 +33,7 @@ import noobanidus.mods.lootr.common.api.*;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.data.ILootrInfo;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
+import noobanidus.mods.lootr.common.api.data.SimpleLootrEntity;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
@@ -43,16 +44,13 @@ import java.util.Set;
 import java.util.UUID;
 
 public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity implements ILootrBlockEntity {
-  private final NonNullList<ItemStack> items = NonNullList.withSize(27, ItemStack.EMPTY);
-  private final Set<UUID> clientOpeners = new ObjectLinkedOpenHashSet<>();
-  protected UUID infoId = null;
-  protected boolean hasBeenOpened = false;
-  private String cachedId;
+  protected final SimpleLootrEntity simpleLootrEntity = new SimpleLootrEntity(this::getVisualOpeners, 27);
+
   private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
     @Override
     protected void onOpen(Level level, BlockPos pos, BlockState state) {
-      if (!LootrBarrelBlockEntity.this.hasBeenOpened) {
-        LootrBarrelBlockEntity.this.hasBeenOpened = true;
+      if (!LootrBarrelBlockEntity.this.hasBeenOpened()) {
+        LootrBarrelBlockEntity.this.simpleLootrEntity.setHasBeenOpened();
         LootrBarrelBlockEntity.this.markChanged();
       }
       LootrBarrelBlockEntity.this.playSound(state, SoundEvents.BARREL_OPEN);
@@ -77,8 +75,6 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
       return false;
     }
   };
-  protected boolean clientOpened = false;
-  private boolean savingToItem = false;
 
   public LootrBarrelBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
     super(LootrRegistry.getBarrelBlockEntity(), pWorldPosition, pBlockState);
@@ -98,10 +94,7 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
   @Override
   @NotNull
   public UUID getInfoUUID() {
-    if (this.infoId == null) {
-      this.infoId = UUID.randomUUID();
-    }
-    return this.infoId;
+    return this.simpleLootrEntity.getInfoUUID();
   }
 
   @Override
@@ -111,7 +104,7 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
 
   @Override
   protected NonNullList<ItemStack> getItems() {
-    return items;
+    return this.simpleLootrEntity.getItems();
   }
 
   @Override
@@ -127,51 +120,22 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
   public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider) {
     super.loadAdditional(compound, provider);
     this.tryLoadLootTable(compound);
-    if (compound.hasUUID(NBTConstants.ENTITY_ID)) {
-      this.infoId = compound.getUUID(NBTConstants.ENTITY_ID);
-    }
-    if (compound.contains(NBTConstants.HAS_BEEN_OPENED, Tag.TAG_BYTE)) {
-      this.hasBeenOpened = compound.getBoolean(NBTConstants.HAS_BEEN_OPENED);
-    }
-    if (this.infoId == null) {
-      getInfoUUID();
-    }
-    clientOpeners.clear();
-    if (compound.contains(NBTConstants.OPENERS)) {
-      ListTag list = compound.getList(NBTConstants.OPENERS, CompoundTag.TAG_INT_ARRAY);
-      for (Tag thisTag : list) {
-        clientOpeners.add(NbtUtils.loadUUID(thisTag));
-      }
-    }
+    this.simpleLootrEntity.loadAdditional(compound, provider);
   }
 
   @Override
   public void saveToItem(ItemStack itemstack, HolderLookup.Provider provider) {
-    savingToItem = true;
+    this.simpleLootrEntity.setSavingToItem(true);
     super.saveToItem(itemstack, provider);
-    savingToItem = false;
+    this.simpleLootrEntity.setSavingToItem(false);
   }
 
   @Override
   protected void saveAdditional(CompoundTag compound, HolderLookup.Provider provider) {
     super.saveAdditional(compound, provider);
     this.trySaveLootTable(compound);
-    if (!LootrAPI.shouldDiscard() && !savingToItem) {
-      compound.putUUID(NBTConstants.ENTITY_ID, getInfoUUID());
-    }
-    compound.putBoolean(NBTConstants.HAS_BEEN_OPENED, this.hasBeenOpened);
-    if (level != null && level.isClientSide()) {
-      if (clientOpeners != null && !clientOpeners.isEmpty()) {
-        ListTag list = new ListTag();
-        for (UUID opener : clientOpeners) {
-          list.add(NbtUtils.createUUID(opener));
-        }
-        compound.put(NBTConstants.OPENERS, list);
-      }
-    }
+    this.simpleLootrEntity.saveAdditional(compound, provider, level != null && level.isClientSide());
   }
-
-
 
   @Override
   protected Component getDefaultName() {
@@ -185,7 +149,7 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
 
   @Override
   public int getContainerSize() {
-    return 27;
+    return this.simpleLootrEntity.getInfoContainerSize();
   }
 
   @Override
@@ -228,39 +192,29 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
 
   @Override
   public boolean hasBeenOpened() {
-    return hasBeenOpened;
+    return this.simpleLootrEntity.hasBeenOpened();
   }
 
   @Override
   public @Nullable Set<UUID> getClientOpeners() {
-    return clientOpeners;
+    return this.simpleLootrEntity.getClientOpeners();
   }
 
   @Override
   public boolean isClientOpened() {
-    return clientOpened;
+    return this.simpleLootrEntity.isClientOpened();
   }
 
   @Override
   public void setClientOpened(boolean opened) {
-    this.clientOpened = opened;
+    this.simpleLootrEntity.setClientOpened(opened);
   }
 
   @Override
   @NotNull
   public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
     CompoundTag result = super.getUpdateTag(provider);
-    saveAdditional(result, provider);
-    Set<UUID> currentOpeners = getVisualOpeners();
-    if (currentOpeners != null && !currentOpeners.isEmpty()) {
-      ListTag list = new ListTag();
-      for (UUID opener : Sets.intersection(currentOpeners, LootrAPI.getPlayerIds())) {
-        list.add(NbtUtils.createUUID(opener));
-      }
-      if (!list.isEmpty()) {
-        result.put(NBTConstants.OPENERS, list);
-      }
-    }
+    this.simpleLootrEntity.fillUpdateTag(result, provider, level != null && level.isClientSide());
     return result;
   }
 
@@ -322,10 +276,7 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
 
   @Override
   public String getInfoKey() {
-    if (cachedId == null) {
-      cachedId = ILootrInfo.generateInfoKey(getInfoUUID());
-    }
-    return cachedId;
+    return this.simpleLootrEntity.getInfoKey();
   }
 
   @Override

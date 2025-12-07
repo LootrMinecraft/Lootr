@@ -62,7 +62,7 @@ public class BlockReplacementMap {
     return replacement;
   }
 
-  private static <V extends Comparable<V>> BlockState safeReplace(BlockState state, BlockState original, Property<V> property) {
+  public static <V extends Comparable<V>> BlockState safeReplace(BlockState state, BlockState original, Property<V> property) {
     if (property == ChestBlock.TYPE && state.hasProperty(property)) {
       return state.setValue(ChestBlock.TYPE, ChestType.SINGLE);
     }

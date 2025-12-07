@@ -39,16 +39,20 @@ public interface ILootrType {
     return true;
   }
 
+  default boolean isEntity() {
+    return false;
+  }
+
   @Nullable
   default Container getContainer (ILootrInfo info, ServerLevel level) {
-    if (getReplacementBlock() != null) {
-      BlockEntity be = level.getBlockEntity(info.getInfoPos());
-      if (be instanceof Container container) {
-        return container;
-      }
-    } else if (getReplacementEntity() != null) {
+    if (isEntity() && getReplacementEntity() != null) {
       Entity entity = level.getEntity(info.getInfoUUID());
       if (entity instanceof Container container) {
+        return container;
+      }
+    } else if (!isEntity() && getReplacementBlock() != null) {
+      BlockEntity be = level.getBlockEntity(info.getInfoPos());
+      if (be instanceof Container container) {
         return container;
       }
     }
