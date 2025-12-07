@@ -3,12 +3,12 @@ package noobanidus.mods.lootr.common.api.data.entity;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.vehicle.MinecartChest;
 import net.minecraft.world.entity.vehicle.VehicleEntity;
 import net.minecraft.world.level.Level;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The default entity-based implementation of ILootrInfo.
@@ -22,11 +22,13 @@ public interface ILootrCart extends ILootrInfoProvider {
     return LootrInfoType.CONTAINER_ENTITY;
   }
 
-  default VehicleEntity asEntity () {
-    if (this instanceof VehicleEntity entity) {
+  @Nullable
+  default Entity asEntity () {
+    if (this instanceof Entity entity) {
       return entity;
     }
-    throw new IllegalStateException("asEntity called on non-VehicleEntity ILootrCart");
+
+    return null;
   }
 
   @Override
