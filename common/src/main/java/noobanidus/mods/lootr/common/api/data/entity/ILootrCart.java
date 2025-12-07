@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.common.api.data.entity;
 
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.vehicle.MinecartChest;
 import net.minecraft.world.entity.vehicle.VehicleEntity;
@@ -56,14 +57,16 @@ public interface ILootrCart extends ILootrInfoProvider {
     }
     boolean replaceWhenDecayed = LootrAPI.shouldReplaceWhenDecayed();
     VehicleEntity entity = asEntity();
-    // TODO: Handle custom entity de-conversion
     if (replaceWhenDecayed) {
-      MinecartChest newCart = EntityType.CHEST_MINECART.create(level);
-      if (newCart != null) {
-        newCart.setPos(entity.position());
-        newCart.setXRot(entity.getXRot());
-        newCart.setYRot(entity.getYRot());
-        level.addFreshEntity(newCart);
+      EntityType<?> type = getInfoNewType().getReplacementEntity();
+      if (type != null) {
+        Entity newCart = type.create(level);
+        if (newCart != null) {
+          newCart.setPos(entity.position());
+          newCart.setXRot(entity.getXRot());
+          newCart.setYRot(entity.getYRot());
+          level.addFreshEntity(newCart);
+        }
       }
     }
     entity.discard();
