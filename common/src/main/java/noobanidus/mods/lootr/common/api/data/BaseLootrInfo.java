@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootTable;
+import noobanidus.mods.lootr.common.api.ILootrType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,20 +18,27 @@ import java.util.UUID;
  * <br />
  * It is specifically used to store data in `LootrSavedData`.
  */
-public record BaseLootrInfo(LootrBlockType blockType, LootrInfoType infoType, UUID uuid, String cachedKey, BlockPos pos, @Nullable Component name, ResourceKey<Level> dimension,
+public record BaseLootrInfo(@Nullable LootrBlockType blockType, @Nullable LootrInfoType infoType, ILootrType type, UUID uuid, String cachedKey, BlockPos pos, @Nullable Component name, ResourceKey<Level> dimension,
                             int containerSize, NonNullList<ItemStack> customInventory, ResourceKey<LootTable> table, long seed) implements ILootrInfo {
   public static BaseLootrInfo copy(ILootrInfo info) {
-    return new BaseLootrInfo(info.getInfoBlockType(), info.getInfoType(), info.getInfoUUID(), info.getInfoKey(), info.getInfoPos(), info.getInfoDisplayName(), info.getInfoDimension(), info.getInfoContainerSize(), info.getInfoReferenceInventory(), info.getInfoLootTable(), info.getInfoLootSeed());
+    return new BaseLootrInfo(info.getInfoBlockType(), info.getInfoType(), info.getInfoNewType(), info.getInfoUUID(), info.getInfoKey(), info.getInfoPos(), info.getInfoDisplayName(), info.getInfoDimension(), info.getInfoContainerSize(), info.getInfoReferenceInventory(), info.getInfoLootTable(), info.getInfoLootSeed());
   }
 
   @Override
+  @Deprecated
   public LootrBlockType getInfoBlockType() {
     return blockType();
   }
 
   @Override
+  @Deprecated
   public LootrInfoType getInfoType() {
     return infoType();
+  }
+
+  @Override
+  public ILootrType getInfoNewType() {
+    return type();
   }
 
   @Override

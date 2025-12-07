@@ -35,9 +35,7 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import noobanidus.mods.lootr.common.api.ILootrBlockEntityConverter;
-import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.NBTConstants;
+import noobanidus.mods.lootr.common.api.*;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.data.ILootrInfo;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
@@ -279,8 +277,14 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   @Override
+  @Deprecated
   public LootrBlockType getInfoBlockType() {
     return LootrBlockType.SHULKER;
+  }
+
+  @Override
+  public ILootrType getInfoNewType() {
+    return BuiltInLootrTypes.SHULKER;
   }
 
   @Override

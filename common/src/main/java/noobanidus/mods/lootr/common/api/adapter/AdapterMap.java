@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+@SuppressWarnings("unchecked")
 public class AdapterMap {
   private final Map<Class<?>, ILootrDataAdapter<?>> byClass = new ConcurrentHashMap<>();
   private final List<ILootrDataAdapter<?>> allAdapters = new ArrayList<>();
@@ -51,7 +52,6 @@ public class AdapterMap {
       noAdapter.add(clazz);
       return null;
     }
-    //noinspection unchecked
     return (ILootrDataAdapter<T>) potentialAdapter;
   }
 }

@@ -10,6 +10,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
+import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
+import noobanidus.mods.lootr.common.api.ILootrType;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,13 +23,14 @@ public record AbstractMinecartContainerLootrInfoProvider(
     AbstractMinecartContainer minecart, String cachedId) implements ILootrCart {
 
   @Override
+  @Deprecated
   public LootrBlockType getInfoBlockType() {
     return LootrBlockType.ENTITY;
   }
 
   @Override
-  public LootrInfoType getInfoType() {
-    return LootrInfoType.CONTAINER_ENTITY;
+  public ILootrType getInfoNewType() {
+    return BuiltInLootrTypes.MINECART;
   }
 
   @Override

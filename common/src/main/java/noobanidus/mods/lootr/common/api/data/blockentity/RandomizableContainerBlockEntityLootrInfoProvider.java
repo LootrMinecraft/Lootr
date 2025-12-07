@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.world.level.block.entity.TrappedChestBlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
+import noobanidus.mods.lootr.common.api.ILootrType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.ILootrSavedData;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
@@ -26,6 +27,7 @@ public record RandomizableContainerBlockEntityLootrInfoProvider(
     NonNullList<ItemStack> customInventory) implements ILootrBlockEntity {
 
   @Override
+  @Deprecated
   public LootrBlockType getInfoBlockType() {
     return switch (blockEntity) {
       case BarrelBlockEntity ignored -> LootrBlockType.BARREL;
@@ -36,8 +38,9 @@ public record RandomizableContainerBlockEntityLootrInfoProvider(
   }
 
   @Override
-  public LootrInfoType getInfoType() {
-    return LootrInfoType.CONTAINER_BLOCK_ENTITY;
+  public ILootrType getInfoNewType() {
+    // TODO: Guess the type
+    return null;
   }
 
   @Override

@@ -26,9 +26,7 @@ import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.storage.loot.LootTable;
-import noobanidus.mods.lootr.common.api.ILootrBlockEntityConverter;
-import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.NBTConstants;
+import noobanidus.mods.lootr.common.api.*;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.data.ILootrInfo;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
@@ -235,13 +233,14 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   }
 
   @Override
+  @Deprecated
   public LootrBlockType getInfoBlockType() {
     return LootrBlockType.CHEST;
   }
 
   @Override
-  public LootrInfoType getInfoType() {
-    return LootrInfoType.CONTAINER_BLOCK_ENTITY;
+  public ILootrType getInfoNewType() {
+    return BuiltInLootrTypes.CHEST;
   }
 
   @Override

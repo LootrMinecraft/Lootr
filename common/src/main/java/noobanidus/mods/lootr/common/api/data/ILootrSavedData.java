@@ -55,11 +55,13 @@ public interface ILootrSavedData extends IRedirect<ILootrInfo>, ILootrInfo, IOpe
   ILootrInventory createInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler);
 
   @Override
+  @Deprecated
   default LootrInfoType getInfoType() {
     return getRedirect().getInfoType();
   }
 
   @Override
+  @Deprecated
   default LootrBlockType getInfoBlockType() {
     return getRedirect().getInfoBlockType();
   }

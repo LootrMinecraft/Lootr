@@ -29,7 +29,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
+import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
 import noobanidus.mods.lootr.common.api.ILootrEntityConverter;
+import noobanidus.mods.lootr.common.api.ILootrType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.data.ILootrInfo;
@@ -248,8 +250,14 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
   @Override
+  @Deprecated
   public LootrBlockType getInfoBlockType() {
     return LootrBlockType.ENTITY;
+  }
+
+  @Override
+  public ILootrType getInfoNewType() {
+    return BuiltInLootrTypes.MINECART;
   }
 
   @Override

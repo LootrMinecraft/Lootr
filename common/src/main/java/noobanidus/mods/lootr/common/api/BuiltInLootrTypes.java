@@ -1,5 +1,8 @@
 package noobanidus.mods.lootr.common.api;
 
+import noobanidus.mods.lootr.common.api.data.LootrBlockType;
+import org.jetbrains.annotations.Nullable;
+
 public class BuiltInLootrTypes {
   public static final String TYPE_CHEST = LootrAPI.rl("chest").toString();
   public static final String TYPE_TRAPPED_CHEST = LootrAPI.rl("trapped_chest").toString();
@@ -14,4 +17,18 @@ public class BuiltInLootrTypes {
   public static ILootrType SHULKER;
   public static ILootrType INVENTORY;
   public static ILootrType MINECART;
+
+  @Nullable
+  @Deprecated
+  public static ILootrType fromLegacy (LootrBlockType type) {
+    return switch (type) {
+      case CHEST -> CHEST;
+      case TRAPPED_CHEST -> TRAPPED_CHEST;
+      case BARREL -> BARREL;
+      case SHULKER -> SHULKER;
+      case INVENTORY -> INVENTORY;
+      case ENTITY -> MINECART;
+      default -> null;
+    };
+  }
 }

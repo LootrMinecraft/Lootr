@@ -19,6 +19,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
+import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
+import noobanidus.mods.lootr.common.api.ILootrType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -40,9 +42,13 @@ import java.util.UUID;
  */
 @ApiStatus.Internal
 public interface ILootrInfo {
+  @Deprecated
   LootrBlockType getInfoBlockType();
 
+  @Deprecated
   LootrInfoType getInfoType();
+
+  ILootrType getInfoNewType ();
 
   @NotNull
   default Vec3 getInfoVec() {
@@ -101,19 +107,7 @@ public interface ILootrInfo {
       return null;
     }
 
-    if (getInfoType() == LootrInfoType.CONTAINER_ENTITY) {
-      Entity entity = level.getEntity(getInfoUUID());
-      if (entity instanceof Container container) {
-        return container;
-      }
-    } else if (getInfoType() == LootrInfoType.CONTAINER_BLOCK_ENTITY) {
-      BlockEntity be = level.getBlockEntity(getInfoPos());
-      if (be instanceof Container container) {
-        return container;
-      }
-    }
-
-    return null;
+    return getInfoNewType().getContainer(this, level);
   }
 
   default NonNullList<ItemStack> buildInitialInventory() {
@@ -121,8 +115,9 @@ public interface ILootrInfo {
   }
 
   default void saveInfoToTag(CompoundTag tag, HolderLookup.Provider provider) {
-    tag.putInt("type", getInfoType().ordinal());
-    tag.putInt("blockType", getInfoBlockType().ordinal());
+/*    tag.putInt("type", getInfoType().ordinal());*/
+    tag.putString("newType", getInfoNewType().getName());
+/*    tag.putInt("blockType", getInfoBlockType().ordinal());*/
     tag.put("position", NbtUtils.writeBlockPos(getInfoPos()));
     tag.putString("key", getInfoKey());
     tag.putString("dimension", getInfoDimension().location().toString());
@@ -142,17 +137,32 @@ public interface ILootrInfo {
   }
 
   static ILootrInfo loadInfoFromTag(CompoundTag tag, HolderLookup.Provider provider) {
-    LootrInfoType infoType = LootrInfoType.CONTAINER_BLOCK_ENTITY;
-    if (tag.contains("type", CompoundTag.TAG_INT)) {
-      infoType = LootrInfoType.values()[tag.getInt("type")];
-    } else if (tag.contains("entity") && tag.getBoolean("entity")) {
-      infoType = LootrInfoType.CONTAINER_ENTITY;
-    } else {
-      LootrAPI.LOG.error("Couldn't deduce the infoType of LootrInfo from tag: {}", tag);
+    ILootrType type = null;
+
+    if (tag.contains("newType", CompoundTag.TAG_STRING)) {
+      type = LootrAPI.getType(tag.getString("newType"));
+
+      if (type == null) {
+        LootrAPI.LOG.error("Couldn't find LootrType '{}' when loading LootrInfo from tag: {}", tag.getString("newType"), tag);
+        throw new IllegalStateException("Couldn't find LootrType '" + tag.getString("newType") + "' when loading LootrInfo from tag: " + tag);
+      }
     }
-    LootrBlockType blockType = null;
-    if (tag.contains("blockType", CompoundTag.TAG_INT)) {
-      blockType = LootrBlockType.values()[tag.getInt("blockType")];
+
+    // LEGACY
+    if (type == null) {
+      if (tag.contains("blockType", CompoundTag.TAG_INT)) {
+        //noinspection deprecation
+        LootrBlockType oldType = LootrBlockType.values()[tag.getInt("blockType")];
+        //noinspection deprecation
+        type = BuiltInLootrTypes.fromLegacy(oldType);
+      } else {
+        if (tag.contains("type", CompoundTag.TAG_INT)) {
+          type = BuiltInLootrTypes.CHEST;
+          // LEGACY
+        } else if (tag.contains("entity") && tag.getBoolean("entity")) {
+          type = BuiltInLootrTypes.MINECART;
+        }
+      }
     }
     BlockPos pos = NbtUtils.readBlockPos(tag, "position").orElse(BlockPos.ZERO);
     UUID uuid = tag.getUUID("uuid");
@@ -166,24 +176,24 @@ public interface ILootrInfo {
     if (tag.contains("reference") && tag.contains("referenceSize")) {
       reference = NonNullList.withSize(tag.getInt("referenceSize"), ItemStack.EMPTY);
       ContainerHelper.loadAllItems(tag.getCompound("reference"), reference, provider);
-      blockType = LootrBlockType.INVENTORY;
+      type = BuiltInLootrTypes.INVENTORY;
     }
-    if (blockType == null) {
-      if (infoType == LootrInfoType.CONTAINER_ENTITY) {
-        blockType = LootrBlockType.ENTITY;
-      } else {
-        blockType = LootrBlockType.CHEST;
-      }
-    }
+
     ResourceKey<LootTable> table = null;
     long seed = -1;
     if (tag.contains("table")) {
       table = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse(tag.getString("table")));
       seed = tag.getLong("seed");
     }
-    return new BaseLootrInfo(blockType, infoType, uuid, ILootrInfo.generateInfoKey(uuid), pos, name, dimension, size, reference, table, seed);
+
+    if (type == null) {
+      LootrAPI.LOG.error("Couldn't determine LootrType when loading LootrInfo from tag, guessing chest: {}", tag);
+      type = BuiltInLootrTypes.CHEST;
+    }
+    return new BaseLootrInfo(null, null, type, uuid, ILootrInfo.generateInfoKey(uuid), pos, name, dimension, size, reference, table, seed);
   }
 
+  @Deprecated
   enum LootrInfoType {
     CONTAINER_BLOCK_ENTITY,
     CONTAINER_ENTITY;

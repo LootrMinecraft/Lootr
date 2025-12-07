@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootTable;
+import noobanidus.mods.lootr.common.api.ILootrType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,17 +24,25 @@ public record CustomLootrInfoProvider(
     Component displayName,
     ResourceKey<Level> dimension,
     NonNullList<ItemStack> customInventory,
-    LootrInfoType type,
-    LootrBlockType blockType) implements ILootrInfoProvider {
+    @Deprecated @Nullable LootrInfoType type,
+    @Deprecated @Nullable LootrBlockType blockType,
+    ILootrType newType) implements ILootrInfoProvider {
 
   @Override
+  @Deprecated
   public LootrBlockType getInfoBlockType() {
     return blockType();
   }
 
   @Override
+  @Deprecated
   public LootrInfoType getInfoType() {
     return type();
+  }
+
+  @Override
+  public ILootrType getInfoNewType() {
+    return newType();
   }
 
   @Override

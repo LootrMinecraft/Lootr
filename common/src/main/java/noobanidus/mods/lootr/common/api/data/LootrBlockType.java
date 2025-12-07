@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.Blocks;
  * registry or some other method in order to allow add-on mods to
  * create custom containers that have replacements.
  */
+@Deprecated
 public enum LootrBlockType {
   CHEST(Blocks.CHEST),
   TRAPPED_CHEST(Blocks.TRAPPED_CHEST),

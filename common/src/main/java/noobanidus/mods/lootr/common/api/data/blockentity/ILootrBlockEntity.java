@@ -38,6 +38,7 @@ public interface ILootrBlockEntity extends ILootrInfoProvider {
   }
 
   @Override
+  @Deprecated
   default LootrInfoType getInfoType() {
     return LootrInfoType.CONTAINER_BLOCK_ENTITY;
   }

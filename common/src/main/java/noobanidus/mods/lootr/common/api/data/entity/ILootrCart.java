@@ -16,6 +16,7 @@ import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
  */
 public interface ILootrCart extends ILootrInfoProvider {
   @Override
+  @Deprecated
   default LootrInfoType getInfoType() {
     return LootrInfoType.CONTAINER_ENTITY;
   }
