@@ -71,7 +71,7 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
   }
 
   @Deprecated
-  static ILootrInfoProvider of(UUID id, BlockPos pos, int containerSize, ResourceKey<LootTable> lootTable, long lootSeed, Component displayName, ResourceKey<Level> dimension, NonNullList<ItemStack> customInventory, LootrInfoType type, LootrBlockType blockType) {
+  static ILootrInfoProvider of(UUID id, BlockPos pos, int containerSize, ResourceKey<LootTable> lootTable, long lootSeed, Component displayName, ResourceKey<Level> dimension, NonNullList<ItemStack> customInventory, @Deprecated LootrInfoType type, @Deprecated LootrBlockType blockType) {
     // TODO: Guess the new type
     return
         new CustomLootrInfoProvider(id, ILootrInfo.generateInfoKey(id), pos, containerSize, lootTable, lootSeed, displayName, dimension, customInventory, type, blockType, null);
