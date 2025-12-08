@@ -34,6 +34,7 @@ public class LootrInventory implements ILootrInventory {
     }
   }
 
+  @Override
   public void setMenuBuilder(MenuBuilder builder) {
     this.menuBuilder = builder;
   }

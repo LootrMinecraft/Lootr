@@ -41,6 +41,7 @@ public class LootrTrappedChestItemRenderer extends BlockEntityWithoutLevelRender
     getBlockEntityRenderDispatcher().renderItem(tile, matrixStack, buffer, combinedLight, combinedOverlay);
   }
 
+  @Override
   public void render(ItemStack stack, ItemDisplayContext mode, PoseStack matrices, MultiBufferSource vertexConsumers, int light, int overlay) {
     renderByItem(stack, mode, matrices, vertexConsumers, light, overlay);
   }

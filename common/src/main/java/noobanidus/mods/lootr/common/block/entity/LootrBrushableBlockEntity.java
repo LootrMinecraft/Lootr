@@ -166,7 +166,8 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
     }
   }
 
-  public void checkReset() {
+  @Override
+  public void IBrushable$checkReset() {
     if (this.level != null) {
       if (this.brushCount != 0 && this.level.getGameTime() >= this.brushCountResetsAtTick) {
         int i = this.getCompletionState();

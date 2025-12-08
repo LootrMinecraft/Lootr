@@ -13,6 +13,7 @@ import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import java.util.Optional;
 
 public class LootedStatTrigger extends SimpleCriterionTrigger<LootedStatTrigger.TriggerInstance> implements ILootedStatTrigger {
+  @Override
   public void trigger(ServerPlayer player) {
     this.trigger(player, (instance) -> instance.test(player));
   }

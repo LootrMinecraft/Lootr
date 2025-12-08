@@ -13,6 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class ContainerTrigger extends SimpleCriterionTrigger<ContainerTrigger.TriggerInstance> implements IContainerTrigger {
+  @Override
   public void trigger(ServerPlayer player, UUID condition) {
     this.trigger(player, TriggerInstance::test);
   }

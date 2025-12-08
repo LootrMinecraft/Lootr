@@ -201,6 +201,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
     return getOpenNess(1f) > 0;
   }
 
+  @Override
   public boolean isClientOpened() {
     return this.simpleLootrInstance.isClientOpened();
   }

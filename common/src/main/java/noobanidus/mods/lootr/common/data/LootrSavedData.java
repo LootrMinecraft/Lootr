@@ -178,6 +178,7 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
     markChanged();
   }
 
+  @Override
   @Nullable
   public LootrInventory getInventory(UUID id) {
     LootrInventory inventory = inventories.get(id);
