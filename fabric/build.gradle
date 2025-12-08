@@ -33,6 +33,9 @@ dependencies {
     modCompileOnly("maven.modrinth:modmenu:${rootProject.mod_menu}")
     modRuntimeOnly("maven.modrinth:modmenu:${rootProject.mod_menu}")
 
+    implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:${rootProject.mixin_extras}"))
+    implementation("io.github.llamalad7:mixinextras-fabric:${rootProject.mixin_extras}")
+
     //modLocalRuntime("com.telepathicgrunt:CommandStructures-Fabric:${project.commandstructures_fabric}")
     //modLocalRuntime("com.telepathicgrunt:StructureVoidToggle-Fabric:${project.structurevoidtoggle_fabric}")
 }

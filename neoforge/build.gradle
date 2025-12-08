@@ -38,6 +38,9 @@ dependencies {
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive = false }
 
+    implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:${rootProject.mixin_extras}"))
+    implementation("io.github.llamalad7:mixinextras-neoforge:${rootProject.mixin_extras}")
+
     //modRuntimeOnly("mezz.jei:jei-${project.jei_mc}-neoforge:${project.jei}")
     //modRuntimeOnly("mezz.jei:jei-${project.jei_mc}-common:${project.jei}")
 
