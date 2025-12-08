@@ -8,13 +8,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.NBTConstants;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 import java.util.UUID;
@@ -37,7 +34,7 @@ public class SimpleLootrEntity {
     this.visualOpenersSupplier = visualOpenersSupplier;
   }
 
-  public NonNullList<ItemStack> getItems () {
+  public NonNullList<ItemStack> getItems() {
     return items;
   }
 
@@ -75,19 +72,19 @@ public class SimpleLootrEntity {
     return items.size();
   }
 
-  public void setHasBeenOpened () {
+  public void setHasBeenOpened() {
     this.hasBeenOpened = true;
   }
 
-  public boolean isSavingToItem () {
+  public boolean isSavingToItem() {
     return savingToItem;
   }
 
-  public void setSavingToItem (boolean saving) {
+  public void setSavingToItem(boolean saving) {
     this.savingToItem = saving;
   }
 
-  public void loadAdditional (CompoundTag compound, HolderLookup.Provider provder) {
+  public void loadAdditional(CompoundTag compound, HolderLookup.Provider provder) {
     if (compound.hasUUID(NBTConstants.ENTITY_ID)) {
       this.infoId = compound.getUUID(NBTConstants.ENTITY_ID);
     }
@@ -106,7 +103,7 @@ public class SimpleLootrEntity {
     }
   }
 
-  public void saveAdditional (CompoundTag compound, HolderLookup.Provider provider, boolean isClientSide) {
+  public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider, boolean isClientSide) {
     if (!LootrAPI.shouldDiscard() && !savingToItem) {
       compound.putUUID(NBTConstants.ENTITY_ID, getInfoUUID());
     }
@@ -122,7 +119,7 @@ public class SimpleLootrEntity {
     }
   }
 
-  public void fillUpdateTag (CompoundTag result, HolderLookup.Provider provider, boolean isClientSide) {
+  public void fillUpdateTag(CompoundTag result, HolderLookup.Provider provider, boolean isClientSide) {
     saveAdditional(result, provider, isClientSide);
     Set<UUID> currentOpeners = visualOpenersSupplier.get();
     if (currentOpeners != null) {
