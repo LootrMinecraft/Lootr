@@ -35,6 +35,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
+import noobanidus.mods.lootr.common.api.IBrushable;
 import noobanidus.mods.lootr.common.api.ILootrType;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
@@ -48,7 +49,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBlockEntity {
+public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBlockEntity, IBrushable {
   private int brushCount;
   private long brushCountResetsAtTick;
   private long coolDownEndsAtTick;
@@ -63,26 +64,6 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
     super(LootrRegistry.getBrushableBlockEntity(), blockPos, blockState);
   }
 
-  public static FallingBlockEntity fall(ServerLevel level, BlockPos blockPos, BlockState blockState, LootrBrushableBlockEntity brushableBlockEntity) {
-    FallingBlockEntity fallingBlockEntity = new FallingBlockEntity(EntityType.FALLING_BLOCK, level);
-    double d = (double) blockPos.getX() + 0.5;
-    double e = blockPos.getY();
-    double f = (double) blockPos.getZ() + 0.5;
-    ((AccessorMixinFallingBlockEntity)fallingBlockEntity).lootr$setBlockState(blockState.hasProperty(BlockStateProperties.WATERLOGGED) ? blockState.setValue(BlockStateProperties.WATERLOGGED, Boolean.FALSE) : blockState);
-    fallingBlockEntity.blocksBuilding = true;
-    fallingBlockEntity.setPos(d, e, f);
-    fallingBlockEntity.setDeltaMovement(Vec3.ZERO);
-    fallingBlockEntity.xo = d;
-    fallingBlockEntity.yo = e;
-    fallingBlockEntity.zo = f;
-    fallingBlockEntity.blockData = brushableBlockEntity.getFallData(level.registryAccess());
-    fallingBlockEntity.setStartPos(fallingBlockEntity.blockPosition());
-    level.setBlock(blockPos, blockState.getFluidState().createLegacyBlock(), 3);
-    level.addFreshEntity(fallingBlockEntity);
-    return fallingBlockEntity;
-
-  }
-
   // TODO:
   private CompoundTag getFallData(HolderLookup.Provider provider) {
     CompoundTag tag = new CompoundTag();
@@ -90,7 +71,8 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
     return tag;
   }
 
-  public boolean brush(long l, Player player, Direction direction) {
+  @Override
+  public boolean IBrushable$brush(long l, Player player, Direction direction) {
     if (this.hitDirection == null) {
       this.hitDirection = direction;
     }
@@ -195,7 +177,6 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
               .setValue(BlockStateProperties.DUSTED, Integer.valueOf(j)), 3);
         }
 
-        int k = 4;
         this.brushCountResetsAtTick = this.level.getGameTime() + 4L;
       }
 
@@ -238,6 +219,7 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
     return compoundTag;
   }
 
+  @Override
   public ClientboundBlockEntityDataPacket getUpdatePacket() {
     return ClientboundBlockEntityDataPacket.create(this);
   }
@@ -368,5 +350,22 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
     return 0;
   }
 
-
+  public static FallingBlockEntity fall(ServerLevel level, BlockPos blockPos, BlockState blockState, LootrBrushableBlockEntity brushableBlockEntity) {
+    FallingBlockEntity fallingBlockEntity = new FallingBlockEntity(EntityType.FALLING_BLOCK, level);
+    double d = (double) blockPos.getX() + 0.5;
+    double e = blockPos.getY();
+    double f = (double) blockPos.getZ() + 0.5;
+    ((AccessorMixinFallingBlockEntity)fallingBlockEntity).lootr$setBlockState(blockState.hasProperty(BlockStateProperties.WATERLOGGED) ? blockState.setValue(BlockStateProperties.WATERLOGGED, Boolean.FALSE) : blockState);
+    fallingBlockEntity.blocksBuilding = true;
+    fallingBlockEntity.setPos(d, e, f);
+    fallingBlockEntity.setDeltaMovement(Vec3.ZERO);
+    fallingBlockEntity.xo = d;
+    fallingBlockEntity.yo = e;
+    fallingBlockEntity.zo = f;
+    fallingBlockEntity.blockData = brushableBlockEntity.getFallData(level.registryAccess());
+    fallingBlockEntity.setStartPos(fallingBlockEntity.blockPosition());
+    level.setBlock(blockPos, blockState.getFluidState().createLegacyBlock(), 3);
+    level.addFreshEntity(fallingBlockEntity);
+    return fallingBlockEntity;
+  }
 }

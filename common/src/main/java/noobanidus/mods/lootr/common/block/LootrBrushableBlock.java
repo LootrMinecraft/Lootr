@@ -57,7 +57,7 @@ public class LootrBrushableBlock extends BrushableBlock {
       return;
     }
 
-    brushableBlockEntity.checkReset();
+    brushableBlockEntity.IBrushable$checkReset();
 
     if (FallingBlock.isFree(serverLevel.getBlockState(blockPos.below())) && blockPos.getY() >= serverLevel.getMinBuildHeight()) {
       LootrBrushableBlockEntity.fall(serverLevel, blockPos, blockState, brushableBlockEntity);
