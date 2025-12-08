@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.common.block.entity;
 
+import com.google.auto.service.AutoService;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -31,6 +32,7 @@ public class LootrTrappedChestBlockEntity extends LootrChestBlockEntity {
     return LootrBlockType.TRAPPED_CHEST;
   }
 
+  @AutoService(ILootrBlockEntityConverter.class)
   public static class DefaultBlockEntityConverter implements ILootrBlockEntityConverter<LootrTrappedChestBlockEntity> {
     @Override
     public ILootrBlockEntity apply(LootrTrappedChestBlockEntity blockEntity) {

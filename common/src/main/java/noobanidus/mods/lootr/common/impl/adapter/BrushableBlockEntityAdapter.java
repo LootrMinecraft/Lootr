@@ -1,11 +1,13 @@
 package noobanidus.mods.lootr.common.impl.adapter;
 
+import com.google.auto.service.AutoService;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.entity.BrushableBlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.mixins.AccessorMixinBrushableBlockEntity;
 
+@AutoService(ILootrDataAdapter.class)
 public class BrushableBlockEntityAdapter implements ILootrDataAdapter<BrushableBlockEntity> {
   @Override
   public Class<BrushableBlockEntity> getAssignableClass() {

@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.common.block.entity;
 
+import com.google.auto.service.AutoService;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
@@ -278,6 +279,7 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
     return openersCounter.getOpenerCount();
   }
 
+  @AutoService(ILootrBlockEntityConverter.class)
   public static class DefaultBlockEntityConverter implements ILootrBlockEntityConverter<LootrBarrelBlockEntity> {
     @Override
     public ILootrBlockEntity apply(LootrBarrelBlockEntity blockEntity) {

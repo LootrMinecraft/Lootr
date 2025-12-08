@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.common.block.entity;
 
+import com.google.auto.service.AutoService;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
@@ -286,6 +287,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
     pLevel.playSound(null, d0, d1, d2, pSound, SoundSource.BLOCKS, 0.5F, pLevel.random.nextFloat() * 0.1F + 0.9F);
   }
 
+  @AutoService(ILootrBlockEntityConverter.class)
   public static class DefaultBlockEntityConverter implements ILootrBlockEntityConverter<LootrChestBlockEntity> {
     @Override
     public ILootrBlockEntity apply(LootrChestBlockEntity blockEntity) {

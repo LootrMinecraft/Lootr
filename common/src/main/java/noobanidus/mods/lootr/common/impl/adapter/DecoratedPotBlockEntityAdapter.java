@@ -1,11 +1,13 @@
 package noobanidus.mods.lootr.common.impl.adapter;
 
+import com.google.auto.service.AutoService;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import org.jetbrains.annotations.Nullable;
 
+@AutoService(ILootrDataAdapter.class)
 public class DecoratedPotBlockEntityAdapter implements ILootrDataAdapter<DecoratedPotBlockEntity> {
   @Override
   public Class<DecoratedPotBlockEntity> getAssignableClass() {

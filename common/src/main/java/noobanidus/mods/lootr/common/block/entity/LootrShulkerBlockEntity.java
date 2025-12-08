@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.common.block.entity;
 
+import com.google.auto.service.AutoService;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -362,6 +363,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
     pLevel.updateNeighborsAt(pPos, pState.getBlock());
   }
 
+  @AutoService(ILootrBlockEntityConverter.class)
   public static class DefaultBlockEntityConverter implements ILootrBlockEntityConverter<LootrShulkerBlockEntity> {
     @Override
     public ILootrBlockEntity apply(LootrShulkerBlockEntity blockEntity) {

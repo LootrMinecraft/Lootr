@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.common.impl.type;
 
+import com.google.auto.service.AutoService;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -7,6 +8,7 @@ import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
 import noobanidus.mods.lootr.common.api.ILootrType;
 import org.jetbrains.annotations.Nullable;
 
+@AutoService(ILootrType.class)
 public class TrappedChestLootrType implements ILootrType {
   @Override
   public String getName() {

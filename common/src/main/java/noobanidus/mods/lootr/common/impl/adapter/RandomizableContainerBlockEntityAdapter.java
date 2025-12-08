@@ -1,10 +1,12 @@
 package noobanidus.mods.lootr.common.impl.adapter;
 
+import com.google.auto.service.AutoService;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 
+@AutoService(ILootrDataAdapter.class)
 public class RandomizableContainerBlockEntityAdapter implements ILootrDataAdapter<RandomizableContainerBlockEntity> {
 
   @Override

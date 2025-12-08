@@ -159,6 +159,7 @@ allprojects {
 
     repositories {
         mavenLocal()
+        mavenCentral()
         maven {
             url "https://maven.neoforged.net/releases/"
         }
@@ -181,6 +182,11 @@ allprojects {
                 includeGroup 'me.shedaniel'
             }
         }
+    }
+
+    dependencies {
+        "compileOnly"("com.google.auto.service:auto-service-annotations:${rootProject.auto_service_version}")
+        "annotationProcessor"("com.google.auto.service:auto-service:${rootProject.auto_service_version}")
     }
 
     tasks.withType(JavaCompile) {
