@@ -19,6 +19,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -33,6 +34,8 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
+import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
+import noobanidus.mods.lootr.common.api.ILootrType;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
@@ -46,16 +49,6 @@ import java.util.Set;
 import java.util.UUID;
 
 public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBlockEntity {
-  private final NonNullList<ItemStack> itemStacks = NonNullList.withSize(1, ItemStack.EMPTY);
-
-  private static final Logger LOGGER = LogUtils.getLogger();
-  private static final String LOOT_TABLE_TAG = "LootTable";
-  private static final String LOOT_TABLE_SEED_TAG = "LootTableSeed";
-  private static final String HIT_DIRECTION_TAG = "hit_direction";
-  private static final String ITEM_TAG = "item";
-  private static final int BRUSH_COOLDOWN_TICKS = 10;
-  private static final int BRUSH_RESET_TICKS = 40;
-  private static final int REQUIRED_BRUSHES_TO_BREAK = 10;
   private int brushCount;
   private long brushCountResetsAtTick;
   private long coolDownEndsAtTick;
@@ -90,6 +83,7 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
 
   }
 
+  // TODO:
   private CompoundTag getFallData(HolderLookup.Provider provider) {
     CompoundTag tag = new CompoundTag();
     saveAdditional(tag, provider);
@@ -304,8 +298,14 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
   }
 
   @Override
+  @Deprecated
   public LootrBlockType getInfoBlockType() {
-    return null;
+    return LootrBlockType.CHEST;
+  }
+
+  @Override
+  public ILootrType getInfoNewType() {
+    return BuiltInLootrTypes.POT;
   }
 
   @Override

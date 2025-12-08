@@ -1,0 +1,29 @@
+package noobanidus.mods.lootr.common.impl.adapter;
+
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
+import net.minecraft.world.level.storage.loot.LootTable;
+import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
+import org.jetbrains.annotations.Nullable;
+
+public class DecoratedPotBlockEntityAdapter implements ILootrDataAdapter<DecoratedPotBlockEntity> {
+  @Override
+  public Class<DecoratedPotBlockEntity> getAssignableClass() {
+    return DecoratedPotBlockEntity.class;
+  }
+
+  @Override
+  public @Nullable ResourceKey<LootTable> getLootTable(DecoratedPotBlockEntity entity) {
+    return entity.getLootTable();
+  }
+
+  @Override
+  public long getLootSeed(DecoratedPotBlockEntity entity) {
+    return entity.getLootTableSeed();
+  }
+
+  @Override
+  public void setLootTable(DecoratedPotBlockEntity entity, ResourceKey<LootTable> table, long seed) {
+    entity.setLootTable(table, seed);
+  }
+}

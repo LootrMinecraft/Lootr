@@ -10,6 +10,9 @@ public class BuiltInLootrTypes {
   public static final String TYPE_SHULKER = LootrAPI.rl("shulker").toString();
   public static final String TYPE_INVENTORY = LootrAPI.rl("inventory").toString();
   public static final String TYPE_MINECART = LootrAPI.rl("minecart").toString();
+  public static final String TYPE_POT = LootrAPI.rl("pot").toString();
+  public static final String TYPE_SAND = LootrAPI.rl("suspicious_sand").toString();
+  public static final String TYPE_GRAVEL = LootrAPI.rl("suspicious_gravel").toString();
 
   public static ILootrType CHEST;
   public static ILootrType TRAPPED_CHEST;
@@ -17,6 +20,9 @@ public class BuiltInLootrTypes {
   public static ILootrType SHULKER;
   public static ILootrType INVENTORY;
   public static ILootrType MINECART;
+  public static ILootrType POT;
+  public static ILootrType SAND;
+  public static ILootrType GRAVEL;
 
   @Nullable
   @Deprecated
