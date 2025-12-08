@@ -46,6 +46,16 @@ public class LootrRegistryImpl implements ILootrRegistry {
   }
 
   @Override
+  public Block getSuspiciousSand() {
+    return ModBlocks.SUSPICIOUS_SAND;
+  }
+
+  @Override
+  public Block getSuspiciousGravel() {
+    return ModBlocks.SUSPICIOUS_GRAVEL;
+  }
+
+  @Override
   public BlockEntityType<?> getBarrelBlockEntity() {
     return ModBlockEntities.LOOTR_BARREL;
   }
@@ -101,10 +111,25 @@ public class LootrRegistryImpl implements ILootrRegistry {
   }
 
   @Override
+  public Item getSuspiciousSandItem() {
+    return ModItems.SUSPICIOUS_SAND;
+  }
+
+  @Override
+  public Item getSuspiciousGravelItem() {
+    return ModItems.SUSPICIOUS_GRAVEL;
+  }
+
+  @Override
   public EntityType<?> getMinecart() {
     return ModEntities.LOOTR_MINECART_ENTITY;
   }
 
+  @Override
+  public BlockEntityType<?> getBrushableBlockEntity() {
+    return ModBlockEntities.LOOTR_BRUSHABLE_BLOCK;
+  }
+  
   @Override
   public IAdvancementTrigger getAdvancementTrigger() {
     return ModAdvancements.ADVANCEMENT;

@@ -27,6 +27,10 @@ public interface ILootrRegistry {
 
   Block getShulker();
 
+  Block getSuspiciousSand ();
+
+  Block getSuspiciousGravel ();
+
   Item getBarrelItem();
 
   Item getChestItem();
@@ -39,7 +43,12 @@ public interface ILootrRegistry {
 
   Item getShulkerItem();
 
+  Item getSuspiciousSandItem ();
+  Item getSuspiciousGravelItem ();
+
   EntityType<?> getMinecart();
+
+  BlockEntityType<?> getBrushableBlockEntity ();
 
   BlockEntityType<?> getBarrelBlockEntity();
 

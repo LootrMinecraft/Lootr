@@ -19,6 +19,8 @@ public class ModItems {
   public static final DeferredHolder<Item, BlockItem> INVENTORY = REGISTER.register("lootr_inventory", () -> new BlockItem(LootrRegistry.getInventoryBlock(), new BlockItem.Properties()));
   public static final DeferredHolder<Item, BlockItem> SHULKER = REGISTER.register("lootr_shulker", () -> new BlockItem(LootrRegistry.getShulkerBlock(), new BlockItem.Properties()));
   public static final DeferredHolder<Item, BlockItem> TROPHY = REGISTER.register("trophy", () -> new BlockItem(LootrRegistry.getTrophyBlock(), new Item.Properties().rarity(Rarity.EPIC)));
+  public static final DeferredHolder<Item, BlockItem> SUSPICIOUS_SAND = REGISTER.register("suspicious_sand", () -> new BlockItem(LootrRegistry.getSuspiciousSand(), new BlockItem.Properties()));
+  public static final DeferredHolder<Item, BlockItem> SUSPICIOUS_GRAVEL = REGISTER.register("suspicious_gravel", () -> new BlockItem(LootrRegistry.getSuspiciousGravel(), new BlockItem.Properties()));
 
   public static void register(IEventBus bus) {
     REGISTER.register(bus);

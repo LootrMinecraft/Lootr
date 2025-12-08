@@ -129,4 +129,24 @@ public class LootrRegistry {
   public static CreativeModeTab getTab() {
     return INSTANCE.getTab();
   }
+
+  public static BlockEntityType<?> getBrushableBlockEntity() {
+    return INSTANCE.getBrushableBlockEntity();
+  }
+
+  public static Block getSuspiciousSand () {
+    return INSTANCE.getSuspiciousSand();
+  }
+
+  public static Block getSuspiciousGravel () {
+    return INSTANCE.getSuspiciousGravel();
+  }
+
+  public static Item getSuspiciousGravelItem () {
+    return INSTANCE.getSuspiciousGravelItem();
+  }
+
+  public static Item getSuspiciousSandItem () {
+    return INSTANCE.getSuspiciousSandItem();
+  }
 }

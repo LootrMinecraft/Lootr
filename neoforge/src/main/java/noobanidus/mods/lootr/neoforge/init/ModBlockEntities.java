@@ -26,4 +26,5 @@ public class ModBlockEntities {
   public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LootrNeoForgeBarrelBlockEntity>> LOOTR_BARREL = REGISTER.register("lootr_barrel", () -> BlockEntityType.Builder.of(LootrNeoForgeBarrelBlockEntity::new, LootrRegistry.getBarrelBlock()).build(null));
   public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LootrInventoryBlockEntity>> LOOTR_INVENTORY = REGISTER.register("lootr_inventory", () -> BlockEntityType.Builder.of(LootrInventoryBlockEntity::new, LootrRegistry.getInventoryBlock()).build(null));
   public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LootrShulkerBlockEntity>> LOOTR_SHULKER = REGISTER.register("lootr_shulker", () -> BlockEntityType.Builder.of(LootrShulkerBlockEntity::new, LootrRegistry.getShulkerBlock()).build(null));
+  public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LootrBrushableBlockEntity>> LOOTR_BRUSHABLE_BLOCK = REGISTER.register("brushable_block", () -> BlockEntityType.Builder.of(LootrBrushableBlockEntity::new, ModBlocks.SUSPICIOUS_GRAVEL.get(), ModBlocks.SUSPICIOUS_SAND.get()).build(null));
 }
