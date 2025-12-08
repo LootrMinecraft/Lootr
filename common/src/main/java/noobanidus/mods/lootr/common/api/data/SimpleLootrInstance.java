@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-public class SimpleLootrEntity {
+public class SimpleLootrInstance {
   private final NonNullList<ItemStack> items;
   private final Set<UUID> clientOpeners = new ObjectOpenHashSet<>();
   protected UUID infoId = null;
@@ -29,7 +29,7 @@ public class SimpleLootrEntity {
   private final Supplier<Set<UUID>> visualOpenersSupplier;
 
   // What in the recursive, self-referential is this
-  public SimpleLootrEntity(Supplier<Set<UUID>> visualOpenersSupplier, int size) {
+  public SimpleLootrInstance(Supplier<Set<UUID>> visualOpenersSupplier, int size) {
     this.items = NonNullList.withSize(size, ItemStack.EMPTY);
     this.visualOpenersSupplier = visualOpenersSupplier;
   }

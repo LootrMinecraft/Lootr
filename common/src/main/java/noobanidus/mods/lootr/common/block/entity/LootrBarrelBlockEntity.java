@@ -1,15 +1,10 @@
 package noobanidus.mods.lootr.common.block.entity;
 
-import com.google.common.collect.Sets;
-import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceKey;
@@ -31,9 +26,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.*;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
-import noobanidus.mods.lootr.common.api.data.ILootrInfo;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
-import noobanidus.mods.lootr.common.api.data.SimpleLootrEntity;
+import noobanidus.mods.lootr.common.api.data.SimpleLootrInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
@@ -44,13 +38,13 @@ import java.util.Set;
 import java.util.UUID;
 
 public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity implements ILootrBlockEntity {
-  protected final SimpleLootrEntity simpleLootrEntity = new SimpleLootrEntity(this::getVisualOpeners, 27);
+  protected final SimpleLootrInstance simpleLootrInstance = new SimpleLootrInstance(this::getVisualOpeners, 27);
 
   private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
     @Override
     protected void onOpen(Level level, BlockPos pos, BlockState state) {
       if (!LootrBarrelBlockEntity.this.hasBeenOpened()) {
-        LootrBarrelBlockEntity.this.simpleLootrEntity.setHasBeenOpened();
+        LootrBarrelBlockEntity.this.simpleLootrInstance.setHasBeenOpened();
         LootrBarrelBlockEntity.this.markChanged();
       }
       LootrBarrelBlockEntity.this.playSound(state, SoundEvents.BARREL_OPEN);
@@ -94,7 +88,7 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
   @Override
   @NotNull
   public UUID getInfoUUID() {
-    return this.simpleLootrEntity.getInfoUUID();
+    return this.simpleLootrInstance.getInfoUUID();
   }
 
   @Override
@@ -104,7 +98,7 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
 
   @Override
   protected NonNullList<ItemStack> getItems() {
-    return this.simpleLootrEntity.getItems();
+    return this.simpleLootrInstance.getItems();
   }
 
   @Override
@@ -120,21 +114,21 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
   public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider) {
     super.loadAdditional(compound, provider);
     this.tryLoadLootTable(compound);
-    this.simpleLootrEntity.loadAdditional(compound, provider);
+    this.simpleLootrInstance.loadAdditional(compound, provider);
   }
 
   @Override
   public void saveToItem(ItemStack itemstack, HolderLookup.Provider provider) {
-    this.simpleLootrEntity.setSavingToItem(true);
+    this.simpleLootrInstance.setSavingToItem(true);
     super.saveToItem(itemstack, provider);
-    this.simpleLootrEntity.setSavingToItem(false);
+    this.simpleLootrInstance.setSavingToItem(false);
   }
 
   @Override
   protected void saveAdditional(CompoundTag compound, HolderLookup.Provider provider) {
     super.saveAdditional(compound, provider);
     this.trySaveLootTable(compound);
-    this.simpleLootrEntity.saveAdditional(compound, provider, level != null && level.isClientSide());
+    this.simpleLootrInstance.saveAdditional(compound, provider, level != null && level.isClientSide());
   }
 
   @Override
@@ -149,7 +143,7 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
 
   @Override
   public int getContainerSize() {
-    return this.simpleLootrEntity.getInfoContainerSize();
+    return this.simpleLootrInstance.getInfoContainerSize();
   }
 
   @Override
@@ -192,29 +186,29 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
 
   @Override
   public boolean hasBeenOpened() {
-    return this.simpleLootrEntity.hasBeenOpened();
+    return this.simpleLootrInstance.hasBeenOpened();
   }
 
   @Override
   public @Nullable Set<UUID> getClientOpeners() {
-    return this.simpleLootrEntity.getClientOpeners();
+    return this.simpleLootrInstance.getClientOpeners();
   }
 
   @Override
   public boolean isClientOpened() {
-    return this.simpleLootrEntity.isClientOpened();
+    return this.simpleLootrInstance.isClientOpened();
   }
 
   @Override
   public void setClientOpened(boolean opened) {
-    this.simpleLootrEntity.setClientOpened(opened);
+    this.simpleLootrInstance.setClientOpened(opened);
   }
 
   @Override
   @NotNull
   public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
     CompoundTag result = super.getUpdateTag(provider);
-    this.simpleLootrEntity.fillUpdateTag(result, provider, level != null && level.isClientSide());
+    this.simpleLootrInstance.fillUpdateTag(result, provider, level != null && level.isClientSide());
     return result;
   }
 
@@ -276,7 +270,7 @@ public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockE
 
   @Override
   public String getInfoKey() {
-    return this.simpleLootrEntity.getInfoKey();
+    return this.simpleLootrInstance.getInfoKey();
   }
 
   @Override
