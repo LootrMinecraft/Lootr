@@ -75,6 +75,10 @@ public class LootrAPI {
     return ResourceLocation.fromNamespaceAndPath(namespace, path);
   }
 
+  public static ResourceLocation mc (String path) {
+    return ResourceLocation.withDefaultNamespace(path);
+  }
+
   public static Set<UUID> getPlayerIds() {
     return INSTANCE.getPlayerIds();
   }

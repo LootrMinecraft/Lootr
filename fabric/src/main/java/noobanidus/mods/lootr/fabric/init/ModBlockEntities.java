@@ -6,6 +6,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.block.entity.*;
 import noobanidus.mods.lootr.fabric.block.entity.LootrFabricBarrelBlockEntity;
+import noobanidus.mods.lootr.fabric.block.entity.LootrFabricBrushableBlockEntity;
 
 public class ModBlockEntities {
   public static void registerBlockEntities() {
@@ -22,5 +23,5 @@ public class ModBlockEntities {
   public static final BlockEntityType<LootrTrappedChestBlockEntity> LOOTR_TRAPPED_CHEST = BlockEntityType.Builder.of(LootrTrappedChestBlockEntity::new, ModBlocks.TRAPPED_CHEST).build(null);
   public static final BlockEntityType<LootrShulkerBlockEntity> LOOTR_SHULKER = BlockEntityType.Builder.of(LootrShulkerBlockEntity::new, ModBlocks.SHULKER).build(null);
   public static final BlockEntityType<LootrInventoryBlockEntity> LOOTR_INVENTORY = BlockEntityType.Builder.of(LootrInventoryBlockEntity::new, ModBlocks.INVENTORY).build(null);
-  public static final BlockEntityType<LootrBrushableBlockEntity> LOOTR_BRUSHABLE_BLOCK = BlockEntityType.Builder.of(LootrBrushableBlockEntity::new, ModBlocks.SUSPICIOUS_GRAVEL, ModBlocks.SUSPICIOUS_SAND).build(null);
+  public static final BlockEntityType<LootrFabricBrushableBlockEntity> LOOTR_BRUSHABLE_BLOCK = BlockEntityType.Builder.of(LootrFabricBrushableBlockEntity::new, ModBlocks.SUSPICIOUS_GRAVEL, ModBlocks.SUSPICIOUS_SAND).build(null);
 }

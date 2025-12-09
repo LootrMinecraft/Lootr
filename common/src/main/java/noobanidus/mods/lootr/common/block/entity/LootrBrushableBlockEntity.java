@@ -49,7 +49,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBlockEntity, IBrushable {
+public abstract class LootrBrushableBlockEntity extends BlockEntity implements ILootrBlockEntity, IBrushable {
   private int brushCount;
   private long brushCountResetsAtTick;
   private long coolDownEndsAtTick;
@@ -90,7 +90,7 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
         int j = this.getCompletionState();
         if (i != j) {
           BlockState blockState = this.getBlockState();
-          BlockState blockState2 = blockState.setValue(BlockStateProperties.DUSTED, Integer.valueOf(j));
+          BlockState blockState2 = blockState.setValue(BlockStateProperties.DUSTED, j);
           this.level.setBlock(this.getBlockPos(), blockState2, 3);
         }
 

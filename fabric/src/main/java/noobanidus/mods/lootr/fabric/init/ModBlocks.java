@@ -12,6 +12,7 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.block.*;
 import noobanidus.mods.lootr.common.block.entity.LootrShulkerBlockEntity;
 import noobanidus.mods.lootr.fabric.block.LootrFabricBarrelBlock;
+import noobanidus.mods.lootr.fabric.block.LootrFabricBrushableBlock;
 
 public class ModBlocks {
   public static final LootrChestBlock CHEST = new LootrChestBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHEST).strength(2.5f));
@@ -30,8 +31,8 @@ public class ModBlocks {
   };
   public static final LootrShulkerBlock SHULKER = new LootrShulkerBlock(BlockBehaviour.Properties.of().strength(2.5f).dynamicShape().noOcclusion().isSuffocating(posPredicate).isViewBlocking(posPredicate));
 
-  public static final LootrBrushableBlock SUSPICIOUS_SAND = new LootrBrushableBlock(((BrushableBlock)Blocks.SUSPICIOUS_SAND).getBrushSound(), ((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushCompletedSound(), BlockBehaviour.Properties.ofFullCopy(Blocks.SUSPICIOUS_SAND));
-  public static final LootrBrushableBlock SUSPICIOUS_GRAVEL = new LootrBrushableBlock(((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushSound(), ((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushCompletedSound(), BlockBehaviour.Properties.ofFullCopy(Blocks.SUSPICIOUS_GRAVEL));
+  public static final LootrBrushableBlock SUSPICIOUS_SAND = new LootrFabricBrushableBlock(((BrushableBlock)Blocks.SUSPICIOUS_SAND).getBrushSound(), ((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushCompletedSound(), BlockBehaviour.Properties.ofFullCopy(Blocks.SUSPICIOUS_SAND));
+  public static final LootrBrushableBlock SUSPICIOUS_GRAVEL = new LootrFabricBrushableBlock(((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushSound(), ((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushCompletedSound(), BlockBehaviour.Properties.ofFullCopy(Blocks.SUSPICIOUS_GRAVEL));
 
   public static void registerBlocks() {
     Registry.register(BuiltInRegistries.BLOCK, LootrAPI.rl("lootr_chest"), CHEST);

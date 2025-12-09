@@ -15,6 +15,7 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.block.*;
 import noobanidus.mods.lootr.common.block.entity.LootrShulkerBlockEntity;
 import noobanidus.mods.lootr.neoforge.block.LootrNeoForgeBarrelBlock;
+import noobanidus.mods.lootr.neoforge.block.LootrNeoForgeBrushableBlock;
 
 
 public class ModBlocks {
@@ -33,8 +34,8 @@ public class ModBlocks {
     }
   };
   public static final DeferredHolder<Block, LootrShulkerBlock> SHULKER = REGISTER.register("lootr_shulker", () -> new LootrShulkerBlock(Block.Properties.of().strength(2.5f).dynamicShape().noOcclusion().forceSolidOn().pushReaction(PushReaction.DESTROY).isSuffocating(posPredicate).isViewBlocking(posPredicate)));
-  public static final DeferredHolder<Block, LootrBrushableBlock> SUSPICIOUS_SAND = REGISTER.register("suspicious_sand", () -> new LootrBrushableBlock(((BrushableBlock)Blocks.SUSPICIOUS_SAND).getBrushSound(), ((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushCompletedSound(), BlockBehaviour.Properties.ofFullCopy(Blocks.SUSPICIOUS_SAND)));
-  public static final DeferredHolder<Block, LootrBrushableBlock> SUSPICIOUS_GRAVEL = REGISTER.register("suspicious_gravel", () -> new LootrBrushableBlock(((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushSound(), ((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushCompletedSound(), BlockBehaviour.Properties.ofFullCopy(Blocks.SUSPICIOUS_GRAVEL)));
+  public static final DeferredHolder<Block, LootrBrushableBlock> SUSPICIOUS_SAND = REGISTER.register("suspicious_sand", () -> new LootrNeoForgeBrushableBlock(((BrushableBlock)Blocks.SUSPICIOUS_SAND).getBrushSound(), ((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushCompletedSound(), BlockBehaviour.Properties.ofFullCopy(Blocks.SUSPICIOUS_SAND)));
+  public static final DeferredHolder<Block, LootrBrushableBlock> SUSPICIOUS_GRAVEL = REGISTER.register("suspicious_gravel", () -> new LootrNeoForgeBrushableBlock(((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushSound(), ((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushCompletedSound(), BlockBehaviour.Properties.ofFullCopy(Blocks.SUSPICIOUS_GRAVEL)));
 
   public static void register(IEventBus bus) {
     REGISTER.register(bus);

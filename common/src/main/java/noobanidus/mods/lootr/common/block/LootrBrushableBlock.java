@@ -20,7 +20,7 @@ import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.block.entity.LootrBrushableBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
-public class LootrBrushableBlock extends BrushableBlock {
+public abstract class LootrBrushableBlock extends BrushableBlock {
   public static final IntegerProperty DUSTED = BlockStateProperties.DUSTED;
 
   public LootrBrushableBlock(SoundEvent soundEvent, SoundEvent soundEvent2, BlockBehaviour.Properties properties) {
@@ -74,7 +74,5 @@ public class LootrBrushableBlock extends BrushableBlock {
 
   @Nullable
   @Override
-  public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-    return new LootrBrushableBlockEntity(blockPos, blockState);
-  }
+  public abstract BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState);
 }

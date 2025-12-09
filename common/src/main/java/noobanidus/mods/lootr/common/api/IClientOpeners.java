@@ -30,10 +30,10 @@ public interface IClientOpeners extends IOpeners {
   }
 
   default boolean hasClientOpened (UUID uuid) {
-    Set<UUID> clientOpeners = getClientOpeners();
-    if (clientOpeners != null && !clientOpeners.isEmpty() && clientOpeners.contains(uuid)) {
+    if (isClientOpened()) {
       return true;
     }
-    return isClientOpened();
+    Set<UUID> clientOpeners = getClientOpeners();
+    return clientOpeners != null && !clientOpeners.isEmpty() && clientOpeners.contains(uuid);
   }
 }
