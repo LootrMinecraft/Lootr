@@ -8,15 +8,21 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.annotation.MigrateName;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 
 public class ModItems {
   private static final DeferredRegister<Item> REGISTER = DeferredRegister.create(BuiltInRegistries.ITEM, LootrAPI.MODID);
 
+  @MigrateName(value="chest", in="26")
   public static final DeferredHolder<Item, BlockItem> CHEST = REGISTER.register("lootr_chest", () -> new BlockItem(LootrRegistry.getChestBlock(), new BlockItem.Properties()));
+  @MigrateName(value="trapped_chest", in="26")
   public static final DeferredHolder<Item, BlockItem> TRAPPED_CHEST = REGISTER.register("lootr_trapped_chest", () -> new BlockItem(LootrRegistry.getTrappedChestBlock(), new BlockItem.Properties()));
+  @MigrateName(value="barrel", in="26")
   public static final DeferredHolder<Item, BlockItem> BARREL = REGISTER.register("lootr_barrel", () -> new BlockItem(LootrRegistry.getBarrelBlock(), new BlockItem.Properties()));
+  @MigrateName(value="inventory", in="26")
   public static final DeferredHolder<Item, BlockItem> INVENTORY = REGISTER.register("lootr_inventory", () -> new BlockItem(LootrRegistry.getInventoryBlock(), new BlockItem.Properties()));
+  @MigrateName(value="shulker_box", in="26")
   public static final DeferredHolder<Item, BlockItem> SHULKER = REGISTER.register("lootr_shulker", () -> new BlockItem(LootrRegistry.getShulkerBlock(), new BlockItem.Properties()));
   public static final DeferredHolder<Item, BlockItem> TROPHY = REGISTER.register("trophy", () -> new BlockItem(LootrRegistry.getTrophyBlock(), new Item.Properties().rarity(Rarity.EPIC)));
   public static final DeferredHolder<Item, BlockItem> SUSPICIOUS_SAND = REGISTER.register("suspicious_sand", () -> new BlockItem(LootrRegistry.getSuspiciousSand(), new BlockItem.Properties()));

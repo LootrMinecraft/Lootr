@@ -12,6 +12,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.annotation.MigrateName;
 import noobanidus.mods.lootr.common.block.*;
 import noobanidus.mods.lootr.common.block.entity.LootrShulkerBlockEntity;
 import noobanidus.mods.lootr.neoforge.block.LootrNeoForgeBarrelBlock;
@@ -20,10 +21,15 @@ import noobanidus.mods.lootr.neoforge.block.LootrNeoForgeBrushableBlock;
 
 public class ModBlocks {
   private static final DeferredRegister<Block> REGISTER = DeferredRegister.create(BuiltInRegistries.BLOCK, LootrAPI.MODID);
+  @MigrateName(value="barrel", in="26")
   public static final DeferredHolder<Block, LootrBarrelBlock> BARREL = REGISTER.register("lootr_barrel", () -> new LootrNeoForgeBarrelBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHEST).strength(2.5f)));
+  @MigrateName(value="chest", in="26")
   public static final DeferredHolder<Block, LootrChestBlock> CHEST = REGISTER.register("lootr_chest", () -> new LootrChestBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BARREL).strength(2.5f)));
+  @MigrateName(value="trapped_chest", in="26")
   public static final DeferredHolder<Block, LootrTrappedChestBlock> TRAPPED_CHEST = REGISTER.register("lootr_trapped_chest", () -> new LootrTrappedChestBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.TRAPPED_CHEST).strength(2.5f)));
+  @MigrateName(value="inventory", in="26")
   public static final DeferredHolder<Block, LootrInventoryBlock> INVENTORY = REGISTER.register("lootr_inventory", () -> new LootrInventoryBlock(Block.Properties.of().strength(2.5f).sound(SoundType.WOOD)));
+
   public static final DeferredHolder<Block, Block> TROPHY = REGISTER.register("trophy", () -> new TrophyBlock(Block.Properties.of().strength(15f).sound(SoundType.METAL).noOcclusion().lightLevel((o) -> 15)));
   private static final BlockBehaviour.StatePredicate posPredicate = (state, level, pos) -> {
     BlockEntity blockentity = level.getBlockEntity(pos);
@@ -33,6 +39,8 @@ public class ModBlocks {
       return false;
     }
   };
+
+  @MigrateName(value="shulker_box", in="26")
   public static final DeferredHolder<Block, LootrShulkerBlock> SHULKER = REGISTER.register("lootr_shulker", () -> new LootrShulkerBlock(Block.Properties.of().strength(2.5f).dynamicShape().noOcclusion().forceSolidOn().pushReaction(PushReaction.DESTROY).isSuffocating(posPredicate).isViewBlocking(posPredicate)));
   public static final DeferredHolder<Block, LootrBrushableBlock> SUSPICIOUS_SAND = REGISTER.register("suspicious_sand", () -> new LootrNeoForgeBrushableBlock(((BrushableBlock)Blocks.SUSPICIOUS_SAND).getBrushSound(), ((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushCompletedSound(), BlockBehaviour.Properties.ofFullCopy(Blocks.SUSPICIOUS_SAND)));
   public static final DeferredHolder<Block, LootrBrushableBlock> SUSPICIOUS_GRAVEL = REGISTER.register("suspicious_gravel", () -> new LootrNeoForgeBrushableBlock(((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushSound(), ((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushCompletedSound(), BlockBehaviour.Properties.ofFullCopy(Blocks.SUSPICIOUS_GRAVEL)));
