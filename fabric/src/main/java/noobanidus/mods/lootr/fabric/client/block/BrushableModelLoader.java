@@ -16,7 +16,7 @@ public class BrushableModelLoader implements ModelLoadingPlugin, ModelResolver {
   private static final ResourceLocation SAND_STAGE_2 = LootrAPI.mc("block/suspicious_sand_2");
   private static final ResourceLocation SAND_STAGE_3 = LootrAPI.mc("block/suspicious_sand_3");
 
-  private static final ResourceLocation GRAVEL_OPENED = LootrAPI.mc("block/suspicious_gravel_open");
+  private static final ResourceLocation GRAVEL_OPENED = LootrAPI.rl("block/suspicious_gravel_open");
   private static final ResourceLocation GRAVEL_STAGE_0 = LootrAPI.mc("block/suspicious_gravel_0");
   private static final ResourceLocation GRAVEL_STAGE_1 = LootrAPI.mc("block/suspicious_gravel_1");
   private static final ResourceLocation GRAVEL_STAGE_2 = LootrAPI.mc("block/suspicious_gravel_2");

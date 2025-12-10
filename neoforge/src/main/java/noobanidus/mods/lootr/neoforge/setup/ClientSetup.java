@@ -23,6 +23,7 @@ import noobanidus.mods.lootr.common.client.item.LootrShulkerItemRenderer;
 import noobanidus.mods.lootr.common.client.item.LootrTrappedChestItemRenderer;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.neoforge.client.block.BarrelModel;
+import noobanidus.mods.lootr.neoforge.client.block.BrushableModel;
 import noobanidus.mods.lootr.neoforge.client.block.LootrChestBlockRenderer;
 import noobanidus.mods.lootr.neoforge.client.block.LootrShulkerBlockRenderer;
 
@@ -32,6 +33,7 @@ public class ClientSetup {
   @SubscribeEvent
   public static void modelRegister(ModelEvent.RegisterGeometryLoaders event) {
     event.register(LootrAPI.rl("barrel"), BarrelModel.Loader.INSTANCE);
+    event.register(LootrAPI.rl("brushable"), BrushableModel.Loader.INSTANCE);
   }
 
   @SuppressWarnings("unchecked")

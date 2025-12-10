@@ -1,0 +1,22 @@
+{
+  "parent": "block/block",
+  "loader": "lootr:brushable",
+  "textures": {
+    "particle": "block/suspicious_gravel_0"
+  },
+  "opened": {
+    "parent": "lootr:block/suspicious_gravel_open"
+  },
+  "stage_0": {
+    "parent": "block/suspicious_gravel_0"
+  },
+  "stage_1": {
+    "parent": "block/suspicious_gravel_1"
+  },
+  "stage_2": {
+    "parent": "block/suspicious_gravel_2"
+  },
+  "stage_3": {
+    "parent": "block/suspicious_gravel_3"
+  }
+}
