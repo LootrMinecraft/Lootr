@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "dusted=0": {
+      "model": "lootr:block/suspicious_gravel"
+    },
+    "dusted=1": {
+      "model": "lootr:block/suspicious_gravel"
+    },
+    "dusted=2": {
+      "model": "lootr:block/suspicious_gravel"
+    },
+    "dusted=3": {
+      "model": "lootr:block/suspicious_gravel"
+    }
+  }
+}

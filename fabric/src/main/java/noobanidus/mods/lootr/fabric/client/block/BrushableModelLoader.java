@@ -10,41 +10,21 @@ import org.jetbrains.annotations.Nullable;
 public class BrushableModelLoader implements ModelLoadingPlugin, ModelResolver {
   public static final BrushableModelLoader INSTANCE = new BrushableModelLoader();
 
-  private static final ResourceLocation SAND_OPENED = LootrAPI.rl("block/sand_opened");
-  private static final ResourceLocation SAND_STAGE_0 = LootrAPI.rl("block/sand_stage_0");
-  private static final ResourceLocation SAND_STAGE_1 = LootrAPI.rl("block/sand_stage_1");
-  private static final ResourceLocation SAND_STAGE_2 = LootrAPI.rl("block/sand_stage_2");
-  private static final ResourceLocation SAND_STAGE_3 = LootrAPI.rl("block/sand_stage_3");
+  private static final ResourceLocation SAND_OPENED = LootrAPI.rl("block/suspicious_sand_open");
+  private static final ResourceLocation SAND_STAGE_0 = LootrAPI.mc("block/suspicious_sand_0");
+  private static final ResourceLocation SAND_STAGE_1 = LootrAPI.mc("block/suspicious_sand_1");
+  private static final ResourceLocation SAND_STAGE_2 = LootrAPI.mc("block/suspicious_sand_2");
+  private static final ResourceLocation SAND_STAGE_3 = LootrAPI.mc("block/suspicious_sand_3");
 
-  private static final ResourceLocation GRAVEL_OPENED = LootrAPI.rl("block/gravel_opened");
-  private static final ResourceLocation GRAVEL_STAGE_0 = LootrAPI.rl("block/gravel_stage_0");
-  private static final ResourceLocation GRAVEL_STAGE_1 = LootrAPI.rl("block/gravel_stage_1");
-  private static final ResourceLocation GRAVEL_STAGE_2 = LootrAPI.rl("block/gravel_stage_2");
-  private static final ResourceLocation GRAVEL_STAGE_3 = LootrAPI.rl("block/gravel_stage_3");
+  private static final ResourceLocation GRAVEL_OPENED = LootrAPI.mc("block/suspicious_gravel_open");
+  private static final ResourceLocation GRAVEL_STAGE_0 = LootrAPI.mc("block/suspicious_gravel_0");
+  private static final ResourceLocation GRAVEL_STAGE_1 = LootrAPI.mc("block/suspicious_gravel_1");
+  private static final ResourceLocation GRAVEL_STAGE_2 = LootrAPI.mc("block/suspicious_gravel_2");
+  private static final ResourceLocation GRAVEL_STAGE_3 = LootrAPI.mc("block/suspicious_gravel_3");
 
   // Model references
-  private static final ResourceLocation LOOTR_BARREL_MODEL_UNOPENED = LootrAPI.rl("block/lootr_barrel");
-  private static final ResourceLocation LOOTR_BARREL_MODEL_OPENED = LootrAPI.rl("block/lootr_barrel_open");
-
-  // Unopened models
-  private static final ResourceLocation LOOTR_BARREL_UNOPENED = LootrAPI.rl("block/lootr_barrel_unopened");
-  private static final ResourceLocation LOOTR_BARREL_UNOPENED_OPEN = LootrAPI.rl("block/lootr_barrel_unopened_open");
-
-  // Opened models
-  private static final ResourceLocation LOOTR_OPENED_BARREL = LootrAPI.rl("block/lootr_opened_barrel");
-  private static final ResourceLocation LOOTR_OPENED_BARREL_OPEN = LootrAPI.rl("block/lootr_opened_barrel_open");
-
-  // Vanilla models
-  private static final ResourceLocation VANILLA = ResourceLocation.fromNamespaceAndPath("minecraft", "block/barrel");
-  private static final ResourceLocation VANILLA_OPEN = ResourceLocation.fromNamespaceAndPath("minecraft", "block/barrel_open");
-
-  // Old unopened models
-  private static final ResourceLocation OLD_LOOTR_BARREL_UNOPENED = LootrAPI.rl("block/old_lootr_barrel_unopened");
-  private static final ResourceLocation OLD_LOOTR_BARREL_UNOPENED_OPEN = LootrAPI.rl("block/old_lootr_barrel_unopened_open");
-
-  // Old opened models
-  private static final ResourceLocation OLD_LOOTR_OPENED_BARREL = LootrAPI.rl("block/old_lootr_opened_barrel");
-  private static final ResourceLocation OLD_LOOTR_OPENED_BARREL_OPEN = LootrAPI.rl("block/old_lootr_opened_barrel_open");
+  private static final ResourceLocation SUSPICIOUS_SAND = LootrAPI.rl("block/suspicious_sand");
+  private static final ResourceLocation SUSPICIOUS_GRAVEL = LootrAPI.rl("block/suspicious_gravel");
 
   @Override
   public @Nullable UnbakedModel resolveModel(ModelResolver.Context context) {
@@ -55,10 +35,10 @@ public class BrushableModelLoader implements ModelLoadingPlugin, ModelResolver {
     if (resourceId == null) {
       return null;
     }
-    if (resourceId.equals(LOOTR_BARREL_MODEL_UNOPENED)) {
-      return new BarrelModel(context.getOrLoadModel(LOOTR_OPENED_BARREL), context.getOrLoadModel(LOOTR_BARREL_UNOPENED), context.getOrLoadModel(VANILLA), context.getOrLoadModel(OLD_LOOTR_OPENED_BARREL), context.getOrLoadModel(OLD_LOOTR_BARREL_UNOPENED));
-    } else if (resourceId.equals(LOOTR_BARREL_MODEL_OPENED)) {
-      return new BarrelModel(context.getOrLoadModel(LOOTR_OPENED_BARREL_OPEN), context.getOrLoadModel(LOOTR_BARREL_UNOPENED_OPEN), context.getOrLoadModel(VANILLA_OPEN), context.getOrLoadModel(OLD_LOOTR_OPENED_BARREL_OPEN), context.getOrLoadModel(OLD_LOOTR_BARREL_UNOPENED_OPEN));
+    if (resourceId.equals(SUSPICIOUS_SAND)) {
+      return new BrushableModel(context.getOrLoadModel(SAND_OPENED), context.getOrLoadModel(SAND_STAGE_0), context.getOrLoadModel(SAND_STAGE_1), context.getOrLoadModel(SAND_STAGE_2), context.getOrLoadModel(SAND_STAGE_3));
+    } else if (resourceId.equals(SUSPICIOUS_GRAVEL)) {
+      return new BrushableModel(context.getOrLoadModel(GRAVEL_OPENED), context.getOrLoadModel(GRAVEL_STAGE_0), context.getOrLoadModel(GRAVEL_STAGE_1), context.getOrLoadModel(GRAVEL_STAGE_2), context.getOrLoadModel(GRAVEL_STAGE_3));
     } else {
       return null;
     }
