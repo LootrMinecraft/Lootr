@@ -7,10 +7,11 @@ plugins {
 
 def javaVersion = 21
 def ENV = System.getenv()
-version = mod_version
-group = mod_group_id
 
 allprojects {
+    version = "${rootProject.minecraft_version}-${rootProject.mod_version}"
+    group = rootProject.maven_group
+
     repositories {
         exclusiveContent {
             forRepository {
@@ -103,11 +104,8 @@ subprojects {
     project.version = rootProject.version
 
     base {
-        archivesName.set(mod_id)
+        archivesName.set("${rootProject.mod_id}-${name}")
     }
-    
-
-    version = "${name}-${rootProject.minecraft_version}-${rootProject.mod_version}"
 
     repositories {}
 
