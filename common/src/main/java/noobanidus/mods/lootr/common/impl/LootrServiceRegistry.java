@@ -41,7 +41,8 @@ public class LootrServiceRegistry {
   private final AdapterMap adapterMap = new AdapterMap();
   private final BlockReplacementMap replacementMap = new BlockReplacementMap();
   private final Map<String, ILootrType> typeMap = new Object2ObjectOpenHashMap<>();
-  private final List<ILootrFabricModelProvider> modelAppenders = new ObjectArrayList<>();
+  // Only used on Fabric
+  private final List<ILootrFabricModelProvider> fabricModelProviders = new ObjectArrayList<>();
 
   @SuppressWarnings("rawtypes")
   public LootrServiceRegistry() {
@@ -103,7 +104,7 @@ public class LootrServiceRegistry {
 
     ServiceLoader<ILootrFabricModelProvider> loader11 = ServiceLoader.load(ILootrFabricModelProvider.class, classLoader);
     for (ILootrFabricModelProvider appender : loader11) {
-      modelAppenders.add(appender);
+      fabricModelProviders.add(appender);
     }
   }
 
@@ -190,6 +191,6 @@ public class LootrServiceRegistry {
 
   @ApiStatus.Internal
   public static List<ILootrFabricModelProvider> getModelAppenders() {
-    return getInstance().modelAppenders;
+    return getInstance().fabricModelProviders;
   }
 }
