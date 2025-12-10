@@ -10,10 +10,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
-import noobanidus.mods.lootr.fabric.client.block.BarrelModelLoader;
-import noobanidus.mods.lootr.fabric.client.block.BrushableModelLoader;
-import noobanidus.mods.lootr.fabric.client.block.LootrChestBlockRenderer;
-import noobanidus.mods.lootr.fabric.client.block.LootrShulkerBlockRenderer;
+import noobanidus.mods.lootr.fabric.client.block.*;
 import noobanidus.mods.lootr.fabric.client.entity.LootrChestCartRenderer;
 import noobanidus.mods.lootr.fabric.client.item.LootrChestItemRenderer;
 import noobanidus.mods.lootr.fabric.client.item.LootrShulkerItemRenderer;
@@ -45,7 +42,7 @@ public class LootrClient implements ClientModInitializer {
     BuiltinItemRendererRegistry.INSTANCE.register(ModBlocks.SHULKER, LootrShulkerItemRenderer.getInstance());
 
     ModelLoadingPlugin.register(BarrelModelLoader.INSTANCE);
-    ModelLoadingPlugin.register(BrushableModelLoader.INSTANCE);
+    ModelLoadingPlugin.register(CustomModelLoader.INSTANCE);
 
     EntityRendererRegistry.register(ModEntities.LOOTR_MINECART_ENTITY, (context) -> new LootrChestCartRenderer<>(context, ModelLayers.CHEST_MINECART));
   }

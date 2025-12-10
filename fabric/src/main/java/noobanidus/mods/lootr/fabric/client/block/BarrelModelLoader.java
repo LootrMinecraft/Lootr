@@ -56,4 +56,7 @@ public class BarrelModelLoader implements ModelLoadingPlugin, ModelResolver {
   public void onInitializeModelLoader(ModelLoadingPlugin.Context pluginContext) {
     pluginContext.resolveModel().register(this);
   }
+
+  record CustomBarrelModel (ResourceLocation opened, ResourceLocation unopened, @Nullable ResourceLocation vanilla) {
+  }
 }

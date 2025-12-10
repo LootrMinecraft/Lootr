@@ -13,6 +13,7 @@ import noobanidus.mods.lootr.common.api.ILootrEntityConverter;
 import noobanidus.mods.lootr.common.api.ILootrType;
 import noobanidus.mods.lootr.common.api.adapter.AdapterMap;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
+import noobanidus.mods.lootr.common.api.client.ILootrFabricModelProvider;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
@@ -21,6 +22,7 @@ import noobanidus.mods.lootr.common.api.processor.ILootrBlockEntityProcessor;
 import noobanidus.mods.lootr.common.api.processor.ILootrEntityProcessor;
 import noobanidus.mods.lootr.common.api.replacement.BlockReplacementMap;
 import noobanidus.mods.lootr.common.api.replacement.ILootrBlockReplacementProvider;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -39,6 +41,7 @@ public class LootrServiceRegistry {
   private final AdapterMap adapterMap = new AdapterMap();
   private final BlockReplacementMap replacementMap = new BlockReplacementMap();
   private final Map<String, ILootrType> typeMap = new Object2ObjectOpenHashMap<>();
+  private final List<ILootrFabricModelProvider> modelAppenders = new ObjectArrayList<>();
 
   @SuppressWarnings("rawtypes")
   public LootrServiceRegistry() {
@@ -96,6 +99,11 @@ public class LootrServiceRegistry {
     for (ILootrType type : loader10) {
       typeMap.put(type.getName(), type);
       type.callback();
+    }
+
+    ServiceLoader<ILootrFabricModelProvider> loader11 = ServiceLoader.load(ILootrFabricModelProvider.class, classLoader);
+    for (ILootrFabricModelProvider appender : loader11) {
+      modelAppenders.add(appender);
     }
   }
 
@@ -178,5 +186,10 @@ public class LootrServiceRegistry {
   @Nullable
   static ILootrType getType (String type) {
     return getInstance().typeMap.get(type);
+  }
+
+  @ApiStatus.Internal
+  public static List<ILootrFabricModelProvider> getModelAppenders() {
+    return getInstance().modelAppenders;
   }
 }
