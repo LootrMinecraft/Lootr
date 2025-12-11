@@ -155,11 +155,6 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
       return;
     }
 
-    //noinspection ConstantValue
-    if (provider.getInfoUUID() == null) {
-      return;
-    }
-
     if (provider.getInfoLevel() == null || provider.getInfoLevel().isClientSide()) {
       return;
     }
