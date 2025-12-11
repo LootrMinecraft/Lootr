@@ -68,6 +68,7 @@ public interface ILootrInfo {
   // The container has been opened at some point in time and has at least one inventory contained (unless inventories have been cleared).
   boolean hasBeenOpened ();
 
+  // This container is currently open or opening.
   boolean isPhysicallyOpen ();
 
   @NotNull

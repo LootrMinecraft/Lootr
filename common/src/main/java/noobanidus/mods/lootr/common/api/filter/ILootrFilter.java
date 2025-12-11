@@ -19,4 +19,8 @@ public interface ILootrFilter {
 
   // Returns true if filtering should stop
   boolean mutate (ObjectArrayList<ItemStack> toMutate, LootFiller.LootFillerState state, LootContext context, RandomSource random);
+
+  default boolean mutate (ObjectArrayList<ItemStack> toMutate, LootFiller.LootFillerState state, LootContext context) {
+    return mutate(toMutate, state, context, context.getRandom());
+  }
 }

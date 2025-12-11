@@ -13,6 +13,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class DefaultLootFiller implements LootFiller {
@@ -24,12 +25,12 @@ public class DefaultLootFiller implements LootFiller {
   }
 
   @Nullable
-  public static LootFillerState getFillerState () {
+  public static LootFillerState getFillerState() {
     return state;
   }
 
   @Override
-  public void unpackLootTable(ILootrInfoProvider provider, Player player, Container inventory) {
+  public void unpackLootTable(ILootrInfoProvider provider, @NotNull Player player, Container inventory) {
     Level level = provider.getInfoLevel();
     if (level == null || level.isClientSide() || level.getServer() == null) {
       LootrAPI.LOG.error("Unable to fill loot container as the level is null, client-side, or the server is null!");
@@ -38,9 +39,9 @@ public class DefaultLootFiller implements LootFiller {
     BlockPos pos = provider.getInfoPos();
     ResourceKey<LootTable> lootTable = provider.getInfoLootTable();
     if (provider.isInfoReferenceInventory() && provider.getInfoReferenceInventory() != null) {
-        for (int i = 0; i < provider.getInfoReferenceInventory().size(); i++) {
-          inventory.setItem(i, provider.getInfoReferenceInventory().get(i).copy());
-        }
+      for (int i = 0; i < provider.getInfoReferenceInventory().size(); i++) {
+        inventory.setItem(i, provider.getInfoReferenceInventory().get(i).copy());
+      }
     } else if (lootTable == null) {
       LootrAPI.LOG.error("Unable to fill loot container in {} at {} as the loot table is null and the provider is not a reference inventory!", level.dimension()
           .location(), pos);
@@ -61,19 +62,22 @@ public class DefaultLootFiller implements LootFiller {
       }
 
       LootParams.Builder builder = new LootParams.Builder((ServerLevel) level)
-          .withParameter(LootContextParams.ORIGIN, provider.getInfoVec());
-      if (player != null) {
-        builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
-      }
+          .withParameter(LootContextParams.ORIGIN, provider.getInfoVec())
+          .withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
 
-      LootFiller.super.fill(provider, player, lootTable, loottable, inventory, builder.create(LootContextParamSets.CHEST), seed);
+      // TODO: Was the super call necessary?
+      fill(provider, player, lootTable, loottable, inventory, builder.create(LootContextParamSets.CHEST), seed);
     }
   }
 
   // This is used to allow for storing the state during the loot filling process, allowing for our loot table mixin to apply
-  public static void performFill (ILootrInfoProvider provider, Player player, ResourceKey<LootTable> lootTableKey, LootTable lootTable, Container container, LootParams parameters, long seed) {
-    state = new LootFillerState(provider, player, lootTableKey, lootTable, container, parameters, seed);
+  public static void performFill(ILootrInfoProvider provider, Player player, ResourceKey<LootTable> lootTableKey, LootTable lootTable, Container container, LootParams parameters, long seed) {
+    setFillerState(new LootFillerState(provider, player, lootTableKey, lootTable, container, parameters, seed));
     lootTable.fill(container, parameters, seed);
-    state = null;
+    setFillerState(null);
+  }
+
+  public static void setFillerState(@Nullable LootFillerState newState) {
+    state = newState;
   }
 }
