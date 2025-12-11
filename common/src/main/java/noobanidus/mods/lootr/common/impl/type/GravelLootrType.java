@@ -11,7 +11,7 @@ import noobanidus.mods.lootr.common.api.data.LootFiller;
 import org.jetbrains.annotations.Nullable;
 
 @AutoService(ILootrType.class)
-public class GravelLootrType implements ILootrType {
+public class GravelLootrType extends BrushableLoortType {
   @Override
   public String getName() {
     return BuiltInLootrTypes.TYPE_GRAVEL;
@@ -20,21 +20,6 @@ public class GravelLootrType implements ILootrType {
   @Override
   public @Nullable Block getReplacementBlock() {
     return Blocks.GRAVEL;
-  }
-
-  @Override
-  public @Nullable EntityType<?> getReplacementEntity() {
-    return null;
-  }
-
-  @Override
-  public LootFiller getDefaultFiller() {
-    return DefaultBrushableLootFiller.getInstance();
-  }
-
-  @Override
-  public boolean canDecay() {
-    return false;
   }
 
   @Override
