@@ -14,17 +14,14 @@ public class LootrNeoForgeBarrelBlockEntity extends LootrBarrelBlockEntity {
     super(pWorldPosition, pBlockState);
   }
 
-  private static final ModelData OPENED_MODEL_DATA = ModelData.builder().with(ModBlockProperties.OPENED, true).build();
-  private static final ModelData CLOSED_MODEL_DATA = ModelData.builder().with(ModBlockProperties.OPENED, false).build();
-
   @NotNull
   @Override
   public ModelData getModelData() {
     Player player = ClientHooks.getPlayer();
     if (player == null || !hasClientOpened(player.getUUID())) {
-      return CLOSED_MODEL_DATA;
+      return ModelDataConstants.CLOSED_MODEL_DATA;
     } else {
-      return OPENED_MODEL_DATA;
+      return ModelDataConstants.OPENED_MODEL_DATA;
     }
   }
 }
