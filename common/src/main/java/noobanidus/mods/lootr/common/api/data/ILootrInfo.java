@@ -50,6 +50,10 @@ public interface ILootrInfo {
 
   ILootrType getInfoNewType ();
 
+  default LootFiller getDefaultFiller () {
+    return getInfoNewType().getDefaultFiller();
+  }
+
   @NotNull
   default Vec3 getInfoVec() {
     return Vec3.atCenterOf(getInfoPos());

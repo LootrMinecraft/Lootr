@@ -6,6 +6,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
 import noobanidus.mods.lootr.common.api.ILootrType;
+import noobanidus.mods.lootr.common.api.data.DefaultBrushableLootFiller;
+import noobanidus.mods.lootr.common.api.data.LootFiller;
 import org.jetbrains.annotations.Nullable;
 
 @AutoService(ILootrType.class)
@@ -23,6 +25,11 @@ public class SandLootrType implements ILootrType {
   @Override
   public @Nullable EntityType<?> getReplacementEntity() {
     return null;
+  }
+
+  @Override
+  public LootFiller getDefaultFiller() {
+    return DefaultBrushableLootFiller.getInstance();
   }
 
   @Override

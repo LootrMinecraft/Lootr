@@ -21,7 +21,11 @@ import noobanidus.mods.lootr.common.mixins.AccessorMixinLootTable;
 import org.jetbrains.annotations.NotNull;
 
 public class DefaultBrushableLootFiller implements LootFiller {
-  public static final DefaultBrushableLootFiller INSTANCE = new DefaultBrushableLootFiller();
+  private static final DefaultBrushableLootFiller INSTANCE = new DefaultBrushableLootFiller();
+
+  public static DefaultBrushableLootFiller getInstance() {
+    return INSTANCE;
+  }
 
   @Override
   public void unpackLootTable(@NotNull ILootrInfoProvider provider, @NotNull Player player, Container inventory) {

@@ -316,7 +316,7 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
       } else {
         if (this.item.isEmpty()) {
           // Set the item from the player's container
-          ILootrInventory inventory = LootrAPI.getInventory(this, (ServerPlayer) player, DefaultBrushableLootFiller.INSTANCE, null);
+          ILootrInventory inventory = LootrAPI.getInventory(this, (ServerPlayer) player, getDefaultFiller(), null);
           if (inventory == null) {
             this.item = ItemStack.EMPTY;
           } else {
