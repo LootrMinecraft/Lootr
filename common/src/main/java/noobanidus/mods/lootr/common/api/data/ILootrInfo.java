@@ -54,6 +54,18 @@ public interface ILootrInfo {
     return getInfoNewType().getDefaultFiller();
   }
 
+  default boolean canRefresh () {
+    return getInfoNewType().canRefresh();
+  }
+
+  default boolean canDecay () {
+    return getInfoNewType().canDecay();
+  }
+
+  default boolean canBeMarkedUnopened () {
+    return getInfoNewType().canBeMarkedUnopened();
+  }
+
   @NotNull
   default Vec3 getInfoVec() {
     return Vec3.atCenterOf(getInfoPos());

@@ -36,6 +36,7 @@ import noobanidus.mods.lootr.common.api.processor.ILootrEntityProcessor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.transformer.meta.MixinMerged;
 
 import java.util.Arrays;
 import java.util.List;
@@ -349,12 +350,24 @@ public class LootrAPI {
     return INSTANCE.replacementBlockState(original);
   }
 
+
   @Nullable
   @Deprecated // Prefer getInventory with MenuBuilder
   public static ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler) {
     return INSTANCE.getInventory(provider, player, filler);
   }
 
+  @Nullable
+  public static ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, @Nullable MenuBuilder builder) {
+    return INSTANCE.getInventory(provider, player, builder);
+  }
+
+  @Nullable
+  public static ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player) {
+    return INSTANCE.getInventory(provider, player, (MenuBuilder) null);
+  }
+
+  // This is only used when wanting to override the loot filler from the default
   @Nullable
   public static ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler, @Nullable  MenuBuilder builder) {
     return INSTANCE.getInventory(provider, player, filler, builder);

@@ -49,6 +49,10 @@ public interface ILootrType {
     return false;
   }
 
+  default boolean canBeMarkedUnopened () {
+    return true;
+  }
+
   @Nullable
   default Container getContainer (ILootrInfo info, ServerLevel level) {
     if (isEntity() && getReplacementEntity() != null) {

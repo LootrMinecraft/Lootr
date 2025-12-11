@@ -62,7 +62,13 @@ public interface ILootrAPI {
 
   // Get specified inventory
   @Nullable
+  @Deprecated
   ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler);
+
+  @Nullable
+  default ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, @Nullable MenuBuilder builder) {
+    return getInventory(provider, player, provider.getDefaultFiller(), builder);
+  }
 
   // Get specified inventory using menubuilder
   @Nullable

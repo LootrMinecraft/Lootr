@@ -50,6 +50,9 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
     if (provider == null) {
       return;
     }
+    if (!provider.canBeMarkedUnopened()) {
+      return;
+    }
     if (provider.removeVisualOpener(player)) {
       provider.performClose(player);
       provider.performUpdate(player);
@@ -87,28 +90,30 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
         return;
       }
     }
-    if (LootrAPI.isDecayed(provider)) {
+    if (provider.canDecay() && LootrAPI.isDecayed(provider)) {
       provider.performDecay();
       player.displayClientMessage(Component.translatable("lootr.message.decayed")
           .setStyle(LootrAPI.getDecayStyle()), true);
       LootrAPI.removeDecayed(provider);
       return;
     } else {
-      int decayValue = LootrAPI.getRemainingDecayValue(provider);
-      if (decayValue > 0 && LootrAPI.shouldNotify(decayValue)) {
-        player.displayClientMessage(Component.translatable("lootr.message.decay_in", decayValue / 20)
-            .setStyle(LootrAPI.getDecayStyle()), true);
-      } else if (decayValue == -1) {
-        if (LootrAPI.isDecaying(provider)) {
-          LootrAPI.setDecaying(provider);
-          player.displayClientMessage(Component.translatable("lootr.message.decay_start", LootrAPI.getDecayValue() / 20)
+      if (provider.canDecay()) {
+        int decayValue = LootrAPI.getRemainingDecayValue(provider);
+        if (decayValue > 0 && LootrAPI.shouldNotify(decayValue)) {
+          player.displayClientMessage(Component.translatable("lootr.message.decay_in", decayValue / 20)
               .setStyle(LootrAPI.getDecayStyle()), true);
+        } else if (decayValue == -1) {
+          if (LootrAPI.isDecaying(provider)) {
+            LootrAPI.setDecaying(provider);
+            player.displayClientMessage(Component.translatable("lootr.message.decay_start", LootrAPI.getDecayValue() / 20)
+                .setStyle(LootrAPI.getDecayStyle()), true);
+          }
         }
       }
     }
     provider.performTrigger(player);
     boolean shouldUpdate = false;
-    if (LootrAPI.isRefreshed(provider)) {
+    if (provider.canRefresh() && LootrAPI.isRefreshed(provider)) {
       provider.performRefresh();
       provider.performClose();
       LootrAPI.removeRefreshed(provider);
@@ -116,21 +121,24 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
           .setStyle(LootrAPI.getRefreshStyle()), true);
       shouldUpdate = true;
     }
-    int refreshValue = LootrAPI.getRemainingRefreshValue(provider);
-    if (refreshValue > 0 && LootrAPI.shouldNotify(refreshValue)) {
-      player.displayClientMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20)
-          .setStyle(LootrAPI.getRefreshStyle()), true);
-    } else if (refreshValue == -1) {
-      if (LootrAPI.isRefreshing(provider)) {
-        LootrAPI.setRefreshing(provider);
-        player.displayClientMessage(Component.translatable("lootr.message.refresh_start", LootrAPI.getRefreshValue() / 20)
+    if (provider.canRefresh()) {
+      int refreshValue = LootrAPI.getRemainingRefreshValue(provider);
+      if (refreshValue > 0 && LootrAPI.shouldNotify(refreshValue)) {
+        player.displayClientMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20)
             .setStyle(LootrAPI.getRefreshStyle()), true);
+      } else if (refreshValue == -1) {
+        if (LootrAPI.isRefreshing(provider)) {
+          LootrAPI.setRefreshing(provider);
+          player.displayClientMessage(Component.translatable("lootr.message.refresh_start", LootrAPI.getRefreshValue() / 20)
+              .setStyle(LootrAPI.getRefreshStyle()), true);
+        }
       }
     }
-    MenuProvider menuProvider = LootrAPI.getInventory(provider, player, provider.getDefaultFiller(), menuBuilder);
+    MenuProvider menuProvider = LootrAPI.getInventory(provider, player, menuBuilder);
     if (menuProvider == null) {
       return;
     }
+    // This is pretty important, should be moved out of here
     if (!provider.hasOpened(player)) {
       player.awardStat(LootrRegistry.getLootedStat());
       LootrRegistry.getStatTrigger().trigger(player);
@@ -163,11 +171,11 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
     }
 
     // TODO: Refactor this to avoid loading the data save unnecessarily
-    if (LootrAPI.shouldPerformDecayWhileTicking() && LootrAPI.isDecayed(provider) && provider.hasBeenOpened()) {
+    if (provider.canDecay() && LootrAPI.shouldPerformDecayWhileTicking() && LootrAPI.isDecayed(provider) && provider.hasBeenOpened()) {
       provider.performDecay();
       LootrAPI.removeDecayed(provider);
       return;
-    } else if (LootrAPI.shouldStartDecayWhileTicking() && !LootrAPI.isDecayed(provider) && provider.hasBeenOpened()) {
+    } else if (provider.canDecay() && LootrAPI.shouldStartDecayWhileTicking() && !LootrAPI.isDecayed(provider) && provider.hasBeenOpened()) {
       int decayValue = LootrAPI.getRemainingDecayValue(provider);
       if (decayValue == -1) {
         if (LootrAPI.isDecaying(provider)) {
@@ -175,13 +183,13 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
         }
       }
     }
-    if (LootrAPI.shouldPerformRefreshWhileTicking() && LootrAPI.isRefreshed(provider) && provider.hasBeenOpened()) {
+    if (provider.canRefresh() && LootrAPI.shouldPerformRefreshWhileTicking() && LootrAPI.isRefreshed(provider) && provider.hasBeenOpened()) {
       provider.performRefresh();
       provider.performClose();
       LootrAPI.removeRefreshed(provider);
       provider.performUpdate();
     }
-    if (LootrAPI.shouldStartRefreshWhileTicking() && !LootrAPI.isRefreshed(provider) && provider.hasBeenOpened()) {
+    if (provider.canRefresh() && LootrAPI.shouldStartRefreshWhileTicking() && !LootrAPI.isRefreshed(provider) && provider.hasBeenOpened()) {
       int refreshValue = LootrAPI.getRemainingRefreshValue(provider);
       if (refreshValue == -1) {
         if (LootrAPI.isRefreshing(provider)) {

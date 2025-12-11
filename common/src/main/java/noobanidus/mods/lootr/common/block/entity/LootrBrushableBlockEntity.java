@@ -27,7 +27,6 @@ import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
 import noobanidus.mods.lootr.common.api.IBrushable;
 import noobanidus.mods.lootr.common.api.ILootrType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.data.DefaultBrushableLootFiller;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.SimpleLootrInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
@@ -145,12 +144,26 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
   private void brushingCompleted(Player player) {
     if (this.level != null && this.level.getServer() != null) {
       this.dropContent(player);
+      boolean shouldUpdate = false;
+      if (!this.hasOpened(player)) {
+        player.awardStat(LootrRegistry.getLootedStat());
+        LootrRegistry.getStatTrigger().trigger((ServerPlayer) player);
+      }
+      if (this.addOpener(player)) {
+        this.performOpen((ServerPlayer)player);
+        shouldUpdate = true;
+      }
+
+      if (shouldUpdate) {
+        this.performUpdate((ServerPlayer)player);
+      }
     }
   }
 
   private void dropContent(Player player) {
     if (this.level != null && this.level.getServer() != null) {
-      if (!this.getItem(player).isEmpty()) {
+      ItemStack theItem = this.popItem(player);
+      if (!theItem.isEmpty()) {
         double d = EntityType.ITEM.getWidth();
         double e = 1.0 - d;
         double f = d / 2.0;
@@ -159,7 +172,7 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
         double g = (double) blockPos.getX() + 0.5 * e + f;
         double h = (double) blockPos.getY() + 0.5 + (double) (EntityType.ITEM.getHeight() / 2.0F);
         double i = (double) blockPos.getZ() + 0.5 * e + f;
-        ItemEntity itemEntity = new ItemEntity(this.level, g, h, i, this.getItem(player).split(this.level.random.nextInt(21) + 10));
+        ItemEntity itemEntity = new ItemEntity(this.level, g, h, i, theItem.split(this.level.random.nextInt(21) + 10));
         itemEntity.setDeltaMovement(Vec3.ZERO);
         this.level.addFreshEntity(itemEntity);
         this.item = ItemStack.EMPTY;
@@ -217,7 +230,7 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
   }
 
   @Nullable
-  public Player getBrushingPlayer () {
+  public Player getBrushingPlayer() {
     if (this.brushingPlayerEntity != null) {
       if (this.brushingPlayer != null) {
         this.brushingPlayer = null;
@@ -306,7 +319,7 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
     return this.item;
   }
 
-  public ItemStack getItem (Player player) {
+  public ItemStack getItem(Player player) {
     boolean clientSide = player.level().isClientSide();
 
     Player brushingPlayer = getBrushingPlayer();
@@ -316,7 +329,7 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
       } else {
         if (this.item.isEmpty()) {
           // Set the item from the player's container
-          ILootrInventory inventory = LootrAPI.getInventory(this, (ServerPlayer) player, getDefaultFiller(), null);
+          ILootrInventory inventory = LootrAPI.getInventory(this, (ServerPlayer) player);
           if (inventory == null) {
             this.item = ItemStack.EMPTY;
           } else {
@@ -330,6 +343,24 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
     }
 
     return this.item;
+  }
+
+  private ItemStack popItem(Player player) {
+    if (player.level().isClientSide()) {
+      return getItem(player);
+    } else {
+      ItemStack theItem = getItem(player);
+      if (!theItem.isEmpty()) {
+        // Clear the item from the player's container
+        ILootrInventory inventory = LootrAPI.getInventory(this, (ServerPlayer) player);
+        if (inventory != null) {
+          inventory.setItem(0, ItemStack.EMPTY);
+          inventory.setChanged();
+        }
+        this.item = ItemStack.EMPTY;
+      }
+      return theItem;
+    }
   }
 
   @Override
@@ -430,7 +461,7 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
     double d = (double) blockPos.getX() + 0.5;
     double e = blockPos.getY();
     double f = (double) blockPos.getZ() + 0.5;
-    ((AccessorMixinFallingBlockEntity)fallingBlockEntity).lootr$setBlockState(blockState.hasProperty(BlockStateProperties.WATERLOGGED) ? blockState.setValue(BlockStateProperties.WATERLOGGED, Boolean.FALSE) : blockState);
+    ((AccessorMixinFallingBlockEntity) fallingBlockEntity).lootr$setBlockState(blockState.hasProperty(BlockStateProperties.WATERLOGGED) ? blockState.setValue(BlockStateProperties.WATERLOGGED, Boolean.FALSE) : blockState);
     fallingBlockEntity.blocksBuilding = true;
     fallingBlockEntity.setPos(d, e, f);
     fallingBlockEntity.setDeltaMovement(Vec3.ZERO);
