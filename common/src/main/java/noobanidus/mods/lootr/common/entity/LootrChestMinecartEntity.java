@@ -44,6 +44,7 @@ import java.util.UUID;
 
 public class LootrChestMinecartEntity extends AbstractMinecartContainer implements ILootrCart {
   private static BlockState cartNormal = null;
+  // TODO: This is never actually used, `opened` is always controlled by packets.
   private final Set<UUID> clientOpeners = new ObjectLinkedOpenHashSet<>();
   private boolean hasBeenOpened = false;
   private boolean opened = false;

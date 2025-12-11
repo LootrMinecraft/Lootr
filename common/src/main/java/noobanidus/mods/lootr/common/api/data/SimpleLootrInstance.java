@@ -18,15 +18,17 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 public class SimpleLootrInstance {
-  private final NonNullList<ItemStack> items;
-  private final Set<UUID> clientOpeners = new ObjectOpenHashSet<>();
+  protected final NonNullList<ItemStack> items;
+  protected final Set<UUID> clientOpeners = new ObjectOpenHashSet<>();
   protected UUID infoId = null;
   protected boolean hasBeenOpened = false;
-  private String cachedId;
+  protected String cachedId;
   protected boolean clientOpened = false;
-  private boolean savingToItem = false;
+  protected boolean savingToItem = false;
 
-  private final Supplier<Set<UUID>> visualOpenersSupplier;
+  protected boolean providesOwnUuid = false;
+
+  protected final Supplier<Set<UUID>> visualOpenersSupplier;
 
   // What in the recursive, self-referential is this
   public SimpleLootrInstance(Supplier<Set<UUID>> visualOpenersSupplier, int size) {
@@ -51,6 +53,9 @@ public class SimpleLootrInstance {
   }
 
   public @NotNull UUID getInfoUUID() {
+    if (providesOwnUuid) {
+      throw new IllegalStateException("This instance provides its own UUID but hasn't overriden `getInfoUUID`: " + this);
+    }
     if (this.infoId == null) {
       this.infoId = UUID.randomUUID();
     }
@@ -85,13 +90,15 @@ public class SimpleLootrInstance {
   }
 
   public void loadAdditional(CompoundTag compound, HolderLookup.Provider provder) {
-    if (compound.hasUUID(NBTConstants.ENTITY_ID)) {
-      this.infoId = compound.getUUID(NBTConstants.ENTITY_ID);
+    if (!providesOwnUuid) {
+      if (compound.hasUUID(NBTConstants.INSTANCE_ID)) {
+        this.infoId = compound.getUUID(NBTConstants.INSTANCE_ID);
+      }
     }
     if (compound.contains(NBTConstants.HAS_BEEN_OPENED, Tag.TAG_BYTE)) {
       this.hasBeenOpened = compound.getBoolean(NBTConstants.HAS_BEEN_OPENED);
     }
-    if (this.infoId == null) {
+    if (this.infoId == null && !providesOwnUuid) {
       getInfoUUID();
     }
     clientOpeners.clear();
@@ -104,8 +111,8 @@ public class SimpleLootrInstance {
   }
 
   public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider, boolean isClientSide) {
-    if (!LootrAPI.shouldDiscard() && !savingToItem) {
-      compound.putUUID(NBTConstants.ENTITY_ID, getInfoUUID());
+    if (!LootrAPI.shouldDiscard() && !isSavingToItem() && !providesOwnUuid) {
+      compound.putUUID(NBTConstants.INSTANCE_ID, getInfoUUID());
     }
     compound.putBoolean(NBTConstants.HAS_BEEN_OPENED, this.hasBeenOpened);
     if (isClientSide) { // level != null && level.isClientSide()) { ?????? This logic seems inverted.

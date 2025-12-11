@@ -50,12 +50,20 @@ import java.util.Set;
 import java.util.UUID;
 
 public abstract class LootrBrushableBlockEntity extends BlockEntity implements ILootrBlockEntity, IBrushable {
+  @Nullable
+  private UUID brushingPlayer;
+  @Nullable
+  private Player brushingPlayerEntity;
+
   private int brushCount;
   private long brushCountResetsAtTick;
   private long coolDownEndsAtTick;
+
   private ItemStack item = ItemStack.EMPTY;
+
   @Nullable
   private Direction hitDirection;
+
   @Nullable
   private ResourceKey<LootTable> lootTable;
   private long lootTableSeed;
@@ -132,17 +140,6 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
   private void brushingCompleted(Player player) {
     if (this.level != null && this.level.getServer() != null) {
       this.dropContent(player);
-      BlockState blockState = this.getBlockState();
-      this.level.levelEvent(3008, this.getBlockPos(), Block.getId(blockState));
-      Block block = this.getBlockState().getBlock();
-      Block block2;
-      if (block instanceof BrushableBlock brushableBlock) {
-        block2 = brushableBlock.getTurnsInto();
-      } else {
-        block2 = Blocks.AIR;
-      }
-
-      this.level.setBlock(this.worldPosition, block2.defaultBlockState(), 3);
     }
   }
 
