@@ -200,6 +200,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
       if (isFakePlayer(player)) {
         continue;
       }
+      // It can be null for some fake players?
       UUID thisUuid = player.getUUID();
       //noinspection ConstantValue
       if (thisUuid != null) {
