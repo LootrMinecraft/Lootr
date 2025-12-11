@@ -376,7 +376,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
       return;
     }
 
-    if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrInfoProvider provider && player instanceof ServerPlayer serverPlayer) {
+    if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrInfoProvider provider && player instanceof ServerPlayer serverPlayer && provider.canDropContentsWhenBroken()) {
       ILootrInventory inventory = getInventory(provider, serverPlayer, provider.getDefaultFiller(), null);
       if (inventory != null) {
         Containers.dropContents(level, pos, inventory);

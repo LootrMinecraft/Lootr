@@ -66,6 +66,10 @@ public interface ILootrInfo {
     return getInfoNewType().canBeMarkedUnopened();
   }
 
+  default boolean canDropContentsWhenBroken () {
+    return getInfoNewType().canDropContentsWhenBroken();
+  }
+
   @NotNull
   default Vec3 getInfoVec() {
     return Vec3.atCenterOf(getInfoPos());
