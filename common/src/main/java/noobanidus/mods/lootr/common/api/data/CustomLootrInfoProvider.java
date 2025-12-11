@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Set;
 import java.util.UUID;
 
+// TODO: Continue supporting this?
 public record CustomLootrInfoProvider(
     UUID id,
     String cachedKey,
