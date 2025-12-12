@@ -138,6 +138,7 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
   private void brushingCompleted(Player player) {
     if (this.level != null && this.level.getServer() != null) {
       this.dropContent(player);
+      this.performTrigger((ServerPlayer) player);
       boolean shouldUpdate = false;
       if (!this.hasOpened(player)) {
         player.awardStat(LootrRegistry.getLootedStat());
@@ -147,8 +148,6 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
         this.performOpen((ServerPlayer) player);
         shouldUpdate = true;
       }
-
-      this.performTrigger((ServerPlayer) player);
 
       if (shouldUpdate) {
         this.performUpdate((ServerPlayer) player);
