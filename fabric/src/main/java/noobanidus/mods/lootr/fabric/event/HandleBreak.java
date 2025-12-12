@@ -50,7 +50,7 @@ public class HandleBreak {
         } else {
           if (!player.isShiftKeyDown()) {
             player.displayClientMessage(Component.translatable("lootr.message.should_sneak").setStyle(getChatStyle()), false);
-            player.displayClientMessage(Component.translatable("lootr.message.should_sneak2", Component.translatable("lootr.message.should_sneak3").setStyle(Style.EMPTY.withBold(true))).setStyle(getChatStyle()), false);
+            player.displayClientMessage(Component.translatable("lootr.message.should_sneak2"), false);
             return false;
           }
         }
@@ -61,7 +61,7 @@ public class HandleBreak {
     } else {
       if (!player.isShiftKeyDown()) {
         player.displayClientMessage(Component.translatable("lootr.message.should_sneak").setStyle(getChatStyle()), false);
-        player.displayClientMessage(Component.translatable("lootr.message.should_sneak2", Component.translatable("lootr.message.should_sneak3").setStyle(Style.EMPTY.withBold(true))).setStyle(getChatStyle()), false);
+        player.displayClientMessage(Component.translatable("lootr.message.should_sneak2").setStyle(getChatStyle()), false);
         return false;
       }
     }

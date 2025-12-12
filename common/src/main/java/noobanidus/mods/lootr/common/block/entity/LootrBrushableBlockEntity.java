@@ -103,6 +103,11 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
       this.brushingPlayer = null;
     }
 
+    if (!this.simpleLootrInstance.hasBeenOpened()) {
+      this.simpleLootrInstance.setHasBeenOpened();
+      markChanged();
+    }
+
     if (this.hitDirection == null) {
       this.hitDirection = direction;
     }
@@ -128,33 +133,6 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
     } else {
       return false;
     }
-  }
-
-  public void unpackLootTable(Player player) {
-    // NO-OP
-/*    if (this.lootTable != null && this.level != null && !this.level.isClientSide() && this.level.getServer() != null) {
-      LootTable lootTable = this.level.getServer().reloadableRegistries().getLootTable(this.lootTable);
-      if (player instanceof ServerPlayer serverPlayer) {
-        CriteriaTriggers.GENERATE_LOOT.trigger(serverPlayer, this.lootTable);
-      }
-
-      LootParams lootParams = new LootParams.Builder((ServerLevel) this.level)
-          .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(this.worldPosition))
-          .withLuck(player.getLuck())
-          .withParameter(LootContextParams.THIS_ENTITY, player)
-          .create(LootContextParamSets.CHEST);
-      ObjectArrayList<ItemStack> objectArrayList = lootTable.getRandomItems(lootParams, this.lootTableSeed);
-
-      this.item = switch (objectArrayList.size()) {
-        case 0 -> ItemStack.EMPTY;
-        case 1 -> (ItemStack) objectArrayList.get(0);
-        default -> {
-          LOGGER.warn("Expected max 1 loot from loot table {}, but got {}", this.lootTable.location(), objectArrayList.size());
-          yield objectArrayList.get(0);
-        }
-      };
-      this.setChanged();
-    }*/
   }
 
   private void brushingCompleted(Player player) {
@@ -278,6 +256,8 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
         compoundTag.put("item", this.item.save(provider));
       }
     }
+
+    this.simpleLootrInstance.fillUpdateTag(compoundTag, provider, level != null && level.isClientSide());
 
     return compoundTag;
   }

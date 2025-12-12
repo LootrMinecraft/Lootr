@@ -15,11 +15,10 @@ public class LootrLangProvider extends LanguageProvider {
   protected void addTranslations() {
     // Tag translations
     add("lootr.commands.usage", "/lootr barrel | barrel <loot-table> | chest | chest <loot-table> | cart | cart <loot-table> | shulker | shulker <loot-table> | trapped_chest | trapped_chest <loot-table> | custom | refresh | decay | open_as <player> | open_as_uuid <uuid> | id | openers");
-    add("lootr.message.should_sneak", "Breaking the chest will delete your unique loot and all items in the chest! In order to break, you must sneak while doing so.");
-    add("lootr.message.should_sneak2", "As loot is %s, only break if really needed.");
-    add("lootr.message.should_sneak3", "per-player per-chest");
-    add("lootr.message.cart_should_sneak", "Breaking the cart will delete your unique loot and items! In order to break, you must sneak while attacking");
-    add("lootr.message.cart_should_sneak3", "per-player per-cart");
+    add("lootr.message.should_sneak", "Breaking this block will delete everyone's unique loot and items! If you do wish to break, sneak while doing so.");
+    add("lootr.message.should_sneak2", "As others may not have looted this, only break if really needed.");
+    add("lootr.message.cart_should_sneak", "Destroying this entity will delete everyone's unique loot and items! If you do wish to destroy it, you must sneak when attacking.");
+    add("lootr.message.cart_should_sneak2", "As others may not have looted this, only destroy if really needed.");
     add("lootr.message.cannot_break", "Loot containers and carts cannot be broken.");
     add("lootr.message.cannot_break_sneak", "Loot containers and carts can only be broken while sneaking in creative mode.");
     add("lootr.message.decayed", "The decaying container crumbles at your touch!");
