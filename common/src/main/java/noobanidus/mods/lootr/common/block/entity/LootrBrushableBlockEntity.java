@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.common.block.entity;
 
+import com.google.auto.service.AutoService;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -19,14 +20,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
-import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
-import noobanidus.mods.lootr.common.api.IBrushable;
-import noobanidus.mods.lootr.common.api.ILootrType;
-import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.*;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.SimpleLootrInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
@@ -83,6 +82,11 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
         return false;
       }
     } else {
+      if (hasOpened(player)) {
+        this.brushingPlayer = null;
+        this.brushingPlayerEntity = null;
+        return false;
+      }
       this.brushingPlayerEntity = player;
       this.brushingPlayer = null;
     }
@@ -150,12 +154,12 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
         LootrRegistry.getStatTrigger().trigger((ServerPlayer) player);
       }
       if (this.addOpener(player)) {
-        this.performOpen((ServerPlayer)player);
+        this.performOpen((ServerPlayer) player);
         shouldUpdate = true;
       }
 
       if (shouldUpdate) {
-        this.performUpdate((ServerPlayer)player);
+        this.performUpdate((ServerPlayer) player);
       }
     }
   }
@@ -257,7 +261,12 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
     Player player = this.getBrushingPlayer();
     if (player != null) {
       compoundTag.putUUID("brushing_player", player.getUUID());
-      compoundTag.put("item", this.getItem(player).save(provider));
+      if (this.item.isEmpty()) {
+        this.item = getItem(player);
+      }
+      if (!this.item.isEmpty()) {
+        compoundTag.put("item", this.item.save(provider));
+      }
     }
 
     return compoundTag;
@@ -473,5 +482,18 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
     level.setBlock(blockPos, blockState.getFluidState().createLegacyBlock(), 3);
     level.addFreshEntity(fallingBlockEntity);
     return fallingBlockEntity;
+  }
+
+  @AutoService(ILootrBlockEntityConverter.class)
+  public static class DefaultBlockEntityConverter implements ILootrBlockEntityConverter<LootrBrushableBlockEntity> {
+    @Override
+    public ILootrBlockEntity apply(LootrBrushableBlockEntity blockEntity) {
+      return blockEntity;
+    }
+
+    @Override
+    public BlockEntityType<?> getBlockEntityType() {
+      return LootrRegistry.getBrushableBlockEntity();
+    }
   }
 }

@@ -101,23 +101,15 @@ public class BrushableModel implements IUnbakedGeometry<BrushableModel> {
     @NotNull
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand, @NotNull ModelData extraData, @NotNull RenderType renderType) {
-      BakedModel model = null;
-      if (extraData.has(ModBlockProperties.OPENED)) {
-        if (extraData.get(ModBlockProperties.OPENED) == Boolean.TRUE) {
-          model = opened;
-        }
-      }
+      BakedModel model = stage_0;
 
-      if (model == null) {
-        model = stage_0;
-      }
-
-      if (state != null) {
+      if (extraData.has(ModBlockProperties.OPENED) && extraData.get(ModBlockProperties.OPENED) == Boolean.TRUE) {
+        model = opened;
+      } else if (state != null) {
         switch (state.getValue(BlockStateProperties.DUSTED)) {
           case 3 -> model = stage_3;
           case 2 -> model = stage_2;
           case 1 -> model = stage_1;
-          default -> model = stage_0;
         }
       }
 
