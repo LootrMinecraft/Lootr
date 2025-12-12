@@ -19,7 +19,8 @@ public class ModAdvancements {
   public static final DeferredHolder<CriterionTrigger<?>, ContainerTrigger> CART = REGISTER.register("cart_opened", ContainerTrigger::new);
   public static final DeferredHolder<CriterionTrigger<?>, ContainerTrigger> SHULKER = REGISTER.register("shulker_opened", ContainerTrigger::new);
   public static final DeferredHolder<CriterionTrigger<?>, LootedStatTrigger> STAT = REGISTER.register("score", LootedStatTrigger::new);
-
+  public static final DeferredHolder<CriterionTrigger<?>, ContainerTrigger> GRAVEL = REGISTER.register("gravel_brushed", ContainerTrigger::new);
+  public static final DeferredHolder<CriterionTrigger<?>, ContainerTrigger> SAND = REGISTER.register("sand_brushed", ContainerTrigger::new);
 
   public static void register(IEventBus bus) {
     REGISTER.register(bus);

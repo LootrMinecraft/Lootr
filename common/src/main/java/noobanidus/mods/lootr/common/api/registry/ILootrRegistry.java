@@ -72,6 +72,9 @@ public interface ILootrRegistry {
 
   ILootedStatTrigger getStatTrigger();
 
+  IContainerTrigger getSandTrigger ();
+  IContainerTrigger getGravelTrigger ();
+
   LootItemConditionType getLootCount();
 
   Stat<?> getLootedStat();

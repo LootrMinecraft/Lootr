@@ -61,6 +61,8 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.advancements.social.description", "Open one of every Lootr container type!");
     add("lootr.advancements.root.title", "Belongs in a Museum");
     add("lootr.advancements.root.description", "Bring instanced, per-player Loot into your world.");
+    add("lootr.advancements.all_gravel.title", "Brush It Off");
+    add("lootr.advancements.all_gravel.description", "Brush all types of suspicious Lootr blocks!");
     add("itemGroup.lootr", "Lootr");
     add("itemGroup.lootr.lootr", "Lootr");
     add("text.autoconfig.lootr.title", "Lootr");

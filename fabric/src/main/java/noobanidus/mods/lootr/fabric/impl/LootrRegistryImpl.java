@@ -161,6 +161,16 @@ public class LootrRegistryImpl implements ILootrRegistry {
   }
 
   @Override
+  public IContainerTrigger getSandTrigger() {
+    return ModAdvancements.SAND;
+  }
+
+  @Override
+  public IContainerTrigger getGravelTrigger() {
+    return ModAdvancements.GRAVEL;
+  }
+
+  @Override
   public LootItemConditionType getLootCount() {
     return ModLoot.LOOT_COUNT;
   }

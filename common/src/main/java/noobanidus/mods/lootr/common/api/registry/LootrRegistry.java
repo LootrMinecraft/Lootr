@@ -118,6 +118,14 @@ public class LootrRegistry {
     return INSTANCE.getShulkerTrigger();
   }
 
+  public static IContainerTrigger getSandTrigger () {
+    return INSTANCE.getSandTrigger ();
+  }
+
+  public static IContainerTrigger getGravelTrigger () {
+    return INSTANCE.getGravelTrigger ();
+  }
+
   public static ILootedStatTrigger getStatTrigger() {
     return INSTANCE.getStatTrigger();
   }
