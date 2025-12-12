@@ -1,0 +1,32 @@
+{
+  "parent": "lootr:root",
+  "criteria": {
+    "brushed_gravel": {
+      "trigger": "lootr:gravel_brushed"
+    },
+    "brushed_sand": {
+      "trigger": "lootr:sand_brushed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "lootr.advancements.all_gravel.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "lootr:suspicious_gravel"
+    },
+    "title": {
+      "translate": "lootr.advancements.all_gravel.title"
+    }
+  },
+  "requirements": [
+    [
+      "brushed_gravel"
+    ],
+    [
+      "brushed_sand"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
