@@ -23,8 +23,10 @@ public class LootrItemTagsProvider extends ItemTagsProvider {
     tag(LootrTags.Items.CHESTS).add(LootrRegistry.getChestItem(), LootrRegistry.getTrappedChestItem(), LootrRegistry.getInventoryItem());
     tag(LootrTags.Items.TRAPPED_CHESTS).add(LootrRegistry.getTrappedChestItem());
     tag(LootrTags.Items.SHULKERS).add(LootrRegistry.getShulkerItem());
+    tag(LootrTags.Items.SANDS).add(LootrRegistry.getSuspiciousSandItem());
+    tag(LootrTags.Items.GRAVELS).add(LootrRegistry.getSuspiciousGravelItem());
     //noinspection unchecked
-    tag(LootrTags.Items.CONTAINERS).addTags(LootrTags.Items.BARRELS, LootrTags.Items.CHESTS, LootrTags.Items.TRAPPED_CHESTS, LootrTags.Items.SHULKERS);
+    tag(LootrTags.Items.CONTAINERS).addTags(LootrTags.Items.BARRELS, LootrTags.Items.CHESTS, LootrTags.Items.TRAPPED_CHESTS, LootrTags.Items.SHULKERS, LootrTags.Items.SANDS, LootrTags.Items.GRAVELS);
   }
 
   @Override

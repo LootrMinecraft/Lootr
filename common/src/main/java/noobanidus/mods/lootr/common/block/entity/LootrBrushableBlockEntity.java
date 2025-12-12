@@ -26,6 +26,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.*;
+import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.SimpleLootrInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
@@ -69,6 +70,17 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
     CompoundTag tag = new CompoundTag();
     saveAdditional(tag, provider);
     return tag;
+  }
+
+  @Override
+  public @Nullable IContainerTrigger getTrigger() {
+    if (getBlockState().is(LootrTags.Blocks.SANDS)) {
+      return LootrRegistry.getSandTrigger();
+    } else if (getBlockState().is(LootrTags.Blocks.GRAVELS)) {
+      return LootrRegistry.getGravelTrigger();
+    } else {
+      return null;
+    }
   }
 
   @Override
@@ -157,6 +169,8 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
         this.performOpen((ServerPlayer) player);
         shouldUpdate = true;
       }
+
+      this.performTrigger((ServerPlayer) player);
 
       if (shouldUpdate) {
         this.performUpdate((ServerPlayer) player);

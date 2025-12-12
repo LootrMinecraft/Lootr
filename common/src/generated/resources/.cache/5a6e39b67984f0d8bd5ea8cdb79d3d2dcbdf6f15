@@ -1,23 +1,28 @@
-// 1.21	2025-11-19T21:09:01.5562774	Lootr Block Tags
+// 1.21	2025-12-12T13:44:27.9992056	Lootr Block Tags
 3921f6b6ce3ffc2c7c96ad7c75bbfa8aa6eaee70 data/c/tags/block/barrels.json
 7dc9f1e4a2bf28c54c45c4290627e5282c0685df data/c/tags/block/chests/trapped.json
 bb14a1e34ddbf18921eeb539ef187bc37b2204fa data/c/tags/block/chests/wooden.json
 5b3398434681ecf3177b5af6a65b4305cdc15e58 data/ftbchunks/tags/block/interact_whitelist.json
 3921f6b6ce3ffc2c7c96ad7c75bbfa8aa6eaee70 data/lootr/tags/block/barrels.json
 bb14a1e34ddbf18921eeb539ef187bc37b2204fa data/lootr/tags/block/chests.json
-4d0f9d567c1b22bcb35bd20742ffa6be61db7869 data/lootr/tags/block/containers.json
+e6016bcb6562b2422bdf639a2681074a4d052569 data/lootr/tags/block/containers.json
 fe6cf034f70caab0e5779b83cc0771fe934f077a data/lootr/tags/block/convert/barrels.json
 35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/lootr/tags/block/convert/blacklist.json
-a93374efb6b23dde8c89944bcc6282c20bc1e007 data/lootr/tags/block/convert/blocks.json
+051d13906923a2b9a5d72bfc0400bb9883d05808 data/lootr/tags/block/convert/blocks.json
 b221fc80e595e4526894509c077c52e4e553aec7 data/lootr/tags/block/convert/chests.json
 6737d0d82bdf89b87efc41c190fa4f0c05e5ee0e data/lootr/tags/block/convert/custom_eligible.json
+08d8a7bb2484130183dd598579a74ecaebb93ca2 data/lootr/tags/block/convert/gravels.json
+2423e4dc6c6bc7901f7d4fca00e61aaaec181aff data/lootr/tags/block/convert/sands.json
 3ae9f87200eda9255e9f974c3c16e48dd11322e1 data/lootr/tags/block/convert/shulkers.json
 52015e498cd31c44d25b4b48018ac24461ecbc91 data/lootr/tags/block/convert/trapped_chests.json
+3a8b9ad82fb278776f4b308bd12ce3486eaf3840 data/lootr/tags/block/gravels.json
 4d0f9d567c1b22bcb35bd20742ffa6be61db7869 data/lootr/tags/block/interact_whitelist_blocks.json
 35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/lootr/tags/block/non_blocking.json
+8e95bbeb950c8586fb981d1d56e2c4bc7cf6d73b data/lootr/tags/block/sands.json
 dc58f334989d3619f69af6641ae7f69e9fe9fc34 data/lootr/tags/block/shulkers.json
 7dc9f1e4a2bf28c54c45c4290627e5282c0685df data/lootr/tags/block/trapped_chests.json
 659e0fd871d3fa5014d4e533e72bc77c5c2b902c data/minecraft/tags/block/guarded_by_piglins.json
 659e0fd871d3fa5014d4e533e72bc77c5c2b902c data/minecraft/tags/block/mineable/axe.json
 0e4a7e9d3f8913d4d595b1e9791c982ea0562eb7 data/minecraft/tags/block/mineable/pickaxe.json
+8e95bbeb950c8586fb981d1d56e2c4bc7cf6d73b data/minecraft/tags/block/sand.json
 dc58f334989d3619f69af6641ae7f69e9fe9fc34 data/minecraft/tags/block/shulker_boxes.json

@@ -6,7 +6,7 @@ import noobanidus.mods.lootr.common.api.data.DefaultBrushableLootFiller;
 import noobanidus.mods.lootr.common.api.data.LootFiller;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class BrushableLoortType implements ILootrType {
+public abstract class BrushableLootrType implements ILootrType {
   @Override
   public @Nullable EntityType<?> getReplacementEntity() {
     return null;
@@ -29,6 +29,11 @@ public abstract class BrushableLoortType implements ILootrType {
 
   @Override
   public boolean canDecay() {
+    return false;
+  }
+
+  @Override
+  public boolean canRefresh() {
     return false;
   }
 }

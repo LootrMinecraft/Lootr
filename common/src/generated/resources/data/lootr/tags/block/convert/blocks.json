@@ -3,6 +3,8 @@
     "#lootr:convert/barrels",
     "#lootr:convert/chests",
     "#lootr:convert/trapped_chests",
-    "#lootr:convert/shulkers"
+    "#lootr:convert/shulkers",
+    "#lootr:convert/sands",
+    "#lootr:convert/gravels"
   ]
 }

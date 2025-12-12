@@ -37,6 +37,8 @@ public class LootrLangProvider extends LanguageProvider {
     add(LootrRegistry.getInventoryBlock(), "Loot Chest");
     add(LootrRegistry.getMinecart(), "Minecart with Loot Chest");
     add(LootrRegistry.getTrophyBlock(), "Centennial Trophy");
+    add(LootrRegistry.getSuspiciousGravel(), "Gravel");
+    add(LootrRegistry.getSuspiciousSand(), "Sand");
     add("lootr.commands.create", "Created a Lootr %s at %s using the loot table %s.");
     add("lootr.commands.summon", "Summoned a Lootr Cart at %s using the loot table %s.");
     add("lootr.commands.blockpos", "%s,%s,%s");
@@ -181,6 +183,8 @@ public class LootrLangProvider extends LanguageProvider {
     add(LootrTags.Blocks.BARRELS, "Lootr Barrels");
     add(LootrTags.Blocks.SHULKERS, "Lootr Shulkers");
     add(LootrTags.Blocks.TRAPPED_CHESTS, "Trapped Lootr Chests");
+    add(LootrTags.Blocks.SANDS, "Suspicious Lootr Sands");
+    add(LootrTags.Blocks.GRAVELS, "Suspicious Lootr Gravels");
     add("lootr.configuration.conversion", conversion);
     add("lootr.configuration.refresh", refresh);
     add("lootr.configuration.breaking", breaking);
