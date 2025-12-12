@@ -8,6 +8,7 @@
     "AccessorMixinDimensionDataStorage",
     "AccessorMixinFallingBlockEntity",
     "AccessorMixinLootTable",
+    "MixinBrushableBlockEntity",
     "MixinBrushItem",
     "MixinCatSitOnBlockGoal",
     "MixinChestBlock",

@@ -221,6 +221,12 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
     }
   }
 
+  @Override
+  public void setLootTableInternal(ResourceKey<LootTable> lootTable, long seed) {
+    this.lootTable = lootTable;
+    this.lootTableSeed = seed;
+  }
+
   @Nullable
   public Player getBrushingPlayer() {
     if (this.brushingPlayerEntity != null) {
@@ -473,6 +479,7 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
     level.addFreshEntity(fallingBlockEntity);
     return fallingBlockEntity;
   }
+
 
   @AutoService(ILootrBlockEntityConverter.class)
   public static class DefaultBlockEntityConverter implements ILootrBlockEntityConverter<LootrBrushableBlockEntity> {
