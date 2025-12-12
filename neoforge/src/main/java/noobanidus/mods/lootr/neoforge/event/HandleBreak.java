@@ -2,6 +2,8 @@ package noobanidus.mods.lootr.neoforge.event;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.server.TickTask;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -25,25 +27,33 @@ public class HandleBreak {
           if (!lbe.hasLootTable()) {
             return;
           }
-        }
-        if (LootrAPI.canDestroyOrBreak(player)) {
-          return;
-        }
-        if (LootrAPI.isBreakDisabled()) {
-          if (player.getAbilities().instabuild) {
-            if (!player.isShiftKeyDown()) {
+          if (LootrAPI.canDestroyOrBreak(player)) {
+            return;
+          }
+          if (LootrAPI.isBreakDisabled()) {
+            if (player.getAbilities().instabuild) {
+              if (!player.isShiftKeyDown()) {
+                event.setCanceled(true);
+                player.displayClientMessage(Component.translatable("lootr.message.cannot_break_sneak")
+                    .setStyle(LootrAPI.getChatStyle()), false);
+              }
+            } else {
               event.setCanceled(true);
-              player.displayClientMessage(Component.translatable("lootr.message.cannot_break_sneak").setStyle(LootrAPI.getChatStyle()), false);
+              player.displayClientMessage(Component.translatable("lootr.message.cannot_break")
+                  .setStyle(LootrAPI.getChatStyle()), false);
             }
           } else {
-            event.setCanceled(true);
-            player.displayClientMessage(Component.translatable("lootr.message.cannot_break").setStyle(LootrAPI.getChatStyle()), false);
+            if (!event.getPlayer().isShiftKeyDown()) {
+              event.setCanceled(true);
+              event.getPlayer().displayClientMessage(Component.translatable("lootr.message.should_sneak")
+                  .setStyle(LootrAPI.getChatStyle()), false);
+              event.getPlayer()
+                  .displayClientMessage(Component.translatable("lootr.message.should_sneak2", Component.translatable("lootr.message.should_sneak3")
+                      .setStyle(Style.EMPTY.withBold(true))).setStyle(LootrAPI.getChatStyle()), false);
+            }
           }
-        } else {
-          if (!event.getPlayer().isShiftKeyDown()) {
-            event.setCanceled(true);
-            event.getPlayer().displayClientMessage(Component.translatable("lootr.message.should_sneak").setStyle(LootrAPI.getChatStyle()), false);
-            event.getPlayer().displayClientMessage(Component.translatable("lootr.message.should_sneak2", Component.translatable("lootr.message.should_sneak3").setStyle(Style.EMPTY.withBold(true))).setStyle(LootrAPI.getChatStyle()), false);
+          if (event.isCanceled() && event.getLevel() instanceof ServerLevel level) {
+            //level.getServer().tell(new TickTask(level.getServer().getTickCount()+2, lbe::performUpdate));
           }
         }
       }
