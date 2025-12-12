@@ -228,8 +228,6 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
   private void tryLoadLootTable(CompoundTag compoundTag) {
     if (compoundTag.contains("LootTable")) {
       this.lootTable = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse(compoundTag.getString("LootTable")));
-    } else {
-      LootrAPI.LOG.error("Brushable BlockEntity at {} is missing loot table information!", this.worldPosition);
     }
     if (compoundTag.contains("LootTableSeed")) {
       this.lootTableSeed = compoundTag.getLong("LootTableSeed");
@@ -242,8 +240,6 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
       if (this.lootTableSeed != 0L) {
         compoundTag.putLong("LootTableSeed", this.lootTableSeed);
       }
-    } else {
-      LootrAPI.LOG.error("Brushable BlockEntity at {} is missing loot table information!", this.worldPosition);
     }
   }
 
