@@ -323,11 +323,15 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
     return this.item;
   }
 
+  public boolean isBrushingPlayer (Player player) {
+    Player brushingPlayer = getBrushingPlayer();
+    return brushingPlayer != null && brushingPlayer == player;
+  }
+
   public ItemStack getItem(Player player) {
     boolean clientSide = player.level().isClientSide();
 
-    Player brushingPlayer = getBrushingPlayer();
-    if (brushingPlayer != null && brushingPlayer == player) {
+    if (isBrushingPlayer(player)) {
       if (clientSide) {
         return this.item; // Rely on it being sync'd from the server
       } else {
