@@ -5,16 +5,10 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BrushableBlock;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.registry.LootrProperties;
 import noobanidus.mods.lootr.common.block.*;
-import noobanidus.mods.lootr.common.block.entity.LootrShulkerBlockEntity;
 import noobanidus.mods.lootr.fabric.block.LootrFabricBarrelBlock;
 import noobanidus.mods.lootr.fabric.block.LootrFabricBrushableBlock;
-import noobanidus.mods.lootr.fabric.block.LootrFabricDecoratedPotBlock;
 
 public class ModBlocks {
   public static final LootrChestBlock CHEST = new LootrChestBlock(LootrProperties.CHEST_PROPERTIES);
@@ -27,7 +21,7 @@ public class ModBlocks {
   public static final LootrBrushableBlock SUSPICIOUS_SAND = new LootrFabricBrushableBlock(((BrushableBlock)Blocks.SUSPICIOUS_SAND).getBrushSound(), ((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushCompletedSound(), LootrProperties.SUSPICIOUS_SAND_PROPERTIES);
   public static final LootrBrushableBlock SUSPICIOUS_GRAVEL = new LootrFabricBrushableBlock(((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushSound(), ((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushCompletedSound(), LootrProperties.SUSPICIOUS_GRAVEL_PROPERTIES);
 
-  public static final LootrFabricDecoratedPotBlock DECORATED_POT = new LootrFabricDecoratedPotBlock(LootrProperties.DECORATED_POT_PROPERTIES);
+  public static final LootrDecoratedPotBlock DECORATED_POT = new LootrDecoratedPotBlock(LootrProperties.DECORATED_POT_PROPERTIES);
 
   public static void registerBlocks() {
     Registry.register(BuiltInRegistries.BLOCK, LootrProperties.LOOTR_CHEST, CHEST);

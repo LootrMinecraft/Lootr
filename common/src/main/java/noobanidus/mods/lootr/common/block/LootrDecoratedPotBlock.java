@@ -10,9 +10,10 @@ import net.minecraft.world.level.block.DecoratedPotBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import noobanidus.mods.lootr.common.block.entity.LootrDecoratedPotBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class LootrDecoratedPotBlock extends DecoratedPotBlock {
+public class LootrDecoratedPotBlock extends DecoratedPotBlock {
   public LootrDecoratedPotBlock(Properties properties) {
     super(properties);
   }
@@ -43,5 +44,7 @@ public abstract class LootrDecoratedPotBlock extends DecoratedPotBlock {
   }
 
   @Override
-  public abstract @Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState);
+  public @Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
+    return new LootrDecoratedPotBlockEntity(blockPos, blockState);
+  }
 }

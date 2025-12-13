@@ -12,7 +12,6 @@ import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.block.entity.*;
 import noobanidus.mods.lootr.neoforge.block.entity.LootrNeoForgeBarrelBlockEntity;
 import noobanidus.mods.lootr.neoforge.block.entity.LootrNeoForgeBrushableBlockEntity;
-import noobanidus.mods.lootr.neoforge.block.entity.LootrNeoForgeDecoratedPotBlockEntity;
 
 @SuppressWarnings("DataFlowIssue")
 public class ModBlockEntities {
@@ -33,5 +32,5 @@ public class ModBlockEntities {
   @MigrateName(value="shulker_box", in="26")
   public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LootrShulkerBlockEntity>> LOOTR_SHULKER = REGISTER.register(LootrProperties.LOOTR_SHULKER.getPath(), () -> BlockEntityType.Builder.of(LootrShulkerBlockEntity::new, LootrRegistry.getShulkerBlock()).build(null));
   public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LootrNeoForgeBrushableBlockEntity>> LOOTR_BRUSHABLE_BLOCK = REGISTER.register(LootrProperties.BRUSHABLE_BLOCK.getPath(), () -> BlockEntityType.Builder.of(LootrNeoForgeBrushableBlockEntity::new, ModBlocks.SUSPICIOUS_GRAVEL.get(), ModBlocks.SUSPICIOUS_SAND.get()).build(null));
-  public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LootrNeoForgeDecoratedPotBlockEntity>> LOOTR_DECORATED_POT = REGISTER.register(LootrProperties.DECORATED_POT.getPath(), () -> BlockEntityType.Builder.of(LootrNeoForgeDecoratedPotBlockEntity::new, ModBlocks.DECORATED_POT.get()).build(null));
+  public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LootrDecoratedPotBlockEntity>> LOOTR_DECORATED_POT = REGISTER.register(LootrProperties.DECORATED_POT.getPath(), () -> BlockEntityType.Builder.of(LootrDecoratedPotBlockEntity::new, ModBlocks.DECORATED_POT.get()).build(null));
 }

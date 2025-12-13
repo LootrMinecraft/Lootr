@@ -13,7 +13,6 @@ import noobanidus.mods.lootr.common.api.registry.LootrProperties;
 import noobanidus.mods.lootr.common.block.*;
 import noobanidus.mods.lootr.neoforge.block.LootrNeoForgeBarrelBlock;
 import noobanidus.mods.lootr.neoforge.block.LootrNeoForgeBrushableBlock;
-import noobanidus.mods.lootr.neoforge.block.LootrNeoForgeDecoratedPotBlock;
 
 
 public class ModBlocks {
@@ -31,7 +30,7 @@ public class ModBlocks {
   public static final DeferredHolder<Block, LootrShulkerBlock> SHULKER = REGISTER.register(LootrProperties.LOOTR_SHULKER.getPath(), () -> new LootrShulkerBlock(LootrProperties.SHULKER_BOX_PROPERTIES));
   public static final DeferredHolder<Block, LootrBrushableBlock> SUSPICIOUS_SAND = REGISTER.register(LootrProperties.SUSPICIOUS_SAND.getPath(), () -> new LootrNeoForgeBrushableBlock(((BrushableBlock)Blocks.SUSPICIOUS_SAND).getBrushSound(), ((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushCompletedSound(), LootrProperties.SUSPICIOUS_SAND_PROPERTIES));
   public static final DeferredHolder<Block, LootrBrushableBlock> SUSPICIOUS_GRAVEL = REGISTER.register(LootrProperties.SUSPICIOUS_GRAVEL.getPath(), () -> new LootrNeoForgeBrushableBlock(((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushSound(), ((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushCompletedSound(), LootrProperties.SUSPICIOUS_GRAVEL_PROPERTIES));
-  public static final DeferredHolder<Block, LootrNeoForgeDecoratedPotBlock> DECORATED_POT = REGISTER.register(LootrProperties.DECORATED_POT.getPath(), () -> new LootrNeoForgeDecoratedPotBlock(LootrProperties.DECORATED_POT_PROPERTIES));
+  public static final DeferredHolder<Block, LootrDecoratedPotBlock> DECORATED_POT = REGISTER.register(LootrProperties.DECORATED_POT.getPath(), () -> new LootrDecoratedPotBlock(LootrProperties.DECORATED_POT_PROPERTIES));
 
   public static final DeferredHolder<Block, Block> TROPHY = REGISTER.register(LootrProperties.TROPHY.getPath(), () -> new TrophyBlock(LootrProperties.TROPHY_PROPERTIES));
 

@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Set;
 import java.util.UUID;
 
-public abstract class LootrDecoratedPotBlockEntity extends BlockEntity implements RandomizableContainer, ContainerSingleItem.BlockContainerSingleItem, ILootrBlockEntity {
+public class LootrDecoratedPotBlockEntity extends BlockEntity implements RandomizableContainer, ContainerSingleItem.BlockContainerSingleItem, ILootrBlockEntity {
   public long wobbleStartedAtTick;
   @Nullable
   public DecoratedPotBlockEntity.WobbleStyle lastWobbleStyle;
@@ -45,8 +45,8 @@ public abstract class LootrDecoratedPotBlockEntity extends BlockEntity implement
 
   private final SimpleLootrInstance lootrInstance = new SimpleLootrInstance(this::getVisualOpeners, 1);
 
-  public LootrDecoratedPotBlockEntity(BlockEntityType<?> type, BlockPos blockPos, BlockState blockState) {
-    super(type, blockPos, blockState);
+  public LootrDecoratedPotBlockEntity(BlockPos blockPos, BlockState blockState) {
+    super(LootrRegistry.getDecoratedPotBlockEntity(), blockPos, blockState);
     this.decorations = PotDecorations.EMPTY;
   }
 
