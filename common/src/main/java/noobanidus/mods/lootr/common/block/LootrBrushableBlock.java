@@ -20,6 +20,8 @@ import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.block.entity.LootrBrushableBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
+// Abstract to compensate for platform-specific block entities which exist
+// in order to dynamically handle client-side rendering.
 public abstract class LootrBrushableBlock extends BrushableBlock {
   public static final IntegerProperty DUSTED = BlockStateProperties.DUSTED;
 
