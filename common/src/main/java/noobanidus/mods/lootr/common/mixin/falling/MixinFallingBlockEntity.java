@@ -9,6 +9,8 @@ import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
+// This is necessary otherwise previously opened falling brushable blocks
+// will revert to their "open" status when they land.
 @Mixin(FallingBlockEntity.class)
 public class MixinFallingBlockEntity {
   @WrapOperation(method="tick", at=@At(value="INVOKE", target="Lnet/minecraft/world/level/block/entity/BlockEntity;setChanged()V"))
