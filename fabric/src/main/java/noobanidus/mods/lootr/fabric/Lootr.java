@@ -11,7 +11,9 @@ import noobanidus.mods.lootr.fabric.impl.LootrAPIImpl;
 import noobanidus.mods.lootr.fabric.impl.LootrRegistryImpl;
 import noobanidus.mods.lootr.fabric.impl.PlatformAPIImpl;
 import noobanidus.mods.lootr.fabric.init.*;
+import noobanidus.mods.lootr.fabric.network.LootrNetworkingInit;
 import noobanidus.mods.lootr.fabric.network.to_client.*;
+import noobanidus.mods.lootr.fabric.network.to_server.PacketRequestUpdate;
 
 public class Lootr implements ModInitializer {
   @Override
@@ -20,11 +22,15 @@ public class Lootr implements ModInitializer {
     LootrRegistry.INSTANCE = new LootrRegistryImpl();
     PlatformAPI.INSTANCE = new PlatformAPIImpl();
 
+
     PayloadTypeRegistry.playS2C().register(PacketOpenCart.TYPE, PacketOpenCart.STREAM_CODEC);
     PayloadTypeRegistry.playS2C().register(PacketCloseCart.TYPE, PacketCloseCart.STREAM_CODEC);
     PayloadTypeRegistry.playS2C().register(PacketOpenContainer.TYPE, PacketOpenContainer.STREAM_CODEC);
     PayloadTypeRegistry.playS2C().register(PacketCloseContainer.TYPE, PacketCloseContainer.STREAM_CODEC);
     PayloadTypeRegistry.playS2C().register(PacketRefreshSection.TYPE, PacketRefreshSection.STREAM_CODEC);
+    PayloadTypeRegistry.playC2S().register(PacketRequestUpdate.TYPE, PacketRequestUpdate.STREAM_CODEC);
+
+    LootrNetworkingInit.register();
 
     LootrConfigInit.registerConfig();
     ModItems.registerItems();

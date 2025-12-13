@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.fabric.mixins;
+package noobanidus.mods.lootr.fabric.mixin;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+// TODO: Remove these migrations
 @Mixin(BlockEntity.class)
 public class MixinBlockEntity {
   private static final String LOOTR_SPECIAL_CHEST = "lootr:special_loot_chest";

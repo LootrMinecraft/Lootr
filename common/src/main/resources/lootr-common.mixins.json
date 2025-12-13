@@ -8,18 +8,19 @@
     "accessor.AccessorMixinDimensionDataStorage",
     "accessor.AccessorMixinFallingBlockEntity",
     "accessor.AccessorMixinLootTable",
-    "ticker.MixinBrushableBlockEntity",
     "brushing.MixinBrushItem",
     "cat.MixinCatSitOnBlockGoal",
     "chest_blocking.MixinChestBlock",
     "elytra.MixinEndCityPieces$EndCityPiece",
-    "ticker.MixinLevelChunk",
+    "falling.MixinFallingBlockEntity",
     "filter.MixinLootTable",
     "poi.MixinPoiType",
     "poi.MixinPoiTypes",
-    "ticker.MixinRandomizableContainer",
     "spawn.MixinServerGamePacketListenerImpl",
-    "structure_saving.MixinStructureTemplate"
+    "structure_saving.MixinStructureTemplate",
+    "ticker.MixinBrushableBlockEntity",
+    "ticker.MixinLevelChunk",
+    "ticker.MixinRandomizableContainer"
   ],
   "client": [
   ],

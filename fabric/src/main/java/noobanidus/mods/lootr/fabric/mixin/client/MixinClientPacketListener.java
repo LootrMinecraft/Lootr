@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.fabric.mixins.client;
+package noobanidus.mods.lootr.fabric.mixin.client;
 
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+// Does this even do anything at this point?
 @Mixin(ClientPacketListener.class)
 public class MixinClientPacketListener {
   @Inject(method="method_38542", at=@At("RETURN"))

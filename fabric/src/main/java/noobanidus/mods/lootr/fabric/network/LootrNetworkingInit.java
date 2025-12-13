@@ -1,72 +1,45 @@
 package noobanidus.mods.lootr.fabric.network;
 
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.Entity;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
-import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
-import noobanidus.mods.lootr.common.client.ClientHooks;
-import noobanidus.mods.lootr.fabric.network.to_client.*;
+import noobanidus.mods.lootr.fabric.network.to_client.PacketCloseContainer;
+import noobanidus.mods.lootr.fabric.network.to_client.PacketOpenContainer;
+import noobanidus.mods.lootr.fabric.network.to_server.PacketRequestUpdate;
 
 public class LootrNetworkingInit {
-  public static void registerClientNetwork() {
-    ClientPlayNetworking.registerGlobalReceiver(PacketCloseCart.TYPE, (payload, context) -> {
-      int entityId = payload.entityId();
-      context.client().execute(() -> {
-        if (context.client().player != null && context.client().player.level() != null) {
-          Entity potential = context.client().player.level().getEntity(entityId);
-          if (LootrAPI.resolveEntity(potential) instanceof ILootrCart cart) {
-            cart.setClientOpened(false);
-          }
+  public static void register() {
+    ServerPlayNetworking.registerGlobalReceiver(PacketRequestUpdate.TYPE, (payload, context) -> {
+      context.server().execute(() -> {
+        GlobalPos pos = payload.position();
+        ServerLevel level = context.server().getLevel(pos.dimension());
+        if (level == null) {
+          return;
         }
-      });
-    });
 
-    ClientPlayNetworking.registerGlobalReceiver(PacketOpenCart.TYPE, (payload, context) -> {
-      int entityId = payload.entityId();
-      context.client().execute(() -> {
-        if (context.client().player != null && context.client().player.level() != null) {
-          Entity potential = context.client().player.level().getEntity(entityId);
-          if (LootrAPI.resolveEntity(potential) instanceof ILootrCart cart) {
-            cart.setClientOpened(true);
-          }
+        BlockEntity blockEntity = level.getBlockEntity(pos.pos());
+        if (blockEntity == null) {
+          return;
         }
-      });
-    });
 
-    ClientPlayNetworking.registerGlobalReceiver(PacketOpenContainer.TYPE, (payload, context) -> {
-      BlockPos position = payload.blockPos();
-      context.client().execute(() -> {
-        if (context.client().player != null && context.client().player.level() != null) {
-          BlockEntity potential = context.client().player.level().getBlockEntity(position);
-          if (LootrAPI.resolveBlockEntity(potential) instanceof ILootrBlockEntity blockEntity) {
-            blockEntity.setClientOpened(true);
-            ClientHooks.clearCache(position);
-          }
+        ILootrBlockEntity resolved = LootrAPI.resolveBlockEntity(blockEntity);
+        if (resolved == null) {
+          return;
         }
-      });
-    });
 
-    ClientPlayNetworking.registerGlobalReceiver(PacketRefreshSection.TYPE, (payload, context) -> {
-      context.client().execute(() -> {
-        if (context.client().player != null && context.client().player.level() != null) {
-          BlockPos position = context.client().player.blockPosition();
-          ClientHooks.clearCache(position);
+        Packet<?> packet = blockEntity.getUpdatePacket();
+        if (packet != null) {
+          context.player().connection.send(packet);
         }
-      });
-    });
 
-    ClientPlayNetworking.registerGlobalReceiver(PacketCloseContainer.TYPE, (payload, context) -> {
-      BlockPos position = payload.blockPos();
-      context.client().execute(() -> {
-        if (context.client().player != null && context.client().player.level() != null) {
-          BlockEntity potential = context.client().player.level().getBlockEntity(position);
-          if (LootrAPI.resolveBlockEntity(potential) instanceof ILootrBlockEntity blockEntity) {
-            blockEntity.setClientOpened(false);
-            ClientHooks.clearCache(position);
-          }
+        if (resolved.hasOpened(context.player())) {
+          ServerPlayNetworking.send(context.player(), new PacketOpenContainer(pos.pos()));
+        } else {
+          ServerPlayNetworking.send(context.player(), new PacketCloseContainer(pos.pos()));
         }
       });
     });

@@ -9,7 +9,6 @@ import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import noobanidus.mods.lootr.common.client.block.LootrBrushableBlockRenderer;
 import noobanidus.mods.lootr.fabric.client.block.*;
@@ -20,14 +19,13 @@ import noobanidus.mods.lootr.fabric.client.item.LootrTrappedChestItemRenderer;
 import noobanidus.mods.lootr.fabric.init.ModBlockEntities;
 import noobanidus.mods.lootr.fabric.init.ModBlocks;
 import noobanidus.mods.lootr.fabric.init.ModEntities;
-import noobanidus.mods.lootr.fabric.init.ModLoot;
-import noobanidus.mods.lootr.fabric.network.LootrNetworkingInit;
+import noobanidus.mods.lootr.fabric.network.LootrClientNetworkingInit;
 
 @Environment(EnvType.CLIENT)
 public class LootrClient implements ClientModInitializer {
   @Override
   public void onInitializeClient() {
-    LootrNetworkingInit.registerClientNetwork();
+    LootrClientNetworkingInit.register();
 
     BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.BARREL, RenderType.cutoutMipped());
 
