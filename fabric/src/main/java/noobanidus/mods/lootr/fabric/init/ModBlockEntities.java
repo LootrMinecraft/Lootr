@@ -3,19 +3,19 @@ package noobanidus.mods.lootr.fabric.init;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.registry.LootrProperties;
 import noobanidus.mods.lootr.common.block.entity.*;
 import noobanidus.mods.lootr.fabric.block.entity.LootrFabricBarrelBlockEntity;
 import noobanidus.mods.lootr.fabric.block.entity.LootrFabricBrushableBlockEntity;
 
 public class ModBlockEntities {
   public static void registerBlockEntities() {
-    Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrAPI.rl("lootr_chest"), LOOTR_CHEST);
-    Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrAPI.rl("lootr_trapped_chest"), LOOTR_TRAPPED_CHEST);
-    Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrAPI.rl("lootr_shulker"), LOOTR_SHULKER);
-    Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrAPI.rl("lootr_barrel"), LOOTR_BARREL);
-    Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrAPI.rl("lootr_inventory"), LOOTR_INVENTORY);
-    Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrAPI.rl("brushable_block"), LOOTR_BRUSHABLE_BLOCK);
+    Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrProperties.LOOTR_CHEST, LOOTR_CHEST);
+    Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrProperties.LOOTR_TRAPPED_CHEST, LOOTR_TRAPPED_CHEST);
+    Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrProperties.LOOTR_SHULKER, LOOTR_SHULKER);
+    Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrProperties.LOOTR_BARREL, LOOTR_BARREL);
+    Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrProperties.LOOTR_INVENTORY, LOOTR_INVENTORY);
+    Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrProperties.BRUSHABLE_BLOCK, LOOTR_BRUSHABLE_BLOCK);
   }
 
   public static final BlockEntityType<LootrChestBlockEntity> LOOTR_CHEST = BlockEntityType.Builder.of(LootrChestBlockEntity::new, ModBlocks.CHEST).build(null);

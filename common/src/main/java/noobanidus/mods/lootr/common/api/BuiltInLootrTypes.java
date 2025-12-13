@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.common.api;
 
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
+import noobanidus.mods.lootr.common.api.registry.LootrProperties;
 import org.jetbrains.annotations.Nullable;
 
 public class BuiltInLootrTypes {
@@ -11,8 +12,8 @@ public class BuiltInLootrTypes {
   public static final String TYPE_INVENTORY = LootrAPI.rl("inventory").toString();
   public static final String TYPE_MINECART = LootrAPI.rl("minecart").toString();
   public static final String TYPE_POT = LootrAPI.rl("pot").toString();
-  public static final String TYPE_SAND = LootrAPI.rl("suspicious_sand").toString();
-  public static final String TYPE_GRAVEL = LootrAPI.rl("suspicious_gravel").toString();
+  public static final String TYPE_SAND = LootrProperties.SUSPICIOUS_SAND.toString();
+  public static final String TYPE_GRAVEL = LootrProperties.SUSPICIOUS_GRAVEL.toString();
 
   public static ILootrType CHEST;
   public static ILootrType TRAPPED_CHEST;
