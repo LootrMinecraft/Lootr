@@ -91,6 +91,69 @@ public final class BlockEntityTicker {
     return lootTable != null && !LootrAPI.isLootTableBlacklisted(lootTable);
   }
 
+  // As opposed to `isValidEntity`, this checks everything
+  public static boolean isValidEntityFull(BlockEntity entity) {
+    if (LootrAPI.isDisabled()) {
+      return false;
+    }
+
+    Level level = entity.getLevel();
+    BlockPos pos = entity.getBlockPos();
+
+    if (level == null) {
+      return false;
+    }
+
+    if (level.isClientSide() || level.getServer() == null || LootrAPI.getServer() == null || !(level instanceof ServerLevel serverLevel)) {
+      return false;
+    }
+
+    if (entity instanceof ILootrBlockEntity || LootrAPI.resolveBlockEntity(entity) instanceof ILootrBlockEntity) {
+      return false;
+    }
+
+    MinecraftServer server = level.getServer();
+    if (!server.isSameThread()) {
+      LootrAPI.LOG.error("Called isValidEntityFull on a non-server thread for {} in {}", entity, level.dimension());
+      return false;
+    }
+
+    if (LootrAPI.isDimensionBlocked(serverLevel.dimension())) {
+      return false;
+    }
+
+    // TODO: This is checked twice in theory but it might be faster to check it here
+    if (!LootrAPI.isWorldBorderSafe(level, pos)) {
+      return false;
+    }
+
+    if (LootrAPI.replacementBlockState(entity.getBlockState()) == null) {
+      return false;
+    }
+
+    ILootrDataAdapter<BlockEntity> adapter = LootrAPI.getAdapter(entity);
+    if (adapter == null) {
+      return false;
+    }
+
+    ResourceKey<LootTable> lootTable = adapter.getLootTable(entity);
+    if (lootTable == null) {
+      return false;
+    }
+
+    if (LootrAPI.isLootTableBlacklisted(lootTable)) {
+      return false;
+    }
+
+    Entry testEntry = new Entry(new ChunkPos(pos), Set.of(pos));
+    Set<ChunkPos> loadedChunks = LoadedChunks.getLoadedChunks(level.dimension());
+    if (testEntry.getChunkLoadStatus(serverLevel, loadedChunks) != ChunkLoadStatus.COMPLETE) {
+      return false;
+    }
+
+    return true;
+  }
+
   public static void onServerTick(MinecraftServer server) {
     if (LootrAPI.isDisabled()) {
       return;
