@@ -26,7 +26,7 @@ public interface MixinRandomizableContainer {
   @WrapOperation(method="setLootTable(Lnet/minecraft/resources/ResourceKey;J)V", at=@At(value="INVOKE", target="Lnet/minecraft/world/RandomizableContainer;setLootTable(Lnet/minecraft/resources/ResourceKey;)V"))
   default void lootr$setLootTable(RandomizableContainer instance, ResourceKey<LootTable> table, Operation<Void> original) {
     original.call(instance, table);
-    if (!(instance instanceof ILootrBlockEntity) && instance instanceof BlockEntity blockEntity && blockEntity.getLevel() != null && !(LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity)) {
+    if (table != null && !(instance instanceof ILootrBlockEntity) && instance instanceof BlockEntity blockEntity && blockEntity.getLevel() != null && !(LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity)) {
       BlockEntityTicker.addEntity(blockEntity, blockEntity.getLevel(), new ChunkPos(blockEntity.getBlockPos()));
     }
   }
