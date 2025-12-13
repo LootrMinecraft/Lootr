@@ -64,14 +64,6 @@ public abstract class LootrBrushableBlock extends BrushableBlock {
     }
   }
 
-  @Override
-  public void onBrokenAfterFall(Level level, BlockPos blockPos, FallingBlockEntity fallingBlockEntity) {
-    // TODO: Lootr variants don't break on fall
-    Vec3 vec3 = fallingBlockEntity.getBoundingBox().getCenter();
-    level.levelEvent(2001, BlockPos.containing(vec3), Block.getId(fallingBlockEntity.getBlockState()));
-    level.gameEvent(fallingBlockEntity, GameEvent.BLOCK_DESTROY, vec3);
-  }
-
   @Nullable
   @Override
   public abstract BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState);
