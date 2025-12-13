@@ -3,7 +3,7 @@ package noobanidus.mods.lootr.fabric.client.block;
 import net.minecraft.resources.ResourceLocation;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 
-public class BrushableModelLoader {
+public class BrushableLocations {
   public static final ResourceLocation SAND_OPENED = LootrAPI.rl("block/suspicious_sand_open");
   public static final ResourceLocation SAND_STAGE_0 = LootrAPI.mc("block/suspicious_sand_0");
   public static final ResourceLocation SAND_STAGE_1 = LootrAPI.mc("block/suspicious_sand_1");
