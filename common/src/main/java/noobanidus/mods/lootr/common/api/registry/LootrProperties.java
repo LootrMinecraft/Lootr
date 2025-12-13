@@ -33,6 +33,7 @@ public class LootrProperties {
   public static final ResourceLocation BARREL = LootrAPI.rl("barrel");
   public static final ResourceLocation INVENTORY = LootrAPI.rl("inventory");
   public static final ResourceLocation CART = LootrAPI.rl("cart");
+  public static final ResourceLocation TROPHY = LootrAPI.rl("trophy");
 
   public static final ResourceLocation DECORATED_POT = LootrAPI.rl("decorated_pot");
   public static final ResourceLocation BRUSHABLE_BLOCK = LootrAPI.rl("brushable_block");

@@ -9,39 +9,31 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.registry.LootrProperties;
 import noobanidus.mods.lootr.common.block.*;
 import noobanidus.mods.lootr.common.block.entity.LootrShulkerBlockEntity;
 import noobanidus.mods.lootr.fabric.block.LootrFabricBarrelBlock;
 import noobanidus.mods.lootr.fabric.block.LootrFabricBrushableBlock;
 
 public class ModBlocks {
-  public static final LootrChestBlock CHEST = new LootrChestBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHEST).strength(2.5f));
-  @SuppressWarnings("deprecation")
-  public static final LootrFabricBarrelBlock BARREL = new LootrFabricBarrelBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BARREL).strength(2.5f).forceSolidOff());
-  public static final LootrTrappedChestBlock TRAPPED_CHEST = new LootrTrappedChestBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.TRAPPED_CHEST).strength(2.5f));
-  public static final LootrInventoryBlock INVENTORY = new LootrInventoryBlock(BlockBehaviour.Properties.of().strength(2.5f).sound(SoundType.WOOD));
-  public static final Block TROPHY = new TrophyBlock(BlockBehaviour.Properties.of().strength(15f).sound(SoundType.METAL).noOcclusion().lightLevel((o) -> 15));
-  private static final BlockBehaviour.StatePredicate posPredicate = (state, level, pos) -> {
-    BlockEntity blockEntity = level.getBlockEntity(pos);
-    if (blockEntity instanceof LootrShulkerBlockEntity shulkerBlockEntity) {
-      return shulkerBlockEntity.isClosed();
-    } else {
-      return false;
-    }
-  };
-  public static final LootrShulkerBlock SHULKER = new LootrShulkerBlock(BlockBehaviour.Properties.of().strength(2.5f).dynamicShape().noOcclusion().isSuffocating(posPredicate).isViewBlocking(posPredicate));
+  public static final LootrChestBlock CHEST = new LootrChestBlock(LootrProperties.CHEST_PROPERTIES);
+  public static final LootrFabricBarrelBlock BARREL = new LootrFabricBarrelBlock(LootrProperties.BARREL_PROPERTIES);
+  public static final LootrTrappedChestBlock TRAPPED_CHEST = new LootrTrappedChestBlock(LootrProperties.TRAPPED_CHEST_PROPERTIES);
+  public static final LootrInventoryBlock INVENTORY = new LootrInventoryBlock(LootrProperties.INVENTORY_PROPERTIES);
+  public static final Block TROPHY = new TrophyBlock(LootrProperties.TROPHY_PROPERTIES);
+  public static final LootrShulkerBlock SHULKER = new LootrShulkerBlock(LootrProperties.SHULKER_BOX_PROPERTIES);
 
-  public static final LootrBrushableBlock SUSPICIOUS_SAND = new LootrFabricBrushableBlock(((BrushableBlock)Blocks.SUSPICIOUS_SAND).getBrushSound(), ((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushCompletedSound(), BlockBehaviour.Properties.ofFullCopy(Blocks.SUSPICIOUS_SAND));
-  public static final LootrBrushableBlock SUSPICIOUS_GRAVEL = new LootrFabricBrushableBlock(((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushSound(), ((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushCompletedSound(), BlockBehaviour.Properties.ofFullCopy(Blocks.SUSPICIOUS_GRAVEL));
+  public static final LootrBrushableBlock SUSPICIOUS_SAND = new LootrFabricBrushableBlock(((BrushableBlock)Blocks.SUSPICIOUS_SAND).getBrushSound(), ((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushCompletedSound(), LootrProperties.SUSPICIOUS_SAND_PROPERTIES);
+  public static final LootrBrushableBlock SUSPICIOUS_GRAVEL = new LootrFabricBrushableBlock(((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushSound(), ((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushCompletedSound(), LootrProperties.SUSPICIOUS_GRAVEL_PROPERTIES);
 
   public static void registerBlocks() {
-    Registry.register(BuiltInRegistries.BLOCK, LootrAPI.rl("lootr_chest"), CHEST);
-    Registry.register(BuiltInRegistries.BLOCK, LootrAPI.rl("lootr_barrel"), BARREL);
-    Registry.register(BuiltInRegistries.BLOCK, LootrAPI.rl("lootr_trapped_chest"), TRAPPED_CHEST);
-    Registry.register(BuiltInRegistries.BLOCK, LootrAPI.rl("lootr_shulker"), SHULKER);
-    Registry.register(BuiltInRegistries.BLOCK, LootrAPI.rl("lootr_inventory"), INVENTORY);
-    Registry.register(BuiltInRegistries.BLOCK, LootrAPI.rl("suspicious_sand"), SUSPICIOUS_SAND);
-    Registry.register(BuiltInRegistries.BLOCK, LootrAPI.rl("suspicious_gravel"), SUSPICIOUS_GRAVEL);
-    Registry.register(BuiltInRegistries.BLOCK, LootrAPI.rl("trophy"), TROPHY);
+    Registry.register(BuiltInRegistries.BLOCK, LootrProperties.LOOTR_CHEST, CHEST);
+    Registry.register(BuiltInRegistries.BLOCK, LootrProperties.LOOTR_BARREL, BARREL);
+    Registry.register(BuiltInRegistries.BLOCK, LootrProperties.LOOTR_TRAPPED_CHEST, TRAPPED_CHEST);
+    Registry.register(BuiltInRegistries.BLOCK, LootrProperties.LOOTR_SHULKER, SHULKER);
+    Registry.register(BuiltInRegistries.BLOCK, LootrProperties.LOOTR_INVENTORY, INVENTORY);
+    Registry.register(BuiltInRegistries.BLOCK, LootrProperties.SUSPICIOUS_SAND, SUSPICIOUS_SAND);
+    Registry.register(BuiltInRegistries.BLOCK, LootrProperties.SUSPICIOUS_GRAVEL, SUSPICIOUS_GRAVEL);
+    Registry.register(BuiltInRegistries.BLOCK, LootrProperties.TROPHY, TROPHY);
   }
 }
