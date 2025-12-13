@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.common.mixins;
+package noobanidus.mods.lootr.common.mixin.filter;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;

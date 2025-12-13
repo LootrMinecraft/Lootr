@@ -16,13 +16,12 @@ import net.minecraft.world.level.storage.LevelResource;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.LootFiller;
-import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.TickingData;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.chunk.LoadedChunks;
-import noobanidus.mods.lootr.common.mixins.AccessorMixinDimensionDataStorage;
+import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinDimensionDataStorage;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 

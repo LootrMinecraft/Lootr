@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.common.mixins;
+package noobanidus.mods.lootr.common.mixin.ticker;
 
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.chunk.LevelChunk;

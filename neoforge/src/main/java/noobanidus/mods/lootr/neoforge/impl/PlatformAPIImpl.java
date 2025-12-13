@@ -12,7 +12,7 @@ import noobanidus.mods.lootr.common.api.DataToCopy;
 import noobanidus.mods.lootr.common.api.IPlatformAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
-import noobanidus.mods.lootr.common.mixins.AccessorMixinBaseContainerBlockEntity;
+import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinBaseContainerBlockEntity;
 import noobanidus.mods.lootr.neoforge.network.toClient.*;
 
 public class PlatformAPIImpl implements IPlatformAPI {

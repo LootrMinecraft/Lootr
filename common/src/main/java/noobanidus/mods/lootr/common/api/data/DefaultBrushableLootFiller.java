@@ -17,7 +17,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
-import noobanidus.mods.lootr.common.mixins.AccessorMixinLootTable;
+import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinLootTable;
 import org.jetbrains.annotations.NotNull;
 
 public class DefaultBrushableLootFiller implements LootFiller {

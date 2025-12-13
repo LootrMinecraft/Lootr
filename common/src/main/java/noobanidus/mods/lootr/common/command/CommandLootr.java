@@ -58,7 +58,7 @@ import noobanidus.mods.lootr.common.data.DataStorage;
 import noobanidus.mods.lootr.common.data.LootrInventory;
 import noobanidus.mods.lootr.common.data.LootrSavedData;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
-import noobanidus.mods.lootr.common.mixins.AccessorMixinBaseContainerBlockEntity;
+import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinBaseContainerBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;

@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.common.mixins;
+package noobanidus.mods.lootr.common.mixin.poi;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;

@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.common.mixins;
+package noobanidus.mods.lootr.common.mixin.ticker;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
@@ -14,8 +14,6 @@ import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.block.entity.BlockEntityTicker;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(RandomizableContainer.class)
 public interface MixinRandomizableContainer {

@@ -32,7 +32,7 @@ import noobanidus.mods.lootr.common.api.data.SimpleLootrInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
-import noobanidus.mods.lootr.common.mixins.AccessorMixinFallingBlockEntity;
+import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinFallingBlockEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.common.mixins;
+package noobanidus.mods.lootr.common.mixin.accessor;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.LockCode;

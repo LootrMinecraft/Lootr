@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.common.mixins;
+package noobanidus.mods.lootr.common.mixin.elytra;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.common.mixins;
+package noobanidus.mods.lootr.common.mixin.accessor;
 
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.entity.BrushableBlockEntity;

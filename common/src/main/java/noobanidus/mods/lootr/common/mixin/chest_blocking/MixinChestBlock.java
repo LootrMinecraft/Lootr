@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.common.mixins;
+package noobanidus.mods.lootr.common.mixin.chest_blocking;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;

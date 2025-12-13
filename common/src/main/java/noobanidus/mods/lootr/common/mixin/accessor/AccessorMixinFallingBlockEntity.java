@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.common.mixins;
+package noobanidus.mods.lootr.common.mixin.accessor;
 
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
