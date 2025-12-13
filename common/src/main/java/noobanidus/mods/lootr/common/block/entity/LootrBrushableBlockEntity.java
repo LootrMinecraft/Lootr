@@ -67,7 +67,6 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
     super(LootrRegistry.getBrushableBlockEntity(), blockPos, blockState);
   }
 
-  // TODO:
   private CompoundTag getFallData(HolderLookup.Provider provider) {
     CompoundTag tag = new CompoundTag();
     saveAdditional(tag, provider);
