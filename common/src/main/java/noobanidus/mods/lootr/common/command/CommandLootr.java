@@ -178,6 +178,27 @@ public class CommandLootr {
       c.getSource().sendSuccess(() -> Component.translatable("lootr.commands.usage"), false);
       return 1;
     });
+    builder.then(Commands.literal("pot").executes(c -> {
+      createBlock(c.getSource(), LootrRegistry.getDecoratedPotBlock(), null);
+      return 1;
+    }).then(suggestTables().executes(c -> {
+      createBlock(c.getSource(), LootrRegistry.getDecoratedPotBlock(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
+      return 1;
+    })));
+    builder.then(Commands.literal("gravel").executes(c -> {
+      createBlock(c.getSource(), LootrRegistry.getSuspiciousGravelBlock(), null);
+      return 1;
+    }).then(suggestTables().executes(c -> {
+      createBlock(c.getSource(), LootrRegistry.getSuspiciousGravelBlock(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
+      return 1;
+    })));
+    builder.then(Commands.literal("sand").executes(c -> {
+      createBlock(c.getSource(), LootrRegistry.getSuspiciousSandBlock(), null);
+      return 1;
+    }).then(suggestTables().executes(c -> {
+      createBlock(c.getSource(), LootrRegistry.getSuspiciousSandBlock(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
+      return 1;
+    })));
     builder.then(Commands.literal("barrel").executes(c -> {
       createBlock(c.getSource(), LootrRegistry.getBarrelBlock(), null);
       return 1;
