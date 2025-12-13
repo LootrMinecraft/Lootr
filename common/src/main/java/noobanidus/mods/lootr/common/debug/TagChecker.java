@@ -5,6 +5,11 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.impl.LootrServiceRegistry;
 
+/**
+ * Provides server log warnings when conversion tags are empty or missing.
+ * <br />
+ * This generally happens when another data pack or mod is broken.
+ */
 public class TagChecker {
   private static void standardError() {
     LootrAPI.LOG.error("[Lootr Tag Error] Please check your server logs for more information. If you are using additional data packs, please ensure they don't reference blocks from mods that aren't loaded in this world.");
@@ -55,6 +60,24 @@ public class TagChecker {
       }
     }, () -> {
       LootrAPI.LOG.error("[Lootr Tag Error] Block tag `lootr:convert/blocks` is missing. This may prevent any block from being converted to a Lootr equivalent. If this is intentional, you may ignore this message.");
+      standardError();
+    });
+    BuiltInRegistries.BLOCK.getTag(LootrTags.Blocks.CONVERT_SANDS).ifPresentOrElse(tag -> {
+      if (tag.size() == 0) {
+        LootrAPI.LOG.error("[Lootr Tag Error] Block tag `lootr:convert/sands` is empty. This may prevent any block from being converted to a Lootr equivalent. If this is intentional, you may ignore this message.");
+        standardError();
+      }
+    }, () -> {
+      LootrAPI.LOG.error("[Lootr Tag Error] Block tag `lootr:convert/sands` is missing. This may prevent any block from being converted to a Lootr equivalent. If this is intentional, you may ignore this message.");
+      standardError();
+    });
+    BuiltInRegistries.BLOCK.getTag(LootrTags.Blocks.CONVERT_GRAVELS).ifPresentOrElse(tag -> {
+      if (tag.size() == 0) {
+        LootrAPI.LOG.error("[Lootr Tag Error] Block tag `lootr:convert/gravels` is empty. This may prevent any block from being converted to a Lootr equivalent. If this is intentional, you may ignore this message.");
+        standardError();
+      }
+    }, () -> {
+      LootrAPI.LOG.error("[Lootr Tag Error] Block tag `lootr:convert/gravels` is missing. This may prevent any block from being converted to a Lootr equivalent. If this is intentional, you may ignore this message.");
       standardError();
     });
   }

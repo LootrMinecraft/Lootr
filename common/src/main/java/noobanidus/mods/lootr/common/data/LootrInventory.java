@@ -20,6 +20,10 @@ import noobanidus.mods.lootr.common.api.data.ILootrSavedData;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * This inventory contains the player's actual items and is served as the container
+ * whenever a player opens an inventory.
+ */
 public class LootrInventory implements ILootrInventory {
   private final NonNullList<ItemStack> contents;
   private ILootrSavedData info;

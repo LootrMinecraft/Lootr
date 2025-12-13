@@ -31,32 +31,6 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
   private final Set<UUID> openers = new ObjectLinkedOpenHashSet<>();
   private final Set<UUID> actualOpeners = new ObjectLinkedOpenHashSet<>();
 
-  private int lastTick = -1;
-
-  private static final int TICK_DELAY = 20 * 60 * 3; // Safely unload after 3 minutes
-
-  public static int getCurrentTick () {
-    MinecraftServer server = LootrAPI.getServer();
-    if (server == null) {
-      return -1;
-    }
-    return server.getTickCount();
-  }
-
-  public boolean shouldUnload () {
-    if (lastTick == -1) {
-      return false;
-    }
-
-    int diff = getCurrentTick() - lastTick;
-
-    if (diff < 0) {
-      return false;
-    }
-
-    return diff > TICK_DELAY;
-  }
-
   protected LootrSavedData(ILootrInfo info) {
     this(info, false);
   }
@@ -149,12 +123,6 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
   }
 
   private void removeOpener (UUID uuid) {
-    /*Set<UUID> actualOpeners = getActualOpeners();
-    if (actualOpeners != null) {
-      if (actualOpeners.remove(uuid)) {
-        setDirty();
-      }
-    }*/
     Set<UUID> visualOpeners = getVisualOpeners();
     if (visualOpeners != null) {
       if (visualOpeners.remove(uuid)) {
@@ -269,12 +237,6 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
     }
 
     return false;
-  }
-
-  @Override
-  public void setDirty() {
-    super.setDirty();
-    this.lastTick = getCurrentTick();
   }
 
   @Override
