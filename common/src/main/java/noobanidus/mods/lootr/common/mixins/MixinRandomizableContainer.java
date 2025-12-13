@@ -18,7 +18,7 @@ public interface MixinRandomizableContainer {
   @WrapOperation(method = "tryLoadLootTable", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/RandomizableContainer;setLootTableSeed(J)V"))
   default void lootr$tryLoadLootTable(RandomizableContainer instance, long l, Operation<Void> original) {
     original.call(instance, l);
-    if (!(instance instanceof ILootrBlockEntity) && instance instanceof BlockEntity blockEntity && blockEntity.getLevel() != null && !(LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity)) {
+    if (/*instance.getLootTable() != null && */!(instance instanceof ILootrBlockEntity) && instance instanceof BlockEntity blockEntity && blockEntity.getLevel() != null && !(LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity)) {
       BlockEntityTicker.addEntity(blockEntity, blockEntity.getLevel(), new ChunkPos(blockEntity.getBlockPos()));
     }
   }
