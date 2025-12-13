@@ -6,6 +6,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.registry.LootrProperties;
 
 public class ModItems {
   public static final BlockItem CHEST = new BlockItem(ModBlocks.CHEST, new Item.Properties());
@@ -20,13 +21,13 @@ public class ModItems {
   public static final BlockItem TROPHY = new BlockItem(ModBlocks.TROPHY, new Item.Properties().rarity(Rarity.EPIC));
 
   public static void registerItems() {
-    Registry.register(BuiltInRegistries.ITEM, LootrAPI.rl("lootr_chest"), CHEST);
-    Registry.register(BuiltInRegistries.ITEM, LootrAPI.rl("lootr_barrel"), BARREL);
-    Registry.register(BuiltInRegistries.ITEM, LootrAPI.rl("lootr_trapped_chest"), TRAPPED_CHEST);
-    Registry.register(BuiltInRegistries.ITEM, LootrAPI.rl("lootr_shulker"), SHULKER);
-    Registry.register(BuiltInRegistries.ITEM, LootrAPI.rl("lootr_inventory"), INVENTORY);
-    Registry.register(BuiltInRegistries.ITEM, LootrAPI.rl("trophy"), TROPHY);
-    Registry.register(BuiltInRegistries.ITEM, LootrAPI.rl("suspicious_sand"), SUSPICIOUS_SAND);
-    Registry.register(BuiltInRegistries.ITEM, LootrAPI.rl("suspicious_gravel"), SUSPICIOUS_GRAVEL);
+    Registry.register(BuiltInRegistries.ITEM, LootrProperties.LOOTR_CHEST, CHEST);
+    Registry.register(BuiltInRegistries.ITEM, LootrProperties.LOOTR_BARREL, BARREL);
+    Registry.register(BuiltInRegistries.ITEM, LootrProperties.LOOTR_TRAPPED_CHEST, TRAPPED_CHEST);
+    Registry.register(BuiltInRegistries.ITEM, LootrProperties.LOOTR_SHULKER, SHULKER);
+    Registry.register(BuiltInRegistries.ITEM, LootrProperties.LOOTR_INVENTORY, INVENTORY);
+    Registry.register(BuiltInRegistries.ITEM, LootrProperties.SUSPICIOUS_SAND, SUSPICIOUS_SAND);
+    Registry.register(BuiltInRegistries.ITEM, LootrProperties.SUSPICIOUS_GRAVEL, SUSPICIOUS_GRAVEL);
+    Registry.register(BuiltInRegistries.ITEM, LootrProperties.TROPHY, TROPHY);
   }
 }

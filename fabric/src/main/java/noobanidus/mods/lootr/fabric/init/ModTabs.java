@@ -16,6 +16,6 @@ public class ModTabs {
       }).build();
 
   public static void registerTabs() {
-    Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, LootrAPI.rl("lootr"), LOOTR_TAB);
+    Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, LootrAPI.rl(LootrAPI.MODID), LOOTR_TAB);
   }
 }
