@@ -17,6 +17,7 @@ import noobanidus.mods.lootr.common.block.entity.*;
 import noobanidus.mods.lootr.common.client.block.LootrBrushableBlockRenderer;
 import noobanidus.mods.lootr.common.client.entity.LootrChestCartRenderer;
 import noobanidus.mods.lootr.common.client.item.LootrChestItemRenderer;
+import noobanidus.mods.lootr.common.client.item.LootrDecoratedPotItemRenderer;
 import noobanidus.mods.lootr.common.client.item.LootrShulkerItemRenderer;
 import noobanidus.mods.lootr.common.client.item.LootrTrappedChestItemRenderer;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
@@ -64,6 +65,12 @@ public class ClientSetup {
         return LootrTrappedChestItemRenderer.getInstance();
       }
     }, LootrRegistry.getTrappedChestItem());
+    event.registerItem(new IClientItemExtensions() {
+      @Override
+      public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+        return LootrDecoratedPotItemRenderer.getInstance();
+      }
+    }, LootrRegistry.getDecoratedPotItem());
     event.registerItem(chest, LootrRegistry.getChestItem());
     event.registerItem(chest, LootrRegistry.getInventoryItem());
   }

@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.common.api;
 
+import net.minecraft.world.entity.player.Player;
 import noobanidus.mods.lootr.common.api.annotation.ClientOnly;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -27,6 +28,10 @@ public interface IClientOpeners extends IOpeners {
       return true;
     }
     return result;
+  }
+
+  default boolean hasClientOpened (Player player) {
+    return hasClientOpened(player.getUUID());
   }
 
   default boolean hasClientOpened (UUID uuid) {

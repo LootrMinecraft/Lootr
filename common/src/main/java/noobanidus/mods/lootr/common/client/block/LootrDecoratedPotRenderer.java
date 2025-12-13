@@ -6,6 +6,8 @@ import com.mojang.math.Axis;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
@@ -13,12 +15,14 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.world.level.block.entity.DecoratedPotPatterns;
 import net.minecraft.world.level.block.entity.PotDecorations;
+import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.registry.LootrProperties;
 import noobanidus.mods.lootr.common.block.entity.LootrDecoratedPotBlockEntity;
 import noobanidus.mods.lootr.common.client.ClientHooks;
@@ -27,6 +31,10 @@ import java.util.Optional;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecoratedPotBlockEntity> {
+  public static final ResourceLocation DECORATED_POT_SHEET = ResourceLocation.withDefaultNamespace("textures/atlas/decorated_pot.png");
+  private static final Material DECORATED_POT = new Material(DECORATED_POT_SHEET, LootrAPI.rl("entity/loot_pot"));
+  private static final Material DECORATED_POT_OPENED = new Material(DECORATED_POT_SHEET, LootrAPI.rl("entity/loot_pot_open"));
+
   public static final ModelLayerLocation OPEN_POT_LAYER = new ModelLayerLocation(LootrProperties.DECORATED_POT, "main");
 
   private final ModelPart neck;
@@ -36,7 +44,9 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
   private final ModelPart rightSide;
   private final ModelPart top;
   private final ModelPart bottom;
+
   private final ModelPart open;
+  private final ModelPart sherds;
 
   public LootrDecoratedPotRenderer(BlockEntityRendererProvider.Context context) {
     ModelPart modelPart = context.bakeLayer(ModelLayers.DECORATED_POT_BASE);
@@ -50,29 +60,58 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
     this.rightSide = modelPart2.getChild("right");
     ModelPart modelPart3 = context.bakeLayer(OPEN_POT_LAYER);
     this.open = modelPart3.getChild("open");
+    this.sherds = modelPart3.getChild("sherds");
   }
 
-	private static Material getSideMaterial(Optional<Item> optional) {
-		if (optional.isPresent()) {
-			Material material = Sheets.getDecoratedPotMaterial(DecoratedPotPatterns.getPatternFromItem((Item)optional.get()));
-			if (material != null) {
-				return material;
-			}
-		}
+  public static LayerDefinition createBodyLayer() {
+    MeshDefinition meshdefinition = new MeshDefinition();
+    PartDefinition partdefinition = meshdefinition.getRoot();
 
-		return Sheets.DECORATED_POT_SIDE;
-	}
+    partdefinition.addOrReplaceChild("open", CubeListBuilder.create().texOffs(0, 0)
+        .addBox(-4.0F, -0.5F, -4.0F, 8.0F, 3.0F, 8.0F, new CubeDeformation(-0.1f))
+        .texOffs(0, 5)
+        .addBox(-3.0F, 2.5F, -3.0F, 6.0F, 1.0F, 6.0F, new CubeDeformation(0.2F)), PartPose.offsetAndRotation(-1.75F, 18.75F, 0.0F, 0.0F, -0.1309F, -0.0873F));
 
-	public void render(LootrDecoratedPotBlockEntity decoratedPotBlockEntity, float f, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int j) {
+    PartDefinition shards = partdefinition.addOrReplaceChild("sherds", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
+
+    shards.addOrReplaceChild("angled_sherd1_r1", CubeListBuilder.create().texOffs(17, 21)
+        .addBox(-0.5F, -0.5F, -4.5F, 5.0F, 1.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.5F, -3.5F, 1.5F, 0.0F, 0.0F, 0.829F));
+
+    shards.addOrReplaceChild("sherd2_r1", CubeListBuilder.create().texOffs(14, 19)
+        .addBox(-4.5F, -0.5F, -4.5F, 9.0F, 1.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.0F, -1.5F, 0.5F, 0.0F, 0.1309F, 0.0F));
+
+    shards.addOrReplaceChild("sherd1_r1", CubeListBuilder.create().texOffs(4, 16)
+        .addBox(-4.5F, -0.5F, -3.5F, 10.0F, 1.0F, 11.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.5F, -0.5F, -1.5F, 0.0F, -0.3054F, 0.0F));
+
+    return LayerDefinition.create(meshdefinition, 64, 64);
+  }
+
+  // TODO: How does this handle custom pot patterns?
+  private static Material getSideMaterial(Optional<Item> optional) {
+    if (optional.isPresent()) {
+      Material material = Sheets.getDecoratedPotMaterial(DecoratedPotPatterns.getPatternFromItem(optional.get()));
+      if (material != null) {
+        return material;
+      }
+    }
+
+    return Sheets.DECORATED_POT_SIDE;
+  }
+
+  public void render(LootrDecoratedPotBlockEntity decoratedPotBlockEntity, float f, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int j) {
     Player player = ClientHooks.getPlayer();
+    if (player == null) {
+      return;
+    }
 
-		poseStack.pushPose();
-		Direction direction = decoratedPotBlockEntity.getDirection();
-		poseStack.translate(0.5, 0.0, 0.5);
-		poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - direction.toYRot()));
-		poseStack.translate(-0.5, 0.0, -0.5);
-    if (decoratedPotBlockEntity.hasOpened(player))
-    {
+    boolean opened = decoratedPotBlockEntity.hasClientOpened(player.getUUID());
+
+    poseStack.pushPose();
+    Direction direction = decoratedPotBlockEntity.getDirection();
+    poseStack.translate(0.5, 0.0, 0.5);
+    poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - direction.toYRot()));
+    poseStack.translate(-0.5, 0.0, -0.5);
+    if (opened) {
       // Don't wobble if open
       DecoratedPotBlockEntity.WobbleStyle wobbleStyle = decoratedPotBlockEntity.lastWobbleStyle;
       if (wobbleStyle != null && decoratedPotBlockEntity.getLevel() != null) {
@@ -93,11 +132,7 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
           }
         }
       }
-    }
-
-    // don't render this if open
-    {
-      VertexConsumer vertexConsumer = Sheets.DECORATED_POT_BASE.buffer(multiBufferSource, RenderType::entitySolid);
+      VertexConsumer vertexConsumer = DECORATED_POT.buffer(multiBufferSource, RenderType::entitySolid);
       this.neck.render(poseStack, vertexConsumer, i, j);
       this.top.render(poseStack, vertexConsumer, i, j);
       this.bottom.render(poseStack, vertexConsumer, i, j);
@@ -106,12 +141,16 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
       this.renderSide(this.backSide, poseStack, multiBufferSource, i, j, getSideMaterial(potDecorations.back()));
       this.renderSide(this.leftSide, poseStack, multiBufferSource, i, j, getSideMaterial(potDecorations.left()));
       this.renderSide(this.rightSide, poseStack, multiBufferSource, i, j, getSideMaterial(potDecorations.right()));
+    } else {
+      VertexConsumer vertexConsumer = DECORATED_POT_OPENED.buffer(multiBufferSource, RenderType::entitySolid);
+      this.open.render(poseStack, vertexConsumer, i, j);
+      this.sherds.render(poseStack, vertexConsumer, i, j);
     }
 
     poseStack.popPose();
-	}
+  }
 
-	private void renderSide(ModelPart modelPart, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int j, Material material) {
-		modelPart.render(poseStack, material.buffer(multiBufferSource, RenderType::entitySolid), i, j);
-	}
+  private void renderSide(ModelPart modelPart, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int j, Material material) {
+    modelPart.render(poseStack, material.buffer(multiBufferSource, RenderType::entitySolid), i, j);
+  }
 }

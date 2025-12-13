@@ -6,14 +6,17 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import noobanidus.mods.lootr.common.client.block.LootrBrushableBlockRenderer;
+import noobanidus.mods.lootr.common.client.block.LootrDecoratedPotRenderer;
 import noobanidus.mods.lootr.fabric.client.block.*;
 import noobanidus.mods.lootr.fabric.client.entity.LootrChestCartRenderer;
 import noobanidus.mods.lootr.fabric.client.item.LootrChestItemRenderer;
+import noobanidus.mods.lootr.fabric.client.item.LootrDecoratedPotItemRenderer;
 import noobanidus.mods.lootr.fabric.client.item.LootrShulkerItemRenderer;
 import noobanidus.mods.lootr.fabric.client.item.LootrTrappedChestItemRenderer;
 import noobanidus.mods.lootr.fabric.init.ModBlockEntities;
@@ -42,9 +45,14 @@ public class LootrClient implements ClientModInitializer {
     BlockEntityRenderers.register(ModBlockEntities.LOOTR_BRUSHABLE_BLOCK, LootrBrushableBlockRenderer::new);
     BuiltinItemRendererRegistry.INSTANCE.register(ModBlocks.SHULKER, LootrShulkerItemRenderer.getInstance());
 
+    BlockEntityRenderers.register(ModBlockEntities.LOOTR_DECORATED_POT, LootrDecoratedPotRenderer::new);
+    BuiltinItemRendererRegistry.INSTANCE.register(ModBlocks.DECORATED_POT, LootrDecoratedPotItemRenderer.getInstance());
+
     ModelLoadingPlugin.register(BarrelModelLoader.INSTANCE);
     ModelLoadingPlugin.register(CustomModelLoader.INSTANCE);
 
     EntityRendererRegistry.register(ModEntities.LOOTR_MINECART_ENTITY, (context) -> new LootrChestCartRenderer<>(context, ModelLayers.CHEST_MINECART));
+
+    EntityModelLayerRegistry.registerModelLayer(LootrDecoratedPotRenderer.OPEN_POT_LAYER, LootrDecoratedPotRenderer::createBodyLayer);
   }
 }
