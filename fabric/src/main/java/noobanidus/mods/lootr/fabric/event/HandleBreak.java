@@ -50,7 +50,7 @@ public class HandleBreak {
         } else {
           if (!player.isShiftKeyDown()) {
             player.displayClientMessage(Component.translatable("lootr.message.should_sneak").setStyle(getChatStyle()), false);
-            player.displayClientMessage(Component.translatable("lootr.message.should_sneak2"), false);
+            player.displayClientMessage(Component.translatable("lootr.message.should_sneak2").setStyle(getChatStyle()), false);
             return false;
           }
         }
