@@ -15,20 +15,26 @@ public class LootrLangProvider extends LanguageProvider {
   protected void addTranslations() {
     // Tag translations
     add("lootr.commands.usage", "/lootr barrel | barrel <loot-table> | chest | chest <loot-table> | cart | cart <loot-table> | shulker | shulker <loot-table> | trapped_chest | trapped_chest <loot-table> | custom | refresh | decay | open_as <player> | open_as_uuid <uuid> | id | openers");
-    add("lootr.message.should_sneak", "Breaking this block will delete everyone's unique loot and items! If you do wish to break, sneak while doing so.");
-    add("lootr.message.should_sneak2", "As others may not have looted this, only break if really needed.");
-    add("lootr.message.cart_should_sneak", "Destroying this entity will delete everyone's unique loot and items! If you do wish to destroy it, you must sneak when attacking.");
-    add("lootr.message.cart_should_sneak2", "As others may not have looted this, only destroy if really needed.");
-    add("lootr.message.cannot_break", "Loot containers and carts cannot be broken.");
-    add("lootr.message.cannot_break_sneak", "Loot containers and carts can only be broken while sneaking in creative mode.");
+
+    add("lootr.message.should_sneak", "Breaking this block will prevent others from obtaining loot! Only break if really needed.");
+    add("lootr.message.cart_should_sneak", "Destroying this entity will prevent others from obtaining loot! Only destroy is really needed.");
+
+    add("lootr.message.should_sneak2", "To break the block anyway, sneak while breaking.");
+    add("lootr.message.cart_should_sneak2", "To destroy this entity anyway, sneak while attacking.");
+
+    add("lootr.message.cannot_break", "Lootr blocks and entities cannot be broken or destroyed.");
+    add("lootr.message.cannot_break_sneak", "While in creative mode, you must sneak to break or destroy Lootr blocks and entities.");
+
     add("lootr.message.decayed", "The decaying container crumbles at your touch!");
     add("lootr.message.decay_in", "This container will decay completely in %s seconds.");
     add("lootr.message.decay_start", "The container begins to crumble at your touch! It will decay completely in %s seconds.");
+
     add("lootr.message.refreshed", "The contents of the container are refreshed at your touch!");
     add("lootr.message.refresh_in", "This container will refresh its contents in %s seconds.");
     add("lootr.message.refresh_start", "The container will refresh with new contents in %s seconds!");
-    add("lootr.message.invalid_table", "Error with mod [%s]! The loot table for this container [%s] could not be found and loot was not generated. Please check your `latest.log` for loading errors.");
-    add("lootr.message.invalid_block", "The container that you have tried to open is invalid as it has not generated its identifier.");
+
+    add("lootr.message.invalid_table", "Error with mod [%s], not Lootr! The loot table for this container [%s] does not exist or could not be loaded. Please report this to the mod author, not to Lootr.");
+
     add(LootrRegistry.getChestBlock(), "Loot Chest");
     add(LootrRegistry.getTrappedChestBlock(), "Loot Chest");
     add(LootrRegistry.getBarrelBlock(), "Loot Barrel");
@@ -38,10 +44,13 @@ public class LootrLangProvider extends LanguageProvider {
     add(LootrRegistry.getTrophyBlock(), "Centennial Trophy");
     add(LootrRegistry.getSuspiciousGravel(), "Gravel");
     add(LootrRegistry.getSuspiciousSand(), "Sand");
+
+    add("stat.lootr.looted_stat", "Containers and entities looted");
+
     add("lootr.commands.create", "Created a Lootr %s at %s using the loot table %s.");
     add("lootr.commands.summon", "Summoned a Lootr Cart at %s using the loot table %s.");
     add("lootr.commands.blockpos", "%s,%s,%s");
-    add("stat.lootr.looted_stat", "Chests Looted");
+
     add("lootr.advancements.100loot.title", "Centennial");
     add("lootr.advancements.100loot.description", "Open 100 Lootr containers!");
     add("lootr.advancements.50loot.title", "Half-Century");
@@ -57,16 +66,20 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.advancements.1cart.title", "Tunnel Treasures");
     add("lootr.advancements.1cart.description", "Open your first Lootr minecart!");
     add("lootr.advancements.1shulker.title", "Bounty Box");
-    add("lootr.advancements.1shulker.description", "Open your first Lootr shulker!");
+    add("lootr.advancements.1shulker.description", "Open your first Lootr shulker box!");
     add("lootr.advancements.social.title", "Socialised Loot");
     add("lootr.advancements.social.description", "Open one of every Lootr container type!");
     add("lootr.advancements.root.title", "Belongs in a Museum");
-    add("lootr.advancements.root.description", "Bring instanced, per-player Loot into your world.");
+    add("lootr.advancements.root.description", "Bring instanced, per-player loot to your world.");
     add("lootr.advancements.all_gravel.title", "Brush It Off");
     add("lootr.advancements.all_gravel.description", "Brush all types of suspicious Lootr blocks!");
+
     add("itemGroup.lootr", "Lootr");
+    // Should be fixed hopefully
     add("itemGroup.lootr.lootr", "Lootr");
     add("text.autoconfig.lootr.title", "Lootr");
+
+    // Config
     var debug = "Debug";
     var report_invalid_tables = "Report Invalid Tables";
     var seed = "Seed";
@@ -177,13 +190,6 @@ public class LootrLangProvider extends LanguageProvider {
     add("text.autoconfig.lootr.option.refresh.start_tick_refresh", start_tick_refresh);
     add("text.autoconfig.lootr.option.conversion.rename_container_block_entities", rename_container_block_entities);
     add("text.autoconfig.lootr.option.conversion.perform_piecewise_check", perform_piecewise_check);
-    add(LootrTags.Blocks.CONTAINERS, "Lootr Containers");
-    add(LootrTags.Blocks.CHESTS, "Lootr Chests");
-    add(LootrTags.Blocks.BARRELS, "Lootr Barrels");
-    add(LootrTags.Blocks.SHULKERS, "Lootr Shulkers");
-    add(LootrTags.Blocks.TRAPPED_CHESTS, "Trapped Lootr Chests");
-    add(LootrTags.Blocks.SANDS, "Suspicious Lootr Sands");
-    add(LootrTags.Blocks.GRAVELS, "Suspicious Lootr Gravels");
     add("lootr.configuration.conversion", conversion);
     add("lootr.configuration.refresh", refresh);
     add("lootr.configuration.breaking", breaking);
@@ -237,5 +243,14 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.configuration.vanilla_textures", vanilla_textures);
     add("lootr.configuration.new_textures", old_textures);
     add("lootr.configuration.replace_when_decayed", replace_when_decayed);
+
+    // Tags
+    add(LootrTags.Blocks.CONTAINERS, "Lootr Containers");
+    add(LootrTags.Blocks.CHESTS, "Lootr Chests");
+    add(LootrTags.Blocks.BARRELS, "Lootr Barrels");
+    add(LootrTags.Blocks.SHULKERS, "Lootr Shulkers");
+    add(LootrTags.Blocks.TRAPPED_CHESTS, "Trapped Lootr Chests");
+    add(LootrTags.Blocks.SANDS, "Suspicious Lootr Sands");
+    add(LootrTags.Blocks.GRAVELS, "Suspicious Lootr Gravels");
   }
 }
