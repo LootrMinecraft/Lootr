@@ -25,8 +25,9 @@ public class ModItems {
   public static final DeferredHolder<Item, BlockItem> INVENTORY = REGISTER.register(LootrProperties.LOOTR_INVENTORY.getPath(), () -> new BlockItem(LootrRegistry.getInventoryBlock(), new BlockItem.Properties()));
   @MigrateName(value="shulker_box", in="26")
   public static final DeferredHolder<Item, BlockItem> SHULKER = REGISTER.register(LootrProperties.LOOTR_SHULKER.getPath(), () -> new BlockItem(LootrRegistry.getShulkerBlock(), new BlockItem.Properties()));
-  public static final DeferredHolder<Item, BlockItem> SUSPICIOUS_SAND = REGISTER.register(LootrProperties.SUSPICIOUS_SAND.getPath(), () -> new BlockItem(LootrRegistry.getSuspiciousSand(), new BlockItem.Properties()));
-  public static final DeferredHolder<Item, BlockItem> SUSPICIOUS_GRAVEL = REGISTER.register(LootrProperties.SUSPICIOUS_GRAVEL.getPath(), () -> new BlockItem(LootrRegistry.getSuspiciousGravel(), new BlockItem.Properties()));
+  public static final DeferredHolder<Item, BlockItem> SUSPICIOUS_SAND = REGISTER.register(LootrProperties.SUSPICIOUS_SAND.getPath(), () -> new BlockItem(LootrRegistry.getSuspiciousSandBlock(), new BlockItem.Properties()));
+  public static final DeferredHolder<Item, BlockItem> SUSPICIOUS_GRAVEL = REGISTER.register(LootrProperties.SUSPICIOUS_GRAVEL.getPath(), () -> new BlockItem(LootrRegistry.getSuspiciousGravelBlock(), new BlockItem.Properties()));
+  public static final DeferredHolder<Item, BlockItem> DECORATED_POT = REGISTER.register(LootrProperties.DECORATED_POT.getPath(), () -> new BlockItem(LootrRegistry.getDecoratedPotBlock(), new BlockItem.Properties()));
   public static final DeferredHolder<Item, BlockItem> TROPHY = REGISTER.register(LootrProperties.TROPHY.getPath(), () -> new BlockItem(LootrRegistry.getTrophyBlock(), new Item.Properties().rarity(Rarity.EPIC)));
 
   public static void register(IEventBus bus) {

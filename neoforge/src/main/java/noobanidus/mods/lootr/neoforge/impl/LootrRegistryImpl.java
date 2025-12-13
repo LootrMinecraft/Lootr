@@ -41,18 +41,23 @@ public class LootrRegistryImpl implements ILootrRegistry {
   }
 
   @Override
-  public Block getShulker() {
+  public Block getShulkerBlock() {
     return ModBlocks.SHULKER.get();
   }
 
   @Override
-  public Block getSuspiciousSand() {
+  public Block getSuspiciousSandBlock() {
     return ModBlocks.SUSPICIOUS_SAND.get();
   }
 
   @Override
-  public Block getSuspiciousGravel() {
+  public Block getSuspiciousGravelBlock() {
     return ModBlocks.SUSPICIOUS_GRAVEL.get();
+  }
+
+  @Override
+  public Block getDecoratedPotBlock() {
+    return ModBlocks.DECORATED_POT.get();
   }
 
   @Override
@@ -78,6 +83,11 @@ public class LootrRegistryImpl implements ILootrRegistry {
   @Override
   public BlockEntityType<?> getShulkerBlockEntity() {
     return ModBlockEntities.LOOTR_SHULKER.get();
+  }
+
+  @Override
+  public BlockEntityType<?> getDecoratedPotBlockEntity() {
+    return ModBlockEntities.LOOTR_DECORATED_POT.get();
   }
 
   @Override
@@ -118,6 +128,11 @@ public class LootrRegistryImpl implements ILootrRegistry {
   @Override
   public Item getSuspiciousGravelItem() {
     return ModItems.SUSPICIOUS_GRAVEL.get();
+  }
+
+  @Override
+  public Item getDecoratedPotItem() {
+    return ModItems.DECORATED_POT.get();
   }
 
   @Override
@@ -168,6 +183,11 @@ public class LootrRegistryImpl implements ILootrRegistry {
   @Override
   public IContainerTrigger getGravelTrigger() {
     return ModAdvancements.GRAVEL.get();
+  }
+
+  @Override
+  public IContainerTrigger getPotTrigger() {
+    return ModAdvancements.POT.get();
   }
 
   @Override

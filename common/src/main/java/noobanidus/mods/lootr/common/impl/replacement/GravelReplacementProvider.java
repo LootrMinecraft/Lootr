@@ -16,6 +16,6 @@ public class GravelReplacementProvider implements ILootrBlockReplacementProvider
 
   @Override
   public Block getBlock() {
-    return LootrRegistry.getSuspiciousGravel();
+    return LootrRegistry.getSuspiciousGravelBlock();
   }
 }

@@ -5,6 +5,7 @@
     "#lootr:convert/trapped_chests",
     "#lootr:convert/shulkers",
     "#lootr:convert/sands",
-    "#lootr:convert/gravels"
+    "#lootr:convert/gravels",
+    "#lootr:convert/pots"
   ]
 }

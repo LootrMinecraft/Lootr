@@ -1,0 +1,26 @@
+{
+  "parent": "lootr:root",
+  "criteria": {
+    "pot_opened": {
+      "trigger": "lootr:pot_opened"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "lootr.advancements.a_pot.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "lootr:decorated_pot"
+    },
+    "title": {
+      "translate": "lootr.advancements.a_pot.title"
+    }
+  },
+  "requirements": [
+    [
+      "pot_opened"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

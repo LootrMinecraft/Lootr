@@ -3,6 +3,9 @@
     "#lootr:barrels",
     "#lootr:chests",
     "#lootr:trapped_chests",
-    "#lootr:shulkers"
+    "#lootr:shulkers",
+    "#lootr:sands",
+    "#lootr:gravels",
+    "#lootr:pots"
   ]
 }

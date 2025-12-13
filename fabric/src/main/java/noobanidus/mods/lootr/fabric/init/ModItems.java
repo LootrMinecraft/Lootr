@@ -18,6 +18,8 @@ public class ModItems {
   public static final BlockItem SUSPICIOUS_SAND = new BlockItem(ModBlocks.SUSPICIOUS_SAND, new Item.Properties());
   public static final BlockItem SUSPICIOUS_GRAVEL = new BlockItem(ModBlocks.SUSPICIOUS_GRAVEL, new Item.Properties());
 
+  public static final BlockItem DECORATED_POT = new BlockItem(ModBlocks.DECORATED_POT, new Item.Properties());
+
   public static final BlockItem TROPHY = new BlockItem(ModBlocks.TROPHY, new Item.Properties().rarity(Rarity.EPIC));
 
   public static void registerItems() {
@@ -28,6 +30,7 @@ public class ModItems {
     Registry.register(BuiltInRegistries.ITEM, LootrProperties.LOOTR_INVENTORY, INVENTORY);
     Registry.register(BuiltInRegistries.ITEM, LootrProperties.SUSPICIOUS_SAND, SUSPICIOUS_SAND);
     Registry.register(BuiltInRegistries.ITEM, LootrProperties.SUSPICIOUS_GRAVEL, SUSPICIOUS_GRAVEL);
+    Registry.register(BuiltInRegistries.ITEM, LootrProperties.DECORATED_POT, DECORATED_POT);
     Registry.register(BuiltInRegistries.ITEM, LootrProperties.TROPHY, TROPHY);
   }
 }

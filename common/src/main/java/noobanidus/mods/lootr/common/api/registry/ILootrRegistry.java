@@ -25,11 +25,17 @@ public interface ILootrRegistry {
 
   Block getTrophyBlock();
 
-  Block getShulker();
+  default Block getShulker () {
+    return getShulkerBlock();
+  }
 
-  Block getSuspiciousSand ();
+  Block getShulkerBlock();
 
-  Block getSuspiciousGravel ();
+  Block getSuspiciousSandBlock();
+
+  Block getSuspiciousGravelBlock();
+
+  Block getDecoratedPotBlock();
 
   Item getBarrelItem();
 
@@ -46,6 +52,8 @@ public interface ILootrRegistry {
   Item getSuspiciousSandItem ();
   Item getSuspiciousGravelItem ();
 
+  Item getDecoratedPotItem ();
+
   EntityType<?> getMinecart();
 
   BlockEntityType<?> getBrushableBlockEntity ();
@@ -59,6 +67,8 @@ public interface ILootrRegistry {
   BlockEntityType<? extends ChestBlockEntity> getInventoryBlockEntity();
 
   BlockEntityType<?> getShulkerBlockEntity();
+
+  BlockEntityType<?> getDecoratedPotBlockEntity ();
 
   IAdvancementTrigger getAdvancementTrigger();
 
@@ -74,6 +84,8 @@ public interface ILootrRegistry {
 
   IContainerTrigger getSandTrigger ();
   IContainerTrigger getGravelTrigger ();
+
+  IContainerTrigger getPotTrigger ();
 
   LootItemConditionType getLootCount();
 

@@ -14,6 +14,7 @@ import noobanidus.mods.lootr.common.block.*;
 import noobanidus.mods.lootr.common.block.entity.LootrShulkerBlockEntity;
 import noobanidus.mods.lootr.fabric.block.LootrFabricBarrelBlock;
 import noobanidus.mods.lootr.fabric.block.LootrFabricBrushableBlock;
+import noobanidus.mods.lootr.fabric.block.LootrFabricDecoratedPotBlock;
 
 public class ModBlocks {
   public static final LootrChestBlock CHEST = new LootrChestBlock(LootrProperties.CHEST_PROPERTIES);
@@ -26,6 +27,8 @@ public class ModBlocks {
   public static final LootrBrushableBlock SUSPICIOUS_SAND = new LootrFabricBrushableBlock(((BrushableBlock)Blocks.SUSPICIOUS_SAND).getBrushSound(), ((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushCompletedSound(), LootrProperties.SUSPICIOUS_SAND_PROPERTIES);
   public static final LootrBrushableBlock SUSPICIOUS_GRAVEL = new LootrFabricBrushableBlock(((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushSound(), ((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushCompletedSound(), LootrProperties.SUSPICIOUS_GRAVEL_PROPERTIES);
 
+  public static final LootrFabricDecoratedPotBlock DECORATED_POT = new LootrFabricDecoratedPotBlock(LootrProperties.DECORATED_POT_PROPERTIES);
+
   public static void registerBlocks() {
     Registry.register(BuiltInRegistries.BLOCK, LootrProperties.LOOTR_CHEST, CHEST);
     Registry.register(BuiltInRegistries.BLOCK, LootrProperties.LOOTR_BARREL, BARREL);
@@ -34,6 +37,7 @@ public class ModBlocks {
     Registry.register(BuiltInRegistries.BLOCK, LootrProperties.LOOTR_INVENTORY, INVENTORY);
     Registry.register(BuiltInRegistries.BLOCK, LootrProperties.SUSPICIOUS_SAND, SUSPICIOUS_SAND);
     Registry.register(BuiltInRegistries.BLOCK, LootrProperties.SUSPICIOUS_GRAVEL, SUSPICIOUS_GRAVEL);
+    Registry.register(BuiltInRegistries.BLOCK, LootrProperties.DECORATED_POT, DECORATED_POT);
     Registry.register(BuiltInRegistries.BLOCK, LootrProperties.TROPHY, TROPHY);
   }
 }

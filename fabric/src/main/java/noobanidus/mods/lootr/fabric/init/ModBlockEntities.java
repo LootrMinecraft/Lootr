@@ -5,8 +5,10 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import noobanidus.mods.lootr.common.api.registry.LootrProperties;
 import noobanidus.mods.lootr.common.block.entity.*;
+import noobanidus.mods.lootr.fabric.block.LootrFabricDecoratedPotBlock;
 import noobanidus.mods.lootr.fabric.block.entity.LootrFabricBarrelBlockEntity;
 import noobanidus.mods.lootr.fabric.block.entity.LootrFabricBrushableBlockEntity;
+import noobanidus.mods.lootr.fabric.block.entity.LootrFabricDecoratedPotBlockEntity;
 
 public class ModBlockEntities {
   public static void registerBlockEntities() {
@@ -24,4 +26,5 @@ public class ModBlockEntities {
   public static final BlockEntityType<LootrShulkerBlockEntity> LOOTR_SHULKER = BlockEntityType.Builder.of(LootrShulkerBlockEntity::new, ModBlocks.SHULKER).build(null);
   public static final BlockEntityType<LootrInventoryBlockEntity> LOOTR_INVENTORY = BlockEntityType.Builder.of(LootrInventoryBlockEntity::new, ModBlocks.INVENTORY).build(null);
   public static final BlockEntityType<LootrFabricBrushableBlockEntity> LOOTR_BRUSHABLE_BLOCK = BlockEntityType.Builder.of(LootrFabricBrushableBlockEntity::new, ModBlocks.SUSPICIOUS_GRAVEL, ModBlocks.SUSPICIOUS_SAND).build(null);
+  public static final BlockEntityType<LootrFabricDecoratedPotBlockEntity> LOOTR_DECORATED_POT = BlockEntityType.Builder.of(LootrFabricDecoratedPotBlockEntity::new, ModBlocks.DECORATED_POT).build(null);
 }

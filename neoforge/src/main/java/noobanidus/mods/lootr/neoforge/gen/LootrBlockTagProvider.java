@@ -21,7 +21,7 @@ public class LootrBlockTagProvider extends BlockTagsProvider {
 
   @Override
   protected void addTags(HolderLookup.Provider provider) {
-    tag(BlockTags.SAND).add(LootrRegistry.getSuspiciousSand());
+    tag(BlockTags.SAND).add(LootrRegistry.getSuspiciousSandBlock());
     tag(BlockTags.SHULKER_BOXES).add(LootrRegistry.getShulkerBlock());
     tag(BlockTags.MINEABLE_WITH_PICKAXE).add(LootrRegistry.getTrophyBlock());
     tag(BlockTags.MINEABLE_WITH_AXE).add(LootrRegistry.getChestBlock(), LootrRegistry.getTrappedChestBlock(), LootrRegistry.getBarrelBlock(), LootrRegistry.getInventoryBlock());
@@ -35,10 +35,11 @@ public class LootrBlockTagProvider extends BlockTagsProvider {
     tag(LootrTags.Blocks.CHESTS).add(LootrRegistry.getChestBlock(), LootrRegistry.getInventoryBlock());
     tag(LootrTags.Blocks.TRAPPED_CHESTS).add(LootrRegistry.getTrappedChestBlock());
     tag(LootrTags.Blocks.SHULKERS).add(LootrRegistry.getShulkerBlock());
-    tag(LootrTags.Blocks.SANDS).add(LootrRegistry.getSuspiciousSand());
-    tag(LootrTags.Blocks.GRAVELS).add(LootrRegistry.getSuspiciousGravel());
+    tag(LootrTags.Blocks.SANDS).add(LootrRegistry.getSuspiciousSandBlock());
+    tag(LootrTags.Blocks.GRAVELS).add(LootrRegistry.getSuspiciousGravelBlock());
+    tag(LootrTags.Blocks.POTS).add(LootrRegistry.getDecoratedPotBlock());
     //noinspection unchecked
-    tag(LootrTags.Blocks.CONTAINERS).addTags(LootrTags.Blocks.BARRELS, LootrTags.Blocks.CHESTS, LootrTags.Blocks.TRAPPED_CHESTS, LootrTags.Blocks.SHULKERS, LootrTags.Blocks.SANDS, LootrTags.Blocks.GRAVELS);
+    tag(LootrTags.Blocks.CONTAINERS).addTags(LootrTags.Blocks.BARRELS, LootrTags.Blocks.CHESTS, LootrTags.Blocks.TRAPPED_CHESTS, LootrTags.Blocks.SHULKERS, LootrTags.Blocks.SANDS, LootrTags.Blocks.GRAVELS, LootrTags.Blocks.POTS);
 
     tag(LootrTags.Blocks.CONVERT_BARRELS).add(Blocks.BARREL).addTag(Tags.Blocks.BARRELS);
     tag(LootrTags.Blocks.CONVERT_CHESTS).add(Blocks.CHEST).addTag(Tags.Blocks.CHESTS_WOODEN);
@@ -46,15 +47,16 @@ public class LootrBlockTagProvider extends BlockTagsProvider {
     tag(LootrTags.Blocks.CONVERT_SHULKERS).add(Blocks.SHULKER_BOX);
     tag(LootrTags.Blocks.CONVERT_SANDS).add(Blocks.SUSPICIOUS_SAND);
     tag(LootrTags.Blocks.CONVERT_GRAVELS).add(Blocks.SUSPICIOUS_GRAVEL);
+    tag(LootrTags.Blocks.CONVERT_POTS).add(Blocks.DECORATED_POT);
     //noinspection unchecked
-    tag(LootrTags.Blocks.CONVERT_BLOCK).addTags(LootrTags.Blocks.CONVERT_BARRELS, LootrTags.Blocks.CONVERT_CHESTS, LootrTags.Blocks.CONVERT_TRAPPED_CHESTS, LootrTags.Blocks.CONVERT_SHULKERS, LootrTags.Blocks.CONVERT_SANDS, LootrTags.Blocks.CONVERT_GRAVELS);
+    tag(LootrTags.Blocks.CONVERT_BLOCK).addTags(LootrTags.Blocks.CONVERT_BARRELS, LootrTags.Blocks.CONVERT_CHESTS, LootrTags.Blocks.CONVERT_TRAPPED_CHESTS, LootrTags.Blocks.CONVERT_SHULKERS, LootrTags.Blocks.CONVERT_SANDS, LootrTags.Blocks.CONVERT_GRAVELS, LootrTags.Blocks.CONVERT_POTS);
 
     tag(LootrTags.Blocks.CONVERT_BLACKLIST);
 
     tag(LootrTags.Blocks.CUSTOM_ELIGIBLE).add(Blocks.BARREL, Blocks.CHEST);
 
     //noinspection unchecked
-    tag(LootrTags.Blocks.INTERACT_WHITELIST_BLOCKS).addTags(LootrTags.Blocks.BARRELS, LootrTags.Blocks.CHESTS, LootrTags.Blocks.TRAPPED_CHESTS, LootrTags.Blocks.SHULKERS);
+    tag(LootrTags.Blocks.INTERACT_WHITELIST_BLOCKS).addTags(LootrTags.Blocks.BARRELS, LootrTags.Blocks.CHESTS, LootrTags.Blocks.TRAPPED_CHESTS, LootrTags.Blocks.SHULKERS, LootrTags.Blocks.SANDS, LootrTags.Blocks.GRAVELS, LootrTags.Blocks.POTS);
 
     tag(LootrTags.Blocks.INTERACT_WHITELIST).addTag(LootrTags.Blocks.INTERACT_WHITELIST_BLOCKS);
   }

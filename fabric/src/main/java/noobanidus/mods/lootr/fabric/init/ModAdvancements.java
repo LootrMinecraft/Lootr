@@ -17,12 +17,14 @@ public class ModAdvancements {
   public static final ResourceLocation SCORE_LOCATION = LootrAPI.rl("score");
   public static final ResourceLocation GRAVEL_LOCATION = LootrAPI.rl("gravel_brushed");
   public static final ResourceLocation SAND_LOCATION = LootrAPI.rl("sand_brushed");
+  public static final ResourceLocation POT_OPENED = LootrAPI.rl("pot_opened");
   public static ContainerTrigger CHEST = null;
   public static ContainerTrigger BARREL = null;
   public static ContainerTrigger CART = null;
   public static ContainerTrigger SHULKER = null;
   public static ContainerTrigger GRAVEL = null;
   public static ContainerTrigger SAND = null;
+  public static ContainerTrigger POT = null;
   public static LootedStatTrigger SCORE = null;
   public static AdvancementTrigger ADVANCEMENT = null;
 
@@ -35,5 +37,6 @@ public class ModAdvancements {
     SCORE = Registry.register(BuiltInRegistries.TRIGGER_TYPES, SCORE_LOCATION, new LootedStatTrigger());
     GRAVEL = Registry.register(BuiltInRegistries.TRIGGER_TYPES, GRAVEL_LOCATION, new ContainerTrigger());
     SAND = Registry.register(BuiltInRegistries.TRIGGER_TYPES, SAND_LOCATION, new ContainerTrigger());
+    POT = Registry.register(BuiltInRegistries.TRIGGER_TYPES, POT_OPENED, new ContainerTrigger());
   }
 }

@@ -42,8 +42,8 @@ public class LootrLangProvider extends LanguageProvider {
     add(LootrRegistry.getInventoryBlock(), "Loot Chest");
     add(LootrRegistry.getMinecart(), "Minecart with Loot Chest");
     add(LootrRegistry.getTrophyBlock(), "Centennial Trophy");
-    add(LootrRegistry.getSuspiciousGravel(), "Gravel");
-    add(LootrRegistry.getSuspiciousSand(), "Sand");
+    add(LootrRegistry.getSuspiciousGravelBlock(), "Gravel");
+    add(LootrRegistry.getSuspiciousSandBlock(), "Sand");
 
     add("stat.lootr.looted_stat", "Containers and entities looted");
 
@@ -73,6 +73,8 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.advancements.root.description", "Bring instanced, per-player loot to your world.");
     add("lootr.advancements.all_gravel.title", "Brush It Off");
     add("lootr.advancements.all_gravel.description", "Brush all types of suspicious Lootr blocks!");
+    add("lootr.advancements.a_pot.title", "Woe to the Pot");
+    add("lootr.advancements.a_pot.description", "Loot your first Lootr decorated pot!");
 
     add("itemGroup.lootr", "Lootr");
     // Should be fixed hopefully

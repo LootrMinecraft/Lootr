@@ -16,6 +16,6 @@ public class SandReplacementProvider implements ILootrBlockReplacementProvider{
 
   @Override
   public Block getBlock() {
-    return LootrRegistry.getSuspiciousSand();
+    return LootrRegistry.getSuspiciousSandBlock();
   }
 }

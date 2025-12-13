@@ -18,7 +18,7 @@ import noobanidus.mods.lootr.common.api.advancement.ILootedStatTrigger;
 public class LootrRegistry {
   public static ILootrRegistry INSTANCE = null;
 
-  public static boolean isReady () {
+  public static boolean isReady() {
     return INSTANCE != null;
   }
 
@@ -43,7 +43,11 @@ public class LootrRegistry {
   }
 
   public static Block getShulkerBlock() {
-    return INSTANCE.getShulker();
+    return INSTANCE.getShulkerBlock();
+  }
+
+  public static Block getDecoratedPotBlock() {
+    return INSTANCE.getDecoratedPotBlock();
   }
 
   public static Item getBarrelItem() {
@@ -70,6 +74,10 @@ public class LootrRegistry {
     return INSTANCE.getShulkerItem();
   }
 
+  public static Item getDecoratedPotItem() {
+    return INSTANCE.getDecoratedPotItem();
+  }
+
   public static EntityType<?> getMinecart() {
     return INSTANCE.getMinecart();
   }
@@ -92,6 +100,10 @@ public class LootrRegistry {
 
   public static BlockEntityType<?> getShulkerBlockEntity() {
     return INSTANCE.getShulkerBlockEntity();
+  }
+
+  public static BlockEntityType<?> getDecoratedPotBlockEntity() {
+    return INSTANCE.getDecoratedPotBlockEntity();
   }
 
   public static LootItemConditionType getLootCount() {
@@ -118,16 +130,20 @@ public class LootrRegistry {
     return INSTANCE.getShulkerTrigger();
   }
 
-  public static IContainerTrigger getSandTrigger () {
-    return INSTANCE.getSandTrigger ();
+  public static IContainerTrigger getSandTrigger() {
+    return INSTANCE.getSandTrigger();
   }
 
-  public static IContainerTrigger getGravelTrigger () {
-    return INSTANCE.getGravelTrigger ();
+  public static IContainerTrigger getGravelTrigger() {
+    return INSTANCE.getGravelTrigger();
   }
 
   public static ILootedStatTrigger getStatTrigger() {
     return INSTANCE.getStatTrigger();
+  }
+
+  public static IContainerTrigger getPotTrigger () {
+    return INSTANCE.getPotTrigger();
   }
 
   public static Stat<?> getLootedStat() {
@@ -142,19 +158,19 @@ public class LootrRegistry {
     return INSTANCE.getBrushableBlockEntity();
   }
 
-  public static Block getSuspiciousSand () {
-    return INSTANCE.getSuspiciousSand();
+  public static Block getSuspiciousSandBlock() {
+    return INSTANCE.getSuspiciousSandBlock();
   }
 
-  public static Block getSuspiciousGravel () {
-    return INSTANCE.getSuspiciousGravel();
+  public static Block getSuspiciousGravelBlock() {
+    return INSTANCE.getSuspiciousGravelBlock();
   }
 
-  public static Item getSuspiciousGravelItem () {
+  public static Item getSuspiciousGravelItem() {
     return INSTANCE.getSuspiciousGravelItem();
   }
 
-  public static Item getSuspiciousSandItem () {
+  public static Item getSuspiciousSandItem() {
     return INSTANCE.getSuspiciousSandItem();
   }
 }
