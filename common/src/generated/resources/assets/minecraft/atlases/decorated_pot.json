@@ -1,0 +1,12 @@
+{
+  "sources": [
+    {
+      "type": "minecraft:single",
+      "resource": "lootr:entity/loot_pot"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "lootr:entity/loot_pot_open"
+    }
+  ]
+}
