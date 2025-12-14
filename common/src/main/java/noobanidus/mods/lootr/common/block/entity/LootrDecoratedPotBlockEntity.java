@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.common.block.entity;
 
+import com.google.auto.service.AutoService;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -23,6 +24,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.ticks.ContainerSingleItem;
 import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
+import noobanidus.mods.lootr.common.api.ILootrBlockEntityConverter;
 import noobanidus.mods.lootr.common.api.ILootrType;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.SimpleLootrInstance;
@@ -265,5 +267,18 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   @Override
   public long getInfoLootSeed() {
     return lootTableSeed;
+  }
+
+  @AutoService(ILootrBlockEntityConverter.class)
+  public static class DefaultBlockEntityConverter implements ILootrBlockEntityConverter<LootrDecoratedPotBlockEntity> {
+    @Override
+    public ILootrBlockEntity apply(LootrDecoratedPotBlockEntity blockEntity) {
+      return blockEntity;
+    }
+
+    @Override
+    public BlockEntityType<?> getBlockEntityType() {
+      return LootrRegistry.getDecoratedPotBlockEntity();
+    }
   }
 }

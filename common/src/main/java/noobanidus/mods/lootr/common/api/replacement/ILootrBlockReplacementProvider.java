@@ -2,7 +2,9 @@ package noobanidus.mods.lootr.common.api.replacement;
 
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import noobanidus.mods.lootr.common.block.entity.LootrDecoratedPotBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
@@ -41,5 +43,9 @@ public interface ILootrBlockReplacementProvider extends Function<Block, @Nullabl
     }
 
     return getBlock();
+  }
+
+  default BlockState copyTypeSpecificProperties (BlockState from, BlockState to) {
+    return to;
   }
 }

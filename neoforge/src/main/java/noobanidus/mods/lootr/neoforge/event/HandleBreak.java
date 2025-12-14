@@ -48,8 +48,7 @@ public class HandleBreak {
               event.getPlayer().displayClientMessage(Component.translatable("lootr.message.should_sneak")
                   .setStyle(LootrAPI.getChatStyle()), false);
               event.getPlayer()
-                  .displayClientMessage(Component.translatable("lootr.message.should_sneak2", Component.translatable("lootr.message.should_sneak3")
-                      .setStyle(Style.EMPTY.withBold(true))).setStyle(LootrAPI.getChatStyle()), false);
+                  .displayClientMessage(Component.translatable("lootr.message.should_sneak2").setStyle(LootrAPI.getChatStyle()), false);
             }
           }
           if (event.isCanceled() && event.getLevel() instanceof ServerLevel level) {

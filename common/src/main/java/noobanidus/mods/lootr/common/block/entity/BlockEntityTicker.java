@@ -7,6 +7,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -254,6 +255,8 @@ public final class BlockEntityTicker {
     LootrAPI.preProcess(level, entityPos, be, replacement, table, seed);
     // Save specific data. Currently, this includes the LockCode (all platforms), along with NeoForge's getPersistentData.
     DataToCopy data = PlatformAPI.copySpecificData(be);
+    ItemStack itemCopy = new ItemStack(be.getBlockState().getBlock());
+    be.saveToItem(itemCopy, level.registryAccess());
     // IMPORTANT: Clear loot table to prevent loot drop when container is destroyed
     adapter.setLootTable(be, null, 0);
     level.setBlock(entityPos, replacement, Block.UPDATE_CLIENTS);
@@ -262,6 +265,7 @@ public final class BlockEntityTicker {
     if (LootrAPI.resolveBlockEntity(newBlockEntity) instanceof ILootrBlockEntity ibe) {
       ibe.setLootTableInternal(table, seed);
       ibe.performUpdate();
+      ibe.asBlockEntity().applyComponentsFromItemStack(itemCopy);
       LootrAPI.postProcess(level, entityPos, ibe.asBlockEntity(), replacement, table, seed);
     } else {
       LootrAPI.LOG.error("replacement {} is not an ILootrBlockEntity {} at {}", replacement, level.dimension(), entityPos);
