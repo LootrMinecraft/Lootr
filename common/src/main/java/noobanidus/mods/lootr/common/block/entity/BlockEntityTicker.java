@@ -255,17 +255,22 @@ public final class BlockEntityTicker {
     LootrAPI.preProcess(level, entityPos, be, replacement, table, seed);
     // Save specific data. Currently, this includes the LockCode (all platforms), along with NeoForge's getPersistentData.
     DataToCopy data = PlatformAPI.copySpecificData(be);
-    ItemStack itemCopy = new ItemStack(be.getBlockState().getBlock());
-    be.saveToItem(itemCopy, level.registryAccess());
+    ItemStack itemCopy = ItemStack.EMPTY;
+    if (adapter.hasCopyableComponentsViaItem(be)) {
+      itemCopy = new ItemStack(be.getBlockState().getBlock());
+      be.saveToItem(itemCopy, level.registryAccess());
+    }
     // IMPORTANT: Clear loot table to prevent loot drop when container is destroyed
     adapter.setLootTable(be, null, 0);
     level.setBlock(entityPos, replacement, Block.UPDATE_CLIENTS);
     BlockEntity newBlockEntity = level.getBlockEntity(entityPos);
     PlatformAPI.restoreSpecificData(data, newBlockEntity);
     if (LootrAPI.resolveBlockEntity(newBlockEntity) instanceof ILootrBlockEntity ibe) {
+      if (!itemCopy.isEmpty()) {
+        ibe.asBlockEntity().applyComponentsFromItemStack(itemCopy);
+      }
       ibe.setLootTableInternal(table, seed);
       ibe.performUpdate();
-      ibe.asBlockEntity().applyComponentsFromItemStack(itemCopy);
       LootrAPI.postProcess(level, entityPos, ibe.asBlockEntity(), replacement, table, seed);
     } else {
       LootrAPI.LOG.error("replacement {} is not an ILootrBlockEntity {} at {}", replacement, level.dimension(), entityPos);

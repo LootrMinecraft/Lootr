@@ -26,4 +26,8 @@ public interface ILootrDataAdapter<T> {
   long getLootSeed(T entity);
 
   void setLootTable(T entity, ResourceKey<LootTable> table, long seed);
+
+  default boolean hasCopyableComponentsViaItem(T entity) {
+    return false;
+  }
 }

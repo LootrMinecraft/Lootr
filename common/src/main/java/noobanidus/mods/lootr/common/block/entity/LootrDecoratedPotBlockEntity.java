@@ -13,7 +13,6 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.RandomizableContainer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -74,6 +73,7 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   @Override
   public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
     CompoundTag compoundTag = super.getUpdateTag(provider);
+    this.saveAdditional(compoundTag, provider);
     this.lootrInstance.fillUpdateTag(compoundTag, provider, level != null && level.isClientSide());
     return compoundTag;
   }
@@ -91,14 +91,8 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   }
 
   public ItemStack getPotAsItem() {
-    ItemStack itemStack = Items.DECORATED_POT.getDefaultInstance();
+    ItemStack itemStack = LootrRegistry.getDecoratedPotItem().getDefaultInstance();
     itemStack.applyComponents(this.collectComponents());
-    return itemStack;
-  }
-
-  public static ItemStack createDecoratedPotItem(PotDecorations potDecorations) {
-    ItemStack itemStack = Items.DECORATED_POT.getDefaultInstance();
-    itemStack.set(DataComponents.POT_DECORATIONS, potDecorations);
     return itemStack;
   }
 
@@ -133,6 +127,7 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   protected void applyImplicitComponents(BlockEntity.DataComponentInput dataComponentInput) {
     super.applyImplicitComponents(dataComponentInput);
     this.decorations = dataComponentInput.getOrDefault(DataComponents.POT_DECORATIONS, PotDecorations.EMPTY);
+    this.setChanged();
   }
 
   @Override

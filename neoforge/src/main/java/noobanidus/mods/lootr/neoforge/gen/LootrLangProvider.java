@@ -44,6 +44,7 @@ public class LootrLangProvider extends LanguageProvider {
     add(LootrRegistry.getTrophyBlock(), "Centennial Trophy");
     add(LootrRegistry.getSuspiciousGravelBlock(), "Gravel");
     add(LootrRegistry.getSuspiciousSandBlock(), "Sand");
+    add(LootrRegistry.getDecoratedPotBlock(), "Decorated Loot Pot");
 
     add("stat.lootr.looted_stat", "Containers and entities looted");
 

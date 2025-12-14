@@ -101,7 +101,10 @@ public class LootrDecoratedPotBlock extends DecoratedPotBlock {
 
   @Override
   public ItemStack getCloneItemStack(LevelReader levelReader, BlockPos blockPos, BlockState blockState) {
-    return super.getCloneItemStack(levelReader, blockPos, blockState);
+    BlockEntity var5 = levelReader.getBlockEntity(blockPos);
+    return var5 instanceof LootrDecoratedPotBlockEntity decoratedPotBlockEntity
+        ? decoratedPotBlockEntity.getPotAsItem()
+        : super.getCloneItemStack(levelReader, blockPos, blockState);
   }
 
   @Override

@@ -41,6 +41,7 @@ public class LootrDecoratedPotItemRenderer extends BlockEntityWithoutLevelRender
 
   @Override
   public void renderByItem(ItemStack p_108830_, ItemDisplayContext p_270899_, PoseStack p_108832_, MultiBufferSource p_108833_, int p_108834_, int p_108835_) {
+    blockEntity.setFromItem(p_108830_);
     this.blockEntityRenderDispatcher.renderItem(blockEntity, p_108832_, p_108833_, p_108834_, p_108835_);
   }
 
