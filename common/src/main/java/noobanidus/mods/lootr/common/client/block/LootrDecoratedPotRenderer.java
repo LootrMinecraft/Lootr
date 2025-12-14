@@ -63,28 +63,23 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
     this.sherds = modelPart3.getChild("sherds");
   }
 
-  public static LayerDefinition createBodyLayer() {
-    MeshDefinition meshdefinition = new MeshDefinition();
-    PartDefinition partdefinition = meshdefinition.getRoot();
+	public static LayerDefinition createBodyLayer() {
+		MeshDefinition meshdefinition = new MeshDefinition();
+		PartDefinition partdefinition = meshdefinition.getRoot();
 
-    partdefinition.addOrReplaceChild("open", CubeListBuilder.create().texOffs(0, 0)
-        .addBox(-4.0F, -0.5F, -4.0F, 8.0F, 3.0F, 8.0F, new CubeDeformation(-0.1f))
-        .texOffs(0, 5)
-        .addBox(-3.0F, 2.5F, -3.0F, 6.0F, 1.0F, 6.0F, new CubeDeformation(0.2F)), PartPose.offsetAndRotation(-1.75F, 18.75F, 0.0F, 0.0F, -0.1309F, -0.0873F));
+		PartDefinition sherds = partdefinition.addOrReplaceChild("sherds", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-    PartDefinition shards = partdefinition.addOrReplaceChild("sherds", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
+		PartDefinition angled_sherd1_r1 = sherds.addOrReplaceChild("angled_sherd1_r1", CubeListBuilder.create().texOffs(17, 21).addBox(-0.5F, -0.5F, -4.5F, 5.0F, 1.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.5F, -3.5F, 1.5F, 0.0F, 0.0F, 0.829F));
 
-    shards.addOrReplaceChild("angled_sherd1_r1", CubeListBuilder.create().texOffs(17, 21)
-        .addBox(-0.5F, -0.5F, -4.5F, 5.0F, 1.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.5F, -3.5F, 1.5F, 0.0F, 0.0F, 0.829F));
+		PartDefinition sherd2_r1 = sherds.addOrReplaceChild("sherd2_r1", CubeListBuilder.create().texOffs(14, 19).addBox(-4.5F, -0.5F, -4.5F, 9.0F, 1.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.0F, -1.5F, 0.5F, 0.0F, 0.1309F, 0.0F));
 
-    shards.addOrReplaceChild("sherd2_r1", CubeListBuilder.create().texOffs(14, 19)
-        .addBox(-4.5F, -0.5F, -4.5F, 9.0F, 1.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.0F, -1.5F, 0.5F, 0.0F, 0.1309F, 0.0F));
+		PartDefinition sherd1_r1 = sherds.addOrReplaceChild("sherd1_r1", CubeListBuilder.create().texOffs(4, 16).addBox(-4.5F, -0.5F, -3.5F, 10.0F, 1.0F, 11.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.5F, -0.5F, -1.5F, 0.0F, -0.3054F, 0.0F));
 
-    shards.addOrReplaceChild("sherd1_r1", CubeListBuilder.create().texOffs(4, 16)
-        .addBox(-4.5F, -0.5F, -3.5F, 10.0F, 1.0F, 11.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.5F, -0.5F, -1.5F, 0.0F, -0.3054F, 0.0F));
+		PartDefinition open = partdefinition.addOrReplaceChild("open", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -4.0F, 8.0F, 3.0F, 8.0F, new CubeDeformation(0.0F))
+		.texOffs(0, 5).addBox(-2.8257F, 2.4924F, -3.0F, 6.0F, 1.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.75F, -5F, 0.0F, 0.0F, -0.1309F, -0.0873F));
 
-    return LayerDefinition.create(meshdefinition, 64, 64);
-  }
+		return LayerDefinition.create(meshdefinition, 64, 64);
+	}
 
   // TODO: How does this handle custom pot patterns?
   private static Material getSideMaterial(Optional<Item> optional) {
@@ -110,8 +105,8 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
     Direction direction = decoratedPotBlockEntity.getDirection();
     poseStack.translate(0.5, 0.0, 0.5);
     poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - direction.toYRot()));
-    poseStack.translate(-0.5, 0.0, -0.5);
-    if (opened) {
+    if (!opened) {
+      poseStack.translate(-0.5, 0.0, -0.5);
       // Don't wobble if open
       DecoratedPotBlockEntity.WobbleStyle wobbleStyle = decoratedPotBlockEntity.lastWobbleStyle;
       if (wobbleStyle != null && decoratedPotBlockEntity.getLevel() != null) {
@@ -142,6 +137,7 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
       this.renderSide(this.leftSide, poseStack, multiBufferSource, i, j, getSideMaterial(potDecorations.left()));
       this.renderSide(this.rightSide, poseStack, multiBufferSource, i, j, getSideMaterial(potDecorations.right()));
     } else {
+      poseStack.scale(1.0f, -1.0f, -1.0f);
       VertexConsumer vertexConsumer = DECORATED_POT_OPENED.buffer(multiBufferSource, RenderType::entitySolid);
       this.open.render(poseStack, vertexConsumer, i, j);
       this.sherds.render(poseStack, vertexConsumer, i, j);

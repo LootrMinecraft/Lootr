@@ -15,6 +15,7 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.block.entity.*;
 import noobanidus.mods.lootr.common.client.block.LootrBrushableBlockRenderer;
+import noobanidus.mods.lootr.common.client.block.LootrDecoratedPotRenderer;
 import noobanidus.mods.lootr.common.client.entity.LootrChestCartRenderer;
 import noobanidus.mods.lootr.common.client.item.LootrChestItemRenderer;
 import noobanidus.mods.lootr.common.client.item.LootrDecoratedPotItemRenderer;
@@ -43,6 +44,7 @@ public class ClientSetup {
     event.registerBlockEntityRenderer((BlockEntityType<LootrInventoryBlockEntity>) LootrRegistry.getInventoryBlockEntity(), LootrChestBlockRenderer::new);
     event.registerEntityRenderer((EntityType<LootrChestMinecartEntity>) LootrRegistry.getMinecart(), (e) -> new LootrChestCartRenderer<>(e, ModelLayers.CHEST_MINECART));
     event.registerBlockEntityRenderer((BlockEntityType<LootrBrushableBlockEntity>) LootrRegistry.getBrushableBlockEntity(), LootrBrushableBlockRenderer::new);
+    event.registerBlockEntityRenderer((BlockEntityType<LootrDecoratedPotBlockEntity>) LootrRegistry.getDecoratedPotBlockEntity(), LootrDecoratedPotRenderer::new);
   }
 
   @SubscribeEvent
@@ -73,5 +75,10 @@ public class ClientSetup {
     }, LootrRegistry.getDecoratedPotItem());
     event.registerItem(chest, LootrRegistry.getChestItem());
     event.registerItem(chest, LootrRegistry.getInventoryItem());
+  }
+
+  @SubscribeEvent
+  public static void registerLayersEvent (EntityRenderersEvent.RegisterLayerDefinitions event) {
+    event.registerLayerDefinition(LootrDecoratedPotRenderer.OPEN_POT_LAYER, LootrDecoratedPotRenderer::createBodyLayer);
   }
 }
