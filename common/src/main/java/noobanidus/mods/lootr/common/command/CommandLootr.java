@@ -140,8 +140,8 @@ public class CommandLootr {
         }
       }
       world.setBlock(pos, placementState, 2);
-      if (world.getBlockEntity(pos) instanceof RandomizableContainerBlockEntity randomizableBe) {
-        randomizableBe.setLootTable(table, world.getRandom().nextLong());
+      if (LootrAPI.resolveBlockEntity(world.getBlockEntity(pos)) instanceof ILootrBlockEntity randomizableBe) {
+        randomizableBe.setLootTableInternal(table, world.getRandom().nextLong());
       }
       c.sendSuccess(() -> Component.translatable("lootr.commands.create", Component.translatable(block.getDescriptionId()), ComponentUtils.wrapInSquareBrackets(Component.translatable("lootr.commands.blockpos", pos.getX(), pos.getY(), pos.getZ())
           .setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.GREEN))
