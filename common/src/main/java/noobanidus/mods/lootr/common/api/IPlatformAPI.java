@@ -57,4 +57,6 @@ public interface IPlatformAPI {
   }
 
   void refreshPlayerSection (ServerPlayer player);
+
+  void performPotBreak(ILootrBlockEntity lootrDecoratedPotBlockEntity, ServerPlayer player);
 }

@@ -88,4 +88,12 @@ public class PlatformAPIImpl implements IPlatformAPI {
   public void refreshPlayerSection(ServerPlayer player) {
     ServerPlayNetworking.send(player, PacketRefreshSection.INSTANCE);
   }
+
+  @Override
+  public void performPotBreak(ILootrBlockEntity blockEntity, ServerPlayer player) {
+    if (blockEntity.getInfoLevel() instanceof ServerLevel serverLevel) {
+      Packet<?> packet = ServerPlayNetworking.createS2CPacket(new PacketPerformBreakEffect(player.getId(), blockEntity.asBlockEntity().getBlockPos()));
+      serverLevel.getChunkSource().chunkMap.getPlayers(new ChunkPos(blockEntity.asBlockEntity().getBlockPos()), false).forEach(splayer -> splayer.connection.send(packet));
+    }
+  }
 }

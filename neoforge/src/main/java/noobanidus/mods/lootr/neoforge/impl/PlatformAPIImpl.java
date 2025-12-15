@@ -43,7 +43,8 @@ public class PlatformAPIImpl implements IPlatformAPI {
 
   @Override
   public void performBlockOpen(ILootrBlockEntity blockEntity) {
-    PacketDistributor.sendToPlayersTrackingChunk((ServerLevel) blockEntity.getInfoLevel(), new ChunkPos(blockEntity.asBlockEntity().getBlockPos()), new PacketOpenContainer(blockEntity.asBlockEntity().getBlockPos()));
+    PacketDistributor.sendToPlayersTrackingChunk((ServerLevel) blockEntity.getInfoLevel(), new ChunkPos(blockEntity.asBlockEntity()
+        .getBlockPos()), new PacketOpenContainer(blockEntity.asBlockEntity().getBlockPos()));
   }
 
   @Override
@@ -53,7 +54,8 @@ public class PlatformAPIImpl implements IPlatformAPI {
 
   @Override
   public void performBlockClose(ILootrBlockEntity blockEntity) {
-    PacketDistributor.sendToPlayersTrackingChunk((ServerLevel) blockEntity.getInfoLevel(), new ChunkPos(blockEntity.asBlockEntity().getBlockPos()), new PacketCloseContainer(blockEntity.asBlockEntity().getBlockPos()));
+    PacketDistributor.sendToPlayersTrackingChunk((ServerLevel) blockEntity.getInfoLevel(), new ChunkPos(blockEntity.asBlockEntity()
+        .getBlockPos()), new PacketCloseContainer(blockEntity.asBlockEntity().getBlockPos()));
   }
 
   @Override
@@ -85,5 +87,11 @@ public class PlatformAPIImpl implements IPlatformAPI {
   @Override
   public void refreshPlayerSection(ServerPlayer player) {
     PacketDistributor.sendToPlayer(player, PacketRefreshSection.INSTANCE);
+  }
+
+  @Override
+  public void performPotBreak(ILootrBlockEntity blockEntity, ServerPlayer player) {
+    PacketDistributor.sendToPlayersTrackingChunk((ServerLevel) blockEntity.getInfoLevel(), new ChunkPos(blockEntity.asBlockEntity()
+        .getBlockPos()), new PacketPerformBreakEffect(player.getId(), blockEntity.asBlockEntity().getBlockPos()));
   }
 }

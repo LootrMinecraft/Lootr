@@ -32,6 +32,7 @@ public class PacketHandler {
     registrar.play(PacketCloseCart.TYPE, PacketCloseCart.STREAM_CODEC);
     registrar.play(PacketCloseContainer.TYPE, PacketCloseContainer.STREAM_CODEC);
     registrar.play(PacketRefreshSection.TYPE, PacketRefreshSection.STREAM_CODEC);
+    registrar.play(PacketPerformBreakEffect.TYPE, PacketPerformBreakEffect.STREAM_CODEC);
   }
 
   protected record PacketRegistrar(PayloadRegistrar registrar, boolean toServer) {

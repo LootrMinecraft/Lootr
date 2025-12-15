@@ -7,6 +7,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
+import noobanidus.mods.lootr.common.block.entity.LootrDecoratedPotBlockEntity;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
 
 /**
@@ -57,6 +58,7 @@ public class PlatformAPI {
     INSTANCE.restoreSpecificData(data, newBlockEntity);
   }
 
+  @Deprecated
   public static void copyEntityData (AbstractMinecartContainer entity1, AbstractMinecartContainer entity2) {
     INSTANCE.copyEntityData(entity1, entity2);
   }
@@ -67,5 +69,9 @@ public class PlatformAPI {
 
   public static void refreshPlayerSection (ServerPlayer player) {
     INSTANCE.refreshPlayerSection(player);
+  }
+
+  public static void performPotBreak(ILootrBlockEntity lootrDecoratedPotBlockEntity, ServerPlayer player) {
+    INSTANCE.performPotBreak(lootrDecoratedPotBlockEntity, player);
   }
 }

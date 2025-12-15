@@ -3,7 +3,12 @@ package noobanidus.mods.lootr.common.client;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.state.BlockState;
+import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinBlock;
 import org.jetbrains.annotations.Nullable;
 
 public class ClientHooks {
@@ -28,6 +33,26 @@ public class ClientHooks {
     Player player = getPlayer();
     if (player != null) {
       clearCache(player.blockPosition());
+    }
+  }
+
+  public static void performBreakEffect(int entityId, BlockPos pos) {
+    Minecraft mc = Minecraft.getInstance();
+    if (mc.level == null || mc.player == null) {
+      return;
+    }
+    if (!(mc.level.getEntity(entityId) instanceof Player player)) {
+      return;
+    }
+    if (player == mc.player) {
+      BlockState state = mc.level.getBlockState(pos);
+      ((AccessorMixinBlock) state.getBlock()).lootr$spawnDestroyParticles(mc.level, player, pos, state);
+      mc.level.playSound(null, pos, SoundEvents.DECORATED_POT_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
+    } else {
+      mc.level.playSound(null, pos, SoundEvents.DECORATED_POT_INSERT_FAIL, SoundSource.BLOCKS, 1.0F, 1.0F);
+      mc.level.addParticle(
+          ParticleTypes.DUST_PLUME, (double) pos.getX() + 0.5, (double) pos.getY() + 1.2, (double) pos.getZ() + 0.5, 7, 0.0, 0.0
+      );
     }
   }
 }

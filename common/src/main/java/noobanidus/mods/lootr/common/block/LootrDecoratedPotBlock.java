@@ -4,14 +4,19 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.EnchantmentTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -25,6 +30,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.block.entity.LootrDecoratedPotBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,12 +43,26 @@ public class LootrDecoratedPotBlock extends DecoratedPotBlock {
 
   @Override
   protected void attack(BlockState blockState, Level level, BlockPos blockPos, Player player) {
-    super.attack(blockState, level, blockPos, player);
+    BlockEntity var7 = level.getBlockEntity(blockPos);
+    if (var7 instanceof LootrDecoratedPotBlockEntity decoratedPotBlockEntity) {
+      decoratedPotBlockEntity.wobble(DecoratedPotBlockEntity.WobbleStyle.NEGATIVE);
+      level.gameEvent(player, GameEvent.BLOCK_CHANGE, blockPos);
+      // TODO: Only do this for the breaking player
+      if (!level.isClientSide()) {
+        decoratedPotBlockEntity.dropContent((ServerPlayer) player);
+      }
+    }
   }
 
   @Override
   public BlockState playerWillDestroy(Level level, BlockPos blockPos, BlockState blockState, Player player) {
-    return super.playerWillDestroy(level, blockPos, blockState, player);
+		this.spawnDestroyParticles(level, player, blockPos, blockState);
+		if (blockState.is(BlockTags.GUARDED_BY_PIGLINS)) {
+			PiglinAi.angerNearbyPiglins(player, false);
+		}
+
+		level.gameEvent(GameEvent.BLOCK_DESTROY, blockPos, GameEvent.Context.of(player, blockState));
+		return blockState;
   }
 
   @Override

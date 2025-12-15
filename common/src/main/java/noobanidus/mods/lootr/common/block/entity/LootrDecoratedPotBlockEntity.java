@@ -16,6 +16,7 @@ import net.minecraft.world.RandomizableContainer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.SeededContainerLoot;
 import net.minecraft.world.level.Level;
@@ -28,10 +29,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.ticks.ContainerSingleItem;
-import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
-import noobanidus.mods.lootr.common.api.ILootrBlockEntityConverter;
-import noobanidus.mods.lootr.common.api.ILootrType;
-import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.*;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.SimpleLootrInstance;
@@ -122,6 +120,12 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
     }
   }
 
+  @Override
+  public void performOpen(ServerPlayer player) {
+    ILootrBlockEntity.super.performOpen(player);
+    PlatformAPI.performPotBreak(this, player);
+  }
+
   public boolean dropContent(ServerPlayer player) {
     if (this.level != null && this.level.getServer() != null) {
       ItemStack theItem = this.popItem(player);
@@ -138,6 +142,14 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
         itemEntity.setDeltaMovement(Vec3.ZERO);
         this.level.addFreshEntity(itemEntity);
 
+        for (Item item : decorations.ordered()) {
+          ItemStack sherdStack = new ItemStack(item, 1);
+          ItemEntity sherdEntity = new ItemEntity(this.level, g, h, i, sherdStack);
+          sherdEntity.setDeltaMovement(Vec3.ZERO);
+          this.level.addFreshEntity(sherdEntity);
+        }
+
+        PlatformAPI.performPotBreak(this, (ServerPlayer) player);
         return true;
       }
     }

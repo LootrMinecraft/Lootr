@@ -70,5 +70,13 @@ public class LootrClientNetworkingInit {
         }
       });
     });
+
+    ClientPlayNetworking.registerGlobalReceiver(PacketPerformBreakEffect.TYPE, ((payload, context) -> {
+      int entityId = payload.entityId();
+      BlockPos pos = payload.pos();
+      context.client().execute(() -> {
+        ClientHooks.performBreakEffect(entityId, pos);
+      });
+    }));
   }
 }
