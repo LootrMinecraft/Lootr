@@ -1,4 +1,5 @@
 {
+  "block.lootr.decorated_pot": "Decorated Loot Pot",
   "block.lootr.lootr_barrel": "Бочка с добычей",
   "block.lootr.lootr_chest": "Сундук с добычей",
   "block.lootr.lootr_inventory": "Сундук с добычей",
@@ -30,6 +31,8 @@
   "lootr.advancements.a_pot.title": "От горшка два вершка",
   "lootr.advancements.all_gravel.description": "Получите скрытую добычу из всех подозрительных блоков с добычей",
   "lootr.advancements.all_gravel.title": "Ни кистей ни вестей",
+  "lootr.advancements.archaeologist.description": "Loot all of Lootr's archaeological blocks!",
+  "lootr.advancements.archaeologist.title": "That Was 90% Gravity",
   "lootr.advancements.root.description": "Привнесите в мир индивидуальную добычу для каждого игрока.",
   "lootr.advancements.root.title": "Принадлежит музею",
   "lootr.advancements.social.description": "Откройте по одному из всех существующих видов контейнеров с добычей!",
