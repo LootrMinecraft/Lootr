@@ -84,17 +84,21 @@ public final class BlockEntityTicker {
     if (entity instanceof ILootrBlockEntity || LootrAPI.resolveBlockEntity(entity) instanceof ILootrBlockEntity) {
       return false;
     }
-    ILootrDataAdapter<BlockEntity> adapter = LootrAPI.getAdapter(entity);
-    if (adapter == null) {
+    if (LootrTags.BlockEntity.isTagged(entity, LootrTags.BlockEntity.CONVERT_BLACKLIST)) {
       return false;
     }
-    ResourceKey<LootTable> lootTable = adapter.getLootTable(entity);
-    return lootTable != null && !LootrAPI.isLootTableBlacklisted(lootTable);
+    ILootrDataAdapter<BlockEntity> adapter = LootrAPI.getAdapter(entity);
+    // IMPORTANT: Do *not* check the loot table here as this is called before nbt is loaded, etc
+    return adapter != null;
   }
 
   // As opposed to `isValidEntity`, this checks everything
   public static boolean isValidEntityFull(BlockEntity entity) {
     if (LootrAPI.isDisabled()) {
+      return false;
+    }
+
+    if (LootrTags.BlockEntity.isTagged(entity, LootrTags.BlockEntity.CONVERT_BLACKLIST)) {
       return false;
     }
 
@@ -235,7 +239,7 @@ public final class BlockEntityTicker {
       ResourceKey<LootTable> table = adapter.getLootTable(blockEntity);
       long seed = adapter.getLootSeed(blockEntity);
       if (table == null) {
-        LootrAPI.LOG.warn("Potential block entity has no loot table in {} ({})", level.dimension(), entityPos);
+        LootrAPI.LOG.warn("Potential block entity {} has no loot table in {} ({})", blockEntity, level.dimension(), entityPos);
         continue;
       }
       if (LootrAPI.isLootTableBlacklisted(table)) {
