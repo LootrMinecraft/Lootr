@@ -37,6 +37,12 @@
     "minecraft:end_gateway",
     "minecraft:end_portal",
     "minecraft:trial_spawner",
-    "minecraft:vault"
+    "minecraft:vault",
+    "lootr:brushable_block",
+    "lootr:lootr_barrel",
+    "lootr:lootr_chest",
+    "lootr:lootr_trapped_chest",
+    "lootr:lootr_inventory",
+    "lootr:lootr_shulker"
   ]
 }

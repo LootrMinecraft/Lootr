@@ -81,10 +81,10 @@ public final class BlockEntityTicker {
   }
 
   private static boolean isValidEntity(BlockEntity entity) {
-    if (entity instanceof ILootrBlockEntity || LootrAPI.resolveBlockEntity(entity) instanceof ILootrBlockEntity) {
+    if (LootrTags.BlockEntity.isTagged(entity, LootrTags.BlockEntity.CONVERT_BLACKLIST)) {
       return false;
     }
-    if (LootrTags.BlockEntity.isTagged(entity, LootrTags.BlockEntity.CONVERT_BLACKLIST)) {
+    if (entity instanceof ILootrBlockEntity || LootrAPI.resolveBlockEntity(entity) instanceof ILootrBlockEntity) {
       return false;
     }
     ILootrDataAdapter<BlockEntity> adapter = LootrAPI.getAdapter(entity);
