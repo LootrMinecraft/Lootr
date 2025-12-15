@@ -1,29 +1,36 @@
 package noobanidus.mods.lootr.common.block;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DecoratedPotBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.EntityCollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import noobanidus.mods.lootr.common.block.entity.LootrDecoratedPotBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
 public class LootrDecoratedPotBlock extends DecoratedPotBlock {
+  private static final VoxelShape BOUNDING_BOX = Block.box(1.0, 0.0, 1.0, 15.0, 8.0, 15.0);
+
   public LootrDecoratedPotBlock(Properties properties) {
     super(properties);
   }
@@ -42,43 +49,7 @@ public class LootrDecoratedPotBlock extends DecoratedPotBlock {
   protected ItemInteractionResult useItemOn(
       ItemStack itemStack, BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult
   ) {
-    BlockEntity itemStack2 = level.getBlockEntity(blockPos);
-    if (itemStack2 instanceof LootrDecoratedPotBlockEntity decoratedPotBlockEntity) {
-      if (level.isClientSide) {
-        return ItemInteractionResult.CONSUME;
-      } else {
-        ItemStack itemStack2x = decoratedPotBlockEntity.getTheItem();
-        if (!itemStack.isEmpty()
-            && (itemStack2x.isEmpty() || ItemStack.isSameItemSameComponents(itemStack2x, itemStack) && itemStack2x.getCount() < itemStack2x.getMaxStackSize())) {
-          decoratedPotBlockEntity.wobble(DecoratedPotBlockEntity.WobbleStyle.POSITIVE);
-          player.awardStat(Stats.ITEM_USED.get(itemStack.getItem()));
-          ItemStack itemStack3 = itemStack.consumeAndReturn(1, player);
-          float f;
-          if (decoratedPotBlockEntity.isEmpty()) {
-            decoratedPotBlockEntity.setTheItem(itemStack3);
-            f = (float)itemStack3.getCount() / (float)itemStack3.getMaxStackSize();
-          } else {
-            itemStack2x.grow(1);
-            f = (float)itemStack2x.getCount() / (float)itemStack2x.getMaxStackSize();
-          }
-
-          level.playSound(null, blockPos, SoundEvents.DECORATED_POT_INSERT, SoundSource.BLOCKS, 1.0F, 0.7F + 0.5F * f);
-          if (level instanceof ServerLevel serverLevel) {
-            serverLevel.sendParticles(
-                ParticleTypes.DUST_PLUME, (double)blockPos.getX() + 0.5, (double)blockPos.getY() + 1.2, (double)blockPos.getZ() + 0.5, 7, 0.0, 0.0, 0.0, 0.0
-            );
-          }
-
-          decoratedPotBlockEntity.setChanged();
-          level.gameEvent(player, GameEvent.BLOCK_CHANGE, blockPos);
-          return ItemInteractionResult.SUCCESS;
-        } else {
-          return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-        }
-      }
-    } else {
-      return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
-    }
+    return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
   }
 
   @Override
@@ -88,6 +59,9 @@ public class LootrDecoratedPotBlock extends DecoratedPotBlock {
       level.playSound(null, blockPos, SoundEvents.DECORATED_POT_INSERT_FAIL, SoundSource.BLOCKS, 1.0F, 1.0F);
       decoratedPotBlockEntity.wobble(DecoratedPotBlockEntity.WobbleStyle.NEGATIVE);
       level.gameEvent(player, GameEvent.BLOCK_CHANGE, blockPos);
+      if (!level.isClientSide()) {
+        decoratedPotBlockEntity.dropContent((ServerPlayer) player);
+      }
       return InteractionResult.SUCCESS;
     } else {
       return InteractionResult.PASS;
@@ -96,7 +70,6 @@ public class LootrDecoratedPotBlock extends DecoratedPotBlock {
 
   @Override
   protected void onProjectileHit(Level level, BlockState blockState, BlockHitResult blockHitResult, Projectile projectile) {
-    super.onProjectileHit(level, blockState, blockHitResult, projectile);
   }
 
   @Override
@@ -108,10 +81,84 @@ public class LootrDecoratedPotBlock extends DecoratedPotBlock {
   }
 
   @Override
+  protected VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
+    switch (getCollisionState(blockGetter, blockPos, collisionContext)) {
+      case PLAYER_OPEN, ITEM_ENTITY -> {
+        return BOUNDING_BOX;
+      }
+      case PLAYER_CLOSED, OTHER -> {
+        return super.getShape(blockState, blockGetter, blockPos, collisionContext);
+      }
+    }
+
+    return super.getShape(blockState, blockGetter, blockPos, collisionContext);
+  }
+
+  @Override
+  protected VoxelShape getCollisionShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
+    switch (getCollisionState(blockGetter, blockPos, collisionContext)) {
+      case PLAYER_OPEN, ITEM_ENTITY -> {
+        return BOUNDING_BOX;
+      }
+      case PLAYER_CLOSED, OTHER -> {
+        return super.getShape(blockState, blockGetter, blockPos, collisionContext);
+      }
+    }
+
+    return super.getShape(blockState, blockGetter, blockPos, collisionContext);
+  }
+
+  private CollisionState getCollisionState (BlockGetter getter, BlockPos pos, CollisionContext context) {
+    if (!(getter.getBlockEntity(pos) instanceof LootrDecoratedPotBlockEntity potBlockEntity))  {
+      return CollisionState.OTHER;
+    }
+
+    if (!(context instanceof EntityCollisionContext entityContext)) {
+      return CollisionState.OTHER;
+    }
+
+    Entity entity = entityContext.getEntity();
+    if (entity == null) {
+      return CollisionState.OTHER;
+    }
+
+    if (entity instanceof ItemEntity) {
+      return CollisionState.ITEM_ENTITY;
+    }
+
+    if (!(entity instanceof Player player)) {
+      return CollisionState.OTHER;
+    }
+
+    if (player.level().isClientSide()) {
+      if (potBlockEntity.hasClientOpened(player)) {
+        return CollisionState.PLAYER_OPEN;
+      } else {
+        return CollisionState.PLAYER_CLOSED;
+      }
+    } else {
+      if (potBlockEntity.hasOpened(player)) {
+        return CollisionState.PLAYER_OPEN;
+      } else {
+        return CollisionState.PLAYER_CLOSED;
+      }
+    }
+  }
+
+  enum CollisionState {
+    PLAYER_OPEN,
+    PLAYER_CLOSED,
+    ITEM_ENTITY,
+    OTHER
+  }
+
+  // TODO:
+  @Override
   protected boolean hasAnalogOutputSignal(BlockState blockState) {
     return super.hasAnalogOutputSignal(blockState);
   }
 
+  // TODO:
   @Override
   protected int getAnalogOutputSignal(BlockState blockState, Level level, BlockPos blockPos) {
     return super.getAnalogOutputSignal(blockState, level, blockPos);

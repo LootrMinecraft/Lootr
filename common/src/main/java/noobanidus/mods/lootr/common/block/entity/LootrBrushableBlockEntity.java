@@ -5,6 +5,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -18,6 +20,7 @@ import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.SeededContainerLoot;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -463,6 +466,30 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
   @Override
   public long getInfoLootSeed() {
     return lootTableSeed;
+  }
+
+  @Override
+  protected void applyImplicitComponents(DataComponentInput dataComponentInput) {
+    SeededContainerLoot seededContainerLoot = dataComponentInput.get(DataComponents.CONTAINER_LOOT);
+    if (seededContainerLoot != null) {
+      this.lootTable = seededContainerLoot.lootTable();
+      this.lootTableSeed = seededContainerLoot.seed();
+    }
+  }
+
+  @Override
+  protected void collectImplicitComponents(DataComponentMap.Builder builder) {
+    super.collectImplicitComponents(builder);
+    if (this.lootTable != null) {
+      builder.set(DataComponents.CONTAINER_LOOT, new SeededContainerLoot(this.lootTable, this.lootTableSeed));
+    }
+  }
+
+  @Override
+  public void removeComponentsFromTag(CompoundTag compoundTag) {
+    super.removeComponentsFromTag(compoundTag);
+    compoundTag.remove("LootTable");
+    compoundTag.remove("LootTableSeed");
   }
 
   public static FallingBlockEntity fall(ServerLevel level, BlockPos blockPos, BlockState blockState, LootrBrushableBlockEntity brushableBlockEntity) {

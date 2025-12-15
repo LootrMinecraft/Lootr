@@ -11,8 +11,13 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.RandomizableContainer;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.SeededContainerLoot;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -21,17 +26,22 @@ import net.minecraft.world.level.block.entity.PotDecorations;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.ticks.ContainerSingleItem;
 import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
 import noobanidus.mods.lootr.common.api.ILootrBlockEntityConverter;
 import noobanidus.mods.lootr.common.api.ILootrType;
+import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.SimpleLootrInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
+import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -78,6 +88,63 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
     return compoundTag;
   }
 
+  @Nullable
+  public ItemStack popItem(ServerPlayer player) {
+    ILootrInventory inventory = LootrAPI.getInventory(this, player);
+    if (inventory == null) {
+      return null;
+    }
+
+    if (!hasOpened(player)) {
+
+      ItemStack result = inventory.getItem(0);
+      inventory.setItem(0, ItemStack.EMPTY);
+      inventory.setChanged();
+
+      this.performTrigger(player);
+      boolean shouldUpdate = false;
+      if (!this.hasOpened(player)) {
+        player.awardStat(LootrRegistry.getLootedStat());
+        LootrRegistry.getStatTrigger().trigger(player);
+      }
+      if (this.addOpener(player)) {
+        this.performOpen(player);
+        shouldUpdate = true;
+      }
+
+      if (shouldUpdate) {
+        this.performUpdate(player);
+      }
+
+      return result;
+    } else {
+      return null;
+    }
+  }
+
+  public boolean dropContent(ServerPlayer player) {
+    if (this.level != null && this.level.getServer() != null) {
+      ItemStack theItem = this.popItem(player);
+      if (theItem != null) {
+        double d = EntityType.ITEM.getWidth();
+        double e = 1.0 - d;
+        double f = d / 2.0;
+        Direction direction = Direction.UP;
+        BlockPos blockPos = this.worldPosition.relative(direction, 1);
+        double g = (double) blockPos.getX() + 0.5 * e + f;
+        double h = (double) blockPos.getY() + 0.5 + (double) (EntityType.ITEM.getHeight() / 2.0F);
+        double i = (double) blockPos.getZ() + 0.5 * e + f;
+        ItemEntity itemEntity = new ItemEntity(this.level, g, h, i, theItem.split(this.level.random.nextInt(21) + 10));
+        itemEntity.setDeltaMovement(Vec3.ZERO);
+        this.level.addFreshEntity(itemEntity);
+
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   public Direction getDirection() {
     return this.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
   }
@@ -121,19 +188,27 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   protected void collectImplicitComponents(DataComponentMap.Builder builder) {
     super.collectImplicitComponents(builder);
     builder.set(DataComponents.POT_DECORATIONS, this.decorations);
+    if (this.lootTable != null) {
+      builder.set(DataComponents.CONTAINER_LOOT, new SeededContainerLoot(this.lootTable, this.lootTableSeed));
+    }
   }
 
   @Override
   protected void applyImplicitComponents(BlockEntity.DataComponentInput dataComponentInput) {
     super.applyImplicitComponents(dataComponentInput);
     this.decorations = dataComponentInput.getOrDefault(DataComponents.POT_DECORATIONS, PotDecorations.EMPTY);
-    this.setChanged();
+    SeededContainerLoot containerLoot = dataComponentInput.get(DataComponents.CONTAINER_LOOT);
+    if (containerLoot != null) {
+      this.setLootTable(containerLoot.lootTable(), containerLoot.seed());
+    }
   }
 
   @Override
   public void removeComponentsFromTag(CompoundTag compoundTag) {
     super.removeComponentsFromTag(compoundTag);
     compoundTag.remove("sherds");
+    compoundTag.remove("LootTable");
+    compoundTag.remove("LootTableSeed");
   }
 
   @Override
@@ -262,6 +337,11 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   @Override
   public long getInfoLootSeed() {
     return lootTableSeed;
+  }
+
+  @Override
+  public @Nullable IContainerTrigger getTrigger() {
+    return LootrRegistry.getPotTrigger();
   }
 
   @AutoService(ILootrBlockEntityConverter.class)
