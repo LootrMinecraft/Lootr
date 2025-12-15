@@ -16,6 +16,7 @@ public class ModBlockEntities {
     Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrProperties.LOOTR_BARREL, LOOTR_BARREL);
     Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrProperties.LOOTR_INVENTORY, LOOTR_INVENTORY);
     Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrProperties.BRUSHABLE_BLOCK, LOOTR_BRUSHABLE_BLOCK);
+    Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrProperties.DECORATED_POT, LOOTR_DECORATED_POT);
   }
 
   public static final BlockEntityType<LootrChestBlockEntity> LOOTR_CHEST = BlockEntityType.Builder.of(LootrChestBlockEntity::new, ModBlocks.CHEST).build(null);
