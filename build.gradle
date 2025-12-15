@@ -86,7 +86,8 @@ subprojects {
 
         publishMods {
             file = tasks.remapJar.archiveFile
-            type = STABLE
+            // TODO: Change this soonish
+            type = ALPHA
             changelog = changelogText
 
             displayName = "lootr-${name}-${rootProject.minecraft_version}-${rootProject.mod_version}"
