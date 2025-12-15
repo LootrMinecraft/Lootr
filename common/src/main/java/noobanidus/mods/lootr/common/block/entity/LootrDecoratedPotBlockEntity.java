@@ -15,7 +15,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.RandomizableContainer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.SeededContainerLoot;
@@ -39,7 +38,6 @@ import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -62,6 +60,7 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   @Override
   protected void saveAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
     super.saveAdditional(compoundTag, provider);
+    this.trySaveLootTable(compoundTag);
     this.decorations.save(compoundTag);
     this.lootrInstance.saveAdditional(compoundTag, provider, level == null || level.isClientSide());
   }
@@ -73,7 +72,6 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
     this.tryLoadLootTable(compoundTag);
     this.lootrInstance.loadAdditional(compoundTag, provider);
   }
-
 
 
   public ClientboundBlockEntityDataPacket getUpdatePacket() {
@@ -202,18 +200,28 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   protected void collectImplicitComponents(DataComponentMap.Builder builder) {
     super.collectImplicitComponents(builder);
     builder.set(DataComponents.POT_DECORATIONS, this.decorations);
+    if (lootTable != null) {
+      builder.set(DataComponents.CONTAINER_LOOT, new SeededContainerLoot(lootTable, lootTableSeed));
+    }
   }
 
   @Override
   protected void applyImplicitComponents(BlockEntity.DataComponentInput dataComponentInput) {
     super.applyImplicitComponents(dataComponentInput);
     this.decorations = dataComponentInput.getOrDefault(DataComponents.POT_DECORATIONS, PotDecorations.EMPTY);
+    SeededContainerLoot loot = dataComponentInput.get(DataComponents.CONTAINER_LOOT);
+    if (loot != null && loot.lootTable() != null) {
+      this.lootTable = loot.lootTable();
+      this.lootTableSeed = loot.seed();
+    }
   }
 
   @Override
   public void removeComponentsFromTag(CompoundTag compoundTag) {
     super.removeComponentsFromTag(compoundTag);
     compoundTag.remove("sherds");
+    compoundTag.remove("LootTable");
+    compoundTag.remove("LootTableSeed");
   }
 
   @Override

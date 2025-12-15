@@ -24,6 +24,7 @@ import net.minecraft.world.item.component.SeededContainerLoot;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.PotDecorations;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -471,6 +472,26 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
   @Override
   public void removeComponentsFromTag(CompoundTag compoundTag) {
     super.removeComponentsFromTag(compoundTag);
+    compoundTag.remove("LootTable");
+    compoundTag.remove("LootTableSeed");
+  }
+
+  @Override
+  protected void applyImplicitComponents(BlockEntity.DataComponentInput dataComponentInput) {
+    super.applyImplicitComponents(dataComponentInput);
+    SeededContainerLoot loot = dataComponentInput.get(DataComponents.CONTAINER_LOOT);
+    if (loot != null && loot.lootTable() != null) {
+      this.lootTable = loot.lootTable();
+      this.lootTableSeed = loot.seed();
+    }
+  }
+
+  @Override
+  protected void collectImplicitComponents(DataComponentMap.Builder builder) {
+    super.collectImplicitComponents(builder);
+    if (lootTable != null) {
+      builder.set(DataComponents.CONTAINER_LOOT, new SeededContainerLoot(lootTable, lootTableSeed));
+    }
   }
 
   public static FallingBlockEntity fall(ServerLevel level, BlockPos blockPos, BlockState blockState, LootrBrushableBlockEntity brushableBlockEntity) {
