@@ -469,27 +469,8 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
   }
 
   @Override
-  protected void applyImplicitComponents(DataComponentInput dataComponentInput) {
-    SeededContainerLoot seededContainerLoot = dataComponentInput.get(DataComponents.CONTAINER_LOOT);
-    if (seededContainerLoot != null) {
-      this.lootTable = seededContainerLoot.lootTable();
-      this.lootTableSeed = seededContainerLoot.seed();
-    }
-  }
-
-  @Override
-  protected void collectImplicitComponents(DataComponentMap.Builder builder) {
-    super.collectImplicitComponents(builder);
-    if (this.lootTable != null) {
-      builder.set(DataComponents.CONTAINER_LOOT, new SeededContainerLoot(this.lootTable, this.lootTableSeed));
-    }
-  }
-
-  @Override
   public void removeComponentsFromTag(CompoundTag compoundTag) {
     super.removeComponentsFromTag(compoundTag);
-    compoundTag.remove("LootTable");
-    compoundTag.remove("LootTableSeed");
   }
 
   public static FallingBlockEntity fall(ServerLevel level, BlockPos blockPos, BlockState blockState, LootrBrushableBlockEntity brushableBlockEntity) {

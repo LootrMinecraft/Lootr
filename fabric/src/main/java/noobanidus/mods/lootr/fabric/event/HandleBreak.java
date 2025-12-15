@@ -32,36 +32,27 @@ public class HandleBreak {
       return true;
     }
 
-    if (!world.isClientSide()) {
-      if (state.is(LootrTags.Blocks.CONTAINERS)) {
-        if ((player instanceof FakePlayer && LootrAPI.isFakePlayerBreakEnabled() || LootrAPI.isBreakEnabled())) {
-          return true;
-        }
-        if (LootrAPI.isBreakDisabled()) {
-          if (player.getAbilities().instabuild) {
-            if (!player.isShiftKeyDown()) {
-              player.displayClientMessage(Component.translatable("lootr.message.cannot_break_sneak").setStyle(getChatStyle()), false);
-              return false;
-            }
-          } else {
-            player.displayClientMessage(Component.translatable("lootr.message.cannot_break").setStyle(getChatStyle()), false);
-            return false;
-          }
-        } else {
-          if (!player.isShiftKeyDown()) {
-            player.displayClientMessage(Component.translatable("lootr.message.should_sneak").setStyle(getChatStyle()), false);
-            player.displayClientMessage(Component.translatable("lootr.message.should_sneak2").setStyle(getChatStyle()), false);
-            return false;
-          }
+    if ((player instanceof FakePlayer && LootrAPI.isFakePlayerBreakEnabled() || LootrAPI.isBreakEnabled())) {
+      return true;
+    }
+    if (LootrAPI.isBreakDisabled()) {
+      if (player.getAbilities().instabuild) {
+        if (!player.isShiftKeyDown()) {
+          player.displayClientMessage(Component.translatable("lootr.message.cannot_break_sneak")
+              .setStyle(getChatStyle()), false);
+          return false;
         }
       } else {
-        player.displayClientMessage(Component.translatable("lootr.message.cannot_break").setStyle(getChatStyle()), false);
+        player.displayClientMessage(Component.translatable("lootr.message.cannot_break")
+            .setStyle(getChatStyle()), false);
         return false;
       }
     } else {
       if (!player.isShiftKeyDown()) {
-        player.displayClientMessage(Component.translatable("lootr.message.should_sneak").setStyle(getChatStyle()), false);
-        player.displayClientMessage(Component.translatable("lootr.message.should_sneak2").setStyle(getChatStyle()), false);
+        player.displayClientMessage(Component.translatable("lootr.message.should_sneak")
+            .setStyle(getChatStyle()), false);
+        player.displayClientMessage(Component.translatable("lootr.message.should_sneak2")
+            .setStyle(getChatStyle()), false);
         return false;
       }
     }

@@ -76,6 +76,8 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.advancements.all_gravel.description", "Brush all types of suspicious Lootr blocks!");
     add("lootr.advancements.a_pot.title", "Woe to the Pot");
     add("lootr.advancements.a_pot.description", "Loot your first Lootr decorated pot!");
+    add("lootr.advancements.archaeologist.title", "That Was 90% Gravity");
+    add("lootr.advancements.archaeologist.description", "Loot all of Lootr's archaeological blocks!");
 
     add("itemGroup.lootr", "Lootr");
     // Should be fixed hopefully

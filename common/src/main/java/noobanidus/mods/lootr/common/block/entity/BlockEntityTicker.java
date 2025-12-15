@@ -264,8 +264,8 @@ public final class BlockEntityTicker {
     adapter.setLootTable(be, null, 0);
     level.setBlock(entityPos, replacement, Block.UPDATE_CLIENTS);
     BlockEntity newBlockEntity = level.getBlockEntity(entityPos);
-    PlatformAPI.restoreSpecificData(data, newBlockEntity);
     if (LootrAPI.resolveBlockEntity(newBlockEntity) instanceof ILootrBlockEntity ibe) {
+      PlatformAPI.restoreSpecificData(data, newBlockEntity);
       if (!itemCopy.isEmpty()) {
         ibe.asBlockEntity().applyComponentsFromItemStack(itemCopy);
       }

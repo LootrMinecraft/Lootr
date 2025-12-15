@@ -74,6 +74,8 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
     this.lootrInstance.loadAdditional(compoundTag, provider);
   }
 
+
+
   public ClientboundBlockEntityDataPacket getUpdatePacket() {
     return ClientboundBlockEntityDataPacket.create(this);
   }
@@ -200,27 +202,18 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   protected void collectImplicitComponents(DataComponentMap.Builder builder) {
     super.collectImplicitComponents(builder);
     builder.set(DataComponents.POT_DECORATIONS, this.decorations);
-    if (this.lootTable != null) {
-      builder.set(DataComponents.CONTAINER_LOOT, new SeededContainerLoot(this.lootTable, this.lootTableSeed));
-    }
   }
 
   @Override
   protected void applyImplicitComponents(BlockEntity.DataComponentInput dataComponentInput) {
     super.applyImplicitComponents(dataComponentInput);
     this.decorations = dataComponentInput.getOrDefault(DataComponents.POT_DECORATIONS, PotDecorations.EMPTY);
-    SeededContainerLoot containerLoot = dataComponentInput.get(DataComponents.CONTAINER_LOOT);
-    if (containerLoot != null) {
-      this.setLootTable(containerLoot.lootTable(), containerLoot.seed());
-    }
   }
 
   @Override
   public void removeComponentsFromTag(CompoundTag compoundTag) {
     super.removeComponentsFromTag(compoundTag);
     compoundTag.remove("sherds");
-    compoundTag.remove("LootTable");
-    compoundTag.remove("LootTableSeed");
   }
 
   @Override

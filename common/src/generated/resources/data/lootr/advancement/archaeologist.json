@@ -1,0 +1,39 @@
+{
+  "parent": "lootr:pot_opened",
+  "criteria": {
+    "got_brush": {
+      "conditions": {
+        "advancement": "lootr:all_gravel"
+      },
+      "trigger": "lootr:advancement"
+    },
+    "got_pot": {
+      "conditions": {
+        "advancement": "lootr:pot_opened"
+      },
+      "trigger": "lootr:advancement"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "lootr.advancements.archaeologist.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "minecraft:brush"
+    },
+    "title": {
+      "translate": "lootr.advancements.archaeologist.title"
+    }
+  },
+  "requirements": [
+    [
+      "got_brush"
+    ],
+    [
+      "got_pot"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
