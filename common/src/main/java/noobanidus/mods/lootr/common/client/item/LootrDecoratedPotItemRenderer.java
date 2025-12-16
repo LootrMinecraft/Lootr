@@ -24,7 +24,7 @@ public class LootrDecoratedPotItemRenderer extends BlockEntityWithoutLevelRender
   public LootrDecoratedPotItemRenderer(BlockEntityRenderDispatcher pBlockEntityRenderDispatcher, EntityModelSet pEntityModelSet) {
     super(pBlockEntityRenderDispatcher, pEntityModelSet);
     this.blockEntityRenderDispatcher = pBlockEntityRenderDispatcher;
-    this.blockEntity = new LootrDecoratedPotBlockEntity(BlockPos.ZERO, LootrRegistry.getChestBlock().defaultBlockState());
+    this.blockEntity = new LootrDecoratedPotBlockEntity(BlockPos.ZERO, LootrRegistry.getDecoratedPotBlock().defaultBlockState());
   }
 
   public LootrDecoratedPotItemRenderer() {
