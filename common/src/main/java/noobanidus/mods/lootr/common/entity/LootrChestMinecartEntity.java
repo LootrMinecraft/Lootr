@@ -124,10 +124,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     }
   }
 
-  @Override
-  public Item getDropItem() {
-    return Items.CHEST_MINECART;
-  }
+
 
   @Override
   public int getContainerSize() {
@@ -309,6 +306,11 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     }
 
     this.setDeltaMovement(this.getDeltaMovement().multiply((double) f, 0.0, (double) f));
+  }
+
+  @Override
+  protected Item getDropItem() {
+    return Items.CHEST_MINECART;
   }
 
   @AutoService(ILootrEntityConverter.class)

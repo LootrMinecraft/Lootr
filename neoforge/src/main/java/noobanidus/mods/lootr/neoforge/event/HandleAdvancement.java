@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.neoforge.event;
 
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.vehicle.VehicleEntity;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.AdvancementEvent;

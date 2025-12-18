@@ -1,13 +1,13 @@
 plugins {
-    id "architectury-plugin" version "3.4-SNAPSHOT"
-    id "dev.architectury.loom" version "1.7-SNAPSHOT" apply false
-    id 'io.github.juuxel.loom-vineflower' version '1.11.0' apply false
-    id "me.modmuss50.mod-publish-plugin" version "0.5.1"
+    id "idea"
+    id "maven-publish"
+    id "me.modmuss50.mod-publish-plugin" version "0.8.4" apply false
+    id "net.neoforged.moddev" version "2.0.80" apply false
 }
 
-architectury {
-    minecraft = rootProject.minecraft_version
-}
+def javaVersion = 21
+def ENV = System.getenv()
+
 
 def getExecOutput(commands) {
 
@@ -21,163 +21,63 @@ def getExecOutput(commands) {
     return out.toString().trim();
 }
 
-subprojects {
-    apply plugin: "dev.architectury.loom"
-    apply plugin: "me.modmuss50.mod-publish-plugin"
-
-    version = "${rootProject.mod_version}-${rootProject.minecraft_version}-${name}"
-
-    loom {
-        silentMojangMappingsLicense()
-    }
-
-    dependencies {
-        minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
-        mappings loom.officialMojangMappings()
-    }
-
-    Map<String, Map<String, String>> platformSettings = [
-            "fabric": [
-                    "curse-id": "615106",
-                    "curse-slug": "lootr-fabric",
-                    "modrinth-id": "EltpO5cN",
-                    "title": "for Fabric"
-            ],
-            "neoforge": [
-                    "curse-id": "361276",
-                    "curse-slug": "lootr",
-                    "modrinth-id": "EltpO5cN",
-                    "title": "for NeoForge"
-            ]
-    ]
-
-    Map<String, Map<String, Boolean>> platformDependencies = [
-            "fabric": [
-                    "fabric-api": true,
-                    "cloth-config": true
-            ],
-            "neoforge": [
-            ]
-    ]
-
-    var env = System.getenv()
-    def uploadSettings = platformSettings.get(name)
-    def uploadDependencies = platformDependencies.get(name)
-
-    def gitRepo = getExecOutput(['git', 'remote', 'get-url', 'origin'])
-    def gitCommit = getExecOutput(['git', 'log', '-n', '1', '--pretty=tformat:%h'])
-    def gitPrevCommit = project.findProperty("git_previous_commit") ?: env["GIT_PREVIOUS_COMMIT"]
-
-
-    String changelogText = ""
-
-    if (gitCommit && gitPrevCommit) {
-        changelogText += getExecOutput(['git', 'log', "--pretty=tformat:- %s [(%h)](${gitRepo}/commit/%h)", '' + gitPrevCommit + '..' + gitCommit])
-    }
-
-    // Limit the changelog to 500 characters
-    changelogText = changelogText.take(500)
-
-
-    if (uploadSettings != null && uploadDependencies != null) {
-
-        //File changeLog = rootProject.file("CHANGELOG.md")
-        //String changelogText = changeLog.exists() ? changeLog.text : ""
-
-        publishMods {
-            file = tasks.remapJar.archiveFile
-            type = BETA
-            changelog = changelogText
-
-            displayName = "lootr-${name}-${rootProject.minecraft_version}-${rootProject.mod_version}"
-            version = "${rootProject.mod_version}"
-            modLoaders.add(name)
-
-            if (project.hasProperty("curse_auth")) {
-                curseforge {
-                    accessToken = project.findProperty("curse_auth")
-                    projectId = uploadSettings["curse-id"]
-                    projectSlug = uploadSettings["curse-slug"]
-                    announcementTitle = "Lootr ${rootProject.minecraft_version}-${rootProject.mod_version} ${uploadSettings["title"]} on CurseForge"
-                    // TODO: Hard-coded
-                    minecraftVersions.add(rootProject.minecraft_version)
-
-                    if (uploadDependencies.size() > 0) {
-                        uploadDependencies.each { dep, required ->
-                            if (required) {
-                                requires(dep)
-                            }
-                            else {
-                                optional(dep)
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (project.hasProperty("modrinth_auth")) {
-                modrinth {
-                    accessToken = project.findProperty("modrinth_auth")
-                    projectId = uploadSettings["modrinth-id"]
-                    announcementTitle = "Lootr ${rootProject.minecraft_version}-${rootProject.mod_version} ${uploadSettings["title"]} on Modrinth"
-                    // TODO: Hard-coded
-                    minecraftVersions.add(rootProject.minecraft_version)
-
-                    dependencies {
-                        uploadDependencies.each { dep, required ->
-                            if (required) {
-                                requires(dep)
-                            } else {
-                                optional(dep)
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (project.hasProperty("curse_discord_webhook")) {
-                discord {
-                    webhookUrl = project.findProperty("curse_discord_webhook")
-                    username = "Lootr Update"
-                    setPlatforms(publishMods.platforms.curseforge, publishMods.platforms.modrinth)
-                }
-            }
-        }
-    }
-}
-
 allprojects {
-    apply plugin: "java"
-    apply plugin: "architectury-plugin"
-    apply plugin: "maven-publish"
-
-    archivesBaseName = "${rootProject.mod_id}-${name}"
     version = "${rootProject.minecraft_version}-${rootProject.mod_version}"
-    group = rootProject.maven_group
+    group = rootProject.mod_group_id
 
     repositories {
         mavenLocal()
         mavenCentral()
-        maven {
-            url "https://maven.neoforged.net/releases/"
-        }
-        maven {
-            url = 'https://api.modrinth.com/maven/'
-            content {
-                includeGroup 'maven.modrinth'
+        exclusiveContent {
+            forRepository {
+                maven {
+                    url = "https://www.cursemaven.com"
+                }
+            }
+            filter {
+                includeGroupAndSubgroups("curse.maven")
             }
         }
-        maven {
-            url = 'https://www.cursemaven.com'
-            content {
-                includeGroup 'curse.maven'
+        exclusiveContent {
+            forRepository {
+                maven {
+                    url = "https://api.modrinth.com/maven/"
+                }
+            }
+            filter {
+                includeGroupAndSubgroups("maven.modrinth")
             }
         }
-        maven {
-            url = 'https://maven.shedaniel.me'
-            content {
-                includeGroup 'me.shedaniel.cloth'
-                includeGroup 'me.shedaniel'
+        exclusiveContent {
+            forRepository {
+                maven {
+                    url = "https://maven.blamejared.com"
+                }
+            }
+            filter {
+                includeGroupAndSubgroups("mezz.jei")
+            }
+        }
+        exclusiveContent {
+            forRepository {
+                maven {
+                    name = "TerraformersMC"
+                    url = "https://maven.terraformersmc.com/"
+                }
+            }
+            filter {
+                includeGroupByRegex("dev\\.emi.*")
+            }
+        }
+        exclusiveContent {
+            forRepository {
+                maven {
+                    url = "https://maven.shedaniel.me"
+                }
+            }
+            filter {
+                includeGroupAndSubgroups("me.shedaniel.cloth")
+                includeGroupAndSubgroups("me.shedaniel")
             }
         }
         exclusiveContent {
@@ -200,47 +100,79 @@ allprojects {
         }
     }
 
-    dependencies {
-        "compileOnly"("com.google.auto.service:auto-service-annotations:${rootProject.auto_service_version}")
-        "annotationProcessor"("com.google.auto.service:auto-service:${rootProject.auto_service_version}")
+    tasks.register('buildAndRelease') {
+        dependsOn(tasks.build, tasks.publish)
+    }
+}
+
+subprojects {
+    apply plugin: "java-library"
+    apply plugin: "maven-publish"
+    apply plugin: "me.modmuss50.mod-publish-plugin"
+    project.group = rootProject.group
+    project.version = rootProject.version
+
+
+    base {
+        archivesName.set("${rootProject.mod_id}-${name}")
     }
 
-    tasks.withType(JavaCompile) {
-        options.encoding = "UTF-8"
-        options.release = 21
+    dependencies {
+        compileOnly "org.jetbrains:annotations:${jetbrains_annotations_version}"
+        compileOnly("com.google.auto.service:auto-service-annotations:${rootProject.auto_service_version}")
+        annotationProcessor("com.google.auto.service:auto-service:${rootProject.auto_service_version}")
+    }
+
+    processResources {
+        filteringCharset "UTF-8"
+
+        def expandProps = [
+                "version"              : project.version,
+                "mod_version"          : project.mod_version,
+                "maven_group_id"       : project.mod_group_id,
+                "mod_id"               : project.mod_id,
+                "mod_display_name"     : project.mod_name,
+                "mod_description"      : project.mod_description,
+                "sources_url"          : project.sources_url,
+                "issues_url"           : project.issues_url,
+                "license_url"          : project.license_url,
+                "homepage_url"         : project.homepage_url,
+
+                "minecraft_version"    : project.minecraft_version,
+                "neoforge_version"     : project.neoforge_version,
+                "fabric_loader_version": project.fabric_loader_version,
+                "java_version"         : "${javaVersion}",
+        ]
+
+        filesMatching(['pack.mcmeta', '*.mod.json', 'META-INF/neoforge.mods.toml']) {
+            expand expandProps
+        }
+        inputs.properties(expandProps)
     }
 
     java {
+        if (JavaVersion.current() < JavaVersion.toVersion(javaVersion)) {
+            toolchain {
+                languageVersion = JavaLanguageVersion.of(javaVersion)
+            }
+        } else {
+            sourceCompatibility = JavaVersion.toVersion(javaVersion)
+            targetCompatibility = JavaVersion.toVersion(javaVersion)
+        }
+
         withSourcesJar()
     }
 
-    task optimizePng {
-        def pngPatterns = ["**/*.png"]
-        doFirst {
-            println 'Executing oxipng task...'
-        }
-        doLast {
-            //Ensure the logo is minimized (we add this file to each jar)
-            //Minimize any PNGs in the source sets
-            for (dir in sourceSets.main.resources.srcDirs) {
-                fileTree(dir: dir, includes: pngPatterns).each { minimizePNGFile(it) }
-            }
-            println 'Finished oxipng task...'
-        }
+    javadoc {
+        options.tags = ["reason"]
     }
-}
 
-//Minimize/optimize all png files, requires optipng on the PATH
-// Credits: BrainStone
-void minimizePNGFile(File file) {
-    exec {
-        executable "./oxipng.exe"
-        args "-o", "6", "-i", "0", "--strip", "all", "-a", "-Z", file
+    tasks.withType(JavaCompile).configureEach {
+        options.release.set(javaVersion)
     }
-}
 
-task buildAndReleaseAll{
-    dependsOn(':common:buildAndRelease', ':neoforge:buildAndRelease', ':fabric:buildAndRelease')
+    tasks.publishMods.mustRunAfter tasks.publish
+    tasks.buildAndRelease.dependsOn(tasks.publish).dependsOn(tasks.publishMods)
 }
 
 tasks.register("tagVersion") {

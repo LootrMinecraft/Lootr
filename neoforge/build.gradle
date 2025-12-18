@@ -1,111 +1,162 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "7.1.2"
-}
-architectury {
-    platformSetupLoomIde()
-    neoForge()
+    id 'net.neoforged.moddev'
 }
 
-loom {
-    accessWidenerPath = project(":common").loom.accessWidenerPath
+configurations {
+    runtimeClasspath.extendsFrom localRuntime
+}
 
-    neoForge {
-        runs {
-            all {}
+repositories {
+}
 
-            data {
-                data()
-                programArgs("--all", "--mod", "lootr")
-                programArgs("--existing", project(":common").file("src/main/resources").absolutePath)
-                programArgs("--output", project(":common").file("src/generated/resources").absolutePath)
-            }
+dependencies {
+    compileOnly(project(':common')) {
+        transitive = false
+    }
+}
+
+publishMods {
+    file = tasks.jar.archiveFile
+    modLoaders.add("neoforge")
+
+    var env = System.getenv()
+
+    def gitRepo = getExecOutput(['git', 'remote', 'get-url', 'origin'])
+    def gitCommit = getExecOutput(['git', 'log', '-n', '1', '--pretty=tformat:%h'])
+    def gitPrevCommit = project.findProperty("git_previous_commit") ?: env["GIT_PREVIOUS_COMMIT"]
+
+    var changelogText = ""
+
+    if (gitCommit && gitPrevCommit) {
+        changelogText += getExecOutput(['git', 'log', "--pretty=tformat:- %s [(%h)](${gitRepo}/commit/%h)", '' + gitPrevCommit + '..' + gitCommit])
+    }
+
+    // Limit the changelog to 500 characters
+    changelogText = changelogText.take(500)
+
+    if (project.hasProperty('curseforge_id_neoforge')) {
+        curseforge('curseforgeNeoForge') {
+            type = ALPHA
+
+            projectSlug = "lootr"
+            displayName = "lootr-neoforge-${rootProject.minecraft_version}-${rootProject.mod_version}"
+            accessToken = project.findProperty("curse_auth")
+            projectId = project.findProperty('curseforge_id_neoforge')
+            announcementTitle = "Lootr ${rootProject.minecraft_version}-${rootProject.mod_version} for NeoForge on CurseForge"
+            minecraftVersions.add(project.minecraft_version)
+            changelog = changelogText
+        }
+    }
+
+    if (project.hasProperty('modrinth_id_fabric')) {
+        modrinth('modrinthNeoForge') {
+            type = ALPHA
+            displayName = "lootr-neoforge-${rootProject.minecraft_version}-${rootProject.mod_version}"
+            accessToken = project.findProperty("modrinth_auth")
+            projectId = project.findProperty('modrinth_id_neoforge')
+            announcementTitle = "Lootr ${rootProject.minecraft_version}-${rootProject.mod_version} for NeoForge on Modrinth"
+            minecraftVersions.add(project.minecraft_version)
+            changelog = changelogText
+        }
+    }
+
+    if (project.hasProperty("curse_discord_webhook")) {
+        discord {
+            webhookUrl = project.findProperty("curse_discord_webhook")
+            username = "Lootr Update"
+            content = "A new version of Lootr has been released!\n\n${changelogText.take(500)}"
         }
     }
 }
 
-configurations {
-    common
-    shadowCommon // Don't use shadow from the shadow plugin because we don't want IDEA to index this.
-    compileClasspath.extendsFrom common
-    runtimeClasspath.extendsFrom common
-    developmentNeoForge.extendsFrom common
+neoForge {
+    version = project.neoforge_version
+
+    parchment {
+        minecraftVersion = project.parchment_minecraft_version
+        mappingsVersion = project.parchment_mappings_version
+    }
+
+    def atFile = project.file("src/main/resources/META-INF/accesstransformer_neoforge.cfg")
+    if (atFile.exists()) {
+        accessTransformers {
+            from atFile
+            publish atFile
+        }
+    }
+
+    validateAccessTransformers.set(true)
+
+    mods {
+        // define mod <-> source bindings
+        // these are used to tell the game which sources are for which mod
+        // mostly optional in a single mod project
+        // but multi mod projects should define one per mod
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
+            sourceSet(project.project(":common").sourceSets.main)
+        }
+    }
+
+    runs {
+        configureEach {
+            logLevel = org.slf4j.event.Level.DEBUG
+
+            gameDirectory = project.file('run')
+
+            sourceSet = sourceSets.main
+            loadedMods.set([mods."${mod_id}"])
+        }
+
+        client {
+            client()
+            //systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+
+            if (project.hasProperty('mc_uuid')) {
+                programArguments.add("--uuid=${project.findProperty('mc_uuid')}")
+            }
+
+            if (project.hasProperty('mc_username')) {
+                programArguments.add("--username=${project.findProperty('mc_username')}")
+            }
+
+            if (project.hasProperty('mc_java_agent_path')) {
+                jvmArgument("-javaagent:${project.findProperty('mc_java_agent_path')}")
+            }
+        }
+
+        server {
+            server()
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+            programArguments.add('--nogui')
+        }
+
+        clientData {
+            data()
+            programArguments.addAll '--all', '--mod', 'lootr', '--existing', project.project(":common").file("src/main/resources").absolutePath, '--output', project.project(":common").file("src/generated/resources").absolutePath
+        }
+    }
 }
 
-dependencies {
-    // REQUIRED
-    neoForge "net.neoforged:neoforge:${rootProject.neoforge_version}"
+tasks.named("compileJava", JavaCompile) {
+    source(project.project(":common").sourceSets.main.allJava)
+}
 
-    common(project(path: ":common", configuration: "namedElements")) { transitive false }
-    shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive = false }
+tasks.named("javadoc", Javadoc) {
+    source(project.project(":common").sourceSets.main.allJava)
+}
 
-    implementation "dev.thomasglasser.sherdsapi:sherdsapi-neoforge-${minecraft_version}:${sherdsapi_version}"
-    implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:${rootProject.mixin_extras}"))
-    implementation("io.github.llamalad7:mixinextras-neoforge:${rootProject.mixin_extras}")
-
-    //modRuntimeOnly("mezz.jei:jei-${project.jei_mc}-neoforge:${project.jei}")
-    //modRuntimeOnly("mezz.jei:jei-${project.jei_mc}-common:${project.jei}")
-
-    //modRuntimeOnly("dev.emi:emi-neoforge:${emi}")
-
-    //modRuntimeOnly("me.shedaniel.cloth:cloth-config-neoforge:${project.cloth_config}")
-    //modRuntimeOnly("dev.architectury:architectury-neoforge:${project.architectury}")
-
-    // modRuntimeOnly("com.telepathicgrunt:CommandStructures-Neoforge:${project.commandstructures_neoforge}")
-    // modRuntimeOnly("com.telepathicgrunt:StructureVoidToggle-Neoforge:${project.structurevoidtoggle_neoforge}")
+tasks.named("sourcesJar", Jar) {
+    from(project.project(":common").sourceSets.main.allSource)
 }
 
 processResources {
-    from(project(":common").sourceSets["main"].resources) {
-        exclude "META-INF/services" // This is important as otherwise NeoForge/FML thinks that both the common jar and the platform jar are exporting the same packages
-    }
-
-    inputs.property "version", project.version
-
-    filesMatching("META-INF/neoforge.mods.toml") {
-        def startVersion = project.property("version_compat_start");
-        def versionRange = "${startVersion},"
-
-        expand ("version": project.version, "versionRange": versionRange)
-    }
+    from project.project(":common").sourceSets.main.resources
 
     from(project(":common").sourceSets["generated"].resources) {
-        exclude ".cache"
+        exclude(".cache")
     }
 }
-
-shadowJar {
-    exclude "fabric.mod.json"
-    exclude "architectury.common.json"
-    exclude "resources/"
-
-    configurations = [project.configurations.shadowCommon]
-    archiveClassifier.set("dev-shadow")
-}
-
-remapJar {
-    inputFile.set shadowJar.archiveFile
-    dependsOn shadowJar
-    archiveClassifier.set(null)
-    atAccessWideners.add("${rootProject.mod_id}.accesswidener") // this is a path inside the mod jar
-}
-
-jar {
-    archiveClassifier.set("dev")
-}
-
-sourcesJar {
-    def commonSources = project(":common").sourcesJar
-    dependsOn commonSources
-    from commonSources.archiveFile.map { zipTree(it) }
-}
-
-components.java {
-    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
-        skip()
-    }
-}
-
-def ENV = System.getenv()
 
 publishing {
     tasks.publish.dependsOn build
@@ -114,7 +165,7 @@ publishing {
         mavenJava(MavenPublication) {
 
             artifactId project.archivesBaseName
-            artifact remapJar
+            artifact jar
             artifact project.sourcesJar {
                 archiveClassifier.set('sources')
             }
@@ -155,7 +206,6 @@ publishing {
     }
 }
 
-task buildAndRelease{}
 tasks.build.mustRunAfter tasks.clean
 tasks.publish.mustRunAfter tasks.build
 tasks.publishMods.mustRunAfter tasks.publish

@@ -9,6 +9,7 @@
     "ZestyBlaze",
     "embeddedt"
   ],
+  "accessWidener": "lootr.accesswidener",
   "contact": {
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/lootr-fabric",
     "sources": "https://github.com/noobanidus/Lootr/tree/fabric-1.19.4",
@@ -35,7 +36,7 @@
   "depends": {
     "fabricloader": ">=0.15.11",
     "fabric": ">=0.100.3",
-    "minecraft": "${versionRange}",
+    "minecraft": "${minecraft_version}",
     "java": ">=21",
     "cloth-config": ">=15.0.127"
   }
