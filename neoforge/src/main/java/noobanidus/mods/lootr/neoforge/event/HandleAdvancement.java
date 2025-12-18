@@ -15,11 +15,4 @@ public class HandleAdvancement {
       LootrRegistry.getAdvancementTrigger().trigger((ServerPlayer) event.getEntity(), event.getAdvancement().id());
     }
   }
-
-  @SubscribeEvent
-  public static void onAdvancement(AdvancementEvent.AdvancementProgressEvent event) {
-    if (!event.getEntity().level().isClientSide()) {
-      LootrRegistry.getAdvancementTrigger().trigger((ServerPlayer) event.getEntity(), event.getAdvancement().id());
-    }
-  }
 }
