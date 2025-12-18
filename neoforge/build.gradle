@@ -38,6 +38,7 @@ dependencies {
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive = false }
 
+    implementation "dev.thomasglasser.sherdsapi:sherdsapi-neoforge-${minecraft_version}:${sherdsapi_version}"
     implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:${rootProject.mixin_extras}"))
     implementation("io.github.llamalad7:mixinextras-neoforge:${rootProject.mixin_extras}")
 
@@ -62,8 +63,7 @@ processResources {
 
     filesMatching("META-INF/neoforge.mods.toml") {
         def startVersion = project.property("version_compat_start");
-        def stopVersion = project.property("version_compat_stop");
-        def versionRange = "${startVersion},${stopVersion}"
+        def versionRange = "${startVersion},"
 
         expand ("version": project.version, "versionRange": versionRange)
     }

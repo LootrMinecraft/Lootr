@@ -33,6 +33,8 @@ dependencies {
     modCompileOnly("maven.modrinth:modmenu:${rootProject.mod_menu}")
     modRuntimeOnly("maven.modrinth:modmenu:${rootProject.mod_menu}")
 
+    modImplementation "dev.thomasglasser.sherdsapi:sherdsapi-fabric-${minecraft_version}:${sherdsapi_version}"
+
     implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:${rootProject.mixin_extras}"))
     implementation("io.github.llamalad7:mixinextras-fabric:${rootProject.mixin_extras}")
 
@@ -45,8 +47,7 @@ processResources {
 
     filesMatching("fabric.mod.json") {
         def startVersion = project.property("version_compat_start");
-        def stopVersion = project.property("version_compat_stop");
-        def versionRange = ">=${startVersion} <=${stopVersion}"
+        def versionRange = ">=${startVersion}"
 
         expand ("version": project.version, "versionRange": versionRange)
     }

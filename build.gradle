@@ -1,6 +1,6 @@
 plugins {
     id "architectury-plugin" version "3.4-SNAPSHOT"
-    id "dev.architectury.loom" version "1.6-SNAPSHOT" apply false
+    id "dev.architectury.loom" version "1.7-SNAPSHOT" apply false
     id 'io.github.juuxel.loom-vineflower' version '1.11.0' apply false
     id "me.modmuss50.mod-publish-plugin" version "0.5.1"
 }
@@ -101,7 +101,6 @@ subprojects {
                     announcementTitle = "Lootr ${rootProject.minecraft_version}-${rootProject.mod_version} ${uploadSettings["title"]} on CurseForge"
                     // TODO: Hard-coded
                     minecraftVersions.add(rootProject.minecraft_version)
-                    minecraftVersions.add("1.21.1")
 
                     if (uploadDependencies.size() > 0) {
                         uploadDependencies.each { dep, required ->
@@ -123,7 +122,6 @@ subprojects {
                     announcementTitle = "Lootr ${rootProject.minecraft_version}-${rootProject.mod_version} ${uploadSettings["title"]} on Modrinth"
                     // TODO: Hard-coded
                     minecraftVersions.add(rootProject.minecraft_version)
-                    minecraftVersions.add("1.21.1")
 
                     dependencies {
                         uploadDependencies.each { dep, required ->
@@ -181,6 +179,24 @@ allprojects {
                 includeGroup 'me.shedaniel.cloth'
                 includeGroup 'me.shedaniel'
             }
+        }
+        exclusiveContent {
+            forRepository {
+                maven {
+                    name = 'Sherds API'
+                    url = 'https://dl.cloudsmith.io/public/thomasglasser/sherdsapi/maven/'
+                }
+            }
+            filter { includeGroupAndSubgroups "dev.thomasglasser.sherdsapi" }
+        }
+        exclusiveContent {
+            forRepository {
+                maven {
+                    name = 'TommyLib'
+                    url = 'https://dl.cloudsmith.io/public/thomasglasser/tommylib/maven/'
+                }
+            }
+            filter { includeGroupAndSubgroups "dev.thomasglasser.tommylib" }
         }
     }
 
