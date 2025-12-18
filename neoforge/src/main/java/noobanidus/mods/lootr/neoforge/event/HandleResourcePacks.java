@@ -9,7 +9,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.AddPackFindersEvent;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 
-@EventBusSubscriber(modid = LootrAPI.MODID, bus=EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = LootrAPI.MODID)
 public class HandleResourcePacks {
   @SubscribeEvent
   public static void onResourcePacks (AddPackFindersEvent event) {

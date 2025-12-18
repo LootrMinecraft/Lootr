@@ -24,7 +24,7 @@ import noobanidus.mods.lootr.common.client.item.LootrTrappedChestItemRenderer;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.neoforge.client.block.*;
 
-@EventBusSubscriber(modid = LootrAPI.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = LootrAPI.MODID, value = Dist.CLIENT)
 public class ClientSetup {
 
   @SubscribeEvent

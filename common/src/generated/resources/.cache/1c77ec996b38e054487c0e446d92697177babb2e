@@ -1,4 +1,4 @@
-// 1.21	2025-12-15T21:30:57.3015623	Lootr Block Entity Type Tags
+// 1.21.1	2025-12-18T18:39:31.5985682	Lootr Block Entity Type Tags
 091116d922e14ae53117711d6e99a51ce1e04269 data/lootr/tags/block_entity_type/convert/blacklist.json
 35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/lootr/tags/block_entity_type/custom_ineligible.json
 35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/lootr/tags/block_entity_type/object.json

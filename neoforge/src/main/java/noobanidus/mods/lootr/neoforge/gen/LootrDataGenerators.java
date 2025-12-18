@@ -13,7 +13,7 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-@EventBusSubscriber(modid = LootrAPI.MODID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = LootrAPI.MODID)
 public class LootrDataGenerators {
   @SubscribeEvent
   public static void gatherData(GatherDataEvent event) {
