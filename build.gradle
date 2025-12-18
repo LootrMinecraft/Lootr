@@ -6,8 +6,6 @@ plugins {
 }
 
 def javaVersion = 21
-def ENV = System.getenv()
-
 
 def getExecOutput(commands) {
 
@@ -111,7 +109,6 @@ subprojects {
     apply plugin: "me.modmuss50.mod-publish-plugin"
     project.group = rootProject.group
     project.version = rootProject.version
-
 
     base {
         archivesName.set("${rootProject.mod_id}-${name}")
