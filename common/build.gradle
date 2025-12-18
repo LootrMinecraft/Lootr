@@ -52,7 +52,7 @@ neoForge {
     validateAccessTransformers.set(true)
 }
 
-def generatedResources = file("src/generated")
+def generatedResources = file("src/generated/resources")
 
 sourceSets {
     generated {
