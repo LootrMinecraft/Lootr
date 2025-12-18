@@ -13,6 +13,9 @@ dependencies {
     compileOnly(project(':common')) {
         transitive = false
     }
+    jarJar(implementation "dev.thomasglasser.sherdsapi:sherdsapi-neoforge-${minecraft_version}:${sherdsapi_version}")
+    implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:${rootProject.mixin_extras_version}"))
+    implementation("io.github.llamalad7:mixinextras-neoforge:${rootProject.mixin_extras_version}")
 }
 
 publishMods {
@@ -128,7 +131,6 @@ neoForge {
         server {
             server()
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-            programArguments.add('--nogui')
         }
 
         clientData {

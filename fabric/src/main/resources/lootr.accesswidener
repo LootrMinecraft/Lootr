@@ -4,4 +4,4 @@ accessible field net/minecraft/server/players/GameProfileCache profilesByName Lj
 accessible method net/minecraft/world/level/storage/LevelResource <init> (Ljava/lang/String;)V
 accessible field net/minecraft/server/PlayerAdvancements player Lnet/minecraft/server/level/ServerPlayer;
 accessible method net/minecraft/world/level/storage/LevelResource <init> (Ljava/lang/String;)V
-accessible method net/minecraft/world/entity/vehicle/VehicleEntity getDropItem ()Lnet/minecraft/world/item/Item;
+extendable method net/minecraft/world/entity/vehicle/VehicleEntity getDropItem ()Lnet/minecraft/world/item/Item;

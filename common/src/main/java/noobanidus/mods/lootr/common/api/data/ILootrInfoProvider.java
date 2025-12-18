@@ -115,7 +115,7 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
   default void performTrigger(ServerPlayer player) {
     IContainerTrigger trigger = getTrigger();
     if (trigger != null) {
-      if (!hasOpened(player)) {
+      if (!hasServerOpened(player)) {
         trigger.trigger(player, getInfoUUID());
       }
     }

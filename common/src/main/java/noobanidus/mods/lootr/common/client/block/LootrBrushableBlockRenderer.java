@@ -31,7 +31,7 @@ public class LootrBrushableBlockRenderer implements BlockEntityRenderer<LootrBru
       if (player == null) {
         return;
       }
-      if (arg.hasOpened(player)) {
+      if (arg.hasClientOpened(player)) {
         return;
       }
       if (!arg.isBrushingPlayer(player)) {

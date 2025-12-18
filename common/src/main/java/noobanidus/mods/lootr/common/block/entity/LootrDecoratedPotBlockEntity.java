@@ -93,7 +93,7 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
       return null;
     }
 
-    if (!hasOpened(player)) {
+    if (!hasServerOpened(player)) {
 
       ItemStack result = inventory.getItem(0);
       inventory.setItem(0, ItemStack.EMPTY);
@@ -101,7 +101,7 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
 
       this.performTrigger(player);
       boolean shouldUpdate = false;
-      if (!this.hasOpened(player)) {
+      if (!this.hasServerOpened(player)) {
         player.awardStat(LootrRegistry.getLootedStat());
         LootrRegistry.getStatTrigger().trigger(player);
       }

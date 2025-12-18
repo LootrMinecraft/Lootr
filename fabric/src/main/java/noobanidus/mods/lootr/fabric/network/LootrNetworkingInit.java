@@ -36,7 +36,7 @@ public class LootrNetworkingInit {
           context.player().connection.send(packet);
         }
 
-        if (resolved.hasOpened(context.player())) {
+        if (resolved.hasServerOpened(context.player())) {
           ServerPlayNetworking.send(context.player(), new PacketOpenContainer(pos.pos()));
         } else {
           ServerPlayNetworking.send(context.player(), new PacketCloseContainer(pos.pos()));

@@ -157,7 +157,7 @@ public class LootrDecoratedPotBlock extends DecoratedPotBlock {
         return CollisionState.PLAYER_CLOSED;
       }
     } else {
-      if (potBlockEntity.hasOpened(player)) {
+      if (potBlockEntity.hasServerOpened(player)) {
         return CollisionState.PLAYER_OPEN;
       } else {
         return CollisionState.PLAYER_CLOSED;

@@ -85,7 +85,7 @@ public class DataStorage {
   public static int getDecayValue(ILootrInfoProvider provider) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
-      if (provider.getInfoLevel() != null && provider.getInfoLevel().isClientSide()) {
+      if (provider.getInfoLevel() == null || (provider.getInfoLevel() != null && provider.getInfoLevel().isClientSide())) {
         return -1;
       }
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot determine the decay value for {}.", provider.getInfoUUID());
@@ -99,7 +99,7 @@ public class DataStorage {
   public static boolean isDecayed(ILootrInfoProvider provider) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
-      if (provider.getInfoLevel() != null && provider.getInfoLevel().isClientSide()) {
+      if (provider == null || (provider.getInfoLevel() != null && provider.getInfoLevel().isClientSide())) {
         return false;
       }
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot determine if {} has decayed.", provider.getInfoUUID());
@@ -113,7 +113,7 @@ public class DataStorage {
   public static void setDecaying(ILootrInfoProvider provider) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
-      if (provider.getInfoLevel() != null && provider.getInfoLevel().isClientSide()) {
+      if (provider.getInfoLevel() == null || (provider.getInfoLevel() != null && provider.getInfoLevel().isClientSide())) {
         return;
       }
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot set the decay value for {}.", provider.getInfoUUID());
@@ -127,7 +127,7 @@ public class DataStorage {
   public static void removeDecayed(ILootrInfoProvider provider) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
-      if (provider.getInfoLevel() != null && provider.getInfoLevel().isClientSide()) {
+      if (provider.getInfoLevel() == null || (provider.getInfoLevel() != null && provider.getInfoLevel().isClientSide())) {
         return;
       }
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr remove the decay value for {}.", provider.getInfoUUID());
@@ -152,7 +152,7 @@ public class DataStorage {
   public static int getRefreshValue(ILootrInfoProvider provider) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
-      if (provider.getInfoLevel() != null && provider.getInfoLevel().isClientSide()) {
+      if (provider.getInfoLevel() == null || (provider.getInfoLevel() != null && provider.getInfoLevel().isClientSide())) {
         return -1;
       }
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot determine the refresh value for {}.", provider.getInfoUUID());
@@ -166,7 +166,7 @@ public class DataStorage {
   public static boolean isRefreshed(ILootrInfoProvider provider) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
-      if (provider.getInfoLevel() != null && provider.getInfoLevel().isClientSide()) {
+      if (provider.getInfoLevel() == null || (provider.getInfoLevel() != null && provider.getInfoLevel().isClientSide())) {
         return false;
       }
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot determine if {} has refreshed.", provider.getInfoUUID());
@@ -180,7 +180,7 @@ public class DataStorage {
   public static void setRefreshing(ILootrInfoProvider provider) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
-      if (provider.getInfoLevel() != null && provider.getInfoLevel().isClientSide()) {
+      if (provider.getInfoLevel() == null || (provider.getInfoLevel() != null && provider.getInfoLevel().isClientSide())) {
         return;
       }
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot set the refresh value for {}.", provider.getInfoUUID());
@@ -194,7 +194,7 @@ public class DataStorage {
   public static void removeRefreshed(ILootrInfoProvider provider) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
-      if (provider.getInfoLevel() != null && provider.getInfoLevel().isClientSide()) {
+      if (provider.getInfoLevel() == null || (provider.getInfoLevel() != null && provider.getInfoLevel().isClientSide())) {
         return;
       }
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr remove the refresh value for {}.",provider.getInfoUUID());
@@ -208,7 +208,7 @@ public class DataStorage {
   public static LootrSavedData getData(ILootrInfoProvider provider) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
-      if (provider.getInfoLevel() != null && provider.getInfoLevel().isClientSide()) {
+      if (provider.getInfoLevel() == null || (provider.getInfoLevel() != null && provider.getInfoLevel().isClientSide())) {
         return null;
       }
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot fetch data for {} at {} with ID {} and cannot continue.", provider.getInfoDimension(), provider.getInfoPos(), provider.getInfoUUID());

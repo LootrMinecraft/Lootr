@@ -128,15 +128,19 @@ public class SimpleLootrInstance {
 
   public void fillUpdateTag(CompoundTag result, HolderLookup.Provider provider, boolean isClientSide) {
     saveAdditional(result, provider, isClientSide);
-    Set<UUID> currentOpeners = visualOpenersSupplier.get();
-    if (currentOpeners != null) {
-      ListTag list = new ListTag();
-      for (UUID opener : Sets.intersection(currentOpeners, LootrAPI.getPlayerIds())) {
-        list.add(NbtUtils.createUUID(opener));
+    if (!isClientSide) {
+      Set<UUID> currentOpeners = visualOpenersSupplier.get();
+      if (currentOpeners != null) {
+        ListTag list = new ListTag();
+        for (UUID opener : Sets.intersection(currentOpeners, LootrAPI.getPlayerIds())) {
+          list.add(NbtUtils.createUUID(opener));
+        }
+        if (!list.isEmpty()) {
+          result.put(NBTConstants.OPENERS, list);
+        }
       }
-      if (!list.isEmpty()) {
-        result.put(NBTConstants.OPENERS, list);
-      }
+    } else {
+      LootrAPI.LOG.error("Tried to fillUpdateTag on the client side for SimpleLootrInstance: {}", this);
     }
   }
 }

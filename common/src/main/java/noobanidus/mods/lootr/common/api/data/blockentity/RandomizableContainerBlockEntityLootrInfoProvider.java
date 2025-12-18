@@ -123,6 +123,7 @@ public record RandomizableContainerBlockEntityLootrInfoProvider(
 
   @Override
   public void markDataChanged() {
+    // TODO: This is actually quite bad
     ILootrSavedData data = LootrAPI.getData(this);
     if (data != null) {
       data.markChanged();

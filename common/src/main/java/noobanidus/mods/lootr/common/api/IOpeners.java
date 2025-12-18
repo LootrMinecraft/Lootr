@@ -78,8 +78,12 @@ public interface IOpeners extends IMarkChanged {
     return false;
   }
 
-
+  @Deprecated
   default boolean hasOpened(UUID uuid) {
+    return hasServerOpened(uuid);
+  }
+
+  default boolean hasServerOpened (UUID uuid) {
     Set<UUID> openers = getActualOpeners();
     if (openers == null) {
       return false;
@@ -87,8 +91,13 @@ public interface IOpeners extends IMarkChanged {
     return !openers.isEmpty() && openers.contains(uuid);
   }
 
+  @Deprecated
   default boolean hasOpened(Player player) {
-    return hasOpened(player.getUUID());
+    return hasServerOpened(player.getUUID());
+  }
+
+  default boolean hasServerOpened (Player player) {
+    return hasServerOpened(player.getUUID());
   }
 
   default boolean addActualOpener(Player player) {

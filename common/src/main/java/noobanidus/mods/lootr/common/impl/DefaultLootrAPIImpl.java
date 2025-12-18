@@ -133,7 +133,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
       return;
     }
     // This is pretty important, should be moved out of here
-    if (!provider.hasOpened(player)) {
+    if (!provider.hasServerOpened(player)) {
       player.awardStat(LootrRegistry.getLootedStat());
       LootrRegistry.getStatTrigger().trigger(player);
     }

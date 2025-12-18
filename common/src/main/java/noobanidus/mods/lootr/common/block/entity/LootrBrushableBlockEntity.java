@@ -90,16 +90,17 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
 
   @Override
   public boolean IBrushable$brush(long l, Player player, Direction direction) {
+    // TODO: There's a presumption that this is only ever called server-side, that could be wrong?
     Player brushingPlayer = this.getBrushingPlayer();
     if (brushingPlayer != null) {
       if (player != brushingPlayer) {
         return false;
       }
-      if (hasOpened(player)) {
+      if (hasServerOpened(player)) {
         return false;
       }
     } else {
-      if (hasOpened(player)) {
+      if (hasServerOpened(player)) {
         this.brushingPlayer = null;
         this.brushingPlayerEntity = null;
         return false;
@@ -145,7 +146,7 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
       this.dropContent(player);
       this.performTrigger((ServerPlayer) player);
       boolean shouldUpdate = false;
-      if (!this.hasOpened(player)) {
+      if (!this.hasServerOpened(player)) {
         player.awardStat(LootrRegistry.getLootedStat());
         LootrRegistry.getStatTrigger().trigger((ServerPlayer) player);
       }
