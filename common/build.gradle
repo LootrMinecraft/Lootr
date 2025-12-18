@@ -51,12 +51,16 @@ neoForge {
     validateAccessTransformers.set(true)
 }
 
-def generatedResources = file("src/generated")
+def generatedResources = file("src/generated/resources")
 
 sourceSets {
-    generated {
-        resources.srcDir generatedResources
+    main {
+        resources.srcDir(generatedResources)
     }
+}
+
+tasks.named("processResources") {
+    exclude(".cache/**")
 }
 
 publishing {
