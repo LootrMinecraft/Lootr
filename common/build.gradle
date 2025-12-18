@@ -29,7 +29,7 @@ dependencies {
     implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:${rootProject.mixin_extras_version}"))
 
     // COMPAT
-    compileOnly("me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config}") { transitive = false  }
+    compileOnly("me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config}") { transitive = false }
     //implementation "dev.thomasglasser.sherdsapi:sherdsapi-common-${minecraft_version}:${sherdsapi_version}"
 }
 
@@ -52,12 +52,16 @@ neoForge {
     validateAccessTransformers.set(true)
 }
 
-def generatedResources = file("src/generated")
+def generatedResources = file("src/generated/resources")
 
 sourceSets {
-    generated {
-        resources.srcDir generatedResources
+    main {
+        resources.srcDir(generatedResources)
     }
+}
+
+tasks.named("processResources") {
+    exclude(".cache/**")
 }
 
 publishing {
