@@ -190,10 +190,6 @@ tasks.named("sourcesJar", Jar) {
 
 processResources {
     from project.project(":common").sourceSets.main.resources
-
-    from(project(":common").sourceSets["generated"].resources) {
-        exclude(".cache")
-    }
 }
 
 publishing {
