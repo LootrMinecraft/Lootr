@@ -3,21 +3,11 @@ plugins {
     id "maven-publish"
     id "me.modmuss50.mod-publish-plugin" version "0.8.4" apply false
     id "net.neoforged.moddev" version "2.0.80" apply false
+    id("fabric-loom") version("1.14-SNAPSHOT") apply(false)
+    id("net.fabricmc.fabric-loom-companion") version("1.14-SNAPSHOT")
 }
 
 def javaVersion = 21
-
-def getExecOutput(commands) {
-
-    def out = new ByteArrayOutputStream()
-
-    exec {
-        commandLine commands
-        standardOutput out
-    }
-
-    return out.toString().trim();
-}
 
 allprojects {
     version = "${rootProject.minecraft_version}-${rootProject.mod_version}"
@@ -168,6 +158,53 @@ subprojects {
         options.release.set(javaVersion)
     }
 
+    publishing {
+        tasks.publish.dependsOn build
+
+        publications {
+            "${project.name}"(MavenPublication) {
+                artifactId "${rootProject.mod_id}-${name}"
+                artifact jar
+                artifact project.sourcesJar {
+                    archiveClassifier.set('sources')
+                }
+
+                pom {
+                    name = 'Lootr'
+                    description = 'Friendly loot for everyone.'
+                    url = 'https://github.com/LootrMinecraft/Lootr'
+
+                    scm {
+                        connection = 'git:https://github.com/LootrMinecraft/Lootr.git'
+                        developerConnection = 'git:https://github.com/LootrMinecraft/Lootr.git'
+                        url = 'https://github.com/LootrMinecraft/Lootr'
+                    }
+
+                    licenses {
+                        license {
+                            name = 'MIT License'
+                            url = 'https://opensource.org/licenses/MIT'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id = 'noobanidus'
+                            name = 'Noobanidus'
+                            email = 'noobanidus+spam@gmail.com'
+                        }
+                    }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                url "file:///" + System.getenv("local_maven")
+            }
+        }
+    }
+
     tasks.publishMods.mustRunAfter tasks.publish
     tasks.buildAndRelease.dependsOn(tasks.publish).dependsOn(tasks.publishMods)
 }
@@ -193,3 +230,5 @@ tasks.register("tagVersion") {
         // }
     }
 }
+
+apply from: "gradle/property_helper.gradle"
