@@ -6,6 +6,9 @@ bin
 .classpath
 .project
 
+# vim
+*~
+
 # idea
 out
 *.ipr
