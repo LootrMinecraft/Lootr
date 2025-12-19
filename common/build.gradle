@@ -30,7 +30,7 @@ dependencies {
 
     // COMPAT
     compileOnly("me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config}") { transitive = false }
-    //implementation "dev.thomasglasser.sherdsapi:sherdsapi-common-${minecraft_version}:${sherdsapi_version}"
+    implementation "dev.thomasglasser.sherdsapi:sherdsapi-common-${minecraft_version}:${sherdsapi_version}"
 }
 
 neoForge {

@@ -3,8 +3,9 @@ plugins {
     id "maven-publish"
     id "me.modmuss50.mod-publish-plugin" version "0.8.4" apply false
     id "net.neoforged.moddev" version "2.0.80" apply false
-    id("fabric-loom") version("1.14-SNAPSHOT") apply(false)
-    id("net.fabricmc.fabric-loom-companion") version("1.14-SNAPSHOT")
+    id("fabric-loom") version("1.14.7") apply(false)
+    id("net.fabricmc.fabric-loom-companion") version("1.14.7")
+    id ("org.jetbrains.gradle.plugin.idea-ext") version "1.3"
 }
 
 def javaVersion = 21

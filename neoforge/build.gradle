@@ -13,7 +13,7 @@ dependencies {
     compileOnly(project(':common')) {
         transitive = false
     }
-    //jarJar(implementation "dev.thomasglasser.sherdsapi:sherdsapi-neoforge-${minecraft_version}:${sherdsapi_version}")
+    jarJar(implementation "dev.thomasglasser.sherdsapi:sherdsapi-neoforge-${minecraft_version}:${sherdsapi_version}")
     implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:${rootProject.mixin_extras_version}"))
     implementation("io.github.llamalad7:mixinextras-neoforge:${rootProject.mixin_extras_version}")
 }
