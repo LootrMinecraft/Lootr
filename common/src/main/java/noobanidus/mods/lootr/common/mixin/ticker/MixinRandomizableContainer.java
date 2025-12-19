@@ -1,6 +1,5 @@
 package noobanidus.mods.lootr.common.mixin.ticker;
 
-import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.resources.ResourceKey;
@@ -14,6 +13,8 @@ import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.block.entity.BlockEntityTicker;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(RandomizableContainer.class)
 public interface MixinRandomizableContainer {
@@ -25,7 +26,7 @@ public interface MixinRandomizableContainer {
     }
   }
 
-  @WrapOperation(method="setLootTable(Lnet/minecraft/resources/ResourceKey;J)V", at=@At(value="INVOKE", target="Lnet/minecraft/world/RandomizableContainer;setLootTable(Lnet/minecraft/resources/ResourceKey;)V"))
+  @WrapOperation(method = "setLootTable(Lnet/minecraft/resources/ResourceKey;J)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/RandomizableContainer;setLootTable(Lnet/minecraft/resources/ResourceKey;)V"))
   default void lootr$setLootTable(RandomizableContainer instance, ResourceKey<LootTable> table, Operation<Void> original) {
     original.call(instance, table);
     if (table != null && !(instance instanceof ILootrBlockEntity) && instance instanceof BlockEntity blockEntity && blockEntity.getLevel() != null && !(LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity)) {
@@ -33,16 +34,14 @@ public interface MixinRandomizableContainer {
     }
   }
 
-  @WrapMethod(method="unpackLootTable")
-  default void lootr$unpackLootTable(Player player, Operation<Void> original) {
+  // Can't be WrapMethod 'cos it's an interface
+  @Inject(method = "unpackLootTable", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/RandomizableContainer;getLootTable()Lnet/minecraft/resources/ResourceKey;"), cancellable = true)
+  default void lootr$unpackLootTable(Player player, CallbackInfo ci) {
     if (this instanceof BlockEntity blockEntity) {
-      // TODO: Configuration for this
       if (BlockEntityTicker.isValidEntityFull(blockEntity)) {
         BlockEntityTicker.addEntity(blockEntity, blockEntity.getLevel(), new ChunkPos(blockEntity.getBlockPos()));
-        return;
+        ci.cancel();
       }
     }
-
-    original.call(player);
   }
 }
