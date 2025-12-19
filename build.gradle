@@ -211,24 +211,16 @@ subprojects {
 
 tasks.register("tagVersion") {
     doLast {
-        def tagName = "arch-${minecraft_version}-${mod_version}"
+        def utils = project.objects.newInstance(ExecUtils)
+        def tagName = "mdg-${minecraft_version}-${mod_version}"
 
-        def existing = getExecOutput(["git", "tag", "--list", tagName])
+        def existing = utils.getExecOutput(["git", "tag", "--list", tagName])
         if (existing == tagName) {
             println "Tag $tagName already exists. Skipping."
             return
         }
 
         println "Creating git tag $tagName"
-        exec {
-            commandLine "git", "tag", tagName
-        }
-
-        // Optional: push tag
-        // exec {
-        //     commandLine "git", "push", "origin", tagName
-        // }
+        utils.getExecOutput(["git", "tag", tagName])
     }
 }
-
-apply from: "gradle/property_helper.gradle"
