@@ -17,7 +17,7 @@ public record PotDecorationsAdapter (ItemStack back, ItemStack left, ItemStack r
       .sizeLimitedListOf(4)
       .xmap(PotDecorationsAdapter::new, PotDecorationsAdapter::ordered);
 
-  public PotDecorationsAdapter(IPotDecorationsAdapter decorations) {
+  public PotDecorationsAdapter(PotDecorationsAdapter decorations) {
     this(decorations.back().copy(), decorations.left().copy(), decorations.right().copy(), decorations.front().copy());
   }
 

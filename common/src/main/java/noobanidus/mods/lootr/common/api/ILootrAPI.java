@@ -284,6 +284,7 @@ public interface ILootrAPI {
 
   boolean shouldReplaceWhenDecayed ();
 
+  PotDecorationsAdapter getDecorationsAdapter(BlockEntity blockEntity);
   PotDecorationsAdapter getDecorationsAdapter(ItemStack stack);
   PotDecorationsAdapter getDecorationsAdapter(BlockEntity.DataComponentInput input);
 }

@@ -5,6 +5,8 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.world.level.block.entity.PotDecorations;
 import net.minecraft.world.level.storage.loot.LootTable;
+import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.PotDecorationsAdapter;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,6 +34,6 @@ public class DecoratedPotBlockEntityAdapter implements ILootrDataAdapter<Decorat
 
   @Override
   public boolean hasCopyableComponentsViaItem(DecoratedPotBlockEntity entity) {
-    return entity.getDecorations() != PotDecorations.EMPTY;
+    return LootrAPI.getDecorationsAdapter(entity) != PotDecorationsAdapter.EMPTY;
   }
 }

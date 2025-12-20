@@ -528,12 +528,17 @@ public class LootrAPI {
   }
 
   @Nullable
-  public static IPotDecorationsAdapter getDecorationsAdapter(ItemStack stack) {
+  public static PotDecorationsAdapter getDecorationsAdapter (BlockEntity blockEntity) {
+    return INSTANCE.getDecorationsAdapter(blockEntity);
+  }
+
+  @Nullable
+  public static PotDecorationsAdapter getDecorationsAdapter(ItemStack stack) {
     return INSTANCE.getDecorationsAdapter(stack);
   }
 
   @Nullable
-  public static IPotDecorationsAdapter getDecorationsAdapter (BlockEntity.DataComponentInput container) {
+  public static PotDecorationsAdapter getDecorationsAdapter (BlockEntity.DataComponentInput container) {
     return INSTANCE.getDecorationsAdapter(container);
   }
 }

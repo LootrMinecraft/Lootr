@@ -7,6 +7,10 @@
     {
       "type": "minecraft:single",
       "resource": "lootr:entity/loot_pot_open"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "lootr:entity/decorated_pot/loot_pottery_pattern"
     }
   ]
 }

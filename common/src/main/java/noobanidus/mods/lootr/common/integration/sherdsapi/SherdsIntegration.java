@@ -9,6 +9,11 @@ import org.jetbrains.annotations.Nullable;
 
 public class SherdsIntegration {
   @Nullable
+  public static PotDecorationsAdapter getAdapterFrom (BlockEntity blockEntity) {
+    return SherdsIntegrationImpl.getAdapterFrom(blockEntity);
+  }
+
+  @Nullable
   public static PotDecorationsAdapter getAdapterFrom(BlockEntity.DataComponentInput stack) {
     return SherdsIntegrationImpl.getAdapterFrom(stack);
   }

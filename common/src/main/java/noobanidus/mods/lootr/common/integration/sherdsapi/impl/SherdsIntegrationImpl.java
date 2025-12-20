@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.common.integration.sherdsapi.impl;
 
 import dev.thomasglasser.sherdsapi.impl.StackPotDecorations;
+import dev.thomasglasser.sherdsapi.impl.StackPotDecorationsHolder;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -18,6 +19,7 @@ public class SherdsIntegrationImpl {
   private static boolean checked2 = false;
 
   @SuppressWarnings("unchecked")
+  @Nullable
   private static DataComponentType<StackPotDecorations> getSherdsDecorationsComponent() {
     if (!checked) {
       checked = true;
@@ -31,6 +33,7 @@ public class SherdsIntegrationImpl {
   }
 
   @SuppressWarnings("unchecked")
+  @Nullable
   private static DataComponentType<ResourceLocation> getSherdsTextureComponent() {
     if (!checked2) {
       checked2 = true;
@@ -44,6 +47,7 @@ public class SherdsIntegrationImpl {
     return type2;
   }
 
+  @Nullable
   public static PotDecorationsAdapter getAdapterFrom(BlockEntity.DataComponentInput stack) {
     DataComponentType<StackPotDecorations> sherdsType = getSherdsDecorationsComponent();
     if (sherdsType == null) {
@@ -58,6 +62,7 @@ public class SherdsIntegrationImpl {
     }
   }
 
+  @Nullable
   public static PotDecorationsAdapter getAdapterFrom(ItemStack stack) {
     DataComponentType<StackPotDecorations> sherdsType = getSherdsDecorationsComponent();
     if (sherdsType == null) {
@@ -76,6 +81,21 @@ public class SherdsIntegrationImpl {
     }
   }
 
+  @Nullable
+  public static PotDecorationsAdapter getAdapterFrom (BlockEntity blockEntity) {
+    if (!(blockEntity instanceof StackPotDecorationsHolder holderType)) {
+      return null;
+    }
+
+    StackPotDecorations decorations = holderType.sherdsapi$getDecorations();
+    if (decorations == null) {
+      return null;
+    } else {
+      return new PotDecorationsAdapter(decorations.ordered());
+    }
+  }
+
+  @Nullable
   public static ResourceLocation getCustomSideTexture(ItemStack item) {
     DataComponentType<ResourceLocation> textureType = getSherdsTextureComponent();
     if (textureType == null) {
