@@ -31,7 +31,6 @@ import noobanidus.mods.lootr.common.integration.sherdsapi.SherdsIntegration;
 import java.util.HashMap;
 import java.util.Map;
 
-@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecoratedPotBlockEntity> {
   public static final ResourceLocation DECORATED_POT_SHEET = ResourceLocation.withDefaultNamespace("textures/atlas/decorated_pot.png");
   private static final Material DECORATED_POT = new Material(DECORATED_POT_SHEET, LootrAPI.rl("entity/loot_pot"));
@@ -89,13 +88,13 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
   private static Material getSideMaterial(ItemStack item) {
     if (!item.isEmpty()) {
       ResourceLocation customSide = SherdsIntegration.getCustomSideTexture(item);
-      if (customSide == null) {
+      if (customSide != null) {
+        return cachedMaterials.computeIfAbsent(customSide, rl -> new Material(DECORATED_POT_SHEET, rl));
+      } else {
         Material material = Sheets.getDecoratedPotMaterial(DecoratedPotPatterns.getPatternFromItem(item.getItem()));
         if (material != null) {
           return material;
         }
-      } else {
-        return cachedMaterials.computeIfAbsent(customSide, rl -> new Material(DECORATED_POT_SHEET, rl));
       }
     }
 
