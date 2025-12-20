@@ -14,6 +14,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.Unit;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -24,6 +25,7 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.api.client.ClientTextureType;
+import noobanidus.mods.lootr.common.api.client.IPotDecorationsAdapter;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.ILootrSavedData;
 import noobanidus.mods.lootr.common.api.data.LootFiller;
@@ -36,7 +38,6 @@ import noobanidus.mods.lootr.common.api.processor.ILootrEntityProcessor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.transformer.meta.MixinMerged;
 
 import java.util.Arrays;
 import java.util.List;
@@ -76,7 +77,7 @@ public class LootrAPI {
     return ResourceLocation.fromNamespaceAndPath(namespace, path);
   }
 
-  public static ResourceLocation mc (String path) {
+  public static ResourceLocation mc(String path) {
     return ResourceLocation.withDefaultNamespace(path);
   }
 
@@ -369,7 +370,7 @@ public class LootrAPI {
 
   // This is only used when wanting to override the loot filler from the default
   @Nullable
-  public static ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler, @Nullable  MenuBuilder builder) {
+  public static ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler, @Nullable MenuBuilder builder) {
     return INSTANCE.getInventory(provider, player, filler, builder);
   }
 
@@ -523,7 +524,17 @@ public class LootrAPI {
   }
 
   @Nullable
-  public static ILootrType getType (String type) {
+  public static ILootrType getType(String type) {
     return INSTANCE.getType(type);
+  }
+
+  @Nullable
+  public static IPotDecorationsAdapter getDecorationsAdapter(ItemStack stack) {
+    return INSTANCE.getDecorationsAdapter(stack);
+  }
+
+  @Nullable
+  public static IPotDecorationsAdapter getDecorationsAdapter (BlockEntity.DataComponentInput container) {
+    return INSTANCE.getDecorationsAdapter(container);
   }
 }

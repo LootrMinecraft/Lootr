@@ -18,16 +18,15 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.world.level.block.entity.DecoratedPotPatterns;
-import net.minecraft.world.level.block.entity.PotDecorations;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.client.IPotDecorationsAdapter;
 import noobanidus.mods.lootr.common.api.registry.LootrProperties;
 import noobanidus.mods.lootr.common.block.entity.LootrDecoratedPotBlockEntity;
 import noobanidus.mods.lootr.common.client.ClientHooks;
-
-import java.util.Optional;
+import noobanidus.mods.lootr.common.integration.sherdsapi.SherdsIntegration;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecoratedPotBlockEntity> {
@@ -82,11 +81,16 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
 	}
 
   // TODO: How does this handle custom pot patterns?
-  private static Material getSideMaterial(Optional<Item> optional) {
-    if (optional.isPresent()) {
-      Material material = Sheets.getDecoratedPotMaterial(DecoratedPotPatterns.getPatternFromItem(optional.get()));
-      if (material != null) {
-        return material;
+  private static Material getSideMaterial(ItemStack item) {
+    if (!item.isEmpty()) {
+      ResourceLocation customSide = SherdsIntegration.getCustomSideTexture(item);
+      if (customSide == null) {
+        Material material = Sheets.getDecoratedPotMaterial(DecoratedPotPatterns.getPatternFromItem(item.getItem()));
+        if (material != null) {
+          return material;
+        }
+      } else {
+
       }
     }
 
@@ -131,7 +135,7 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
       this.neck.render(poseStack, vertexConsumer, i, j);
       this.top.render(poseStack, vertexConsumer, i, j);
       this.bottom.render(poseStack, vertexConsumer, i, j);
-      PotDecorations potDecorations = decoratedPotBlockEntity.getDecorations();
+      IPotDecorationsAdapter potDecorations = decoratedPotBlockEntity.getDecorations();
       this.renderSide(this.frontSide, poseStack, multiBufferSource, i, j, getSideMaterial(potDecorations.front()));
       this.renderSide(this.backSide, poseStack, multiBufferSource, i, j, getSideMaterial(potDecorations.back()));
       this.renderSide(this.leftSide, poseStack, multiBufferSource, i, j, getSideMaterial(potDecorations.left()));

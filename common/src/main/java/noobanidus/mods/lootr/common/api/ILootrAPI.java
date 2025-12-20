@@ -10,6 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -20,6 +21,7 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.api.client.ClientTextureType;
+import noobanidus.mods.lootr.common.api.client.IPotDecorationsAdapter;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.ILootrSavedData;
 import noobanidus.mods.lootr.common.api.data.LootFiller;
@@ -282,6 +284,9 @@ public interface ILootrAPI {
   boolean shouldBypassSpawnProtection ();
 
   boolean shouldReplaceWhenDecayed ();
+
+  IPotDecorationsAdapter getDecorationsAdapter(ItemStack stack);
+  IPotDecorationsAdapter getDecorationsAdapter(BlockEntity.DataComponentInput input);
 }
 
 

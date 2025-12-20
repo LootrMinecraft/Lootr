@@ -18,6 +18,9 @@ public class LootrProperties {
     return false;
   };
 
+  public static final ResourceLocation SHERDSAPI_POT_DECORATIONS = ResourceLocation.fromNamespaceAndPath("sherdsapi", "stack_pot_decorations");
+  public static final ResourceLocation SHERDSAPI_SHERD_PATTERN = ResourceLocation.fromNamespaceAndPath("sherdsapi", "sherd_pattern");
+
   // TODO: Rename even these!
   public static final ResourceLocation LOOTR_CHEST = LootrAPI.rl("lootr_chest");
   public static final ResourceLocation LOOTR_TRAPPED_CHEST = LootrAPI.rl("lootr_trapped_chest");

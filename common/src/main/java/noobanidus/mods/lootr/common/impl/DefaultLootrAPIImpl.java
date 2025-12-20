@@ -2,6 +2,9 @@ package noobanidus.mods.lootr.common.impl;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
@@ -13,6 +16,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
@@ -24,7 +28,7 @@ import noobanidus.mods.lootr.common.api.ILootrType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.MenuBuilder;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
-import noobanidus.mods.lootr.common.api.data.DefaultLootFiller;
+import noobanidus.mods.lootr.common.api.client.IPotDecorationsAdapter;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.ILootrSavedData;
 import noobanidus.mods.lootr.common.api.data.LootFiller;
@@ -34,9 +38,12 @@ import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
 import noobanidus.mods.lootr.common.api.processor.ILootrBlockEntityProcessor;
 import noobanidus.mods.lootr.common.api.processor.ILootrEntityProcessor;
+import noobanidus.mods.lootr.common.api.registry.LootrProperties;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.client.ClientHooks;
 import noobanidus.mods.lootr.common.data.DataStorage;
+import noobanidus.mods.lootr.common.impl.decoration.PotDecorationsAdapter;
+import noobanidus.mods.lootr.common.integration.sherdsapi.SherdsIntegration;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
@@ -422,5 +429,48 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   @Override
   public ILootrType getType(String type) {
     return LootrServiceRegistry.getType(type);
+  }
+
+  private boolean sherdsChecked = false;
+  private DataComponentType<?> sherdsType = null;
+
+  @Nullable
+  private DataComponentType<?> getSherdsComponent() {
+    if (!sherdsChecked) {
+      sherdsChecked = true;
+      sherdsType = BuiltInRegistries.DATA_COMPONENT_TYPE.get(LootrProperties.SHERDSAPI_POT_DECORATIONS);
+    }
+    return sherdsType;
+  }
+
+  @Override
+  @Nullable
+  public IPotDecorationsAdapter getDecorationsAdapter(ItemStack stack) {
+    DataComponentType<?> sherdsType = getSherdsComponent();
+    if (sherdsType != null && stack.has(sherdsType)) {
+      return SherdsIntegration.getAdapterFrom(stack);
+    }
+    var output = stack.get(DataComponents.POT_DECORATIONS);
+    if (output == null) {
+      return null;
+    }
+    return new PotDecorationsAdapter(output);
+  }
+
+  @Override
+  @Nullable
+  public IPotDecorationsAdapter getDecorationsAdapter(BlockEntity.DataComponentInput stack) {
+    DataComponentType<?> sherdsType = getSherdsComponent();
+    if (sherdsType != null) {
+      var comp = stack.get(sherdsType);
+      if (comp != null) {
+        return SherdsIntegration.getAdapterFrom(stack);
+      }
+    }
+    var output = stack.get(DataComponents.POT_DECORATIONS);
+    if (output == null) {
+      return null;
+    }
+    return new PotDecorationsAdapter(output);
   }
 }
