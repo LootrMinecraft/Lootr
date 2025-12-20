@@ -28,7 +28,6 @@ import noobanidus.mods.lootr.common.api.ILootrType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.MenuBuilder;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
-import noobanidus.mods.lootr.common.api.client.IPotDecorationsAdapter;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.ILootrSavedData;
 import noobanidus.mods.lootr.common.api.data.LootFiller;
@@ -42,7 +41,7 @@ import noobanidus.mods.lootr.common.api.registry.LootrProperties;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.client.ClientHooks;
 import noobanidus.mods.lootr.common.data.DataStorage;
-import noobanidus.mods.lootr.common.impl.decoration.PotDecorationsAdapter;
+import noobanidus.mods.lootr.common.api.PotDecorationsAdapter;
 import noobanidus.mods.lootr.common.integration.sherdsapi.SherdsIntegration;
 import org.jetbrains.annotations.Nullable;
 
@@ -445,7 +444,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
 
   @Override
   @Nullable
-  public IPotDecorationsAdapter getDecorationsAdapter(ItemStack stack) {
+  public PotDecorationsAdapter getDecorationsAdapter(ItemStack stack) {
     DataComponentType<?> sherdsType = getSherdsComponent();
     if (sherdsType != null && stack.has(sherdsType)) {
       return SherdsIntegration.getAdapterFrom(stack);
@@ -459,7 +458,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
 
   @Override
   @Nullable
-  public IPotDecorationsAdapter getDecorationsAdapter(BlockEntity.DataComponentInput stack) {
+  public PotDecorationsAdapter getDecorationsAdapter(BlockEntity.DataComponentInput stack) {
     DataComponentType<?> sherdsType = getSherdsComponent();
     if (sherdsType != null) {
       var comp = stack.get(sherdsType);

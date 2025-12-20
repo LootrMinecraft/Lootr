@@ -21,7 +21,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
-import net.minecraft.world.level.block.entity.PotDecorations;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -29,13 +28,12 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.ticks.ContainerSingleItem;
 import noobanidus.mods.lootr.common.api.*;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
-import noobanidus.mods.lootr.common.api.client.IPotDecorationsAdapter;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.SimpleLootrInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
-import noobanidus.mods.lootr.common.impl.decoration.PotDecorationsAdapter;
+import noobanidus.mods.lootr.common.api.PotDecorationsAdapter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -69,7 +67,7 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   @Override
   protected void loadAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
     super.loadAdditional(compoundTag, provider);
-    this.decorations.load(compoundTag);
+    this.decorations = this.decorations.load(compoundTag);
     this.tryLoadLootTable(compoundTag);
     this.lootrInstance.loadAdditional(compoundTag, provider);
   }
@@ -162,7 +160,7 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
     return this.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
   }
 
-  public IPotDecorationsAdapter getDecorations() {
+  public PotDecorationsAdapter getDecorations() {
     return this.decorations;
   }
 
@@ -208,8 +206,7 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   @Override
   protected void applyImplicitComponents(BlockEntity.DataComponentInput dataComponentInput) {
     super.applyImplicitComponents(dataComponentInput);
-    var decorations = LootrAPI.getDecorationsAdapter(dataComponentInput);
-    this.decorations = new PotDecorationsAdapter(dataComponentInput.getOrDefault(DataComponents.POT_DECORATIONS, PotDecorations.EMPTY));
+    this.decorations = LootrAPI.getDecorationsAdapter(dataComponentInput);
     SeededContainerLoot loot = dataComponentInput.get(DataComponents.CONTAINER_LOOT);
     if (loot != null && loot.lootTable() != null) {
       this.lootTable = loot.lootTable();

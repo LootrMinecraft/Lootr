@@ -22,11 +22,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.world.level.block.entity.DecoratedPotPatterns;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.client.IPotDecorationsAdapter;
+import noobanidus.mods.lootr.common.api.PotDecorationsAdapter;
 import noobanidus.mods.lootr.common.api.registry.LootrProperties;
 import noobanidus.mods.lootr.common.block.entity.LootrDecoratedPotBlockEntity;
 import noobanidus.mods.lootr.common.client.ClientHooks;
 import noobanidus.mods.lootr.common.integration.sherdsapi.SherdsIntegration;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecoratedPotBlockEntity> {
@@ -80,6 +83,8 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
 		return LayerDefinition.create(meshdefinition, 64, 64);
 	}
 
+  private static final Map<ResourceLocation, Material> cachedMaterials = new HashMap<>();
+
   // TODO: How does this handle custom pot patterns?
   private static Material getSideMaterial(ItemStack item) {
     if (!item.isEmpty()) {
@@ -90,7 +95,7 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
           return material;
         }
       } else {
-
+        return cachedMaterials.computeIfAbsent(customSide, rl -> new Material(DECORATED_POT_SHEET, rl));
       }
     }
 
@@ -135,7 +140,7 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
       this.neck.render(poseStack, vertexConsumer, i, j);
       this.top.render(poseStack, vertexConsumer, i, j);
       this.bottom.render(poseStack, vertexConsumer, i, j);
-      IPotDecorationsAdapter potDecorations = decoratedPotBlockEntity.getDecorations();
+      PotDecorationsAdapter potDecorations = decoratedPotBlockEntity.getDecorations();
       this.renderSide(this.frontSide, poseStack, multiBufferSource, i, j, getSideMaterial(potDecorations.front()));
       this.renderSide(this.backSide, poseStack, multiBufferSource, i, j, getSideMaterial(potDecorations.back()));
       this.renderSide(this.leftSide, poseStack, multiBufferSource, i, j, getSideMaterial(potDecorations.left()));

@@ -12,6 +12,8 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
+import net.minecraft.world.level.block.entity.PotDecorations;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkSource;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -262,6 +264,11 @@ public final class BlockEntityTicker {
     ItemStack itemCopy = ItemStack.EMPTY;
     if (adapter.hasCopyableComponentsViaItem(be)) {
       itemCopy = new ItemStack(be.getBlockState().getBlock());
+      if (be instanceof DecoratedPotBlockEntity deco) {
+        if (deco.getDecorations() != PotDecorations.EMPTY) {
+          LootrAPI.LOG.error("Converting DecoratedPotBlockEntity in {} at {} with decorations {}", level.dimension(), entityPos, deco.getDecorations());
+        }
+      }
       be.saveToItem(itemCopy, level.registryAccess());
     }
     // IMPORTANT: Clear loot table to prevent loot drop when container is destroyed

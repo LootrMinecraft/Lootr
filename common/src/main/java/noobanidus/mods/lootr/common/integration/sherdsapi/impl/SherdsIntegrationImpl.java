@@ -6,9 +6,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import noobanidus.mods.lootr.common.api.client.IPotDecorationsAdapter;
+import noobanidus.mods.lootr.common.api.PotDecorationsAdapter;
 import noobanidus.mods.lootr.common.api.registry.LootrProperties;
-import noobanidus.mods.lootr.common.impl.decoration.PotDecorationsAdapter;
 import org.jetbrains.annotations.Nullable;
 
 public class SherdsIntegrationImpl {
@@ -32,7 +31,7 @@ public class SherdsIntegrationImpl {
   }
 
   @SuppressWarnings("unchecked")
-  private static DataComponentType<ResourceLocation> getSherdsTextureComponent () {
+  private static DataComponentType<ResourceLocation> getSherdsTextureComponent() {
     if (!checked2) {
       checked2 = true;
       var comp = BuiltInRegistries.DATA_COMPONENT_TYPE.get(LootrProperties.SHERDSAPI_SHERD_PATTERN);
@@ -45,7 +44,7 @@ public class SherdsIntegrationImpl {
     return type2;
   }
 
-  public static IPotDecorationsAdapter getAdapterFrom(BlockEntity.DataComponentInput stack) {
+  public static PotDecorationsAdapter getAdapterFrom(BlockEntity.DataComponentInput stack) {
     DataComponentType<StackPotDecorations> sherdsType = getSherdsDecorationsComponent();
     if (sherdsType == null) {
       return null;
@@ -55,11 +54,11 @@ public class SherdsIntegrationImpl {
     if (decorations == null) {
       return null;
     } else {
-      return new PotDecorationsAdapter(new SherdsPotDecorationsAdapter(decorations));
+      return new PotDecorationsAdapter(decorations.ordered());
     }
   }
 
-  public static IPotDecorationsAdapter getAdapterFrom(ItemStack stack) {
+  public static PotDecorationsAdapter getAdapterFrom(ItemStack stack) {
     DataComponentType<StackPotDecorations> sherdsType = getSherdsDecorationsComponent();
     if (sherdsType == null) {
       return null;
@@ -73,7 +72,7 @@ public class SherdsIntegrationImpl {
     if (decorations == null) {
       return null;
     } else {
-      return new PotDecorationsAdapter(new SherdsPotDecorationsAdapter(decorations));
+      return new PotDecorationsAdapter(decorations.ordered());
     }
   }
 
