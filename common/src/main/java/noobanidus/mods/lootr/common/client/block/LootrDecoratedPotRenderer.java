@@ -89,8 +89,7 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
     if (!item.isEmpty()) {
       ResourceLocation customSide = SherdsIntegration.getCustomSideTexture(item);
       if (customSide != null) {
-        var result = cachedMaterials.computeIfAbsent(customSide, rl -> new Material(DECORATED_POT_SHEET, rl.withPrefix("entity/decorated_pot/")));
-        return result;
+        return cachedMaterials.computeIfAbsent(customSide, rl -> new Material(DECORATED_POT_SHEET, rl.withPrefix("entity/decorated_pot/")));
       } else {
         Material material = Sheets.getDecoratedPotMaterial(DecoratedPotPatterns.getPatternFromItem(item.getItem()));
         if (material != null) {
