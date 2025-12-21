@@ -161,6 +161,9 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   }
 
   public PotDecorationsAdapter getDecorations() {
+    if (this.decorations == null) {
+      this.decorations = PotDecorationsAdapter.EMPTY;
+    }
     return this.decorations;
   }
 

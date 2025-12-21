@@ -264,11 +264,6 @@ public final class BlockEntityTicker {
     ItemStack itemCopy = ItemStack.EMPTY;
     if (adapter.hasCopyableComponentsViaItem(be)) {
       itemCopy = new ItemStack(be.getBlockState().getBlock());
-      if (be instanceof DecoratedPotBlockEntity deco) {
-        if (deco.getDecorations() != PotDecorations.EMPTY) {
-          LootrAPI.LOG.error("Converting DecoratedPotBlockEntity in {} at {} with decorations {}", level.dimension(), entityPos, deco.getDecorations());
-        }
-      }
       be.saveToItem(itemCopy, level.registryAccess());
     }
     // IMPORTANT: Clear loot table to prevent loot drop when container is destroyed

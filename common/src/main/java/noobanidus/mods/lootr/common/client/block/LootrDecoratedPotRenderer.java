@@ -70,13 +70,13 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
 
 		PartDefinition sherds = partdefinition.addOrReplaceChild("sherds", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition angled_sherd1_r1 = sherds.addOrReplaceChild("angled_sherd1_r1", CubeListBuilder.create().texOffs(17, 21).addBox(-0.5F, -0.5F, -4.5F, 5.0F, 1.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.5F, -3.5F, 1.5F, 0.0F, 0.0F, 0.829F));
+		sherds.addOrReplaceChild("angled_sherd1_r1", CubeListBuilder.create().texOffs(17, 21).addBox(-0.5F, -0.5F, -4.5F, 5.0F, 1.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.5F, -3.5F, 1.5F, 0.0F, 0.0F, 0.829F));
 
-		PartDefinition sherd2_r1 = sherds.addOrReplaceChild("sherd2_r1", CubeListBuilder.create().texOffs(14, 19).addBox(-4.5F, -0.5F, -4.5F, 9.0F, 1.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.0F, -1.5F, 0.5F, 0.0F, 0.1309F, 0.0F));
+		sherds.addOrReplaceChild("sherd2_r1", CubeListBuilder.create().texOffs(14, 19).addBox(-4.5F, -0.5F, -4.5F, 9.0F, 1.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.0F, -1.5F, 0.5F, 0.0F, 0.1309F, 0.0F));
 
-		PartDefinition sherd1_r1 = sherds.addOrReplaceChild("sherd1_r1", CubeListBuilder.create().texOffs(4, 16).addBox(-4.5F, -0.5F, -3.5F, 10.0F, 1.0F, 11.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.5F, -0.5F, -1.5F, 0.0F, -0.3054F, 0.0F));
+		sherds.addOrReplaceChild("sherd1_r1", CubeListBuilder.create().texOffs(4, 16).addBox(-4.5F, -0.5F, -3.5F, 10.0F, 1.0F, 11.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.5F, -0.5F, -1.5F, 0.0F, -0.3054F, 0.0F));
 
-		PartDefinition open = partdefinition.addOrReplaceChild("open", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -4.0F, 8.0F, 3.0F, 8.0F, new CubeDeformation(0.0F))
+		partdefinition.addOrReplaceChild("open", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -4.0F, 8.0F, 3.0F, 8.0F, new CubeDeformation(0.0F))
 		.texOffs(0, 5).addBox(-2.8257F, 2.4924F, -3.0F, 6.0F, 1.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.75F, -5F, 0.0F, 0.0F, -0.1309F, -0.0873F));
 
 		return LayerDefinition.create(meshdefinition, 64, 64);
@@ -102,6 +102,7 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
     return Sheets.DECORATED_POT_SIDE;
   }
 
+  @Override
   public void render(LootrDecoratedPotBlockEntity decoratedPotBlockEntity, float f, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int j) {
     Player player = ClientHooks.getPlayer();
     if (player == null) {
