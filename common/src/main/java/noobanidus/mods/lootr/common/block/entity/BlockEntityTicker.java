@@ -279,7 +279,7 @@ public final class BlockEntityTicker {
       ibe.performUpdate();
       LootrAPI.postProcess(level, entityPos, ibe.asBlockEntity(), replacement, table, seed);
     } else {
-      LootrAPI.LOG.error("replacement {} is not an ILootrBlockEntity {} at {}", replacement, level.dimension(), entityPos);
+      LootrAPI.LOG.error("Somehow, replacement result {} is not an ILootrBlockEntity {} at {}", replacement, level.dimension(), entityPos);
     }
   }
 
