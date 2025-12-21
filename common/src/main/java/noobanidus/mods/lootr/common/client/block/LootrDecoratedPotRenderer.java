@@ -79,7 +79,7 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
 		partdefinition.addOrReplaceChild("open", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -4.0F, 8.0F, 3.0F, 8.0F, new CubeDeformation(0.0F))
 		.texOffs(0, 5).addBox(-2.8257F, 2.4924F, -3.0F, 6.0F, 1.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.75F, -5F, 0.0F, 0.0F, -0.1309F, -0.0873F));
 
-		return LayerDefinition.create(meshdefinition, 64, 64);
+		return LayerDefinition.create(meshdefinition, 64, 32);
 	}
 
   private static final Map<ResourceLocation, Material> cachedMaterials = new HashMap<>();
