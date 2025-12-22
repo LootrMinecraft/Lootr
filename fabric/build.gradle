@@ -88,7 +88,7 @@ publishMods {
         curseforge('curseforgeFabric') {
 
             projectSlug = "lootr-fabric"
-            type = ALPHA
+            type = RELEASE
             displayName = "lootr-fabric-${rootProject.minecraft_version}-${rootProject.mod_version}"
             accessToken = project.findProperty("curse_auth")
             projectId = project.findProperty('curseforge_id_fabric')
@@ -108,7 +108,7 @@ publishMods {
 
     if (project.hasProperty('modrinth_id_fabric')) {
         modrinth('modrinthFabric') {
-            type = ALPHA
+            type = RELEASE
             displayName = "lootr-fabric-${rootProject.minecraft_version}-${rootProject.mod_version}"
             accessToken = project.findProperty("modrinth_auth")
             projectId = project.findProperty('modrinth_id_fabric')
