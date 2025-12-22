@@ -29,7 +29,9 @@ public class ClientSetup {
 
   @SubscribeEvent
   public static void modelRegister(ModelEvent.RegisterGeometryLoaders event) {
-    event.register(LootrAPI.rl("custom_barrel"), CustomBarrelModel.Loader.INSTANCE);
+    // "custom_barrel" is deprecated
+    event.register(LootrAPI.rl("custom_barrel"), CustomModel.Loader.BARREL_INSTANCE);
+    event.register(LootrAPI.rl("custom_model"), CustomModel.Loader.INSTANCE);
     event.register(LootrAPI.rl("barrel"), BarrelModel.Loader.INSTANCE);
     event.register(LootrAPI.rl("brushable"), BrushableModel.Loader.INSTANCE);
   }
