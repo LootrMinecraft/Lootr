@@ -71,6 +71,7 @@ public class ConfigManager extends ConfigManagerBase {
   public static final ModConfigSpec.BooleanValue DISABLE_NOTIFICATIONS;
   public static final ModConfigSpec.BooleanValue DISABLE_MESSAGE_STYLES;
   public static final ModConfigSpec.BooleanValue TRAPPED_CUSTOM;
+  public static final ModConfigSpec.BooleanValue SHOULD_WARN_NO_LOOT_TABLE_AT_GENERATION;
   // Client-only
   public static final ModConfigSpec.BooleanValue VANILLA_TEXTURES;
   public static final ModConfigSpec.BooleanValue NEW_TEXTURES;
@@ -101,6 +102,7 @@ public class ConfigManager extends ConfigManagerBase {
     DISABLE = COMMON_BUILDER.comment("if true, no chests will be converted").define("disable", false);
     CONVERT_MINESHAFTS = COMMON_BUILDER.comment("whether or not mineshaft chest minecarts should be converted to standard loot chests").define("convert_mineshafts", true);
     CONVERT_ELYTRAS = COMMON_BUILDER.comment("whether or not the Elytra item frame should be converted into a standard loot chest with a guaranteed elytra").define("convert_elytras", true);
+    SHOULD_WARN_NO_LOOT_TABLE_AT_GENERATION = COMMON_BUILDER.comment("whether or not to output a warning to the log when a suitable block entity has no loot table and is skipped during conversion").define("skip_logging_no_loot_table_at_generation", true);
     REPORT_UNRESOLVED_TABLES = COMMON_BUILDER.comment("lootr will automatically log all unresolved tables (i.e., for containers that have a loot table associated with them but, for whatever reason, the lookup for this table returns empty). setting this option to true additionally informs players when they open containers.").define("report_unresolved_tables", false);
     CHECK_WORLD_BORDER = COMMON_BUILDER.comment("disregard chests and chunks that are outside of the world border; enable this option if you are using a world border and are suffering consistent TPS issues; if you change the world border, you will need to restart your client").define("check_world_border", false);
     PERFORM_PIECEWISE_CHECK = COMMON_BUILDER.comment("checks structure pieces as well as structure starts when determining if a structure contains a position, more accurate but may cause lag (default true)").define("perform_piecewise_check", true);

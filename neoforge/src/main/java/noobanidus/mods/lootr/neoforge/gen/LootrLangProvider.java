@@ -1,6 +1,8 @@
 package noobanidus.mods.lootr.neoforge.gen;
 
 import net.minecraft.data.PackOutput;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
@@ -140,6 +142,7 @@ public class LootrLangProvider extends LanguageProvider {
     var start_tick_refresh = "Start Refresh While Ticking";
     var rename_container_block_entities = "Rename Container Block Entities";
     var perform_piecewise_check = "Perform Piecewise Check";
+    var skip_logging = "Skip Logging LootTable-less Block Entities during Generation";
     add("text.autoconfig.lootr.option.debug", debug);
     add("text.autoconfig.lootr.option.debug.report_invalid_tables", report_invalid_tables);
     add("text.autoconfig.lootr.option.seed", seed);
@@ -150,6 +153,7 @@ public class LootrLangProvider extends LanguageProvider {
     add("text.autoconfig.lootr.option.conversion.convert_elytras", elytra);
     add("text.autoconfig.lootr.option.conversion.bypass_spawn_protection", spawn);
     add("text.autoconfig.lootr.option.conversion.world_border", world_border);
+    add("text.autoconfig.lootr.option.conversion.skip_logging_no_loot_table_at_generation", skip_logging);
     add("text.autoconfig.lootr.option.breaking", breaking);
     add("text.autoconfig.lootr.option.breaking.enable_break", enable_break);
     add("text.autoconfig.lootr.option.breaking.enable_fake_player_break", enable_fake_player_break);
@@ -248,6 +252,7 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.configuration.vanilla_textures", vanilla_textures);
     add("lootr.configuration.new_textures", old_textures);
     add("lootr.configuration.replace_when_decayed", replace_when_decayed);
+    add("lootr.configuration.skip_logging_no_loot_table_at_generation", skip_logging);
 
     // Tags
     add(LootrTags.Blocks.CONTAINERS, "Lootr Containers");

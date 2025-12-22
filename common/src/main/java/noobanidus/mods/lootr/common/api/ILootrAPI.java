@@ -214,6 +214,8 @@ public interface ILootrAPI {
   boolean shouldPerformRefreshWhileTicking ();
   boolean shouldStartDecayWhileTicking ();
   boolean shouldStartRefreshWhileTicking ();
+  boolean shouldWarnNoLootTables ();
+
 
   boolean performPiecewiseCheck ();
 

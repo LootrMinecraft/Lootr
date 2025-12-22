@@ -328,6 +328,11 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   }
 
   @Override
+  public boolean shouldWarnNoLootTables() {
+    return ConfigManager.get().conversion.skip_logging_no_loot_table_at_generation;
+  }
+
+  @Override
   public boolean performPiecewiseCheck() {
     return ConfigManager.shouldPerformPiecewiseCheck();
   }

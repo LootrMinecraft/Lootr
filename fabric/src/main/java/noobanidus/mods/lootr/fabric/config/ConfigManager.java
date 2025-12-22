@@ -272,6 +272,7 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
     public boolean world_border = false;
     public boolean perform_piecewise_check = true;
     public boolean bypass_spawn_protection = true;
+    public boolean skip_logging_no_loot_table_at_generation = true;
   }
 
   public static class Breaking {
