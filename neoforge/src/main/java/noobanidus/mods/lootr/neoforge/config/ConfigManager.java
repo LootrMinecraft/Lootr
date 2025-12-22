@@ -29,6 +29,7 @@ public class ConfigManager extends ConfigManagerBase {
   public static final ModConfigSpec.BooleanValue RANDOMISE_SEED;
   public static final ModConfigSpec.BooleanValue DISABLE;
   public static final ModConfigSpec.IntValue MAXIMUM_AGE;
+  @Deprecated
   public static final ModConfigSpec.BooleanValue CONVERT_MINESHAFTS;
   public static final ModConfigSpec.BooleanValue CONVERT_ELYTRAS;
   public static final ModConfigSpec.BooleanValue PERFORM_PIECEWISE_CHECK;
@@ -96,10 +97,10 @@ public class ConfigManager extends ConfigManagerBase {
 
   static {
     COMMON_BUILDER.push("conversion").comment("configuration options for the conversion of chests");
+    DISABLE = COMMON_BUILDER.comment("if true, no chests will be converted").define("disable", false);
     RANDOMISE_SEED = COMMON_BUILDER.comment("determine whether or not loot generated is the same for all players using the provided seed, or randomised per player").define("randomise_seed", true);
     MAXIMUM_AGE = COMMON_BUILDER.comment("the maximum age for containers; entries above this age will be discarded [default: 60 * 20 * 15, fifteen minutes] [note: the value 6000 will be corrected to 18000. if you wish to use 6000, please use 6001 or 5999.]").defineInRange("max_age", 60 * 20 * 15, 0, Integer.MAX_VALUE);
     BYPASS_SPAWN_PROTECTION = COMMON_BUILDER.comment("if true, accessing a Lootr container will bypass spawn protection").define("bypass_spawn_protection", true);
-    DISABLE = COMMON_BUILDER.comment("if true, no chests will be converted").define("disable", false);
     CONVERT_MINESHAFTS = COMMON_BUILDER.comment("whether or not mineshaft chest minecarts should be converted to standard loot chests").define("convert_mineshafts", true);
     CONVERT_ELYTRAS = COMMON_BUILDER.comment("whether or not the Elytra item frame should be converted into a standard loot chest with a guaranteed elytra").define("convert_elytras", true);
     SHOULD_WARN_NO_LOOT_TABLE_AT_GENERATION = COMMON_BUILDER.comment("whether or not to output a warning to the log when a suitable block entity has no loot table and is skipped during conversion").define("skip_logging_no_loot_table_at_generation", true);
@@ -111,13 +112,13 @@ public class ConfigManager extends ConfigManagerBase {
     List<? extends String> empty = Collections.emptyList();
     Predicate<Object> validator = o -> o instanceof String && ((String) o).contains(":");
     Predicate<Object> modidValidator = o -> o instanceof String && !((String) o).contains(":");
-    DIMENSION_WHITELIST = COMMON_BUILDER.comment("list of dimensions (to the exclusion of all others) that loot chest should be replaced in (default: blank, allowing all dimensions, e.g., [\"minecraft:overworld\", \"minecraft:the_end\"])").defineList("dimension_whitelist", empty, validator);
-    DIMENSION_BLACKLIST = COMMON_BUILDER.comment("list of dimensions that loot chests should not be replaced in (default: blank, allowing all dimensions, format e.g., [\"minecraft:overworld\", \"minecraft:the_end\"])").defineList("dimension_blacklist", empty, validator);
-    MODID_DIMENSION_BLACKLIST = COMMON_BUILDER.comment("list of dimensions by modid that loot chests should not be replaced in (default: blank, allowing all modids, format e.g., [\"minecraft", "othermod\"])").defineList("modid_dimension_blacklist", empty, modidValidator);
-    MODID_DIMENSION_WHITELIST = COMMON_BUILDER.comment("list of dimensions by modid that loot chest should be replaced in (default: blank, allowing all modids, format e.g., [\"minecraft", "othermod\"])").defineList("modid_dimension_whitelist", empty, modidValidator);
-    LOOT_TABLE_BLACKLIST = COMMON_BUILDER.comment("list of loot tables which shouldn't be converted (in the format of [\"modid:loot_table\", \"othermodid:other_loot_table\"])").defineList("loot_table_blacklist", empty, validator);
-    LOOT_MODID_BLACKLIST = COMMON_BUILDER.comment("list of modids whose loot tables shouldn't be converted (in the format of [\"modid\", \"other_modid\"])").defineList("loot_modid_blacklist", empty, modidValidator);
-    PROBLEMATIC_LOOT_TABLES = COMMON_BUILDER.comment("list of loot tables whose conversion causes problems (in the same format as `loot_table_blacklist`)").defineList("problematic_loot_tables", LootrAPI.PROBLEMATIC_CHESTS.stream().map(ResourceLocation::toString).toList(), validator);
+    DIMENSION_WHITELIST = COMMON_BUILDER.comment("list of dimensions (to the exclusion of all others) that loot chest should be replaced in (default: blank, allowing all dimensions, e.g., [\"minecraft:overworld\", \"minecraft:the_end\"])").defineList("dimension_whitelist", empty, () -> "", validator);
+    DIMENSION_BLACKLIST = COMMON_BUILDER.comment("list of dimensions that loot chests should not be replaced in (default: blank, allowing all dimensions, format e.g., [\"minecraft:overworld\", \"minecraft:the_end\"])").defineList("dimension_blacklist", empty, () -> "", validator);
+    MODID_DIMENSION_BLACKLIST = COMMON_BUILDER.comment("list of dimensions by modid that loot chests should not be replaced in (default: blank, allowing all modids, format e.g., [\"minecraft", "othermod\"])").defineList("modid_dimension_blacklist", empty, () -> "", modidValidator);
+    MODID_DIMENSION_WHITELIST = COMMON_BUILDER.comment("list of dimensions by modid that loot chest should be replaced in (default: blank, allowing all modids, format e.g., [\"minecraft", "othermod\"])").defineList("modid_dimension_whitelist", empty, () -> "", modidValidator);
+    LOOT_TABLE_BLACKLIST = COMMON_BUILDER.comment("list of loot tables which shouldn't be converted (in the format of [\"modid:loot_table\", \"othermodid:other_loot_table\"])").defineList("loot_table_blacklist", empty, () -> "", validator);
+    LOOT_MODID_BLACKLIST = COMMON_BUILDER.comment("list of modids whose loot tables shouldn't be converted (in the format of [\"modid\", \"other_modid\"])").defineList("loot_modid_blacklist", empty, () -> "", modidValidator);
+    PROBLEMATIC_LOOT_TABLES = COMMON_BUILDER.comment("list of loot tables whose conversion causes problems (in the same format as `loot_table_blacklist`)").defineList("problematic_loot_tables", LootrAPI.PROBLEMATIC_CHESTS.stream().map(ResourceLocation::toString).toList(), () -> "", validator);
     COMMON_BUILDER.pop();
     COMMON_BUILDER.push("breaking").comment("configuration options for breaking containers");
     DISABLE_BREAK = COMMON_BUILDER.comment("prevent the destruction of Lootr chests except while sneaking in creative mode").define("disable_break", false);

@@ -262,5 +262,10 @@ public class LootrLangProvider extends LanguageProvider {
     add(LootrTags.Blocks.TRAPPED_CHESTS, "Trapped Lootr Chests");
     add(LootrTags.Blocks.SANDS, "Suspicious Lootr Sands");
     add(LootrTags.Blocks.GRAVELS, "Suspicious Lootr Gravels");
+
+    add(LootrTags.Blocks.CUSTOM_ELIGIBLE, "Custom Inventory Eligible Target Blocks");
+    add(LootrTags.Blocks.CATS_CAN_BLOCK, "Blocks Cats Can Sit On");
+    add(LootrTags.Blocks.NON_BLOCKING, "Blocks That Do Not Prevent Opening Chests");
+    add(LootrTags.Blocks.INTERACT_WHITELIST_BLOCKS, "Blocks That Bypass Spawn Protection Interaction Disabling");
   }
 }
