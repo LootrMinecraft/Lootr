@@ -8,6 +8,7 @@ import noobanidus.mods.lootr.common.block.entity.LootrBrushableBlockEntity;
 import noobanidus.mods.lootr.common.client.ClientHooks;
 import org.jetbrains.annotations.Nullable;
 
+// TODO: Worth mixing this in?
 public class LootrFabricBrushableBlockEntity extends LootrBrushableBlockEntity implements RenderDataBlockEntity {
   public LootrFabricBrushableBlockEntity(BlockPos blockPos, BlockState blockState) {
     super(blockPos, blockState);
