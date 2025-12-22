@@ -112,7 +112,7 @@ subprojects {
     }
 
     processResources {
-        filteringCharset "UTF-8"
+        filteringCharset = "UTF-8"
 
         def expandProps = [
                 "version"              : project.version,
@@ -164,7 +164,7 @@ subprojects {
 
         publications {
             "${project.name}"(MavenPublication) {
-                artifactId "${rootProject.mod_id}-${name}"
+                artifactId = "${rootProject.mod_id}-${name}"
                 artifact jar
                 artifact project.sourcesJar {
                     archiveClassifier.set('sources')
@@ -201,7 +201,7 @@ subprojects {
 
         repositories {
             maven {
-                url "file:///" + System.getenv("local_maven")
+                url = "file:///" + System.getenv("local_maven")
             }
         }
     }
