@@ -30,4 +30,8 @@ public interface ILootrDataAdapter<T> {
   default boolean hasCopyableComponentsViaItem(T entity) {
     return false;
   }
+
+  default int priority () {
+    return 0;
+  }
 }

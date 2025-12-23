@@ -28,4 +28,9 @@ public class RandomizableContainerBlockEntityAdapter implements ILootrDataAdapte
   public void setLootTable(RandomizableContainerBlockEntity entity, ResourceKey<LootTable> table, long seed) {
     entity.setLootTable(table, seed);
   }
+
+  @Override
+  public int priority() {
+    return -100;
+  }
 }
