@@ -40,7 +40,7 @@
   "lootr.commands.blockpos": "%s,%s,%s",
   "lootr.commands.create": "Criou um Lootr %s em %s usando a tabela de loot %s.",
   "lootr.commands.summon": "Invocou um carrinho de Lootr em %s usando a tabela de loot %s.",
-  "lootr.commands.usage": "/lootr barrel | barrel <loot-table> | chest | chest <loot-table> | cart | cart <loot-table> | shulker | shulker <loot-table> | trapped_chest | trapped_chest <loot-table> | custom | refresh | decay | open_as <player> | open_as_uuid <uuid> | id | openers",
+  "lootr.commands.usage": "/lootr cart | cart <loot-table> | %s | custom | refresh | decay | open_as <player> | open_as_uuid <uuid> | id | openers",
   "lootr.configuration.blast_immune": "Imunidade a Explosões",
   "lootr.configuration.blast_resistant": "Resistência a Explosões",
   "lootr.configuration.breaking": "Quebrando",
