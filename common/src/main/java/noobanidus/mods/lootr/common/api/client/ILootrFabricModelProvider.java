@@ -4,13 +4,14 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Used (in 1.21.0/1.21.1) to allow add-on mods to provide custom barrel
- * and brushable blocks without having to implement baked models in their
+ * Used (in 1.21.0/1.21.1) to allow add-on mods to provide custom models for
+ * brushable blocks etc without having to implement baked models in their
  * own code.
  * <br />
  * Note: This is only for Fabric! For NeoForge, use the model loaders:
- * - `lootr:custom_barrel` requires "unopened" and "opened" model definitions,
- *                         and optionally a "vanilla" model definition.
+ * - `lootr:custom_model` requires "opened" and "unopened" model definitions
+ *                        and optionally a "vanilla" model definition.
+ * - `lootr:custom_barrel` is deprecated, use `custom_model` instead.
  * - `lootr:brushable` requires an "opened" model definition and the four "stage"
  *                     of brushable models.
  * <br />
@@ -22,13 +23,13 @@ public interface ILootrFabricModelProvider {
 
   interface Acceptor {
     /**
-     * Accept a barrel model definition. Note: the custom barrel model does not
+     * Accept a custom model definition. Note: the custom model does not
      * support the "old" vs "new" textures configuration of Lootr, and that is
      * completely ignored.
      * <br />
-     * Note: you will need to register two models for your barrel: one for the
-     * barrel's "open" block state, and one for its "closed" block state. You can
-     * consult Lootr's `lootr_barrel` blockstate as an example.
+     * Note: for any block that uses BlockStateProprties.OPEN, you will need to
+     * register two separate models, one for the "open" and one for the "closed"
+     * state, and then control which is used in the blockstate file.
      * <br />
      * @param modelName The resource location of the model. This parameter will be
      *                  the resource location used in the blockstate json.
@@ -40,7 +41,13 @@ public interface ILootrFabricModelProvider {
      *                             texture in contrast to a "Lootr-ified" texture for the open/
      *                             unopened states, you can just pass null here.
      */
-    void acceptBarrelModel (ResourceLocation modelName, ResourceLocation modelOpenedLocation, ResourceLocation modelUnopenedLocation, @Nullable ResourceLocation modelVanillaLocation);
+    void acceptCustomModel (ResourceLocation modelName, ResourceLocation modelOpenedLocation, ResourceLocation modelUnopenedLocation, @Nullable ResourceLocation modelVanillaLocation);
+
+    // Use acceptCustomModel instead.
+    @Deprecated
+    default void acceptBarrelModel (ResourceLocation modelName, ResourceLocation modelOpenedLocation, ResourceLocation modelUnopenedLocation, @Nullable ResourceLocation modelVanillaLocation) {
+      acceptCustomModel(modelName, modelOpenedLocation, modelUnopenedLocation, modelVanillaLocation);
+    }
 
     /**
      * Accept a brushable model definition.

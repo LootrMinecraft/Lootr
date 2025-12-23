@@ -41,7 +41,7 @@ publishMods {
 
     if (project.hasProperty('curseforge_id_neoforge')) {
         curseforge('curseforgeNeoForge') {
-            type = RELEASE
+            type = STABLE
 
             projectSlug = "lootr"
             displayName = "lootr-neoforge-${rootProject.minecraft_version}-${rootProject.mod_version}"
@@ -55,7 +55,7 @@ publishMods {
 
     if (project.hasProperty('modrinth_id_fabric')) {
         modrinth('modrinthNeoForge') {
-            type = RELEASE
+            type = STABLE
             displayName = "lootr-neoforge-${rootProject.minecraft_version}-${rootProject.mod_version}"
             accessToken = project.findProperty("modrinth_auth")
             projectId = project.findProperty('modrinth_id_neoforge')

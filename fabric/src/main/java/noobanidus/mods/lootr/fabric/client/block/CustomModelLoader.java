@@ -45,7 +45,7 @@ public class CustomModelLoader implements ModelLoadingPlugin, ModelResolver, ILo
   }
 
   @Override
-  public void acceptBarrelModel(ResourceLocation modelName, ResourceLocation modelOpenedLocation, ResourceLocation modelUnopenedLocation, @Nullable ResourceLocation modelVanillaLocation) {
+  public void acceptCustomModel(ResourceLocation modelName, ResourceLocation modelOpenedLocation, ResourceLocation modelUnopenedLocation, @Nullable ResourceLocation modelVanillaLocation) {
     BARREL_MODEL_MAP.put(modelName, new CustomBarrelModelInfo(modelOpenedLocation, modelUnopenedLocation, modelVanillaLocation));
   }
 
