@@ -40,7 +40,7 @@
   "lootr.commands.blockpos": "%s，%s，%s",
   "lootr.commands.create": "已使用战利品表 %3$s 于 %2$s 处创建出了 Lootr 的%1$s。",
   "lootr.commands.summon": "已使用战利品表 %2$s 于 %1$s 处生成出了 Lootr 矿车。",
-  "lootr.commands.usage": "/lootr barrel | barrel <战利品表> | chest | chest <战利品表> | cart | cart <战利品表> | shulker | shulker <战利品表> | trapped_chest | trapped_chest <战利品表> | custom | refresh | decay | open_as <玩家名> | open_as_uuid <玩家uuid> | id | openers",
+  "lootr.commands.usage": "/lootr cart | cart <loot-table> | %s | custom | refresh | decay | open_as <player> | open_as_uuid <uuid> | id | openers",
   "lootr.configuration.blast_immune": "爆炸免疫",
   "lootr.configuration.blast_resistant": "爆炸抗性",
   "lootr.configuration.breaking": "破坏",
