@@ -17,7 +17,7 @@ public class LootrLangProvider extends LanguageProvider {
   @Override
   protected void addTranslations() {
     // Tag translations
-    add("lootr.commands.usage", "/lootr barrel | barrel <loot-table> | chest | chest <loot-table> | cart | cart <loot-table> | shulker | shulker <loot-table> | trapped_chest | trapped_chest <loot-table> | custom | refresh | decay | open_as <player> | open_as_uuid <uuid> | id | openers");
+    add("lootr.commands.usage", "/lootr cart | cart <loot-table> | %s | custom | refresh | decay | open_as <player> | open_as_uuid <uuid> | id | openers");
 
     add("lootr.message.should_sneak", "Breaking this block will prevent others from obtaining loot! Only break if really needed.");
     add("lootr.message.cart_should_sneak", "Destroying this entity will prevent others from obtaining loot! Only destroy is really needed.");

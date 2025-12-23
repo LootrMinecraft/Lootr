@@ -48,6 +48,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
+import noobanidus.mods.lootr.common.api.command.ILootrCommandExtension;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.block.LootrBarrelBlock;
@@ -58,6 +59,7 @@ import noobanidus.mods.lootr.common.data.DataStorage;
 import noobanidus.mods.lootr.common.data.LootrInventory;
 import noobanidus.mods.lootr.common.data.LootrSavedData;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
+import noobanidus.mods.lootr.common.impl.LootrServiceRegistry;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinBaseContainerBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
@@ -175,58 +177,20 @@ public class CommandLootr {
 
   public LiteralArgumentBuilder<CommandSourceStack> builder(LiteralArgumentBuilder<CommandSourceStack> builder) {
     builder.executes(c -> {
-      c.getSource().sendSuccess(() -> Component.translatable("lootr.commands.usage"), false);
+      c.getSource().sendSuccess(() -> Component.translatable("lootr.commands.usage", Component.literal(LootrServiceRegistry.getCommandExtensionsString())), false);
       return 1;
     });
-    builder.then(Commands.literal("pot").executes(c -> {
-      createBlock(c.getSource(), LootrRegistry.getDecoratedPotBlock(), null);
-      return 1;
-    }).then(suggestTables().executes(c -> {
-      createBlock(c.getSource(), LootrRegistry.getDecoratedPotBlock(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
-      return 1;
-    })));
-    builder.then(Commands.literal("gravel").executes(c -> {
-      createBlock(c.getSource(), LootrRegistry.getSuspiciousGravelBlock(), null);
-      return 1;
-    }).then(suggestTables().executes(c -> {
-      createBlock(c.getSource(), LootrRegistry.getSuspiciousGravelBlock(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
-      return 1;
-    })));
-    builder.then(Commands.literal("sand").executes(c -> {
-      createBlock(c.getSource(), LootrRegistry.getSuspiciousSandBlock(), null);
-      return 1;
-    }).then(suggestTables().executes(c -> {
-      createBlock(c.getSource(), LootrRegistry.getSuspiciousSandBlock(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
-      return 1;
-    })));
-    builder.then(Commands.literal("barrel").executes(c -> {
-      createBlock(c.getSource(), LootrRegistry.getBarrelBlock(), null);
-      return 1;
-    }).then(suggestTables().executes(c -> {
-      createBlock(c.getSource(), LootrRegistry.getBarrelBlock(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
-      return 1;
-    })));
-    builder.then(Commands.literal("trapped_chest").executes(c -> {
-      createBlock(c.getSource(), LootrRegistry.getTrappedChestBlock(), null);
-      return 1;
-    }).then(suggestTables().executes(c -> {
-      createBlock(c.getSource(), LootrRegistry.getTrappedChestBlock(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
-      return 1;
-    })));
-    builder.then(Commands.literal("chest").executes(c -> {
-      createBlock(c.getSource(), LootrRegistry.getChestBlock(), null);
-      return 1;
-    }).then(suggestTables().executes(c -> {
-      createBlock(c.getSource(), LootrRegistry.getChestBlock(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
-      return 1;
-    })));
-    builder.then(Commands.literal("shulker").executes(c -> {
-      createBlock(c.getSource(), LootrRegistry.getShulkerBlock(), null);
-      return 1;
-    }).then(suggestTables().executes(c -> {
-      createBlock(c.getSource(), LootrRegistry.getShulkerBlock(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
-      return 1;
-    })));
+
+    for (ILootrCommandExtension extension : LootrServiceRegistry.getCommandExtensions()) {
+      builder.then(Commands.literal(extension.getId()).executes(c -> {
+        createBlock(c.getSource(), extension.getBlock(), null);
+        return 1;
+      }).then(suggestTables().executes(c -> {
+        createBlock(c.getSource(), extension.getBlock(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
+        return 1;
+      })));
+    }
+
     builder.then(Commands.literal("clear").executes(c -> {
       c.getSource().sendSuccess(() -> Component.literal("Must provide player name."), true);
       return 1;

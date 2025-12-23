@@ -14,6 +14,7 @@ import noobanidus.mods.lootr.common.api.ILootrType;
 import noobanidus.mods.lootr.common.api.adapter.AdapterMap;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.api.client.ILootrFabricModelProvider;
+import noobanidus.mods.lootr.common.api.command.ILootrCommandExtension;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
@@ -43,6 +44,9 @@ public class LootrServiceRegistry {
   private final Map<String, ILootrType> typeMap = new Object2ObjectOpenHashMap<>();
   // Only used on Fabric
   private final List<ILootrFabricModelProvider> fabricModelProviders = new ObjectArrayList<>();
+  private final List<ILootrCommandExtension> commandExtensions = new ObjectArrayList<>();
+
+  private final String commands;
 
   @SuppressWarnings("rawtypes")
   public LootrServiceRegistry() {
@@ -106,6 +110,17 @@ public class LootrServiceRegistry {
     for (ILootrFabricModelProvider appender : loader11) {
       fabricModelProviders.add(appender);
     }
+
+    StringJoiner commandsTemp = new StringJoiner(" | ");
+
+    ServiceLoader<ILootrCommandExtension> loader12 = ServiceLoader.load(ILootrCommandExtension.class, classLoader);
+    for (ILootrCommandExtension extension : loader12) {
+      commandExtensions.add(extension);
+      commandsTemp.add(extension.getId());
+      commandsTemp.add(extension.getId() + " <loot-table>");
+    }
+
+    this.commands = commandsTemp.toString();
   }
 
   public static LootrServiceRegistry getInstance() {
@@ -195,5 +210,15 @@ public class LootrServiceRegistry {
   @ApiStatus.Internal
   public static List<ILootrFabricModelProvider> getModelAppenders() {
     return getInstance().fabricModelProviders;
+  }
+
+  @ApiStatus.Internal
+  public static List<ILootrCommandExtension> getCommandExtensions() {
+    return getInstance().commandExtensions;
+  }
+
+  @ApiStatus.Internal
+  public static String getCommandExtensionsString() {
+    return getInstance().commands;
   }
 }
