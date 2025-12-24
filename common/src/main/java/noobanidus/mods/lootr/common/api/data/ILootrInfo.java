@@ -48,25 +48,25 @@ public interface ILootrInfo {
   @Deprecated
   LootrInfoType getInfoType();
 
-  ILootrType getInfoNewType ();
+  ILootrType getInfoNewType();
 
-  default LootFiller getDefaultFiller () {
+  default LootFiller getDefaultFiller() {
     return getInfoNewType().getDefaultFiller();
   }
 
-  default boolean canRefresh () {
+  default boolean canRefresh() {
     return getInfoNewType().canRefresh();
   }
 
-  default boolean canDecay () {
+  default boolean canDecay() {
     return getInfoNewType().canDecay();
   }
 
-  default boolean canBeMarkedUnopened () {
+  default boolean canBeMarkedUnopened() {
     return getInfoNewType().canBeMarkedUnopened();
   }
 
-  default boolean canDropContentsWhenBroken () {
+  default boolean canDropContentsWhenBroken() {
     return getInfoNewType().canDropContentsWhenBroken();
   }
 
@@ -78,18 +78,18 @@ public interface ILootrInfo {
   @NotNull
   UUID getInfoUUID();
 
-  String getInfoKey ();
+  String getInfoKey();
 
-  static String generateInfoKey (UUID id) {
+  static String generateInfoKey(UUID id) {
     String idString = id.toString();
     return "lootr/" + idString.charAt(0) + "/" + idString.substring(0, 2) + "/" + idString;
   }
 
   // The container has been opened at some point in time and has at least one inventory contained (unless inventories have been cleared).
-  boolean hasBeenOpened ();
+  boolean hasBeenOpened();
 
   // This container is currently open or opening.
-  boolean isPhysicallyOpen ();
+  boolean isPhysicallyOpen();
 
   @NotNull
   BlockPos getInfoPos();
@@ -128,7 +128,21 @@ public interface ILootrInfo {
       return null;
     }
 
-    return getInfoNewType().getContainer(this, level);
+    if (getInfoNewType() == null) {
+      // Try to guess
+      BlockEntity be = level.getBlockEntity(getInfoPos());
+      if (be instanceof Container container) {
+        return container;
+      }
+      Entity entity = level.getEntity(getInfoUUID());
+      if (entity instanceof Container container) {
+        return container;
+      }
+      LootrAPI.LOG.warn("Unable to guess container type for LootrInfo with key '{}'", getInfoKey());
+      return null;
+    } else {
+      return getInfoNewType().getContainer(this, level);
+    }
   }
 
   default NonNullList<ItemStack> buildInitialInventory() {
@@ -136,9 +150,9 @@ public interface ILootrInfo {
   }
 
   default void saveInfoToTag(CompoundTag tag, HolderLookup.Provider provider) {
-/*    tag.putInt("type", getInfoType().ordinal());*/
+    /*    tag.putInt("type", getInfoType().ordinal());*/
     tag.putString("newType", getInfoNewType().getName());
-/*    tag.putInt("blockType", getInfoBlockType().ordinal());*/
+    /*    tag.putInt("blockType", getInfoBlockType().ordinal());*/
     tag.put("position", NbtUtils.writeBlockPos(getInfoPos()));
     tag.putString("key", getInfoKey());
     tag.putString("dimension", getInfoDimension().location().toString());
