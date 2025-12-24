@@ -31,7 +31,7 @@ public class LootrClient implements ClientModInitializer {
   public void onInitializeClient() {
     LootrNetworkingInit.registerClientNetwork();
 
-    BlockRenderLayerMap.putBlock(ModBlocks.BARREL, ChunkSectionLayer.CUTOUT_MIPPED);
+    BlockRenderLayerMap.putBlock(ModBlocks.BARREL, ChunkSectionLayer.CUTOUT);
 
     BlockEntityRenderers.register(ModBlockEntities.LOOTR_CHEST, LootrChestBlockRenderer::new);
     SpecialBlockRendererRegistry.register(ModBlocks.CHEST, LootrChestSpecialRenderer.Unbaked.chest());
