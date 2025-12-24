@@ -40,7 +40,7 @@
   "lootr.commands.blockpos": "%s,%s,%s",
   "lootr.commands.create": "Skapade en %s vid %s med skattabellen %s.",
   "lootr.commands.summon": "Skapade en gruvvagn vid %s med skattabellen %s.",
-  "lootr.commands.usage": "/lootr barrel | barrel <skattabell> | chest | chest <skattabell> | cart | cart <skattabell> | shulker | shulker <skattabell> | convert | custom <id> | refresh | decay",
+  "lootr.commands.usage": "/lootr cart | cart <loot-table> | %s | custom | refresh | decay | open_as <player> | open_as_uuid <uuid> | id | openers",
   "lootr.configuration.blast_immune": "Sprängimmunitet",
   "lootr.configuration.blast_resistant": "Sprängresistans",
   "lootr.configuration.breaking": "Förstörelse",

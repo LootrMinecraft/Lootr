@@ -40,7 +40,7 @@
   "lootr.commands.blockpos": "%s,%s,%s",
   "lootr.commands.create": "Se creó un Botín %s en %s usando la tabla de botín %s.",
   "lootr.commands.summon": "Se invocó un Vagón Botín en %s usando la tabla de botín %s.",
-  "lootr.commands.usage": "/lootr barrel | barrel <loot-table> | chest | chest <loot-table> | cart | cart <loot-table> | shulker | shulker <loot-table> | convert | custom <id> | refresh | decay",
+  "lootr.commands.usage": "/lootr cart | cart <loot-table> | %s | custom | refresh | decay | open_as <player> | open_as_uuid <uuid> | id | openers",
   "lootr.configuration.blast_immune": "Inmunidad a Explosiones",
   "lootr.configuration.blast_resistant": "Resistencia a Explosiones",
   "lootr.configuration.breaking": "Romper",

@@ -40,7 +40,7 @@
   "lootr.commands.blockpos": "%s,%s,%s",
   "lootr.commands.create": "ルートテーブル%3$sを使用して、%2$sにLootrの%1$sを作成しました",
   "lootr.commands.summon": "ルートテーブル%2$sを使用して、%1$sにLootrのトロッコを召喚しました",
-  "lootr.commands.usage": "/lootr barrel | barrel <loot-table> | chest | chest <loot-table> | cart | cart <loot-table> | shulker | shulker <loot-table> | convert | custom <id> | refresh | decay",
+  "lootr.commands.usage": "/lootr cart | cart <loot-table> | %s | custom | refresh | decay | open_as <player> | open_as_uuid <uuid> | id | openers",
   "lootr.configuration.blast_immune": "爆発を無効化",
   "lootr.configuration.blast_resistant": "爆発耐性",
   "lootr.configuration.breaking": "破壊",
