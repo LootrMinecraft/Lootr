@@ -2,7 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "noobanidus.mods.lootr.fabric.mixins",
-  "compatibilityLevel": "JAVA_16",
+  "compatibilityLevel": "JAVA_21",
   "mixins": [
     "MixinPersistentEntitySectionManager",
     "MixinPlayerAdvancements",
