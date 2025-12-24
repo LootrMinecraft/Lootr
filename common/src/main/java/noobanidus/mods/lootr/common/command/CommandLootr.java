@@ -3,6 +3,7 @@ package noobanidus.mods.lootr.common.command;
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
@@ -25,6 +26,7 @@ import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.GameProfileCache;
@@ -42,6 +44,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.chunk.status.ChunkStatus;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -54,6 +57,7 @@ import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.block.LootrBarrelBlock;
 import noobanidus.mods.lootr.common.block.LootrChestBlock;
 import noobanidus.mods.lootr.common.block.LootrShulkerBlock;
+import noobanidus.mods.lootr.common.block.entity.BlockEntityTicker;
 import noobanidus.mods.lootr.common.block.entity.LootrInventoryBlockEntity;
 import noobanidus.mods.lootr.common.data.DataStorage;
 import noobanidus.mods.lootr.common.data.LootrInventory;
@@ -61,6 +65,7 @@ import noobanidus.mods.lootr.common.data.LootrSavedData;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.common.impl.LootrServiceRegistry;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinBaseContainerBlockEntity;
+import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinChunkMap;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -177,7 +182,8 @@ public class CommandLootr {
 
   public LiteralArgumentBuilder<CommandSourceStack> builder(LiteralArgumentBuilder<CommandSourceStack> builder) {
     builder.executes(c -> {
-      c.getSource().sendSuccess(() -> Component.translatable("lootr.commands.usage", Component.literal(LootrServiceRegistry.getCommandExtensionsString())), false);
+      c.getSource()
+          .sendSuccess(() -> Component.translatable("lootr.commands.usage", Component.literal(LootrServiceRegistry.getCommandExtensionsString())), false);
       return 1;
     });
 
@@ -214,7 +220,7 @@ public class CommandLootr {
       createBlock(c.getSource(), null, ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
       return 1;
     })));
-    builder.then(Commands.literal("custom").executes(c -> {
+    builder.then(Commands.literal("custom-chest").executes(c -> {
       BlockPos pos = BlockPos.containing(c.getSource().getPosition());
       Level level = c.getSource().getLevel();
       BlockState state = level.getBlockState(pos);
@@ -412,7 +418,7 @@ public class CommandLootr {
       }
       return 1;
     })));
-    builder.then(Commands.literal("convert").then(Commands.argument("from", BlockPosArgument.blockPos())
+    builder.then(Commands.literal("custom-area").then(Commands.argument("from", BlockPosArgument.blockPos())
         .then(Commands.argument("to", BlockPosArgument.blockPos()).executes(context -> {
           BoundingBox bounds = BoundingBox.fromCorners(BlockPosArgument.getLoadedBlockPos(context, "from"), BlockPosArgument.getLoadedBlockPos(context, "to"));
           ChunkPos start = new ChunkPos(new BlockPos(bounds.minX(), bounds.minY(), bounds.minZ()));
@@ -457,7 +463,7 @@ public class CommandLootr {
                 BlockEntity te = level.getBlockEntity(pos);
                 if (!(te instanceof LootrInventoryBlockEntity inventory)) {
                   context.getSource()
-                      .sendSuccess(() -> Component.literal("Unable to convert chest, BlockState is not a Lootr Inventory block."), false);
+                      .sendFailure(Component.literal("Unable to convert chest at '" + pos + "', BlockState is not a Lootr Inventory block."));
                 } else {
                   inventory.setCustomInventory(custom);
                   inventory.setChanged();
@@ -481,6 +487,71 @@ public class CommandLootr {
 
           return 1;
         })));
+    builder.then(Commands.literal("force_chunk")
+        .executes(c -> {
+          ChunkPos pos = new ChunkPos(BlockPos.containing(c.getSource().getPosition()));
+          ServerLevel level = c.getSource().getLevel();
+          var source = level.getChunkSource().getChunk(pos.x, pos.z, ChunkStatus.FULL, false);
+          if (source instanceof LevelChunk levelChunk) {
+            for (BlockEntity be : levelChunk.getBlockEntities().values()) {
+              c.getSource()
+                  .sendSuccess(() -> Component.literal("Forcing BlockEntity[" + be + "] at " + be.getBlockPos() + " to be added to the queue."), false);
+              BlockEntityTicker.addEntity(be, level, pos);
+            }
+          } else {
+            c.getSource()
+                .sendFailure(Component.literal("Chunk at " + pos.x + ", " + pos.z + " is not loaded somehow!"));
+            return 0;
+          }
+          return 1;
+        }));
+    builder.then(Commands.literal("force_radius")
+        .then(Commands.argument("radius", IntegerArgumentType.integer(1)).executes(c -> {
+          int radius;
+          try {
+            radius = Integer.parseInt(StringArgumentType.getString(c, "radius"));
+          } catch (NumberFormatException e) {
+            c.getSource()
+                .sendFailure(Component.literal("Radius must be an integer."));
+            return 0;
+          }
+          ServerLevel level = c.getSource().getLevel();
+          ChunkPos center = new ChunkPos(BlockPos.containing(c.getSource().getPosition()));
+          for (int x = center.x - radius; x <= center.x + radius; x++) {
+            for (int z = center.z - radius; z <= center.z + radius; z++) {
+              ChunkPos pos = new ChunkPos(x, z);
+              var source = level.getChunkSource().getChunk(pos.x, pos.z, ChunkStatus.FULL, false);
+              if (source instanceof LevelChunk levelChunk) {
+                for (BlockEntity be : levelChunk.getBlockEntities().values()) {
+                  c.getSource()
+                      .sendSuccess(() -> Component.literal("Forcing BlockEntity[" + be +"] at " + be.getBlockPos() + " to be added to the queue."), false);
+                  BlockEntityTicker.addEntity(be, level, pos);
+                }
+              }
+            }
+          }
+          return 1;
+        })));
+    builder.then(Commands.literal("force_all")
+        .executes(c -> {
+          ServerLevel level = c.getSource().getLevel();
+          for (ChunkHolder holder : ((AccessorMixinChunkMap) level.getChunkSource().chunkMap).lootr$getChunks()) {
+            if (!holder.wasAccessibleSinceLastSave()) {
+              continue;
+            }
+            holder.refreshAccessibility();
+            var chunk = holder.getLatestChunk();
+            if (chunk instanceof LevelChunk levelChunk) {
+              ChunkPos pos = levelChunk.getPos();
+              for (BlockEntity be : levelChunk.getBlockEntities().values()) {
+                c.getSource()
+                    .sendSuccess(() -> Component.literal("Forcing BlockEntity[" + be +"] at " + be.getBlockPos() + " to be added to the queue."), false);
+                BlockEntityTicker.addEntity(be, level, pos);
+              }
+            }
+          }
+          return 1;
+        }));
     return builder;
   }
 

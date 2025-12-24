@@ -1,5 +1,3 @@
-import me.modmuss50.mpp.ReleaseType
-
 plugins {
     id 'fabric-loom' version "1.14.7"
 }

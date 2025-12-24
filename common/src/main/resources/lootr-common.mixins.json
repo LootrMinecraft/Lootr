@@ -6,6 +6,7 @@
     "accessor.AccessorMixinBaseContainerBlockEntity",
     "accessor.AccessorMixinBlock",
     "accessor.AccessorMixinBrushableBlockEntity",
+    "accessor.AccessorMixinChunkMap",
     "accessor.AccessorMixinDimensionDataStorage",
     "accessor.AccessorMixinFallingBlockEntity",
     "accessor.AccessorMixinLootTable",
