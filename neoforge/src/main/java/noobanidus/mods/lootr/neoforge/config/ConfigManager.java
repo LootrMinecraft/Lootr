@@ -2,7 +2,7 @@ package noobanidus.mods.lootr.neoforge.config;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -112,7 +112,7 @@ public class ConfigManager extends ConfigManagerBase {
     MODID_DIMENSION_WHITELIST = COMMON_BUILDER.comment("list of dimensions by modid that loot chest should be replaced in (default: blank, allowing all modids, format e.g., [\"minecraft", "othermod\"])").defineList("modid_dimension_whitelist", empty, modidValidator);
     LOOT_TABLE_BLACKLIST = COMMON_BUILDER.comment("list of loot tables which shouldn't be converted (in the format of [\"modid:loot_table\", \"othermodid:other_loot_table\"])").defineList("loot_table_blacklist", empty, validator);
     LOOT_MODID_BLACKLIST = COMMON_BUILDER.comment("list of modids whose loot tables shouldn't be converted (in the format of [\"modid\", \"other_modid\"])").defineList("loot_modid_blacklist", empty, modidValidator);
-    PROBLEMATIC_LOOT_TABLES = COMMON_BUILDER.comment("list of loot tables whose conversion causes problems (in the same format as `loot_table_tlacklist`)").defineList("problematic_loot_tables", LootrAPI.PROBLEMATIC_CHESTS.stream().map(ResourceLocation::toString).toList(), validator);
+    PROBLEMATIC_LOOT_TABLES = COMMON_BUILDER.comment("list of loot tables whose conversion causes problems (in the same format as `loot_table_tlacklist`)").defineList("problematic_loot_tables", LootrAPI.PROBLEMATIC_CHESTS.stream().map(Identifier::toString).toList(), validator);
     COMMON_BUILDER.pop();
     COMMON_BUILDER.push("breaking").comment("configuration options for breaking containers");
     DISABLE_BREAK = COMMON_BUILDER.comment("prevent the destruction of Lootr chests except while sneaking in creative mode").define("disable_break", false);
@@ -254,7 +254,7 @@ public class ConfigManager extends ConfigManagerBase {
       return true;
     }
 
-    return !getLootModids().isEmpty() && getLootModids().contains(table.location().getNamespace());
+    return !getLootModids().isEmpty() && getLootModids().contains(table.identifier().getNamespace());
   }
 
   public static Set<ResourceKey<LootTable>> getDecayingTables() {
@@ -286,7 +286,7 @@ public class ConfigManager extends ConfigManagerBase {
   }
 
   public static boolean isDimensionBlocked(ResourceKey<Level> key) {
-    if (!getDimensionModidWhitelist().isEmpty() && !getDimensionModidWhitelist().contains(key.location().getNamespace()) || getDimensionModidBlacklist().contains(key.location().getNamespace())) {
+    if (!getDimensionModidWhitelist().isEmpty() && !getDimensionModidWhitelist().contains(key.identifier().getNamespace()) || getDimensionModidBlacklist().contains(key.identifier().getNamespace())) {
       return true;
     }
 
@@ -309,7 +309,7 @@ public class ConfigManager extends ConfigManagerBase {
       if (!getDecayingTables().isEmpty() && getDecayingTables().contains(provider.getInfoLootTable())) {
         return true;
       }
-      if (!getDecayMods().isEmpty() && getDecayMods().contains(provider.getInfoLootTable().location().getNamespace())) {
+      if (!getDecayMods().isEmpty() && getDecayMods().contains(provider.getInfoLootTable().identifier().getNamespace())) {
         return true;
       }
     }
@@ -327,7 +327,7 @@ public class ConfigManager extends ConfigManagerBase {
       if (!getRefreshingTables().isEmpty() && getRefreshingTables().contains(provider.getInfoLootTable())) {
         return true;
       }
-      if (!getRefreshMods().isEmpty() && getRefreshMods().contains(provider.getInfoLootTable().location().getNamespace())) {
+      if (!getRefreshMods().isEmpty() && getRefreshMods().contains(provider.getInfoLootTable().identifier().getNamespace())) {
         return true;
       }
     }

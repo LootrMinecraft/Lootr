@@ -68,7 +68,7 @@ public class LootrLootTableProvider {
           }
           LootTable.Builder builder = this.map.remove(resourceKey);
           if (builder == null) {
-            throw new IllegalStateException(String.format(Locale.ROOT, "Missing loottable '%s' for '%s'", resourceKey.location(), BuiltInRegistries.BLOCK.getKey(block)));
+            throw new IllegalStateException(String.format(Locale.ROOT, "Missing loottable '%s' for '%s'", resourceKey.identifier(), BuiltInRegistries.BLOCK.getKey(block)));
           }
           biConsumer.accept(resourceKey, builder);
         });

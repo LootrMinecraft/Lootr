@@ -6,12 +6,12 @@ import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -25,8 +25,10 @@ import noobanidus.mods.lootr.common.block.entity.LootrShulkerBlockEntity;
 import noobanidus.mods.lootr.common.client.block.state.LootrShulkerBoxRenderState;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
 import java.util.Set;
+import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
 public class LootrShulkerBoxRenderer implements BlockEntityRenderer<LootrShulkerBlockEntity, LootrShulkerBoxRenderState> {
@@ -109,7 +111,7 @@ public class LootrShulkerBoxRenderer implements BlockEntityRenderer<LootrShulker
     this.model.setupAnim(progress);
   }
 
-  public void getExtents(Direction direction, float progress, Set<Vector3f> output) {
+  public void getExtents(Direction direction, float progress, Consumer<Vector3fc> output) {
     PoseStack posestack = new PoseStack();
     this.prepareModel(posestack, direction, progress);
     this.model.root().getExtentsForGui(posestack, output);
@@ -119,7 +121,7 @@ public class LootrShulkerBoxRenderer implements BlockEntityRenderer<LootrShulker
     private final ModelPart lid;
 
     public ShulkerBoxModel(ModelPart root) {
-      super(root, RenderType::entityCutoutNoCull);
+      super(root, RenderTypes::entityCutoutNoCull);
       this.lid = root.getChild("lid");
     }
 

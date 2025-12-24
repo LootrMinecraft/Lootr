@@ -11,7 +11,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.StringRepresentable;
@@ -121,11 +121,11 @@ public interface ILootrInfo {
           BlockPos.CODEC.fieldOf("position").forGetter(ILootrInfo::getInfoPos),
           // Optional display name
           ComponentSerialization.CODEC.optionalFieldOf("name").forGetter(i -> Optional.ofNullable(i.getInfoDisplayName())),
-          ResourceLocation.CODEC.xmap(loc -> ResourceKey.create(Registries.DIMENSION, loc), ResourceKey::location).fieldOf("dimension").forGetter(ILootrInfo::getInfoDimension),
+          Identifier.CODEC.xmap(loc -> ResourceKey.create(Registries.DIMENSION, loc), ResourceKey::identifier).fieldOf("dimension").forGetter(ILootrInfo::getInfoDimension),
           Codec.INT.fieldOf("size").forGetter(ILootrInfo::getInfoContainerSize),
           ItemStack.OPTIONAL_CODEC.listOf().xmap(list -> NonNullList.of(ItemStack.EMPTY, list.toArray(new ItemStack[0])), list -> list).optionalFieldOf("reference").forGetter(info -> info.isInfoReferenceInventory() ? Optional.ofNullable(info.getInfoReferenceInventory()) : Optional.empty()),
           // Optional loot table and seed
-          ResourceLocation.CODEC.xmap(loc -> ResourceKey.create(Registries.LOOT_TABLE, loc), ResourceKey::location).optionalFieldOf("table").forGetter(i -> Optional.ofNullable(i.getInfoLootTable())),
+          Identifier.CODEC.xmap(loc -> ResourceKey.create(Registries.LOOT_TABLE, loc), ResourceKey::identifier).optionalFieldOf("table").forGetter(i -> Optional.ofNullable(i.getInfoLootTable())),
           Codec.LONG.optionalFieldOf("seed").forGetter(info ->
                   info.getInfoLootTable() != null ? Optional.of(info.getInfoLootSeed()) : Optional.empty()
           )

@@ -6,7 +6,7 @@ import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -24,7 +24,7 @@ import java.util.Set;
 @Config(name = LootrAPI.MODID)
 public class ConfigManager extends ConfigManagerBase implements ConfigData {
   @ConfigEntry.Gui.Excluded
-  private static final List<ResourceLocation> PROBLEMATIC_CHESTS = Arrays.asList(ResourceLocation.fromNamespaceAndPath("atum", "chests/pharaoh"), ResourceLocation.fromNamespaceAndPath("twilightforest", "structures/stronghold_boss"));
+  private static final List<Identifier> PROBLEMATIC_CHESTS = Arrays.asList(Identifier.fromNamespaceAndPath("atum", "chests/pharaoh"), Identifier.fromNamespaceAndPath("twilightforest", "structures/stronghold_boss"));
 
   @ConfigEntry.Gui.Excluded
   private static Set<String> DECAY_MODS = null;
@@ -155,7 +155,7 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
       return true;
     }
 
-    return getLootModidsBlacklist().contains(table.location().getNamespace());
+    return getLootModidsBlacklist().contains(table.identifier().getNamespace());
   }
 
   public static Set<ResourceKey<LootTable>> getDecayingTables() {
@@ -187,7 +187,7 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
   }
 
   public static boolean isDimensionBlocked(ResourceKey<Level> key) {
-    if (!getDimensionModidWhitelist().isEmpty() && !getDimensionModidWhitelist().contains(key.location().getNamespace()) || getDimensionModidBlacklist().contains(key.location().getNamespace())) {
+    if (!getDimensionModidWhitelist().isEmpty() && !getDimensionModidWhitelist().contains(key.identifier().getNamespace()) || getDimensionModidBlacklist().contains(key.identifier().getNamespace())) {
       return true;
     }
 
@@ -210,7 +210,7 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
       if (getDecayingTables().contains(tile.getInfoLootTable())) {
         return true;
       }
-      if (getDecayMods().contains(tile.getInfoLootTable().location().getNamespace())) {
+      if (getDecayMods().contains(tile.getInfoLootTable().identifier().getNamespace())) {
         return true;
       }
     }
@@ -228,7 +228,7 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
       if (getRefreshingTables().contains(tile.getInfoLootTable())) {
         return true;
       }
-      if (getRefreshMods().contains(tile.getInfoLootTable().location().getNamespace())) {
+      if (getRefreshMods().contains(tile.getInfoLootTable().identifier().getNamespace())) {
         return true;
       }
     }

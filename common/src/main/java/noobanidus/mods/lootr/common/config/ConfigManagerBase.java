@@ -2,7 +2,7 @@ package noobanidus.mods.lootr.common.config;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.Level;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 
@@ -28,17 +28,17 @@ public class ConfigManagerBase {
     return validateResourceKeyList(incomingList, listKey, o -> ResourceKey.create(Registries.DIMENSION, o));
   }
 
-  protected static <T> Set<ResourceKey<T>> validateResourceKeyList (Collection<? extends String> incomingList, String listKey, Function<ResourceLocation, ResourceKey<T>> builder) {
+  protected static <T> Set<ResourceKey<T>> validateResourceKeyList (Collection<? extends String> incomingList, String listKey, Function<Identifier, ResourceKey<T>> builder) {
     Set<ResourceKey<T>> validatedList = new HashSet<>();
     for (String entry : incomingList) {
       if (entry == null || entry.isEmpty()) {
-        throw new RuntimeException("Error found when validating a configuration list for '" + listKey + "'. One of the entries is null or empty and cannot be converted to a ResourceLocation.");
+        throw new RuntimeException("Error found when validating a configuration list for '" + listKey + "'. One of the entries is null or empty and cannot be converted to a Identifier.");
       }
-      ResourceLocation location;
+      Identifier location;
       try {
-        location = ResourceLocation.parse(entry);
+        location = Identifier.parse(entry);
       } catch (Exception e) {
-        throw new RuntimeException("Error found when validating a configuration list for '" + listKey + "'. The value found in the list, '" + entry + "', is not a valid ResourceLocation.", e);
+        throw new RuntimeException("Error found when validating a configuration list for '" + listKey + "'. The value found in the list, '" + entry + "', is not a valid Identifier.", e);
       }
 
       try {

@@ -10,7 +10,7 @@ import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.ResolvableModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.BarrelBlock;
@@ -29,23 +29,23 @@ public class UnbakedBarrelBlockStateModel implements CustomUnbakedBlockStateMode
   public static MapCodec<UnbakedBarrelBlockStateModel> CODEC = MapCodec.unit(INSTANCE);
 
   // Unopened models
-  private static final ResourceLocation LOOTR_BARREL_UNOPENED = LootrAPI.rl("block/lootr_barrel_unopened");
-  private static final ResourceLocation LOOTR_BARREL_UNOPENED_OPEN = LootrAPI.rl("block/lootr_barrel_unopened_open");
+  private static final Identifier LOOTR_BARREL_UNOPENED = LootrAPI.rl("block/lootr_barrel_unopened");
+  private static final Identifier LOOTR_BARREL_UNOPENED_OPEN = LootrAPI.rl("block/lootr_barrel_unopened_open");
 
   // Opened models
-  private static final ResourceLocation LOOTR_OPENED_BARREL = LootrAPI.rl("block/lootr_opened_barrel");
-  private static final ResourceLocation LOOTR_OPENED_BARREL_OPEN = LootrAPI.rl("block/lootr_opened_barrel_open");
+  private static final Identifier LOOTR_OPENED_BARREL = LootrAPI.rl("block/lootr_opened_barrel");
+  private static final Identifier LOOTR_OPENED_BARREL_OPEN = LootrAPI.rl("block/lootr_opened_barrel_open");
 
   // Vanilla models
-  private static final ResourceLocation VANILLA = ResourceLocation.fromNamespaceAndPath("minecraft", "block/barrel");
-  private static final ResourceLocation VANILLA_OPEN = ResourceLocation.fromNamespaceAndPath("minecraft", "block/barrel_open");
+  private static final Identifier VANILLA = Identifier.fromNamespaceAndPath("minecraft", "block/barrel");
+  private static final Identifier VANILLA_OPEN = Identifier.fromNamespaceAndPath("minecraft", "block/barrel_open");
 
   // Old unopened models
-  private static final ResourceLocation OLD_LOOTR_BARREL_UNOPENED = LootrAPI.rl("block/old_lootr_barrel_unopened");
-  private static final ResourceLocation OLD_LOOTR_BARREL_UNOPENED_OPEN = LootrAPI.rl("block/old_lootr_barrel_unopened_open");
+  private static final Identifier OLD_LOOTR_BARREL_UNOPENED = LootrAPI.rl("block/old_lootr_barrel_unopened");
+  private static final Identifier OLD_LOOTR_BARREL_UNOPENED_OPEN = LootrAPI.rl("block/old_lootr_barrel_unopened_open");
 
-  private static final ResourceLocation OLD_LOOTR_OPENED_BARREL = LootrAPI.rl("block/old_lootr_opened_barrel");
-  private static final ResourceLocation OLD_LOOTR_OPENED_BARREL_OPEN = LootrAPI.rl("block/old_lootr_opened_barrel_open");
+  private static final Identifier OLD_LOOTR_OPENED_BARREL = LootrAPI.rl("block/old_lootr_opened_barrel");
+  private static final Identifier OLD_LOOTR_OPENED_BARREL_OPEN = LootrAPI.rl("block/old_lootr_opened_barrel_open");
 
   @Override
   public MapCodec<? extends CustomUnbakedBlockStateModel> codec() {
@@ -85,7 +85,7 @@ public class UnbakedBarrelBlockStateModel implements CustomUnbakedBlockStateMode
     resolver.markDependency(OLD_LOOTR_OPENED_BARREL_OPEN);
   }
 
-  public static BlockStateModel[] bakeDirectionalVariants(ModelBaker baker, ResourceLocation model) {
+  public static BlockStateModel[] bakeDirectionalVariants(ModelBaker baker, Identifier model) {
     BlockStateModel[] result = new BlockStateModel[6];
     for (Direction dir : Direction.values()) {
       result[dir.ordinal()] = new SingleVariant(SimpleModelWrapper.bake(baker, model, FacingUtil.transformFor(dir)));

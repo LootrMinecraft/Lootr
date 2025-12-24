@@ -29,10 +29,6 @@ public class TickingData extends SavedData {
     this.tickMap.defaultReturnValue(-1);
   }
 
-  private TickingData(SavedData.Context context) {
-    this();
-  }
-
   private TickingData(List<TickEntry> entries) {
     this();
     for (TickEntry entry : entries) {

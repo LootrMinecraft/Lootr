@@ -348,7 +348,7 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
 
   @Override
   public Component getInvalidTableComponent(ResourceKey<LootTable> lootTable) {
-    return Component.translatable("lootr.message.invalid_table", lootTable.location().getNamespace(), lootTable.toString()).setStyle(!isMessageStylesEnabled() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED)).withBold(true));
+    return Component.translatable("lootr.message.invalid_table", lootTable.identifier().getNamespace(), lootTable.toString()).setStyle(!isMessageStylesEnabled() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED)).withBold(true));
   }
 
   @Override

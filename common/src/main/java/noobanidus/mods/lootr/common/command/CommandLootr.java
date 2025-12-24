@@ -11,7 +11,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.commands.arguments.IdentifierArgument;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.commands.arguments.coordinates.Vec3Argument;
 import net.minecraft.core.BlockPos;
@@ -23,9 +23,10 @@ import net.minecraft.network.chat.ComponentUtils;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.permissions.Permissions;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
@@ -74,7 +75,7 @@ public class CommandLootr {
   private static List<ResourceKey<LootTable>> getTables() {
     if (tables == null) {
       tables = new ArrayList<>(BuiltInLootTables.all());
-      tableNames = tables.stream().map(o -> o.location().toString()).toList();
+      tableNames = tables.stream().map(o -> o.identifier().toString()).toList();
     }
     return tables;
   }
@@ -143,13 +144,13 @@ public class CommandLootr {
   }
 
   public CommandLootr register() {
-    this.dispatcher.register(builder(Commands.literal("lootr").requires(p -> p.hasPermission(2))));
+    this.dispatcher.register(builder(Commands.literal("lootr").requires(p -> p.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))));
     this.dispatcher = null;
     return this;
   }
 
-  private RequiredArgumentBuilder<CommandSourceStack, ResourceLocation> suggestTables() {
-    return Commands.argument("table", ResourceLocationArgument.id())
+  private RequiredArgumentBuilder<CommandSourceStack, Identifier> suggestTables() {
+    return Commands.argument("table", IdentifierArgument.id())
         .suggests((c, build) -> SharedSuggestionProvider.suggest(getTableNames(), build));
   }
 
@@ -162,28 +163,28 @@ public class CommandLootr {
       createBlock(c.getSource(), LootrRegistry.getBarrelBlock(), null);
       return 1;
     }).then(suggestTables().executes(c -> {
-      createBlock(c.getSource(), LootrRegistry.getBarrelBlock(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
+      createBlock(c.getSource(), LootrRegistry.getBarrelBlock(), ResourceKey.create(Registries.LOOT_TABLE, IdentifierArgument.getId(c, "table")));
       return 1;
     })));
     builder.then(Commands.literal("trapped_chest").executes(c -> {
       createBlock(c.getSource(), LootrRegistry.getTrappedChestBlock(), null);
       return 1;
     }).then(suggestTables().executes(c -> {
-      createBlock(c.getSource(), LootrRegistry.getTrappedChestBlock(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
+      createBlock(c.getSource(), LootrRegistry.getTrappedChestBlock(), ResourceKey.create(Registries.LOOT_TABLE, IdentifierArgument.getId(c, "table")));
       return 1;
     })));
     builder.then(Commands.literal("chest").executes(c -> {
       createBlock(c.getSource(), LootrRegistry.getChestBlock(), null);
       return 1;
     }).then(suggestTables().executes(c -> {
-      createBlock(c.getSource(), LootrRegistry.getChestBlock(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
+      createBlock(c.getSource(), LootrRegistry.getChestBlock(), ResourceKey.create(Registries.LOOT_TABLE, IdentifierArgument.getId(c, "table")));
       return 1;
     })));
     builder.then(Commands.literal("shulker").executes(c -> {
       createBlock(c.getSource(), LootrRegistry.getShulkerBlock(), null);
       return 1;
     }).then(suggestTables().executes(c -> {
-      createBlock(c.getSource(), LootrRegistry.getShulkerBlock(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
+      createBlock(c.getSource(), LootrRegistry.getShulkerBlock(), ResourceKey.create(Registries.LOOT_TABLE, IdentifierArgument.getId(c, "table")));
       return 1;
     })));
     builder.then(Commands.literal("clear").executes(c -> {
@@ -207,7 +208,7 @@ public class CommandLootr {
       createBlock(c.getSource(), null, null);
       return 1;
     }).then(suggestTables().executes(c -> {
-      createBlock(c.getSource(), null, ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
+      createBlock(c.getSource(), null, ResourceKey.create(Registries.LOOT_TABLE, IdentifierArgument.getId(c, "table")));
       return 1;
     })));
     builder.then(Commands.literal("custom").executes(c -> {

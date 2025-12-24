@@ -1,16 +1,13 @@
 package noobanidus.mods.lootr.common.client.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
-import net.minecraft.client.model.ChestModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelLayers;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.model.object.chest.ChestModel;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.AbstractMinecartRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.Material;
@@ -39,7 +36,7 @@ public class LootrChestCartRenderer<T extends LootrChestMinecartEntity> extends 
     f = 1.0F - f;
     f = 1.0F - f * f * f;
     Material material = LootrChestBlockRenderer.getMaterial(false, renderState.open);
-    RenderType rendertype = material.renderType(RenderType::entityCutout);
+    RenderType rendertype = material.renderType(this.chestModel::renderType);
     TextureAtlasSprite textureatlassprite = this.materials.get(material);
     nodeCollector.submitModel(
         this.chestModel,

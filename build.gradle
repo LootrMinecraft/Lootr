@@ -2,17 +2,21 @@ plugins {
     id "idea"
     id "maven-publish"
     id "me.modmuss50.mod-publish-plugin" version "0.8.4" apply false
-    id "net.neoforged.moddev" version "2.0.115" apply false
+    id "net.neoforged.moddev" version "2.0.134" apply false
+    id("fabric-loom") version("1.14.7") apply(false)
+    id("net.fabricmc.fabric-loom-companion") version("1.14.7")
+    id ("org.jetbrains.gradle.plugin.idea-ext") version "1.3"
 }
 
 def javaVersion = 21
-def ENV = System.getenv()
 
 allprojects {
     version = "${rootProject.minecraft_version}-${rootProject.mod_version}"
-    group = rootProject.maven_group
+    group = rootProject.mod_group_id
 
     repositories {
+        mavenLocal()
+        mavenCentral()
         exclusiveContent {
             forRepository {
                 maven {
@@ -31,19 +35,6 @@ allprojects {
             }
             filter {
                 includeGroupAndSubgroups("maven.modrinth")
-            }
-        }
-        exclusiveContent {
-            forRepository {
-                maven {
-                    url = "https://nexus.resourcefulbees.com/repository/maven-public/"
-                }
-            }
-            filter {
-                includeGroupAndSubgroups("com.telepathicgrunt")
-                includeGroupAndSubgroups("com.teamresourceful.resourcefullib")
-                includeGroupAndSubgroups("com.teamresourceful")
-                includeGroupAndSubgroups("earth.terrarium.athena")
             }
         }
         exclusiveContent {
@@ -78,6 +69,15 @@ allprojects {
                 includeGroupAndSubgroups("me.shedaniel")
             }
         }
+        exclusiveContent {
+            forRepository {
+                maven {
+                    name = 'TommyLib'
+                    url = 'https://dl.cloudsmith.io/public/thomasglasser/tommylib/maven/'
+                }
+            }
+            filter { includeGroupAndSubgroups "dev.thomasglasser.tommylib" }
+        }
     }
 
     tasks.register('buildAndRelease') {
@@ -85,21 +85,10 @@ allprojects {
     }
 }
 
-def getExecOutput(commands) {
-    def out = new ByteArrayOutputStream()
-
-    exec {
-        commandLine commands
-        standardOutput out
-    }
-
-    return out.toString().trim();
-}
-
 subprojects {
-    apply plugin: 'java-library'
-    apply plugin: 'maven-publish'
-    apply plugin: 'me.modmuss50.mod-publish-plugin'
+    apply plugin: "java-library"
+    apply plugin: "maven-publish"
+    apply plugin: "me.modmuss50.mod-publish-plugin"
     project.group = rootProject.group
     project.version = rootProject.version
 
@@ -107,14 +96,14 @@ subprojects {
         archivesName.set("${rootProject.mod_id}-${name}")
     }
 
-    repositories {}
-
     dependencies {
         compileOnly "org.jetbrains:annotations:${jetbrains_annotations_version}"
+        compileOnly("com.google.auto.service:auto-service-annotations:${rootProject.auto_service_version}")
+        annotationProcessor("com.google.auto.service:auto-service:${rootProject.auto_service_version}")
     }
 
     processResources {
-        filteringCharset "UTF-8"
+        filteringCharset = "UTF-8"
 
         def expandProps = [
                 "version"              : project.version,
@@ -161,18 +150,69 @@ subprojects {
         options.release.set(javaVersion)
     }
 
+    publishing {
+        tasks.publish.dependsOn build
+
+        publications {
+            "${project.name}"(MavenPublication) {
+                artifactId = "${rootProject.mod_id}-${name}"
+                artifact jar
+                artifact project.sourcesJar {
+                    archiveClassifier.set('sources')
+                }
+
+                pom {
+                    name = 'Lootr'
+                    description = 'Friendly loot for everyone.'
+                    url = 'https://github.com/LootrMinecraft/Lootr'
+
+                    scm {
+                        connection = 'git:https://github.com/LootrMinecraft/Lootr.git'
+                        developerConnection = 'git:https://github.com/LootrMinecraft/Lootr.git'
+                        url = 'https://github.com/LootrMinecraft/Lootr'
+                    }
+
+                    licenses {
+                        license {
+                            name = 'MIT License'
+                            url = 'https://opensource.org/licenses/MIT'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id = 'noobanidus'
+                            name = 'Noobanidus'
+                            email = 'noobanidus+spam@gmail.com'
+                        }
+                    }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                url = "file:///" + System.getenv("local_maven")
+            }
+        }
+    }
+
     tasks.publishMods.mustRunAfter tasks.publish
     tasks.buildAndRelease.dependsOn(tasks.publish).dependsOn(tasks.publishMods)
 }
 
-tasks.named('wrapper', Wrapper).configure {
-    distributionType = Wrapper.DistributionType.BIN
-}
+tasks.register("tagVersion") {
+    doLast {
+        def utils = project.objects.newInstance(ExecUtils)
+        def tagName = "mdg-${minecraft_version}-${mod_version}"
 
-// IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
-idea {
-    module {
-        downloadSources = true
-        downloadJavadoc = true
+        def existing = utils.getExecOutput(["git", "tag", "--list", tagName])
+        if (existing == tagName) {
+            println "Tag $tagName already exists. Skipping."
+            return
+        }
+
+        println "Creating git tag $tagName"
+        utils.getExecOutput(["git", "tag", tagName])
     }
 }

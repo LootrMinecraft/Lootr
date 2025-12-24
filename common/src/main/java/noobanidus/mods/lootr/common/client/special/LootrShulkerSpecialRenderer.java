@@ -10,14 +10,16 @@ import net.minecraft.client.renderer.special.NoDataSpecialModelRenderer;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemDisplayContext;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.client.block.LootrShulkerBoxRenderer;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
 import java.util.Set;
+import java.util.function.Consumer;
 
 public class LootrShulkerSpecialRenderer implements NoDataSpecialModelRenderer {
   private final LootrShulkerBoxRenderer renderer;
@@ -38,22 +40,22 @@ public class LootrShulkerSpecialRenderer implements NoDataSpecialModelRenderer {
   }
 
   @Override
-  public void getExtents(Set<Vector3f> p_428206_) {
-    this.renderer.getExtents(this.orientation, this.openness, p_428206_);
+  public void getExtents(Consumer<Vector3fc> consumer) {
+    this.renderer.getExtents(this.orientation, this.openness, consumer);
   }
 
-  public record Unbaked(ResourceLocation texture, ResourceLocation oldTexture, float openness,
+  public record Unbaked(Identifier texture, Identifier oldTexture, float openness,
                         Direction orientation) implements SpecialModelRenderer.Unbaked {
     public static final MapCodec<Unbaked> MAP_CODEC = RecordCodecBuilder.mapCodec(
         instance -> instance.group(
-            ResourceLocation.CODEC.fieldOf("texture").forGetter(Unbaked::texture),
-            ResourceLocation.CODEC.fieldOf("old_texture").forGetter(Unbaked::oldTexture),
+            Identifier.CODEC.fieldOf("texture").forGetter(Unbaked::texture),
+            Identifier.CODEC.fieldOf("old_texture").forGetter(Unbaked::oldTexture),
             Codec.FLOAT.fieldOf("openness").forGetter(Unbaked::openness),
             Direction.CODEC.fieldOf("orientation").forGetter(Unbaked::orientation)
         ).apply(instance, LootrShulkerSpecialRenderer.Unbaked::new)
     );
 
-    public Unbaked(ResourceLocation texture, ResourceLocation oldTexture) {
+    public Unbaked(Identifier texture, Identifier oldTexture) {
       this(texture, oldTexture, 0.0f, Direction.UP);
     }
 

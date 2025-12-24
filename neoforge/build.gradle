@@ -7,27 +7,33 @@ configurations {
 }
 
 repositories {
+    maven { url "https://api.modrinth.com/maven" }
 }
 
 dependencies {
     compileOnly(project(':common')) {
         transitive = false
     }
+    implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:${rootProject.mixin_extras_version}"))
+    implementation("io.github.llamalad7:mixinextras-neoforge:${rootProject.mixin_extras_version}")
 }
+
 publishMods {
     file = tasks.jar.archiveFile
     modLoaders.add("neoforge")
 
     var env = System.getenv()
 
-    def gitRepo = getExecOutput(['git', 'remote', 'get-url', 'origin'])
-    def gitCommit = getExecOutput(['git', 'log', '-n', '1', '--pretty=tformat:%h'])
+    def utils = project.objects.newInstance(ExecUtils)
+
+    def gitRepo = utils.getExecOutput(['git', 'remote', 'get-url', 'origin'])
+    def gitCommit = utils.getExecOutput(['git', 'log', '-n', '1', '--pretty=tformat:%h'])
     def gitPrevCommit = project.findProperty("git_previous_commit") ?: env["GIT_PREVIOUS_COMMIT"]
 
     var changelogText = ""
 
     if (gitCommit && gitPrevCommit) {
-        changelogText += getExecOutput(['git', 'log', "--pretty=tformat:- %s [(%h)](${gitRepo}/commit/%h)", '' + gitPrevCommit + '..' + gitCommit])
+        changelogText += utils.getExecOutput(['git', 'log', "--pretty=tformat:- %s [(%h)](${gitRepo}/commit/%h)", '' + gitPrevCommit + '..' + gitCommit])
     }
 
     // Limit the changelog to 500 characters
@@ -35,7 +41,7 @@ publishMods {
 
     if (project.hasProperty('curseforge_id_neoforge')) {
         curseforge('curseforgeNeoForge') {
-            type = ALPHA
+            type = STABLE
 
             projectSlug = "lootr"
             displayName = "lootr-neoforge-${rootProject.minecraft_version}-${rootProject.mod_version}"
@@ -49,7 +55,7 @@ publishMods {
 
     if (project.hasProperty('modrinth_id_fabric')) {
         modrinth('modrinthNeoForge') {
-            type = ALPHA
+            type = STABLE
             displayName = "lootr-neoforge-${rootProject.minecraft_version}-${rootProject.mod_version}"
             accessToken = project.findProperty("modrinth_auth")
             projectId = project.findProperty('modrinth_id_neoforge')
@@ -127,7 +133,6 @@ neoForge {
         server {
             server()
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-            programArguments.add('--nogui')
         }
 
         clientData {
@@ -150,55 +155,7 @@ tasks.named("sourcesJar", Jar) {
 }
 
 processResources {
-    from project.project(":common").sourceSets.main.resources
-}
-
-publishing {
-    tasks.publish.dependsOn build
-
-    publications {
-        mavenJava(MavenPublication) {
-
-            artifactId project.archivesBaseName
-            artifact jar
-            artifact project.sourcesJar {
-                archiveClassifier.set('sources')
-            }
-
-            pom {
-                name = 'Lootr'
-                description = 'Friendly loot for everyone.'
-                url = 'https://github.com/LootrMinecraft/Lootr'
-
-                scm {
-                    connection = 'git:https://github.com/LootrMinecraft/Lootr.git'
-                    developerConnection = 'git:https://github.com/LootrMinecraft/Lootr.git'
-                    url = 'https://github.com/LootrMinecraft/Lootr'
-                }
-
-                licenses {
-                    license {
-                        name = 'MIT License'
-                        url = 'https://opensource.org/licenses/MIT'
-                    }
-                }
-
-                developers {
-                    developer {
-                        id = 'noobanidus'
-                        name = 'Noobanidus'
-                        email = 'noobanidus+spam@gmail.com'
-                    }
-                }
-            }
-        }
-    }
-
-    repositories {
-        maven {
-            url "file:///" + System.getenv("local_maven")
-        }
-    }
+    from (project.project(":common").sourceSets.main.resources)
 }
 
 tasks.build.mustRunAfter tasks.clean

@@ -2,19 +2,19 @@ package noobanidus.mods.lootr.fabric.init;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import noobanidus.mods.lootr.common.advancement.AdvancementTrigger;
 import noobanidus.mods.lootr.common.advancement.ContainerTrigger;
 import noobanidus.mods.lootr.common.advancement.LootedStatTrigger;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 
 public class ModAdvancements {
-  public static final ResourceLocation CHEST_LOCATION = LootrAPI.rl("chest_opened");
-  public static final ResourceLocation BARREL_LOCATION = LootrAPI.rl("barrel_opened");
-  public static final ResourceLocation CART_LOCATION = LootrAPI.rl("cart_opened");
-  public static final ResourceLocation SHULKER_LOCATION = LootrAPI.rl("shulker_opened");
-  public static final ResourceLocation ADVANCEMENT_LOCATION = LootrAPI.rl("advancement");
-  public static final ResourceLocation SCORE_LOCATION = LootrAPI.rl("score");
+  public static final Identifier CHEST_LOCATION = LootrAPI.rl("chest_opened");
+  public static final Identifier BARREL_LOCATION = LootrAPI.rl("barrel_opened");
+  public static final Identifier CART_LOCATION = LootrAPI.rl("cart_opened");
+  public static final Identifier SHULKER_LOCATION = LootrAPI.rl("shulker_opened");
+  public static final Identifier ADVANCEMENT_LOCATION = LootrAPI.rl("advancement");
+  public static final Identifier SCORE_LOCATION = LootrAPI.rl("score");
   public static ContainerTrigger CHEST = null;
   public static ContainerTrigger BARREL = null;
   public static ContainerTrigger CART = null;

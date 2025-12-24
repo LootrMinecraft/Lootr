@@ -7,7 +7,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -54,7 +54,7 @@ public class LootrAPI {
   public static final ResourceKey<TicketType> LOOTR_ENTITY_TICK_TICKET = ResourceKey.create(Registries.TICKET_TYPE, LootrAPI.rl("entity_tick_ticket"));
   @ApiStatus.Internal
   public static final List<String> _lootr$digits = Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f");
-  public static final List<ResourceLocation> PROBLEMATIC_CHESTS = Arrays.asList(LootrAPI.rl("twilightforest", "structures/stronghold_boss"), LootrAPI.rl("atum", "chests/pharaoh"));
+  public static final List<Identifier> PROBLEMATIC_CHESTS = Arrays.asList(LootrAPI.rl("twilightforest", "structures/stronghold_boss"), LootrAPI.rl("atum", "chests/pharaoh"));
 
   public static ILootrAPI INSTANCE = null;
   public static boolean shouldDiscardIdAndOpeners;
@@ -63,12 +63,12 @@ public class LootrAPI {
     return INSTANCE != null;
   }
 
-  public static ResourceLocation rl(String path) {
-    return ResourceLocation.fromNamespaceAndPath(MODID, path);
+  public static Identifier rl(String path) {
+    return Identifier.fromNamespaceAndPath(MODID, path);
   }
 
-  public static ResourceLocation rl(String namespace, String path) {
-    return ResourceLocation.fromNamespaceAndPath(namespace, path);
+  public static Identifier rl(String namespace, String path) {
+    return Identifier.fromNamespaceAndPath(namespace, path);
   }
 
   public static Set<UUID> getPlayerIds() {

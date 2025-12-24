@@ -2,7 +2,7 @@ package noobanidus.mods.lootr.neoforge.gen.compat;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagEntry;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import noobanidus.mods.lootr.common.api.LootrAPI;
@@ -33,25 +33,25 @@ public class LootrCompatBlockTagProvider extends BlockTagsProvider {
     if (!CHEST_BLOCK_IDS.isEmpty()) {
       var tag = tag(LootrTags.Blocks.CONVERT_CHESTS);
       for (String block : CHEST_BLOCK_IDS) {
-        tag.add(TagEntry.optionalElement(ResourceLocation.fromNamespaceAndPath(COMPAT_MODID, block)));
+        tag.add(TagEntry.optionalElement(Identifier.fromNamespaceAndPath(COMPAT_MODID, block)));
       }
     }
     if (!BARREL_BLOCK_IDS.isEmpty()) {
       var tag = tag(LootrTags.Blocks.CONVERT_BARRELS);
       for (String block : BARREL_BLOCK_IDS) {
-        tag.add(TagEntry.optionalElement(ResourceLocation.fromNamespaceAndPath(COMPAT_MODID, block)));
+        tag.add(TagEntry.optionalElement(Identifier.fromNamespaceAndPath(COMPAT_MODID, block)));
       }
     }
     if (!TRAPPED_CHEST_BLOCK_IDS.isEmpty()) {
       var tag = tag(LootrTags.Blocks.CONVERT_TRAPPED_CHESTS);
       for (String block : TRAPPED_CHEST_BLOCK_IDS) {
-        tag.add(TagEntry.optionalElement(ResourceLocation.fromNamespaceAndPath(COMPAT_MODID, block)));
+        tag.add(TagEntry.optionalElement(Identifier.fromNamespaceAndPath(COMPAT_MODID, block)));
       }
     }
     if (!SHULKER_BOX_BLOCK_IDS.isEmpty()) {
       var tag = tag(LootrTags.Blocks.CONVERT_SHULKERS);
       for (String block : SHULKER_BOX_BLOCK_IDS) {
-        tag.add(TagEntry.optionalElement(ResourceLocation.fromNamespaceAndPath(COMPAT_MODID, block)));
+        tag.add(TagEntry.optionalElement(Identifier.fromNamespaceAndPath(COMPAT_MODID, block)));
       }
     }
   }

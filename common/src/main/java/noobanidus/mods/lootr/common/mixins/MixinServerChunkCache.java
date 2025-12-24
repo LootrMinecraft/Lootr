@@ -1,7 +1,7 @@
 package noobanidus.mods.lootr.common.mixins;
 
-import net.minecraft.FileUtil;
 import net.minecraft.server.level.ServerChunkCache;
+import net.minecraft.util.FileUtil;
 import net.minecraft.world.level.Level;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import org.spongepowered.asm.mixin.Mixin;

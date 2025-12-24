@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.11.7'
+    id 'fabric-loom' version "1.14.7"
 }
 
 repositories {
@@ -26,6 +26,7 @@ repositories {
     }
 }
 
+
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings(loom.layered {
@@ -49,22 +50,29 @@ dependencies {
 
     modCompileOnly("me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config}")
     modLocalRuntime("me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config}")
+
+    implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:${rootProject.mixin_extras_version}"))
+    implementation("io.github.llamalad7:mixinextras-fabric:${rootProject.mixin_extras_version}")
 }
 
 publishMods {
+    apply from: "../gradle/property_helper.gradle"
+
     file = tasks.remapJar.archiveFile
     modLoaders.add("fabric")
 
     var env = System.getenv()
 
-    def gitRepo = getExecOutput(['git', 'remote', 'get-url', 'origin'])
-    def gitCommit = getExecOutput(['git', 'log', '-n', '1', '--pretty=tformat:%h'])
+    def utils = project.objects.newInstance(ExecUtils)
+
+    def gitRepo = utils.getExecOutput(['git', 'remote', 'get-url', 'origin'])
+    def gitCommit = utils.getExecOutput(['git', 'log', '-n', '1', '--pretty=tformat:%h'])
     def gitPrevCommit = project.findProperty("git_previous_commit") ?: env["GIT_PREVIOUS_COMMIT"]
 
     var changelogText = ""
 
     if (gitCommit && gitPrevCommit) {
-        changelogText += getExecOutput(['git', 'log', "--pretty=tformat:- %s [(%h)](${gitRepo}/commit/%h)", '' + gitPrevCommit + '..' + gitCommit])
+        changelogText += utils.getExecOutput(['git', 'log', "--pretty=tformat:- %s [(%h)](${gitRepo}/commit/%h)", '' + gitPrevCommit + '..' + gitCommit])
     }
 
     // Limit the changelog to 500 characters
@@ -79,7 +87,7 @@ publishMods {
         curseforge('curseforgeFabric') {
 
             projectSlug = "lootr-fabric"
-            type = ALPHA
+            type = STABLE
             displayName = "lootr-fabric-${rootProject.minecraft_version}-${rootProject.mod_version}"
             accessToken = project.findProperty("curse_auth")
             projectId = project.findProperty('curseforge_id_fabric')
@@ -99,7 +107,7 @@ publishMods {
 
     if (project.hasProperty('modrinth_id_fabric')) {
         modrinth('modrinthFabric') {
-            type = ALPHA
+            type = STABLE
             displayName = "lootr-fabric-${rootProject.minecraft_version}-${rootProject.mod_version}"
             accessToken = project.findProperty("modrinth_auth")
             projectId = project.findProperty('modrinth_id_fabric')
@@ -120,11 +128,11 @@ publishMods {
     }
 
     if (project.hasProperty("curse_discord_webhook")) {
-         discord {
-             webhookUrl = project.findProperty("curse_discord_webhook")
-             username = "Lootr Update"
-             content = "A new version of Lootr has been released!\n\n${changelogText.take(500)}"
-         }
+        discord {
+            webhookUrl = project.findProperty("curse_discord_webhook")
+            username = "Lootr Update"
+            content = "A new version of Lootr has been released!\n\n${changelogText.take(500)}"
+        }
     }
 }
 
@@ -190,54 +198,6 @@ tasks.named("sourcesJar", Jar) {
 
 processResources {
     from project.project(":common").sourceSets.main.resources
-}
-
-publishing {
-    tasks.publish.dependsOn build
-
-    publications {
-        mavenJava(MavenPublication) {
-
-            artifactId project.archivesBaseName
-            artifact remapJar
-            artifact project.sourcesJar {
-                archiveClassifier.set('sources')
-            }
-
-            pom {
-                name = 'Lootr'
-                description = 'Friendly loot for everyone.'
-                url = 'https://github.com/LootrMinecraft/Lootr'
-
-                scm {
-                    connection = 'git:https://github.com/LootrMinecraft/Lootr.git'
-                    developerConnection = 'git:https://github.com/LootrMinecraft/Lootr.git'
-                    url = 'https://github.com/LootrMinecraft/Lootr'
-                }
-
-                licenses {
-                    license {
-                        name = 'MIT License'
-                        url = 'https://opensource.org/licenses/MIT'
-                    }
-                }
-
-                developers {
-                    developer {
-                        id = 'noobanidus'
-                        name = 'Noobanidus'
-                        email = 'noobanidus+spam@gmail.com'
-                    }
-                }
-            }
-        }
-    }
-
-    repositories {
-        maven {
-            url "file:///" + System.getenv("local_maven")
-        }
-    }
 }
 
 tasks.build.mustRunAfter tasks.clean

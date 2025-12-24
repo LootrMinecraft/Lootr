@@ -2,7 +2,7 @@ package noobanidus.mods.lootr.common.api.registry;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.stats.Stat;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.CreativeModeTab;
@@ -17,12 +17,12 @@ import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.advancement.ILootedStatTrigger;
 
 public class LootrRegistry {
-  public static final ResourceLocation CHEST = LootrAPI.rl("lootr_chest");
-  public static final ResourceLocation TRAPPED_CHEST = LootrAPI.rl("lootr_trapped_chest");
-  public static final ResourceLocation BARREL = LootrAPI.rl("lootr_barrel");
-  public static final ResourceLocation INVENTORY = LootrAPI.rl("lootr_inventory");
-  public static final ResourceLocation TROPHY = LootrAPI.rl("trophy");
-  public static final ResourceLocation SHULKER = LootrAPI.rl("lootr_shulker");
+  public static final Identifier CHEST = LootrAPI.rl("lootr_chest");
+  public static final Identifier TRAPPED_CHEST = LootrAPI.rl("lootr_trapped_chest");
+  public static final Identifier BARREL = LootrAPI.rl("lootr_barrel");
+  public static final Identifier INVENTORY = LootrAPI.rl("lootr_inventory");
+  public static final Identifier TROPHY = LootrAPI.rl("trophy");
+  public static final Identifier SHULKER = LootrAPI.rl("lootr_shulker");
 
   public static final ResourceKey<Block> CHEST_BLOCK_KEY = ResourceKey.create(Registries.BLOCK, CHEST);
   public static final ResourceKey<Block> TRAPPED_CHEST_BLOCK_KEY = ResourceKey.create(Registries.BLOCK, TRAPPED_CHEST);
