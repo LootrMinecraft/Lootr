@@ -7,6 +7,7 @@ configurations {
 }
 
 repositories {
+    maven { url "https://api.modrinth.com/maven" }
 }
 
 dependencies {
@@ -16,6 +17,7 @@ dependencies {
     compileOnly "dev.thomasglasser.sherdsapi:sherdsapi-neoforge-${minecraft_version}:${sherdsapi_version}"
     implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:${rootProject.mixin_extras_version}"))
     implementation("io.github.llamalad7:mixinextras-neoforge:${rootProject.mixin_extras_version}")
+    implementation "maven.modrinth:jade:15.10.0+neoforge"
 }
 
 publishMods {

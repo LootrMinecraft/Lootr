@@ -25,8 +25,8 @@ import org.jetbrains.annotations.Nullable;
 public abstract class LootrBrushableBlock extends BrushableBlock {
   public static final IntegerProperty DUSTED = BlockStateProperties.DUSTED;
 
-  public LootrBrushableBlock(SoundEvent soundEvent, SoundEvent soundEvent2, BlockBehaviour.Properties properties) {
-    super(Blocks.AIR, soundEvent, soundEvent2, properties);
+  public LootrBrushableBlock(Block pseudoReplacement, SoundEvent soundEvent, SoundEvent soundEvent2, BlockBehaviour.Properties properties) {
+    super(pseudoReplacement, soundEvent, soundEvent2, properties);
   }
 
   @Override
