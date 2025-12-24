@@ -40,7 +40,7 @@
   "lootr.commands.blockpos": "%s,%s,%s",
   "lootr.commands.create": "%s를 %s에 전리품 테이블 %s를 사용하여 생성하였습니다.",
   "lootr.commands.summon": "전리품 상자가 든 광산 수레를 %s에 전리품 테이블 %s를 사용하여 생성하였습니다.",
-  "lootr.commands.usage": "/lootr cart | cart <loot-table> | %s | custom | refresh | decay | open_as <player> | open_as_uuid <uuid> | id | openers",
+  "lootr.commands.usage": "/lootr cart | cart <loot-table> | %s | custom-chest | custom-area <x> <y> <z> <x> <y> <z> | refresh | decay | open_as <player> | open_as_uuid <uuid> | id | openers | clear <player> | cclear <entity matcher>",
   "lootr.configuration.blast_immune": "폭발에 면역",
   "lootr.configuration.blast_resistant": "폭발 저항",
   "lootr.configuration.breaking": "블록 파괴",

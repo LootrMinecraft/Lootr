@@ -40,7 +40,7 @@
   "lootr.commands.blockpos": "%s,%s,%s",
   "lootr.commands.create": "在 %s 使用戰利品表 %s 建立了一個 Lootr %s。",
   "lootr.commands.summon": "在 %s 使用戰利品表 %s 召喚了一輛 Lootr 礦車。",
-  "lootr.commands.usage": "/lootr cart | cart <loot-table> | %s | custom | refresh | decay | open_as <player> | open_as_uuid <uuid> | id | openers",
+  "lootr.commands.usage": "/lootr cart | cart <loot-table> | %s | custom-chest | custom-area <x> <y> <z> <x> <y> <z> | refresh | decay | open_as <player> | open_as_uuid <uuid> | id | openers | clear <player> | cclear <entity matcher>",
   "lootr.configuration.blast_immune": "爆炸免疫",
   "lootr.configuration.blast_resistant": "抗爆炸",
   "lootr.configuration.breaking": "破壞",
