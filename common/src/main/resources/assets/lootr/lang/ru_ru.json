@@ -40,7 +40,7 @@
   "lootr.commands.blockpos": "%s,%s,%s",
   "lootr.commands.create": "Создано: %s в %s, используя таблицу добычи %s.",
   "lootr.commands.summon": "Создана вагонетка с сундуком с добычей в %s, используя таблицу добычи %s.",
-  "lootr.commands.usage": "/lootr cart | cart <loot-table> | %s | custom-chest | custom-area <x> <y> <z> <x> <y> <z> | refresh | decay | open_as <player> | open_as_uuid <uuid> | id | openers | clear <player> | cclear <entity matcher>",
+  "lootr.commands.usage": "/lootr cart | cart <таблица-добычи> | %s | custom-chest | custom-area <x> <y> <z> <x> <y> <z> | refresh | decay | open_as <игрок> | open_as_uuid <uuid> | id | openers | clear <игрок> | cclear <сопоставитель сущности>",
   "lootr.configuration.blast_immune": "Полная взрывоустойчивость",
   "lootr.configuration.blast_resistant": "Взрывоустойчивость",
   "lootr.configuration.breaking": "Разрушение",
