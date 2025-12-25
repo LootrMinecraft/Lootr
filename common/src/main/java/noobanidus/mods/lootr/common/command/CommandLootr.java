@@ -11,6 +11,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.commands.arguments.DimensionArgument;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
@@ -45,6 +46,8 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.status.ChunkStatus;
+import net.minecraft.world.level.chunk.storage.RegionFile;
+import net.minecraft.world.level.chunk.storage.RegionStorageInfo;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -66,9 +69,14 @@ import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.common.impl.LootrServiceRegistry;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinBaseContainerBlockEntity;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinChunkMap;
+import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinMinecraftServer;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
+import java.nio.file.Path;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CommandLootr {
   private static List<ResourceKey<LootTable>> tables = null;
@@ -156,7 +164,7 @@ public class CommandLootr {
     }
   }
 
-  private static NonNullList<ItemStack> copyItemList(NonNullList<ItemStack> reference) {
+  static NonNullList<ItemStack> copyItemList(NonNullList<ItemStack> reference) {
     NonNullList<ItemStack> contents = NonNullList.withSize(reference.size(), ItemStack.EMPTY);
     for (int i = 0; i < reference.size(); i++) {
       contents.set(i, reference.get(i).copy());
@@ -418,6 +426,13 @@ public class CommandLootr {
       }
       return 1;
     })));
+    builder.then(Commands.literal("custom-map")
+        .then(Commands.argument("level", DimensionArgument.dimension()).executes(c -> {
+          ServerLevel levelKey = DimensionArgument.getDimension(c, "level");
+
+          CustomConvertJob.start(c.getSource().getServer(), levelKey, getAllChunkPositions(levelKey), c.getSource());
+          return 1;
+        })));
     builder.then(Commands.literal("custom-area").then(Commands.argument("from", BlockPosArgument.blockPos())
         .then(Commands.argument("to", BlockPosArgument.blockPos()).executes(context -> {
           BoundingBox bounds = BoundingBox.fromCorners(BlockPosArgument.getLoadedBlockPos(context, "from"), BlockPosArgument.getLoadedBlockPos(context, "to"));
@@ -454,7 +469,7 @@ public class CommandLootr {
               }
               BlockState state = blockEntity.getBlockState();
               if (!state.is(LootrTags.Blocks.CUSTOM_ELIGIBLE) && !blockEntity.getType().builtInRegistryHolder()
-                  .is(LootrTags.BlockEntity.CUSTOM_INELIGIBlE)) {
+                  .is(LootrTags.BlockEntity.CUSTOM_INELIGIBLE)) {
                 NonNullList<ItemStack> reference = ((AccessorMixinBaseContainerBlockEntity) blockEntity).invokeGetItems();
                 BlockState newState = updateBlockState(state, LootrRegistry.getInventoryBlock().defaultBlockState());
                 NonNullList<ItemStack> custom = copyItemList(reference);
@@ -524,7 +539,7 @@ public class CommandLootr {
               if (source instanceof LevelChunk levelChunk) {
                 for (BlockEntity be : levelChunk.getBlockEntities().values()) {
                   c.getSource()
-                      .sendSuccess(() -> Component.literal("Forcing BlockEntity[" + be +"] at " + be.getBlockPos() + " to be added to the queue."), false);
+                      .sendSuccess(() -> Component.literal("Forcing BlockEntity[" + be + "] at " + be.getBlockPos() + " to be added to the queue."), false);
                   BlockEntityTicker.addEntity(be, level, pos);
                 }
               }
@@ -545,7 +560,7 @@ public class CommandLootr {
               ChunkPos pos = levelChunk.getPos();
               for (BlockEntity be : levelChunk.getBlockEntities().values()) {
                 c.getSource()
-                    .sendSuccess(() -> Component.literal("Forcing BlockEntity[" + be +"] at " + be.getBlockPos() + " to be added to the queue."), false);
+                    .sendSuccess(() -> Component.literal("Forcing BlockEntity[" + be + "] at " + be.getBlockPos() + " to be added to the queue."), false);
                 BlockEntityTicker.addEntity(be, level, pos);
               }
             }
@@ -555,7 +570,50 @@ public class CommandLootr {
     return builder;
   }
 
-  private static BlockState updateBlockState(BlockState oldState, BlockState newState) {
+  private static final Pattern REGEX = Pattern.compile("^r\\.(-?[0-9]+)\\.(-?[0-9]+)\\.mca$");
+
+  private static List<ChunkPos> getAllChunkPositions(ServerLevel level) {
+    var storage = ((AccessorMixinMinecraftServer) level.getServer()).Lootr$getStorageSource();
+    RegionStorageInfo regionstorageinfo = new RegionStorageInfo(storage.getLevelId(), level.dimension(), "lootr");
+    Path path = storage.getDimensionPath(level.dimension()).resolve("region");
+
+    File[] afile = path.toFile().listFiles((p_321626_, p_321493_) -> p_321493_.endsWith(".mca"));
+
+    if (afile == null) {
+      return List.of();
+    } else {
+      List<ChunkPos> result = new ArrayList<>();
+      for (File file1 : afile) {
+        Matcher matcher = REGEX.matcher(file1.getName());
+        if (matcher.matches()) {
+          int i = Integer.parseInt(matcher.group(1)) << 5;
+          int j = Integer.parseInt(matcher.group(2)) << 5;
+          List<ChunkPos> list1 = Lists.newArrayList();
+
+          try (RegionFile regionfile = new RegionFile(regionstorageinfo, file1.toPath(), path, true)) {
+            for (int k = 0; k < 32; k++) {
+              for (int l = 0; l < 32; l++) {
+                ChunkPos chunkpos = new ChunkPos(k + i, l + j);
+                if (regionfile.doesChunkExist(chunkpos)) {
+                  list1.add(chunkpos);
+                }
+              }
+            }
+
+            if (!list1.isEmpty()) {
+              result.addAll(list1);
+            }
+          } catch (Throwable throwable) {
+            LootrAPI.LOG.error("Failed to read chunks from region file {}", file1.toPath(), throwable);
+          }
+        }
+      }
+
+      return result;
+    }
+  }
+
+  static BlockState updateBlockState(BlockState oldState, BlockState newState) {
     if (oldState.hasProperty(BlockStateProperties.FACING) && newState.hasProperty(BlockStateProperties.FACING)) {
       newState = newState.setValue(BlockStateProperties.FACING, oldState.getValue(BlockStateProperties.FACING));
     }

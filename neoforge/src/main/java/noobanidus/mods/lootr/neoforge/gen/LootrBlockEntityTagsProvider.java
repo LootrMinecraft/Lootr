@@ -22,7 +22,7 @@ public class LootrBlockEntityTagsProvider extends IntrinsicHolderTagsProvider<Bl
   protected void addTags(HolderLookup.Provider provider) {
     tag(LootrTags.BlockEntity.LOOTR_OBJECT);
     tag(LootrTags.BlockEntity.TRAPPED).add(LootrRegistry.getTrappedChestBlockEntity());
-    tag(LootrTags.BlockEntity.CUSTOM_INELIGIBlE);
+    tag(LootrTags.BlockEntity.CUSTOM_INELIGIBLE);
     tag(LootrTags.BlockEntity.CONVERT_BLACKLIST)
         // We just blacklist everything 'cos
         .add(BlockEntityType.BANNER, BlockEntityType.BEACON, BlockEntityType.BED, BlockEntityType.BEEHIVE, BlockEntityType.BELL, BlockEntityType.BLAST_FURNACE, BlockEntityType.BREWING_STAND, BlockEntityType.CALIBRATED_SCULK_SENSOR, BlockEntityType.CAMPFIRE, BlockEntityType.CHISELED_BOOKSHELF, BlockEntityType.COMMAND_BLOCK, BlockEntityType.COMPARATOR, BlockEntityType.CONDUIT, BlockEntityType.CRAFTER, BlockEntityType.DAYLIGHT_DETECTOR, BlockEntityType.DISPENSER, BlockEntityType.DROPPER, BlockEntityType.ENCHANTING_TABLE, BlockEntityType.ENDER_CHEST, BlockEntityType.FURNACE, BlockEntityType.HANGING_SIGN, BlockEntityType.HOPPER, BlockEntityType.JIGSAW, BlockEntityType.JUKEBOX, BlockEntityType.LECTERN, BlockEntityType.PISTON, BlockEntityType.SCULK_CATALYST, BlockEntityType.SCULK_SENSOR, BlockEntityType.SCULK_SHRIEKER, BlockEntityType.SIGN, BlockEntityType.SKULL, BlockEntityType.SMOKER, BlockEntityType.MOB_SPAWNER, BlockEntityType.STRUCTURE_BLOCK, BlockEntityType.END_GATEWAY, BlockEntityType.END_PORTAL, BlockEntityType.TRIAL_SPAWNER, BlockEntityType.VAULT)

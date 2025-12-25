@@ -75,7 +75,7 @@ public class LootrTags {
   public static class BlockEntity extends LootrTags {
     public static TagKey<BlockEntityType<?>> LOOTR_OBJECT = tag("object");
     public static TagKey<BlockEntityType<?>> TRAPPED = tag("trapped");
-    public static TagKey<BlockEntityType<?>> CUSTOM_INELIGIBlE = tag("custom_ineligible");
+    public static TagKey<BlockEntityType<?>> CUSTOM_INELIGIBLE = tag("custom_ineligible");
     public static TagKey<BlockEntityType<?>> CONVERT_BLACKLIST = tag("convert/blacklist");
 
     public static boolean isTagged(net.minecraft.world.level.block.entity.BlockEntity blockEntity, TagKey<BlockEntityType<?>> tag) {

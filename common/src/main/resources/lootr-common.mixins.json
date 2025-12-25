@@ -10,6 +10,7 @@
     "accessor.AccessorMixinDimensionDataStorage",
     "accessor.AccessorMixinFallingBlockEntity",
     "accessor.AccessorMixinLootTable",
+    "accessor.AccessorMixinMinecraftServer",
     "brushing.MixinBrushItem",
     "cat.MixinCatSitOnBlockGoal",
     "chest_blocking.MixinChestBlock",
