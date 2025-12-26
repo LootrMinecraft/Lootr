@@ -509,6 +509,7 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
     fallingBlockEntity.zo = f;
     fallingBlockEntity.blockData = brushableBlockEntity.getFallData(level.registryAccess());
     fallingBlockEntity.setStartPos(fallingBlockEntity.blockPosition());
+    fallingBlockEntity.dropItem = false;
     level.setBlock(blockPos, blockState.getFluidState().createLegacyBlock(), 3);
     level.addFreshEntity(fallingBlockEntity);
     return fallingBlockEntity;
