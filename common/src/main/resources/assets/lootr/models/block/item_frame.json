@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/template_item_frame",
+  "textures": {
+    "particle": "lootr:block/gold_planks",
+    "wood": "lootr:block/gold_planks",
+    "back": "minecraft:block/item_frame"
+  }
+}
