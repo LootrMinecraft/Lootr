@@ -24,7 +24,7 @@ import org.jetbrains.annotations.ApiStatus;
 
 public interface ILootrBlockEntity extends ILootrInfoProvider {
   static <T extends BlockEntity> void ticker (Level level, BlockPos pos, BlockState state, T blockEntity) {
-    if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity t && t.hasLootTable()) {
+    if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity t && (level.isClientSide() || t.hasLootTable())) {
       t.defaultTick(level, pos, state);
     }
   }
