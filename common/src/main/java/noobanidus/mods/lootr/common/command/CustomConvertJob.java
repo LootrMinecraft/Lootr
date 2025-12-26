@@ -26,7 +26,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-// Blame ChatGPT for this travesty.
+// Blame ChatGPT for this travesty, although it's not so bad.
 public final class CustomConvertJob {
   private static final ThreadFactory THREAD_FACTORY =
       new ThreadFactoryBuilder().setDaemon(true).setNameFormat("lootr-convert-%d").build();
@@ -37,6 +37,8 @@ public final class CustomConvertJob {
   private static Thread convertThread;
 
   private static final int TICKET_LEVEL = 2;
+
+  private static final int batchSize = 2;
 
   public static void start(MinecraftServer server, ServerLevel level, List<ChunkPos> positions, CommandSourceStack src) {
     if (convertThread != null && convertThread.isAlive()) {
@@ -52,7 +54,6 @@ public final class CustomConvertJob {
 
     convertThread = THREAD_FACTORY.newThread(() -> {
       try {
-        final int batchSize = 2; // increase slowly; 1–4 is usually sane
         for (int i = 0; i < positions.size() && running.get(); i += batchSize) {
           int from = i;
           int to = Math.min(i + batchSize, positions.size());
