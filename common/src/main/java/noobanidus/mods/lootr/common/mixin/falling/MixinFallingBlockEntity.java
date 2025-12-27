@@ -16,7 +16,12 @@ public class MixinFallingBlockEntity {
   @WrapOperation(method="tick", at=@At(value="INVOKE", target="Lnet/minecraft/world/level/block/entity/BlockEntity;setChanged()V"))
   private void lootr$onSetChanged(BlockEntity instance, Operation<Void> original) {
     original.call(instance);
-    ILootrBlockEntity resolved = LootrAPI.resolveBlockEntity(instance);
+    ILootrBlockEntity resolved = null;
+    if (LootrAPI.resolveBlockEntity(instance) instanceof ILootrBlockEntity resolved2) {
+      resolved = resolved2;
+    } else if (instance instanceof ILootrBlockEntity resolved2) {
+      resolved = resolved2;
+    }
     if (resolved != null) {
       resolved.performUpdate();
     }
