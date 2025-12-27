@@ -4,6 +4,7 @@ import com.google.auto.service.AutoService;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.level.storage.loot.LootTable;
+import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,7 +19,7 @@ public class ItemFrameAdapter implements ILootrDataAdapter<ItemFrame> {
 
   @Override
   public @Nullable ResourceKey<LootTable> getLootTable(ItemFrame entity) {
-    return null;
+    return LootrAPI.ITEM_FRAME_EMPTY;
   }
 
   @Override

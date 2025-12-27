@@ -180,7 +180,14 @@ public interface ILootrAPI {
 
   boolean shouldConvertMineshafts();
 
+  @Deprecated
   boolean shouldConvertElytras();
+
+  boolean shouldConvertElytrasToChests();
+
+  boolean shouldConvertElytrasToItemFrames();
+
+  boolean shouldConvertStructureItemFrames();
 
   int getDecayValue();
 
@@ -207,6 +214,10 @@ public interface ILootrAPI {
   boolean isBreakEnabled();
 
   boolean isFakePlayerBreakEnabled();
+
+  boolean canBrushablesSelfSupport();
+
+  boolean canItemFramesSelfSupport();
 
   boolean shouldDropPlayerLoot();
 

@@ -35,6 +35,7 @@ import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.SimpleLootrEntityInstance;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinItemFrame;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,6 +56,9 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
 
   public void lootrSetItem(ItemStack stack) {
     this.inventory.set(0, stack);
+    if (!level().isClientSide()) {
+      this.setItemInternal(stack);
+    }
   }
 
   @Override
@@ -201,7 +205,7 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
 
   @Override
   public ItemStack getItem() {
-    return inventory.getFirst();
+    return this.getEntityData().get(AccessorMixinItemFrame.lootr$getDataItem());
   }
 
   @Override
@@ -223,13 +227,23 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   @Override
   public void addAdditionalSaveData(CompoundTag compound) {
     super.addAdditionalSaveData(compound);
-    ContainerHelper.loadAllItems(compound.getCompound(NBTConstants.CUSTOM_INVENTORY), this.inventory, level().registryAccess());
+    compound.put(NBTConstants.CUSTOM_INVENTORY, ContainerHelper.saveAllItems(new CompoundTag(), this.inventory, level().registryAccess()));
   }
 
   @Override
   public void readAdditionalSaveData(CompoundTag compound) {
     super.readAdditionalSaveData(compound);
-    compound.put(NBTConstants.CUSTOM_INVENTORY, ContainerHelper.saveAllItems(new CompoundTag(), this.inventory, level().registryAccess()));
+    ContainerHelper.loadAllItems(compound.getCompound(NBTConstants.CUSTOM_INVENTORY), this.inventory, level().registryAccess());
+    this.setItemInternal(this.inventory.getFirst());
+  }
+
+  private void setItemInternal(ItemStack stack) {
+    if (!stack.isEmpty()) {
+      stack = stack.copyWithCount(1);
+    }
+
+    ((AccessorMixinItemFrame) this).lootr$onItemChanged(stack);
+    this.getEntityData().set(AccessorMixinItemFrame.lootr$getDataItem(), stack);
   }
 
   @Override

@@ -14,6 +14,7 @@
   },
   "client": [
     "client.MixinClientLevel",
-    "client.MixinClientPacketListener"
+    "client.MixinClientPacketListener",
+    "client.MixinModelBakery"
   ]
 }

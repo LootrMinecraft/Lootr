@@ -233,13 +233,30 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   }
 
   @Override
+  @Deprecated
   public boolean shouldConvertMineshafts() {
     return ConfigManager.get().conversion.convert_mineshafts;
   }
 
   @Override
+  @Deprecated
   public boolean shouldConvertElytras() {
-    return ConfigManager.get().conversion.convert_elytras;
+    return false;
+  }
+
+  @Override
+  public boolean shouldConvertElytrasToChests() {
+    return ConfigManager.get().conversion.convert_elytras_to_chests;
+  }
+
+  @Override
+  public boolean shouldConvertElytrasToItemFrames() {
+    return ConfigManager.get().conversion.convert_elytras_to_item_frames;
+  }
+
+  @Override
+  public boolean shouldConvertStructureItemFrames() {
+    return ConfigManager.get().conversion.convert_structure_item_frames;
   }
 
   @Override
@@ -300,6 +317,16 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   @Override
   public boolean isFakePlayerBreakEnabled() {
     return ConfigManager.get().breaking.enable_fake_player_break;
+  }
+
+  @Override
+  public boolean canBrushablesSelfSupport() {
+    return ConfigManager.get().breaking.brushables_self_support;
+  }
+
+  @Override
+  public boolean canItemFramesSelfSupport() {
+    return ConfigManager.get().breaking.item_frames_self_support;
   }
 
   @Override

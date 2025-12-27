@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
+import noobanidus.mods.lootr.common.api.ILootrAPI;
 import noobanidus.mods.lootr.common.api.client.ClientTextureType;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.impl.DefaultLootrAPIImpl;
@@ -233,13 +234,30 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   }
 
   @Override
+  @Deprecated
   public boolean shouldConvertMineshafts() {
     return ConfigManager.CONVERT_MINESHAFTS.get();
   }
 
   @Override
+  @Deprecated
   public boolean shouldConvertElytras() {
-    return ConfigManager.CONVERT_ELYTRAS.get();
+    return false;
+  }
+
+  @Override
+  public boolean shouldConvertElytrasToChests() {
+    return ConfigManager.CONVERT_ELYTRAS_TO_CHESTS.get();
+  }
+
+  @Override
+  public boolean shouldConvertElytrasToItemFrames() {
+    return ConfigManager.CONVERT_ELYTRAS_TO_ITEM_FRAMES.get();
+  }
+
+  @Override
+  public boolean shouldConvertStructureItemFrames() {
+    return ConfigManager.CONVERT_ITEM_FRAMES.get();
   }
 
   @Override
@@ -300,6 +318,16 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   @Override
   public boolean isFakePlayerBreakEnabled() {
     return ConfigManager.ENABLE_FAKE_PLAYER_BREAK.get();
+  }
+
+  @Override
+  public boolean canBrushablesSelfSupport() {
+    return ConfigManager.BRUSHABLES_SELF_SUPPORT.get();
+  }
+
+  @Override
+  public boolean canItemFramesSelfSupport() {
+    return ConfigManager.ITEM_FRAMES_SELF_SUPPORT.get();
   }
 
   @Override

@@ -9,6 +9,7 @@
     "accessor.AccessorMixinChunkMap",
     "accessor.AccessorMixinDimensionDataStorage",
     "accessor.AccessorMixinFallingBlockEntity",
+    "accessor.AccessorMixinItemFrame",
     "accessor.AccessorMixinLootTable",
     "accessor.AccessorMixinMinecraftServer",
     "brushing.MixinBrushItem",

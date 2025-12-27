@@ -267,8 +267,11 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
 
   public static class Conversion {
     public boolean disable = false;
-    public boolean convert_elytras = true;
+    public boolean convert_elytras_to_chests = false;
+    public boolean convert_elytras_to_item_frames = true;
+    @Deprecated
     public boolean convert_mineshafts = true;
+    public boolean convert_structure_item_frames = true;
     public boolean world_border = false;
     public boolean perform_piecewise_check = true;
     public boolean bypass_spawn_protection = true;
@@ -284,6 +287,8 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
     public boolean blast_immune = false;
     public boolean trapped_custom = false;
     public boolean should_drop_player_loot = false;
+    public boolean brushables_self_support = false;
+    public boolean item_frames_self_support = false;
   }
 
   public static class Lists {

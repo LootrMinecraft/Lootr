@@ -254,16 +254,31 @@ public class LootrAPI {
     return INSTANCE.isWorldBorderSafe(level, pos);
   }
 
+  @Deprecated
   public static boolean shouldCheckWorldBorder() {
     return INSTANCE.shouldCheckWorldBorder();
   }
 
+  @Deprecated
   public static boolean shouldConvertMineshafts() {
     return INSTANCE.shouldConvertMineshafts();
   }
 
+  @Deprecated
   public static boolean shouldConvertElytras() {
     return INSTANCE.shouldConvertElytras();
+  }
+
+  public static boolean shouldConvertElytrasToChests() {
+    return INSTANCE.shouldConvertElytrasToChests();
+  }
+
+  public static boolean shouldConvertElytrasToItemFrames() {
+    return INSTANCE.shouldConvertElytrasToItemFrames();
+  }
+
+  public static boolean shouldConvertStructureItemFrames() {
+    return INSTANCE.shouldConvertStructureItemFrames();
   }
 
   public static int getDecayValue() {
@@ -308,6 +323,14 @@ public class LootrAPI {
 
   public static boolean canDestroyOrBreak(Player player) {
     return INSTANCE.canDestroyOrBreak(player);
+  }
+
+  public static boolean canBrushablesSelfSupport() {
+    return INSTANCE.canBrushablesSelfSupport();
+  }
+
+  public static boolean canItemFramesSelfSupport() {
+    return INSTANCE.canItemFramesSelfSupport();
   }
 
   public static boolean isBreakDisabled() {
