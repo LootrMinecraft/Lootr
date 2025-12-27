@@ -34,4 +34,28 @@ public class MixinBrushItem {
     }
     return original;
   }
+
+/*
+  Potential "solution" for Digsite Workbench's modded brush items in order
+  to compensate for the improved speed of brushing without it having to
+  override the entire `onUseTick` method in its derivative item class.
+
+  @ModifyVariable(method="onUseTick", at=@At(value="STORE"), slice = @Slice(
+      from = @At(
+          value = "INVOKE",
+          target = "Lnet/minecraft/world/item/BrushItem;getUseDuration(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/LivingEntity;)I"
+      ),
+      to = @At(
+          value = "INVOKE",
+          target = "Lnet/minecraft/world/phys/BlockHitResult;getBlockPos()Lnet/minecraft/core/BlockPos;"
+      )
+  ), ordinal=0)
+  private boolean lootr$ChangeBrushSpeed(boolean incoming, Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
+    if (stack.getItem() instanceof ModdedBrushItem modded) {
+      int i = stack.getUseDuration(entity) - remainingUseDuration + 1;
+      return i % modded.getBrushingSpeed() == modded.getBrushingSpeed() / 2;
+    }
+
+    return incoming;
+  }*/
 }
