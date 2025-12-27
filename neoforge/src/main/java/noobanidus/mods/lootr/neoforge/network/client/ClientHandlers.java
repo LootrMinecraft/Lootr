@@ -8,7 +8,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
-import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
+import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.client.ClientHooks;
 
 
@@ -25,7 +25,7 @@ public class ClientHandlers {
       return;
     }
 
-    if (LootrAPI.resolveEntity(cart) instanceof ILootrCart lootrCart) {
+    if (LootrAPI.resolveEntity(cart) instanceof ILootrEntity lootrCart) {
       lootrCart.setClientOpened(false);
       return;
     }
@@ -45,7 +45,7 @@ public class ClientHandlers {
       return;
     }
 
-    if (LootrAPI.resolveEntity(cart) instanceof ILootrCart lootrCart) {
+    if (LootrAPI.resolveEntity(cart) instanceof ILootrEntity lootrCart) {
       lootrCart.setClientOpened(true);
       return;
     }
@@ -71,7 +71,7 @@ public class ClientHandlers {
     ClientHooks.clearCache(pos);
   }
 
-  public static void handleRefresh () {
+  public static void handleRefresh() {
     Player player = Minecraft.getInstance().player;
     if (player != null) {
       ClientHooks.clearCache(player.blockPosition());

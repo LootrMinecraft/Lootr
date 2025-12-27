@@ -9,18 +9,38 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
-import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
+import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
 public interface IPlatformAPI {
-  void performCartOpen(ILootrCart cart, ServerPlayer player);
+  void performEntityOpen(ILootrEntity entity, ServerPlayer player);
 
-  void performCartOpen(ILootrCart cart);
+  @Deprecated
+  default void performCartOpen(ILootrCart cart, ServerPlayer player) {
+    performEntityOpen(cart, player);
+  }
 
-  void performCartClose(ILootrCart cart, ServerPlayer player);
+  @Deprecated
+  default void performCartOpen(ILootrCart cart) {
+    performEntityOpen(cart);
+  }
 
-  void performCartClose(ILootrCart cart);
+  void performEntityOpen(ILootrEntity entity);
+
+  @Deprecated
+  default void performCartClose(ILootrCart cart, ServerPlayer player) {
+    performEntityClose(cart, player);
+  }
+
+  void performEntityClose(ILootrEntity cart, ServerPlayer player);
+
+  @Deprecated
+  default void performCartClose(ILootrCart cart) {
+    performEntityClose(cart);
+  }
+
+  void performEntityClose(ILootrEntity entity);
 
   void performBlockOpen(ILootrBlockEntity blockEntity, ServerPlayer player);
 
@@ -35,7 +55,7 @@ public interface IPlatformAPI {
   void restoreSpecificData(DataToCopy data, BlockEntity newBlockEntity);
 
   @Deprecated
-  default void copyEntityData (AbstractMinecartContainer entity1, AbstractMinecartContainer entity2) {
+  default void copyEntityData(AbstractMinecartContainer entity1, AbstractMinecartContainer entity2) {
     entity2.setXRot(entity1.getXRot());
     entity2.setYRot(entity1.getYRot());
     entity2.setYHeadRot(entity1.getYHeadRot());
@@ -44,7 +64,7 @@ public interface IPlatformAPI {
     }
   }
 
-  default void copyEntityData (ILootrDataAdapter<Entity> adapter, Entity entity1, ILootrCart entity3) {
+  default void copyEntityData(ILootrDataAdapter<Entity> adapter, Entity entity1, ILootrCart entity3) {
     Entity entity2 = entity3.asEntity();
     entity2.setXRot(entity1.getXRot());
     entity2.setYRot(entity1.getYRot());
@@ -56,7 +76,7 @@ public interface IPlatformAPI {
     }
   }
 
-  void refreshPlayerSection (ServerPlayer player);
+  void refreshPlayerSection(ServerPlayer player);
 
   void performPotBreak(ILootrBlockEntity lootrDecoratedPotBlockEntity, ServerPlayer player);
 }

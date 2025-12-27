@@ -38,7 +38,7 @@ import java.util.UUID;
  * object storing the information (such as the block entity or entity).
  * <br />
  * In theory, there is no need for anyone to ever implement this directly.
- * Instead, implement ILootrInfoProvider, ILootrCart or ILootrBlockEntity.
+ * Instead, implement ILootrInfoProvider, ILootrEntity or ILootrBlockEntity.
  */
 @ApiStatus.Internal
 public interface ILootrInfo {

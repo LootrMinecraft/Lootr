@@ -25,10 +25,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.saveddata.maps.MapId;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
+import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import org.jetbrains.annotations.Nullable;
 
-public class LootrItemFrame extends ItemFrame {
+public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   public LootrItemFrame(EntityType<? extends ItemFrame> entityType, Level level) {
     super(entityType, level);
   }

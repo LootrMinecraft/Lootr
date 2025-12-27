@@ -25,7 +25,7 @@ import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.ILootrSavedData;
 import noobanidus.mods.lootr.common.api.data.LootFiller;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
-import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
+import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
 import noobanidus.mods.lootr.common.api.processor.ILootrBlockEntityProcessor;
@@ -114,7 +114,7 @@ public interface ILootrAPI {
 
   ClientTextureType getTextureType();
 
-  default boolean isNewTextures () {
+  default boolean isNewTextures() {
     return getTextureType() == ClientTextureType.NEW;
   }
 
@@ -210,14 +210,18 @@ public interface ILootrAPI {
 
   boolean shouldDropPlayerLoot();
 
-  boolean shouldPerformDecayWhileTicking ();
-  boolean shouldPerformRefreshWhileTicking ();
-  boolean shouldStartDecayWhileTicking ();
-  boolean shouldStartRefreshWhileTicking ();
-  boolean shouldWarnNoLootTables ();
+  boolean shouldPerformDecayWhileTicking();
+
+  boolean shouldPerformRefreshWhileTicking();
+
+  boolean shouldStartDecayWhileTicking();
+
+  boolean shouldStartRefreshWhileTicking();
+
+  boolean shouldWarnNoLootTables();
 
 
-  boolean performPiecewiseCheck ();
+  boolean performPiecewiseCheck();
 
   @Deprecated
   default boolean isAwarded(ILootrInfoProvider provider, ServerPlayer player) {
@@ -263,31 +267,39 @@ public interface ILootrAPI {
   void handleProviderTick(@Nullable ILootrInfoProvider provider);
 
   @Nullable
-  <T extends BlockEntity> ILootrBlockEntity resolveBlockEntity (T blockEntity);
+  <T extends BlockEntity> ILootrBlockEntity resolveBlockEntity(T blockEntity);
 
-  <T extends Entity> ILootrCart resolveEntity (T entity);
+  <T extends Entity> ILootrEntity resolveEntity(T entity);
 
-  boolean isTaggedStructurePresent (ServerLevel level, ChunkPos chunkPos, TagKey<Structure> tag, BlockPos pos);
+  boolean isTaggedStructurePresent(ServerLevel level, ChunkPos chunkPos, TagKey<Structure> tag, BlockPos pos);
 
-  void playerDestroyed (Level level, Player player, BlockPos pos, @Nullable BlockEntity blockEntity);
+  void playerDestroyed(Level level, Player player, BlockPos pos, @Nullable BlockEntity blockEntity);
 
-  void refreshSections ();
+  void refreshSections();
 
-  List<ILootrFilter> getFilters ();
-  List<ILootrBlockEntityProcessor.Pre> getBlockEntityPreProcessors ();
-  List<ILootrBlockEntityProcessor.Post> getBlockEntityPostProcessors ();
-  List<ILootrEntityProcessor.Pre> getEntityPreProcessors ();
-  List<ILootrEntityProcessor.Post> getEntityPostProcessors ();
+  List<ILootrFilter> getFilters();
+
+  List<ILootrBlockEntityProcessor.Pre> getBlockEntityPreProcessors();
+
+  List<ILootrBlockEntityProcessor.Post> getBlockEntityPostProcessors();
+
+  List<ILootrEntityProcessor.Pre> getEntityPreProcessors();
+
+  List<ILootrEntityProcessor.Post> getEntityPostProcessors();
+
   @Nullable
   <T> ILootrDataAdapter<T> getAdapter(T type);
-  ILootrType getType (String type);
 
-  boolean shouldBypassSpawnProtection ();
+  ILootrType getType(String type);
 
-  boolean shouldReplaceWhenDecayed ();
+  boolean shouldBypassSpawnProtection();
+
+  boolean shouldReplaceWhenDecayed();
 
   PotDecorationsAdapter getDecorationsAdapter(BlockEntity blockEntity);
+
   PotDecorationsAdapter getDecorationsAdapter(ItemStack stack);
+
   PotDecorationsAdapter getDecorationsAdapter(BlockEntity.DataComponentInput input);
 }
 

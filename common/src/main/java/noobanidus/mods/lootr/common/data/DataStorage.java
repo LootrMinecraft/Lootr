@@ -18,7 +18,7 @@ import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.LootFiller;
 import noobanidus.mods.lootr.common.api.data.TickingData;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
-import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
+import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.chunk.LoadedChunks;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinDimensionDataStorage;
@@ -85,7 +85,8 @@ public class DataStorage {
   public static int getDecayValue(ILootrInfoProvider provider) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
-      if (provider.getInfoLevel() == null || (provider.getInfoLevel() != null && provider.getInfoLevel().isClientSide())) {
+      if (provider.getInfoLevel() == null || (provider.getInfoLevel() != null && provider.getInfoLevel()
+          .isClientSide())) {
         return -1;
       }
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot determine the decay value for {}.", provider.getInfoUUID());
@@ -113,7 +114,8 @@ public class DataStorage {
   public static void setDecaying(ILootrInfoProvider provider) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
-      if (provider.getInfoLevel() == null || (provider.getInfoLevel() != null && provider.getInfoLevel().isClientSide())) {
+      if (provider.getInfoLevel() == null || (provider.getInfoLevel() != null && provider.getInfoLevel()
+          .isClientSide())) {
         return;
       }
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot set the decay value for {}.", provider.getInfoUUID());
@@ -127,7 +129,8 @@ public class DataStorage {
   public static void removeDecayed(ILootrInfoProvider provider) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
-      if (provider.getInfoLevel() == null || (provider.getInfoLevel() != null && provider.getInfoLevel().isClientSide())) {
+      if (provider.getInfoLevel() == null || (provider.getInfoLevel() != null && provider.getInfoLevel()
+          .isClientSide())) {
         return;
       }
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr remove the decay value for {}.", provider.getInfoUUID());
@@ -152,7 +155,8 @@ public class DataStorage {
   public static int getRefreshValue(ILootrInfoProvider provider) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
-      if (provider.getInfoLevel() == null || (provider.getInfoLevel() != null && provider.getInfoLevel().isClientSide())) {
+      if (provider.getInfoLevel() == null || (provider.getInfoLevel() != null && provider.getInfoLevel()
+          .isClientSide())) {
         return -1;
       }
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot determine the refresh value for {}.", provider.getInfoUUID());
@@ -166,7 +170,8 @@ public class DataStorage {
   public static boolean isRefreshed(ILootrInfoProvider provider) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
-      if (provider.getInfoLevel() == null || (provider.getInfoLevel() != null && provider.getInfoLevel().isClientSide())) {
+      if (provider.getInfoLevel() == null || (provider.getInfoLevel() != null && provider.getInfoLevel()
+          .isClientSide())) {
         return false;
       }
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot determine if {} has refreshed.", provider.getInfoUUID());
@@ -180,7 +185,8 @@ public class DataStorage {
   public static void setRefreshing(ILootrInfoProvider provider) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
-      if (provider.getInfoLevel() == null || (provider.getInfoLevel() != null && provider.getInfoLevel().isClientSide())) {
+      if (provider.getInfoLevel() == null || (provider.getInfoLevel() != null && provider.getInfoLevel()
+          .isClientSide())) {
         return;
       }
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot set the refresh value for {}.", provider.getInfoUUID());
@@ -194,10 +200,11 @@ public class DataStorage {
   public static void removeRefreshed(ILootrInfoProvider provider) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
-      if (provider.getInfoLevel() == null || (provider.getInfoLevel() != null && provider.getInfoLevel().isClientSide())) {
+      if (provider.getInfoLevel() == null || (provider.getInfoLevel() != null && provider.getInfoLevel()
+          .isClientSide())) {
         return;
       }
-      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr remove the refresh value for {}.",provider.getInfoUUID());
+      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr remove the refresh value for {}.", provider.getInfoUUID());
       return;
     }
     TickingData data = manager.computeIfAbsent(TickingData.FACTORY, REFRESHES);
@@ -208,7 +215,8 @@ public class DataStorage {
   public static LootrSavedData getData(ILootrInfoProvider provider) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
-      if (provider.getInfoLevel() == null || (provider.getInfoLevel() != null && provider.getInfoLevel().isClientSide())) {
+      if (provider.getInfoLevel() == null || (provider.getInfoLevel() != null && provider.getInfoLevel()
+          .isClientSide())) {
         return null;
       }
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot fetch data for {} at {} with ID {} and cannot continue.", provider.getInfoDimension(), provider.getInfoPos(), provider.getInfoUUID());
@@ -300,7 +308,7 @@ public class DataStorage {
               .contains(chunkPos)) {
             if (lootrSavedData.getInfoNewType().isEntity()) {
               Entity entity = level.getEntity(lootrSavedData.getInfoUUID());
-              if (entity instanceof ILootrCart cart) {
+              if (entity instanceof ILootrEntity cart) {
                 cart.removeVisualOpener(id);
                 cart.performClose();
                 cart.performUpdate();

@@ -16,7 +16,7 @@ import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.api.client.ILootrFabricModelProvider;
 import noobanidus.mods.lootr.common.api.command.ILootrCommandExtension;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
-import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
+import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilterProvider;
 import noobanidus.mods.lootr.common.api.processor.ILootrBlockEntityProcessor;
@@ -138,8 +138,8 @@ public class LootrServiceRegistry {
 
   @SuppressWarnings("unchecked")
   @Nullable
-  private static <T> Function<T, ILootrCart> getEntity(EntityType<?> clazz) {
-    return (Function<T, ILootrCart>) getInstance().entityConverterMap.get(clazz);
+  private static <T> Function<T, ILootrEntity> getEntity(EntityType<?> clazz) {
+    return (Function<T, ILootrEntity>) getInstance().entityConverterMap.get(clazz);
   }
 
   @Nullable
@@ -158,11 +158,11 @@ public class LootrServiceRegistry {
   }
 
   @Nullable
-  static <T extends Entity> ILootrCart convertEntity(T entity) {
+  static <T extends Entity> ILootrEntity convertEntity(T entity) {
     if (entity == null) {
       return null;
     }
-    Function<T, ILootrCart> converter = getEntity(entity.getType());
+    Function<T, ILootrEntity> converter = getEntity(entity.getType());
     if (converter == null) {
       return null;
     }
@@ -177,19 +177,19 @@ public class LootrServiceRegistry {
     return getInstance().entityPreProcessors;
   }
 
-  static List<ILootrBlockEntityProcessor.Pre> getBlockEntityPreProcessors () {
+  static List<ILootrBlockEntityProcessor.Pre> getBlockEntityPreProcessors() {
     return getInstance().blockEntityPreProcessors;
   }
 
-  static List<ILootrEntityProcessor.Post> getEntityPostProcessors () {
+  static List<ILootrEntityProcessor.Post> getEntityPostProcessors() {
     return getInstance().entityPostProcessors;
   }
 
-  static List<ILootrBlockEntityProcessor.Post> getBlockEntityPostProcessors () {
+  static List<ILootrBlockEntityProcessor.Post> getBlockEntityPostProcessors() {
     return getInstance().blockEntityPostProcessors;
   }
 
-  static BlockState getReplacementBlockState (BlockState block) {
+  static BlockState getReplacementBlockState(BlockState block) {
     return getInstance().replacementMap.getReplacement(block);
   }
 
@@ -203,7 +203,7 @@ public class LootrServiceRegistry {
   }
 
   @Nullable
-  static ILootrType getType (String type) {
+  static ILootrType getType(String type) {
     return getInstance().typeMap.get(type);
   }
 

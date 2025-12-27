@@ -7,29 +7,49 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
-import noobanidus.mods.lootr.common.block.entity.LootrDecoratedPotBlockEntity;
+import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
 
 /**
- This contains platform-specific (i.e., NeoForge/Fabric) methods.
- <br />
- It is separate from LootrAPI simply just because.
+ * This contains platform-specific (i.e., NeoForge/Fabric) methods.
+ * <br />
+ * It is separate from LootrAPI simply just because.
  **/
 public class PlatformAPI {
   public static IPlatformAPI INSTANCE;
 
+  public static void performEntityOpen(ILootrEntity entity, ServerPlayer player) {
+    INSTANCE.performEntityOpen(entity, player);
+  }
+
+  @Deprecated
   public static void performCartOpen(ILootrCart cart, ServerPlayer player) {
     INSTANCE.performCartOpen(cart, player);
   }
 
+  public static void performEntityOpen(ILootrEntity entity) {
+    INSTANCE.performEntityOpen(entity);
+  }
+
+  @Deprecated
   public static void performCartOpen(ILootrCart cart) {
     INSTANCE.performCartOpen(cart);
   }
 
+  public static void performEntityClose(ILootrEntity entity, ServerPlayer player) {
+    INSTANCE.performEntityClose(entity, player);
+  }
+
+  @Deprecated
   public static void performCartClose(ILootrCart cart, ServerPlayer player) {
     INSTANCE.performCartClose(cart, player);
   }
 
+  public static void performEntityClose(ILootrEntity entity) {
+    INSTANCE.performEntityClose(entity);
+  }
+
+  @Deprecated
   public static void performCartClose(ILootrCart cart) {
     INSTANCE.performCartClose(cart);
   }
@@ -59,15 +79,15 @@ public class PlatformAPI {
   }
 
   @Deprecated
-  public static void copyEntityData (AbstractMinecartContainer entity1, AbstractMinecartContainer entity2) {
+  public static void copyEntityData(AbstractMinecartContainer entity1, AbstractMinecartContainer entity2) {
     INSTANCE.copyEntityData(entity1, entity2);
   }
 
-  public static void copyEntityData (ILootrDataAdapter<Entity> adapter, Entity entity1, LootrChestMinecartEntity entity2) {
+  public static void copyEntityData(ILootrDataAdapter<Entity> adapter, Entity entity1, LootrChestMinecartEntity entity2) {
     INSTANCE.copyEntityData(adapter, entity1, entity2);
   }
 
-  public static void refreshPlayerSection (ServerPlayer player) {
+  public static void refreshPlayerSection(ServerPlayer player) {
     INSTANCE.refreshPlayerSection(player);
   }
 

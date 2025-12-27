@@ -11,29 +11,29 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import noobanidus.mods.lootr.common.api.DataToCopy;
 import noobanidus.mods.lootr.common.api.IPlatformAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
-import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
+import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinBaseContainerBlockEntity;
 import noobanidus.mods.lootr.neoforge.network.toClient.*;
 
 public class PlatformAPIImpl implements IPlatformAPI {
   @Override
-  public void performCartOpen(ILootrCart cart, ServerPlayer player) {
-    PacketDistributor.sendToPlayer(player, new PacketOpenCart(cart.asEntity().getId()));
+  public void performEntityOpen(ILootrEntity entity, ServerPlayer player) {
+    PacketDistributor.sendToPlayer(player, new PacketOpenCart(entity.asEntity().getId()));
   }
 
   @Override
-  public void performCartOpen(ILootrCart cart) {
-    PacketDistributor.sendToPlayersTrackingEntity(cart.asEntity(), new PacketOpenCart(cart.asEntity().getId()));
+  public void performEntityOpen(ILootrEntity entity) {
+    PacketDistributor.sendToPlayersTrackingEntity(entity.asEntity(), new PacketOpenCart(entity.asEntity().getId()));
   }
 
   @Override
-  public void performCartClose(ILootrCart cart, ServerPlayer player) {
-    PacketDistributor.sendToPlayer(player, new PacketCloseCart(cart.asEntity().getId()));
+  public void performEntityClose(ILootrEntity entity, ServerPlayer player) {
+    PacketDistributor.sendToPlayer(player, new PacketCloseCart(entity.asEntity().getId()));
   }
 
   @Override
-  public void performCartClose(ILootrCart cart) {
-    PacketDistributor.sendToPlayersTrackingEntity(cart.asEntity(), new PacketCloseCart(cart.asEntity().getId()));
+  public void performEntityClose(ILootrEntity entity) {
+    PacketDistributor.sendToPlayersTrackingEntity(entity.asEntity(), new PacketCloseCart(entity.asEntity().getId()));
   }
 
   @Override

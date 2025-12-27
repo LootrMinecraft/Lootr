@@ -11,34 +11,34 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import noobanidus.mods.lootr.common.api.DataToCopy;
 import noobanidus.mods.lootr.common.api.IPlatformAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
-import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
+import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinBaseContainerBlockEntity;
 import noobanidus.mods.lootr.fabric.network.to_client.*;
 
 public class PlatformAPIImpl implements IPlatformAPI {
   @Override
-  public void performCartOpen(ILootrCart cart, ServerPlayer player) {
-    ServerPlayNetworking.send(player, new PacketOpenCart(cart.asEntity().getId()));
+  public void performEntityOpen(ILootrEntity entity, ServerPlayer player) {
+    ServerPlayNetworking.send(player, new PacketOpenCart(entity.asEntity().getId()));
   }
 
   @Override
-  public void performCartOpen(ILootrCart cart) {
-    if (cart.getInfoLevel() instanceof ServerLevel serverLevel) {
-      Packet<?> packet = ServerPlayNetworking.createS2CPacket(new PacketOpenCart(cart.asEntity().getId()));
-      serverLevel.getChunkSource().chunkMap.getPlayers(new ChunkPos(cart.asEntity().blockPosition()), false).forEach(player -> player.connection.send(packet));
+  public void performEntityOpen(ILootrEntity entity) {
+    if (entity.getInfoLevel() instanceof ServerLevel serverLevel) {
+      Packet<?> packet = ServerPlayNetworking.createS2CPacket(new PacketOpenCart(entity.asEntity().getId()));
+      serverLevel.getChunkSource().chunkMap.getPlayers(new ChunkPos(entity.asEntity().blockPosition()), false).forEach(player -> player.connection.send(packet));
     }
   }
 
   @Override
-  public void performCartClose(ILootrCart cart, ServerPlayer player) {
-    ServerPlayNetworking.send(player, new PacketCloseCart(cart.asEntity().getId()));
+  public void performEntityClose(ILootrEntity entity, ServerPlayer player) {
+    ServerPlayNetworking.send(player, new PacketCloseCart(entity.asEntity().getId()));
   }
 
   @Override
-  public void performCartClose(ILootrCart cart) {
-    if (cart.getInfoLevel() instanceof ServerLevel serverLevel) {
-      Packet<?> packet = ServerPlayNetworking.createS2CPacket(new PacketCloseCart(cart.asEntity().getId()));
-      serverLevel.getChunkSource().chunkMap.getPlayers(new ChunkPos(cart.asEntity().blockPosition()), false).forEach(player -> player.connection.send(packet));
+  public void performEntityClose(ILootrEntity entity) {
+    if (entity.getInfoLevel() instanceof ServerLevel serverLevel) {
+      Packet<?> packet = ServerPlayNetworking.createS2CPacket(new PacketCloseCart(entity.asEntity().getId()));
+      serverLevel.getChunkSource().chunkMap.getPlayers(new ChunkPos(entity.asEntity().blockPosition()), false).forEach(player -> player.connection.send(packet));
     }
   }
 

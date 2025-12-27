@@ -1,20 +1,21 @@
 package noobanidus.mods.lootr.common.api;
 
 import net.minecraft.world.entity.EntityType;
-import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
+import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 
 import java.util.function.Function;
 
 // TODO: I can technically get away with renaming this from "Converter"
 // as it doesn't actually convert, it just wraps/resolves.
+
 /**
- * Converts an object (of any type) into an ILootrCart.
+ * Converts an object (of any type) into an ILootrEntity.
  * <br />
  * Converters are loaded via services. Specifically, the class implementing this
  * converter should be listed (fully qualified name) in a file located at:
  * META-INF/services/noobanidus.mods.lootr.common.api.ILootrEntityConverter
  * <br />
- * These converters are then used to resolve entities into ILootrCart
+ * These converters are then used to resolve entities into ILootrEntity
  * rather than using specific "instanceof" checks or casts.
  * <br />
  * While the default implementations of this (i.e., LootrChestMinecartEntity$DefaultEntityConverter)
@@ -26,9 +27,9 @@ import java.util.function.Function;
  * if it is also installed, but otherwise want to function as a normal block entity
  * with Vanilla-esque (i.e., single loot generation) when it is not installed.*
  **/
-public interface ILootrEntityConverter<T> extends Function<T, ILootrCart> {
+public interface ILootrEntityConverter<T> extends Function<T, ILootrEntity> {
   @Override
-  ILootrCart apply (T entity);
+  ILootrEntity apply(T entity);
 
-  EntityType<?> getEntityType ();
+  EntityType<?> getEntityType();
 }

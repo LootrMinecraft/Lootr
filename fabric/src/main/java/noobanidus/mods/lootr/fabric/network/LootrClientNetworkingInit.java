@@ -6,7 +6,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
-import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
+import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.client.ClientHooks;
 import noobanidus.mods.lootr.fabric.network.to_client.*;
 
@@ -17,7 +17,7 @@ public class LootrClientNetworkingInit {
       context.client().execute(() -> {
         if (context.client().player != null && context.client().player.level() != null) {
           Entity potential = context.client().player.level().getEntity(entityId);
-          if (LootrAPI.resolveEntity(potential) instanceof ILootrCart cart) {
+          if (LootrAPI.resolveEntity(potential) instanceof ILootrEntity cart) {
             cart.setClientOpened(false);
           }
         }
@@ -29,7 +29,7 @@ public class LootrClientNetworkingInit {
       context.client().execute(() -> {
         if (context.client().player != null && context.client().player.level() != null) {
           Entity potential = context.client().player.level().getEntity(entityId);
-          if (LootrAPI.resolveEntity(potential) instanceof ILootrCart cart) {
+          if (LootrAPI.resolveEntity(potential) instanceof ILootrEntity cart) {
             cart.setClientOpened(true);
           }
         }

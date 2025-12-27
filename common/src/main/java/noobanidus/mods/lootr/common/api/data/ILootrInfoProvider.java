@@ -24,7 +24,7 @@ import java.util.UUID;
 
 /**
  * This is the commonly used interface for accessing Lootr containers.
- * That said, implementations generally extend ILootrBlockEntity or ILootrCart,
+ * That said, implementations generally extend ILootrBlockEntity or ILootrEntity,
  * as these provide more functionality.
  * <br />
  * This interface should, however, be used whenever a function interacts
@@ -82,7 +82,7 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
   }
 
   // This matters for actual implementations of ILootrBlockEntity
-  // but not so much as for ILootrCart implementations as those
+  // but not so much as for ILootrEntity implementations as those
   // do not actually track openers; there's no reason why they
   // couldn't though...
   default int getPhysicalOpenerCount () {

@@ -29,7 +29,7 @@ import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.ILootrSavedData;
 import noobanidus.mods.lootr.common.api.data.LootFiller;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
-import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
+import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
 import noobanidus.mods.lootr.common.api.processor.ILootrBlockEntityProcessor;
@@ -447,7 +447,7 @@ public class LootrAPI {
     return INSTANCE.resolveBlockEntity(blockEntity);
   }
 
-  public static <T extends Entity> ILootrCart resolveEntity(T entity) {
+  public static <T extends Entity> ILootrEntity resolveEntity(T entity) {
     return INSTANCE.resolveEntity(entity);
   }
 
@@ -491,7 +491,7 @@ public class LootrAPI {
     return INSTANCE.shouldReplaceWhenDecayed();
   }
 
-  public static boolean shouldWarnNoLootTables () {
+  public static boolean shouldWarnNoLootTables() {
     return INSTANCE.shouldWarnNoLootTables();
   }
 
@@ -532,7 +532,7 @@ public class LootrAPI {
   }
 
   @Nullable
-  public static PotDecorationsAdapter getDecorationsAdapter (BlockEntity blockEntity) {
+  public static PotDecorationsAdapter getDecorationsAdapter(BlockEntity blockEntity) {
     return INSTANCE.getDecorationsAdapter(blockEntity);
   }
 
@@ -542,7 +542,7 @@ public class LootrAPI {
   }
 
   @Nullable
-  public static PotDecorationsAdapter getDecorationsAdapter (BlockEntity.DataComponentInput container) {
+  public static PotDecorationsAdapter getDecorationsAdapter(BlockEntity.DataComponentInput container) {
     return INSTANCE.getDecorationsAdapter(container);
   }
 }

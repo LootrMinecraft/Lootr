@@ -21,7 +21,7 @@ import java.util.UUID;
 
 // TODO: Continue supporting this?
 public record AbstractMinecartContainerLootrInfoProvider(
-    AbstractMinecartContainer minecart, String cachedId) implements ILootrCart {
+    AbstractMinecartContainer minecart, String cachedId) implements ILootrEntity {
 
   @Override
   @Deprecated
