@@ -14,6 +14,7 @@ public class BuiltInLootrTypes {
   public static final String TYPE_POT = LootrAPI.rl("pot").toString();
   public static final String TYPE_SAND = LootrProperties.SUSPICIOUS_SAND.toString();
   public static final String TYPE_GRAVEL = LootrProperties.SUSPICIOUS_GRAVEL.toString();
+  public static final String TYPE_ITEM_FRAME = LootrProperties.ITEM_FRAME.toString();
 
   public static ILootrType CHEST;
   public static ILootrType TRAPPED_CHEST;
@@ -24,6 +25,7 @@ public class BuiltInLootrTypes {
   public static ILootrType POT;
   public static ILootrType SAND;
   public static ILootrType GRAVEL;
+  public static ILootrType ITEM_FRAME;
 
   @Nullable
   @Deprecated

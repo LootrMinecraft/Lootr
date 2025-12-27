@@ -17,11 +17,13 @@ import noobanidus.mods.lootr.common.block.entity.*;
 import noobanidus.mods.lootr.common.client.block.LootrBrushableBlockRenderer;
 import noobanidus.mods.lootr.common.client.block.LootrDecoratedPotRenderer;
 import noobanidus.mods.lootr.common.client.entity.LootrChestCartRenderer;
+import noobanidus.mods.lootr.common.client.entity.LootrItemFrameRenderer;
 import noobanidus.mods.lootr.common.client.item.LootrChestItemRenderer;
 import noobanidus.mods.lootr.common.client.item.LootrDecoratedPotItemRenderer;
 import noobanidus.mods.lootr.common.client.item.LootrShulkerItemRenderer;
 import noobanidus.mods.lootr.common.client.item.LootrTrappedChestItemRenderer;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
+import noobanidus.mods.lootr.common.entity.LootrItemFrame;
 import noobanidus.mods.lootr.neoforge.client.block.*;
 
 @EventBusSubscriber(modid = LootrAPI.MODID, value = Dist.CLIENT)
@@ -47,6 +49,7 @@ public class ClientSetup {
     event.registerEntityRenderer((EntityType<LootrChestMinecartEntity>) LootrRegistry.getMinecart(), (e) -> new LootrChestCartRenderer<>(e, ModelLayers.CHEST_MINECART));
     event.registerBlockEntityRenderer((BlockEntityType<LootrBrushableBlockEntity>) LootrRegistry.getBrushableBlockEntity(), LootrBrushableBlockRenderer::new);
     event.registerBlockEntityRenderer((BlockEntityType<LootrDecoratedPotBlockEntity>) LootrRegistry.getDecoratedPotBlockEntity(), LootrDecoratedPotRenderer::new);
+    event.registerEntityRenderer((EntityType<LootrItemFrame>) LootrRegistry.getItemFrame(), LootrItemFrameRenderer::new);
   }
 
   @SubscribeEvent

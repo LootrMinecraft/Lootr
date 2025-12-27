@@ -96,6 +96,10 @@ public class LootrLootTableProvider {
                   LootPool.lootPool()
                       .setRolls(ConstantValue.exactly(1))
                       .add(LootItem.lootTableItem(LootrRegistry.getTrophyBlock()).apply(SetItemCountFunction.setCount(ConstantValue.exactly(1))))));
+      consumer.accept(
+          LootrAPI.ITEM_FRAME_EMPTY,
+          LootTable.lootTable()
+      );
     }
   }
 }

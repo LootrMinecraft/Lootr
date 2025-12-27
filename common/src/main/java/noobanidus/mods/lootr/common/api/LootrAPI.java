@@ -57,6 +57,7 @@ public class LootrAPI {
   public static final String NETWORK_VERSION = "lootr-1.21.0-1";
   public static final ResourceKey<LootTable> ELYTRA_CHEST = ResourceKey.create(Registries.LOOT_TABLE, LootrAPI.rl("chests/elytra"));
   public static final ResourceKey<LootTable> TROPHY_REWARD = ResourceKey.create(Registries.LOOT_TABLE, LootrAPI.rl("reward/trophy"));
+  public static final ResourceKey<LootTable> ITEM_FRAME_EMPTY = ResourceKey.create(Registries.LOOT_TABLE, LootrAPI.rl("entity/item_frame_empty"));
   @Deprecated
   public static final TicketType<Unit> LOOTR_ENTITY_TICK_TICKET = TicketType.create("lootr_entity_tick_ticket", (unit1, unit2) -> 0, 300);
   public static final List<ResourceLocation> PROBLEMATIC_CHESTS = Arrays.asList(LootrAPI.rl("twilightforest", "structures/stronghold_boss"), LootrAPI.rl("atum", "chests/pharaoh"));

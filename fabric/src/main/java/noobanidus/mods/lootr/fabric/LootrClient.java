@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import noobanidus.mods.lootr.common.client.block.LootrBrushableBlockRenderer;
 import noobanidus.mods.lootr.common.client.block.LootrDecoratedPotRenderer;
+import noobanidus.mods.lootr.common.client.entity.LootrItemFrameRenderer;
 import noobanidus.mods.lootr.fabric.client.block.*;
 import noobanidus.mods.lootr.fabric.client.entity.LootrChestCartRenderer;
 import noobanidus.mods.lootr.fabric.client.item.LootrChestItemRenderer;
@@ -52,6 +53,7 @@ public class LootrClient implements ClientModInitializer {
     ModelLoadingPlugin.register(CustomModelLoader.INSTANCE);
 
     EntityRendererRegistry.register(ModEntities.LOOTR_MINECART_ENTITY, (context) -> new LootrChestCartRenderer<>(context, ModelLayers.CHEST_MINECART));
+    EntityRendererRegistry.register(ModEntities.ITEM_FRAME, LootrItemFrameRenderer::new);
 
     EntityModelLayerRegistry.registerModelLayer(LootrDecoratedPotRenderer.OPEN_POT_LAYER, LootrDecoratedPotRenderer::createBodyLayer);
   }
