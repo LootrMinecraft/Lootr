@@ -2,6 +2,7 @@ package noobanidus.mods.lootr.common.api.registry;
 
 import net.minecraft.stats.Stat;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -80,6 +81,10 @@ public class LootrRegistry {
 
   public static EntityType<?> getMinecart() {
     return INSTANCE.getMinecart();
+  }
+
+  public static EntityType<? extends ItemFrame> getItemFrame() {
+    return INSTANCE.getItemFrame();
   }
 
   public static BlockEntityType<?> getBarrelBlockEntity() {

@@ -2,6 +2,7 @@ package noobanidus.mods.lootr.neoforge.impl;
 
 import net.minecraft.stats.Stat;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -138,6 +139,11 @@ public class LootrRegistryImpl implements ILootrRegistry {
   @Override
   public EntityType<?> getMinecart() {
     return ModEntities.LOOTR_MINECART_ENTITY.get();
+  }
+
+  @Override
+  public EntityType<? extends ItemFrame> getItemFrame() {
+    return ModEntities.ITEM_FRAME.get();
   }
 
   @Override

@@ -25,6 +25,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.saveddata.maps.MapId;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
+import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import org.jetbrains.annotations.Nullable;
 
 public class LootrItemFrame extends ItemFrame {
@@ -33,7 +34,7 @@ public class LootrItemFrame extends ItemFrame {
   }
 
   public LootrItemFrame(Level level, BlockPos pos, Direction facingDirection) {
-    super(EntityType.ITEM_FRAME, level, pos, facingDirection);
+    super(LootrRegistry.getItemFrame(), level, pos, facingDirection);
   }
 
   @Override
