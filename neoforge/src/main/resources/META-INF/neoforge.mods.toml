@@ -16,6 +16,10 @@ license="https://github.com/noobanidus/Lootr/blob/1.16/LICENSE"
 [[mixins]]
     config="lootr-neoforge.mixins.json"
 
+[[mixins]]
+    config="lootr-neoforge-digsite_workshop.mixins.json"
+    requiredMods=["digsite_workshop"]
+
 [[dependencies.lootr]]
     modId="minecraft"
     type="required"

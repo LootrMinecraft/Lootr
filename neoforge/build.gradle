@@ -6,8 +6,14 @@ configurations {
     runtimeClasspath.extendsFrom localRuntime
 }
 
+def extraModsDir = "extra-mods"
+
 repositories {
     maven { url "https://api.modrinth.com/maven" }
+    flatDir {
+        name "extra-mods"
+        dir file(extraModsDir)
+    }
 }
 
 dependencies {
@@ -18,6 +24,16 @@ dependencies {
     implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:${rootProject.mixin_extras_version}"))
     implementation("io.github.llamalad7:mixinextras-neoforge:${rootProject.mixin_extras_version}")
     implementation "maven.modrinth:jade:15.10.0+neoforge"
+
+    // Locally sourced extra mods for runtime (i.e. testing)
+    for (extraModJar in fileTree(dir: extraModsDir, include: '*.jar')) {
+        def basename = extraModJar.name.substring(0, extraModJar.name.length() - ".jar".length())
+        def versionSep = basename.lastIndexOf('-')
+        assert versionSep != -1
+        def artifactId = basename.substring(0, versionSep)
+        def version = basename.substring(versionSep + 1)
+        implementation "extra-mods:$artifactId:$version"
+    }
 }
 
 publishMods {

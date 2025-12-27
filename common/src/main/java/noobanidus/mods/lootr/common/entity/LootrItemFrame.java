@@ -2,8 +2,11 @@ package noobanidus.mods.lootr.common.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
@@ -25,9 +28,16 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.saveddata.maps.MapId;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
+import net.minecraft.world.level.storage.loot.LootTable;
+import noobanidus.mods.lootr.common.api.ILootrType;
+import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Set;
+import java.util.UUID;
 
 public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   public LootrItemFrame(EntityType<? extends ItemFrame> entityType, Level level) {
@@ -194,6 +204,96 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
 
   protected ItemStack getFrameItemStack() {
     return new ItemStack(Items.ITEM_FRAME);
+  }
+
+  @Override
+  public @Nullable Set<UUID> getClientOpeners() {
+    return Set.of();
+  }
+
+  @Override
+  public boolean isClientOpened() {
+    return false;
+  }
+
+  @Override
+  public void setClientOpened(boolean opened) {
+
+  }
+
+  @Override
+  public void markChanged() {
+
+  }
+
+  @Override
+  public LootrBlockType getInfoBlockType() {
+    return null;
+  }
+
+  @Override
+  public ILootrType getInfoNewType() {
+    return null;
+  }
+
+  @Override
+  public @NotNull UUID getInfoUUID() {
+    return null;
+  }
+
+  @Override
+  public String getInfoKey() {
+    return "";
+  }
+
+  @Override
+  public boolean hasBeenOpened() {
+    return false;
+  }
+
+  @Override
+  public boolean isPhysicallyOpen() {
+    return false;
+  }
+
+  @Override
+  public @NotNull BlockPos getInfoPos() {
+    return null;
+  }
+
+  @Override
+  public @Nullable Component getInfoDisplayName() {
+    return null;
+  }
+
+  @Override
+  public @NotNull ResourceKey<Level> getInfoDimension() {
+    return null;
+  }
+
+  @Override
+  public int getInfoContainerSize() {
+    return 0;
+  }
+
+  @Override
+  public @Nullable NonNullList<ItemStack> getInfoReferenceInventory() {
+    return null;
+  }
+
+  @Override
+  public boolean isInfoReferenceInventory() {
+    return false;
+  }
+
+  @Override
+  public @Nullable ResourceKey<LootTable> getInfoLootTable() {
+    return null;
+  }
+
+  @Override
+  public long getInfoLootSeed() {
+    return 0;
   }
 }
 

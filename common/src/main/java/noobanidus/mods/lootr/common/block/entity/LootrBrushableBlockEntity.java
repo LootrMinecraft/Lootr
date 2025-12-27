@@ -36,6 +36,7 @@ import noobanidus.mods.lootr.common.api.data.SimpleLootrInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.common.integration.digsite_workshop.IModdedBrushItem;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinFallingBlockEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -90,6 +91,12 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
 
   @Override
   public boolean IBrushable$brush(long l, Player player, Direction direction) {
+    // This code mimics `FasterBrushingMixin` from Digsite Workshop.
+    ItemStack brushItem = getBrushItem(player);
+    if (brushItem.getItem() instanceof IModdedBrushItem moddedBrushItem) {
+      this.coolDownEndsAtTick -= 10L - moddedBrushItem.lootr$getBrushingSpeed();
+    }
+
     // TODO: There's a presumption that this is only ever called server-side, that could be wrong?
     Player brushingPlayer = this.getBrushingPlayer();
     if (brushingPlayer != null) {
@@ -139,6 +146,15 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
     } else {
       return false;
     }
+  }
+
+  private ItemStack getBrushItem(Player player) {
+    if (player.getMainHandItem().getItem() instanceof IModdedBrushItem) {
+      return player.getMainHandItem();
+    } else if (player.getOffhandItem().getItem() instanceof IModdedBrushItem) {
+      return player.getOffhandItem();
+    }
+    return ItemStack.EMPTY;
   }
 
   private void brushingCompleted(Player player) {
@@ -329,7 +345,7 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
     return this.item;
   }
 
-  public boolean isBrushingPlayer (Player player) {
+  public boolean isBrushingPlayer(Player player) {
     Player brushingPlayer = getBrushingPlayer();
     return brushingPlayer != null && brushingPlayer == player;
   }

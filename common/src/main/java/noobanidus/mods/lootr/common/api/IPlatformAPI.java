@@ -64,7 +64,7 @@ public interface IPlatformAPI {
     }
   }
 
-  default void copyEntityData(ILootrDataAdapter<Entity> adapter, Entity entity1, ILootrCart entity3) {
+  default void copyEntityData(ILootrDataAdapter<Entity> adapter, Entity entity1, ILootrEntity entity3) {
     Entity entity2 = entity3.asEntity();
     entity2.setXRot(entity1.getXRot());
     entity2.setYRot(entity1.getYRot());
