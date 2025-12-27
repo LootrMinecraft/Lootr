@@ -97,7 +97,6 @@ public abstract class LootrBrushableBlockEntity extends BlockEntity implements I
       this.coolDownEndsAtTick -= 10L - moddedBrushItem.lootr$getBrushingSpeed();
     }
 
-    // TODO: There's a presumption that this is only ever called server-side, that could be wrong?
     Player brushingPlayer = this.getBrushingPlayer();
     if (brushingPlayer != null) {
       if (player != brushingPlayer) {
