@@ -151,6 +151,10 @@ public class LootrRegistry {
     return INSTANCE.getPotTrigger();
   }
 
+  public static IContainerTrigger getItemFrameTrigger () {
+    return INSTANCE.getItemFrameTrigger();
+  }
+
   public static Stat<?> getLootedStat() {
     return INSTANCE.getLootedStat();
   }

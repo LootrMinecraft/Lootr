@@ -94,4 +94,6 @@ public interface ILootrRegistry {
   Stat<?> getLootedStat();
 
   CreativeModeTab getTab();
+
+  IContainerTrigger getItemFrameTrigger();
 }

@@ -213,4 +213,9 @@ public class LootrRegistryImpl implements ILootrRegistry {
   public CreativeModeTab getTab() {
     return ModTabs.LOOTR.get();
   }
+
+  @Override
+  public IContainerTrigger getItemFrameTrigger() {
+    return ModAdvancements.ITEM_FRAME.get();
+  }
 }
