@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.world.level.block.entity.TrappedChestBlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
+import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
 import noobanidus.mods.lootr.common.api.ILootrType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.ILootrSavedData;
@@ -40,8 +41,7 @@ public record RandomizableContainerBlockEntityLootrInfoProvider(
 
   @Override
   public ILootrType getInfoNewType() {
-    // TODO: Guess the type
-    return null;
+    return BuiltInLootrTypes.SIMPLE;
   }
 
   @Override
@@ -123,7 +123,7 @@ public record RandomizableContainerBlockEntityLootrInfoProvider(
 
   @Override
   public void markDataChanged() {
-    // TODO: This is actually quite bad
+    // TODO: Ensure this is never called on the client
     ILootrSavedData data = LootrAPI.getData(this);
     if (data != null) {
       data.markChanged();
