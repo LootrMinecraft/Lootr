@@ -43,6 +43,7 @@
     "lootr:lootr_chest",
     "lootr:lootr_trapped_chest",
     "lootr:lootr_inventory",
-    "lootr:lootr_shulker"
+    "lootr:lootr_shulker",
+    "lootr:decorated_pot"
   ]
 }
