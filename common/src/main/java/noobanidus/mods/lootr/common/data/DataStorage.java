@@ -306,7 +306,9 @@ public class DataStorage {
           ChunkPos chunkPos = new ChunkPos(lootrSavedData.getInfoPos());
           if (chunkCache.hasChunk(chunkPos.x, chunkPos.z) && LoadedChunks.getLoadedChunks(lootrSavedData.getInfoDimension())
               .contains(chunkPos)) {
-            if (lootrSavedData.getInfoNewType().isEntity()) {
+            // TODO: Optimize this to function off ILootrInfoProvider
+            //noinspection deprecation
+            if (lootrSavedData.isEntity()) {
               Entity entity = level.getEntity(lootrSavedData.getInfoUUID());
               if (entity instanceof ILootrEntity cart) {
                 cart.removeVisualOpener(id);

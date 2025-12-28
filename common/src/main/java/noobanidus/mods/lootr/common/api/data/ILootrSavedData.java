@@ -10,6 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
+import noobanidus.mods.lootr.common.api.ILootrType;
 import noobanidus.mods.lootr.common.api.IMarkChanged;
 import noobanidus.mods.lootr.common.api.IOpeners;
 import noobanidus.mods.lootr.common.api.IRedirect;
@@ -56,14 +57,22 @@ public interface ILootrSavedData extends IRedirect<ILootrInfo>, ILootrInfo, IOpe
 
   @Override
   @Deprecated
+  @Nullable
   default LootrInfoType getInfoType() {
     return getRedirect().getInfoType();
   }
 
   @Override
   @Deprecated
+  @Nullable
   default LootrBlockType getInfoBlockType() {
     return getRedirect().getInfoBlockType();
+  }
+
+  @Override
+  @Nullable
+  default ILootrType getInfoNewType() {
+    return getRedirect().getInfoNewType();
   }
 
   @Override

@@ -100,7 +100,8 @@ public interface ILootrBlockEntity extends ILootrInfoProvider {
     boolean replaceWhenDecayed = LootrAPI.shouldReplaceWhenDecayed();
     level.destroyBlock(getInfoPos(), !replaceWhenDecayed);
     if (replaceWhenDecayed) {
-      Block replacementBlock = getInfoNewType().getReplacementBlock();
+      //noinspection deprecation
+      Block replacementBlock = getReplacementBlock();
       if (replacementBlock != null) {
         BlockState replacementState = replacementBlock.defaultBlockState();
         for (Property<?> prop : replacementState.getProperties()) {

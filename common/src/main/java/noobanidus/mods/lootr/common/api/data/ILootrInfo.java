@@ -14,8 +14,11 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
@@ -43,31 +46,100 @@ import java.util.UUID;
 @ApiStatus.Internal
 public interface ILootrInfo {
   @Deprecated
+  @Nullable
   LootrBlockType getInfoBlockType();
 
   @Deprecated
+  @Nullable
   LootrInfoType getInfoType();
 
+  @Nullable
   ILootrType getInfoNewType();
 
   default LootFiller getDefaultFiller() {
-    return getInfoNewType().getDefaultFiller();
+    ILootrType type = getInfoNewType();
+    if (type == null) {
+      return DefaultLootFiller.getInstance();
+    } else {
+      return type.getDefaultFiller();
+    }
   }
 
   default boolean canRefresh() {
-    return getInfoNewType().canRefresh();
+    ILootrType type = getInfoNewType();
+    if (type == null) {
+      return true;
+    } else {
+      return type.canRefresh();
+    }
   }
 
   default boolean canDecay() {
-    return getInfoNewType().canDecay();
+    ILootrType type = getInfoNewType();
+    if (type == null) {
+      return true;
+    } else {
+      return type.canDecay();
+    }
   }
 
   default boolean canBeMarkedUnopened() {
-    return getInfoNewType().canBeMarkedUnopened();
+    ILootrType type = getInfoNewType();
+    if (type == null) {
+      return true;
+    } else {
+      return type.canBeMarkedUnopened();
+    }
   }
 
   default boolean canDropContentsWhenBroken() {
-    return getInfoNewType().canDropContentsWhenBroken();
+    ILootrType type = getInfoNewType();
+    if (type == null) {
+      return true;
+    } else {
+      return type.canDropContentsWhenBroken();
+    }
+  }
+
+  // Prefer using getInfoNewType().getReplacementBlock()
+  // This exists for backwards compatibility with "simple"
+  // implementations.
+  @Nullable
+  @Deprecated
+  default Block getReplacementBlock() {
+    ILootrType type = getInfoNewType();
+    if (type == null) {
+      return null;
+    } else {
+      return type.getReplacementBlock();
+    }
+  }
+
+  // Prefer using getInfoNewType().getReplacementEntity()
+  // This exists for backwards compatibility with "simple"
+  // implementations.
+  @Nullable
+  @Deprecated
+  default EntityType<?> getReplacementEntity() {
+    ILootrType type = getInfoNewType();
+    if (type == null) {
+      return null;
+    } else {
+      return type.getReplacementEntity();
+    }
+  }
+
+  // Prefer using getInfoNewType().isEntity() This exists
+  // exists for backwards compatibility with "simple"
+  // implementations.
+  @Deprecated
+  default boolean isEntity () {
+    ILootrType type = getInfoNewType();
+    if (type == null) {
+      return false;
+    } else {
+      return type.isEntity();
+    }
   }
 
   @NotNull
@@ -150,9 +222,15 @@ public interface ILootrInfo {
   }
 
   default void saveInfoToTag(CompoundTag tag, HolderLookup.Provider provider) {
-    /*    tag.putInt("type", getInfoType().ordinal());*/
-    tag.putString("newType", getInfoNewType().getName());
-    /*    tag.putInt("blockType", getInfoBlockType().ordinal());*/
+    if (getInfoType() != null) {
+      tag.putInt("type", getInfoType().ordinal());
+    }
+    if (getInfoNewType() != null) {
+      tag.putString("newType", getInfoNewType().getName());
+    }
+    if (getInfoBlockType() != null) {
+      tag.putInt("blockType", getInfoBlockType().ordinal());
+    }
     tag.put("position", NbtUtils.writeBlockPos(getInfoPos()));
     tag.putString("key", getInfoKey());
     tag.putString("dimension", getInfoDimension().location().toString());
@@ -166,6 +244,7 @@ public interface ILootrInfo {
       tag.putString("name", Component.Serializer.toJson(getInfoDisplayName(), provider));
     }
     if (isInfoReferenceInventory()) {
+      //noinspection DataFlowIssue
       tag.putInt("referenceSize", getInfoReferenceInventory().size());
       tag.put("reference", ContainerHelper.saveAllItems(new CompoundTag(), getInfoReferenceInventory(), true, provider));
     }

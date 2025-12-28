@@ -52,10 +52,12 @@ public interface ILootrEntity extends ILootrInfoProvider {
     boolean replaceWhenDecayed = LootrAPI.shouldReplaceWhenDecayed();
     Entity entity = asEntity();
     if (replaceWhenDecayed) {
-      EntityType<?> type = getInfoNewType().getReplacementEntity();
+      //noinspection deprecation
+      EntityType<?> type = getReplacementEntity();
       if (type != null) {
         Entity newCart = type.create(level);
         if (newCart != null) {
+          // TODO: Does anything else need to be copied over?
           newCart.setPos(entity.position());
           newCart.setXRot(entity.getXRot());
           newCart.setYRot(entity.getYRot());

@@ -18,25 +18,32 @@ import java.util.UUID;
  * <br />
  * It is specifically used to store data in `LootrSavedData`.
  */
-public record BaseLootrInfo(@Nullable LootrBlockType blockType, @Nullable LootrInfoType infoType, ILootrType type, UUID uuid, String cachedKey, BlockPos pos, @Nullable Component name, ResourceKey<Level> dimension,
-                            int containerSize, NonNullList<ItemStack> customInventory, ResourceKey<LootTable> table, long seed) implements ILootrInfo {
+public record BaseLootrInfo(@Deprecated @Nullable LootrBlockType blockType,
+                            @Deprecated @Nullable LootrInfoType infoType, @Nullable ILootrType type, UUID uuid,
+                            String cachedKey, BlockPos pos, @Nullable Component name, ResourceKey<Level> dimension,
+                            int containerSize, NonNullList<ItemStack> customInventory, ResourceKey<LootTable> table,
+                            long seed) implements ILootrInfo {
+  @SuppressWarnings("deprecation")
   public static BaseLootrInfo copy(ILootrInfo info) {
     return new BaseLootrInfo(info.getInfoBlockType(), info.getInfoType(), info.getInfoNewType(), info.getInfoUUID(), info.getInfoKey(), info.getInfoPos(), info.getInfoDisplayName(), info.getInfoDimension(), info.getInfoContainerSize(), info.getInfoReferenceInventory(), info.getInfoLootTable(), info.getInfoLootSeed());
   }
 
   @Override
   @Deprecated
+  @Nullable
   public LootrBlockType getInfoBlockType() {
     return blockType();
   }
 
   @Override
   @Deprecated
+  @Nullable
   public LootrInfoType getInfoType() {
     return infoType();
   }
 
   @Override
+  @Nullable
   public ILootrType getInfoNewType() {
     return type();
   }

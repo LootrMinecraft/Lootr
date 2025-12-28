@@ -212,11 +212,6 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
     markChanged();
   }
 
-  @Override
-  public ILootrType getInfoNewType() {
-    return getRedirect().getInfoNewType();
-  }
-
   // This is triggered in createInventory and reset in refresh.
   @Override
   public boolean hasBeenOpened() {
