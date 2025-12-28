@@ -74,6 +74,9 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
 
   @Override
   public boolean survives() {
+    if (LootrAPI.canItemFramesSelfSupport()) {
+      return true;
+    }
     // Determine based on Lootr config
     if (!this.level().noCollision(this)) {
       return false;
@@ -128,7 +131,6 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
 
   @Override
   public boolean hurt(DamageSource source, float amount) {
-    // TODO: Depend on config
     if (source.getEntity() instanceof ServerPlayer player) {
       this.actuallyDropItem(player);
     }
