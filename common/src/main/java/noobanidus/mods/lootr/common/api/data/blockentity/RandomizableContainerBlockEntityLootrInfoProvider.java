@@ -23,7 +23,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Set;
 import java.util.UUID;
 
-// TODO: Continue supporting this?
+// Currently used by:
+// - Bumblezone integration
 public record RandomizableContainerBlockEntityLootrInfoProvider(
     @NotNull RandomizableContainerBlockEntity blockEntity, UUID id, String cachedId,
     NonNullList<ItemStack> customInventory) implements ILootrBlockEntity {
