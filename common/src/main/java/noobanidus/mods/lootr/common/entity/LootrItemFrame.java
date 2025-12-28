@@ -248,23 +248,9 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
 
   @Override
   public InteractionResult interact(Player player, InteractionHand hand) {
-    ItemStack itemStack = player.getItemInHand(hand);
-    boolean hasItemInFrame = !this.getItem().isEmpty();
-    boolean hasItemInHand = !itemStack.isEmpty();
     if (!this.level().isClientSide) {
-      if (!hasItemInFrame) {
-        if (hasItemInHand && !this.isRemoved()) {
-          if (itemStack.is(Items.FILLED_MAP)) {
-            MapItemSavedData mapItemSavedData = MapItem.getSavedData(itemStack, this.level());
-            if (mapItemSavedData != null && mapItemSavedData.isTrackedCountOverLimit(256)) {
-              return InteractionResult.FAIL;
-            }
-          }
-
-          this.setItem(itemStack);
-          this.gameEvent(GameEvent.BLOCK_CHANGE, player);
-          itemStack.consume(1, player);
-        }
+      if (player.isShiftKeyDown()) {
+        // Pop the item
       } else {
         this.playSound(this.getRotateItemSound(), 1.0F, 1.0F);
         this.setRotation(this.getRotation() + 1);
@@ -273,7 +259,7 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
 
       return InteractionResult.CONSUME;
     } else {
-      return !hasItemInFrame && !hasItemInHand ? InteractionResult.PASS : InteractionResult.SUCCESS;
+      return InteractionResult.SUCCESS;
     }
   }
 
