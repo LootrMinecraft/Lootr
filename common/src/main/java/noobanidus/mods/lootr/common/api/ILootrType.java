@@ -64,7 +64,7 @@ public interface ILootrType {
       if (entity instanceof Container container) {
         return container;
       }
-    } else if (!isEntity() && getReplacementBlock() != null) {
+    } else if (!isEntity()) {
       BlockEntity be = level.getBlockEntity(info.getInfoPos());
       if (be instanceof Container container) {
         return container;

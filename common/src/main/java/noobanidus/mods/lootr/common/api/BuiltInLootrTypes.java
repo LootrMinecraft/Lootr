@@ -4,6 +4,7 @@ import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.registry.LootrProperties;
 import org.jetbrains.annotations.Nullable;
 
+@SuppressWarnings("DeprecatedIsStillUsed")
 public class BuiltInLootrTypes {
   public static final String TYPE_CHEST = LootrAPI.rl("chest").toString();
   public static final String TYPE_TRAPPED_CHEST = LootrAPI.rl("trapped_chest").toString();
@@ -15,6 +16,8 @@ public class BuiltInLootrTypes {
   public static final String TYPE_SAND = LootrProperties.SUSPICIOUS_SAND.toString();
   public static final String TYPE_GRAVEL = LootrProperties.SUSPICIOUS_GRAVEL.toString();
   public static final String TYPE_ITEM_FRAME = LootrProperties.ITEM_FRAME.toString();
+  // TODO: Not sure about the name of this
+  public static final String TYPE_SIMPLE = LootrProperties.SIMPLE.toString();
 
   public static ILootrType CHEST;
   public static ILootrType TRAPPED_CHEST;
@@ -26,6 +29,7 @@ public class BuiltInLootrTypes {
   public static ILootrType SAND;
   public static ILootrType GRAVEL;
   public static ILootrType ITEM_FRAME;
+  public static ILootrType SIMPLE;
 
   @Nullable
   @Deprecated

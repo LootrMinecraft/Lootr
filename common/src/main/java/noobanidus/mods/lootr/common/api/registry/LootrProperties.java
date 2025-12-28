@@ -21,7 +21,7 @@ public class LootrProperties {
   public static final ResourceLocation SHERDSAPI_POT_DECORATIONS = ResourceLocation.fromNamespaceAndPath("sherdsapi", "stack_pot_decorations");
   public static final ResourceLocation SHERDSAPI_SHERD_PATTERN = ResourceLocation.fromNamespaceAndPath("sherdsapi", "sherd_pattern");
 
-  // TODO: Rename even these!
+  // TODO: Rename these eventually.
   public static final ResourceLocation LOOTR_CHEST = LootrAPI.rl("lootr_chest");
   public static final ResourceLocation LOOTR_TRAPPED_CHEST = LootrAPI.rl("lootr_trapped_chest");
   public static final ResourceLocation LOOTR_SHULKER = LootrAPI.rl("lootr_shulker");
@@ -29,21 +29,29 @@ public class LootrProperties {
   public static final ResourceLocation LOOTR_INVENTORY = LootrAPI.rl("lootr_inventory");
   public static final ResourceLocation LOOTR_CART = LootrAPI.rl("lootr_cart");
 
+  // Into these
   public static final ResourceLocation CHEST = LootrAPI.rl("chest");
   public static final ResourceLocation TRAPPED_CHEST = LootrAPI.rl("trapped_chest");
+
+  // TODO: Migrate shulker -> shulker_box
   public static final ResourceLocation SHULKER = LootrAPI.rl("shulker");
+
   public static final ResourceLocation SHULKER_BOX = LootrAPI.rl("shulker_box");
   public static final ResourceLocation BARREL = LootrAPI.rl("barrel");
   public static final ResourceLocation INVENTORY = LootrAPI.rl("inventory");
-  public static final ResourceLocation CART = LootrAPI.rl("cart");
-  public static final ResourceLocation ITEM_FRAME = LootrAPI.rl("item_frame");
+  public static final ResourceLocation MINECART = LootrAPI.rl("chest_minecart");
   public static final ResourceLocation TROPHY = LootrAPI.rl("trophy");
 
+  // These don't need to be migrated
   public static final ResourceLocation DECORATED_POT = LootrAPI.rl("decorated_pot");
   public static final ResourceLocation BRUSHABLE_BLOCK = LootrAPI.rl("brushable_block");
   public static final ResourceLocation SUSPICIOUS_SAND = LootrAPI.rl("suspicious_sand");
   public static final ResourceLocation SUSPICIOUS_GRAVEL = LootrAPI.rl("suspicious_gravel");
+  public static final ResourceLocation ITEM_FRAME = LootrAPI.rl("item_frame");
 
+  public static final ResourceLocation SIMPLE = LootrAPI.rl("simple");
+
+  // TODO: These are for backwards-compatibility
   public static final String LOOTR_SPECIAL_CHEST = "lootr:special_loot_chest";
   public static final String LOOTR_SPECIAL_BARREL = "lootr:special_loot_barrel";
   public static final String LOOTR_SPECIAL_TRAPPED_CHEST = "lootr:special_trapped_loot_chest";

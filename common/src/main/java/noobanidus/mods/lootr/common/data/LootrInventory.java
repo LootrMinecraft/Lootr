@@ -113,19 +113,12 @@ public class LootrInventory implements ILootrInventory {
     }
 
     Container container = info.getInfoContainer();
-    if (container == null) {
-      return false;
-    }
+    return switch (container) {
+      case BlockEntity blockEntity -> Container.stillValidBlockEntity(blockEntity, player);
+      case ContainerEntity containerEntity -> containerEntity.isChestVehicleStillValid(player);
+      case null, default -> false;
+    };
 
-    if (container instanceof BlockEntity blockEntity) {
-      return Container.stillValidBlockEntity(blockEntity, player);
-    }
-
-    if (container instanceof ContainerEntity containerEntity) {
-      return containerEntity.isChestVehicleStillValid(player);
-    }
-
-    return false;
   }
 
   @Override
