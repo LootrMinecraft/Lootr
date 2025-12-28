@@ -153,28 +153,32 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   public void setItem(ItemStack stack, boolean updateNeighbours) {
   }
 
-  // Self?
   private void actuallyDropItem(ServerPlayer player) {
     if (this.level().isClientSide()) {
+      return;
+    }
+    ILootrInventory inventory = LootrAPI.getInventory(this, player);
+    if (inventory == null) {
+      return;
+    }
+    if (inventory.getItem(0).isEmpty()) {
       return;
     }
     if (!hasServerOpened(player)) {
       player.awardStat(LootrRegistry.getLootedStat());
       LootrRegistry.getStatTrigger().trigger(player);
-      this.playSound(this.getRemoveItemSound(), 1.0F, 1.0F);
-      ILootrInventory inventory = LootrAPI.getInventory(this, player);
-      if (inventory != null) {
-        inventory.setItem(0, ItemStack.EMPTY);
-        inventory.setChanged();
-      }
-      ItemStack item = getItem().copy();
-      this.spawnAtLocation(item);
-      this.performTrigger(player);
-      if (this.addOpener(player)) {
-        this.performOpen(player);
-      }
-      this.performUpdate(player);
     }
+    this.playSound(this.getRemoveItemSound(), 1.0F, 1.0F);
+
+    inventory.setItem(0, ItemStack.EMPTY);
+    inventory.setChanged();
+    ItemStack item = getItem().copy();
+    this.spawnAtLocation(item);
+    this.performTrigger(player);
+    if (this.addOpener(player)) {
+      this.performOpen(player);
+    }
+    this.performUpdate(player);
   }
 
   @Override
@@ -222,13 +226,9 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   @Override
   public InteractionResult interact(Player player, InteractionHand hand) {
     if (!this.level().isClientSide) {
-      if (!hasServerOpened(player) && player.isShiftKeyDown()) {
-        this.actuallyDropItem((ServerPlayer) player);
-      } else {
-        this.playSound(this.getRotateItemSound(), 1.0F, 1.0F);
-        this.setRotation(this.getRotation() + 1);
-        this.gameEvent(GameEvent.BLOCK_CHANGE, player);
-      }
+      this.playSound(this.getRotateItemSound(), 1.0F, 1.0F);
+      this.setRotation(this.getRotation() + 1);
+      this.gameEvent(GameEvent.BLOCK_CHANGE, player);
 
       return InteractionResult.CONSUME;
     } else {

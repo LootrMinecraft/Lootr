@@ -5,6 +5,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.AbstractMinecartContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -17,6 +18,7 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.data.blockentity.RandomizableContainerBlockEntityLootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.entity.AbstractMinecartContainerLootrInfoProvider;
+import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
@@ -105,6 +107,21 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
       return data.getActualOpeners();
     }
     return null;
+  }
+
+  default boolean hasLootAvailable (ServerPlayer player) {
+    ILootrInventory inventory = LootrAPI.getInventory(this, player);
+    if (inventory == null) {
+      return false;
+    }
+
+    for (int i = 0; i < inventory.getContainerSize(); i++) {
+      if (!inventory.getItem(i).isEmpty()) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   @Nullable

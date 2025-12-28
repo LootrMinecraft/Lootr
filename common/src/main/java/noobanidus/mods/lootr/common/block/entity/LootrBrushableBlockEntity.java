@@ -102,11 +102,11 @@ public abstract class  LootrBrushableBlockEntity extends BlockEntity implements 
       if (player != brushingPlayer) {
         return false;
       }
-      if (hasServerOpened(player)) {
+      if (!hasLootAvailable((ServerPlayer) player)) {
         return false;
       }
     } else {
-      if (hasServerOpened(player)) {
+      if (!hasLootAvailable((ServerPlayer) player)) {
         this.brushingPlayer = null;
         this.brushingPlayerEntity = null;
         return false;

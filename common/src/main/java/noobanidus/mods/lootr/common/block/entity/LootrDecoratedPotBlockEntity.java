@@ -33,7 +33,6 @@ import noobanidus.mods.lootr.common.api.data.SimpleLootrInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
-import noobanidus.mods.lootr.common.api.PotDecorationsAdapter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -92,31 +91,30 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
       return null;
     }
 
-    if (!hasServerOpened(player)) {
-
-      ItemStack result = inventory.getItem(0);
-      inventory.setItem(0, ItemStack.EMPTY);
-      inventory.setChanged();
-
-      this.performTrigger(player);
-      boolean shouldUpdate = false;
-      if (!this.hasServerOpened(player)) {
-        player.awardStat(LootrRegistry.getLootedStat());
-        LootrRegistry.getStatTrigger().trigger(player);
-      }
-      if (this.addOpener(player)) {
-        this.performOpen(player);
-        shouldUpdate = true;
-      }
-
-      if (shouldUpdate) {
-        this.performUpdate(player);
-      }
-
-      return result;
-    } else {
+    ItemStack result = inventory.getItem(0);
+    if (result.isEmpty()) {
       return null;
     }
+
+    inventory.setItem(0, ItemStack.EMPTY);
+    inventory.setChanged();
+
+    this.performTrigger(player);
+    boolean shouldUpdate = false;
+    if (!this.hasServerOpened(player)) {
+      player.awardStat(LootrRegistry.getLootedStat());
+      LootrRegistry.getStatTrigger().trigger(player);
+    }
+    if (this.addOpener(player)) {
+      this.performOpen(player);
+      shouldUpdate = true;
+    }
+
+    if (shouldUpdate) {
+      this.performUpdate(player);
+    }
+
+    return result;
   }
 
   @Override

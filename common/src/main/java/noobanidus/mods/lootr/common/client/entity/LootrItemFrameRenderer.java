@@ -15,7 +15,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.registry.LootrProperties;
 import noobanidus.mods.lootr.common.entity.LootrItemFrame;
 
@@ -34,7 +33,10 @@ public class LootrItemFrameRenderer extends ItemFrameRenderer<LootrItemFrame> {
   }
 
   public void render(LootrItemFrame entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
-    super.render(entity, entityYaw, partialTicks, poseStack, buffer, packedLight);
+    if (this.shouldShowName(entity)) {
+      this.renderNameTag(entity, entity.getDisplayName(), poseStack, buffer, packedLight, partialTicks);
+    }
+
     poseStack.pushPose();
     Direction direction = entity.getDirection();
     Vec3 vec3 = this.getRenderOffset(entity, partialTicks);

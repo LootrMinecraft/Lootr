@@ -96,6 +96,8 @@ public interface IOpeners extends IMarkChanged {
     return hasServerOpened(player.getUUID());
   }
 
+  // So technically we have 3 types of openers. This is only for the
+  // looted stat counting. So use `hasLootAvailable` instead.
   default boolean hasServerOpened (Player player) {
     return hasServerOpened(player.getUUID());
   }

@@ -99,7 +99,7 @@
   "lootr.configuration.whitelist": "Lists",
   "lootr.message.cannot_break": "Lootr blocks and entities cannot be broken or destroyed.",
   "lootr.message.cannot_break_sneak": "While in creative mode, you must sneak to break or destroy Lootr blocks and entities.",
-  "lootr.message.cart_should_sneak": "Destroying this entity will prevent others from obtaining loot! Only destroy is really needed.",
+  "lootr.message.cart_should_sneak": "Destroying this entity will prevent others from obtaining loot! Only destroy if really needed.",
   "lootr.message.cart_should_sneak2": "To destroy this entity anyway, sneak while attacking.",
   "lootr.message.decay_in": "This container will decay completely in %s seconds.",
   "lootr.message.decay_start": "The container begins to crumble at your touch! It will decay completely in %s seconds.",
