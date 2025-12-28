@@ -34,4 +34,14 @@ public class ItemFrameLootrType implements ILootrType {
   public boolean isEntity() {
     return true;
   }
+
+  @Override
+  public boolean canDecay() {
+    return false;
+  }
+
+  @Override
+  public boolean canRefresh() {
+    return false;
+  }
 }

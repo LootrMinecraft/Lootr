@@ -4,7 +4,6 @@ import com.google.auto.service.AutoService;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -21,19 +20,16 @@ import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.MapItem;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DiodeBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.level.saveddata.maps.MapId;
-import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.*;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.SimpleLootrEntityInstance;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
+import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinItemFrame;
 import org.jetbrains.annotations.NotNull;
@@ -90,13 +86,6 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   }
 
   @Override
-  public void kill() {
-    // TODO:
-    this.removeFramedMap(this.getItem());
-    super.kill();
-  }
-
-  @Override
   public boolean isInvulnerableTo(DamageSource source) {
     if (this.isInvulnerable() && source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
       return true;
@@ -140,29 +129,24 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   @Override
   public boolean hurt(DamageSource source, float amount) {
     // TODO: Depend on config
-    if (this.isInvulnerableTo(source)) {
-      return false;
-    } else if (!this.level().isClientSide) {
-      if (source.getEntity() instanceof Player player) {
-        this.dropItem(player, false);
-        this.gameEvent(GameEvent.BLOCK_CHANGE, player);
-        this.playSound(this.getRemoveItemSound(), 1.0F, 1.0F);
-      }
+    if (source.getEntity() instanceof ServerPlayer player) {
+      this.actuallyDropItem(player);
+    }
 
+    if (this.isInvulnerableTo(source)) {
       return false;
     }
 
-    return false;
+    if (!this.isRemoved() && !this.level().isClientSide) {
+      this.kill();
+      this.markHurt();
+    }
+
+    return true;
   }
 
   @Override
   public void dropItem(@Nullable Entity entity) {
-    if (entity == null) {
-      return;
-    }
-    this.playSound(this.getBreakSound(), 1.0F, 1.0F);
-    this.dropItem(entity, true);
-    this.gameEvent(GameEvent.BLOCK_CHANGE, entity);
   }
 
   @Override
@@ -170,37 +154,27 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   }
 
   // Self?
-  private void dropItem(@NotNull Entity entity, boolean dropSelf) {
-    ItemStack itemStack = this.getItem();
-    this.setItem(ItemStack.EMPTY);
-    if (!this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
-      this.removeFramedMap(itemStack);
-    } else if (entity instanceof Player player && player.hasInfiniteMaterials()) {
-      this.removeFramedMap(itemStack);
-    } else {
-      if (dropSelf) {
-        this.spawnAtLocation(this.getFrameItemStack());
-      }
-
-      if (!itemStack.isEmpty()) {
-        itemStack = itemStack.copy();
-        this.removeFramedMap(itemStack);
-        this.spawnAtLocation(itemStack);
-      }
+  private void actuallyDropItem(ServerPlayer player) {
+    if (this.level().isClientSide()) {
+      return;
     }
-  }
-
-  private void removeFramedMap(ItemStack stack) {
-    MapId mapId = this.getFramedMapId(stack);
-    if (mapId != null) {
-      MapItemSavedData mapItemSavedData = MapItem.getSavedData(mapId, this.level());
-      if (mapItemSavedData != null) {
-        mapItemSavedData.removedFromFrame(this.pos, this.getId());
-        mapItemSavedData.setDirty(true);
+    if (!hasServerOpened(player)) {
+      player.awardStat(LootrRegistry.getLootedStat());
+      LootrRegistry.getStatTrigger().trigger(player);
+      this.playSound(this.getRemoveItemSound(), 1.0F, 1.0F);
+      ILootrInventory inventory = LootrAPI.getInventory(this, player);
+      if (inventory != null) {
+        inventory.setItem(0, ItemStack.EMPTY);
+        inventory.setChanged();
       }
+      ItemStack item = getItem().copy();
+      this.spawnAtLocation(item);
+      this.performTrigger(player);
+      if (this.addOpener(player)) {
+        this.performOpen(player);
+      }
+      this.performUpdate(player);
     }
-
-    stack.setEntityRepresentation(null);
   }
 
   @Override
@@ -209,14 +183,8 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   }
 
   @Override
-  @Nullable
-  public MapId getFramedMapId(ItemStack stack) {
-    return stack.get(DataComponents.MAP_ID);
-  }
-
-  @Override
   public boolean hasFramedMap() {
-    return this.getItem().has(DataComponents.MAP_ID);
+    return false;
   }
 
   @Override
@@ -238,6 +206,11 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   }
 
   private void setItemInternal(ItemStack stack) {
+    if (stack.is(Items.FILLED_MAP)) {
+      LootrAPI.LOG.error("ItemFrames with maps are not supported by Lootr Item Frames due to technical limitations.");
+      return;
+    }
+
     if (!stack.isEmpty()) {
       stack = stack.copyWithCount(1);
     }
@@ -249,8 +222,8 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   @Override
   public InteractionResult interact(Player player, InteractionHand hand) {
     if (!this.level().isClientSide) {
-      if (player.isShiftKeyDown()) {
-        // Pop the item
+      if (!hasServerOpened(player) && player.isShiftKeyDown()) {
+        this.actuallyDropItem((ServerPlayer) player);
       } else {
         this.playSound(this.getRotateItemSound(), 1.0F, 1.0F);
         this.setRotation(this.getRotation() + 1);
@@ -271,7 +244,7 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   // TODO:
   @Override
   public ItemStack getPickResult() {
-    return ItemStack.EMPTY;
+    return new ItemStack(Items.ITEM_FRAME);
   }
 
   @Override

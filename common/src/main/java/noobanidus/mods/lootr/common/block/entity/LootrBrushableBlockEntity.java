@@ -47,7 +47,7 @@ import java.util.UUID;
 
 // Abstract so that platform-specific extensions can handle client-side
 // rendering.
-public abstract class LootrBrushableBlockEntity extends BlockEntity implements ILootrBlockEntity, IBrushable {
+public abstract class  LootrBrushableBlockEntity extends BlockEntity implements ILootrBlockEntity, IBrushable {
   private final SimpleLootrInstance simpleLootrInstance = new SimpleLootrInstance(this::getVisualOpeners, 1);
 
   @Nullable

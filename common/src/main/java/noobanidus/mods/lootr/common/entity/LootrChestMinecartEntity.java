@@ -63,6 +63,11 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
   @Override
+  public ItemStack getPickResult() {
+    return new ItemStack(Items.CHEST_MINECART);
+  }
+
+  @Override
   public void unpackChestVehicleLootTable(@Nullable Player p_219950_) {
   }
 
@@ -81,6 +86,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     this.opened = opened;
   }
 
+  // TODO: Abstract this out into SimpleLootrEntity
   @Override
   public boolean isInvulnerableTo(DamageSource source) {
     if (this.isInvulnerable() && source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
