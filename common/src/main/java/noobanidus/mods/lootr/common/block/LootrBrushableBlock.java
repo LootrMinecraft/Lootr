@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
+import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.block.entity.LootrBrushableBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
@@ -61,6 +62,9 @@ public abstract class LootrBrushableBlock extends BrushableBlock {
 
     brushableBlockEntity.IBrushable$checkReset();
 
+    if (LootrAPI.canBrushablesSelfSupport()) {
+      return;
+    }
     if (FallingBlock.isFree(serverLevel.getBlockState(blockPos.below())) && blockPos.getY() >= serverLevel.getMinBuildHeight()) {
       LootrBrushableBlockEntity.fall(serverLevel, blockPos, blockState, brushableBlockEntity);
     }

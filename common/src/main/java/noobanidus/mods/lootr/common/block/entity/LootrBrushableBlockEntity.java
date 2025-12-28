@@ -24,7 +24,6 @@ import net.minecraft.world.item.component.SeededContainerLoot;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.PotDecorations;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -510,7 +509,10 @@ public abstract class  LootrBrushableBlockEntity extends BlockEntity implements 
     }
   }
 
-  public static FallingBlockEntity fall(ServerLevel level, BlockPos blockPos, BlockState blockState, LootrBrushableBlockEntity brushableBlockEntity) {
+  public static void fall(ServerLevel level, BlockPos blockPos, BlockState blockState, LootrBrushableBlockEntity brushableBlockEntity) {
+    if (LootrAPI.canBrushablesSelfSupport()) {
+      return;
+    }
     FallingBlockEntity fallingBlockEntity = new FallingBlockEntity(EntityType.FALLING_BLOCK, level);
     double d = (double) blockPos.getX() + 0.5;
     double e = blockPos.getY();
@@ -527,7 +529,6 @@ public abstract class  LootrBrushableBlockEntity extends BlockEntity implements 
     fallingBlockEntity.dropItem = false;
     level.setBlock(blockPos, blockState.getFluidState().createLegacyBlock(), 3);
     level.addFreshEntity(fallingBlockEntity);
-    return fallingBlockEntity;
   }
 
 
