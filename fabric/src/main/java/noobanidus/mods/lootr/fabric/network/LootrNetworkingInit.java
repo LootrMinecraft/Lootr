@@ -36,7 +36,6 @@ public class LootrNetworkingInit {
           context.player().connection.send(packet);
         }
 
-        // TODO: I think this packet was broken
         if (resolved.hasVisualOpened(context.player())) {
           ServerPlayNetworking.send(context.player(), new PacketOpenContainer(pos.pos()));
         } else {
