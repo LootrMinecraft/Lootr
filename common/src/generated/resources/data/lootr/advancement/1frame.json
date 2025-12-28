@@ -1,0 +1,26 @@
+{
+  "parent": "lootr:root",
+  "criteria": {
+    "looted_frame": {
+      "trigger": "lootr:item_frame_looted"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "lootr.advancements.1frame.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:item_frame"
+    },
+    "title": {
+      "translate": "lootr.advancements.1frame.title"
+    }
+  },
+  "requirements": [
+    [
+      "looted_frame"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

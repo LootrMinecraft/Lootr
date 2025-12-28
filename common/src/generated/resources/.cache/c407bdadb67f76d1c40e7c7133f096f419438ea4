@@ -1,3 +1,6 @@
-// 1.21.1	2025-12-18T18:39:31.5995803	Lootr Entity Type Tags
+// 1.21.1	2025-12-28T15:50:00.3094217	Lootr Entity Type Tags
 9bf099777161ff5f1aae2c1f9806945330f2aae4 data/lootr/tags/entity_type/carts.json
+d797b3bab154f55bc1ac2ade58cfd9c65c85830f data/lootr/tags/entity_type/containers.json
 00fa94832b5fb41eb348bc721d28da821e1fe343 data/lootr/tags/entity_type/entities.json
+8ba0cebfc5d439953aa68c587573c91938be36bf data/lootr/tags/entity_type/item_frames.json
+f3f3b79e4a6cd0d82c462875fcc71877b05a6944 data/lootr/tags/entity_type/minecarts.json

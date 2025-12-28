@@ -56,6 +56,8 @@ public class LootrTags {
     public static TagKey<Item> POTS = tag("pots");
     public static TagKey<Item> CONTAINERS = tag("containers");
 
+    public static TagKey<Item> ITEM_FRAME_CONVERT_BLACKLIST = tag("convert/item_frame_blacklist");
+
     static TagKey<Item> tag(String name) {
       return TagKey.create(Registries.ITEM, LootrAPI.rl(name));
     }
@@ -66,6 +68,11 @@ public class LootrTags {
     public static TagKey<EntityType<?>> CONVERT_ENTITIES = tag("entities");
     // TODO: Use this
     public static TagKey<EntityType<?>> CONVERT_BLACKLIST = tag("blacklist");
+
+    public static TagKey<EntityType<?>> MINECARTS = tag("minecarts");
+    public static TagKey<EntityType<?>> ITEM_FRAMES = tag("item_frames");
+
+    public static TagKey<EntityType<?>> CONTAINERS = tag("containers");
 
     static TagKey<EntityType<?>> tag(String name) {
       return TagKey.create(Registries.ENTITY_TYPE, LootrAPI.rl(name));

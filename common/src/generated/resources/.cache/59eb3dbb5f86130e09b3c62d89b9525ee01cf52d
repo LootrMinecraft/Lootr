@@ -1,4 +1,4 @@
-// 1.21.1	2025-12-18T18:39:31.5995803	Loot Tables
+// 1.21.1	2025-12-28T15:50:00.3083979	Loot Tables
 8eea450cccf954b00efcdda2a3d48df6ea079d09 data/lootr/loot_table/blocks/lootr_barrel.json
 05d03b8f6075123c44e0b3ffc269fd47e9a59f68 data/lootr/loot_table/blocks/lootr_chest.json
 260c0547345a0ae965137f565c61a8d3786d02fd data/lootr/loot_table/blocks/lootr_inventory.json
@@ -6,4 +6,5 @@
 3447a563cf17c2ca6469d4847c40697d3a7a936c data/lootr/loot_table/blocks/lootr_trapped_chest.json
 12c3e3df4e2b4efcb00682913ce6234d95ec8db4 data/lootr/loot_table/blocks/trophy.json
 345594272603fec7ed1bce397953f4284f6667b8 data/lootr/loot_table/chests/elytra.json
+2d5e78474818ea37fe3c84129592a67e0a6fbfcb data/lootr/loot_table/entity/item_frame_empty.json
 7eae5b75689857a7cbcf892a810208fa91a05d51 data/lootr/loot_table/reward/trophy.json

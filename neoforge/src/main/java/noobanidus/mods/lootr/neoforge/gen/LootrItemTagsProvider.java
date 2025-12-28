@@ -28,6 +28,7 @@ public class LootrItemTagsProvider extends ItemTagsProvider {
     tag(LootrTags.Items.POTS).add(LootrRegistry.getDecoratedPotItem());
     //noinspection unchecked
     tag(LootrTags.Items.CONTAINERS).addTags(LootrTags.Items.BARRELS, LootrTags.Items.CHESTS, LootrTags.Items.TRAPPED_CHESTS, LootrTags.Items.SHULKERS, LootrTags.Items.SANDS, LootrTags.Items.GRAVELS, LootrTags.Items.POTS);
+    tag(LootrTags.Items.ITEM_FRAME_CONVERT_BLACKLIST);
   }
 
   @Override

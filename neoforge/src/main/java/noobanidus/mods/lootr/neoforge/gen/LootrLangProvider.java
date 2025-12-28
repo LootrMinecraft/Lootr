@@ -1,9 +1,6 @@
 package noobanidus.mods.lootr.neoforge.gen;
 
 import net.minecraft.data.PackOutput;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
@@ -48,6 +45,7 @@ public class LootrLangProvider extends LanguageProvider {
     add(LootrRegistry.getSuspiciousGravelBlock(), "Gravel");
     add(LootrRegistry.getSuspiciousSandBlock(), "Sand");
     add(LootrRegistry.getDecoratedPotBlock(), "Decorated Loot Pot");
+    add(LootrRegistry.getItemFrame(), "Item Frame with Loot");
 
     add("stat.lootr.looted_stat", "Containers and entities looted");
 
@@ -71,6 +69,8 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.advancements.1cart.description", "Open your first Lootr minecart!");
     add("lootr.advancements.1shulker.title", "Bounty Box");
     add("lootr.advancements.1shulker.description", "Open your first Lootr shulker box!");
+    add("lootr.advancements.1frame.title", "I was framed!");
+    add("lootr.advancements.1frame.description", "Loot an item from a Lootr item frame!");
     add("lootr.advancements.social.title", "Socialised Loot");
     add("lootr.advancements.social.description", "Open one of every Lootr container type!");
     add("lootr.advancements.root.title", "Belongs in a Museum");
@@ -256,6 +256,16 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.configuration.skip_logging_no_loot_table_at_generation", skip_logging);
 
     // Tags
+    add(LootrTags.Blocks.CONVERT_BARRELS, "Blocks that Convert to Lootr Barrels");
+    add(LootrTags.Blocks.CONVERT_CHESTS, "Blocks that Convert to Lootr Chests");
+    add(LootrTags.Blocks.CONVERT_SHULKERS, "Blocks that Convert to Lootr Shulkers");
+    add(LootrTags.Blocks.CONVERT_TRAPPED_CHESTS, "Blocks that Convert to Trapped Lootr Chests");
+    add(LootrTags.Blocks.CONVERT_POTS, "Blocks that Convert to Lootr Pots");
+    add(LootrTags.Blocks.CONVERT_GRAVELS, "Blocks that Convert to Suspicious Lootr Gravels");
+    add(LootrTags.Blocks.CONVERT_SANDS, "Blocks that Convert to Suspicious Lootr Sands");
+    add(LootrTags.Blocks.CONVERT_BLOCK, "All Blocks that Convert to Lootr Containers");
+    add(LootrTags.Blocks.CONVERT_BLACKLIST, "Blocks that are blocked from being converted to Lootr Containers");
+
     add(LootrTags.Blocks.CONTAINERS, "Lootr Containers");
     add(LootrTags.Blocks.CHESTS, "Lootr Chests");
     add(LootrTags.Blocks.BARRELS, "Lootr Barrels");
@@ -277,5 +287,13 @@ public class LootrLangProvider extends LanguageProvider {
     add(LootrTags.Items.SANDS, "Suspicious Lootr Sands");
     add(LootrTags.Items.GRAVELS, "Suspicious Lootr Gravels");
     add(LootrTags.Items.POTS, "Lootr Pots");
+    add(LootrTags.Items.ITEM_FRAME_CONVERT_BLACKLIST, "Item Frame Item Blacklist");
+
+    add(LootrTags.Entity.CONTAINERS, "Lootr Containers");
+    add(LootrTags.Entity.CONVERT_ENTITIES, "Entities that Convert to Lootr Containers");
+    add(LootrTags.Entity.CONVERT_BLACKLIST, "Entities that Do Not Convert to Lootr Containers");
+    add(LootrTags.Entity.CONVERT_CARTS, "Minecarts that can convert to Lootr carts");
+    add(LootrTags.Entity.ITEM_FRAMES, "Lootr Item Frames");
+    add(LootrTags.Entity.MINECARTS, "Lootr Minecarts");
   }
 }
