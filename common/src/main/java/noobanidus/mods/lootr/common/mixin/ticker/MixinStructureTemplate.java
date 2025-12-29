@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(StructureTemplate.class)
 public class MixinStructureTemplate {
   @SuppressWarnings("UnresolvedMixinReference")
-  @WrapOperation(method = {"lambda$addEntitiesToWorld$5", "method_17917"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/ServerLevelAccessor;addFreshEntityWithPassengers(Lnet/minecraft/world/entity/Entity;)V"))
+  @WrapOperation(method = {/* Vanilla: */ "lambda$placeEntities$5", /* NeoForge patched: */ "lambda$addEntitiesToWorld$5", /* Fabric/Yarn name: */ "method_17917"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/ServerLevelAccessor;addFreshEntityWithPassengers(Lnet/minecraft/world/entity/Entity;)V"))
   private static void lootr$AddEntitiesToWorldInject(ServerLevelAccessor level, Entity entity, Operation<Void> original) {
     if (LootrAPI.shouldConvertStructureItemFrames() && entity.getType().is(LootrTags.Entity.CONVERT_ITEM_FRAMES)) {
       ILootrItemFrameAdapter<Entity> adapter = LootrAPI.getItemFrameAdapter(entity);
