@@ -25,7 +25,6 @@ import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
 import net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSettings;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import noobanidus.mods.lootr.common.api.LootrAPI;
@@ -35,7 +34,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-@EventBusSubscriber(modid=LootrAPI.MODID)
 public class LootrDataPackGenerators {
   // Salts used for the randomization of structure placements
   private static final int STRUCTURE_SALT = 8266497;
