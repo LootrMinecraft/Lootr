@@ -1,0 +1,14 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 8266497,
+    "separation": 2,
+    "spacing": 15
+  },
+  "structures": [
+    {
+      "structure": "lootr:test",
+      "weight": 1
+    }
+  ]
+}
