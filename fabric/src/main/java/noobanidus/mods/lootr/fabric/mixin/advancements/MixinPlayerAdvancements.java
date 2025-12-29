@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.fabric.mixin;
+package noobanidus.mods.lootr.fabric.mixin.advancements;
 
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.server.PlayerAdvancements;

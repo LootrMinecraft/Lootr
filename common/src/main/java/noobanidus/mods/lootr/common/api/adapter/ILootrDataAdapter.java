@@ -1,6 +1,9 @@
 package noobanidus.mods.lootr.common.api.adapter;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,9 +20,7 @@ import org.jetbrains.annotations.Nullable;
  * <br />
  * Adapters are accessed via LootrAPI::getAdapter.
  */
-public interface ILootrDataAdapter<T> {
-  Class<T> getAssignableClass();
-
+public non-sealed interface ILootrDataAdapter<T> extends ILootrAdapter<T> {
   @Nullable
   ResourceKey<LootTable> getLootTable(T entity);
 
@@ -29,9 +30,5 @@ public interface ILootrDataAdapter<T> {
 
   default boolean hasCopyableComponentsViaItem(T entity) {
     return false;
-  }
-
-  default int priority () {
-    return 0;
   }
 }

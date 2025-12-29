@@ -13,6 +13,7 @@ import noobanidus.mods.lootr.common.api.ILootrEntityConverter;
 import noobanidus.mods.lootr.common.api.ILootrType;
 import noobanidus.mods.lootr.common.api.adapter.AdapterMap;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
+import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
 import noobanidus.mods.lootr.common.api.client.ILootrFabricModelProvider;
 import noobanidus.mods.lootr.common.api.command.ILootrCommandExtension;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
@@ -39,7 +40,8 @@ public class LootrServiceRegistry {
   private final List<ILootrBlockEntityProcessor.Pre> blockEntityPreProcessors = new ObjectArrayList<>();
   private final List<ILootrEntityProcessor.Pre> entityPreProcessors = new ObjectArrayList<>();
   private final List<ILootrEntityProcessor.Post> entityPostProcessors = new ObjectArrayList<>();
-  private final AdapterMap adapterMap = new AdapterMap();
+  private final AdapterMap<ILootrDataAdapter<?>> dataAdapterMap = new AdapterMap<>(AdapterMap.NONE_DATA_ADAPTER);
+  private final AdapterMap<ILootrItemFrameAdapter<?>> itemFrameAdapterMap = new AdapterMap<>(AdapterMap.NONE_ITEM_FRAME_ADAPTER);
   private final BlockReplacementMap replacementMap = new BlockReplacementMap();
   private final Map<String, ILootrType> typeMap = new Object2ObjectOpenHashMap<>();
   // Only used on Fabric
@@ -90,7 +92,7 @@ public class LootrServiceRegistry {
 
     ServiceLoader<ILootrDataAdapter> loader6 = ServiceLoader.load(ILootrDataAdapter.class, classLoader);
     for (ILootrDataAdapter<?> adapter : loader6) {
-      adapterMap.register(adapter);
+      dataAdapterMap.register(adapter);
     }
 
     ServiceLoader<ILootrBlockReplacementProvider> loader9 = ServiceLoader.load(ILootrBlockReplacementProvider.class, classLoader);
@@ -121,6 +123,11 @@ public class LootrServiceRegistry {
     }
 
     this.commands = commandsTemp.toString();
+
+    ServiceLoader<ILootrItemFrameAdapter> loader13 = ServiceLoader.load(ILootrItemFrameAdapter.class, classLoader);
+    for (ILootrItemFrameAdapter<?> adapter : loader13) {
+      itemFrameAdapterMap.register(adapter);
+    }
   }
 
   public static LootrServiceRegistry getInstance() {
@@ -199,7 +206,14 @@ public class LootrServiceRegistry {
 
   @Nullable
   static <T> ILootrDataAdapter<T> getAdapter(T type) {
-    return getInstance().adapterMap.getAdapter(type);
+    //noinspection unchecked
+    return (ILootrDataAdapter<T>) getInstance().dataAdapterMap.getAdapter(type);
+  }
+
+  @SuppressWarnings("unchecked")
+  @Nullable
+  static <T>ILootrItemFrameAdapter<T> getItemFrameAdapter (T type) {
+    return (ILootrItemFrameAdapter<T>)  getInstance().itemFrameAdapterMap.getAdapter(type);
   }
 
   @Nullable

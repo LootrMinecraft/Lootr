@@ -1,6 +1,9 @@
 package noobanidus.mods.lootr.common.api.adapter;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.Nullable;
 
@@ -10,14 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@SuppressWarnings("unchecked")
-public class AdapterMap {
-  private static final ILootrDataAdapter<Object> NONE = new ILootrDataAdapter<>() {
-    @Override
-    public Class<Object> getAssignableClass() {
-      return Object.class;
-    }
-
+public class AdapterMap<A extends ILootrAdapter<?>> {
+  public static final ILootrDataAdapter<Object> NONE_DATA_ADAPTER = new ILootrDataAdapter<>() {
     @Override
     public @Nullable ResourceKey<LootTable> getLootTable(Object entity) {
       return null;
@@ -30,7 +27,11 @@ public class AdapterMap {
 
     @Override
     public void setLootTable(Object entity, ResourceKey<LootTable> table, long seed) {
+    }
 
+    @Override
+    public Class<Object> getAssignableClass() {
+      return Object.class;
     }
 
     @Override
@@ -39,31 +40,76 @@ public class AdapterMap {
     }
   };
 
-  private final Map<Class<?>, ILootrDataAdapter<?>> byClass = new ConcurrentHashMap<>();
-  private final List<ILootrDataAdapter<?>> allAdapters = new ArrayList<>();
+  public static final ILootrItemFrameAdapter<Object> NONE_ITEM_FRAME_ADAPTER = new ILootrItemFrameAdapter<>() {
+
+    @Override
+    public Class<Object> getAssignableClass() {
+      return Object.class;
+    }
+
+    @Override
+    public Direction getDirection(Object object) {
+      return Direction.NORTH;
+    }
+
+    @Override
+    public ItemStack getItem(Object object) {
+      return ItemStack.EMPTY;
+    }
+
+    @Override
+    public int getRotation(Object object) {
+      return 0;
+    }
+
+    @Override
+    public BlockPos getPos(Object object) {
+      return BlockPos.ZERO;
+    }
+
+    @Override
+    public boolean isFixed(Object object) {
+      return false;
+    }
+
+    @Override
+    public boolean isInvisible(Object object) {
+      return false;
+    }
+
+    @Override
+    public int priority() {
+      return Integer.MIN_VALUE;
+    }
+  };
 
 
-  public AdapterMap() {
+  private final A NONE;
+  private final Map<Class<?>, A> byClass = new ConcurrentHashMap<>();
+  private final List<A> allAdapters = new ArrayList<>();
+
+  public AdapterMap(A none) {
+    this.NONE = none;
   }
 
-  public <T> void register(ILootrDataAdapter<T> adapter) {
+  public void register(A adapter) {
     allAdapters.add(adapter);
     byClass.clear();
   }
 
   @Nullable
-  public <T> ILootrDataAdapter<T> getAdapter(T type) {
+  public A getAdapter(@Nullable Object type) {
     if (type == null) {
       return null;
 
     }
     Class<?> clazz = type.getClass();
-    ILootrDataAdapter<?> potentialAdapter = byClass.computeIfAbsent(clazz, clazz2 -> {
-      ILootrDataAdapter<?> best = null;
+    A potentialAdapter = byClass.computeIfAbsent(clazz, clazz2 -> {
+      A best = null;
       int bestDistance = Integer.MAX_VALUE;
       int bestPriority = Integer.MIN_VALUE;
 
-      for (ILootrDataAdapter<?> adapter : allAdapters) {
+      for (A adapter : allAdapters) {
         if (!adapter.getAssignableClass().isAssignableFrom(clazz2)) {
           continue;
         }
@@ -82,10 +128,10 @@ public class AdapterMap {
     if (potentialAdapter == NONE) {
       return null;
     }
-    return (ILootrDataAdapter<T>) potentialAdapter;
+    return potentialAdapter;
   }
 
-  private static int distance(Class<?> runtime, ILootrDataAdapter<?> target) {
+  private static int distance(Class<?> runtime, ILootrAdapter<?> target) {
     Class<?> targetClass = target.getAssignableClass();
     int d = 0;
 

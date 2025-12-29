@@ -5,6 +5,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.vehicle.AbstractMinecartContainer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
+import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
@@ -83,7 +84,11 @@ public class PlatformAPI {
     INSTANCE.copyEntityData(entity1, entity2);
   }
 
-  public static void copyEntityData(ILootrDataAdapter<Entity> adapter, Entity entity1, LootrChestMinecartEntity entity2) {
+  public static void copyEntityData(ILootrDataAdapter<Entity> adapter, Entity entity1, ILootrEntity entity2) {
+    INSTANCE.copyEntityData(adapter, entity1, entity2);
+  }
+
+  public static void copyEntityData (ILootrItemFrameAdapter<Entity> adapter, Entity entity1, ILootrEntity entity2) {
     INSTANCE.copyEntityData(adapter, entity1, entity2);
   }
 

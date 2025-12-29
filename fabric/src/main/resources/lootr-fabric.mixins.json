@@ -4,10 +4,11 @@
   "package": "noobanidus.mods.lootr.fabric.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "MixinBlockEntity",
-    "MixinPersistentEntitySectionManager",
-    "MixinPlayerAdvancements",
-    "MixinReloadableServerResources"
+    "advancements.MixinPlayerAdvancements",
+    "data_fixer.MixinBlockEntity",
+    "tags.MixinReloadableServerResources",
+    "ticker.MixinPersistentEntitySectionManager",
+    "ticker.MixinStructureTemplate"
   ],
   "injectors": {
     "defaultRequire": 1

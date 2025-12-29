@@ -7,6 +7,7 @@ import net.minecraft.world.entity.vehicle.AbstractMinecartContainer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
+import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
@@ -72,8 +73,16 @@ public interface IPlatformAPI {
     ResourceKey<LootTable> lootTable = adapter.getLootTable(entity1);
     long seed = adapter.getLootSeed(entity1);
     if (lootTable != null && entity2 instanceof AbstractMinecartContainer entity4) {
+      // TODO: Shim this into ILootrEntity
       entity4.setLootTable(lootTable, seed);
     }
+  }
+
+  default void copyEntityData (ILootrItemFrameAdapter<Entity> adapter, Entity entity1, ILootrEntity entity3) {
+    Entity entity2 = entity3.asEntity();
+    entity2.setXRot(entity1.getXRot());
+    entity2.setYRot(entity1.getYRot());
+    entity2.setYHeadRot(entity1.getYHeadRot());
   }
 
   void refreshPlayerSection(ServerPlayer player);

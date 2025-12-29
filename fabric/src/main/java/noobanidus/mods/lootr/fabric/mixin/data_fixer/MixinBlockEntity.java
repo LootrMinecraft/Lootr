@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.fabric.mixin;
+package noobanidus.mods.lootr.fabric.mixin.data_fixer;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;

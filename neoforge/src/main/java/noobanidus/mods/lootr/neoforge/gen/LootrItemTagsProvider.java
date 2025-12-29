@@ -4,6 +4,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import noobanidus.mods.lootr.common.api.LootrAPI;
@@ -28,7 +29,7 @@ public class LootrItemTagsProvider extends ItemTagsProvider {
     tag(LootrTags.Items.POTS).add(LootrRegistry.getDecoratedPotItem());
     //noinspection unchecked
     tag(LootrTags.Items.CONTAINERS).addTags(LootrTags.Items.BARRELS, LootrTags.Items.CHESTS, LootrTags.Items.TRAPPED_CHESTS, LootrTags.Items.SHULKERS, LootrTags.Items.SANDS, LootrTags.Items.GRAVELS, LootrTags.Items.POTS);
-    tag(LootrTags.Items.ITEM_FRAME_CONVERT_BLACKLIST);
+    tag(LootrTags.Items.ITEM_FRAME_CONVERT_BLACKLIST).add(Items.FILLED_MAP, Items.MAP);
   }
 
   @Override

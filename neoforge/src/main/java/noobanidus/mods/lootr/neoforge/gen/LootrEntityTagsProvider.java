@@ -20,8 +20,9 @@ public class LootrEntityTagsProvider extends EntityTypeTagsProvider {
   @Override
   protected void addTags(HolderLookup.Provider provider) {
     tag(LootrTags.Entity.CONVERT_CARTS).add(EntityType.CHEST_MINECART);
+    tag(LootrTags.Entity.CONVERT_ITEM_FRAMES).add(EntityType.ITEM_FRAME, EntityType.GLOW_ITEM_FRAME);
     //noinspection unchecked
-    tag(LootrTags.Entity.CONVERT_ENTITIES).addTags(LootrTags.Entity.CONVERT_CARTS);
+    tag(LootrTags.Entity.CONVERT_ENTITIES).addTags(LootrTags.Entity.CONVERT_CARTS, LootrTags.Entity.CONVERT_ITEM_FRAMES);
 
     tag(LootrTags.Entity.MINECARTS).add(ModEntities.LOOTR_MINECART_ENTITY.get());
     tag(LootrTags.Entity.ITEM_FRAMES).add(ModEntities.ITEM_FRAME.get());

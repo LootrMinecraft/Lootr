@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.fabric.mixin;
+package noobanidus.mods.lootr.fabric.mixin.tags;
 
 import net.minecraft.server.ReloadableServerResources;
 import noobanidus.mods.lootr.common.debug.TagChecker;

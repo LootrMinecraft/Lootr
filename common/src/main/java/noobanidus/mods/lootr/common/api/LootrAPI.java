@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
+import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
 import noobanidus.mods.lootr.common.api.client.ClientTextureType;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.ILootrSavedData;
@@ -548,6 +549,11 @@ public class LootrAPI {
   @Nullable
   public static <T> ILootrDataAdapter<T> getAdapter(T type) {
     return INSTANCE.getAdapter(type);
+  }
+
+  @Nullable
+  public static <T>ILootrItemFrameAdapter<T> getItemFrameAdapter (T type) {
+    return INSTANCE.getItemFrameAdapter(type);
   }
 
   @Nullable

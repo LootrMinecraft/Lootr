@@ -16,4 +16,7 @@ public interface AccessorMixinItemFrame {
   static EntityDataAccessor<ItemStack> lootr$getDataItem() {
     throw new UnsupportedOperationException();
   }
+
+  @Accessor("fixed")
+  boolean lootr$isFixed();
 }

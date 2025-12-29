@@ -51,6 +51,7 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   }
 
   public void lootrSetItem(ItemStack stack) {
+    stack = stack.copyWithCount(1);
     this.inventory.set(0, stack);
     if (!level().isClientSide()) {
       this.setItemInternal(stack);

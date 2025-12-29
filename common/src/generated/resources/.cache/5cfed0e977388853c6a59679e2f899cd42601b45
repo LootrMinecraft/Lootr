@@ -1,8 +1,8 @@
-// 1.21.1	2025-12-28T15:50:00.3094217	Lootr Item Tags
+// 1.21.1	2025-12-29T13:36:42.8277213	Lootr Item Tags
 3921f6b6ce3ffc2c7c96ad7c75bbfa8aa6eaee70 data/lootr/tags/item/barrels.json
 7e33f4b155c3112cc4c4a06a54ce9eee00a33c94 data/lootr/tags/item/chests.json
 813190a0907fbe1634f18084415a06fff1020315 data/lootr/tags/item/containers.json
-35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/lootr/tags/item/convert/item_frame_blacklist.json
+887558ed0459405755eb7dbd6687b24cee39ef4c data/lootr/tags/item/convert/item_frame_blacklist.json
 3a8b9ad82fb278776f4b308bd12ce3486eaf3840 data/lootr/tags/item/gravels.json
 10577df40042f8873a19316d75d1549fed9e47ed data/lootr/tags/item/pots.json
 8e95bbeb950c8586fb981d1d56e2c4bc7cf6d73b data/lootr/tags/item/sands.json

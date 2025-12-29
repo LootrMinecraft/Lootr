@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.fabric.mixin;
+package noobanidus.mods.lootr.fabric.mixin.ticker;
 
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.TickTask;
