@@ -1,17 +1,24 @@
-package noobanidus.mods.lootr.common.impl;
+package noobanidus.mods.lootr.common.mixin.ticker;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
 import noobanidus.mods.lootr.common.entity.LootrItemFrame;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
 
-public class ItemFrameHandler {
-  public static void maybeReplaceItemFrames(ServerLevelAccessor level, Entity entity, Operation<Void> original) {
+@Mixin(StructureTemplate.class)
+public class MixinStructureTemplate {
+  @SuppressWarnings("UnresolvedMixinReference")
+  @WrapOperation(method = {"lambda$addEntitiesToWorld$5", "method_17917"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/ServerLevelAccessor;addFreshEntityWithPassengers(Lnet/minecraft/world/entity/Entity;)V"))
+  private static void lootr$AddEntitiesToWorldInject(ServerLevelAccessor level, Entity entity, Operation<Void> original) {
     if (LootrAPI.shouldConvertStructureItemFrames() && entity.getType().is(LootrTags.Entity.CONVERT_ITEM_FRAMES)) {
       ILootrItemFrameAdapter<Entity> adapter = LootrAPI.getItemFrameAdapter(entity);
       if (adapter != null && !adapter.isFixed(entity) && !adapter.isInvisible(entity)) {

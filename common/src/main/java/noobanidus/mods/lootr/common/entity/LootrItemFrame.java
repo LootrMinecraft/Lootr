@@ -91,6 +91,7 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
 
   @Override
   public boolean isInvulnerableTo(DamageSource source) {
+    // This is called multiple times so it can't be relied upon for messaging
     if (this.isInvulnerable() && source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
       return true;
     }
@@ -101,33 +102,43 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
       }
       if (LootrAPI.isBreakDisabled()) {
         if (player.getAbilities().instabuild) {
+          return !player.isShiftKeyDown();
+        } else {
+          return true;
+        }
+      } else if (!source.getEntity().isShiftKeyDown()) {
+        return true;
+      } else //noinspection RedundantIfStatement
+        if (source.getEntity().isShiftKeyDown()) {
+          return false;
+        }
+    }
+
+    return true;
+  }
+
+  private void maybeMessagePlayer(DamageSource source) {
+    if (source.getEntity() instanceof Player player) {
+      if (LootrAPI.canDestroyOrBreak(player)) {
+        return;
+      }
+      if (LootrAPI.isBreakDisabled()) {
+        if (player.getAbilities().instabuild) {
           if (!player.isShiftKeyDown()) {
             player.displayClientMessage(Component.translatable("lootr.message.cannot_break_sneak")
                 .setStyle(LootrAPI.getChatStyle()), false);
-            return true;
-          } else {
-            return false;
           }
         } else {
           player.displayClientMessage(Component.translatable("lootr.message.cannot_break")
               .setStyle(LootrAPI.getChatStyle()), false);
-          return true;
         }
       } else if (!source.getEntity().isShiftKeyDown()) {
         ((Player) source.getEntity()).displayClientMessage(Component.translatable("lootr.message.cart_should_sneak")
             .setStyle(LootrAPI.getChatStyle()), false);
         ((Player) source.getEntity()).displayClientMessage(Component.translatable("lootr.message.cart_should_sneak2")
             .setStyle(LootrAPI.getChatStyle()), false);
-        return true;
-      } else //noinspection RedundantIfStatement
-        if (source.getEntity().isShiftKeyDown()) {
-          return false;
-        }
-    } else {
-      return true;
+      }
     }
-
-    return true;
   }
 
   @Override
@@ -135,6 +146,8 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
     if (source.getEntity() instanceof ServerPlayer player) {
       this.actuallyDropItem(player);
     }
+
+    maybeMessagePlayer(source);
 
     if (this.isInvulnerableTo(source)) {
       return false;

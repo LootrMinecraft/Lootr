@@ -24,7 +24,8 @@
     "structure_saving.MixinStructureTemplate",
     "ticker.MixinBrushableBlockEntity",
     "ticker.MixinLevelChunk",
-    "ticker.MixinRandomizableContainer"
+    "ticker.MixinRandomizableContainer",
+    "ticker.MixinStructureTemplate"
   ],
   "client": [
   ],

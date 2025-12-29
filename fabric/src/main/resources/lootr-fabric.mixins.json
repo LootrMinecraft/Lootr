@@ -7,8 +7,7 @@
     "advancements.MixinPlayerAdvancements",
     "data_fixer.MixinBlockEntity",
     "tags.MixinReloadableServerResources",
-    "ticker.MixinPersistentEntitySectionManager",
-    "ticker.MixinStructureTemplate"
+    "ticker.MixinPersistentEntitySectionManager"
   ],
   "injectors": {
     "defaultRequire": 1

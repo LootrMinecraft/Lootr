@@ -3,7 +3,6 @@
   "package": "noobanidus.mods.lootr.neoforge.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "ticker.MixinStructureTemplate"
   ],
   "client": [
   ],
