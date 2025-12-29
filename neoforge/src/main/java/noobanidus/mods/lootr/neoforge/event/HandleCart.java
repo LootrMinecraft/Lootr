@@ -4,6 +4,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
@@ -11,10 +12,13 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.util.LogicalSidedProvider;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.LootrConstants;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
+import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
+import noobanidus.mods.lootr.common.entity.LootrItemFrame;
 
 @EventBusSubscriber(modid = LootrAPI.MODID)
 public class HandleCart {
@@ -27,7 +31,28 @@ public class HandleCart {
       return;
     }
     Entity entity = event.getEntity();
-    if (entity.getType().is(LootrTags.Entity.CONVERT_ENTITIES)) {
+    if (LootrAPI.shouldConvertStructureItemFrames() && entity.getType()
+        .is(LootrTags.Entity.CONVERT_ITEM_FRAMES) && entity.getTags()
+        .contains(LootrConstants.CAN_CONVERT_TAG) /* CAN_CONVERT_TAG is handled elsewhere */) {
+      ILootrItemFrameAdapter<Entity> adapter = LootrAPI.getItemFrameAdapter(entity);
+      if (adapter == null) {
+        LootrAPI.LOG.error("No item frame adapter found for entity '{}' even though it is tagged for conversion.", entity);
+        return;
+      }
+
+      if (!adapter.isFixed(entity) && !adapter.isInvisible(entity)) {
+        ItemStack contained = adapter.getItem(entity);
+        if (!contained.isEmpty() && !contained.is(LootrTags.Items.ITEM_FRAME_CONVERT_BLACKLIST)) {
+          LootrItemFrame newItemFrame = new LootrItemFrame(level.getLevel(), adapter.getPos(entity), adapter.getDirection(entity));
+          newItemFrame.lootrSetItem(contained);
+          PlatformAPI.copyEntityData(adapter, entity, newItemFrame);
+
+          // TODO: Processing
+          var executor = LogicalSidedProvider.WORKQUEUE.get(LogicalSide.SERVER);
+          executor.tell(new TickTask(0, () -> event.getLevel().addFreshEntity(newItemFrame)));
+        }
+      }
+    } else if (entity.getType().is(LootrTags.Entity.CONVERT_ENTITIES)) {
       ILootrDataAdapter<Entity> adapter = LootrAPI.getAdapter(entity);
       if (adapter == null) {
         LootrAPI.LOG.error("No adapter found for entity '{}' even though it is tagged for conversion.", entity);

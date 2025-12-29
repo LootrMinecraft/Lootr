@@ -51,7 +51,7 @@ public class LootrConstants {
   public static final ResourceLocation SIMPLE = LootrAPI.rl("simple");
 
   // Tags for entities
-  public static final ResourceLocation CAN_CONVERT = LootrAPI.rl("can_convert");
+  public static final ResourceLocation CAN_CONVERT = LootrAPI.rl("lootr_can_convert_item_frame");
   public static final String CAN_CONVERT_TAG = CAN_CONVERT.toString();
 
   // TODO: These are for backwards-compatibility
