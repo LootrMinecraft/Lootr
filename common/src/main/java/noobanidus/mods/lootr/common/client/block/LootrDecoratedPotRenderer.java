@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.world.level.block.entity.DecoratedPotPatterns;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.PotDecorationsAdapter;
-import noobanidus.mods.lootr.common.api.registry.LootrProperties;
+import noobanidus.mods.lootr.common.api.LootrConstants;
 import noobanidus.mods.lootr.common.block.entity.LootrDecoratedPotBlockEntity;
 import noobanidus.mods.lootr.common.client.ClientHooks;
 import noobanidus.mods.lootr.common.integration.sherdsapi.SherdsIntegration;
@@ -36,7 +36,7 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
   private static final Material DECORATED_POT = new Material(DECORATED_POT_SHEET, LootrAPI.rl("entity/loot_pot"));
   private static final Material DECORATED_POT_OPENED = new Material(DECORATED_POT_SHEET, LootrAPI.rl("entity/loot_pot_open"));
 
-  public static final ModelLayerLocation OPEN_POT_LAYER = new ModelLayerLocation(LootrProperties.DECORATED_POT, "main");
+  public static final ModelLayerLocation OPEN_POT_LAYER = new ModelLayerLocation(LootrConstants.DECORATED_POT, "main");
 
   private final ModelPart neck;
   private final ModelPart frontSide;

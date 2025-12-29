@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.common.api.registry;
+package noobanidus.mods.lootr.common.api;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
@@ -6,10 +6,9 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.PushReaction;
-import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 
-public class LootrProperties {
+public class LootrConstants {
   private static final BlockBehaviour.StatePredicate posPredicate = (state, level, pos) -> {
     BlockEntity blockentity = level.getBlockEntity(pos);
     if (LootrAPI.resolveBlockEntity(blockentity) instanceof ILootrBlockEntity ibe) {
@@ -50,6 +49,10 @@ public class LootrProperties {
   public static final ResourceLocation ITEM_FRAME = LootrAPI.rl("item_frame");
 
   public static final ResourceLocation SIMPLE = LootrAPI.rl("simple");
+
+  // Tags for entities
+  public static final ResourceLocation CAN_CONVERT = LootrAPI.rl("can_convert");
+  public static final String CAN_CONVERT_TAG = CAN_CONVERT.toString();
 
   // TODO: These are for backwards-compatibility
   public static final String LOOTR_SPECIAL_CHEST = "lootr:special_loot_chest";

@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import noobanidus.mods.lootr.common.api.PotDecorationsAdapter;
-import noobanidus.mods.lootr.common.api.registry.LootrProperties;
+import noobanidus.mods.lootr.common.api.LootrConstants;
 import org.jetbrains.annotations.Nullable;
 
 public class SherdsIntegrationImpl {
@@ -23,7 +23,7 @@ public class SherdsIntegrationImpl {
   private static DataComponentType<StackPotDecorations> getSherdsDecorationsComponent() {
     if (!checked) {
       checked = true;
-      var comp = BuiltInRegistries.DATA_COMPONENT_TYPE.get(LootrProperties.SHERDSAPI_POT_DECORATIONS);
+      var comp = BuiltInRegistries.DATA_COMPONENT_TYPE.get(LootrConstants.SHERDSAPI_POT_DECORATIONS);
       if (comp == null) {
         return null;
       }
@@ -37,7 +37,7 @@ public class SherdsIntegrationImpl {
   private static DataComponentType<ResourceLocation> getSherdsTextureComponent() {
     if (!checked2) {
       checked2 = true;
-      var comp = BuiltInRegistries.DATA_COMPONENT_TYPE.get(LootrProperties.SHERDSAPI_SHERD_PATTERN);
+      var comp = BuiltInRegistries.DATA_COMPONENT_TYPE.get(LootrConstants.SHERDSAPI_SHERD_PATTERN);
       if (comp == null) {
         return null;
       }

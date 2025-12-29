@@ -37,7 +37,7 @@ import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
 import noobanidus.mods.lootr.common.api.processor.ILootrBlockEntityProcessor;
 import noobanidus.mods.lootr.common.api.processor.ILootrEntityProcessor;
-import noobanidus.mods.lootr.common.api.registry.LootrProperties;
+import noobanidus.mods.lootr.common.api.LootrConstants;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.client.ClientHooks;
 import noobanidus.mods.lootr.common.data.DataStorage;
@@ -442,7 +442,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   private DataComponentType<?> getSherdsComponent() {
     if (!sherdsChecked) {
       sherdsChecked = true;
-      sherdsType = BuiltInRegistries.DATA_COMPONENT_TYPE.get(LootrProperties.SHERDSAPI_POT_DECORATIONS);
+      sherdsType = BuiltInRegistries.DATA_COMPONENT_TYPE.get(LootrConstants.SHERDSAPI_POT_DECORATIONS);
     }
     return sherdsType;
   }

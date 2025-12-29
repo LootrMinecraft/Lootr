@@ -15,12 +15,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-import noobanidus.mods.lootr.common.api.registry.LootrProperties;
+import noobanidus.mods.lootr.common.api.LootrConstants;
 import noobanidus.mods.lootr.common.entity.LootrItemFrame;
 
 public class LootrItemFrameRenderer extends ItemFrameRenderer<LootrItemFrame> {
-  public static final ModelResourceLocation FRAME_LOCATION = new ModelResourceLocation(LootrProperties.ITEM_FRAME.withPrefix("block/"), "standalone");
-  public static final ModelResourceLocation FRAME_OPEN_LOCATION = new ModelResourceLocation(LootrProperties.ITEM_FRAME.withPrefix("block/")
+  public static final ModelResourceLocation FRAME_LOCATION = new ModelResourceLocation(LootrConstants.ITEM_FRAME.withPrefix("block/"), "standalone");
+  public static final ModelResourceLocation FRAME_OPEN_LOCATION = new ModelResourceLocation(LootrConstants.ITEM_FRAME.withPrefix("block/")
       .withSuffix("_open"), "standalone");
 
   private final ItemRenderer itemRenderer;
