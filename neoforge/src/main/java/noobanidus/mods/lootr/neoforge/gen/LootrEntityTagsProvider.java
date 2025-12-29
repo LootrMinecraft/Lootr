@@ -3,9 +3,11 @@ package noobanidus.mods.lootr.neoforge.gen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.EntityTypeTagsProvider;
+import net.minecraft.tags.TagEntry;
 import net.minecraft.world.entity.EntityType;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.LootrConstants;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.neoforge.init.ModEntities;
 import org.jetbrains.annotations.Nullable;
@@ -24,7 +26,7 @@ public class LootrEntityTagsProvider extends EntityTypeTagsProvider {
     //noinspection unchecked
     tag(LootrTags.Entity.CONVERT_ENTITIES).addTags(LootrTags.Entity.CONVERT_CARTS, LootrTags.Entity.CONVERT_ITEM_FRAMES);
 
-    tag(LootrTags.Entity.MINECARTS).add(ModEntities.LOOTR_MINECART_ENTITY.get());
+    tag(LootrTags.Entity.MINECARTS).add(TagEntry.optionalTag(ModEntities.LOOTR_MINECART_ENTITY.getId())).add(TagEntry.optionalTag(LootrConstants.LOOTR_CART)); // Disparity between Fabric and NeoForge: `lootr_cart` for Fabric, `lootr_minecart` for NeoForge.
     tag(LootrTags.Entity.ITEM_FRAMES).add(ModEntities.ITEM_FRAME.get());
 
     //noinspection unchecked

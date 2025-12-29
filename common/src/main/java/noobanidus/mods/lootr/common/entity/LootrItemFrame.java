@@ -118,7 +118,7 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   }
 
   private void maybeMessagePlayer(DamageSource source) {
-    if (source.getEntity() instanceof Player player) {
+    if (source.getEntity() instanceof Player player && !this.level().isClientSide()) {
       if (LootrAPI.canDestroyOrBreak(player)) {
         return;
       }
@@ -143,11 +143,17 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
 
   @Override
   public boolean hurt(DamageSource source, float amount) {
-    if (source.getEntity() instanceof ServerPlayer player) {
-      this.actuallyDropItem(player);
+    boolean skipMessage = false;
+
+    if (amount > 0 && source.getEntity() instanceof ServerPlayer player) {
+      if (this.actuallyDropItem(player)) {
+        skipMessage = true;
+      }
     }
 
-    maybeMessagePlayer(source);
+    if (amount > 0 && !skipMessage) {
+      maybeMessagePlayer(source);
+    }
 
     if (this.isInvulnerableTo(source)) {
       return false;
@@ -169,16 +175,16 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   public void setItem(ItemStack stack, boolean updateNeighbours) {
   }
 
-  private void actuallyDropItem(ServerPlayer player) {
+  private boolean actuallyDropItem(ServerPlayer player) {
     if (this.level().isClientSide()) {
-      return;
+      return false;
     }
     ILootrInventory inventory = LootrAPI.getInventory(this, player);
     if (inventory == null) {
-      return;
+      return false;
     }
     if (inventory.getItem(0).isEmpty()) {
-      return;
+      return false;
     }
     if (!hasServerOpened(player)) {
       player.awardStat(LootrRegistry.getLootedStat());
@@ -195,6 +201,7 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
       this.performOpen(player);
     }
     this.performUpdate(player);
+    return true;
   }
 
   @Override
