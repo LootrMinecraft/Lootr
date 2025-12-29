@@ -46,6 +46,7 @@ public class HandleCart {
           LootrItemFrame newItemFrame = new LootrItemFrame(level.getLevel(), adapter.getPos(entity), adapter.getDirection(entity));
           newItemFrame.lootrSetItem(contained);
           PlatformAPI.copyEntityData(adapter, entity, newItemFrame);
+          event.setCanceled(true);
 
           // TODO: Processing
           var executor = LogicalSidedProvider.WORKQUEUE.get(LogicalSide.SERVER);
