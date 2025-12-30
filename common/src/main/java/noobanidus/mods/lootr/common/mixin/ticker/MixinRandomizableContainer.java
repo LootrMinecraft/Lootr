@@ -12,12 +12,19 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.block.entity.BlockEntityTicker;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import javax.annotation.Nullable;
+
 @Mixin(RandomizableContainer.class)
 public interface MixinRandomizableContainer {
+  @Shadow
+  @Nullable
+  ResourceKey<LootTable> getLootTable();
+
   @WrapOperation(method = "tryLoadLootTable", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/RandomizableContainer;setLootTableSeed(J)V"))
   default void lootr$tryLoadLootTable(RandomizableContainer instance, long l, Operation<Void> original) {
     original.call(instance, l);
@@ -37,7 +44,7 @@ public interface MixinRandomizableContainer {
   // Can't be WrapMethod 'cos it's an interface
   @Inject(method = "unpackLootTable", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/RandomizableContainer;getLootTable()Lnet/minecraft/resources/ResourceKey;"), cancellable = true)
   default void lootr$unpackLootTable(Player player, CallbackInfo ci) {
-    if (this instanceof BlockEntity blockEntity) {
+    if (this.getLootTable() != null && this instanceof BlockEntity blockEntity) {
       if (BlockEntityTicker.isValidEntityFull(blockEntity)) {
         BlockEntityTicker.addEntity(blockEntity, blockEntity.getLevel(), new ChunkPos(blockEntity.getBlockPos()));
         ci.cancel();
