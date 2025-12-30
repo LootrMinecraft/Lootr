@@ -18,22 +18,19 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import javax.annotation.Nullable;
-
 @Mixin(RandomizableContainer.class)
 public interface MixinRandomizableContainer {
   @Shadow
-  @Nullable
   ResourceKey<LootTable> getLootTable();
 
   @Shadow
-  @Nullable
   Level getLevel();
 
   @WrapOperation(method = "tryLoadLootTable", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/RandomizableContainer;setLootTableSeed(J)V"))
   default void lootr$tryLoadLootTable(RandomizableContainer instance, long l, Operation<Void> original) {
     original.call(instance, l);
-    if (instance.getLevel() != null && !instance.getLevel().isClientSide() && instance instanceof BlockEntity blockEntity && !(instance instanceof ILootrBlockEntity) && !(LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity)) {
+    if (instance.getLevel() != null && !instance.getLevel()
+        .isClientSide() && instance instanceof BlockEntity blockEntity && !(instance instanceof ILootrBlockEntity) && !(LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity)) {
       BlockEntityTicker.addEntity(blockEntity, blockEntity.getLevel(), new ChunkPos(blockEntity.getBlockPos()));
     }
   }
@@ -41,7 +38,8 @@ public interface MixinRandomizableContainer {
   @WrapOperation(method = "setLootTable(Lnet/minecraft/resources/ResourceKey;J)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/RandomizableContainer;setLootTable(Lnet/minecraft/resources/ResourceKey;)V"))
   default void lootr$setLootTable(RandomizableContainer instance, ResourceKey<LootTable> table, Operation<Void> original) {
     original.call(instance, table);
-    if (table != null && instance.getLevel() != null && !instance.getLevel().isClientSide() && instance instanceof BlockEntity blockEntity && !(instance instanceof ILootrBlockEntity) && !(LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity)) {
+    if (table != null && instance.getLevel() != null && !instance.getLevel()
+        .isClientSide() && instance instanceof BlockEntity blockEntity && !(instance instanceof ILootrBlockEntity) && !(LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity)) {
       BlockEntityTicker.addEntity(blockEntity, blockEntity.getLevel(), new ChunkPos(blockEntity.getBlockPos()));
     }
   }
