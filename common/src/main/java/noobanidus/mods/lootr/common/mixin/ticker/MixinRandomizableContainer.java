@@ -47,9 +47,9 @@ public interface MixinRandomizableContainer {
   }
 
   // Can't be WrapMethod 'cos it's an interface
-  @Inject(method = "unpackLootTable", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/RandomizableContainer;getLootTable()Lnet/minecraft/resources/ResourceKey;"), cancellable = true)
+  @Inject(method = "unpackLootTable", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;getServer()Lnet/minecraft/server/MinecraftServer;"), cancellable = true)
   default void lootr$unpackLootTable(Player player, CallbackInfo ci) {
-    if (this.getLevel() != null && !this.getLevel().isClientSide() && this.getLootTable() != null && this instanceof BlockEntity blockEntity) {
+    if (this instanceof BlockEntity blockEntity) {
       if (BlockEntityTicker.isValidEntityFull(blockEntity)) {
         BlockEntityTicker.addEntity(blockEntity, blockEntity.getLevel(), new ChunkPos(blockEntity.getBlockPos()));
         ci.cancel();
