@@ -49,6 +49,7 @@ public interface MixinRandomizableContainer {
   // Can't be WrapMethod 'cos it's an interface
   @Inject(method = "unpackLootTable", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;getServer()Lnet/minecraft/server/MinecraftServer;"), cancellable = true)
   default void lootr$unpackLootTable(Player player, CallbackInfo ci) {
+    //noinspection DataFlowIssue -> The mixin point guarantees level is non-null
     if (this.getLevel().getServer() != null && this instanceof BlockEntity blockEntity) {
       if (BlockEntityTicker.isValidEntityFull(blockEntity)) {
         BlockEntityTicker.addEntity(blockEntity, blockEntity.getLevel(), new ChunkPos(blockEntity.getBlockPos()));
