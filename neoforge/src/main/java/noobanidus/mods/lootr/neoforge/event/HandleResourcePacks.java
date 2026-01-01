@@ -21,6 +21,23 @@ public class HandleResourcePacks {
           PackSource.BUILT_IN,
           false,
           Pack.Position.BOTTOM);
+    } else if (event.getPackType() == PackType.SERVER_DATA) {
+/*      event.addPackFinders(
+          LootrAPI.rl("datapacks/lootr_no_advancements"),
+          PackType.SERVER_DATA,
+          Component.literal("Disable Lootr Advancements"),
+          PackSource.WORLD,
+          false,
+          Pack.Position.BOTTOM
+      );
+      event.addPackFinders(
+          LootrAPI.rl("datapacks/lootr_no_suspicious_blocks"),
+          PackType.SERVER_DATA,
+          Component.literal("Disable Lootr Converting Suspicious Blocks"),
+          PackSource.WORLD,
+          false,
+          Pack.Position.BOTTOM
+      );*/
     }
   }
 }
