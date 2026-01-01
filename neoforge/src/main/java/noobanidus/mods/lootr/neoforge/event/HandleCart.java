@@ -20,6 +20,7 @@ import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.common.entity.LootrItemFrame;
 
+// TODO: Abstract common code out of here
 @EventBusSubscriber(modid = LootrAPI.MODID)
 public class HandleCart {
   @SubscribeEvent
@@ -33,7 +34,7 @@ public class HandleCart {
     Entity entity = event.getEntity();
     if (LootrAPI.shouldConvertStructureItemFrames() && entity.getType()
         .is(LootrTags.Entity.CONVERT_ITEM_FRAMES) && entity.getTags()
-        .contains(LootrConstants.CAN_CONVERT_TAG) /* CAN_CONVERT_TAG is handled elsewhere */) {
+        .contains(LootrConstants.CAN_CONVERT_TAG) /* Item frames without CAN_CONVERT_TAG handled elsewhere */) {
       ILootrItemFrameAdapter<Entity> adapter = LootrAPI.getItemFrameAdapter(entity);
       if (adapter == null) {
         LootrAPI.LOG.error("No item frame adapter found for entity '{}' even though it is tagged for conversion.", entity);

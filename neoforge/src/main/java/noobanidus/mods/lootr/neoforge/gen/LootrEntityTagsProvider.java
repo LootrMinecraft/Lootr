@@ -24,7 +24,7 @@ public class LootrEntityTagsProvider extends EntityTypeTagsProvider {
     tag(LootrTags.Entity.CONVERT_CARTS).add(EntityType.CHEST_MINECART);
     tag(LootrTags.Entity.CONVERT_ITEM_FRAMES).add(EntityType.ITEM_FRAME, EntityType.GLOW_ITEM_FRAME);
     //noinspection unchecked
-    tag(LootrTags.Entity.CONVERT_ENTITIES).addTags(LootrTags.Entity.CONVERT_CARTS, LootrTags.Entity.CONVERT_ITEM_FRAMES);
+    tag(LootrTags.Entity.CONVERT_ENTITIES).addTags(LootrTags.Entity.CONVERT_CARTS /* DO NOT INCLUDE ITEM FRAMES HERE, IT BREAKS THINGS */);
 
     tag(LootrTags.Entity.MINECARTS).add(TagEntry.optionalTag(ModEntities.LOOTR_MINECART_ENTITY.getId())).add(TagEntry.optionalTag(LootrConstants.LOOTR_CART)); // Disparity between Fabric and NeoForge: `lootr_cart` for Fabric, `lootr_minecart` for NeoForge.
     tag(LootrTags.Entity.ITEM_FRAMES).add(ModEntities.ITEM_FRAME.get());
