@@ -274,7 +274,7 @@ public class DataStorage {
     }
 
     for (String cache : ((AccessorMixinDimensionDataStorage) data).getCache().keySet()) {
-      if (cache.startsWith("lootr") && !files.contains(cache)) {
+      if (cache.startsWith("lootr/") && !files.contains(cache)) {
         files.add(cache);
       }
     }
