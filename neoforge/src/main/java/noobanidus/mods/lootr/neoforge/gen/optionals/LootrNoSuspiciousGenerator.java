@@ -36,13 +36,6 @@ import java.util.function.Consumer;
 public class LootrNoSuspiciousGenerator {
   private static final List<DataGenerator> generators = new ArrayList<>();
 
-  private static DataGenerator makeGenerator(Path path, Component description) {
-    DataGenerator generator = new DataGenerator(path, DetectedVersion.tryDetectVersion(), true);
-    generator.addProvider(true, new PackMetadataGenerator(generator.getPackOutput()).add(PackMetadataSection.TYPE, new PackMetadataSection(description, 15, Optional.empty()))); // 15 -> ???
-    generators.add(generator);
-    return generator;
-  }
-
   @SubscribeEvent
   public static void gatherData(GatherDataEvent event) {
     PackOutput output = event.getGenerator().getPackOutput();
@@ -54,7 +47,7 @@ public class LootrNoSuspiciousGenerator {
     Path datapacks = root.resolve("datapacks"); // a hack
 
     // Data pack generation
-    var generator = makeGenerator(datapacks.resolve("lootr_no_suspicious_blocks"), Component.literal("Disable Lootr Suspicious Sand and Gravel"));
+    var generator = LootrNoAdvancementGenerator.makeGenerator(datapacks.resolve("lootr_no_suspicious_blocks"), Component.literal("Disable Lootr Suspicious Sand and Gravel"));
     generator.addProvider(event.includeServer(), new LootrBlockTagProvider(generator.getPackOutput(), provider, helper));
 
     try {

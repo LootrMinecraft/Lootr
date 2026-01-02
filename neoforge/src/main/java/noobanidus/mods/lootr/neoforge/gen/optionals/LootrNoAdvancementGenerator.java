@@ -10,7 +10,9 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.metadata.PackMetadataGenerator;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
+import net.minecraft.util.InclusiveRange;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.data.AdvancementProvider;
@@ -31,9 +33,9 @@ import java.util.function.Consumer;
 public class LootrNoAdvancementGenerator {
   private static final List<DataGenerator> generators = new ArrayList<>();
 
-  private static DataGenerator makeGenerator(Path path, Component description) {
+  public static DataGenerator makeGenerator(Path path, Component description) {
     DataGenerator generator = new DataGenerator(path, DetectedVersion.tryDetectVersion(), true);
-    generator.addProvider(true, new PackMetadataGenerator(generator.getPackOutput()).add(PackMetadataSection.TYPE, new PackMetadataSection(description, 15, Optional.empty()))); // 15 -> ???
+    generator.addProvider(true, new PackMetadataGenerator(generator.getPackOutput()).add(PackMetadataSection.TYPE, new PackMetadataSection(description, DetectedVersion.BUILT_IN.getPackVersion(PackType.SERVER_DATA), Optional.empty())));
     generators.add(generator);
     return generator;
   }

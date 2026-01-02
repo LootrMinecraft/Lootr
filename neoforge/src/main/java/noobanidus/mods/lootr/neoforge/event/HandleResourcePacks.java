@@ -22,11 +22,11 @@ public class HandleResourcePacks {
           false,
           Pack.Position.BOTTOM);
     } else if (event.getPackType() == PackType.SERVER_DATA) {
-/*      event.addPackFinders(
+      event.addPackFinders(
           LootrAPI.rl("datapacks/lootr_no_advancements"),
           PackType.SERVER_DATA,
           Component.literal("Disable Lootr Advancements"),
-          PackSource.WORLD,
+          PackSource.BUILT_IN,
           false,
           Pack.Position.BOTTOM
       );
@@ -34,10 +34,10 @@ public class HandleResourcePacks {
           LootrAPI.rl("datapacks/lootr_no_suspicious_blocks"),
           PackType.SERVER_DATA,
           Component.literal("Disable Lootr Converting Suspicious Blocks"),
-          PackSource.WORLD,
+          PackSource.BUILT_IN,
           false,
           Pack.Position.BOTTOM
-      );*/
+      );
     }
   }
 }
