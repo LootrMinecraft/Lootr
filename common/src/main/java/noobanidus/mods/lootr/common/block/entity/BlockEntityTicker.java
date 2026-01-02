@@ -276,7 +276,9 @@ public final class BlockEntityTicker {
       }
       PlatformAPI.restoreSpecificData(data, newBlockEntity);
       ibe.setLootTableInternal(table, seed);
-      ibe.performUpdate();
+      if (LootrAPI.getFileSaveMode().shouldInitialSave()) {
+        ibe.performUpdate();
+      }
       LootrAPI.postProcess(level, entityPos, ibe.asBlockEntity(), replacement, table, seed);
     } else {
       LootrAPI.LOG.error("Somehow, replacement result {} is not an ILootrBlockEntity {} at {}", replacement, level.dimension(), entityPos);

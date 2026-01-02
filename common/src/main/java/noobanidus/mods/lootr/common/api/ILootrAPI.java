@@ -22,6 +22,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
 import noobanidus.mods.lootr.common.api.client.ClientTextureType;
+import noobanidus.mods.lootr.common.api.config.SaveMode;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.ILootrSavedData;
 import noobanidus.mods.lootr.common.api.data.LootFiller;
@@ -316,6 +317,8 @@ public interface ILootrAPI {
   PotDecorationsAdapter getDecorationsAdapter(ItemStack stack);
 
   PotDecorationsAdapter getDecorationsAdapter(BlockEntity.DataComponentInput input);
+
+  SaveMode getFileSaveMode ();
 }
 
 

@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.client.ClientTextureType;
+import noobanidus.mods.lootr.common.api.config.SaveMode;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.impl.DefaultLootrAPIImpl;
 import noobanidus.mods.lootr.fabric.config.ConfigManager;
@@ -372,6 +373,11 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   @Override
   public boolean shouldReplaceWhenDecayed() {
     return ConfigManager.get().decay.replace_when_decayed;
+  }
+
+  @Override
+  public SaveMode getFileSaveMode() {
+    return ConfigManager.get().conversion.save_mode;
   }
 
   @Override

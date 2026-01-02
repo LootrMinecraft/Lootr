@@ -14,6 +14,7 @@ import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
+import noobanidus.mods.lootr.common.api.config.SaveMode;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.config.ConfigManagerBase;
 import noobanidus.mods.lootr.common.impl.LootrServiceRegistry;
@@ -29,6 +30,7 @@ public class ConfigManager extends ConfigManagerBase {
   public static final ModConfigSpec.BooleanValue RANDOMISE_SEED;
   public static final ModConfigSpec.BooleanValue DISABLE;
   public static final ModConfigSpec.IntValue MAXIMUM_AGE;
+  public static final ModConfigSpec.ConfigValue<SaveMode> SAVE_MODE;
   @Deprecated
   public static final ModConfigSpec.BooleanValue CONVERT_MINESHAFTS;
   public static final ModConfigSpec.BooleanValue CONVERT_ELYTRAS_TO_CHESTS;
@@ -102,6 +104,7 @@ public class ConfigManager extends ConfigManagerBase {
   static {
     COMMON_BUILDER.push("conversion").comment("configuration options for the conversion of chests");
     DISABLE = COMMON_BUILDER.comment("if true, no chests will be converted").define("disable", false);
+    SAVE_MODE = COMMON_BUILDER.comment("determines when lootr saves data files for containers. 'always' will always save them, which may result in more files than expected; 'when_opened' will only save them the first time they have been opened; 'smart' defaults to 'always' but switches to 'when_opened' for aternos and exaroton").defineEnum("save_mode", SaveMode.SMART);
     RANDOMISE_SEED = COMMON_BUILDER.comment("determine whether or not loot generated is the same for all players using the provided seed, or randomised per player").define("randomise_seed", true);
     MAXIMUM_AGE = COMMON_BUILDER.comment("the maximum age for containers; entries above this age will be discarded [default: 60 * 20 * 15, fifteen minutes] [note: the value 6000 will be corrected to 18000. if you wish to use 6000, please use 6001 or 5999.]").defineInRange("max_age", 60 * 20 * 15, 0, Integer.MAX_VALUE);
     BYPASS_SPAWN_PROTECTION = COMMON_BUILDER.comment("if true, accessing a Lootr container will bypass spawn protection").define("bypass_spawn_protection", true);

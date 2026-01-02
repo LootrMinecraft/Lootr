@@ -18,6 +18,7 @@ import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import noobanidus.mods.lootr.common.api.ILootrAPI;
 import noobanidus.mods.lootr.common.api.client.ClientTextureType;
+import noobanidus.mods.lootr.common.api.config.SaveMode;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.impl.DefaultLootrAPIImpl;
 import noobanidus.mods.lootr.neoforge.config.ConfigManager;
@@ -373,6 +374,11 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   @Override
   public boolean shouldReplaceWhenDecayed() {
     return ConfigManager.REPLACE_WHEN_DECAYED.get();
+  }
+
+  @Override
+  public SaveMode getFileSaveMode() {
+    return ConfigManager.SAVE_MODE.get();
   }
 
   @Override

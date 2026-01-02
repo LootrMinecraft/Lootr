@@ -13,6 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
+import noobanidus.mods.lootr.common.api.config.SaveMode;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.config.ConfigManagerBase;
 import noobanidus.mods.lootr.common.impl.LootrServiceRegistry;
@@ -276,6 +277,7 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
     public boolean perform_piecewise_check = true;
     public boolean bypass_spawn_protection = true;
     public boolean skip_logging_no_loot_table_at_generation = true;
+    public SaveMode save_mode = SaveMode.SMART;
   }
 
   public static class Breaking {
