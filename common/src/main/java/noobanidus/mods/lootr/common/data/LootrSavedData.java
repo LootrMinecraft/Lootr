@@ -216,10 +216,20 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
   // versus "hasBeenOpened" in ILootrInfoProvider? There's no synchronization between them.
   // The main reason it exists in the provider is to prevent tick events from causing
   // data to be created and then saved, which was apparently causing TPS lag for someone.
+  // It's also used to ignore specific saved data files when clearing via command.
+
   // This is triggered in createInventory and reset in refresh.
   @Override
   public boolean hasBeenOpened() {
     return hasBeenOpened;
+  }
+
+  public boolean canBeCulled () {
+    if (!inventories.isEmpty()) {
+      return false;
+    }
+
+    return !hasBeenOpened();
   }
 
   @Override

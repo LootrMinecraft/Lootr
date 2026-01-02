@@ -2,6 +2,7 @@ package noobanidus.mods.lootr.common.data;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtIo;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
@@ -21,6 +22,7 @@ import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.chunk.LoadedChunks;
+import noobanidus.mods.lootr.common.command.IOUtil;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinDimensionDataStorage;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -28,9 +30,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Stream;
 
 @SuppressWarnings("unused")
@@ -242,6 +242,45 @@ public class DataStorage {
     return clearInventories(player.getUUID());
   }
 
+  public static Set<String> getAllLootrFiles() {
+    DimensionDataStorage data = getDataStorage();
+    if (data == null) {
+      // Errors are already generated in `getDataStorage`
+      return Collections.emptySet();
+    }
+
+    MinecraftServer server = LootrAPI.getServer();
+    if (server == null) {
+      LootrAPI.LOG.error("MinecraftServer is null at this stage; Lootr cannot clear inventories.");
+      return Collections.emptySet();
+    }
+
+    Path dataPath = server.getWorldPath(new LevelResource("data")).resolve("lootr");
+
+    Set<String> files = new HashSet<>();
+    for (String cache : ((AccessorMixinDimensionDataStorage) data).getCache().keySet()) {
+      if (cache.startsWith("lootr/")) {
+        files.add(cache);
+      }
+    }
+
+    try (Stream<Path> paths = Files.walk(dataPath)) {
+      paths.forEach(path -> {
+        if (Files.isRegularFile(path)) {
+          String fileName = path.getFileName().toString();
+          if (fileName.startsWith("lootr-")) {
+            return;
+          }
+          files.add("lootr/" + fileName.charAt(0) + "/" + fileName.substring(0, 2) + "/" + fileName.replace(".dat", ""));
+        }
+      });
+    } catch (IOException e) {
+      return files;
+    }
+
+    return files;
+  }
+
   @ApiStatus.Internal
   // This is now safe!
   public static boolean clearInventories(UUID id) {
@@ -257,27 +296,7 @@ public class DataStorage {
       return false;
     }
 
-    Path dataPath = server.getWorldPath(new LevelResource("data")).resolve("lootr");
-    List<String> files = new ArrayList<>();
-    try (Stream<Path> paths = Files.walk(dataPath)) {
-      paths.forEach(path -> {
-        if (Files.isRegularFile(path)) {
-          String fileName = path.getFileName().toString();
-          if (fileName.startsWith("lootr-")) {
-            return;
-          }
-          files.add("lootr/" + fileName.charAt(0) + "/" + fileName.substring(0, 2) + "/" + fileName.replace(".dat", ""));
-        }
-      });
-    } catch (IOException e) {
-      return false;
-    }
-
-    for (String cache : ((AccessorMixinDimensionDataStorage) data).getCache().keySet()) {
-      if (cache.startsWith("lootr/") && !files.contains(cache)) {
-        files.add(cache);
-      }
-    }
+    Set<String> files = getAllLootrFiles();
 
     int count = 0;
 
@@ -306,22 +325,24 @@ public class DataStorage {
           ChunkPos chunkPos = new ChunkPos(lootrSavedData.getInfoPos());
           if (chunkCache.hasChunk(chunkPos.x, chunkPos.z) && LoadedChunks.getLoadedChunks(lootrSavedData.getInfoDimension())
               .contains(chunkPos)) {
-            // TODO: Optimize this to function off ILootrInfoProvider
+            // TODO: This should still be simplified
+            ILootrInfoProvider provider = null;
             //noinspection deprecation
             if (lootrSavedData.isEntity()) {
               Entity entity = level.getEntity(lootrSavedData.getInfoUUID());
               if (entity instanceof ILootrEntity cart) {
-                cart.removeVisualOpener(id);
-                cart.performClose();
-                cart.performUpdate();
+                provider = cart;
               }
             } else {
               BlockEntity entity = level.getBlockEntity(lootrSavedData.getInfoPos());
               if (LootrAPI.resolveBlockEntity(entity) instanceof ILootrBlockEntity blockEntity) {
-                blockEntity.removeVisualOpener(id);
-                blockEntity.performClose();
-                blockEntity.performUpdate();
+                provider = blockEntity;
               }
+            }
+            if (provider != null) {
+              provider.removeVisualOpener(id);
+              provider.performClose();
+              provider.performUpdate();
             }
           }
         }
@@ -335,6 +356,52 @@ public class DataStorage {
     }
 
     return false;
+  }
+
+  @ApiStatus.Internal
+  // This is now safe!
+  public static int cullInventories() {
+    DimensionDataStorage data = getDataStorage();
+    if (data == null) {
+      // Errors are already generated in `getDataStorage`
+      return 0;
+    }
+
+    MinecraftServer server = LootrAPI.getServer();
+    if (server == null) {
+      LootrAPI.LOG.error("MinecraftServer is null at this stage; Lootr cannot clear inventories.");
+      return 0;
+    }
+
+    Set<String> files = getAllLootrFiles();
+
+    Set<String> filesToDelete = new HashSet<>();
+
+    for (String file : files) {
+      SavedData datum = data.get(new SavedData.Factory<>(() -> LootrDummyData.INSTANCE, LootrSavedData::load, null), file);
+      if (datum == LootrDummyData.INSTANCE) {
+        // Failed to load so clear it from the cache
+        LootrAPI.LOG.error("Failed to load data for {}, removing from cache.", file);
+        ((AccessorMixinDimensionDataStorage) data).getCache().remove(file);
+        continue;
+      }
+      if (!(datum instanceof LootrSavedData lootrSavedData)) {
+        LootrAPI.LOG.error("Data for {} is not a LootrSavedData instance.", file);
+        ((AccessorMixinDimensionDataStorage) data).getCache().remove(file);
+        continue;
+      }
+      if (lootrSavedData.canBeCulled()) {
+        filesToDelete.add(file);
+        ((AccessorMixinDimensionDataStorage) data).getCache().remove(file);
+      }
+    }
+
+    if (!filesToDelete.isEmpty()) {
+      IOUtil.cullSavedDataAsync(server, filesToDelete);
+      LootrAPI.LOG.info("Culling {} inventories.", filesToDelete.size());
+    }
+
+    return filesToDelete.size();
   }
 
   private static class LootrDummyData extends SavedData {

@@ -502,6 +502,11 @@ public class CommandLootr {
 
           return 1;
         })));
+    builder.then(Commands.literal("cull").executes(c -> {
+      c.getSource()
+          .sendSuccess(() -> Component.literal("Going to asynchronously cull " + DataStorage.cullInventories() + " inventories."), true);
+      return 1;
+    }));
     builder.then(Commands.literal("force_chunk")
         .executes(c -> {
           ChunkPos pos = new ChunkPos(BlockPos.containing(c.getSource().getPosition()));
