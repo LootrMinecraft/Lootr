@@ -20,7 +20,7 @@ public abstract class DefaultPlatformAPIImpl implements IPlatformAPI {
 
     for (String name : SERVER_ENVIRONMENT_REDUCE_FILES) {
       if (System.getenv(name) != null) {
-        LootrAPI.LOG.error("Environment variable '{}' detected. If the save mode configuration is set to 'SMART', Lootr will only save data files for containers that have been opened by players, rather than every file.", name);
+        LootrAPI.LOG.info("Environment variable '{}' detected. If the save mode configuration is set to 'SMART', Lootr will only save data files for containers that have been opened by players, rather than every file.", name);
         serverNeedsLessFiles = true;
         break;
       }
