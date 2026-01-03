@@ -30,6 +30,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.Function;
 
+@SuppressWarnings("unchecked")
 public class LootrServiceRegistry {
   private static LootrServiceRegistry INSTANCE;
 
@@ -138,12 +139,10 @@ public class LootrServiceRegistry {
   }
 
   @Nullable
-  @SuppressWarnings("unchecked")
   private static <T> Function<T, ILootrBlockEntity> getBlockEntity(BlockEntityType<?> clazz) {
     return (Function<T, ILootrBlockEntity>) getInstance().blockEntityConverterMap.get(clazz);
   }
 
-  @SuppressWarnings("unchecked")
   @Nullable
   private static <T> Function<T, ILootrEntity> getEntity(EntityType<?> clazz) {
     return (Function<T, ILootrEntity>) getInstance().entityConverterMap.get(clazz);
@@ -206,11 +205,9 @@ public class LootrServiceRegistry {
 
   @Nullable
   static <T> ILootrDataAdapter<T> getAdapter(T type) {
-    //noinspection unchecked
     return (ILootrDataAdapter<T>) getInstance().dataAdapterMap.getAdapter(type);
   }
 
-  @SuppressWarnings("unchecked")
   @Nullable
   static <T>ILootrItemFrameAdapter<T> getItemFrameAdapter (T type) {
     return (ILootrItemFrameAdapter<T>)  getInstance().itemFrameAdapterMap.getAdapter(type);
