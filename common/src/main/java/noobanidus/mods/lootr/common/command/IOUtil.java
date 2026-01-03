@@ -38,5 +38,8 @@ public class IOUtil {
         }
       });
     }
+    withIOWorker(() -> {
+      LootrAPI.LOG.info("Culled {} saved data files.", savedDataFiles.size());
+    });
   }
 }
