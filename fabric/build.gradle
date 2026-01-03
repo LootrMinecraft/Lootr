@@ -48,6 +48,8 @@ dependencies {
         transitive = false
     }
 
+    modImplementation "maven.modrinth:jade:15.10.0+fabric"
+
     modCompileOnly("me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config}")
     modLocalRuntime("me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config}")
     modCompileOnly "dev.thomasglasser.sherdsapi:sherdsapi-fabric-${minecraft_version}:${sherdsapi_version}"
