@@ -17,6 +17,9 @@ import java.util.concurrent.CompletableFuture;
 public class LootrDataGenerators {
   @SubscribeEvent
   public static void gatherData(GatherDataEvent event) {
+    if (!event.getMods().contains(LootrAPI.MODID)) {
+      return;
+    }
     DataGenerator generator = event.getGenerator();
     PackOutput output = event.getGenerator().getPackOutput();
     CompletableFuture<HolderLookup.Provider> provider = event.getLookupProvider();

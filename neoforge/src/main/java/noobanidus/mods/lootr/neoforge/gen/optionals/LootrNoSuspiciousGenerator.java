@@ -38,6 +38,9 @@ public class LootrNoSuspiciousGenerator {
 
   @SubscribeEvent
   public static void gatherData(GatherDataEvent event) {
+    if (!event.getMods().contains(LootrAPI.MODID)) {
+      return;
+    }
     PackOutput output = event.getGenerator().getPackOutput();
     CompletableFuture<HolderLookup.Provider> provider = event.getLookupProvider();
     ExistingFileHelper helper = event.getExistingFileHelper();

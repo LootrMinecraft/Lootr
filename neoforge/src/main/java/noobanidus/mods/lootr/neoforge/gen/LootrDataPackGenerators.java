@@ -44,6 +44,9 @@ public class LootrDataPackGenerators {
 
   @SubscribeEvent
   public static void onGatherData(GatherDataEvent event) {
+    if (!event.getMods().contains(LootrAPI.MODID)) {
+      return;
+    }
     event.getGenerator().addProvider(
         event.includeServer(),
         (DataProvider.Factory<DatapackBuiltinEntriesProvider>) output -> new DatapackBuiltinEntriesProvider(
