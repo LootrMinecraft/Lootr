@@ -10,12 +10,14 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.network.PacketDistributor;
 import noobanidus.mods.lootr.common.api.DataToCopy;
 import noobanidus.mods.lootr.common.api.IPlatformAPI;
+import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
+import noobanidus.mods.lootr.common.impl.DefaultPlatformAPIImpl;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinBaseContainerBlockEntity;
 import noobanidus.mods.lootr.neoforge.network.toClient.*;
 
-public class PlatformAPIImpl implements IPlatformAPI {
+public class PlatformAPIImpl extends DefaultPlatformAPIImpl implements IPlatformAPI {
   @Override
   public void performEntityOpen(ILootrEntity entity, ServerPlayer player) {
     PacketDistributor.sendToPlayer(player, new PacketOpenCart(entity.asEntity().getId()));
@@ -80,7 +82,7 @@ public class PlatformAPIImpl implements IPlatformAPI {
   @Override
   @Deprecated
   public void copyEntityData(AbstractMinecartContainer entity1, AbstractMinecartContainer entity2) {
-    IPlatformAPI.super.copyEntityData(entity1, entity2);
+    super.copyEntityData(entity1, entity2);
     entity2.getPersistentData().merge(entity1.getPersistentData());
   }
 

@@ -99,4 +99,8 @@ public class PlatformAPI {
   public static void performPotBreak(ILootrBlockEntity lootrDecoratedPotBlockEntity, ServerPlayer player) {
     INSTANCE.performPotBreak(lootrDecoratedPotBlockEntity, player);
   }
+
+  public static boolean shouldDoInitialSave () {
+    return INSTANCE.shouldDoInitialSave();
+  }
 }

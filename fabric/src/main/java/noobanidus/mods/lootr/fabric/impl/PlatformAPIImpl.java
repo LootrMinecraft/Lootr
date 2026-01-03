@@ -12,10 +12,11 @@ import noobanidus.mods.lootr.common.api.DataToCopy;
 import noobanidus.mods.lootr.common.api.IPlatformAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
+import noobanidus.mods.lootr.common.impl.DefaultPlatformAPIImpl;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinBaseContainerBlockEntity;
 import noobanidus.mods.lootr.fabric.network.to_client.*;
 
-public class PlatformAPIImpl implements IPlatformAPI {
+public class PlatformAPIImpl extends DefaultPlatformAPIImpl implements IPlatformAPI {
   @Override
   public void performEntityOpen(ILootrEntity entity, ServerPlayer player) {
     ServerPlayNetworking.send(player, new PacketOpenCart(entity.asEntity().getId()));
