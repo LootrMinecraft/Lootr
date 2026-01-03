@@ -28,6 +28,10 @@ public class IOUtil {
   }
 
   public static void cullSavedDataAsync (MinecraftServer server, Set<String> savedDataFiles) {
+    if (savedDataFiles.isEmpty()) {
+      LootrAPI.LOG.info("No saved data files to cull.");
+      return;
+    }
     for (String name : savedDataFiles) {
       Path file = getSavedDataPath(server, name);
       withIOWorker(() -> {
