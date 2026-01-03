@@ -260,6 +260,9 @@ public class DataStorage {
     Set<String> files = new HashSet<>();
     for (String cache : ((AccessorMixinDimensionDataStorage) data).getCache().keySet()) {
       if (cache.startsWith("lootr/")) {
+        if (cache.startsWith("lootr/Lootr-") || cache.startsWith("lootr/lootr-")) {
+          continue;
+        }
         files.add(cache);
       }
     }
@@ -268,7 +271,7 @@ public class DataStorage {
       paths.forEach(path -> {
         if (Files.isRegularFile(path)) {
           String fileName = path.getFileName().toString();
-          if (fileName.startsWith("lootr/lootr-") || fileName.startsWith("lootr/Lootr-")) {
+          if (fileName.startsWith("lootr-") || fileName.startsWith("Lootr-")) {
             return;
           }
           files.add("lootr/" + fileName.charAt(0) + "/" + fileName.substring(0, 2) + "/" + fileName.replace(".dat", ""));
