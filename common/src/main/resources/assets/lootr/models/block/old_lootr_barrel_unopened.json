@@ -1,5 +1,6 @@
 {
   "parent": "block/cube_bottom_top",
+  "render_type": "minecraft:cutout",
   "textures": {
     "particle": "lootr:block/old_barrel_top",
     "top": "lootr:block/old_barrel_top",

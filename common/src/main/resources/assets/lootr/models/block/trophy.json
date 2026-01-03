@@ -7,6 +7,7 @@
     "particle": "lootr:chest_opened",
     "missing": "lootr:chest_opened"
   },
+  "render_type": "minecraft:cutout",
   "elements": [
     {
       "name": "Right Leg",
