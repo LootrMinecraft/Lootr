@@ -96,6 +96,10 @@ public class LootrLangProvider extends LanguageProvider {
     var max_entry_age = "Maximum Block Entity Age";
     var disable = "Disable Conversion";
     var elytra = "Convert Elytra Item Frames";
+    var elytra_chests = "Convert Elytra Item Frames into Chests";
+    var elytra_frame = "Convert Elytra Item Frames into Lootr Item Frames";
+    var frames = "Convert Structure Item Frames";
+    var mode = "Container Data Save Mode";
     var spawn = "Bypass Spawn Protection";
     var convert_mineshafts = "Convert Mineshaft Chest Carts";
     var world_border = "Disable Conversion Outside World Border";
@@ -155,6 +159,10 @@ public class LootrLangProvider extends LanguageProvider {
     add("text.autoconfig.lootr.option.conversion.bypass_spawn_protection", spawn);
     add("text.autoconfig.lootr.option.conversion.world_border", world_border);
     add("text.autoconfig.lootr.option.conversion.skip_logging_no_loot_table_at_generation", skip_logging);
+    add("text.autoconfig.lootr.option.conversion.save_mode", mode);
+    add("text.autoconfig.lootr.option.conversion.convert_structure_item_frames", frames);
+    add("text.autoconfig.lootr.option.conversion.convert_elytras_to_chests", elytra_chests);
+    add("text.autoconfig.lootr.option.conversion.convert_elytras_to_item_frames", elytra_frame);
     add("text.autoconfig.lootr.option.breaking", breaking);
     add("text.autoconfig.lootr.option.breaking.enable_break", enable_break);
     add("text.autoconfig.lootr.option.breaking.enable_fake_player_break", enable_fake_player_break);
@@ -254,6 +262,10 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.configuration.new_textures", old_textures);
     add("lootr.configuration.replace_when_decayed", replace_when_decayed);
     add("lootr.configuration.skip_logging_no_loot_table_at_generation", skip_logging);
+    add("lootr.configuration.save_mode", mode);
+    add("lootr.configuration.convert_item_frames", frames);
+    add("lootr.configuration.convert_elytras_to_chests", elytra_chests);
+    add("lootr.configuration.convert_elytras_to_item_frames", elytra_frame);
 
     // Tags
     add(LootrTags.Blocks.CONVERT_BARRELS, "Blocks that Convert to Lootr Barrels");
