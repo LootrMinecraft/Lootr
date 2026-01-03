@@ -12,7 +12,6 @@ import net.minecraft.data.metadata.PackMetadataGenerator;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
-import net.minecraft.util.InclusiveRange;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.data.AdvancementProvider;
@@ -56,6 +55,9 @@ public class LootrNoAdvancementGenerator {
     // Data pack generation
     var generator = makeGenerator(datapacks.resolve("lootr_no_advancements"), Component.literal("Disable Lootr Advancements"));
     generator.addProvider(event.includeServer(), new AdvancementProvider(generator.getPackOutput(), provider, helper, List.of(new LootrAdvancementGenerator())));
+
+    generator = makeGenerator(datapacks.resolve("lootr_no_suspicious_blocks"), Component.literal("Disable Lootr Suspicious Sand and Gravel"));
+    generator.addProvider(event.includeServer(), new LootrNoSuspiciousGenerator.LootrBlockTagProvider(generator.getPackOutput(), provider, helper));
 
     try {
       for (DataGenerator toRun : generators) {

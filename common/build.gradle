@@ -62,6 +62,12 @@ sourceSets {
 
 tasks.named("processResources") {
     exclude(".cache/**")
+
+    from("../datapacks") {
+        include("lootr_no_advancements/**")
+        include("lootr_no_suspicious_blocks/**")
+        exclude(".cache/**")
+    }
 }
 
 tasks.build.mustRunAfter tasks.clean
