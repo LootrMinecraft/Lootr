@@ -148,6 +148,8 @@ public class LootrLangProvider extends LanguageProvider {
     var rename_container_block_entities = "Rename Container Block Entities";
     var perform_piecewise_check = "Perform Piecewise Check";
     var skip_logging = "Skip Logging LootTable-less Block Entities during Generation";
+    var brushables = "Lootr Brushable Blocks Don't Fall";
+    var supported = "Lootr Item Frames Don't Break";
     add("text.autoconfig.lootr.option.debug", debug);
     add("text.autoconfig.lootr.option.debug.report_invalid_tables", report_invalid_tables);
     add("text.autoconfig.lootr.option.seed", seed);
@@ -172,6 +174,8 @@ public class LootrLangProvider extends LanguageProvider {
     add("text.autoconfig.lootr.option.breaking.blast_immune", blast_immune);
     add("text.autoconfig.lootr.option.breaking.trapped_custom", trapped_custom);
     add("text.autoconfig.lootr.option.breaking.should_drop_player_loot", should_drop_player_loot);
+    add("text.autoconfig.lootr.option.breaking.brushables_self_support", brushables);
+    add("text.autoconfig.lootr.option.breaking.item_frames_self_support", supported);
     add("text.autoconfig.lootr.option.lists", lists);
     add("text.autoconfig.lootr.option.lists.dimension_whitelist", dimension_whitelist);
     add("text.autoconfig.lootr.option.lists.dimension_blacklist", dimension_blacklist);
@@ -266,6 +270,8 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.configuration.convert_item_frames", frames);
     add("lootr.configuration.convert_elytras_to_chests", elytra_chests);
     add("lootr.configuration.convert_elytras_to_item_frames", elytra_frame);
+    add("lootr.configuration.brushables_self_support", brushables);
+    add("lootr.configuration.item_frames_self_support", supported);
 
     // Tags
     add(LootrTags.Blocks.CONVERT_BARRELS, "Blocks that Convert to Lootr Barrels");
