@@ -43,6 +43,7 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   public long wobbleStartedAtTick;
   @Nullable
   public DecoratedPotBlockEntity.WobbleStyle lastWobbleStyle;
+  @Nullable
   private PotDecorationsAdapter decorations;
   @Nullable
   protected ResourceKey<LootTable> lootTable;
@@ -59,14 +60,14 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   protected void saveAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
     super.saveAdditional(compoundTag, provider);
     this.trySaveLootTable(compoundTag);
-    this.decorations.save(compoundTag);
+    this.getDecorations().save(compoundTag);
     this.lootrInstance.saveAdditional(compoundTag, provider, level == null || level.isClientSide());
   }
 
   @Override
   protected void loadAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
     super.loadAdditional(compoundTag, provider);
-    this.decorations = this.decorations.load(compoundTag);
+    this.decorations = this.getDecorations().load(compoundTag);
     this.tryLoadLootTable(compoundTag);
     this.lootrInstance.loadAdditional(compoundTag, provider);
   }
@@ -139,7 +140,7 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
         itemEntity.setDeltaMovement(Vec3.ZERO);
         this.level.addFreshEntity(itemEntity);
 
-        for (ItemStack item : decorations.ordered()) {
+        for (ItemStack item : getDecorations().ordered()) {
           ItemStack sherdStack = item.copy();
           ItemEntity sherdEntity = new ItemEntity(this.level, g, h, i, sherdStack);
           sherdEntity.setDeltaMovement(Vec3.ZERO);
