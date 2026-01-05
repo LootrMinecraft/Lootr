@@ -158,7 +158,7 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
 
   @Override
   public LootrInventory createInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler) {
-    if (this.canCreateInventory(provider, player)) {
+    if (provider.canPlayerOpen(player)) {
       LootrInventory result = new LootrInventory(this, provider.buildInitialInventory());
       if (!LootrAPI.isFakePlayer(player)) {
         filler.unpackLootTable(provider, player, result);
@@ -168,7 +168,7 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
       setDirty();
       return result;
     } else {
-      informLimitedCannotOpen(player);
+      provider.informPlayerCannotOpen(player);
       return null;
     }
   }

@@ -179,19 +179,15 @@ public interface ILootrInfo {
   @Nullable
   NonNullList<ItemStack> getInfoReferenceInventory();
 
-  default Set<UUID> getLimitedOpeners () {
-    return Collections.emptySet();
+  default boolean canPlayerOpen (ServerPlayer player) {
+    return true;
+  }
+
+  default void informPlayerCannotOpen (ServerPlayer player) {
+
   }
 
   boolean isInfoReferenceInventory();
-
-  default boolean isLimitedOpenersInventory () {
-    return false;
-  }
-
-  default void informLimitedCannotOpen (ServerPlayer player) {
-    // NO-OP
-  }
 
   // This can be null but only if it is a custom inventory.
   @Nullable
