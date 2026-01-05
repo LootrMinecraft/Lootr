@@ -184,7 +184,6 @@ public interface ILootrInfo {
   }
 
   default void informPlayerCannotOpen (ServerPlayer player) {
-
   }
 
   boolean isInfoReferenceInventory();

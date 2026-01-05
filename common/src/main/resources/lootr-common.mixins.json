@@ -18,6 +18,7 @@
     "elytra.MixinEndCityPieces$EndCityPiece",
     "falling.MixinFallingBlockEntity",
     "filter.MixinLootTable",
+    "lock.MixinBaseContainerBlockEntity",
     "poi.MixinPoiType",
     "poi.MixinPoiTypes",
     "spawn.MixinServerGamePacketListenerImpl",

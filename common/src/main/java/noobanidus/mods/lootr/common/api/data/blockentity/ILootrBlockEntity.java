@@ -10,6 +10,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
@@ -131,6 +132,26 @@ public interface ILootrBlockEntity extends ILootrInfoProvider {
       container.setLootTable(lootTable, seed);
     } else {
       throw new NotImplementedException("setLootTableInternal called on ILootrBlockEntity that is not a RandomizableContainer without overriding!");
+    }
+  }
+
+  @Override
+  default boolean canPlayerOpen(ServerPlayer player) {
+    if (this instanceof BaseContainerBlockEntity bce) {
+      LockMessageSuppression.setSuppressableLock(true);
+      var result = bce.canOpen(player);
+      LockMessageSuppression.setSuppressableLock(false);
+      return result;
+    }
+
+    return true;
+  }
+
+  @Override
+  default void informPlayerCannotOpen(ServerPlayer player) {
+    if (this instanceof BaseContainerBlockEntity bce) {
+      LockMessageSuppression.setSuppressableLock(false);
+      bce.canOpen(player);
     }
   }
 }

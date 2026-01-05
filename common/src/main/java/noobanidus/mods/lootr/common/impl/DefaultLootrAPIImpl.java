@@ -82,12 +82,8 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
       return;
     }
 
-    // TODO: HANDLE LOCKKEY ELSEWHERE
-    // This handles the `lockKey` parameter
-    if (provider instanceof BaseContainerBlockEntity baseContainer) {
-      if (!baseContainer.canOpen(player)) {
-        return;
-      }
+    if (!provider.canPlayerOpen(player)) {
+      return;
     }
     if (LootrAPI.isDecayed(provider) && provider.canDecay()) {
       provider.performDecay();
