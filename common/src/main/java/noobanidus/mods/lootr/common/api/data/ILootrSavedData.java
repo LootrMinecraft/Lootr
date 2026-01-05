@@ -38,17 +38,30 @@ public interface ILootrSavedData extends IRedirect<ILootrInfo>, ILootrInfo, IOpe
 
   boolean clearInventories(UUID id);
 
+  default boolean canCreateInventory (ILootrInfoProvider provider, ServerPlayer player) {
+    if (provider.isLimitedOpenersInventory()) {
+      return provider.getLimitedOpeners().contains(player.getUUID());
+    }
+
+    return true;
+  }
+
   default ILootrInventory getInventory(ServerPlayer player) {
     return getInventory(player.getUUID());
   }
 
   default ILootrInventory getOrCreateInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler) {
-    ILootrInventory result = getInventory(player);
-    if (result != null) {
-      return result;
-    }
+    if (canCreateInventory(provider, player)) {
+      ILootrInventory result = getInventory(player);
+      if (result != null) {
+        return result;
+      }
 
-    return createInventory(provider, player, filler);
+      return createInventory(provider, player, filler);
+    } else {
+      informLimitedCannotOpen(player);
+      return null;
+    }
   }
 
   ILootrInventory getInventory(UUID id);

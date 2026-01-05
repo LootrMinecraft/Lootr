@@ -158,14 +158,19 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
 
   @Override
   public LootrInventory createInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler) {
-    LootrInventory result = new LootrInventory(this, provider.buildInitialInventory());
-    if (!LootrAPI.isFakePlayer(player)) {
-      filler.unpackLootTable(provider, player, result);
+    if (this.canCreateInventory(provider, player)) {
+      LootrInventory result = new LootrInventory(this, provider.buildInitialInventory());
+      if (!LootrAPI.isFakePlayer(player)) {
+        filler.unpackLootTable(provider, player, result);
+      }
+      inventories.put(player.getUUID(), result);
+      hasBeenOpened = true;
+      setDirty();
+      return result;
+    } else {
+      informLimitedCannotOpen(player);
+      return null;
     }
-    inventories.put(player.getUUID(), result);
-    hasBeenOpened = true;
-    setDirty();
-    return result;
   }
 
   @Override

@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.Entity;
@@ -29,6 +30,8 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -176,7 +179,19 @@ public interface ILootrInfo {
   @Nullable
   NonNullList<ItemStack> getInfoReferenceInventory();
 
+  default Set<UUID> getLimitedOpeners () {
+    return Collections.emptySet();
+  }
+
   boolean isInfoReferenceInventory();
+
+  default boolean isLimitedOpenersInventory () {
+    return false;
+  }
+
+  default void informLimitedCannotOpen (ServerPlayer player) {
+    // NO-OP
+  }
 
   // This can be null but only if it is a custom inventory.
   @Nullable
