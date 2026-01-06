@@ -11,9 +11,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import noobanidus.mods.lootr.common.api.ILootrBlockEntityConverter;
-import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.NBTConstants;
+import noobanidus.mods.lootr.common.api.*;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
@@ -65,6 +63,11 @@ public class LootrInventoryBlockEntity extends LootrChestBlockEntity {
     }
   }
 
+
+  @Override
+  public ILootrType getInfoNewType() {
+    return BuiltInLootrTypes.INVENTORY;
+  }
 
   @Override
   public boolean isInfoReferenceInventory() {
