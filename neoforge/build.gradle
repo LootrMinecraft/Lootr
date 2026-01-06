@@ -23,7 +23,7 @@ dependencies {
     compileOnly "dev.thomasglasser.sherdsapi:sherdsapi-neoforge-${minecraft_version}:${sherdsapi_version}"
     implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:${rootProject.mixin_extras_version}"))
     implementation("io.github.llamalad7:mixinextras-neoforge:${rootProject.mixin_extras_version}")
-    implementation "maven.modrinth:jade:15.10.0+neoforge"
+    implementation "maven.modrinth:jade:${rootProject.jade_version}+neoforge"
 
     // Locally sourced extra mods for runtime (i.e. testing)
     for (extraModJar in fileTree(dir: extraModsDir, include: '*.jar')) {

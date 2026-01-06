@@ -32,7 +32,7 @@ dependencies {
 
     // COMPAT
     compileOnly("me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config}") { transitive = false }
-    compileOnly("maven.modrinth:jade:15.10.0+neoforge")
+    compileOnly("maven.modrinth:jade:${rootProject.jade_version}+neoforge")
 }
 
 neoForge {

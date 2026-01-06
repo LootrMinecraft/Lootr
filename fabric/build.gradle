@@ -48,7 +48,7 @@ dependencies {
         transitive = false
     }
 
-    modImplementation "maven.modrinth:jade:15.10.0+fabric"
+    modImplementation "maven.modrinth:jade:${project.jade_version}+fabric"
 
     modCompileOnly("me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config}")
     modLocalRuntime("me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config}")
