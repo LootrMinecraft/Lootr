@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.fabric.integration.jade;
+package noobanidus.mods.lootr.common.integration.jade;
 
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;

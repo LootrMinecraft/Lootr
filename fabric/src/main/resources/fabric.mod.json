@@ -29,7 +29,7 @@
       "noobanidus.mods.lootr.fabric.integration.ModMenuIntegration"
     ],
     "jade": [
-      "noobanidus.mods.lootr.fabric.integration.jade.LootrWailaPlugin"
+      "noobanidus.mods.lootr.common.integration.jade.LootrWailaPlugin"
     ]
   },
   "mixins": [
