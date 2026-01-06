@@ -18,6 +18,7 @@ import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.commands.arguments.coordinates.Vec3Argument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -77,6 +78,7 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 public class CommandLootr {
   private static List<ResourceKey<LootTable>> tables = null;
@@ -87,9 +89,9 @@ public class CommandLootr {
     this.dispatcher = dispatcher;
   }
 
-  private static List<ResourceKey<LootTable>> getTables() {
+  private static List<ResourceKey<LootTable>> getTables(MinecraftServer server) {
     if (tables == null) {
-      tables = new ArrayList<>(BuiltInLootTables.all());
+      tables = server.reloadableRegistries().get().lookup(Registries.LOOT_TABLE).map(HolderLookup::listElementIds).orElse(Stream.of()).toList();
       tableNames = tables.stream().map(o -> o.location().toString()).toList();
     }
     return tables;
@@ -110,8 +112,8 @@ public class CommandLootr {
     return Lists.newArrayList(cache.profilesByName.keySet());
   }
 
-  private static List<String> getTableNames() {
-    getTables();
+  private static List<String> getTableNames(MinecraftServer server) {
+    getTables(server);
     return tableNames;
   }
 
@@ -121,7 +123,7 @@ public class CommandLootr {
     BlockPos pos = new BlockPos((int) incomingPos.x, (int) incomingPos.y, (int) incomingPos.z);
     ResourceKey<LootTable> table;
     if (incomingTable == null) {
-      table = getTables().get(world.getRandom().nextInt(getTables().size()));
+      table = getTables(c.getServer()).get(world.getRandom().nextInt(getTables(c.getServer()).size()));
     } else {
       table = incomingTable;
     }
@@ -180,7 +182,7 @@ public class CommandLootr {
 
   private RequiredArgumentBuilder<CommandSourceStack, ResourceLocation> suggestTables() {
     return Commands.argument("table", ResourceLocationArgument.id())
-        .suggests((c, build) -> SharedSuggestionProvider.suggest(getTableNames(), build));
+        .suggests((c, build) -> SharedSuggestionProvider.suggest(getTableNames(c.getSource().getServer()), build));
   }
 
   private RequiredArgumentBuilder<CommandSourceStack, String> suggestProfiles() {
