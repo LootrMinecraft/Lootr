@@ -1,18 +1,14 @@
-package noobanidus.mods.lootr.fabric.block.entity;
+package noobanidus.mods.lootr.fabric.mixin.self;
 
 import net.fabricmc.fabric.api.blockview.v2.RenderDataBlockEntity;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.block.state.BlockState;
 import noobanidus.mods.lootr.common.block.entity.LootrBarrelBlockEntity;
 import noobanidus.mods.lootr.common.client.ClientHooks;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Mixin;
 
-public class LootrFabricBarrelBlockEntity extends LootrBarrelBlockEntity implements RenderDataBlockEntity {
-  public LootrFabricBarrelBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
-    super(pWorldPosition, pBlockState);
-  }
-
+@Mixin(LootrBarrelBlockEntity.class)
+public class MixinLootrBarrelBlockEntity implements RenderDataBlockEntity {
   @Override
   public @Nullable Object getRenderData() {
     Player player = ClientHooks.getPlayer();
@@ -20,6 +16,6 @@ public class LootrFabricBarrelBlockEntity extends LootrBarrelBlockEntity impleme
       return null;
     }
 
-    return hasClientOpened(player.getUUID());
+    return ((LootrBarrelBlockEntity) (Object)this).hasClientOpened(player.getUUID());
   }
 }

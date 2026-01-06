@@ -7,19 +7,17 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BrushableBlock;
 import noobanidus.mods.lootr.common.api.LootrConstants;
 import noobanidus.mods.lootr.common.block.*;
-import noobanidus.mods.lootr.fabric.block.LootrFabricBarrelBlock;
-import noobanidus.mods.lootr.fabric.block.LootrFabricBrushableBlock;
 
 public class ModBlocks {
   public static final LootrChestBlock CHEST = new LootrChestBlock(LootrConstants.CHEST_PROPERTIES);
-  public static final LootrFabricBarrelBlock BARREL = new LootrFabricBarrelBlock(LootrConstants.BARREL_PROPERTIES);
+  public static final LootrBarrelBlock BARREL = new LootrBarrelBlock(LootrConstants.BARREL_PROPERTIES);
   public static final LootrTrappedChestBlock TRAPPED_CHEST = new LootrTrappedChestBlock(LootrConstants.TRAPPED_CHEST_PROPERTIES);
   public static final LootrInventoryBlock INVENTORY = new LootrInventoryBlock(LootrConstants.INVENTORY_PROPERTIES);
   public static final Block TROPHY = new TrophyBlock(LootrConstants.TROPHY_PROPERTIES);
   public static final LootrShulkerBlock SHULKER = new LootrShulkerBlock(LootrConstants.SHULKER_BOX_PROPERTIES);
 
-  public static final LootrBrushableBlock SUSPICIOUS_SAND = new LootrFabricBrushableBlock(Blocks.SAND, ((BrushableBlock)Blocks.SUSPICIOUS_SAND).getBrushSound(), ((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushCompletedSound(), LootrConstants.SUSPICIOUS_SAND_PROPERTIES);
-  public static final LootrBrushableBlock SUSPICIOUS_GRAVEL = new LootrFabricBrushableBlock(Blocks.GRAVEL, ((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushSound(), ((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushCompletedSound(), LootrConstants.SUSPICIOUS_GRAVEL_PROPERTIES);
+  public static final LootrBrushableBlock SUSPICIOUS_SAND = new LootrBrushableBlock(Blocks.SAND, ((BrushableBlock)Blocks.SUSPICIOUS_SAND).getBrushSound(), ((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushCompletedSound(), LootrConstants.SUSPICIOUS_SAND_PROPERTIES);
+  public static final LootrBrushableBlock SUSPICIOUS_GRAVEL = new LootrBrushableBlock(Blocks.GRAVEL, ((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushSound(), ((BrushableBlock)Blocks.SUSPICIOUS_GRAVEL).getBrushCompletedSound(), LootrConstants.SUSPICIOUS_GRAVEL_PROPERTIES);
 
   public static final LootrDecoratedPotBlock DECORATED_POT = new LootrDecoratedPotBlock(LootrConstants.DECORATED_POT_PROPERTIES);
 

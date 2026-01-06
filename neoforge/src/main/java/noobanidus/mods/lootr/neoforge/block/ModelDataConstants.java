@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.neoforge.block.entity;
+package noobanidus.mods.lootr.neoforge.block;
 
 import net.neoforged.neoforge.client.model.data.ModelData;
 import noobanidus.mods.lootr.neoforge.init.ModBlockProperties;

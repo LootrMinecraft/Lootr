@@ -38,9 +38,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Set;
 import java.util.UUID;
 
-// Abstract so that platform-specific extensions can handle client-side
-// rendering.
-public abstract class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity implements ILootrBlockEntity {
+public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity implements ILootrBlockEntity {
   protected final SimpleLootrInstance simpleLootrInstance = new SimpleLootrInstance(this::getVisualOpeners, 27);
 
   private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {

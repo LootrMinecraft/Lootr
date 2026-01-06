@@ -21,9 +21,7 @@ import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.block.entity.LootrBarrelBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
-// Abstract to compensate for platform-specific block entities which exist
-// in order to dynamically handle client-side rendering.
-public abstract class LootrBarrelBlock extends BarrelBlock {
+public class LootrBarrelBlock extends BarrelBlock {
   public LootrBarrelBlock(Properties p_49046_) {
     super(p_49046_);
   }
@@ -62,7 +60,9 @@ public abstract class LootrBarrelBlock extends BarrelBlock {
 
   @Nullable
   @Override
-  public abstract BlockEntity newBlockEntity(BlockPos pos, BlockState state);
+  public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    return new LootrBarrelBlockEntity(pos, state);
+  }
 
   @Override
   @SuppressWarnings("deprecation")

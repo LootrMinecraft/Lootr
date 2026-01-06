@@ -6,6 +6,8 @@
   "mixins": [
     "advancements.MixinPlayerAdvancements",
     "data_fixer.MixinBlockEntity",
+    "data_fixer.MixinLootrBrushableBlockEntity",
+    "self.MixinLootrBarrelBlockEntity",
     "tags.MixinReloadableServerResources",
     "ticker.MixinPersistentEntitySectionManager"
   ],

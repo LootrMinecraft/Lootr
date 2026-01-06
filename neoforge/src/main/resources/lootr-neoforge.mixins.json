@@ -3,6 +3,8 @@
   "package": "noobanidus.mods.lootr.neoforge.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "self.MixinLootrBarrelBlockEntity",
+    "self.MixinLootrBrushableBlockEntity"
   ],
   "client": [
   ],
