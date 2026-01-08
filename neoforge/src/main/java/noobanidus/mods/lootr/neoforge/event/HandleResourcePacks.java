@@ -22,6 +22,7 @@ public class HandleResourcePacks {
           false,
           Pack.Position.BOTTOM);
     } else if (event.getPackType() == PackType.SERVER_DATA) {
+      // TODO: This doesn't currently work as expected
       event.addPackFinders(
           LootrAPI.rl("datapacks/lootr_no_advancements"),
           PackType.SERVER_DATA,

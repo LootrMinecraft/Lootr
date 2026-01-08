@@ -20,9 +20,7 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.client.model.geometry.IGeometryBakingContext;
 import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
 import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
-import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.neoforge.init.ModBlockProperties;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -43,19 +41,26 @@ public class BrushableModel implements IUnbakedGeometry<BrushableModel> {
     this.stage_3 = stage_3;
   }
 
+  @Nullable
   private static BakedModel buildModel(UnbakedModel entry, ModelState modelTransform, ModelBaker bakery, Function<Material, TextureAtlasSprite> spriteGetter) {
     return entry.bake(bakery, spriteGetter, modelTransform);
   }
 
   @Override
   public BakedModel bake(IGeometryBakingContext context, ModelBaker bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides) {
+    var opened = buildModel(this.opened, modelTransform, bakery, spriteGetter);
+    var stage_0 = buildModel(this.stage_0, modelTransform, bakery, spriteGetter);
+    var stage_1 = buildModel(this.stage_1, modelTransform, bakery, spriteGetter);
+    var stage_2 = buildModel(this.stage_2, modelTransform, bakery, spriteGetter);
+    var stage_3 = buildModel(this.stage_3, modelTransform, bakery, spriteGetter);
+
+    if (opened == null || stage_0 == null || stage_1 == null || stage_2 == null || stage_3 == null) {
+      throw new IllegalStateException("BrushableModel could not bake all sub-models");
+    }
+
     return new BrushableBakedModel(context.useAmbientOcclusion(), context.isGui3d(), context.useBlockLight(),
         spriteGetter.apply(context.getMaterial("particle")), overrides,
-        buildModel(opened, modelTransform, bakery, spriteGetter),
-        buildModel(stage_0, modelTransform, bakery, spriteGetter),
-        buildModel(stage_1, modelTransform, bakery, spriteGetter),
-        buildModel(stage_2, modelTransform, bakery, spriteGetter),
-        buildModel(stage_3, modelTransform, bakery, spriteGetter),
+        opened, stage_0, stage_1, stage_2, stage_3,
         context.getTransforms()
     );
   }
@@ -69,38 +74,14 @@ public class BrushableModel implements IUnbakedGeometry<BrushableModel> {
     stage_3.resolveParents(modelGetter);
   }
 
-  private static final class BrushableBakedModel implements IDynamicBakedModel {
-    private final boolean ambientOcclusion;
-    private final boolean gui3d;
-    private final boolean isSideLit;
-    private final TextureAtlasSprite particle;
-    private final ItemOverrides overrides;
-    private final BakedModel opened;
-    private final BakedModel stage_0;
-    private final BakedModel stage_1;
-    private final BakedModel stage_2;
-    private final BakedModel stage_3;
-    private final ItemTransforms cameraTransforms;
+  @SuppressWarnings("deprecation")
+  private record BrushableBakedModel(boolean ambientOcclusion, boolean gui3d, boolean isSideLit,
+                                     TextureAtlasSprite particle, ItemOverrides overrides, BakedModel opened,
+                                     BakedModel stage_0, BakedModel stage_1, BakedModel stage_2, BakedModel stage_3,
+                                     ItemTransforms cameraTransforms) implements IDynamicBakedModel {
 
-    public BrushableBakedModel(boolean ambientOcclusion, boolean isGui3d, boolean isSideLit, TextureAtlasSprite particle, ItemOverrides overrides, BakedModel opened, BakedModel stage_0, BakedModel stage_1, BakedModel stage_2, BakedModel stage_3, ItemTransforms cameraTransforms) {
-
-      this.isSideLit = isSideLit;
-      this.cameraTransforms = cameraTransforms;
-      this.ambientOcclusion = ambientOcclusion;
-      this.gui3d = isGui3d;
-      this.particle = particle;
-      this.overrides = overrides;
-      this.opened = opened;
-      this.stage_0 = stage_0;
-      this.stage_1 = stage_1;
-      this.stage_2 = stage_2;
-      this.stage_3 = stage_3;
-    }
-
-
-    @NotNull
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand, @NotNull ModelData extraData, @NotNull RenderType renderType) {
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand, ModelData extraData, @Nullable RenderType renderType) {
       BakedModel model = stage_0;
 
       if (extraData.has(ModBlockProperties.OPENED) && extraData.get(ModBlockProperties.OPENED) == Boolean.TRUE) {
@@ -142,7 +123,7 @@ public class BrushableModel implements IUnbakedGeometry<BrushableModel> {
     }
 
     @Override
-    public TextureAtlasSprite getParticleIcon(@NotNull ModelData data) {
+    public TextureAtlasSprite getParticleIcon(ModelData data) {
       return stage_0.getParticleIcon(data);
     }
 

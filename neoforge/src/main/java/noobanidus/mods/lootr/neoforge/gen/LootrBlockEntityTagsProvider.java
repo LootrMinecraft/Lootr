@@ -11,11 +11,13 @@ import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 public class LootrBlockEntityTagsProvider extends IntrinsicHolderTagsProvider<BlockEntityType<?>> {
   public LootrBlockEntityTagsProvider(PackOutput arg, CompletableFuture<HolderLookup.Provider> completableFuture, @Nullable ExistingFileHelper existingFileHelper) {
-    super(arg, Registries.BLOCK_ENTITY_TYPE, completableFuture, (BlockEntityType<?> arg2) -> arg2.builtInRegistryHolder().key(), LootrAPI.MODID, existingFileHelper);
+    super(arg, Registries.BLOCK_ENTITY_TYPE, completableFuture, (BlockEntityType<?> arg2) -> Objects.requireNonNull(arg2.builtInRegistryHolder())
+        .key(), LootrAPI.MODID, existingFileHelper);
   }
 
   @Override

@@ -9,7 +9,6 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.client.ClientHooks;
 import noobanidus.mods.lootr.neoforge.network.ILootrNeoForgePacket;
-import noobanidus.mods.lootr.neoforge.network.client.ClientHandlers;
 
 public record PacketPerformBreakEffect(int entityId, BlockPos pos) implements ILootrNeoForgePacket {
   public static final Type<PacketPerformBreakEffect> TYPE = new Type<>(LootrAPI.rl("perform_break_effect"));

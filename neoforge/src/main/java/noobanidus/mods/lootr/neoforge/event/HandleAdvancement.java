@@ -8,6 +8,7 @@ import net.neoforged.neoforge.event.entity.player.AdvancementEvent;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 
+@SuppressWarnings("resource")
 @EventBusSubscriber(modid = LootrAPI.MODID)
 public class HandleAdvancement {
   @SubscribeEvent

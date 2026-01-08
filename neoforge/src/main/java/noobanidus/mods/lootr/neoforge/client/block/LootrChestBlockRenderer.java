@@ -11,7 +11,8 @@ import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.block.entity.LootrChestBlockEntity;
 
-@SuppressWarnings({"NullableProblems"})
+import java.util.Objects;
+
 public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootrBlockEntity> extends ChestRenderer<T> {
   public static final Material MATERIAL = new Material(Sheets.CHEST_SHEET, LootrAPI.rl("chest"));
   public static final Material MATERIAL2 = new Material(Sheets.CHEST_SHEET, LootrAPI.rl("chest_opened"));
@@ -34,7 +35,7 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootrBlo
     if (Minecraft.getInstance().player == null) {
       return LootrAPI.isOldTextures() ? OLD_MATERIAL2 : MATERIAL2;
     }
-    boolean trapped = blockEntity.getType().builtInRegistryHolder().is(LootrTags.BlockEntity.TRAPPED);
+    boolean trapped = Objects.requireNonNull(blockEntity.getType().builtInRegistryHolder()).is(LootrTags.BlockEntity.TRAPPED);
     if (blockEntity.hasClientOpened(Minecraft.getInstance().player.getUUID())) {
       if (LootrAPI.isOldTextures()) {
         return trapped ? OLD_MATERIAL4 : OLD_MATERIAL2;

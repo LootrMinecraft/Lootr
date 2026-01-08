@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+// Only used for testing
 public class LootrDataPackGenerators {
   // Salts used for the randomization of structure placements
   private static final int STRUCTURE_SALT = 8266497;
@@ -42,7 +43,6 @@ public class LootrDataPackGenerators {
   private static final ResourceKey<StructureTemplatePool> LOOTR_TEST_START_POOL = ResourceKey.create(Registries.TEMPLATE_POOL, LootrAPI.rl("test_start_pool"));
   private static final ResourceKey<StructureSet> LOOTR_TEST_STRUCTURE_SET = ResourceKey.create(Registries.STRUCTURE_SET, LootrAPI.rl("test_structure_set"));
 
-  @SubscribeEvent
   public static void onGatherData(GatherDataEvent event) {
     if (!event.getMods().contains(LootrAPI.MODID)) {
       return;

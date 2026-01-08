@@ -21,7 +21,6 @@ import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
 import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.neoforge.init.ModBlockProperties;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -42,19 +41,25 @@ public class BarrelModel implements IUnbakedGeometry<BarrelModel> {
     this.old_unopened = old_unopened;
   }
 
+  @Nullable
   private static BakedModel buildModel(UnbakedModel entry, ModelState modelTransform, ModelBaker bakery, Function<Material, TextureAtlasSprite> spriteGetter) {
     return entry.bake(bakery, spriteGetter, modelTransform);
   }
 
   @Override
   public BakedModel bake(IGeometryBakingContext context, ModelBaker bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides) {
+    var opened = buildModel(this.opened, modelTransform, bakery, spriteGetter);
+    var unopened = buildModel(this.unopened, modelTransform, bakery, spriteGetter);
+    var vanilla = buildModel(this.vanilla, modelTransform, bakery, spriteGetter);
+    var old_opened = buildModel(this.old_opened, modelTransform, bakery, spriteGetter);
+    var old_unopened = buildModel(this.old_unopened, modelTransform, bakery, spriteGetter);
+
+    if (opened == null || unopened == null || vanilla == null || old_opened == null || old_unopened == null) {
+      throw new IllegalStateException("Barrel model couldn't be baked due to missing sub-models");
+    }
+
     return new BarrelBakedModel(context.useAmbientOcclusion(), context.isGui3d(), context.useBlockLight(),
-        spriteGetter.apply(context.getMaterial("particle")), overrides,
-        buildModel(opened, modelTransform, bakery, spriteGetter),
-        buildModel(unopened, modelTransform, bakery, spriteGetter),
-        buildModel(vanilla, modelTransform, bakery, spriteGetter),
-        buildModel(old_opened, modelTransform, bakery, spriteGetter),
-        buildModel(old_unopened, modelTransform, bakery, spriteGetter),
+        spriteGetter.apply(context.getMaterial("particle")), overrides, opened, unopened, vanilla, old_opened, old_unopened,
         context.getTransforms()
     );
   }
@@ -68,6 +73,7 @@ public class BarrelModel implements IUnbakedGeometry<BarrelModel> {
     old_unopened.resolveParents(modelGetter);
   }
 
+  @SuppressWarnings("deprecation")
   private static final class BarrelBakedModel implements IDynamicBakedModel {
     private final boolean ambientOcclusion;
     private final boolean gui3d;
@@ -95,10 +101,8 @@ public class BarrelModel implements IUnbakedGeometry<BarrelModel> {
       this.old_unopened = old_unopened;
     }
 
-
-    @NotNull
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand, @NotNull ModelData extraData, @NotNull RenderType renderType) {
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand, ModelData extraData, @Nullable RenderType renderType) {
       BakedModel model;
       if (LootrAPI.isVanillaTextures()) {
         model = vanilla;
@@ -142,14 +146,14 @@ public class BarrelModel implements IUnbakedGeometry<BarrelModel> {
     }
 
     @Override
-    public TextureAtlasSprite getParticleIcon(@NotNull ModelData data) {
+    public TextureAtlasSprite getParticleIcon(ModelData data) {
       if (LootrAPI.isVanillaTextures()) {
-        return vanilla.getParticleIcon();
+        return vanilla.getParticleIcon(data);
       }
       if (data.get(ModBlockProperties.OPENED) == Boolean.TRUE) {
-        return LootrAPI.isOldTextures() ? old_opened.getParticleIcon() : opened.getParticleIcon();
+        return LootrAPI.isOldTextures() ? old_opened.getParticleIcon(data) : opened.getParticleIcon(data);
       } else {
-        return LootrAPI.isOldTextures() ? old_unopened.getParticleIcon() : unopened.getParticleIcon();
+        return LootrAPI.isOldTextures() ? old_unopened.getParticleIcon(data) : unopened.getParticleIcon(data);
       }
     }
 

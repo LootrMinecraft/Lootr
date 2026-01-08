@@ -33,12 +33,13 @@ public class CustomModel implements IUnbakedGeometry<CustomModel> {
   @Nullable
   private final UnbakedModel vanilla;
 
-  public CustomModel(UnbakedModel opened, UnbakedModel unopened, UnbakedModel vanilla) {
+  public CustomModel(UnbakedModel opened, UnbakedModel unopened, @Nullable UnbakedModel vanilla) {
     this.opened = opened;
     this.unopened = unopened;
     this.vanilla = vanilla;
   }
 
+  @Nullable
   private static BakedModel buildModel(UnbakedModel entry, ModelState modelTransform, ModelBaker bakery, Function<Material, TextureAtlasSprite> spriteGetter) {
     return entry.bake(bakery, spriteGetter, modelTransform);
   }
@@ -67,8 +68,11 @@ public class CustomModel implements IUnbakedGeometry<CustomModel> {
                                   TextureAtlasSprite particle, ItemOverrides overrides, BakedModel opened,
                                   BakedModel unopened, BakedModel vanilla,
                                   ItemTransforms cameraTransforms) implements IDynamicBakedModel {
-      private CustomBakedModel(boolean ambientOcclusion, boolean gui3d, boolean isSideLit, TextureAtlasSprite particle, ItemOverrides overrides, BakedModel opened, BakedModel unopened, @Nullable
+      private CustomBakedModel(boolean ambientOcclusion, boolean gui3d, boolean isSideLit, TextureAtlasSprite particle, ItemOverrides overrides, @Nullable BakedModel opened, @Nullable BakedModel unopened, @Nullable
       BakedModel vanilla, ItemTransforms cameraTransforms) {
+        if (opened == null || unopened == null) {
+          throw new IllegalArgumentException("Opened and unopened models cannot be null");
+        }
         this.isSideLit = isSideLit;
         this.cameraTransforms = cameraTransforms;
         this.ambientOcclusion = ambientOcclusion;
@@ -81,9 +85,8 @@ public class CustomModel implements IUnbakedGeometry<CustomModel> {
       }
 
 
-      @NotNull
       @Override
-      public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand, @NotNull ModelData extraData, @NotNull RenderType renderType) {
+      public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand, ModelData extraData, @Nullable RenderType renderType) {
         BakedModel model;
         if (LootrAPI.isVanillaTextures() && vanilla != null) {
           model = vanilla;
@@ -127,7 +130,7 @@ public class CustomModel implements IUnbakedGeometry<CustomModel> {
       }
 
       @Override
-      public TextureAtlasSprite getParticleIcon(@NotNull ModelData data) {
+      public TextureAtlasSprite getParticleIcon(ModelData data) {
         if (LootrAPI.isVanillaTextures() && vanilla != null) {
           return vanilla.getParticleIcon(data);
         }
@@ -138,6 +141,7 @@ public class CustomModel implements IUnbakedGeometry<CustomModel> {
         }
       }
 
+      @SuppressWarnings("deprecation")
       @Override
       public ItemTransforms getTransforms() {
         return cameraTransforms;

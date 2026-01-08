@@ -9,7 +9,6 @@ import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
-import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
 
 /**
  * This contains platform-specific (i.e., NeoForge/Fabric) methods.
@@ -88,7 +87,7 @@ public class PlatformAPI {
     INSTANCE.copyEntityData(adapter, entity1, entity2);
   }
 
-  public static void copyEntityData (ILootrItemFrameAdapter<Entity> adapter, Entity entity1, ILootrEntity entity2) {
+  public static void copyEntityData(ILootrItemFrameAdapter<Entity> adapter, Entity entity1, ILootrEntity entity2) {
     INSTANCE.copyEntityData(adapter, entity1, entity2);
   }
 
@@ -100,7 +99,7 @@ public class PlatformAPI {
     INSTANCE.performPotBreak(lootrDecoratedPotBlockEntity, player);
   }
 
-  public static boolean shouldDoInitialSave () {
+  public static boolean shouldDoInitialSave() {
     return INSTANCE.shouldDoInitialSave();
   }
 }

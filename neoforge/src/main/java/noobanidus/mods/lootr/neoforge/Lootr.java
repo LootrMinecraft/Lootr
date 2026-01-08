@@ -46,7 +46,6 @@ public class Lootr {
   }
 
   public void onCommands(RegisterCommandsEvent event) {
-    COMMAND_LOOTR = new CommandLootr(event.getDispatcher());
-    COMMAND_LOOTR.register();
+    CommandLootr.register(event.getDispatcher());
   }
 }

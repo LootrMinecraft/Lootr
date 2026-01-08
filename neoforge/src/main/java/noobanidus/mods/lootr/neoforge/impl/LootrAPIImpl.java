@@ -22,12 +22,14 @@ import noobanidus.mods.lootr.common.api.config.SaveMode;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.impl.DefaultLootrAPIImpl;
 import noobanidus.mods.lootr.neoforge.config.ConfigManager;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class LootrAPIImpl extends DefaultLootrAPIImpl {
   @Override
+  @Nullable
   public MinecraftServer getServer() {
     return ServerLifecycleHooks.getCurrentServer();
   }

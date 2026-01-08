@@ -54,7 +54,11 @@ public class ClientHandlers {
   }
 
   public static void handleOpenContainer(BlockPos pos) {
-    BlockEntity blockEntity = Minecraft.getInstance().level.getBlockEntity(pos);
+    var level = Minecraft.getInstance().level;
+    if (level == null) {
+      return;
+    }
+    BlockEntity blockEntity = level.getBlockEntity(pos);
     if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity lootrBlockEntity) {
       lootrBlockEntity.setClientOpened(true);
       lootrBlockEntity.asBlockEntity().requestModelDataUpdate();
@@ -63,7 +67,11 @@ public class ClientHandlers {
   }
 
   public static void handleCloseContainer(BlockPos pos) {
-    BlockEntity blockEntity = Minecraft.getInstance().level.getBlockEntity(pos);
+    var level = Minecraft.getInstance().level;
+    if (level == null) {
+      return;
+    }
+    BlockEntity blockEntity = level.getBlockEntity(pos);
     if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity lootrBlockEntity) {
       lootrBlockEntity.setClientOpened(false);
       lootrBlockEntity.asBlockEntity().requestModelDataUpdate();
