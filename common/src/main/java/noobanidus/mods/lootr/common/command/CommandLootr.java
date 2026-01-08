@@ -53,6 +53,7 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.LootrConstants;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.command.ILootrCommandExtension;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
@@ -73,6 +74,7 @@ import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinMinecraftServer;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -581,44 +583,46 @@ public class CommandLootr {
 
   private static final Pattern REGEX = Pattern.compile("^r\\.(-?[0-9]+)\\.(-?[0-9]+)\\.mca$");
 
+  private static final FilenameFilter MCA_FILTER = (file, fileName) -> fileName.endsWith(LootrConstants.MCA_FILE_EXTENSION);
+
   private static List<ChunkPos> getAllChunkPositions(ServerLevel level) {
     var storage = ((AccessorMixinMinecraftServer) level.getServer()).Lootr$getStorageSource();
-    RegionStorageInfo regionstorageinfo = new RegionStorageInfo(storage.getLevelId(), level.dimension(), "lootr");
-    Path path = storage.getDimensionPath(level.dimension()).resolve("region");
+    RegionStorageInfo regionstorageinfo = new RegionStorageInfo(storage.getLevelId(), level.dimension(), LootrConstants.LOOTR_DATA_DIRECTORY);
+    Path path = storage.getDimensionPath(level.dimension()).resolve(LootrConstants.REGION_DIRECTORY);
 
-    File[] afile = path.toFile().listFiles((p_321626_, p_321493_) -> p_321493_.endsWith(".mca"));
+    File[] directoryListing = path.toFile().listFiles(MCA_FILTER);
 
-    if (afile == null) {
+    if (directoryListing == null) {
       return List.of();
     } else {
-      List<ChunkPos> result = new ArrayList<>();
-      for (File file1 : afile) {
-        Matcher matcher = REGEX.matcher(file1.getName());
+      List<ChunkPos> allGeneratedChunkPositions = new ArrayList<>();
+      for (File potentialRegionFile : directoryListing) {
+        Matcher matcher = REGEX.matcher(potentialRegionFile.getName());
         if (matcher.matches()) {
           int i = Integer.parseInt(matcher.group(1)) << 5;
           int j = Integer.parseInt(matcher.group(2)) << 5;
-          List<ChunkPos> list1 = Lists.newArrayList();
+          List<ChunkPos> regionChunks = Lists.newArrayList();
 
-          try (RegionFile regionfile = new RegionFile(regionstorageinfo, file1.toPath(), path, true)) {
+          try (RegionFile regionfile = new RegionFile(regionstorageinfo, potentialRegionFile.toPath(), path, true)) {
             for (int k = 0; k < 32; k++) {
               for (int l = 0; l < 32; l++) {
                 ChunkPos chunkpos = new ChunkPos(k + i, l + j);
                 if (regionfile.doesChunkExist(chunkpos)) {
-                  list1.add(chunkpos);
+                  regionChunks.add(chunkpos);
                 }
               }
             }
 
-            if (!list1.isEmpty()) {
-              result.addAll(list1);
+            if (!regionChunks.isEmpty()) {
+              allGeneratedChunkPositions.addAll(regionChunks);
             }
           } catch (Throwable throwable) {
-            LootrAPI.LOG.error("Failed to read chunks from region file {}", file1.toPath(), throwable);
+            LootrAPI.LOG.error("Failed to read chunks from region file {}", potentialRegionFile.toPath(), throwable);
           }
         }
       }
 
-      return result;
+      return allGeneratedChunkPositions;
     }
   }
 

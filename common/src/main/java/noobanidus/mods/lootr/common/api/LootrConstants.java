@@ -61,6 +61,10 @@ public class LootrConstants {
   public static final String LOOTR_SPECIAL_SHULKER = "lootr:special_loot_shulker";
   public static final String LOOTR_SPECIAL_INVENTORY = "lootr:special_loot_inventory";
 
+  public static final String LOOTR_DATA_DIRECTORY = "lootr";
+  public static final String REGION_DIRECTORY = "region";
+  public static final String MCA_FILE_EXTENSION = ".mca";
+
   public static final BlockBehaviour.Properties CHEST_PROPERTIES = BlockBehaviour.Properties.ofFullCopy(Blocks.CHEST)
       .strength(2.5f);
   public static final BlockBehaviour.Properties TRAPPED_CHEST_PROPERTIES = BlockBehaviour.Properties.ofFullCopy(Blocks.TRAPPED_CHEST)
