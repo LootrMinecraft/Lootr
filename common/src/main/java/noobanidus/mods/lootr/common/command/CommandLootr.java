@@ -50,7 +50,6 @@ import net.minecraft.world.level.chunk.status.ChunkStatus;
 import net.minecraft.world.level.chunk.storage.RegionFile;
 import net.minecraft.world.level.chunk.storage.RegionStorageInfo;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
@@ -80,18 +79,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+@SuppressWarnings("resource")
 public class CommandLootr {
   private static List<ResourceKey<LootTable>> tables = null;
   private static List<String> tableNames = null;
-  private CommandDispatcher<CommandSourceStack> dispatcher;
-
-  public CommandLootr(CommandDispatcher<CommandSourceStack> dispatcher) {
-    this.dispatcher = dispatcher;
-  }
 
   private static List<ResourceKey<LootTable>> getTables(MinecraftServer server) {
     if (tables == null) {
-      tables = server.reloadableRegistries().get().lookup(Registries.LOOT_TABLE).map(HolderLookup::listElementIds).orElse(Stream.of()).toList();
+      tables = server.reloadableRegistries().get().lookup(Registries.LOOT_TABLE).map(HolderLookup::listElementIds)
+          .orElse(Stream.of()).toList();
       tableNames = tables.stream().map(o -> o.location().toString()).toList();
     }
     return tables;
@@ -174,23 +170,21 @@ public class CommandLootr {
     return contents;
   }
 
-  public CommandLootr register() {
-    this.dispatcher.register(builder(Commands.literal("lootr").requires(p -> p.hasPermission(2))));
-    this.dispatcher = null;
-    return this;
+  public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
+    dispatcher.register(builder(Commands.literal("lootr").requires(p -> p.hasPermission(2))));
   }
 
-  private RequiredArgumentBuilder<CommandSourceStack, ResourceLocation> suggestTables() {
+  private static RequiredArgumentBuilder<CommandSourceStack, ResourceLocation> suggestTables() {
     return Commands.argument("table", ResourceLocationArgument.id())
         .suggests((c, build) -> SharedSuggestionProvider.suggest(getTableNames(c.getSource().getServer()), build));
   }
 
-  private RequiredArgumentBuilder<CommandSourceStack, String> suggestProfiles() {
+  private static RequiredArgumentBuilder<CommandSourceStack, String> suggestProfiles() {
     return Commands.argument("profile", StringArgumentType.string())
         .suggests((c, build) -> SharedSuggestionProvider.suggest(getProfiles(), build));
   }
 
-  public LiteralArgumentBuilder<CommandSourceStack> builder(LiteralArgumentBuilder<CommandSourceStack> builder) {
+  public static LiteralArgumentBuilder<CommandSourceStack> builder(LiteralArgumentBuilder<CommandSourceStack> builder) {
     builder.executes(c -> {
       c.getSource()
           .sendSuccess(() -> Component.translatable("lootr.commands.usage", Component.literal(LootrServiceRegistry.getCommandExtensionsString())), false);
@@ -212,8 +206,9 @@ public class CommandLootr {
       return 1;
     }).then(suggestProfiles().executes(c -> {
       String playerName = StringArgumentType.getString(c, "profile");
-      Optional<GameProfile> opt_profile = c.getSource().getServer().getProfileCache().get(playerName);
-      if (!opt_profile.isPresent()) {
+      Optional<GameProfile> opt_profile = Objects.requireNonNull(c.getSource().getServer().getProfileCache())
+          .get(playerName);
+      if (opt_profile.isEmpty()) {
         c.getSource()
             .sendFailure(Component.literal("Invalid player name: " + playerName + ", profile not found in the cache."));
         return 0;
@@ -245,6 +240,7 @@ public class CommandLootr {
         if (!(blockEntity instanceof BaseContainerBlockEntity container)) {
           c.getSource()
               .sendSuccess(() -> Component.literal("Please stand on the container you wish to convert."), false);
+          return 0;
         }
         NonNullList<ItemStack> reference = ((AccessorMixinBaseContainerBlockEntity) blockEntity).invokeGetItems();
         BlockState newState = updateBlockState(state, LootrRegistry.getInventoryBlock().defaultBlockState());
@@ -268,8 +264,9 @@ public class CommandLootr {
       return 1;
     }).then(suggestProfiles().executes(c -> {
       String playerName = StringArgumentType.getString(c, "profile");
-      Optional<GameProfile> opt_profile = c.getSource().getServer().getProfileCache().get(playerName);
-      if (!opt_profile.isPresent()) {
+      Optional<GameProfile> opt_profile = Objects.requireNonNull(c.getSource().getServer().getProfileCache())
+          .get(playerName);
+      if (opt_profile.isEmpty()) {
         c.getSource()
             .sendFailure(Component.literal("Invalid player name: " + playerName + ", profile not found in the cache."));
         return 0;
@@ -335,6 +332,10 @@ public class CommandLootr {
       }
 
       LootrSavedData data = DataStorage.getData(ibe);
+      if (data == null) {
+        c.getSource().sendSuccess(() -> Component.literal("No Lootr data found for this container."), true);
+        return 0;
+      }
       LootrInventory inventory = data.getInventory(id);
       if (inventory == null) {
         c.getSource().sendSuccess(() -> Component.literal("No stored inventory for " + id + " found."), true);
@@ -416,7 +417,7 @@ public class CommandLootr {
           c.getSource()
               .sendSuccess(() -> Component.literal("BlockEntity at location " + position + " has " + openers.size() + " openers. UUIDs as follows:"), true);
           for (UUID uuid : openers) {
-            Optional<GameProfile> prof = c.getSource().getServer().getProfileCache().get(uuid);
+            Optional<GameProfile> prof = Objects.requireNonNull(c.getSource().getServer().getProfileCache()).get(uuid);
             c.getSource()
                 .sendSuccess(() -> Component.literal("UUID: " + uuid + ", user profile: " + (prof.isPresent() ? prof.get()
                     .getName() : "null")), true);
@@ -470,6 +471,7 @@ public class CommandLootr {
                 }
               }
               BlockState state = blockEntity.getBlockState();
+              //noinspection DataFlowIssue
               if (!state.is(LootrTags.Blocks.CUSTOM_ELIGIBLE) && !blockEntity.getType().builtInRegistryHolder()
                   .is(LootrTags.BlockEntity.CUSTOM_INELIGIBLE)) {
                 NonNullList<ItemStack> reference = ((AccessorMixinBaseContainerBlockEntity) blockEntity).invokeGetItems();

@@ -16,21 +16,14 @@ import noobanidus.mods.lootr.neoforge.impl.LootrAPIImpl;
 import noobanidus.mods.lootr.neoforge.impl.LootrRegistryImpl;
 import noobanidus.mods.lootr.neoforge.impl.PlatformAPIImpl;
 import noobanidus.mods.lootr.neoforge.init.*;
-import noobanidus.mods.lootr.neoforge.network.PacketHandler;
 
 // TODO: Ideas/important things to be implemented
 // - Display notices after containers are closed
 // - or use toasts
 // - lockouts?
-@Mod(value=LootrAPI.MODID)
+@Mod(value = LootrAPI.MODID)
 public class Lootr {
-  public static Lootr instance;
-  private final PacketHandler packetHandler;
-
-  public CommandLootr COMMAND_LOOTR;
-
   public Lootr(ModContainer modContainer, IEventBus modBus) {
-    instance = this;
     LootrAPI.INSTANCE = new LootrAPIImpl();
     LootrRegistry.INSTANCE = new LootrRegistryImpl();
     PlatformAPI.INSTANCE = new PlatformAPIImpl();
@@ -46,15 +39,10 @@ public class Lootr {
     ModLoot.register(modBus);
     ModStats.register(modBus);
     ModAdvancements.register(modBus);
-    this.packetHandler = new PacketHandler(modBus);
   }
 
   public static ResourceLocation rl(String path) {
     return LootrAPI.rl(path);
-  }
-
-  public static PacketHandler getPacketHandler() {
-    return instance.packetHandler;
   }
 
   public void onCommands(RegisterCommandsEvent event) {
