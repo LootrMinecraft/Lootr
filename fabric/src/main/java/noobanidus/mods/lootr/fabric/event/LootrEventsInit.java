@@ -19,7 +19,6 @@ import noobanidus.mods.lootr.common.data.DataStorage;
 
 public class LootrEventsInit {
   public static MinecraftServer serverInstance;
-  public static CommandLootr lootrCommand;
 
   public static void registerEvents() {
     ServerLifecycleEvents.SERVER_STARTING.register(server -> {
@@ -45,8 +44,7 @@ public class LootrEventsInit {
     PlayerBlockBreakEvents.CANCELED.register(HandleBreak::afterBlockBreak);
 
     CommandRegistrationCallback.EVENT.register((dispatcher, reg, env) -> {
-      lootrCommand = new CommandLootr(dispatcher);
-      lootrCommand.register();
+      CommandLootr.register(dispatcher);
     });
 
     ModContainer container = FabricLoader.getInstance().getModContainer(LootrAPI.MODID).orElseThrow();
