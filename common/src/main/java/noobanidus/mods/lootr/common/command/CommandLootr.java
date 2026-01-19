@@ -535,7 +535,7 @@ public class CommandLootr {
         .then(Commands.argument("radius", IntegerArgumentType.integer(1)).executes(c -> {
           int radius;
           try {
-            radius = Integer.parseInt(StringArgumentType.getString(c, "radius"));
+            radius = IntegerArgumentType.getInteger(c, "radius");
           } catch (NumberFormatException e) {
             c.getSource()
                 .sendFailure(Component.literal("Radius must be an integer."));
