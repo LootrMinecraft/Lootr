@@ -190,6 +190,24 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
+  public final void handleProviderClientTick(@Nullable ILootrInfoProvider provider) {
+    if (provider == null) {
+      return;
+    }
+
+    if (provider.getInfoLevel() == null || !provider.getInfoLevel().isClientSide()) {
+      return;
+    }
+
+    if (LootrAPI.shouldDisplayUnopenedParticles()) {
+      var type = provider.getInfoNewType();
+      if (type != null && type.displaysUnopenedParticle()) {
+        ClientHooks.performUnopenedParticles(provider);
+      }
+    }
+  }
+
+  @Override
   public final Set<UUID> getPlayerIds() {
     MinecraftServer server = getServer();
     if (server == null) {

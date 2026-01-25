@@ -5,13 +5,13 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.AbstractMinecartContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.IClientOpeners;
 import noobanidus.mods.lootr.common.api.ILootrType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
@@ -174,5 +174,22 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
     if (data != null) {
       data.markChanged();
     }
+  }
+
+  default Vec3 getParticleCenter () {
+    BlockPos pos = getInfoPos();
+    return new Vec3(pos.getX(), pos.getY(), pos.getZ());
+  }
+
+  default double getParticleYOffset () {
+    return 0.95;
+  }
+
+  default double[] getParticleXBounds() {
+    return new double[] {0.25, 0.75};
+  }
+
+  default double[] getParticleZBounds() {
+    return new double[] {0.25, 0.75};
   }
 }

@@ -357,6 +357,10 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
     return LootrRegistry.getShulkerTrigger();
   }
 
+  @Override
+  public double getParticleYOffset() {
+    return 1.1;
+  }
 
   private static void doNeighborUpdates(Level pLevel, BlockPos pPos, BlockState pState) {
     pState.updateNeighbourShapes(pLevel, pPos, 3);

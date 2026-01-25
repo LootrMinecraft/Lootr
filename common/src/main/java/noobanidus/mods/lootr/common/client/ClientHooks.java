@@ -8,8 +8,12 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
+import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
+import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinBlock;
 import org.jetbrains.annotations.Nullable;
 
@@ -69,6 +73,36 @@ public class ClientHooks {
             0,
             0
         );
+      }
+    }
+  }
+
+  private static double bounded(RandomSource random, double[] bounds) {
+    double min = bounds[0];
+    double max = bounds[1];
+    return min + random.nextDouble() * (max - min);
+  }
+
+  public static void performUnopenedParticles(ILootrInfoProvider provider) {
+    Player player = getPlayer();
+    if (player != null) {
+      Level level = Minecraft.getInstance().level;
+      if (level != null && !provider.hasClientOpened(player)) {
+        RandomSource random = Minecraft.getInstance().level.getRandom();
+        if (random.nextInt(3) == 0) {
+          double xOff = bounded(random, provider.getParticleXBounds());
+          double zOff = bounded(random, provider.getParticleZBounds());
+          Vec3 pos = provider.getParticleCenter();
+          level.addParticle(
+              LootrRegistry.getUnopenedParticleType(),
+              pos.x + xOff,
+              pos.y + provider.getParticleYOffset() + random.nextDouble() * 0.02,
+              pos.z + zOff,
+              0,
+              random.nextDouble() * 0.02,
+              0
+          );
+        }
       }
     }
   }

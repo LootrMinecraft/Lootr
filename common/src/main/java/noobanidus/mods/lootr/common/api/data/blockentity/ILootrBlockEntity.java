@@ -40,6 +40,8 @@ public interface ILootrBlockEntity extends ILootrInfoProvider {
   default void defaultTick (Level level, BlockPos pos, BlockState state) {
     if (!level.isClientSide()) {
       LootrAPI.handleProviderTick(this);
+    } else {
+      LootrAPI.handleProviderClientTick(this);
     }
   }
 

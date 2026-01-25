@@ -468,6 +468,10 @@ public class LootrAPI {
     INSTANCE.handleProviderTick(provider);
   }
 
+  public static void handleProviderClientTick (@Nullable ILootrInfoProvider provider) {
+    INSTANCE.handleProviderClientTick(provider);
+  }
+
   @Nullable
   public static <T extends BlockEntity> ILootrBlockEntity resolveBlockEntity(T blockEntity) {
     return INSTANCE.resolveBlockEntity(blockEntity);

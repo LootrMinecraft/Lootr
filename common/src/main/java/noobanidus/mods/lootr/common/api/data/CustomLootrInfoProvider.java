@@ -97,6 +97,11 @@ public record CustomLootrInfoProvider(
   }
 
   @Override
+  public Level getInfoLevel() {
+    return getDefaultLevel();
+  }
+
+  @Override
   public @Nullable NonNullList<ItemStack> getInfoReferenceInventory() {
     return customInventory();
   }

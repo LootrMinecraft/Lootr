@@ -57,6 +57,10 @@ public interface ILootrType {
     return true;
   }
 
+  default boolean displaysUnopenedParticle () {
+    return true;
+  }
+
   @Nullable
   default Container getContainer (ILootrInfo info, ServerLevel level) {
     if (isEntity() && getReplacementEntity() != null) {

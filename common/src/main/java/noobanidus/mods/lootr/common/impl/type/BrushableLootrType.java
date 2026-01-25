@@ -36,4 +36,9 @@ public abstract class BrushableLootrType implements ILootrType {
   public boolean canRefresh() {
     return false;
   }
+
+  @Override
+  public boolean displaysUnopenedParticle() {
+    return false;
+  }
 }

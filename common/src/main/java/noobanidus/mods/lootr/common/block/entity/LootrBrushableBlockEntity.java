@@ -44,7 +44,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-public class  LootrBrushableBlockEntity extends BlockEntity implements ILootrBlockEntity, IBrushable {
+public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBlockEntity, IBrushable {
   private final SimpleLootrInstance simpleLootrInstance = new SimpleLootrInstance(this::getVisualOpeners, 1);
 
   @Nullable
@@ -480,6 +480,11 @@ public class  LootrBrushableBlockEntity extends BlockEntity implements ILootrBlo
   @Override
   public long getInfoLootSeed() {
     return lootTableSeed;
+  }
+
+  @Override
+  public Level getInfoLevel() {
+    return level;
   }
 
   @Override

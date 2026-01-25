@@ -7,13 +7,13 @@ import net.minecraft.core.particles.SimpleParticleType;
 public class UnopenedParticle extends TextureSheetParticle {
   public UnopenedParticle(ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
     super(level, x, y, z, xSpeed, ySpeed, zSpeed);
-    this.lifetime = 40;
-    this.alpha = 1f;
+    this.lifetime = 30;
+    this.alpha = 0.8f;
     this.xd = 0;
-    this.yd *= 0.03f;
+    this.yd = ySpeed;
     this.zd = 0;
     this.hasPhysics = false;
-    this.quadSize = 0.2f;
+    this.quadSize = 0.12f;
     this.friction = 1f;
 
     int c1 = 0xfad64a;
@@ -32,14 +32,14 @@ public class UnopenedParticle extends TextureSheetParticle {
     super.tick();
     if (!this.removed) {
       float f = (float) this.age / (float) this.lifetime;
-      f *= f * f;
-      this.alpha = 1f - f;
+      f *= f;
+      this.alpha = Math.max(0, 0.8f - f);
     }
   }
 
   @Override
   public ParticleRenderType getRenderType() {
-    return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
+    return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
   }
 
   public record Provider(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {

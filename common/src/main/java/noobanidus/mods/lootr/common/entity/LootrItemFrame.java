@@ -25,6 +25,7 @@ import net.minecraft.world.level.block.DiodeBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.*;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.SimpleLootrEntityInstance;
@@ -247,6 +248,16 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   }
 
   @Override
+  public void tick() {
+    super.tick();
+    if (!this.level().isClientSide()) {
+      LootrAPI.handleProviderTick(this);
+    } else {
+      LootrAPI.handleProviderClientTick(this);
+    }
+  }
+
+  @Override
   public InteractionResult interact(Player player, InteractionHand hand) {
     if (!this.level().isClientSide) {
       this.playSound(this.getRotateItemSound(), 1.0F, 1.0F);
@@ -364,6 +375,49 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   @Override
   public long getInfoLootSeed() {
     return 0;
+  }
+
+  @Override
+  public Level getInfoLevel() {
+    return level();
+  }
+
+  @Override
+  public Vec3 getParticleCenter() {
+    Vec3 pos = this.position();
+
+    return switch (this.direction) {
+      case NORTH -> pos.add(0.5, 0.0,  0);  // attached SOUTH
+      case SOUTH -> pos.add(-0.5, 0.0, 0);  // attached NORTH
+      case EAST  -> pos.add(0, 0.0, 0.5);  // attached WEST
+      case WEST  -> pos.add( 0, 0.0, -0.5);  // attached EAST
+      default -> pos;
+    };
+  }
+
+  @Override
+  public double getParticleYOffset() {
+    return 0.5f;
+  }
+
+  @Override
+  public double[] getParticleXBounds() {
+    return switch (this.direction) {
+      case NORTH, SOUTH -> new double[]{0.1, 0.9}; // X varies along the top edge
+      case EAST -> new double[]{0.05, 0.05}; // X clamped
+      case WEST -> new double[]{0.95, 0.95}; // X clamped
+      default -> throw new IllegalStateException("Invalid item frame direction");
+    };
+  }
+
+  @Override
+  public double[] getParticleZBounds() {
+    return switch (this.direction) {
+      case EAST, WEST -> new double[]{0.1, 0.9}; // Z varies along the top edge
+      case SOUTH -> new double[]{0.05, 0.05}; // Z clamped
+      case NORTH -> new double[]{0.95, 0.95}; // Z clamped
+      default -> throw new IllegalStateException("Invalid item frame direction");
+    };
   }
 
   @AutoService(ILootrEntityConverter.class)

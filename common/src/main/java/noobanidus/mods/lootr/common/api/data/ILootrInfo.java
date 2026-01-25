@@ -194,8 +194,11 @@ public interface ILootrInfo {
 
   long getInfoLootSeed();
 
+  Level getInfoLevel();
+
+  // TODO: WTF?????
   @Nullable
-  default Level getInfoLevel() {
+  default Level getDefaultLevel() {
     MinecraftServer server = LootrAPI.getServer();
     if (server == null) {
       return null;

@@ -28,6 +28,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.ticks.ContainerSingleItem;
 import noobanidus.mods.lootr.common.api.*;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
+import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.SimpleLootrInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
@@ -352,8 +353,28 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   }
 
   @Override
+  public Level getInfoLevel() {
+    return level;
+  }
+
+  @Override
   public @Nullable IContainerTrigger getTrigger() {
     return LootrRegistry.getPotTrigger();
+  }
+
+  @Override
+  public double getParticleYOffset() {
+    return 1.3;
+  }
+
+  @Override
+  public double[] getParticleXBounds() {
+    return new double[]{0.4, 0.6};
+  }
+
+  @Override
+  public double[] getParticleZBounds() {
+    return new double[]{0.4, 0.6};
   }
 
   @AutoService(ILootrBlockEntityConverter.class)

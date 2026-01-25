@@ -133,6 +133,8 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     super.tick();
     if (!this.level().isClientSide()) {
       LootrAPI.handleProviderTick(this);
+    } else {
+      LootrAPI.handleProviderClientTick(this);
     }
   }
 
@@ -302,6 +304,21 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   public void markChanged() {
     setChanged();
     markDataChanged();
+  }
+
+  @Override
+  public double getParticleYOffset() {
+    return 1.1;
+  }
+
+  @Override
+  public double[] getParticleXBounds() {
+    return new double[]{0.3, 0.7};
+  }
+
+  @Override
+  public double[] getParticleZBounds() {
+    return new double[]{0.3, 0.7};
   }
 
   @Override

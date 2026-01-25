@@ -279,6 +279,11 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     return openersCounter.getOpenerCount();
   }
 
+  @Override
+  public double getParticleYOffset() {
+    return 1.1;
+  }
+
   @AutoService(ILootrBlockEntityConverter.class)
   public static class DefaultBlockEntityConverter implements ILootrBlockEntityConverter<LootrBarrelBlockEntity> {
     @Override

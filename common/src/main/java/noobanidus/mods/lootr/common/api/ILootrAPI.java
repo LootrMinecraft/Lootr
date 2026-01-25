@@ -279,6 +279,8 @@ public interface ILootrAPI {
 
   void handleProviderTick(@Nullable ILootrInfoProvider provider);
 
+  void handleProviderClientTick (@Nullable ILootrInfoProvider provider);
+
   @Nullable
   <T extends BlockEntity> ILootrBlockEntity resolveBlockEntity(T blockEntity);
 

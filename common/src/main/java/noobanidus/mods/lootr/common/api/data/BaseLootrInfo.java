@@ -111,4 +111,9 @@ public record BaseLootrInfo(@Deprecated @Nullable LootrBlockType blockType,
   public long getInfoLootSeed() {
     return seed();
   }
+
+  @Override
+  public Level getInfoLevel() {
+    return getDefaultLevel();
+  }
 }

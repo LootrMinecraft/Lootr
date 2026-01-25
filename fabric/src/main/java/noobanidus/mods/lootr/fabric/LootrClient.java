@@ -5,17 +5,21 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
+import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import noobanidus.mods.lootr.common.client.block.LootrBrushableBlockRenderer;
 import noobanidus.mods.lootr.common.client.block.LootrDecoratedPotRenderer;
 import noobanidus.mods.lootr.common.client.entity.LootrItemFrameRenderer;
-import noobanidus.mods.lootr.fabric.client.block.*;
+import noobanidus.mods.lootr.common.client.particle.UnopenedParticle;
+import noobanidus.mods.lootr.fabric.client.block.BarrelModelLoader;
+import noobanidus.mods.lootr.fabric.client.block.CustomModelLoader;
+import noobanidus.mods.lootr.fabric.client.block.LootrChestBlockRenderer;
+import noobanidus.mods.lootr.fabric.client.block.LootrShulkerBlockRenderer;
 import noobanidus.mods.lootr.fabric.client.entity.LootrChestCartRenderer;
 import noobanidus.mods.lootr.fabric.client.item.LootrChestItemRenderer;
 import noobanidus.mods.lootr.fabric.client.item.LootrDecoratedPotItemRenderer;
@@ -24,6 +28,7 @@ import noobanidus.mods.lootr.fabric.client.item.LootrTrappedChestItemRenderer;
 import noobanidus.mods.lootr.fabric.init.ModBlockEntities;
 import noobanidus.mods.lootr.fabric.init.ModBlocks;
 import noobanidus.mods.lootr.fabric.init.ModEntities;
+import noobanidus.mods.lootr.fabric.init.ModParticles;
 import noobanidus.mods.lootr.fabric.network.LootrClientNetworkingInit;
 
 @Environment(EnvType.CLIENT)
@@ -58,5 +63,7 @@ public class LootrClient implements ClientModInitializer {
     EntityRendererRegistry.register(ModEntities.ITEM_FRAME, LootrItemFrameRenderer::new);
 
     EntityModelLayerRegistry.registerModelLayer(LootrDecoratedPotRenderer.OPEN_POT_LAYER, LootrDecoratedPotRenderer::createBodyLayer);
+
+    ParticleFactoryRegistry.getInstance().register(ModParticles.UNOPENED_PARTCLE, UnopenedParticle.Provider::new);
   }
 }
