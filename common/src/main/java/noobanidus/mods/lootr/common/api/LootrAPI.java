@@ -580,4 +580,8 @@ public class LootrAPI {
   public static SaveMode getFileSaveMode () {
     return INSTANCE.getFileSaveMode();
   }
+
+  public static boolean shouldDisplayUnopenedParticles () {
+    return INSTANCE.shouldDisplayUnopenedParticles();
+  }
 }

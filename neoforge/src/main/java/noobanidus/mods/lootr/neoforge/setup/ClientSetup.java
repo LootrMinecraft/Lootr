@@ -9,6 +9,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import noobanidus.mods.lootr.common.api.LootrAPI;
@@ -22,9 +23,11 @@ import noobanidus.mods.lootr.common.client.item.LootrChestItemRenderer;
 import noobanidus.mods.lootr.common.client.item.LootrDecoratedPotItemRenderer;
 import noobanidus.mods.lootr.common.client.item.LootrShulkerItemRenderer;
 import noobanidus.mods.lootr.common.client.item.LootrTrappedChestItemRenderer;
+import noobanidus.mods.lootr.common.client.particle.UnopenedParticle;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.common.entity.LootrItemFrame;
 import noobanidus.mods.lootr.neoforge.client.block.*;
+import noobanidus.mods.lootr.neoforge.init.ModParticles;
 
 @EventBusSubscriber(modid = LootrAPI.MODID, value = Dist.CLIENT)
 public class ClientSetup {
@@ -90,5 +93,10 @@ public class ClientSetup {
   @SubscribeEvent
   public static void registerLayersEvent (EntityRenderersEvent.RegisterLayerDefinitions event) {
     event.registerLayerDefinition(LootrDecoratedPotRenderer.OPEN_POT_LAYER, LootrDecoratedPotRenderer::createBodyLayer);
+  }
+
+  @SubscribeEvent
+  public static void registerParticles (RegisterParticleProvidersEvent event) {
+    event.registerSpriteSet(ModParticles.UNOPENED_PARTICLE.get(), UnopenedParticle.Provider::new);
   }
 }

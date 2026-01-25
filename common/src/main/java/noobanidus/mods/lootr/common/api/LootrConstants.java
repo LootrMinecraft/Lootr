@@ -47,6 +47,7 @@ public class LootrConstants {
   public static final ResourceLocation SUSPICIOUS_SAND = LootrAPI.rl("suspicious_sand");
   public static final ResourceLocation SUSPICIOUS_GRAVEL = LootrAPI.rl("suspicious_gravel");
   public static final ResourceLocation ITEM_FRAME = LootrAPI.rl("item_frame");
+  public static final ResourceLocation UNOPENED_PARTICLE = LootrAPI.rl("unopened_particle");
 
   public static final ResourceLocation SIMPLE = LootrAPI.rl("simple");
 

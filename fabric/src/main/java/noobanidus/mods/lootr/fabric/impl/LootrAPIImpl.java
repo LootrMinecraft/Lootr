@@ -381,6 +381,11 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   }
 
   @Override
+  public boolean shouldDisplayUnopenedParticles() {
+    return ConfigManager.get().client.unopened_particles;
+  }
+
+  @Override
   public Component getInvalidTableComponent(ResourceKey<LootTable> lootTable) {
     return Component.translatable("lootr.message.invalid_table", lootTable.location()
             .getNamespace(), lootTable.toString())

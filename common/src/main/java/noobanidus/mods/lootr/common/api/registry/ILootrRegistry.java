@@ -1,5 +1,7 @@
 package noobanidus.mods.lootr.common.api.registry;
 
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.stats.Stat;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.decoration.ItemFrame;
@@ -96,4 +98,6 @@ public interface ILootrRegistry {
   CreativeModeTab getTab();
 
   IContainerTrigger getItemFrameTrigger();
+
+  SimpleParticleType getUnopenedParticleType ();
 }

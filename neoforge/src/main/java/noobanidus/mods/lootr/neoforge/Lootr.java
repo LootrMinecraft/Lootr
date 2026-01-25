@@ -39,6 +39,7 @@ public class Lootr {
     ModLoot.register(modBus);
     ModStats.register(modBus);
     ModAdvancements.register(modBus);
+    ModParticles.register(modBus);
   }
 
   public static ResourceLocation rl(String path) {

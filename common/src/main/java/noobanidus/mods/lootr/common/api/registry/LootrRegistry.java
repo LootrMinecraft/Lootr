@@ -1,5 +1,7 @@
 package noobanidus.mods.lootr.common.api.registry;
 
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.stats.Stat;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.decoration.ItemFrame;
@@ -181,5 +183,9 @@ public class LootrRegistry {
 
   public static Item getSuspiciousSandItem() {
     return INSTANCE.getSuspiciousSandItem();
+  }
+
+  public static SimpleParticleType getUnopenedParticleType () {
+    return INSTANCE.getUnopenedParticleType ();
   }
 }

@@ -319,6 +319,8 @@ public interface ILootrAPI {
   PotDecorationsAdapter getDecorationsAdapter(BlockEntity.DataComponentInput input);
 
   SaveMode getFileSaveMode ();
+
+  boolean shouldDisplayUnopenedParticles ();
 }
 
 

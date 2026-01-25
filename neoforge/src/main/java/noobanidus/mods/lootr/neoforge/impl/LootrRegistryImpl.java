@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.neoforge.impl;
 
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.stats.Stat;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.decoration.ItemFrame;
@@ -217,5 +218,10 @@ public class LootrRegistryImpl implements ILootrRegistry {
   @Override
   public IContainerTrigger getItemFrameTrigger() {
     return ModAdvancements.ITEM_FRAME.get();
+  }
+
+  @Override
+  public SimpleParticleType getUnopenedParticleType() {
+    return ModParticles.UNOPENED_PARTICLE.get();
   }
 }

@@ -82,6 +82,7 @@ public class ConfigManager extends ConfigManagerBase {
   // Client-only
   public static final ModConfigSpec.BooleanValue VANILLA_TEXTURES;
   public static final ModConfigSpec.BooleanValue NEW_TEXTURES;
+  public static final ModConfigSpec.BooleanValue UNOPENED_PARTICLES;
   private static final ModConfigSpec.Builder COMMON_BUILDER = new ModConfigSpec.Builder();
   private static final ModConfigSpec.Builder CLIENT_BUILDER = new ModConfigSpec.Builder();
   public static ModConfigSpec COMMON_CONFIG;
@@ -221,6 +222,9 @@ public class ConfigManager extends ConfigManagerBase {
     VANILLA_TEXTURES = CLIENT_BUILDER.comment("set to true to use vanilla textures instead of Lootr special textures. Note: this will prevent previously opened chests from rendering differently")
         .define("vanilla_textures", false);
     NEW_TEXTURES = CLIENT_BUILDER.comment("set to true to use the new Lootr textures").define("new_textures", true);
+    CLIENT_BUILDER.pop();
+    CLIENT_BUILDER.push("particles").comment("configuration options for particles");
+    UNOPENED_PARTICLES = CLIENT_BUILDER.comment("set to true to enable 'unopened particles' to spawn from containers that the player has not yet opened").define("unopened_particles", true);
     CLIENT_BUILDER.pop();
     CLIENT_CONFIG = CLIENT_BUILDER.build();
   }

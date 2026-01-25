@@ -3,6 +3,7 @@
   "package": "noobanidus.mods.lootr.neoforge.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "accessor.AccessorMixinSimpleParticleType",
     "integration.digsite_workshop.MixinModdedBrushItem"
   ],
   "client": [
