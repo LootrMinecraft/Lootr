@@ -27,17 +27,17 @@ public class HandleResourcePacks {
           LootrAPI.rl("datapacks/lootr_no_advancements"),
           PackType.SERVER_DATA,
           Component.literal("Disable Lootr Advancements"),
-          PackSource.BUILT_IN,
+          PackSource.FEATURE,
           false,
-          Pack.Position.BOTTOM
+          Pack.Position.TOP
       );
       event.addPackFinders(
           LootrAPI.rl("datapacks/lootr_no_suspicious_blocks"),
           PackType.SERVER_DATA,
           Component.literal("Disable Lootr Converting Suspicious Blocks"),
-          PackSource.BUILT_IN,
+          PackSource.FEATURE,
           false,
-          Pack.Position.BOTTOM
+          Pack.Position.TOP
       );
     }
   }
