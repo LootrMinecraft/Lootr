@@ -7,9 +7,11 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
+import net.fabricmc.fabric.impl.resource.loader.ResourceManagerHelperImpl;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.block.entity.BlockEntityTicker;
@@ -50,5 +52,16 @@ public class LootrEventsInit {
     ModContainer container = FabricLoader.getInstance().getModContainer(LootrAPI.MODID).orElseThrow();
 
     ResourceManagerHelper.registerBuiltinResourcePack(LootrAPI.rl("old_textures"), container, Component.literal("Lootr - Old Textures"), ResourcePackActivationType.NORMAL);
+    registerPack(container, "lootr_no_advancements", Component.literal("Disable Lootr Advancements"));
+    registerPack(container, "lootr_no_suspicious_blocks", Component.literal("Disable Lootr Converting Suspicious Blocks"));
+  }
+
+  private static void registerPack (ModContainer container, String name, Component desc) {
+    ResourceManagerHelperImpl.registerBuiltinResourcePack(
+        ResourceLocation.fromNamespaceAndPath(container.getMetadata().getId(), name),
+        "datapacks/" + name,
+        container,
+        desc,
+        ResourcePackActivationType.NORMAL);
   }
 }
