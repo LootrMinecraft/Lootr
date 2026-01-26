@@ -588,4 +588,8 @@ public class LootrAPI {
   public static boolean shouldDisplayUnopenedParticles () {
     return INSTANCE.shouldDisplayUnopenedParticles();
   }
+
+  public static long getGameTime () {
+    return INSTANCE.getGameTime();
+  }
 }

@@ -10,9 +10,7 @@ import net.minecraft.world.level.saveddata.SavedData;
 
 import java.util.UUID;
 
-/**
- * This is *cursed*.
- */
+@Deprecated
 public class TickingData extends SavedData {
   public static final SavedData.Factory<TickingData> FACTORY = new Factory<>(TickingData::new, TickingData::load, null);
   private final Object2IntMap<UUID> tickMap = new Object2IntOpenHashMap<>();

@@ -323,6 +323,16 @@ public interface ILootrAPI {
   SaveMode getFileSaveMode ();
 
   boolean shouldDisplayUnopenedParticles ();
+
+  default long getGameTime () {
+    var server = LootrAPI.getServer();
+
+    if (server == null) {
+      return -1;
+    }
+
+    return server.getWorldData().overworldData().getGameTime();
+  }
 }
 
 
