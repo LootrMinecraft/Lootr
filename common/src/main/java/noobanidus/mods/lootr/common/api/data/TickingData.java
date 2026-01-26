@@ -19,6 +19,7 @@ public class TickingData extends SavedData {
 
   public TickingData() {
     tickMap.defaultReturnValue(-1);
+
   }
 
   public static TickingData load(CompoundTag pCompound, HolderLookup.Provider provider) {

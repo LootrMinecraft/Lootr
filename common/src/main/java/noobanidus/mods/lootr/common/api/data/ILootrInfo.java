@@ -26,11 +26,13 @@ import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
 import noobanidus.mods.lootr.common.api.ILootrType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -194,7 +196,16 @@ public interface ILootrInfo {
 
   long getInfoLootSeed();
 
-  Level getInfoLevel();
+  Set<Class<?>> WARNED_CLASSES = new HashSet<>();
+
+  default Level getInfoLevel() {
+    if (!WARNED_CLASSES.contains(this.getClass())) {
+      LootrAPI.LOG.error("Class {} does not implement `getInfoLevel`! Falling back on `getDefaultLevel`.", this.getClass()
+          .getName());
+      WARNED_CLASSES.add(this.getClass());
+    }
+    return getDefaultLevel();
+  }
 
   // TODO: WTF?????
   @Nullable
