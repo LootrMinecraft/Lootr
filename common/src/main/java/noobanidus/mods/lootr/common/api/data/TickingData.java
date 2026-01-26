@@ -91,4 +91,8 @@ public class TickingData extends SavedData {
     pCompound.put("result", decayList);
     return pCompound;
   }
+
+  public Object2IntMap<UUID> getTickMap() {
+    return tickMap;
+  }
 }

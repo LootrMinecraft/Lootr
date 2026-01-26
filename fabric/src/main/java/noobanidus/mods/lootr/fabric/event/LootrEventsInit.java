@@ -33,10 +33,7 @@ public class LootrEventsInit {
       LoadedChunks.clear();
     });
 
-    ServerTickEvents.END_SERVER_TICK.register(server -> {
-      DataStorage.doTick();
-      BlockEntityTicker.onServerTick(server);
-    });
+    ServerTickEvents.END_SERVER_TICK.register(BlockEntityTicker::onServerTick);
 
     ServerChunkEvents.CHUNK_LOAD.register(LoadedChunks::onChunkLoad);
     ServerChunkEvents.CHUNK_UNLOAD.register(LoadedChunks::onChunkUnload);

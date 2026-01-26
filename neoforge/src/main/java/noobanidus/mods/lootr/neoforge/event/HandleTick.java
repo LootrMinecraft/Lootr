@@ -11,8 +11,6 @@ import noobanidus.mods.lootr.common.data.DataStorage;
 public class HandleTick {
   @SubscribeEvent
   public static void onServerTick (ServerTickEvent.Post event) {
-    DataStorage.doTick();
-
     BlockEntityTicker.onServerTick(event.getServer());
   }
 }

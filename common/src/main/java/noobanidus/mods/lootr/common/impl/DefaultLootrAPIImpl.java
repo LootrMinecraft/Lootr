@@ -89,7 +89,6 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
       provider.performDecay();
       player.displayClientMessage(Component.translatable("lootr.message.decayed")
           .setStyle(LootrAPI.getDecayStyle()), true);
-      LootrAPI.removeDecayed(provider);
       return;
     } else {
       if (provider.canDecay()) {
@@ -111,7 +110,6 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
     if (LootrAPI.isRefreshed(provider) && provider.canRefresh()) {
       provider.performRefresh();
       provider.performClose();
-      LootrAPI.removeRefreshed(provider);
       player.displayClientMessage(Component.translatable("lootr.message.refreshed")
           .setStyle(LootrAPI.getRefreshStyle()), true);
       shouldUpdate = true;
@@ -163,7 +161,6 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
     // TODO: Refactor this to avoid loading the data save unnecessarily
     if (LootrAPI.shouldPerformDecayWhileTicking() && LootrAPI.isDecayed(provider) && provider.hasBeenOpened() && provider.canDecay()) {
       provider.performDecay();
-      LootrAPI.removeDecayed(provider);
       return;
     } else if (LootrAPI.shouldStartDecayWhileTicking() && !LootrAPI.isDecayed(provider) && provider.hasBeenOpened() && provider.canDecay()) {
       int decayValue = LootrAPI.getRemainingDecayValue(provider);
@@ -176,7 +173,6 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
     if (LootrAPI.shouldPerformRefreshWhileTicking() && LootrAPI.isRefreshed(provider) && provider.hasBeenOpened() && provider.canRefresh()) {
       provider.performRefresh();
       provider.performClose();
-      LootrAPI.removeRefreshed(provider);
       provider.performUpdate();
     }
     if (LootrAPI.shouldStartRefreshWhileTicking() && !LootrAPI.isRefreshed(provider) && provider.hasBeenOpened() && provider.canRefresh()) {
@@ -287,8 +283,8 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
+  @Deprecated
   public final void removeDecayed(ILootrInfoProvider provider) {
-    DataStorage.removeDecayed(provider);
   }
 
   @Override
@@ -307,8 +303,8 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
+  @Deprecated
   public final void removeRefreshed(ILootrInfoProvider provider) {
-    DataStorage.removeRefreshed(provider);
   }
 
   @Override

@@ -436,6 +436,7 @@ public class LootrAPI {
     INSTANCE.setDecaying(provider);
   }
 
+  @Deprecated
   public static void removeDecayed(ILootrInfoProvider provider) {
     INSTANCE.removeDecayed(provider);
   }
@@ -452,6 +453,7 @@ public class LootrAPI {
     INSTANCE.setRefreshing(provider);
   }
 
+  @Deprecated
   public static void removeRefreshed(ILootrInfoProvider provider) {
     INSTANCE.removeRefreshed(provider);
   }

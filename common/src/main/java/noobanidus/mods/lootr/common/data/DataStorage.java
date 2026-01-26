@@ -17,6 +17,7 @@ import net.minecraft.world.level.storage.LevelResource;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.LootFiller;
+import noobanidus.mods.lootr.common.api.data.NewTickingData;
 import noobanidus.mods.lootr.common.api.data.TickingData;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
@@ -33,11 +34,13 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Stream;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "DataFlowIssue"})
 public class DataStorage {
   @Deprecated
   public static final String ADVANCEMENTS = "lootr/Lootr-AdvancementData";
+  @Deprecated
   public static final String DECAYS = "lootr/Lootr-DecayData";
+  @Deprecated
   public static final String REFRESHES = "lootr/Lootr-RefreshData";
 
   @ApiStatus.Internal
@@ -81,6 +84,7 @@ public class DataStorage {
   public static void award(UUID id, ServerPlayer player) {
   }
 
+  @SuppressWarnings("deprecation")
   @ApiStatus.Internal
   public static int getDecayValue(ILootrInfoProvider provider) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
@@ -92,24 +96,20 @@ public class DataStorage {
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot determine the decay value for {}.", provider.getInfoUUID());
       return -1;
     }
-    TickingData data = manager.computeIfAbsent(TickingData.FACTORY, DECAYS);
-    return data.getValue(provider.getInfoUUID());
+    var server = LootrAPI.getServer();
+    TickingData oldData = manager.computeIfAbsent(TickingData.FACTORY, DECAYS);
+    NewTickingData data = NewTickingData.getRefreshData();
+    data.migrateOldData(server, oldData);
+    // Safe to down-cast as the value should always be quite small
+    return (int) data.howLongUntilComplete(server, provider.getInfoUUID());
   }
 
   @ApiStatus.Internal
   public static boolean isDecayed(ILootrInfoProvider provider) {
-    DimensionDataStorage manager = DataStorage.getDataStorage();
-    if (manager == null) {
-      if (provider == null || (provider.getInfoLevel() != null && provider.getInfoLevel().isClientSide())) {
-        return false;
-      }
-      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot determine if {} has decayed.", provider.getInfoUUID());
-      return false;
-    }
-    TickingData data = manager.computeIfAbsent(TickingData.FACTORY, DECAYS);
-    return data.isComplete(provider.getInfoUUID());
+    return getDecayValue(provider) == 0;
   }
 
+  @SuppressWarnings("deprecation")
   @ApiStatus.Internal
   public static void setDecaying(ILootrInfoProvider provider) {
     DimensionDataStorage manager = DataStorage.getDataStorage();
@@ -121,34 +121,22 @@ public class DataStorage {
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot set the decay value for {}.", provider.getInfoUUID());
       return;
     }
-    TickingData data = manager.computeIfAbsent(TickingData.FACTORY, DECAYS);
-    data.setValue(provider.getInfoUUID(), LootrAPI.getDecayValue());
+    TickingData oldData = manager.computeIfAbsent(TickingData.FACTORY, DECAYS);
+    NewTickingData data = NewTickingData.getDecayData();
+    var server = LootrAPI.getServer();
+    data.migrateOldData(server, oldData);
+    data.setCompletesIn(server, provider.getInfoUUID(), LootrAPI.getDecayValue());
   }
 
   @ApiStatus.Internal
   public static void removeDecayed(ILootrInfoProvider provider) {
-    DimensionDataStorage manager = DataStorage.getDataStorage();
-    if (manager == null) {
-      if (provider.getInfoLevel() == null || (provider.getInfoLevel() != null && provider.getInfoLevel()
-          .isClientSide())) {
-        return;
-      }
-      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr remove the decay value for {}.", provider.getInfoUUID());
-      return;
-    }
-    TickingData data = manager.computeIfAbsent(TickingData.FACTORY, DECAYS);
-    data.remove(provider.getInfoUUID());
+    // NO-OP
   }
 
   @ApiStatus.Internal
+  @Deprecated
   public static void doTick() {
-    DimensionDataStorage manager = DataStorage.getDataStorage();
-    if (manager == null) {
-      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot iterate and tick decay.");
-      return;
-    }
-    manager.computeIfAbsent(TickingData.FACTORY, DECAYS).tick();
-    manager.computeIfAbsent(TickingData.FACTORY, REFRESHES).tick();
+    // NO-OP
   }
 
   @ApiStatus.Internal
@@ -162,23 +150,16 @@ public class DataStorage {
       LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot determine the refresh value for {}.", provider.getInfoUUID());
       return -1;
     }
-    TickingData data = manager.computeIfAbsent(TickingData.FACTORY, REFRESHES);
-    return data.getValue(provider.getInfoUUID());
+    TickingData oldData = manager.computeIfAbsent(TickingData.FACTORY, REFRESHES);
+    NewTickingData data = NewTickingData.getRefreshData();
+    var server = LootrAPI.getServer();
+    data.migrateOldData(server, oldData);
+    return (int) data.howLongUntilComplete(server, provider.getInfoUUID());
   }
 
   @ApiStatus.Internal
   public static boolean isRefreshed(ILootrInfoProvider provider) {
-    DimensionDataStorage manager = DataStorage.getDataStorage();
-    if (manager == null) {
-      if (provider.getInfoLevel() == null || (provider.getInfoLevel() != null && provider.getInfoLevel()
-          .isClientSide())) {
-        return false;
-      }
-      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot determine if {} has refreshed.", provider.getInfoUUID());
-      return false;
-    }
-    TickingData data = manager.computeIfAbsent(TickingData.FACTORY, REFRESHES);
-    return data.isComplete(provider.getInfoUUID());
+    return getRefreshValue(provider) == 0;
   }
 
   @ApiStatus.Internal
@@ -193,22 +174,15 @@ public class DataStorage {
       return;
     }
     TickingData data = manager.computeIfAbsent(TickingData.FACTORY, REFRESHES);
-    data.setValue(provider.getInfoUUID(), LootrAPI.getRefreshValue());
+    NewTickingData newData = NewTickingData.getRefreshData();
+    var server = LootrAPI.getServer();
+    newData.migrateOldData(server, data);
+    newData.setCompletesIn(server, provider.getInfoUUID(), LootrAPI.getRefreshValue());
   }
 
   @ApiStatus.Internal
   public static void removeRefreshed(ILootrInfoProvider provider) {
-    DimensionDataStorage manager = DataStorage.getDataStorage();
-    if (manager == null) {
-      if (provider.getInfoLevel() == null || (provider.getInfoLevel() != null && provider.getInfoLevel()
-          .isClientSide())) {
-        return;
-      }
-      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr remove the refresh value for {}.", provider.getInfoUUID());
-      return;
-    }
-    TickingData data = manager.computeIfAbsent(TickingData.FACTORY, REFRESHES);
-    data.remove(provider.getInfoUUID());
+    // NO-OP
   }
 
   @ApiStatus.Internal
@@ -407,6 +381,7 @@ public class DataStorage {
     return filesToDelete.size();
   }
 
+  @SuppressWarnings("NullableProblems")
   private static class LootrDummyData extends SavedData {
     public static final LootrDummyData INSTANCE = new LootrDummyData();
 
