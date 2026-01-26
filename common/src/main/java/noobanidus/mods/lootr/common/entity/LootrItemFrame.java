@@ -406,7 +406,7 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
       case NORTH, SOUTH -> new double[]{0.1, 0.9}; // X varies along the top edge
       case EAST -> new double[]{0.05, 0.05}; // X clamped
       case WEST -> new double[]{0.95, 0.95}; // X clamped
-      default -> throw new IllegalStateException("Invalid item frame direction");
+      default -> new double[]{0, 0.01};
     };
   }
 
@@ -416,7 +416,7 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
       case EAST, WEST -> new double[]{0.1, 0.9}; // Z varies along the top edge
       case SOUTH -> new double[]{0.05, 0.05}; // Z clamped
       case NORTH -> new double[]{0.95, 0.95}; // Z clamped
-      default -> throw new IllegalStateException("Invalid item frame direction");
+      default -> new double[]{0, 0.01};
     };
   }
 
