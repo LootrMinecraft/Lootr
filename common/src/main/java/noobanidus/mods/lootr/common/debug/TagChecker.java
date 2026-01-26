@@ -20,8 +20,8 @@ public class TagChecker {
     var server = LootrAPI.getServer();
 
     if (server != null) {
-      packEnabled = server.getWorldData().getDataConfiguration().dataPacks().getEnabled()
-          .contains("lootr:lootr_no_suspicious_blocks");
+      var packs = server.getWorldData().getDataConfiguration().dataPacks().getEnabled();
+      packEnabled = packs.contains("lootr:lootr_no_suspicious_blocks") || packs.contains("mod/lootr:datapacks/lootr_no_advancements");
     } else {
       // If there's no server this is being fired on the client thread and we don't care about the tags here
       return;
