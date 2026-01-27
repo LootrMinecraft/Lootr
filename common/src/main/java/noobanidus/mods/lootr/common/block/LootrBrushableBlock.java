@@ -12,12 +12,15 @@ import net.minecraft.world.level.block.BrushableBlock;
 import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.block.entity.LootrBrushableBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
@@ -72,5 +75,11 @@ public class LootrBrushableBlock extends BrushableBlock {
   @Override
   public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
     return new LootrBrushableBlockEntity(blockPos, blockState);
+  }
+
+  @Override
+  @Nullable
+  public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+    return ILootrBlockEntity::ticker;
   }
 }

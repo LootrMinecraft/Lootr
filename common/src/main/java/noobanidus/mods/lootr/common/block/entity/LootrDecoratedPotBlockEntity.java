@@ -111,6 +111,7 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
       this.performOpen(player);
       shouldUpdate = true;
     }
+    this.lootrInstance.setHasBeenOpened();
 
     if (shouldUpdate) {
       this.performUpdate(player);

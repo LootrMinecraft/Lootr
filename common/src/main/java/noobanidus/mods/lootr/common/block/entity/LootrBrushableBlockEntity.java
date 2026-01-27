@@ -418,7 +418,13 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
 
   @Override
   public ILootrType getInfoNewType() {
-    return BuiltInLootrTypes.POT;
+    if (this.getBlockState().is(LootrTags.Blocks.SANDS)) {
+      return BuiltInLootrTypes.SAND;
+    } else if (this.getBlockState().is(LootrTags.Blocks.GRAVELS)) {
+      return BuiltInLootrTypes.GRAVEL;
+    } else {
+      return BuiltInLootrTypes.CHEST;
+    }
   }
 
   @Override
