@@ -19,27 +19,19 @@ public class NewTickingData {
   private static final Object2ObjectMap<UUID, String> CACHED_NAMES = new Object2ObjectOpenHashMap<>();
   private static final Object2ObjectMap<UUID, String> CACHED_FILE_NAMES = new Object2ObjectOpenHashMap<>();
 
-  private final String prefix;
-  private final TickingType type;
-
-  private static final Object2ObjectMap<TickingType, NewTickingData> INSTANCES = new Object2ObjectOpenHashMap<>();
-  static {
-    for (TickingType type : TickingType.values()) {
-      INSTANCES.put(type, new NewTickingData(type));
-    }
-  }
-
-  public static NewTickingData getInstance(TickingType type) {
-    return INSTANCES.get(type);
-  }
+  private static final NewTickingData REFRESH_DATA = new NewTickingData(TickingType.REFRESH);
+  private static final NewTickingData DECAY_DATA = new NewTickingData(TickingType.DECAY);
 
   public static NewTickingData getRefreshData () {
-    return getInstance(TickingType.REFRESH);
+    return REFRESH_DATA;
   }
 
   public static NewTickingData getDecayData () {
-    return getInstance(TickingType.DECAY);
+    return DECAY_DATA;
   }
+
+  private final String prefix;
+  private final TickingType type;
 
   @SuppressWarnings("deprecation")
   public void migrateOldData (MinecraftServer server, TickingData oldData) {
@@ -58,21 +50,12 @@ public class NewTickingData {
         LootrAPI.LOG.error("Unable to migrate {} ticking data for id {}: section mismatch, expected {}", type.getPrefix(), id, section.cachedName);
       }
     }
+    oldData.clear();
   }
 
   protected NewTickingData(TickingType type) {
     this.type = type;
     this.prefix = "lootr/ticking/" + type.getPrefix() + "/";
-  }
-
-  public boolean isCompleted(MinecraftServer server, UUID id) {
-    Section section = getSection(server, id);
-    try {
-      return section.completed(server, id);
-    } catch (SectionException e) {
-      LootrAPI.LOG.error("Unable to check {} ticking data for id {}: section mismatch, expected {}", type.getPrefix(), id, section.cachedName);
-      return false;
-    }
   }
 
   public void setCompletesIn (MinecraftServer server, UUID id, long tickTime) {

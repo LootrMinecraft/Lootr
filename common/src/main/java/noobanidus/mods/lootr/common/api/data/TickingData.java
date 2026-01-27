@@ -95,4 +95,9 @@ public class TickingData extends SavedData {
   public Object2IntMap<UUID> getTickMap() {
     return tickMap;
   }
+
+  public void clear () {
+    tickMap.clear();
+    setDirty();
+  }
 }

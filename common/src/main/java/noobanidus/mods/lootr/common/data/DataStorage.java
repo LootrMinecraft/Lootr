@@ -98,7 +98,7 @@ public class DataStorage {
     }
     var server = LootrAPI.getServer();
     TickingData oldData = manager.computeIfAbsent(TickingData.FACTORY, DECAYS);
-    NewTickingData data = NewTickingData.getRefreshData();
+    NewTickingData data = NewTickingData.getDecayData();
     data.migrateOldData(server, oldData);
     // Safe to down-cast as the value should always be quite small
     return (int) data.howLongUntilComplete(server, provider.getInfoUUID());
@@ -154,7 +154,8 @@ public class DataStorage {
     NewTickingData data = NewTickingData.getRefreshData();
     var server = LootrAPI.getServer();
     data.migrateOldData(server, oldData);
-    return (int) data.howLongUntilComplete(server, provider.getInfoUUID());
+    int result = (int) data.howLongUntilComplete(server, provider.getInfoUUID());
+    return result;
   }
 
   @ApiStatus.Internal
