@@ -93,6 +93,15 @@ public class ClientHooks {
           double xOff = bounded(random, provider.getParticleXBounds());
           double zOff = bounded(random, provider.getParticleZBounds());
           Vec3 pos = provider.getParticleCenter();
+/*          level.addParticle(
+              LootrRegistry.getUnopenedParticleType(),
+              pos.x,
+              pos.y + provider.getParticleYOffset(),
+              pos.z,
+              0,
+              random.nextDouble() * 0.02,
+              0
+          );*/
           level.addParticle(
               LootrRegistry.getUnopenedParticleType(),
               pos.x + xOff,

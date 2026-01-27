@@ -384,40 +384,39 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
 
   @Override
   public Vec3 getParticleCenter() {
-    Vec3 pos = this.position();
-
-    return switch (this.direction) {
-      case NORTH -> pos.add(0.5, 0.0,  0);  // attached SOUTH
-      case SOUTH -> pos.add(-0.5, 0.0, 0);  // attached NORTH
-      case EAST  -> pos.add(0, 0.0, 0.5);  // attached WEST
-      case WEST  -> pos.add( 0, 0.0, -0.5);  // attached EAST
-      default -> pos;
-    };
+    return this.position();
+    //return Vec3.atCenterOf(BlockPos.containing(this.position()));
   }
 
   @Override
   public double getParticleYOffset() {
-    return 0.5f;
+    return 0.4f;
   }
 
   @Override
   public double[] getParticleXBounds() {
-    return switch (this.direction) {
-      case NORTH, SOUTH -> new double[]{0.1, 0.9}; // X varies along the top edge
-      case EAST -> new double[]{0.05, 0.05}; // X clamped
-      case WEST -> new double[]{0.95, 0.95}; // X clamped
-      default -> new double[]{0, 0.01};
-    };
+    if (this.direction.getAxis() == Direction.Axis.Z) {
+      return new double[]{-0.35, 0.35};
+    } else {
+      if (this.direction == Direction.SOUTH || this.direction == Direction.EAST) {
+        return new double[]{0.05, 0.1};
+      } else {
+        return new double[]{-0.1, -0.05};
+      }
+    }
   }
 
   @Override
   public double[] getParticleZBounds() {
-    return switch (this.direction) {
-      case EAST, WEST -> new double[]{0.1, 0.9}; // Z varies along the top edge
-      case SOUTH -> new double[]{0.05, 0.05}; // Z clamped
-      case NORTH -> new double[]{0.95, 0.95}; // Z clamped
-      default -> new double[]{0, 0.01};
-    };
+    if (this.direction.getAxis() == Direction.Axis.X) {
+      return new double[]{-0.35, 0.35};
+    } else {
+      if (this.direction == Direction.SOUTH || this.direction == Direction.EAST) {
+        return new double[]{0.05, 0.1};
+      } else {
+        return new double[]{-0.1, -0.05};
+      }
+    }
   }
 
   @AutoService(ILootrEntityConverter.class)
