@@ -1,32 +1,30 @@
 package noobanidus.mods.lootr.common.api.data;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.*;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.level.saveddata.SavedDataType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 
-import java.io.File;
+import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
 
-@SuppressWarnings("DataFlowIssue")
 public class NewTickingData {
-  private static final Function<String, SavedData.Factory<Section>> STRING_FACTORY = (name) -> new SavedData.Factory<>(() -> new Section(name), Section::load, null);
-
   private static final Object2ObjectMap<UUID, String> CACHED_NAMES = new Object2ObjectOpenHashMap<>();
   private static final Object2ObjectMap<UUID, String> CACHED_FILE_NAMES = new Object2ObjectOpenHashMap<>();
 
   private static final NewTickingData REFRESH_DATA = new NewTickingData(TickingType.REFRESH);
   private static final NewTickingData DECAY_DATA = new NewTickingData(TickingType.DECAY);
 
-  public static NewTickingData getRefreshData () {
+  public static NewTickingData getRefreshData() {
     return REFRESH_DATA;
   }
 
-  public static NewTickingData getDecayData () {
+  public static NewTickingData getDecayData() {
     return DECAY_DATA;
   }
 
@@ -34,7 +32,7 @@ public class NewTickingData {
   private final TickingType type;
 
   @SuppressWarnings("deprecation")
-  public void migrateOldData (MinecraftServer server, TickingData oldData) {
+  public void migrateOldData(MinecraftServer server, TickingData oldData) {
     var currentGameTime = server.getWorldData().overworldData().getGameTime();
     for (Object2IntMap.Entry<UUID> entry : oldData.getTickMap().object2IntEntrySet()) {
       UUID id = entry.getKey();
@@ -58,7 +56,7 @@ public class NewTickingData {
     this.prefix = "lootr/ticking/" + type.getPrefix() + "/";
   }
 
-  public void setCompletesIn (MinecraftServer server, UUID id, long tickTime) {
+  public void setCompletesIn(MinecraftServer server, UUID id, long tickTime) {
     Section section = getSection(server, id);
     try {
       section.setCompletesAt(id, server.getWorldData().overworldData().getGameTime() + tickTime);
@@ -67,7 +65,7 @@ public class NewTickingData {
     }
   }
 
-  public long howLongUntilComplete (MinecraftServer server, UUID id) {
+  public long howLongUntilComplete(MinecraftServer server, UUID id) {
     Section section = getSection(server, id);
     try {
       long completesAt = section.completesAt(id);
@@ -77,7 +75,7 @@ public class NewTickingData {
       long currentTime = server.getWorldData().overworldData().getGameTime();
       return Math.max(0L, completesAt - currentTime);
     } catch (SectionException e) {
-      LootrAPI.LOG.error("Unable to get {} ticking data for id {}: section mismatch, expected {}", type.getPrefix(),id, section.cachedName);
+      LootrAPI.LOG.error("Unable to get {} ticking data for id {}: section mismatch, expected {}", type.getPrefix(), id, section.cachedName);
       return -1L;
     }
   }
@@ -93,27 +91,45 @@ public class NewTickingData {
     });
   }
 
-  private String getFileName (UUID id) {
+  private String getFileName(UUID id) {
     return prefix + getBaseFileName(id);
   }
 
+  @SuppressWarnings("DataFlowIssue")
   private Section getSection(MinecraftServer server, UUID id) {
     var level = server.overworld();
     var dataStorage = level.getDataStorage();
-    return dataStorage.computeIfAbsent(STRING_FACTORY.apply(getBaseFileName(id)), getFileName(id));
+    return dataStorage.computeIfAbsent(new SavedDataType<>(getFileName(id), () -> new Section(prefix), Section.CODEC.apply(prefix), null));
   }
 
   public static class SectionException extends Exception {
   }
 
-  @SuppressWarnings("NullableProblems")
   protected static class Section extends SavedData {
+    private record TickEntry(UUID id, long value) {
+      public static final Codec<TickEntry> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+          UUIDUtil.CODEC.fieldOf("id").forGetter(TickEntry::id),
+          Codec.LONG.fieldOf("value").forGetter(TickEntry::value)
+      ).apply(instance, TickEntry::new));
+    }
+
+    public static final Function<String, Codec<Section>> CODEC = (name) -> TickEntry.CODEC.listOf()
+        .xmap((data) -> new Section(name, data), o -> o.getTickMap().object2LongEntrySet().stream()
+            .map(e -> new TickEntry(e.getKey(), e.getLongValue())).toList());
+
     private final Object2LongMap<UUID> tickMap = new Object2LongOpenHashMap<>();
     private final String cachedName;
 
     public Section(String cachedName) {
       this.tickMap.defaultReturnValue(-1L);
       this.cachedName = cachedName;
+    }
+
+    private Section(String cachedName, List<TickEntry> entries) {
+      this(cachedName);
+      for (TickEntry entry : entries) {
+        this.tickMap.put(entry.id(), entry.value());
+      }
     }
 
     private boolean excludes(UUID id) {
@@ -146,41 +162,20 @@ public class NewTickingData {
       setDirty();
     }
 
-    @Override
-    public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
-      ListTag decayList = new ListTag();
-      for (Object2LongMap.Entry<UUID> entry : tickMap.object2LongEntrySet()) {
-        CompoundTag thisTag = new CompoundTag();
-        thisTag.putUUID("id", entry.getKey());
-        thisTag.putLong("value", entry.getLongValue());
-        decayList.add(thisTag);
-      }
-      tag.put("result", decayList);
-      tag.putString("cachedName", cachedName);
-      return tag;
+    private Object2LongMap<UUID> getTickMap() {
+      return tickMap;
     }
 
-    public static Section load(CompoundTag pCompound, HolderLookup.Provider provider) {
-      String cachedName = pCompound.getString("cachedName");
-      Section data = new Section(cachedName);
-      data.tickMap.clear();
-      data.tickMap.defaultReturnValue(-1);
-      ListTag decayList = pCompound.getList("result", 10);
-      for (int i = 0; i < decayList.size(); i++) {
-        CompoundTag thisTag = decayList.getCompound(i);
-        data.tickMap.put(thisTag.getUUID("id"), thisTag.getLong("value"));
-      }
-      return data;
-    }
 
-    @Override
+    // TODO:
+/*    @Override
     public void save(File file, HolderLookup.Provider registries) {
       if (isDirty()) {
         //noinspection ResultOfMethodCallIgnored
         file.getParentFile().mkdirs();
       }
       super.save(file, registries);
-    }
+    }*/
   }
 
   public enum TickingType {

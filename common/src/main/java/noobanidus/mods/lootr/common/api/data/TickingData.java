@@ -1,40 +1,43 @@
 package noobanidus.mods.lootr.common.api.data;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.world.level.saveddata.SavedData;
 
+import java.util.List;
 import java.util.UUID;
 
 @Deprecated
 public class TickingData extends SavedData {
-  public static final SavedData.Factory<TickingData> FACTORY = new Factory<>(TickingData::new, TickingData::load, null);
+  private record TickEntry(UUID id, int value) {
+    public static final Codec<TickEntry> CODEC = RecordCodecBuilder.create(instance -> instance.group(UUIDUtil.CODEC.fieldOf("id")
+            .forGetter(TickEntry::id),
+        Codec.INT.fieldOf("value").forGetter(TickEntry::value)).apply(instance, TickEntry::new));
+  }
+
+  public static final Codec<TickingData> CODEC = TickEntry.CODEC.listOf().xmap(
+      TickingData::new, o -> o.getTickMap().object2IntEntrySet().stream()
+          .map(entry -> new TickEntry(entry.getKey(), entry.getIntValue()))
+          .toList());
+
   private final Object2IntMap<UUID> tickMap = new Object2IntOpenHashMap<>();
 
   public TickingData() {
-    tickMap.defaultReturnValue(-1);
-
+    this.tickMap.defaultReturnValue(-1);
   }
 
-  public static TickingData load(CompoundTag pCompound, HolderLookup.Provider provider) {
-    TickingData data = new TickingData();
-    data.tickMap.clear();
-    data.tickMap.defaultReturnValue(-1);
-    ListTag decayList = pCompound.getList("result", Tag.TAG_COMPOUND);
-    for (int i = 0; i < decayList.size(); i++) {
-      CompoundTag thisTag = decayList.getCompound(i);
-      data.tickMap.put(thisTag.getUUID("id"), thisTag.getInt("value"));
+  private TickingData(List<TickEntry> entries) {
+    this();
+    for (TickEntry entry : entries) {
+      tickMap.put(entry.id(), entry.value());
     }
-    return data;
   }
 
   public boolean isComplete(UUID id) {
-    int value = getValue(id);
-    return value == 0 || value == 1;
+    return tickMap.getInt(id) == 0 || tickMap.getInt(id) == 1;
   }
 
   public int getValue(UUID id) {
@@ -79,24 +82,11 @@ public class TickingData extends SavedData {
     }
   }
 
-  @Override
-  public CompoundTag save(CompoundTag pCompound, HolderLookup.Provider provider) {
-    ListTag decayList = new ListTag();
-    for (Object2IntMap.Entry<UUID> entry : tickMap.object2IntEntrySet()) {
-      CompoundTag thisTag = new CompoundTag();
-      thisTag.putUUID("id", entry.getKey());
-      thisTag.putInt("value", entry.getIntValue());
-      decayList.add(thisTag);
-    }
-    pCompound.put("result", decayList);
-    return pCompound;
-  }
-
   public Object2IntMap<UUID> getTickMap() {
     return tickMap;
   }
 
-  public void clear () {
+  public void clear() {
     tickMap.clear();
     setDirty();
   }
