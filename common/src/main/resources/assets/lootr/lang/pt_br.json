@@ -122,7 +122,7 @@
   "tag.block.lootr.chests": "Baús de Lootr",
   "tag.block.lootr.containers": "Contêineres de Lootr",
   "tag.block.lootr.convert.barrels": "Blocos que se Convertem em Barris Lootr",
-  "tag.block.lootr.convert.blacklist": "Blocks that are blocked from being converted to Lootr Containers",
+  "tag.block.lootr.convert.blacklist": "Blocos que estão bloqueados de serem convertidos em Contêineres Lootr",
   "tag.block.lootr.convert.blocks": "Todos os Blocos que se Convertem em Contêineres Lootr",
   "tag.block.lootr.convert.chests": "Blocos que se Convertem em Baús Lootr",
   "tag.block.lootr.convert.custom_eligible": "Blocos Alvo Elegíveis para Inventário Personalizado",
