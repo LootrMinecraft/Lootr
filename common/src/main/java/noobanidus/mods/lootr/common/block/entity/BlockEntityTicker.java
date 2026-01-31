@@ -212,7 +212,7 @@ public final class BlockEntityTicker {
     if (!level.getServer().getWorldData().worldGenOptions().generateStructures()) {
       return true;
     }
-    Registry<Structure> registry = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
+    Registry<Structure> registry = level.registryAccess().lookupOrThrow(Registries.STRUCTURE);
     if (registry.getTag(LootrTags.Structure.STRUCTURE_BLACKLIST).filter(tag -> tag.size() != 0).isPresent()) {
       return !LootrAPI.isTaggedStructurePresent(level, chunkPos, LootrTags.Structure.STRUCTURE_BLACKLIST, position);
     } else if (registry.getTag(LootrTags.Structure.STRUCTURE_WHITELIST).filter(tag -> tag.size() != 0).isPresent()) {

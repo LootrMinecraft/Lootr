@@ -2,20 +2,21 @@ package noobanidus.mods.lootr.common.integration.sherdsapi.impl;
 
 import dev.thomasglasser.sherdsapi.impl.StackPotDecorations;
 import dev.thomasglasser.sherdsapi.impl.StackPotDecorationsHolder;
+import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import noobanidus.mods.lootr.common.api.PotDecorationsAdapter;
 import noobanidus.mods.lootr.common.api.LootrConstants;
+import noobanidus.mods.lootr.common.api.PotDecorationsAdapter;
 import org.jetbrains.annotations.Nullable;
 
 public class SherdsIntegrationImpl {
   private static DataComponentType<StackPotDecorations> type = null;
   private static boolean checked = false;
 
-  private static DataComponentType<ResourceLocation> type2 = null;
+  private static DataComponentType<Identifier> type2 = null;
   private static boolean checked2 = false;
 
   @SuppressWarnings("unchecked")
@@ -24,31 +25,33 @@ public class SherdsIntegrationImpl {
     if (!checked) {
       checked = true;
       var comp = BuiltInRegistries.DATA_COMPONENT_TYPE.get(LootrConstants.SHERDSAPI_POT_DECORATIONS);
-      if (comp == null) {
+      if (comp.isEmpty()) {
         return null;
       }
-      type = (DataComponentType<StackPotDecorations>) comp;
+      var comp2 = comp.get();
+      type = (DataComponentType<StackPotDecorations>) comp2;
     }
     return type;
   }
 
   @SuppressWarnings("unchecked")
   @Nullable
-  private static DataComponentType<ResourceLocation> getSherdsTextureComponent() {
+  private static DataComponentType<Identifier> getSherdsTextureComponent() {
     if (!checked2) {
       checked2 = true;
       var comp = BuiltInRegistries.DATA_COMPONENT_TYPE.get(LootrConstants.SHERDSAPI_SHERD_PATTERN);
-      if (comp == null) {
+      if (comp.isEmpty()) {
         return null;
       }
-      type2 = (DataComponentType<ResourceLocation>) comp;
+      var comp2 = comp.get();
+      type2 = (DataComponentType<Identifier>) comp2;
     }
 
     return type2;
   }
 
   @Nullable
-  public static PotDecorationsAdapter getAdapterFrom(BlockEntity.DataComponentInput stack) {
+  public static PotDecorationsAdapter getAdapterFrom(DataComponentGetter stack) {
     DataComponentType<StackPotDecorations> sherdsType = getSherdsDecorationsComponent();
     if (sherdsType == null) {
       return null;
@@ -82,7 +85,7 @@ public class SherdsIntegrationImpl {
   }
 
   @Nullable
-  public static PotDecorationsAdapter getAdapterFrom (BlockEntity blockEntity) {
+  public static PotDecorationsAdapter getAdapterFrom(BlockEntity blockEntity) {
     if (!(blockEntity instanceof StackPotDecorationsHolder holderType)) {
       return null;
     }
@@ -96,8 +99,8 @@ public class SherdsIntegrationImpl {
   }
 
   @Nullable
-  public static ResourceLocation getCustomSideTexture(ItemStack item) {
-    DataComponentType<ResourceLocation> textureType = getSherdsTextureComponent();
+  public static Identifier getCustomSideTexture(ItemStack item) {
+    DataComponentType<Identifier> textureType = getSherdsTextureComponent();
     if (textureType == null) {
       return null;
     }

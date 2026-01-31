@@ -14,7 +14,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -34,7 +34,7 @@ public class BarrelModel implements UnbakedModel {
   private final UnbakedModel vanilla;
   private final UnbakedModel old_opened;
   private final UnbakedModel old_unopened;
-  private Collection<ResourceLocation> dependencies = null;
+  private Collection<Identifier> dependencies = null;
 
   public BarrelModel(UnbakedModel opened, UnbakedModel unopened, UnbakedModel vanilla, UnbakedModel old_opened, UnbakedModel old_unopened) {
     this.opened = opened;
@@ -45,7 +45,7 @@ public class BarrelModel implements UnbakedModel {
   }
 
   @Override
-  public Collection<ResourceLocation> getDependencies() {
+  public Collection<Identifier> getDependencies() {
     if (dependencies == null) {
       this.dependencies = Streams.concat(opened.getDependencies().stream(), unopened.getDependencies().stream(), vanilla.getDependencies().stream(), old_opened.getDependencies().stream(), old_unopened.getDependencies().stream()).collect(Collectors.toSet());
     }
@@ -53,7 +53,7 @@ public class BarrelModel implements UnbakedModel {
   }
 
   @Override
-  public void resolveParents(Function<ResourceLocation, UnbakedModel> function) {
+  public void resolveParents(Function<Identifier, UnbakedModel> function) {
     this.opened.resolveParents(function);
     this.unopened.resolveParents(function);
     this.vanilla.resolveParents(function);

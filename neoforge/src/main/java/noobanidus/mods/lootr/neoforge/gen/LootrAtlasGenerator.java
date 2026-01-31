@@ -3,7 +3,7 @@ package noobanidus.mods.lootr.neoforge.gen;
 import net.minecraft.client.renderer.texture.atlas.sources.SingleFile;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.common.data.SpriteSourceProvider;
 import noobanidus.mods.lootr.common.api.LootrAPI;
@@ -43,7 +43,7 @@ public class LootrAtlasGenerator extends SpriteSourceProvider {
     this.atlas(BLOCKS_ATLAS).addSource(new SingleFile(LootrAPI.rl("chest_opened"), Optional.empty()));
     this.atlas(BLOCKS_ATLAS)
         .addSource(new SingleFile(LootrAPI.rl("minecraft", "entity/player/wide/steve"), Optional.empty()));
-    this.atlas(ResourceLocation.withDefaultNamespace("decorated_pot"))
+    this.atlas(Identifier.withDefaultNamespace("decorated_pot"))
         .addSource(new SingleFile(LootrAPI.rl("entity/loot_pot"), Optional.empty()))
         .addSource(new SingleFile(LootrAPI.rl("entity/loot_pot_open"), Optional.empty()))
         .addSource(new SingleFile(LootrAPI.rl("entity/decorated_pot/loot_pottery_pattern"), Optional.empty()));

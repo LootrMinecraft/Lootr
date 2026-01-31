@@ -2,6 +2,7 @@ package noobanidus.mods.lootr.common.api.data.entity;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -56,7 +57,7 @@ public interface ILootrEntity extends ILootrInfoProvider {
       //noinspection deprecation
       EntityType<?> type = getReplacementEntity();
       if (type != null) {
-        Entity newCart = type.create(level);
+        Entity newCart = type.create(level, EntitySpawnReason.CONVERSION);
         if (newCart != null) {
           // TODO: Does anything else need to be copied over?
           newCart.setPos(entity.position());

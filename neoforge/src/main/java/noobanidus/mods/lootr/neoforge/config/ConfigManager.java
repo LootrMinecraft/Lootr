@@ -2,7 +2,7 @@ package noobanidus.mods.lootr.neoforge.config;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -148,7 +148,7 @@ public class ConfigManager extends ConfigManagerBase {
     LOOT_MODID_BLACKLIST = COMMON_BUILDER.comment("list of modids whose loot tables shouldn't be converted (in the format of [\"modid\", \"other_modid\"])")
         .defineList("loot_modid_blacklist", empty, () -> "", modidValidator);
     PROBLEMATIC_LOOT_TABLES = COMMON_BUILDER.comment("list of loot tables whose conversion causes problems (in the same format as `loot_table_blacklist`)")
-        .defineList("problematic_loot_tables", LootrAPI.PROBLEMATIC_CHESTS.stream().map(ResourceLocation::toString)
+        .defineList("problematic_loot_tables", LootrAPI.PROBLEMATIC_CHESTS.stream().map(Identifier::toString)
             .toList(), () -> "", validator);
     COMMON_BUILDER.pop();
     COMMON_BUILDER.push("breaking").comment("configuration options for breaking containers");

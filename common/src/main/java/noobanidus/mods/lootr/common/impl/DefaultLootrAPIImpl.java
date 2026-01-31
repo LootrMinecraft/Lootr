@@ -2,6 +2,7 @@ package noobanidus.mods.lootr.common.impl;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -473,7 +474,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
 
   @Override
   @Nullable
-  public PotDecorationsAdapter getDecorationsAdapter(BlockEntity.DataComponentInput stack) {
+  public PotDecorationsAdapter getDecorationsAdapter(DataComponentGetter stack) {
     DataComponentType<?> sherdsType = getSherdsComponent();
     if (sherdsType != null) {
       var comp = stack.get(sherdsType);

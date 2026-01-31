@@ -4,7 +4,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
 
-public class UnopenedParticle extends TextureSheetParticle {
+public class UnopenedParticle extends SingleQuadParticle {
   public UnopenedParticle(ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
     super(level, x, y, z, xSpeed, ySpeed, zSpeed);
     this.lifetime = 30;
@@ -40,6 +40,11 @@ public class UnopenedParticle extends TextureSheetParticle {
   @Override
   public ParticleRenderType getRenderType() {
     return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+  }
+
+  @Override
+  protected Layer getLayer() {
+    return null;
   }
 
   public record Provider(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {

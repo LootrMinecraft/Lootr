@@ -14,7 +14,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -36,7 +36,7 @@ public class BrushableModel implements UnbakedModel {
   private final UnbakedModel stage2;
   private final UnbakedModel stage3;
 
-  private Collection<ResourceLocation> dependencies = null;
+  private Collection<Identifier> dependencies = null;
 
   public BrushableModel(UnbakedModel opened, UnbakedModel stage0, UnbakedModel stage1, UnbakedModel stage2, UnbakedModel stage3) {
     this.opened = opened;
@@ -47,7 +47,7 @@ public class BrushableModel implements UnbakedModel {
   }
 
   @Override
-  public Collection<ResourceLocation> getDependencies() {
+  public Collection<Identifier> getDependencies() {
     if (dependencies == null) {
       this.dependencies = Streams.concat(opened.getDependencies().stream(), stage0.getDependencies().stream(), stage1.getDependencies().stream(), stage2.getDependencies().stream(), stage3.getDependencies().stream()).collect(Collectors.toSet());
     }
@@ -55,7 +55,7 @@ public class BrushableModel implements UnbakedModel {
   }
 
   @Override
-  public void resolveParents(Function<ResourceLocation, UnbakedModel> function) {
+  public void resolveParents(Function<Identifier, UnbakedModel> function) {
     this.opened.resolveParents(function);
     this.stage0.resolveParents(function);
     this.stage1.resolveParents(function);

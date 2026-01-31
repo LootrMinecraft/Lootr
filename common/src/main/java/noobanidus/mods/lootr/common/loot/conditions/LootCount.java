@@ -9,7 +9,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
@@ -39,7 +38,7 @@ public record LootCount(List<Operation> operations) implements LootItemCondition
 
   @Override
   public boolean test(LootContext lootContext) {
-    Vec3 incomingPos = lootContext.getParam(LootContextParams.ORIGIN);
+    Vec3 incomingPos = lootContext.getParameter(LootContextParams.ORIGIN);
     BlockPos position = new BlockPos((int) incomingPos.x, (int) incomingPos.y, (int) incomingPos.z);
     BlockEntity blockEntity = lootContext.getLevel().getBlockEntity(position);
     ILootrBlockEntity ibe = LootrAPI.resolveBlockEntity(blockEntity);
@@ -60,10 +59,12 @@ public record LootCount(List<Operation> operations) implements LootItemCondition
     return false;
   }
 
-  @Override
+
+  // TODO:
+/*  @Override
   public Set<LootContextParam<?>> getReferencedContextParams() {
     return ImmutableSet.of(LootContextParams.ORIGIN);
-  }
+  }*/
 
   public enum Operand implements BiPredicate<Integer, Integer>, StringRepresentable {
     EQUALS(Integer::equals, 0),

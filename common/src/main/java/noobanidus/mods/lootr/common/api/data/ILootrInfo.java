@@ -8,7 +8,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -304,8 +304,8 @@ public interface ILootrInfo {
     }
     BlockPos pos = NbtUtils.readBlockPos(tag, "position").orElse(BlockPos.ZERO);
     UUID uuid = tag.getUUID("uuid");
-    ResourceKey<Level> dimension = ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(tag.getString("dimension")));
-    int size = tag.getInt("size");
+    ResourceKey<Level> dimension = ResourceKey.create(Registries.DIMENSION, Identifier.parse(tag.getString("dimension")));
+    int size = tag.getInt("size").get();
     Component name = null;
     if (tag.contains("name")) {
       name = Component.Serializer.fromJson(tag.getString("name"), provider);
@@ -320,7 +320,7 @@ public interface ILootrInfo {
     ResourceKey<LootTable> table = null;
     long seed = -1;
     if (tag.contains("table")) {
-      table = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse(tag.getString("table")));
+      table = ResourceKey.create(Registries.LOOT_TABLE, Identifier.parse(tag.getString("table")));
       seed = tag.getLong("seed");
     }
 

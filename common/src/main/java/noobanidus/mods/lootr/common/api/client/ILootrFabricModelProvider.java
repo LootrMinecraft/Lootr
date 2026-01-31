@@ -1,6 +1,6 @@
 package noobanidus.mods.lootr.common.api.client;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -41,11 +41,11 @@ public interface ILootrFabricModelProvider {
      *                             texture in contrast to a "Lootr-ified" texture for the open/
      *                             unopened states, you can just pass null here.
      */
-    void acceptCustomModel (ResourceLocation modelName, ResourceLocation modelOpenedLocation, ResourceLocation modelUnopenedLocation, @Nullable ResourceLocation modelVanillaLocation);
+    void acceptCustomModel (Identifier modelName, Identifier modelOpenedLocation, Identifier modelUnopenedLocation, @Nullable Identifier modelVanillaLocation);
 
     // Use acceptCustomModel instead.
     @Deprecated
-    default void acceptBarrelModel (ResourceLocation modelName, ResourceLocation modelOpenedLocation, ResourceLocation modelUnopenedLocation, @Nullable ResourceLocation modelVanillaLocation) {
+    default void acceptBarrelModel (Identifier modelName, Identifier modelOpenedLocation, Identifier modelUnopenedLocation, @Nullable Identifier modelVanillaLocation) {
       acceptCustomModel(modelName, modelOpenedLocation, modelUnopenedLocation, modelVanillaLocation);
     }
 
@@ -62,6 +62,6 @@ public interface ILootrFabricModelProvider {
      * @param stage2
      * @param stage3
      */
-    void acceptBrushableModel (ResourceLocation modelName, ResourceLocation opened, ResourceLocation stage0, ResourceLocation stage1, ResourceLocation stage2, ResourceLocation stage3);
+    void acceptBrushableModel (Identifier modelName, Identifier opened, Identifier stage0, Identifier stage1, Identifier stage2, Identifier stage3);
   }
 }

@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.common.integration.sherdsapi;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.component.DataComponentGetter;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import noobanidus.mods.lootr.common.api.PotDecorationsAdapter;
@@ -14,7 +15,7 @@ public class SherdsIntegration {
   }
 
   @Nullable
-  public static PotDecorationsAdapter getAdapterFrom(BlockEntity.DataComponentInput stack) {
+  public static PotDecorationsAdapter getAdapterFrom(DataComponentGetter stack) {
     return SherdsIntegrationImpl.getAdapterFrom(stack);
   }
 
@@ -24,7 +25,7 @@ public class SherdsIntegration {
   }
 
   @Nullable
-  public static ResourceLocation getCustomSideTexture(ItemStack item) {
+  public static Identifier getCustomSideTexture(ItemStack item) {
     return SherdsIntegrationImpl.getCustomSideTexture(item);
   }
 }

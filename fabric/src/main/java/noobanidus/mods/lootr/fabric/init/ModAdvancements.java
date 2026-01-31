@@ -2,23 +2,23 @@ package noobanidus.mods.lootr.fabric.init;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import noobanidus.mods.lootr.common.advancement.AdvancementTrigger;
 import noobanidus.mods.lootr.common.advancement.ContainerTrigger;
 import noobanidus.mods.lootr.common.advancement.LootedStatTrigger;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 
 public class ModAdvancements {
-  public static final ResourceLocation CHEST_LOCATION = LootrAPI.rl("chest_opened");
-  public static final ResourceLocation BARREL_LOCATION = LootrAPI.rl("barrel_opened");
-  public static final ResourceLocation CART_LOCATION = LootrAPI.rl("cart_opened");
-  public static final ResourceLocation SHULKER_LOCATION = LootrAPI.rl("shulker_opened");
-  public static final ResourceLocation ADVANCEMENT_LOCATION = LootrAPI.rl("advancement");
-  public static final ResourceLocation SCORE_LOCATION = LootrAPI.rl("score");
-  public static final ResourceLocation GRAVEL_LOCATION = LootrAPI.rl("gravel_brushed");
-  public static final ResourceLocation SAND_LOCATION = LootrAPI.rl("sand_brushed");
-  public static final ResourceLocation POT_OPENED = LootrAPI.rl("pot_opened");
-  public static final ResourceLocation ITEM_FRAME_LOCATION = LootrAPI.rl("item_frame_looted");
+  public static final Identifier CHEST_LOCATION = LootrAPI.rl("chest_opened");
+  public static final Identifier BARREL_LOCATION = LootrAPI.rl("barrel_opened");
+  public static final Identifier CART_LOCATION = LootrAPI.rl("cart_opened");
+  public static final Identifier SHULKER_LOCATION = LootrAPI.rl("shulker_opened");
+  public static final Identifier ADVANCEMENT_LOCATION = LootrAPI.rl("advancement");
+  public static final Identifier SCORE_LOCATION = LootrAPI.rl("score");
+  public static final Identifier GRAVEL_LOCATION = LootrAPI.rl("gravel_brushed");
+  public static final Identifier SAND_LOCATION = LootrAPI.rl("sand_brushed");
+  public static final Identifier POT_OPENED = LootrAPI.rl("pot_opened");
+  public static final Identifier ITEM_FRAME_LOCATION = LootrAPI.rl("item_frame_looted");
   public static ContainerTrigger CHEST = null;
   public static ContainerTrigger BARREL = null;
   public static ContainerTrigger CART = null;

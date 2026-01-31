@@ -1,11 +1,12 @@
 package noobanidus.mods.lootr.common.api;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -62,7 +63,7 @@ public class LootrAPI {
   public static final ResourceKey<LootTable> ITEM_FRAME_EMPTY = ResourceKey.create(Registries.LOOT_TABLE, LootrAPI.rl("entity/item_frame_empty"));
   @Deprecated
   public static final TicketType<Unit> LOOTR_ENTITY_TICK_TICKET = TicketType.create("lootr_entity_tick_ticket", (unit1, unit2) -> 0, 300);
-  public static final List<ResourceLocation> PROBLEMATIC_CHESTS = Arrays.asList(LootrAPI.rl("twilightforest", "structures/stronghold_boss"), LootrAPI.rl("atum", "chests/pharaoh"));
+  public static final List<Identifier> PROBLEMATIC_CHESTS = Arrays.asList(LootrAPI.rl("twilightforest", "structures/stronghold_boss"), LootrAPI.rl("atum", "chests/pharaoh"));
 
   public static ILootrAPI INSTANCE = null;
   public static boolean shouldDiscardIdAndOpeners;
@@ -71,16 +72,16 @@ public class LootrAPI {
     return INSTANCE != null;
   }
 
-  public static ResourceLocation rl(String path) {
-    return ResourceLocation.fromNamespaceAndPath(MODID, path);
+  public static Identifier rl(String path) {
+    return Identifier.fromNamespaceAndPath(MODID, path);
   }
 
-  public static ResourceLocation rl(String namespace, String path) {
-    return ResourceLocation.fromNamespaceAndPath(namespace, path);
+  public static Identifier rl(String namespace, String path) {
+    return Identifier.fromNamespaceAndPath(namespace, path);
   }
 
-  public static ResourceLocation mc(String path) {
-    return ResourceLocation.withDefaultNamespace(path);
+  public static Identifier mc(String path) {
+    return Identifier.withDefaultNamespace(path);
   }
 
   public static Set<UUID> getPlayerIds() {
@@ -579,7 +580,7 @@ public class LootrAPI {
   }
 
   @Nullable
-  public static PotDecorationsAdapter getDecorationsAdapter(BlockEntity.DataComponentInput container) {
+  public static PotDecorationsAdapter getDecorationsAdapter(DataComponentGetter container) {
     return INSTANCE.getDecorationsAdapter(container);
   }
 

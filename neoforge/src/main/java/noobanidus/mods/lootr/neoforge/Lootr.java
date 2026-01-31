@@ -1,6 +1,6 @@
 package noobanidus.mods.lootr.neoforge;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -42,7 +42,7 @@ public class Lootr {
     ModParticles.register(modBus);
   }
 
-  public static ResourceLocation rl(String path) {
+  public static Identifier rl(String path) {
     return LootrAPI.rl(path);
   }
 

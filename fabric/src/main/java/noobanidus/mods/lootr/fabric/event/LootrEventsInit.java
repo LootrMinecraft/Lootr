@@ -11,7 +11,7 @@ import net.fabricmc.fabric.impl.resource.loader.ResourceManagerHelperImpl;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.block.entity.BlockEntityTicker;
@@ -55,7 +55,7 @@ public class LootrEventsInit {
 
   private static void registerPack (ModContainer container, String name, Component desc) {
     ResourceManagerHelperImpl.registerBuiltinResourcePack(
-        ResourceLocation.fromNamespaceAndPath(container.getMetadata().getId(), name),
+        Identifier.fromNamespaceAndPath(container.getMetadata().getId(), name),
         "datapacks/" + name,
         container,
         desc,

@@ -1,22 +1,20 @@
 package noobanidus.mods.lootr.common.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.EnchantmentTags;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -32,7 +30,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.block.entity.LootrDecoratedPotBlockEntity;
 import org.jetbrains.annotations.Nullable;
@@ -59,20 +56,22 @@ public class LootrDecoratedPotBlock extends DecoratedPotBlock {
 
   @Override
   public BlockState playerWillDestroy(Level level, BlockPos blockPos, BlockState blockState, Player player) {
-		this.spawnDestroyParticles(level, player, blockPos, blockState);
-		if (blockState.is(BlockTags.GUARDED_BY_PIGLINS)) {
-			PiglinAi.angerNearbyPiglins(player, false);
-		}
+    this.spawnDestroyParticles(level, player, blockPos, blockState);
+    if (blockState.is(BlockTags.GUARDED_BY_PIGLINS) && level instanceof ServerLevel sLevel) {
+      PiglinAi.angerNearbyPiglins(sLevel, player, false);
+    }
 
-		level.gameEvent(GameEvent.BLOCK_DESTROY, blockPos, GameEvent.Context.of(player, blockState));
-		return blockState;
+    level.gameEvent(GameEvent.BLOCK_DESTROY, blockPos, GameEvent.Context.of(player, blockState));
+    return blockState;
   }
 
   @Override
-  protected ItemInteractionResult useItemOn(
+  protected InteractionResult useItemOn(
       ItemStack itemStack, BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult
   ) {
-    return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+    return InteractionResult.PASS;
+    // TODO:
+    // return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
   }
 
   @Override
@@ -96,11 +95,12 @@ public class LootrDecoratedPotBlock extends DecoratedPotBlock {
   }
 
   @Override
-  public ItemStack getCloneItemStack(LevelReader levelReader, BlockPos blockPos, BlockState blockState) {
+  protected ItemStack getCloneItemStack(LevelReader levelReader, BlockPos blockPos, BlockState blockState, boolean boolValue) {
+    // TODO: What is boolValue?
     BlockEntity var5 = levelReader.getBlockEntity(blockPos);
     return var5 instanceof LootrDecoratedPotBlockEntity decoratedPotBlockEntity
         ? decoratedPotBlockEntity.getPotAsItem()
-        : super.getCloneItemStack(levelReader, blockPos, blockState);
+        : super.getCloneItemStack(levelReader, blockPos, blockState, boolValue);
   }
 
   @Override
@@ -131,8 +131,8 @@ public class LootrDecoratedPotBlock extends DecoratedPotBlock {
     return super.getShape(blockState, blockGetter, blockPos, collisionContext);
   }
 
-  private CollisionState getCollisionState (BlockGetter getter, BlockPos pos, CollisionContext context) {
-    if (!(getter.getBlockEntity(pos) instanceof LootrDecoratedPotBlockEntity potBlockEntity))  {
+  private CollisionState getCollisionState(BlockGetter getter, BlockPos pos, CollisionContext context) {
+    if (!(getter.getBlockEntity(pos) instanceof LootrDecoratedPotBlockEntity potBlockEntity)) {
       return CollisionState.OTHER;
     }
 
@@ -183,8 +183,8 @@ public class LootrDecoratedPotBlock extends DecoratedPotBlock {
 
   // TODO:
   @Override
-  protected int getAnalogOutputSignal(BlockState blockState, Level level, BlockPos blockPos) {
-    return super.getAnalogOutputSignal(blockState, level, blockPos);
+  protected int getAnalogOutputSignal(BlockState blockState, Level level, BlockPos blockPos, Direction direction) {
+    return super.getAnalogOutputSignal(blockState, level, blockPos, direction);
   }
 
   @Override

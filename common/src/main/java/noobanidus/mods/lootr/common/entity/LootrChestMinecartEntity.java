@@ -16,8 +16,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.vehicle.AbstractMinecart;
-import net.minecraft.world.entity.vehicle.AbstractMinecartContainer;
+import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
+import net.minecraft.world.entity.vehicle.minecart.AbstractMinecartContainer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.Item;
@@ -59,7 +59,8 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
   public LootrChestMinecartEntity(Level worldIn, double x, double y, double z) {
-    super(LootrRegistry.getMinecart(), x, y, z, worldIn);
+    super(LootrRegistry.getMinecart(), worldIn);
+    setInitialPos(x, y, z);
   }
 
   @Override

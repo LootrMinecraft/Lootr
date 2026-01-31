@@ -4,10 +4,10 @@ import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.AdvancementType;
-import net.minecraft.advancements.critereon.PlayerTrigger;
+import net.minecraft.advancements.criterion.PlayerTrigger;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.data.AdvancementProvider;
@@ -23,7 +23,7 @@ import java.util.function.Consumer;
 public class LootrAdvancementGenerator implements AdvancementProvider.AdvancementGenerator {
   @Override
   public void generate(HolderLookup.Provider arg, Consumer<AdvancementHolder> consumer, ExistingFileHelper existingFileHelper) {
-    AdvancementHolder lootrRoot = Advancement.Builder.advancement().display(Blocks.CHEST, Component.translatable("lootr.advancements.root.title"), Component.translatable("lootr.advancements.root.description"), ResourceLocation.parse("minecraft:textures/block/dark_oak_log.png"), AdvancementType.TASK, false, false, false).addCriterion("always_true", PlayerTrigger.TriggerInstance.tick()).save(consumer, LootrAPI.rl("root"), existingFileHelper);
+    AdvancementHolder lootrRoot = Advancement.Builder.advancement().display(Blocks.CHEST, Component.translatable("lootr.advancements.root.title"), Component.translatable("lootr.advancements.root.description"), Identifier.parse("minecraft:textures/block/dark_oak_log.png"), AdvancementType.TASK, false, false, false).addCriterion("always_true", PlayerTrigger.TriggerInstance.tick()).save(consumer, LootrAPI.rl("root"), existingFileHelper);
     AdvancementHolder one_barrel = Advancement.Builder.advancement().parent(lootrRoot).display(LootrRegistry.getBarrelBlock(), Component.translatable("lootr.advancements.1barrel.title"), Component.translatable("lootr.advancements.1barrel.description"), null, AdvancementType.TASK, true, true, false).addCriterion("opened_barrel", ContainerTrigger.looted(LootrRegistry.getBarrelTrigger())).save(consumer, LootrAPI.rl("1barrel"), existingFileHelper);
     // 1cart
     AdvancementHolder one_cart = Advancement.Builder.advancement().parent(lootrRoot).display(Items.CHEST_MINECART, Component.translatable("lootr.advancements.1cart.title"), Component.translatable("lootr.advancements.1cart.description"), null, AdvancementType.TASK, true, true, false).addCriterion("opened_cart", ContainerTrigger.looted(LootrRegistry.getCartTrigger())).save(consumer, LootrAPI.rl("1cart"), existingFileHelper);

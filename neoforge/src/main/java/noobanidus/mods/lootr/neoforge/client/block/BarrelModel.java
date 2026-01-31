@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.*;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
@@ -65,7 +65,7 @@ public class BarrelModel implements IUnbakedGeometry<BarrelModel> {
   }
 
   @Override
-  public void resolveParents(Function<ResourceLocation, UnbakedModel> modelGetter, IGeometryBakingContext context) {
+  public void resolveParents(Function<Identifier, UnbakedModel> modelGetter, IGeometryBakingContext context) {
     opened.resolveParents(modelGetter);
     unopened.resolveParents(modelGetter);
     vanilla.resolveParents(modelGetter);

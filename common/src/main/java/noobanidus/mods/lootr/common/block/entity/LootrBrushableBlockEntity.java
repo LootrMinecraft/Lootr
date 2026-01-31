@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -12,7 +13,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
@@ -222,7 +223,7 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
 
   private void tryLoadLootTable(CompoundTag compoundTag) {
     if (compoundTag.contains("LootTable")) {
-      this.lootTable = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse(compoundTag.getString("LootTable")));
+      this.lootTable = ResourceKey.create(Registries.LOOT_TABLE, Identifier.parse(compoundTag.getString("LootTable")));
     }
     if (compoundTag.contains("LootTableSeed")) {
       this.lootTableSeed = compoundTag.getLong("LootTableSeed");
@@ -501,7 +502,7 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
   }
 
   @Override
-  protected void applyImplicitComponents(BlockEntity.DataComponentInput dataComponentInput) {
+  protected void applyImplicitComponents(DataComponentGetter dataComponentInput) {
     super.applyImplicitComponents(dataComponentInput);
     SeededContainerLoot loot = dataComponentInput.get(DataComponents.CONTAINER_LOOT);
     if (loot != null && loot.lootTable() != null) {

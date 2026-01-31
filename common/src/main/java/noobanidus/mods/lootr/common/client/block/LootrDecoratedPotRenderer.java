@@ -9,13 +9,12 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -32,7 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecoratedPotBlockEntity> {
-  public static final ResourceLocation DECORATED_POT_SHEET = ResourceLocation.withDefaultNamespace("textures/atlas/decorated_pot.png");
+  public static final Identifier DECORATED_POT_SHEET = Identifier.withDefaultNamespace("textures/atlas/decorated_pot.png");
   private static final Material DECORATED_POT = new Material(DECORATED_POT_SHEET, LootrAPI.rl("entity/loot_pot"));
   private static final Material DECORATED_POT_OPENED = new Material(DECORATED_POT_SHEET, LootrAPI.rl("entity/loot_pot_open"));
 
@@ -82,12 +81,12 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
 		return LayerDefinition.create(meshdefinition, 64, 32);
 	}
 
-  private static final Map<ResourceLocation, Material> cachedMaterials = new HashMap<>();
+  private static final Map<Identifier, Material> cachedMaterials = new HashMap<>();
 
   // TODO: How does this handle custom pot patterns?
   private static Material getSideMaterial(ItemStack item) {
     if (!item.isEmpty()) {
-      ResourceLocation customSide = SherdsIntegration.getCustomSideTexture(item);
+      Identifier customSide = SherdsIntegration.getCustomSideTexture(item);
       if (customSide != null) {
         return cachedMaterials.computeIfAbsent(customSide, rl -> new Material(DECORATED_POT_SHEET, rl.withPrefix("entity/decorated_pot/")));
       } else {

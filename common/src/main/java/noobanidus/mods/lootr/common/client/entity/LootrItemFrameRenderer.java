@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.entity.ItemFrameRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.ModelManager;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.resources.model.ModelIdentifier;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
@@ -19,8 +19,8 @@ import noobanidus.mods.lootr.common.api.LootrConstants;
 import noobanidus.mods.lootr.common.entity.LootrItemFrame;
 
 public class LootrItemFrameRenderer extends ItemFrameRenderer<LootrItemFrame> {
-  public static final ModelResourceLocation FRAME_LOCATION = new ModelResourceLocation(LootrConstants.ITEM_FRAME.withPrefix("block/"), "standalone");
-  public static final ModelResourceLocation FRAME_OPEN_LOCATION = new ModelResourceLocation(LootrConstants.ITEM_FRAME.withPrefix("block/")
+  public static final ModelIdentifier FRAME_LOCATION = new ModelIdentifier(LootrConstants.ITEM_FRAME.withPrefix("block/"), "standalone");
+  public static final ModelIdentifier FRAME_OPEN_LOCATION = new ModelIdentifier(LootrConstants.ITEM_FRAME.withPrefix("block/")
       .withSuffix("_open"), "standalone");
 
   private final ItemRenderer itemRenderer;
@@ -48,7 +48,7 @@ public class LootrItemFrameRenderer extends ItemFrameRenderer<LootrItemFrame> {
     ItemStack itemstack = entity.getItem();
     if (!flag) {
       ModelManager modelmanager = this.blockRenderer.getBlockModelShaper().getModelManager();
-      ModelResourceLocation modelresourcelocation = entity.isClientOpened() ? FRAME_OPEN_LOCATION : FRAME_LOCATION;
+      ModelIdentifier modelresourcelocation = entity.isClientOpened() ? FRAME_OPEN_LOCATION : FRAME_LOCATION;
       poseStack.pushPose();
       poseStack.translate(-0.5F, -0.5F, -0.5F);
       this.blockRenderer

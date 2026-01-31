@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
@@ -208,7 +209,7 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   }
 
   @Override
-  protected void applyImplicitComponents(BlockEntity.DataComponentInput dataComponentInput) {
+  protected void applyImplicitComponents(DataComponentGetter dataComponentInput) {
     super.applyImplicitComponents(dataComponentInput);
     this.decorations = LootrAPI.getDecorationsAdapter(dataComponentInput);
     SeededContainerLoot loot = dataComponentInput.get(DataComponents.CONTAINER_LOOT);

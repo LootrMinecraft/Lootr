@@ -6,7 +6,7 @@ import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -25,7 +25,7 @@ import java.util.Set;
 @Config(name = LootrAPI.MODID)
 public class ConfigManager extends ConfigManagerBase implements ConfigData {
   @ConfigEntry.Gui.Excluded
-  private static final List<ResourceLocation> PROBLEMATIC_CHESTS = Arrays.asList(ResourceLocation.fromNamespaceAndPath("atum", "chests/pharaoh"), ResourceLocation.fromNamespaceAndPath("twilightforest", "structures/stronghold_boss"));
+  private static final List<Identifier> PROBLEMATIC_CHESTS = Arrays.asList(Identifier.fromNamespaceAndPath("atum", "chests/pharaoh"), Identifier.fromNamespaceAndPath("twilightforest", "structures/stronghold_boss"));
 
   @ConfigEntry.Gui.Excluded
   private static Set<String> DECAY_MODS = null;

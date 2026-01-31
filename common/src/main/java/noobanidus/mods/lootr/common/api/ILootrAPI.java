@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.common.api;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceKey;
@@ -318,7 +319,7 @@ public interface ILootrAPI {
 
   PotDecorationsAdapter getDecorationsAdapter(ItemStack stack);
 
-  PotDecorationsAdapter getDecorationsAdapter(BlockEntity.DataComponentInput input);
+  PotDecorationsAdapter getDecorationsAdapter(DataComponentGetter input);
 
   SaveMode getFileSaveMode ();
 

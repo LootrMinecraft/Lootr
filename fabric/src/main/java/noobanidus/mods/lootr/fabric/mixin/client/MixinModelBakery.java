@@ -2,9 +2,9 @@ package noobanidus.mods.lootr.fabric.mixin.client;
 
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.resources.model.ModelBakery;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.resources.model.ModelIdentifier;
 import net.minecraft.client.resources.model.UnbakedModel;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.profiling.ProfilerFiller;
 import noobanidus.mods.lootr.common.client.entity.LootrItemFrameRenderer;
 import org.apache.commons.lang3.NotImplementedException;
@@ -19,12 +19,12 @@ import java.util.Map;
 @Mixin(ModelBakery.class)
 public class MixinModelBakery {
   @Shadow
-  private void registerModelAndLoadDependencies(ModelResourceLocation modelLocation, UnbakedModel model) {
+  private void registerModelAndLoadDependencies(ModelIdentifier modelLocation, UnbakedModel model) {
     throw new NotImplementedException();
   }
 
   @Shadow
-  UnbakedModel getModel(ResourceLocation modelLocation) {
+  UnbakedModel getModel(Identifier modelLocation) {
     throw new NotImplementedException();
   }
 
