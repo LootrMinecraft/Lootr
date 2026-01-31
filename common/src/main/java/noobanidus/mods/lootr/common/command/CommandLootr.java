@@ -2,6 +2,7 @@ package noobanidus.mods.lootr.common.command;
 
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.yggdrasil.response.NameAndId;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -25,13 +26,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentUtils;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.players.GameProfileCache;
+import net.minecraft.server.permissions.Permissions;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -88,26 +89,11 @@ public class CommandLootr {
 
   private static List<ResourceKey<LootTable>> getTables(MinecraftServer server) {
     if (tables == null) {
-      tables = server.reloadableRegistries().get().lookup(Registries.LOOT_TABLE).map(HolderLookup::listElementIds)
+      tables = server.reloadableRegistries().lookup().lookup(Registries.LOOT_TABLE).map(HolderLookup::listElementIds)
           .orElse(Stream.of()).toList();
-      tableNames = tables.stream().map(o -> o.location().toString()).toList();
+      tableNames = tables.stream().map(o -> o.identifier().toString()).toList();
     }
     return tables;
-  }
-
-  private static List<String> getProfiles() {
-    MinecraftServer server = LootrAPI.getServer();
-    if (server == null) {
-      return Collections.emptyList();
-    }
-
-    GameProfileCache cache = server.getProfileCache();
-    if (cache == null) {
-      return Collections.emptyList();
-    }
-
-    // This uses an access widener as the GameProfileInfo class is package-private and thus an accessor mixin is not possible
-    return Lists.newArrayList(cache.profilesByName.keySet());
   }
 
   private static List<String> getTableNames(MinecraftServer server) {
@@ -173,17 +159,13 @@ public class CommandLootr {
   }
 
   public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-    dispatcher.register(builder(Commands.literal("lootr").requires(p -> p.hasPermission(2))));
+    dispatcher.register(builder(Commands.literal("lootr")
+        .requires(p -> p.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))));
   }
 
   private static RequiredArgumentBuilder<CommandSourceStack, Identifier> suggestTables() {
     return Commands.argument("table", IdentifierArgument.id())
         .suggests((c, build) -> SharedSuggestionProvider.suggest(getTableNames(c.getSource().getServer()), build));
-  }
-
-  private static RequiredArgumentBuilder<CommandSourceStack, String> suggestProfiles() {
-    return Commands.argument("profile", StringArgumentType.string())
-        .suggests((c, build) -> SharedSuggestionProvider.suggest(getProfiles(), build));
   }
 
   public static LiteralArgumentBuilder<CommandSourceStack> builder(LiteralArgumentBuilder<CommandSourceStack> builder) {
@@ -206,20 +188,20 @@ public class CommandLootr {
     builder.then(Commands.literal("clear").executes(c -> {
       c.getSource().sendSuccess(() -> Component.literal("Must provide player name."), true);
       return 1;
-    }).then(suggestProfiles().executes(c -> {
+    }).executes(c -> {
       String playerName = StringArgumentType.getString(c, "profile");
-      Optional<GameProfile> opt_profile = Objects.requireNonNull(c.getSource().getServer().getProfileCache())
-          .get(playerName);
-      if (opt_profile.isEmpty()) {
+      Optional<NameAndId> opt_profile = c.getSource().getServer().services().profileRepository()
+          .findProfileByName(playerName);
+      if (!opt_profile.isPresent()) {
         c.getSource()
             .sendFailure(Component.literal("Invalid player name: " + playerName + ", profile not found in the cache."));
         return 0;
       }
-      GameProfile profile = opt_profile.get();
+      NameAndId profile = opt_profile.get();
       c.getSource()
-          .sendSuccess(() -> Component.literal(LootrAPI.clearPlayerLoot(profile.getId()) ? "Cleared stored inventories for " + playerName : "No stored inventories for " + playerName + " to clear"), true);
+          .sendSuccess(() -> Component.literal(LootrAPI.clearPlayerLoot(profile.id()) ? "Cleared stored inventories for " + playerName : "No stored inventories for " + playerName + " to clear"), true);
       return 1;
-    })));
+    }));
     builder.then(Commands.literal("cart").executes(c -> {
       createBlock(c.getSource(), null, null);
       return 1;
@@ -264,16 +246,16 @@ public class CommandLootr {
     builder.then(Commands.literal("open_as").executes(c -> {
       c.getSource().sendSuccess(() -> Component.literal("Must provide player name."), true);
       return 1;
-    }).then(suggestProfiles().executes(c -> {
+    }).executes(c -> {
       String playerName = StringArgumentType.getString(c, "profile");
-      Optional<GameProfile> opt_profile = Objects.requireNonNull(c.getSource().getServer().getProfileCache())
-          .get(playerName);
-      if (opt_profile.isEmpty()) {
+      Optional<NameAndId> opt_profile = c.getSource().getServer().services().profileRepository()
+          .findProfileByName(playerName);
+      if (!opt_profile.isPresent()) {
         c.getSource()
             .sendFailure(Component.literal("Invalid player name: " + playerName + ", profile not found in the cache."));
         return 0;
       }
-      GameProfile profile = opt_profile.get();
+      NameAndId profile = opt_profile.get();
       BlockPos pos = BlockPos.containing(c.getSource().getPosition());
       Level level = c.getSource().getLevel();
       BlockEntity te = level.getBlockEntity(pos);
@@ -292,7 +274,7 @@ public class CommandLootr {
         c.getSource().sendSuccess(() -> Component.literal("No Lootr data found for this container."), false);
         return 0;
       }
-      LootrInventory inventory = data.getInventory(profile.getId());
+      LootrInventory inventory = data.getInventory(profile.id());
       if (inventory == null) {
         c.getSource().sendSuccess(() -> Component.literal("No stored inventory for " + playerName + " found."), true);
         return 0;
@@ -307,7 +289,7 @@ public class CommandLootr {
       player.openMenu(inventory);
 
       return 1;
-    })));
+    }));
     builder.then(Commands.literal("open_as_uuid").executes(c -> {
       c.getSource().sendSuccess(() -> Component.literal("Must provide player UUID."), true);
       return 1;
@@ -419,10 +401,10 @@ public class CommandLootr {
           c.getSource()
               .sendSuccess(() -> Component.literal("BlockEntity at location " + position + " has " + openers.size() + " openers. UUIDs as follows:"), true);
           for (UUID uuid : openers) {
-            Optional<GameProfile> prof = Objects.requireNonNull(c.getSource().getServer().getProfileCache()).get(uuid);
+            Optional<GameProfile> prof = c.getSource().getServer().services().profileResolver().fetchById(uuid);
             c.getSource()
                 .sendSuccess(() -> Component.literal("UUID: " + uuid + ", user profile: " + (prof.isPresent() ? prof.get()
-                    .getName() : "null")), true);
+                    .name() : "null")), true);
           }
         }
       } else {

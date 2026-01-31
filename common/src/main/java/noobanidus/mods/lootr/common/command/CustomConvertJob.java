@@ -31,8 +31,9 @@ public final class CustomConvertJob {
   private static final ThreadFactory THREAD_FACTORY =
       new ThreadFactoryBuilder().setDaemon(true).setNameFormat("lootr-convert-%d").build();
 
-  private static final TicketType<ChunkPos> CONVERT_TICKET =
-      TicketType.create("lootr_convert", Comparator.comparingLong(ChunkPos::toLong));
+  // TODO: Ticket type needs to be registered
+  private static final TicketType CONVERT_TICKET = null;
+/*      TicketType.create("lootr_convert", Comparator.comparingLong(ChunkPos::toLong));*/
 
   private static Thread convertThread;
 

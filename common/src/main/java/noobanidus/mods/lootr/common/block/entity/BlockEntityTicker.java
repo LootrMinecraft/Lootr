@@ -2,6 +2,7 @@ package noobanidus.mods.lootr.common.block.entity;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -213,10 +214,12 @@ public final class BlockEntityTicker {
       return true;
     }
     Registry<Structure> registry = level.registryAccess().lookupOrThrow(Registries.STRUCTURE);
-    if (registry.getTag(LootrTags.Structure.STRUCTURE_BLACKLIST).filter(tag -> tag.size() != 0).isPresent()) {
+    HolderSet<Structure> structureBlacklist = registry.getOrThrow(LootrTags.Structure.STRUCTURE_BLACKLIST);
+    HolderSet<Structure> structureWhitelist = registry.getOrThrow(LootrTags.Structure.STRUCTURE_WHITELIST);
+    if (structureBlacklist.size() != 0) {
       return !LootrAPI.isTaggedStructurePresent(level, chunkPos, LootrTags.Structure.STRUCTURE_BLACKLIST, position);
-    } else if (registry.getTag(LootrTags.Structure.STRUCTURE_WHITELIST).filter(tag -> tag.size() != 0).isPresent()) {
-      return LootrAPI.isTaggedStructurePresent(level, chunkPos, LootrTags.Structure.STRUCTURE_WHITELIST, position);
+    } else if (structureWhitelist.size() != 0) {
+      return !LootrAPI.isTaggedStructurePresent(level, chunkPos, LootrTags.Structure.STRUCTURE_WHITELIST, position);
     }
     return true;
   }
@@ -264,7 +267,8 @@ public final class BlockEntityTicker {
     ItemStack itemCopy = ItemStack.EMPTY;
     if (adapter.hasCopyableComponentsViaItem(be)) {
       itemCopy = new ItemStack(be.getBlockState().getBlock());
-      be.saveToItem(itemCopy, level.registryAccess());
+      // TODO:
+/*      be.saveToItem(itemCopy, level.registryAccess());*/
     }
     // IMPORTANT: Clear loot table to prevent loot drop when container is destroyed
     adapter.setLootTable(be, null, 0);
