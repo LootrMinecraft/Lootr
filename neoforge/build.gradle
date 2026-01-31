@@ -154,7 +154,7 @@ neoForge {
         }
 
         clientData {
-            data()
+            clientData()
             programArguments.addAll '--all', '--mod', 'lootr', '--existing', project.project(":common").file("src/main/resources").absolutePath, '--output', project.project(":common").file("src/generated/resources").absolutePath
         }
     }
