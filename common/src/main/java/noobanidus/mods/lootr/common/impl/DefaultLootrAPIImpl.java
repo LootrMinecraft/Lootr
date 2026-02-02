@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.common.impl;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentType;
@@ -20,7 +21,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.world.level.block.entity.PotDecorations;
@@ -38,7 +38,6 @@ import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
 import noobanidus.mods.lootr.common.api.processor.ILootrBlockEntityProcessor;
 import noobanidus.mods.lootr.common.api.processor.ILootrEntityProcessor;
-import noobanidus.mods.lootr.common.api.LootrConstants;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.client.ClientHooks;
 import noobanidus.mods.lootr.common.data.DataStorage;
@@ -146,7 +145,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
       provider.performUpdate(player);
     }
     player.openMenu(menuProvider);
-    PiglinAi.angerNearbyPiglins(player, true);
+    PiglinAi.angerNearbyPiglins(player.level(), player, true);
   }
 
   @Override
@@ -323,9 +322,9 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
 
   @Override
   public boolean isTaggedStructurePresent(ServerLevel level, ChunkPos chunkPos, TagKey<Structure> tag, BlockPos pos) {
-    Registry<Structure> registry = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
+    Registry<Structure> registry = level.registryAccess().lookupOrThrow(Registries.STRUCTURE);
     List<StructureStart> starts = level.structureManager()
-        .startsForStructure(chunkPos, o -> registry.getHolder(registry.getId(o)).map(b -> b.is(tag)).orElse(false));
+        .startsForStructure(chunkPos, o -> registry.get(registry.getId(o)).map(b -> b.is(tag)).orElse(false));
     for (StructureStart start : starts) {
       BoundingBox extended = start.getBoundingBox().inflatedBy(8);
       if (extended.isInside(pos)) {
@@ -453,7 +452,8 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   private DataComponentType<?> getSherdsComponent() {
     if (!sherdsChecked) {
       sherdsChecked = true;
-      sherdsType = BuiltInRegistries.DATA_COMPONENT_TYPE.get(LootrConstants.SHERDSAPI_POT_DECORATIONS);
+      sherdsType = BuiltInRegistries.DATA_COMPONENT_TYPE.get(LootrConstants.SHERDSAPI_POT_DECORATIONS)
+          .map(Holder::value).orElse(null);
     }
     return sherdsType;
   }

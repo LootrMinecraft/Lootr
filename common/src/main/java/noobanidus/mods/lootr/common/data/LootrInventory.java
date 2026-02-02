@@ -1,11 +1,10 @@
 package noobanidus.mods.lootr.common.data;
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.entity.ContainerUser;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.ContainerEntity;
@@ -25,15 +24,19 @@ import org.jetbrains.annotations.Nullable;
  * whenever a player opens an inventory.
  */
 public class LootrInventory implements ILootrInventory {
-  private final NonNullList<ItemStack> contents;
+  private NonNullList<ItemStack> contents = null;
   private ILootrSavedData info;
   private MenuBuilder menuBuilder = null;
 
-  public LootrInventory(ILootrSavedData info, NonNullList<ItemStack> contents) {
-    this.info = info;
+  public LootrInventory(NonNullList<ItemStack> contents) {
     if (!contents.isEmpty()) {
       this.contents = contents;
-    } else {
+    }
+  }
+
+  void setLootrSavedData(ILootrSavedData savedData) {
+    this.info = savedData;
+    if (this.contents == null) {
       this.contents = info.buildInitialInventory();
     }
   }
@@ -41,13 +44,6 @@ public class LootrInventory implements ILootrInventory {
   @Override
   public void setMenuBuilder(MenuBuilder builder) {
     this.menuBuilder = builder;
-  }
-
-  @Override
-  public CompoundTag saveToTag(HolderLookup.Provider provider) {
-    CompoundTag result = new CompoundTag();
-    ContainerHelper.saveAllItems(result, this.contents, provider);
-    return result;
   }
 
   @Override
@@ -163,19 +159,20 @@ public class LootrInventory implements ILootrInventory {
   }
 
   @Override
-  public void startOpen(Player player) {
+
+  public void startOpen(ContainerUser user) {
     Container container = info.getInfoContainer();
     if (container != null) {
-      container.startOpen(player);
+      container.startOpen(user);
     }
   }
 
   @Override
-  public void stopOpen(Player player) {
+  public void stopOpen(ContainerUser user) {
     setChanged();
     Container container = info.getInfoContainer();
     if (container != null) {
-      container.stopOpen(player);
+      container.stopOpen(user);
     }
   }
 
@@ -183,6 +180,4 @@ public class LootrInventory implements ILootrInventory {
   public NonNullList<ItemStack> getInventoryContents() {
     return this.contents;
   }
-
-
 }

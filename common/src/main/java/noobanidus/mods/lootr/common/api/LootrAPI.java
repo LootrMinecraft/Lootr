@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.common.api;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -61,6 +62,7 @@ public class LootrAPI {
   public static final ResourceKey<LootTable> ELYTRA_CHEST = ResourceKey.create(Registries.LOOT_TABLE, LootrAPI.rl("chests/elytra"));
   public static final ResourceKey<LootTable> TROPHY_REWARD = ResourceKey.create(Registries.LOOT_TABLE, LootrAPI.rl("reward/trophy"));
   public static final ResourceKey<LootTable> ITEM_FRAME_EMPTY = ResourceKey.create(Registries.LOOT_TABLE, LootrAPI.rl("entity/item_frame_empty"));
+  public static final ResourceKey<LootTable> EMPTY_CHEST = ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath("c", "empty"));
   public static final List<Identifier> PROBLEMATIC_CHESTS = Arrays.asList(LootrAPI.rl("twilightforest", "structures/stronghold_boss"), LootrAPI.rl("atum", "chests/pharaoh"));
   public static final List<String> _lootr$digits = Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f");
 
@@ -131,8 +133,8 @@ public class LootrAPI {
     return INSTANCE.getDestroyProgress(state, player, level, position, defaultProgress);
   }
 
-  public static int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos, int defaultSignal) {
-    return INSTANCE.getAnalogOutputSignal(pBlockState, pLevel, pPos, defaultSignal);
+  public static int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos, int defaultSignal, Direction direction) {
+    return INSTANCE.getAnalogOutputSignal(pBlockState, pLevel, pPos, defaultSignal, direction);
   }
 
   public static boolean shouldPowerComparators() {

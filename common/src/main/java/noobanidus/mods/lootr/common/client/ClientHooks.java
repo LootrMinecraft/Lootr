@@ -66,6 +66,7 @@ public class ClientHooks {
         mc.level.addParticle(
             ParticleTypes.DUST_PLUME,
             false,
+            false,
             pos.getX() + 0.5,
             pos.getY() + offset,
             pos.getZ() + 0.5,

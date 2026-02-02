@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -12,7 +13,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -32,8 +35,10 @@ import noobanidus.mods.lootr.common.block.entity.LootrChestBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
 public class LootrChestBlock extends ChestBlock {
+  static final VoxelShape SHAPE = Block.column(14.0, 0.0, 14.0);
+
   public LootrChestBlock(Properties properties) {
-    super(properties, LootrRegistry::getChestBlockEntity);
+    super(LootrRegistry::getChestBlockEntity, SoundEvents.CHEST_OPEN, SoundEvents.CHEST_CLOSE, properties);
   }
 
   @Override
@@ -60,24 +65,25 @@ public class LootrChestBlock extends ChestBlock {
   }
 
   @Override
-  public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
-    if (stateIn.getValue(WATERLOGGED)) {
-      worldIn.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
+  protected BlockState updateShape(BlockState blockState, LevelReader levelReader, ScheduledTickAccess scheduledTickAccess, BlockPos blockPos, Direction direction, BlockPos blockPos2, BlockState blockState2, RandomSource randomSource) {
+    if (blockState.getValue(WATERLOGGED)) {
+      scheduledTickAccess.scheduleTick(blockPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelReader));
     }
 
-    return stateIn;
+    return blockState;
   }
 
   @Override
   public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
-    return AABB;
+    return SHAPE;
   }
 
   @Override
   public BlockState getStateForPlacement(BlockPlaceContext context) {
     Direction direction = context.getHorizontalDirection().getOpposite();
     FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
-    return this.defaultBlockState().setValue(FACING, direction).setValue(TYPE, ChestType.SINGLE).setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
+    return this.defaultBlockState().setValue(FACING, direction).setValue(TYPE, ChestType.SINGLE)
+        .setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
   }
 
   @Override
@@ -102,8 +108,8 @@ public class LootrChestBlock extends ChestBlock {
   }
 
   @Override
-  public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos) {
-    return LootrAPI.getAnalogOutputSignal(pBlockState, pLevel, pPos, 0);
+  public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos, Direction direction) {
+    return LootrAPI.getAnalogOutputSignal(pBlockState, pLevel, pPos, 0, direction);
   }
 
   @Override

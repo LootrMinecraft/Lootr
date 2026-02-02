@@ -8,9 +8,11 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.ContainerUser;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
@@ -18,6 +20,8 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
 import noobanidus.mods.lootr.common.api.ILootrBlockEntityConverter;
@@ -59,7 +63,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
     }
 
     @Override
-    protected boolean isOwnContainer(Player player) {
+    public boolean isOwnContainer(Player player) {
       if ((player.containerMenu instanceof ChestMenu menu)) {
         if (menu.getContainer() instanceof LootrInventory data) {
           return LootrChestBlockEntity.this.getInfoUUID().equals(data.getInfo().getInfoUUID());
@@ -85,24 +89,24 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   }
 
   @Override
-  public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider) {
-    super.loadAdditional(compound, provider);
-    this.tryLoadLootTable(compound);
-    this.simpleLootrInstance.loadAdditional(compound, provider);
+  public void loadAdditional(ValueInput input) {
+    super.loadAdditional(input);
+    this.tryLoadLootTable(input);
+    this.simpleLootrInstance.loadAdditional(input);
   }
 
-  @Override
+/*  @Override
   public void saveToItem(ItemStack itemstack, HolderLookup.Provider provider) {
     this.simpleLootrInstance.setSavingToItem(true);
     super.saveToItem(itemstack, provider);
     this.simpleLootrInstance.setSavingToItem(false);
-  }
+  }*/
 
   @Override
-  protected void saveAdditional(CompoundTag compound, HolderLookup.Provider provider) {
-    super.saveAdditional(compound, provider);
-    this.trySaveLootTable(compound);
-    this.simpleLootrInstance.saveAdditional(compound, provider, level != null && level.isClientSide());
+  protected void saveAdditional(ValueOutput output) {
+    super.saveAdditional(output);
+    this.trySaveLootTable(output);
+    this.simpleLootrInstance.saveAdditional(output, level != null && level.isClientSide());
   }
 
   @Override
@@ -116,16 +120,20 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   }
 
   @Override
-  public void startOpen(Player pPlayer) {
-    if (!this.remove && !pPlayer.isSpectator()) {
-      this.openersCounter.incrementOpeners(pPlayer, this.getLevel(), this.getBlockPos(), this.getBlockState());
+  public void startOpen(ContainerUser user) {
+    if (user instanceof ServerPlayer pPlayer) {
+      if (!this.remove && !pPlayer.isSpectator()) {
+        this.openersCounter.incrementOpeners(pPlayer, this.getLevel(), this.getBlockPos(), this.getBlockState(), user.getContainerInteractionRange());
+      }
     }
   }
 
   @Override
-  public void stopOpen(Player pPlayer) {
-    if (!this.remove && !pPlayer.isSpectator()) {
-      this.openersCounter.decrementOpeners(pPlayer, this.getLevel(), this.getBlockPos(), this.getBlockState());
+  public void stopOpen(ContainerUser user) {
+    if (user instanceof ServerPlayer pPlayer) {
+      if (!this.remove && !pPlayer.isSpectator()) {
+        this.openersCounter.decrementOpeners(pPlayer, this.getLevel(), this.getBlockPos(), this.getBlockState());
+      }
     }
   }
 
@@ -145,7 +153,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   @NotNull
   public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
     CompoundTag result = super.getUpdateTag(provider);
-    this.simpleLootrInstance.fillUpdateTag(result, provider, level != null && level.isClientSide());
+    result.merge(this.simpleLootrInstance.fillUpdateTag(provider, level != null && level.isClientSide(), this));
     return result;
   }
 

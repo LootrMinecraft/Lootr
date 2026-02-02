@@ -1,24 +1,31 @@
 package noobanidus.mods.lootr.common.api.data;
 
 import com.google.common.collect.Sets;
+import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.nbt.Tag;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.storage.TagValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.NBTConstants;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
 
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
 
 public class SimpleLootrInstance {
-  protected final NonNullList<ItemStack> items;
+  private static final Logger LOGGER = LogUtils.getLogger();
+
+  protected NonNullList<ItemStack> items;
   protected final Set<UUID> clientOpeners = new ObjectOpenHashSet<>();
   protected UUID infoId = null;
   protected boolean hasBeenOpened = false;
@@ -38,6 +45,11 @@ public class SimpleLootrInstance {
 
   public NonNullList<ItemStack> getItems() {
     return items;
+  }
+
+  // TODO:
+  public void setItems(NonNullList<ItemStack> items) {
+    this.items = items;
   }
 
   public Set<UUID> getClientOpeners() {
@@ -89,58 +101,44 @@ public class SimpleLootrInstance {
     this.savingToItem = saving;
   }
 
-  public void loadAdditional(CompoundTag compound, HolderLookup.Provider provder) {
+  public void loadAdditional(ValueInput input) {
     if (!providesOwnUuid) {
-      if (compound.hasUUID(NBTConstants.INSTANCE_ID)) {
-        this.infoId = compound.getUUID(NBTConstants.INSTANCE_ID);
-      }
+      this.infoId = input.read(NBTConstants.INSTANCE_ID, UUIDUtil.CODEC).orElse(null);
     }
-    if (compound.contains(NBTConstants.HAS_BEEN_OPENED, Tag.TAG_BYTE)) {
-      this.hasBeenOpened = compound.getBoolean(NBTConstants.HAS_BEEN_OPENED);
-    }
+    this.hasBeenOpened = input.getBooleanOr(NBTConstants.HAS_BEEN_OPENED, false);
     if (this.infoId == null && !providesOwnUuid) {
       getInfoUUID();
     }
     clientOpeners.clear();
-    if (compound.contains(NBTConstants.OPENERS)) {
-      ListTag list = compound.getList(NBTConstants.OPENERS, CompoundTag.TAG_INT_ARRAY);
-      for (Tag thisTag : list) {
-        clientOpeners.add(NbtUtils.loadUUID(thisTag));
-      }
-    }
+    input.read(NBTConstants.OPENERS, UUIDUtil.CODEC_SET).map(clientOpeners::addAll);
   }
 
-  public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider, boolean isClientSide) {
+  public void saveAdditional(ValueOutput output, boolean isClientSide) {
     if (!LootrAPI.shouldDiscard() && !isSavingToItem() && !providesOwnUuid) {
-      compound.putUUID(NBTConstants.INSTANCE_ID, getInfoUUID());
+      output.store(NBTConstants.INSTANCE_ID, UUIDUtil.CODEC, getInfoUUID());
     }
-    compound.putBoolean(NBTConstants.HAS_BEEN_OPENED, this.hasBeenOpened);
+    output.putBoolean(NBTConstants.HAS_BEEN_OPENED, this.hasBeenOpened);
     if (isClientSide) { // level != null && level.isClientSide()) { ?????? This logic seems inverted.
       if (!clientOpeners.isEmpty()) {
-        ListTag list = new ListTag();
-        for (UUID opener : clientOpeners) {
-          list.add(NbtUtils.createUUID(opener));
-        }
-        compound.put(NBTConstants.OPENERS, list);
+        output.store(NBTConstants.OPENERS, UUIDUtil.CODEC_SET, clientOpeners);
       }
     }
   }
 
-  public void fillUpdateTag(CompoundTag result, HolderLookup.Provider provider, boolean isClientSide) {
-    saveAdditional(result, provider, isClientSide);
-    if (!isClientSide) {
-      Set<UUID> currentOpeners = visualOpenersSupplier.get();
-      if (currentOpeners != null) {
-        ListTag list = new ListTag();
-        for (UUID opener : Sets.intersection(currentOpeners, LootrAPI.getPlayerIds())) {
-          list.add(NbtUtils.createUUID(opener));
-        }
-        if (!list.isEmpty()) {
-          result.put(NBTConstants.OPENERS, list);
-        }
+  public CompoundTag fillUpdateTag(HolderLookup.Provider provider, boolean isClientSide, BlockEntity parent) {
+    try (ProblemReporter.ScopedCollector p = new ProblemReporter.ScopedCollector(LOGGER)) {
+      ProblemReporter p2 = p.forChild(parent.problemPath());
+      TagValueOutput output = TagValueOutput.createWithContext(p2, provider);
+
+      saveAdditional(output, isClientSide);
+      if (!isClientSide) {
+        Set<UUID> currentOpeners = Sets.intersection(visualOpenersSupplier.get(), LootrAPI.getPlayerIds());
+        output.store(NBTConstants.OPENERS, UUIDUtil.CODEC_SET, currentOpeners);
+      } else {
+        LootrAPI.LOG.error("Tried to fillUpdateTag on the client side for SimpleLootrInstance: {}", this);
       }
-    } else {
-      LootrAPI.LOG.error("Tried to fillUpdateTag on the client side for SimpleLootrInstance: {}", this);
+
+      return output.buildResult();
     }
   }
 }

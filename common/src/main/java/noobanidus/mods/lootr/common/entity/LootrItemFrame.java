@@ -4,16 +4,15 @@ import com.google.auto.service.AutoService;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.decoration.ItemFrame;
@@ -24,9 +23,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DiodeBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
-import noobanidus.mods.lootr.common.api.*;
+import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
+import noobanidus.mods.lootr.common.api.ILootrEntityConverter;
+import noobanidus.mods.lootr.common.api.ILootrType;
+import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.SimpleLootrEntityInstance;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
@@ -83,14 +87,38 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
     if (!this.level().noCollision(this)) {
       return false;
     } else {
-      BlockState blockState = this.level().getBlockState(this.pos.relative(this.direction.getOpposite()));
-      return (blockState.isSolid() || this.direction.getAxis()
-          .isHorizontal() && DiodeBlock.isDiode(blockState)) && this.level()
-          .getEntities(this, this.getBoundingBox(), HANGING_ENTITY).isEmpty();
+      BlockState blockstate = this.level().getBlockState(this.pos.relative(this.getDirection().getOpposite()));
+      return blockstate.isSolid() || this.getDirection().getAxis()
+          .isHorizontal() && DiodeBlock.isDiode(blockstate) ? this.canCoexist(true) : false;
     }
   }
 
   @Override
+  public boolean hurtServer(ServerLevel serverLevel, DamageSource source, float amount) {
+    boolean skipMessage = false;
+
+    if (amount > 0 && source.getEntity() instanceof ServerPlayer player) {
+      if (this.actuallyDropItem(player)) {
+        skipMessage = true;
+      }
+    }
+
+    if (amount > 0 && !skipMessage) {
+      maybeMessagePlayer(source);
+    }
+
+    if (this.isInvulnerableTo(source)) {
+      return false;
+    }
+
+    if (!this.isRemoved() && !this.level().isClientSide()) {
+      this.kill((ServerLevel) this.level());
+      this.markHurt();
+    }
+
+    return true;
+  }
+
   public boolean isInvulnerableTo(DamageSource source) {
     // This is called multiple times so it can't be relied upon for messaging
     if (this.isInvulnerable() && source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
@@ -143,36 +171,6 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   }
 
   @Override
-  public boolean hurt(DamageSource source, float amount) {
-    boolean skipMessage = false;
-
-    if (amount > 0 && source.getEntity() instanceof ServerPlayer player) {
-      if (this.actuallyDropItem(player)) {
-        skipMessage = true;
-      }
-    }
-
-    if (amount > 0 && !skipMessage) {
-      maybeMessagePlayer(source);
-    }
-
-    if (this.isInvulnerableTo(source)) {
-      return false;
-    }
-
-    if (!this.isRemoved() && !this.level().isClientSide) {
-      this.kill();
-      this.markHurt();
-    }
-
-    return true;
-  }
-
-  @Override
-  public void dropItem(@Nullable Entity entity) {
-  }
-
-  @Override
   public void setItem(ItemStack stack, boolean updateNeighbours) {
   }
 
@@ -196,7 +194,7 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
     inventory.setItem(0, ItemStack.EMPTY);
     inventory.setChanged();
     ItemStack item = getItem().copy();
-    this.spawnAtLocation(item);
+    this.spawnAtLocation((ServerLevel) this.level(), item);
     this.performTrigger(player);
     if (this.addOpener(player)) {
       this.performOpen(player);
@@ -215,21 +213,33 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
     return false;
   }
 
+  private static final SlotAccess NULL = new SlotAccess() {
+    @Override
+    public ItemStack get() {
+      return ItemStack.EMPTY;
+    }
+
+    @Override
+    public boolean set(ItemStack stack) {
+      return false;
+    }
+  };
+
   @Override
   public SlotAccess getSlot(int slot) {
-    return SlotAccess.NULL;
+    return NULL;
   }
 
   @Override
-  public void addAdditionalSaveData(CompoundTag compound) {
-    super.addAdditionalSaveData(compound);
-    compound.put(NBTConstants.CUSTOM_INVENTORY, ContainerHelper.saveAllItems(new CompoundTag(), this.inventory, level().registryAccess()));
+  public void addAdditionalSaveData(ValueOutput output) {
+    super.addAdditionalSaveData(output);
+    ContainerHelper.saveAllItems(output, this.inventory, true);
   }
 
   @Override
-  public void readAdditionalSaveData(CompoundTag compound) {
-    super.readAdditionalSaveData(compound);
-    ContainerHelper.loadAllItems(compound.getCompound(NBTConstants.CUSTOM_INVENTORY), this.inventory, level().registryAccess());
+  public void readAdditionalSaveData(ValueInput input) {
+    super.readAdditionalSaveData(input);
+    ContainerHelper.loadAllItems(input, this.inventory);
     this.setItemInternal(this.inventory.getFirst());
   }
 
@@ -259,7 +269,7 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
 
   @Override
   public InteractionResult interact(Player player, InteractionHand hand) {
-    if (!this.level().isClientSide) {
+    if (!this.level().isClientSide()) {
       this.playSound(this.getRotateItemSound(), 1.0F, 1.0F);
       this.setRotation(this.getRotation() + 1);
       this.gameEvent(GameEvent.BLOCK_CHANGE, player);
@@ -395,10 +405,10 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
 
   @Override
   public double[] getParticleXBounds() {
-    if (this.direction.getAxis() == Direction.Axis.Z) {
+    if (this.getDirection().getAxis() == Direction.Axis.Z) {
       return new double[]{-0.35, 0.35};
     } else {
-      if (this.direction == Direction.SOUTH || this.direction == Direction.EAST) {
+      if (this.getDirection() == Direction.SOUTH || this.getDirection() == Direction.EAST) {
         return new double[]{0.05, 0.1};
       } else {
         return new double[]{-0.1, -0.05};
@@ -408,10 +418,10 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
 
   @Override
   public double[] getParticleZBounds() {
-    if (this.direction.getAxis() == Direction.Axis.X) {
+    if (this.getDirection().getAxis() == Direction.Axis.X) {
       return new double[]{-0.35, 0.35};
     } else {
-      if (this.direction == Direction.SOUTH || this.direction == Direction.EAST) {
+      if (this.getDirection() == Direction.SOUTH || this.getDirection() == Direction.EAST) {
         return new double[]{0.05, 0.1};
       } else {
         return new double[]{-0.1, -0.05};

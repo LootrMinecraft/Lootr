@@ -1,19 +1,17 @@
 package noobanidus.mods.lootr.common.block.entity;
 
 import com.google.auto.service.AutoService;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.NonNullList;
+import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
@@ -27,6 +25,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.*;
@@ -71,9 +71,7 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
   }
 
   private CompoundTag getFallData(HolderLookup.Provider provider) {
-    CompoundTag tag = new CompoundTag();
-    saveAdditional(tag, provider);
-    return tag;
+    return this.saveCustomOnly(provider);
   }
 
   @Override
@@ -221,20 +219,16 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
     }
   }
 
-  private void tryLoadLootTable(CompoundTag compoundTag) {
-    if (compoundTag.contains("LootTable")) {
-      this.lootTable = ResourceKey.create(Registries.LOOT_TABLE, Identifier.parse(compoundTag.getString("LootTable")));
-    }
-    if (compoundTag.contains("LootTableSeed")) {
-      this.lootTableSeed = compoundTag.getLong("LootTableSeed");
-    }
+  private void tryLoadLootTable(ValueInput input) {
+    this.lootTable = input.read("LootTable", LootTable.KEY_CODEC).orElse(null);
+    this.lootTableSeed = input.getLongOr("LootTableSeed", 0L);
   }
 
-  private void trySaveLootTable(CompoundTag compoundTag) {
+  private void trySaveLootTable(ValueOutput output) {
     if (this.lootTable != null) {
-      compoundTag.putString("LootTable", this.lootTable.location().toString());
+      output.store("LootTable", LootTable.KEY_CODEC, this.lootTable);
       if (this.lootTableSeed != 0L) {
-        compoundTag.putLong("LootTableSeed", this.lootTableSeed);
+        output.putLong("LootTableSeed", this.lootTableSeed);
       }
     }
   }
@@ -263,25 +257,26 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
     return null;
   }
 
+  @SuppressWarnings("deprecation")
   @Override
   public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
     CompoundTag compoundTag = super.getUpdateTag(provider);
-    if (this.hitDirection != null) {
-      compoundTag.putInt("hit_direction", this.hitDirection.ordinal());
-    }
+    compoundTag.storeNullable("hit_direction", Direction.LEGACY_ID_CODEC, this.hitDirection);
 
     Player player = this.getBrushingPlayer();
     if (player != null) {
-      compoundTag.putUUID("brushing_player", player.getUUID());
+      compoundTag.store("brushing_player", UUIDUtil.CODEC, player.getUUID());
       if (this.item.isEmpty()) {
         this.item = getItem(player);
       }
       if (!this.item.isEmpty()) {
-        compoundTag.put("item", this.item.save(provider));
+        RegistryOps<Tag> registryops = provider.createSerializationContext(NbtOps.INSTANCE);
+        compoundTag.store("item", ItemStack.CODEC, registryops, this.item);
       }
     }
 
-    this.simpleLootrInstance.fillUpdateTag(compoundTag, provider, level != null && level.isClientSide());
+
+    compoundTag.merge(this.simpleLootrInstance.fillUpdateTag(provider, level != null && level.isClientSide(), this));
 
     return compoundTag;
   }
@@ -292,35 +287,29 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
   }
 
   @Override
-  protected void loadAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
-    super.loadAdditional(compoundTag, provider);
-    this.tryLoadLootTable(compoundTag);
+  protected void loadAdditional(ValueInput input) {
+    super.loadAdditional(input);
+    this.tryLoadLootTable(input);
 
-    if (compoundTag.contains("hit_direction")) {
-      this.hitDirection = Direction.values()[compoundTag.getInt("hit_direction")];
-    }
+    this.hitDirection = input.read("hit_direction", Direction.LEGACY_ID_CODEC).orElse(null);
 
-    if (compoundTag.hasUUID("brushing_player")) {
-      this.brushingPlayer = compoundTag.getUUID("brushing_player");
-    } else {
-      this.brushingPlayer = null;
-    }
+    this.brushingPlayer = input.read("brushing_player", UUIDUtil.CODEC).orElse(null);
     this.brushingPlayerEntity = null;
 
     // This should only be on the client.
-    if (this.brushingPlayer != null && compoundTag.contains("item")) {
-      this.item = ItemStack.parseOptional(provider, compoundTag.getCompound("item"));
+    if (this.brushingPlayer != null) {
+      this.item = input.read("item", ItemStack.CODEC).orElse(ItemStack.EMPTY);
     } else {
       this.item = ItemStack.EMPTY;
     }
-    this.simpleLootrInstance.loadAdditional(compoundTag, provider);
+    this.simpleLootrInstance.loadAdditional(input);
   }
 
   @Override
-  protected void saveAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
-    super.saveAdditional(compoundTag, provider);
-    this.trySaveLootTable(compoundTag);
-    this.simpleLootrInstance.saveAdditional(compoundTag, provider, this.level != null && this.level.isClientSide());
+  protected void saveAdditional(ValueOutput output) {
+    super.saveAdditional(output);
+    this.trySaveLootTable(output);
+    this.simpleLootrInstance.saveAdditional(output, this.level != null && this.level.isClientSide());
   }
 
   private int getCompletionState() {
@@ -495,10 +484,10 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
   }
 
   @Override
-  public void removeComponentsFromTag(CompoundTag compoundTag) {
+  public void removeComponentsFromTag(ValueOutput compoundTag) {
     super.removeComponentsFromTag(compoundTag);
-    compoundTag.remove("LootTable");
-    compoundTag.remove("LootTableSeed");
+    compoundTag.discard("LootTable");
+    compoundTag.discard("LootTableSeed");
   }
 
   @Override

@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.common.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
@@ -29,20 +30,6 @@ public class LootrBarrelBlock extends BarrelBlock {
   @Override
   public float getExplosionResistance() {
     return LootrAPI.getExplosionResistance(this, super.getExplosionResistance());
-  }
-
-  @Override
-  public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
-    if (!pState.is(pNewState.getBlock())) {
-      BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-      if (blockentity instanceof LootrBarrelBlockEntity) {
-        pLevel.updateNeighbourForOutputSignal(pPos, this);
-      }
-
-      if (pState.hasBlockEntity() && (!pState.is(pNewState.getBlock()) || !pNewState.hasBlockEntity())) {
-        pLevel.removeBlockEntity(pPos);
-      }
-    }
   }
 
   @Override
@@ -97,8 +84,8 @@ public class LootrBarrelBlock extends BarrelBlock {
   }
 
   @Override
-  public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos) {
-    return LootrAPI.getAnalogOutputSignal(pBlockState, pLevel, pPos, 0);
+  public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos, Direction direction) {
+    return LootrAPI.getAnalogOutputSignal(pBlockState, pLevel, pPos, 0, direction);
   }
 
   @Override

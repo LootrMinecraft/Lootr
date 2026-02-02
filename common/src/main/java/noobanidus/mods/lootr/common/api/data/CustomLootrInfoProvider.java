@@ -29,6 +29,22 @@ public record CustomLootrInfoProvider(
     @Deprecated @Nullable LootrBlockType blockType,
     ILootrType newType) implements ILootrInfoProvider {
 
+  @SuppressWarnings("deprecation")
+  public CustomLootrInfoProvider(UUID id, String cachedKey, BlockPos pos, int containerSize, ResourceKey<LootTable> lootTable, long lootSeed, Component displayName, ResourceKey<Level> dimension, NonNullList<ItemStack> customInventory, @Deprecated @Nullable LootrInfoType type, @Deprecated @Nullable LootrBlockType blockType, ILootrType newType) {
+    this.id = id;
+    this.cachedKey = cachedKey;
+    this.pos = pos;
+    this.containerSize = containerSize;
+    this.lootTable = lootTable;
+    this.lootSeed = lootSeed;
+    this.displayName = displayName;
+    this.dimension = dimension;
+    this.customInventory = customInventory;
+    this.type = type;
+    this.blockType = blockType;
+    this.newType = BaseLootrInfo.resolveType(blockType, type, newType);
+  }
+
   @Override
   @Deprecated
   public LootrBlockType getInfoBlockType() {

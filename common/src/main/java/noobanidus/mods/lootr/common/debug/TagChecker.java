@@ -28,7 +28,7 @@ public class TagChecker {
     }
 
     LootrServiceRegistry.clearReplacements();
-    BuiltInRegistries.BLOCK.getTag(LootrTags.Blocks.CONVERT_BARRELS).ifPresentOrElse(tag -> {
+    BuiltInRegistries.BLOCK.get(LootrTags.Blocks.CONVERT_BARRELS).ifPresentOrElse(tag -> {
       if (tag.size() == 0) {
         LootrAPI.LOG.error("[Lootr Tag Error] Block tag `lootr:convert/barrels` is empty. Barrels will not be converted to Lootr barrels. If this is intentional, you can disregard this message.");
         standardError();
@@ -37,7 +37,7 @@ public class TagChecker {
       LootrAPI.LOG.error("[Lootr Tag Error] Block tag `lootr:convert/barrels` is missing. Barrels will not be converted to Lootr barrels.");
       standardError();
     });
-    BuiltInRegistries.BLOCK.getTag(LootrTags.Blocks.CONVERT_CHESTS).ifPresentOrElse(tag -> {
+    BuiltInRegistries.BLOCK.get(LootrTags.Blocks.CONVERT_CHESTS).ifPresentOrElse(tag -> {
       if (tag.size() == 0) {
         LootrAPI.LOG.error("[Lootr Tag Error] Block tag `lootr:convert/chests` is empty. Chests will not be converted to Lootr chests. If this is intentional, you can disregard this message.");
         standardError();
@@ -46,7 +46,7 @@ public class TagChecker {
       LootrAPI.LOG.error("[Lootr Tag Error] Block tag `lootr:convert/chests` is missing. Barrels will not be converted to Lootr chests.");
       standardError();
     });
-    BuiltInRegistries.BLOCK.getTag(LootrTags.Blocks.CONVERT_SHULKERS).ifPresentOrElse(tag -> {
+    BuiltInRegistries.BLOCK.get(LootrTags.Blocks.CONVERT_SHULKERS).ifPresentOrElse(tag -> {
       if (tag.size() == 0) {
         LootrAPI.LOG.error("[Lootr Tag Error] Block tag `lootr:convert/shulkers` is empty. Shulkers will not be converted to Lootr shulkers. If this is intentional, you can disregard this message.");
         standardError();
@@ -55,7 +55,7 @@ public class TagChecker {
       LootrAPI.LOG.error("[Lootr Tag Error] Block tag `lootr:convert/shulkers` is missing. Shulkers will not be converted to Lootr shulkers.");
       standardError();
     });
-    BuiltInRegistries.BLOCK.getTag(LootrTags.Blocks.CONVERT_TRAPPED_CHESTS).ifPresentOrElse(tag -> {
+    BuiltInRegistries.BLOCK.get(LootrTags.Blocks.CONVERT_TRAPPED_CHESTS).ifPresentOrElse(tag -> {
       if (tag.size() == 0) {
         LootrAPI.LOG.error("[Lootr Tag Error] Block tag `lootr:convert/trapped_chests` is empty. Trapped chests will not be converted to Lootr trapped chests. If this is intentional, you can disregard this message.");
         standardError();
@@ -64,7 +64,7 @@ public class TagChecker {
       LootrAPI.LOG.error("[Lootr Tag Error] Block tag `lootr:convert/trapped_chests` is missing. Trapped chests will not be converted to Lootr trapped chests.");
       standardError();
     });
-    BuiltInRegistries.BLOCK.getTag(LootrTags.Blocks.CONVERT_BLOCK).ifPresentOrElse(tag -> {
+    BuiltInRegistries.BLOCK.get(LootrTags.Blocks.CONVERT_BLOCK).ifPresentOrElse(tag -> {
       if (tag.size() == 0) {
         LootrAPI.LOG.error("[Lootr Tag Error] Block tag `lootr:convert/blocks` is empty. This may prevent any block from being converted to a Lootr equivalent. If this is intentional, you may ignore this message.");
         standardError();
@@ -73,7 +73,7 @@ public class TagChecker {
       LootrAPI.LOG.error("[Lootr Tag Error] Block tag `lootr:convert/blocks` is missing. This may prevent any block from being converted to a Lootr equivalent. If this is intentional, you may ignore this message.");
       standardError();
     });
-    BuiltInRegistries.BLOCK.getTag(LootrTags.Blocks.CONVERT_SANDS).ifPresentOrElse(tag -> {
+    BuiltInRegistries.BLOCK.get(LootrTags.Blocks.CONVERT_SANDS).ifPresentOrElse(tag -> {
       if (tag.size() == 0 && !packEnabled) {
         LootrAPI.LOG.error("[Lootr Tag Error] Block tag `lootr:convert/sands` is empty. This may prevent any block from being converted to a Lootr equivalent. If this is intentional, you may ignore this message.");
         standardError();
@@ -84,7 +84,7 @@ public class TagChecker {
         standardError();
       }
     });
-    BuiltInRegistries.BLOCK.getTag(LootrTags.Blocks.CONVERT_GRAVELS).ifPresentOrElse(tag -> {
+    BuiltInRegistries.BLOCK.get(LootrTags.Blocks.CONVERT_GRAVELS).ifPresentOrElse(tag -> {
       if (tag.size() == 0 && !packEnabled) {
         LootrAPI.LOG.error("[Lootr Tag Error] Block tag `lootr:convert/gravels` is empty. This may prevent any block from being converted to a Lootr equivalent. If this is intentional, you may ignore this message.");
         standardError();

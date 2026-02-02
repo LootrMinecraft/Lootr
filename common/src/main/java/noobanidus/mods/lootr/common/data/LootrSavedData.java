@@ -1,8 +1,11 @@
 package noobanidus.mods.lootr.common.data;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
@@ -15,6 +18,7 @@ import net.minecraft.world.level.saveddata.SavedData;
 import noobanidus.mods.lootr.common.api.ILootrType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.*;
+import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -25,6 +29,14 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 public class LootrSavedData extends SavedData implements ILootrSavedData {
+  public static final Codec<LootrSavedData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+      Codec.BOOL.fieldOf("hasBeenOpened").forGetter(LootrSavedData::hasBeenOpened),
+      ILootrInfo.CODEC.fieldOf("info").forGetter(data -> data.info),
+      Codec.unboundedMap(Codec.STRING.xmap(UUID::fromString, UUID::toString), (Codec<LootrInventory>)(Object) ILootrInventory.CODEC).fieldOf("inventories").forGetter(data -> data.inventories),
+      UUIDUtil.CODEC_LINKED_SET.fieldOf("openers").forGetter(data -> data.openers),
+      UUIDUtil.CODEC_LINKED_SET.fieldOf("actualOpeners").forGetter(data -> data.actualOpeners)
+  ).apply(instance, LootrSavedData::new));
+
   private boolean hasBeenOpened;
   private ILootrInfo info;
   private final Map<UUID, LootrInventory> inventories = new HashMap<>();
@@ -43,47 +55,20 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
     }
   }
 
+  private LootrSavedData(boolean hasBeenOpened, ILootrInfo info, Map<UUID, LootrInventory> map, Set<UUID> openers, Set<UUID> actualOpeners) {
+    this.hasBeenOpened = hasBeenOpened;
+    this.info = info;
+    this.inventories.putAll(map);
+    for (var inv : this.inventories.values()) {
+      inv.setLootrSavedData(this);
+    }
+    this.openers.addAll(openers);
+    this.actualOpeners.addAll(actualOpeners);
+  }
+
   public static Supplier<LootrSavedData> fromInfo(ILootrInfo info) {
     return () -> new LootrSavedData(info);
   }
-
-  public static LootrSavedData load(CompoundTag compound, HolderLookup.Provider provider) {
-    ILootrInfo info = ILootrInfo.loadInfoFromTag(compound, provider);
-    LootrSavedData data = new LootrSavedData(info, true);
-    data.inventories.clear();
-    data.openers.clear();
-    data.actualOpeners.clear();
-
-    ListTag compounds = compound.getList("inventories", Tag.TAG_COMPOUND);
-
-    for (int i = 0; i < compounds.size(); i++) {
-      CompoundTag thisTag = compounds.getCompound(i);
-      CompoundTag itemTag = thisTag.getCompound("chest");
-      NonNullList<ItemStack> items = info.buildInitialInventory();
-      ContainerHelper.loadAllItems(itemTag, items, provider);
-      UUID uuid = thisTag.getUUID("uuid");
-      data.inventories.put(uuid, new LootrInventory(data, items));
-    }
-
-    if (compound.contains("openers")) {
-      ListTag openers = compound.getList("openers", Tag.TAG_INT_ARRAY);
-      for (Tag opener : openers) {
-        data.openers.add(NbtUtils.loadUUID(opener));
-      }
-    }
-    if (compound.contains("actualOpeners")) {
-      ListTag openers = compound.getList("actualOpeners", Tag.TAG_INT_ARRAY);
-      for (Tag opener : openers) {
-        data.actualOpeners.add(NbtUtils.loadUUID(opener));
-      }
-    }
-    if (compound.contains("hasBeenOpened")) {
-      data.hasBeenOpened = compound.getBoolean("hasBeenOpened");
-    }
-    return data;
-  }
-
-
 
   @Override
   public ILootrInfo getRedirect() {
@@ -159,7 +144,8 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
   @Override
   public LootrInventory createInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler) {
     if (provider.canPlayerOpen(player)) {
-      LootrInventory result = new LootrInventory(this, provider.buildInitialInventory());
+      LootrInventory result = new LootrInventory(provider.buildInitialInventory());
+      result.setLootrSavedData(this);
       if (!LootrAPI.isFakePlayer(player)) {
         filler.unpackLootTable(provider, player, result);
       }
@@ -171,34 +157,6 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
       provider.informPlayerCannotOpen(player);
       return null;
     }
-  }
-
-  @Override
-  public CompoundTag save(CompoundTag compound, HolderLookup.Provider provider) {
-    this.info.saveInfoToTag(compound, provider);
-
-    ListTag compounds = new ListTag();
-    for (Map.Entry<UUID, LootrInventory> entry : inventories.entrySet()) {
-      CompoundTag thisTag = new CompoundTag();
-      thisTag.putUUID("uuid", entry.getKey());
-      thisTag.put("chest", entry.getValue().saveToTag(provider));
-      compounds.add(thisTag);
-    }
-    compound.put("inventories", compounds);
-    ListTag openers = new ListTag();
-    for (UUID opener : this.openers) {
-      openers.add(NbtUtils.createUUID(opener));
-    }
-    compound.put("openers", openers);
-    ListTag actualOpeners = new ListTag();
-    for (UUID opener : this.actualOpeners) {
-      actualOpeners.add(NbtUtils.createUUID(opener));
-    }
-    compound.put("actualOpeners", actualOpeners);
-
-    compound.putBoolean("hasBeenOpened", hasBeenOpened);
-
-    return compound;
   }
 
   @Override
@@ -214,7 +172,8 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
   public void refresh() {
     inventories.clear();
     hasBeenOpened = false;
-    markChanged();
+    // TODO: 1.21.11 didn't have this
+    // markChanged();
   }
 
   // TODO: Is there disparity between the usage of "hasBeenOpened" in ILootrSavedData
@@ -251,13 +210,5 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
     }
 
     return false;
-  }
-
-  @Override
-  public void save(File pFile, HolderLookup.Provider provider) {
-    if (isDirty()) {
-      pFile.getParentFile().mkdirs();
-    }
-    super.save(pFile, provider);
   }
 }

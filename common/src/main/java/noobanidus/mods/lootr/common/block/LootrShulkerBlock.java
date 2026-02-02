@@ -2,7 +2,7 @@ package noobanidus.mods.lootr.common.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.BlockTags;
@@ -11,9 +11,7 @@ import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
@@ -34,8 +32,6 @@ import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.block.entity.LootrShulkerBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-
 public class LootrShulkerBlock extends ShulkerBoxBlock {
   public LootrShulkerBlock(Properties pProperties) {
     super(DyeColor.YELLOW, pProperties);
@@ -46,7 +42,8 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
     if (pBlockEntity.getAnimationStatus() != ShulkerBoxBlockEntity.AnimationStatus.CLOSED) {
       return true;
     } else {
-      AABB aabb = Shulker.getProgressDeltaAabb(1.0f, pState.getValue(FACING), 0.0F, 0.5F).move(pPos).deflate(1.0E-6D);
+      AABB aabb = Shulker.getProgressDeltaAabb(1.0f, pState.getValue(FACING), 0.0F, 0.5F, pPos.getBottomCenter())
+          .deflate(1.0E-6D);
       return pLevel.noCollision(aabb);
     }
   }
@@ -80,31 +77,13 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
   @Override
   public BlockState playerWillDestroy(Level pLevel, BlockPos pPos, BlockState pState, Player pPlayer) {
     this.spawnDestroyParticles(pLevel, pPlayer, pPos, pState);
-    if (pState.is(BlockTags.GUARDED_BY_PIGLINS)) {
-      PiglinAi.angerNearbyPiglins(pPlayer, false);
+    if (pState.is(BlockTags.GUARDED_BY_PIGLINS) && pLevel instanceof ServerLevel sLevel) {
+      PiglinAi.angerNearbyPiglins(sLevel, pPlayer, false);
     }
 
     pLevel.gameEvent(pPlayer, GameEvent.BLOCK_DESTROY, pPos);
 
     return pState;
-  }
-
-  @Override
-  public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
-    if (!pState.is(pNewState.getBlock())) {
-      BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-      if (blockentity instanceof LootrShulkerBlockEntity) {
-        pLevel.updateNeighbourForOutputSignal(pPos, pState.getBlock());
-      }
-
-      if (pState.hasBlockEntity() && (!pState.is(pNewState.getBlock()) || !pNewState.hasBlockEntity())) {
-        pLevel.removeBlockEntity(pPos);
-      }
-    }
-  }
-
-  @Override
-  public void appendHoverText(ItemStack p_56193_, Item.TooltipContext p_339693_, List<Component> p_56195_, TooltipFlag p_56196_) {
   }
 
   @Override
@@ -130,8 +109,8 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
   }
 
   @Override
-  public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos) {
-    return LootrAPI.getAnalogOutputSignal(pBlockState, pLevel, pPos, 0);
+  public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos, Direction direction) {
+    return LootrAPI.getAnalogOutputSignal(pBlockState, pLevel, pPos, 0, direction);
   }
 
   @Override

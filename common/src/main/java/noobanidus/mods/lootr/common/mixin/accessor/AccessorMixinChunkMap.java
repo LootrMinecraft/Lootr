@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(ChunkMap.class)
 public interface AccessorMixinChunkMap {
+  // TODO
   @Invoker("getChunks")
   Iterable<ChunkHolder> lootr$getChunks();
 }

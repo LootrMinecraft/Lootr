@@ -6,7 +6,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BrushableBlock;
 import net.minecraft.world.level.block.FallingBlock;
@@ -47,11 +48,9 @@ public class LootrBrushableBlock extends BrushableBlock {
   }
 
   @Override
-  public BlockState updateShape(
-      BlockState blockState, Direction direction, BlockState blockState2, LevelAccessor levelAccessor, BlockPos blockPos, BlockPos blockPos2
-  ) {
-    levelAccessor.scheduleTick(blockPos, this, 2);
-    return super.updateShape(blockState, direction, blockState2, levelAccessor, blockPos, blockPos2);
+  public BlockState updateShape(BlockState blockState, LevelReader levelAccessor, ScheduledTickAccess scheduledTickAccess, BlockPos blockPos, Direction direction, BlockPos blockPos2, BlockState blockState2, RandomSource random) {
+    scheduledTickAccess.scheduleTick(blockPos, this, 2);
+    return super.updateShape(blockState, levelAccessor, scheduledTickAccess, blockPos, direction, blockPos2, blockState2, random);
   }
 
   @Override
@@ -66,7 +65,7 @@ public class LootrBrushableBlock extends BrushableBlock {
     if (LootrAPI.canBrushablesSelfSupport()) {
       return;
     }
-    if (FallingBlock.isFree(serverLevel.getBlockState(blockPos.below())) && blockPos.getY() >= serverLevel.getMinBuildHeight()) {
+    if (FallingBlock.isFree(serverLevel.getBlockState(blockPos.below())) && blockPos.getY() >= serverLevel.getMinY()) {
       LootrBrushableBlockEntity.fall(serverLevel, blockPos, blockState, brushableBlockEntity);
     }
   }

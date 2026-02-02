@@ -24,12 +24,13 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.ticks.ContainerSingleItem;
 import noobanidus.mods.lootr.common.api.*;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
-import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.SimpleLootrInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
@@ -59,19 +60,20 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   }
 
   @Override
-  protected void saveAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
-    super.saveAdditional(compoundTag, provider);
-    this.trySaveLootTable(compoundTag);
-    this.getDecorations().save(compoundTag);
-    this.lootrInstance.saveAdditional(compoundTag, provider, level == null || level.isClientSide());
+  protected void saveAdditional(ValueOutput output) {
+    super.saveAdditional(output);
+    this.trySaveLootTable(output);
+    output.store(NBTConstants.DECORATIONS, PotDecorationsAdapter.CODEC, getDecorations());
+    this.lootrInstance.saveAdditional(output, level == null || level.isClientSide());
   }
 
   @Override
-  protected void loadAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
-    super.loadAdditional(compoundTag, provider);
-    this.decorations = this.getDecorations().load(compoundTag);
-    this.tryLoadLootTable(compoundTag);
-    this.lootrInstance.loadAdditional(compoundTag, provider);
+  protected void loadAdditional(ValueInput input) {
+    super.loadAdditional(input);
+    this.decorations = input.read(NBTConstants.DECORATIONS, PotDecorationsAdapter.CODEC)
+        .orElse(PotDecorationsAdapter.EMPTY);
+    this.tryLoadLootTable(input);
+    this.lootrInstance.loadAdditional(input);
   }
 
 
@@ -82,8 +84,8 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   @Override
   public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
     CompoundTag compoundTag = super.getUpdateTag(provider);
-    this.saveAdditional(compoundTag, provider);
-    this.lootrInstance.fillUpdateTag(compoundTag, provider, level != null && level.isClientSide());
+    compoundTag.merge(this.saveCustomOnly(provider));
+    compoundTag.merge(this.lootrInstance.fillUpdateTag(provider, level != null && level.isClientSide(), this));
     return compoundTag;
   }
 
@@ -220,10 +222,10 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   }
 
   @Override
-  public void removeComponentsFromTag(CompoundTag compoundTag) {
-    super.removeComponentsFromTag(compoundTag);
-    compoundTag.remove("LootTable");
-    compoundTag.remove("LootTableSeed");
+  public void removeComponentsFromTag(ValueOutput output) {
+    super.removeComponentsFromTag(output);
+    output.discard("LootTable");
+    output.discard("LootTableSeed");
   }
 
   @Override

@@ -26,7 +26,7 @@ public class MixinPoiType {
     PoiType thisPoi = (PoiType) (Object) this;
     if (!lootr$fishermanCheck) {
       lootr$fishermanCheck = true;
-      lootr$isFisherman = PoiTypes.FISHERMAN.location().equals(BuiltInRegistries.POINT_OF_INTEREST_TYPE.getKey(thisPoi));
+      lootr$isFisherman = PoiTypes.FISHERMAN.identifier().equals(BuiltInRegistries.POINT_OF_INTEREST_TYPE.getKey(thisPoi));
     }
     if (lootr$isFisherman) {
       if (state.is(LootrRegistry.getBarrelBlock())) {

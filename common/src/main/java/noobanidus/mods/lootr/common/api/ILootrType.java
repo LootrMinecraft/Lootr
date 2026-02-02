@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.common.api;
 
+import com.mojang.serialization.Codec;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.Entity;
@@ -9,6 +10,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import noobanidus.mods.lootr.common.api.data.DefaultLootFiller;
 import noobanidus.mods.lootr.common.api.data.ILootrInfo;
 import noobanidus.mods.lootr.common.api.data.LootFiller;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -21,6 +23,9 @@ import org.jetbrains.annotations.Nullable;
  * This supersedes the now deprecated LootrBlockType and LootrInfoType.
  */
 public interface ILootrType {
+  @SuppressWarnings("DataFlowIssue")
+  Codec<ILootrType> CODEC = Codec.STRING.xmap(LootrAPI::getType, ILootrType::getName);
+
   String getName();
 
   @Nullable

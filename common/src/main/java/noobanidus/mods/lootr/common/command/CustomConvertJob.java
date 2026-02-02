@@ -113,6 +113,7 @@ public final class CustomConvertJob {
       src.sendFailure(Component.literal("Level not found."));
       return 0;
     }
+    // TODO:
     level.getChunkSource().addRegionTicket(CONVERT_TICKET, pos, TICKET_LEVEL, pos);
     try {
       var chunk = level.getChunk(pos.x, pos.z);
@@ -147,6 +148,7 @@ public final class CustomConvertJob {
 
       return changed;
     } finally {
+      // TODO:
       level.getChunkSource().removeRegionTicket(CONVERT_TICKET, pos, TICKET_LEVEL, pos);
     }
   }

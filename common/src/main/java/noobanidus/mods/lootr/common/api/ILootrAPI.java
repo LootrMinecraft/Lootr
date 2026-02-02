@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.common.api;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -101,7 +102,7 @@ public interface ILootrAPI {
   float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos position, float defaultProgress);
 
   // Determine analog signal from configuration
-  int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos, int defaultSignal);
+  int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos, int defaultSignal, Direction direction);
 
   // Determine if comparators should be powered when containers are opened
   boolean shouldPowerComparators();

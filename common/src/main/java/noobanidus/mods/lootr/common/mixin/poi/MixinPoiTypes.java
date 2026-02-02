@@ -21,7 +21,7 @@ public class MixinPoiTypes {
       return;
     }
     if (state.is(LootrRegistry.getBarrelBlock())) {
-      cir.setReturnValue(Optional.of(BuiltInRegistries.POINT_OF_INTEREST_TYPE.getHolderOrThrow(PoiTypes.FISHERMAN)));
+      cir.setReturnValue(Optional.of(BuiltInRegistries.POINT_OF_INTEREST_TYPE.getOrThrow(PoiTypes.FISHERMAN)));
       cir.cancel();
     }
   }

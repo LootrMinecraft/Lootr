@@ -11,6 +11,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import noobanidus.mods.lootr.common.api.*;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
@@ -18,39 +20,18 @@ import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import org.jetbrains.annotations.Nullable;
 
 public class LootrInventoryBlockEntity extends LootrChestBlockEntity {
-  private NonNullList<ItemStack> customInventory;
-
   public LootrInventoryBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
     super(LootrRegistry.getInventoryBlockEntity(), pWorldPosition, pBlockState);
   }
 
   @Override
-  public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider) {
-    super.loadAdditional(compound, provider);
-    if (compound.contains(NBTConstants.CUSTOM_INVENTORY) && compound.contains(NBTConstants.CUSTOM_SIZE)) {
-      int size = compound.getInt(NBTConstants.CUSTOM_SIZE);
-      this.customInventory = NonNullList.withSize(size, ItemStack.EMPTY);
-      ContainerHelper.loadAllItems(compound.getCompound(NBTConstants.CUSTOM_INVENTORY), this.customInventory, provider);
-    }
-  }
-
-  @Override
-  protected void saveAdditional(CompoundTag compound, HolderLookup.Provider provider) {
-    super.saveAdditional(compound, provider);
-    if (this.customInventory != null) {
-      compound.putInt(NBTConstants.CUSTOM_SIZE, this.customInventory.size());
-      compound.put(NBTConstants.CUSTOM_INVENTORY, ContainerHelper.saveAllItems(new CompoundTag(), this.customInventory, provider));
-    }
-  }
-
-  @Override
   @Nullable
   public NonNullList<ItemStack> getInfoReferenceInventory() {
-    return customInventory;
+    return simpleLootrInstance.getItems();
   }
 
   public void setCustomInventory(NonNullList<ItemStack> customInventory) {
-    this.customInventory = customInventory;
+    simpleLootrInstance.setItems(customInventory);
   }
 
   @Override

@@ -1,17 +1,22 @@
 package noobanidus.mods.lootr.common.api.data;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.Entity;
@@ -31,10 +36,8 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Function;
 
 /**
  * The base class for all Lootr information holders.
@@ -245,7 +248,7 @@ public interface ILootrInfo {
     return NonNullList.withSize(getInfoContainerSize(), ItemStack.EMPTY);
   }
 
-  default void saveInfoToTag(CompoundTag tag, HolderLookup.Provider provider) {
+/*  default void saveInfoToTag(CompoundTag tag, HolderLookup.Provider provider) {
     if (getInfoType() != null) {
       tag.putInt("type", getInfoType().ordinal());
     }
@@ -329,11 +332,38 @@ public interface ILootrInfo {
       type = BuiltInLootrTypes.CHEST;
     }
     return new BaseLootrInfo(null, null, type, uuid, ILootrInfo.generateInfoKey(uuid), pos, name, dimension, size, reference, table, seed);
-  }
+  }*/
+
+  @SuppressWarnings("deprecation")
+  Codec<ILootrInfo> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+      LootrBlockType.CODEC.fieldOf("blockType").forGetter(ILootrInfo::getInfoBlockType),
+      LootrInfoType.CODEC.fieldOf("type").forGetter(ILootrInfo::getInfoType),
+      ILootrType.CODEC.optionalFieldOf("newType", null).forGetter(ILootrInfo::getInfoNewType),
+      UUIDUtil.CODEC.fieldOf("uuid").forGetter(ILootrInfo::getInfoUUID),
+      Codec.STRING.fieldOf("key").forGetter(ILootrInfo::getInfoKey),
+      BlockPos.CODEC.fieldOf("position").forGetter(ILootrInfo::getInfoPos),
+      // Optional display name
+      ComponentSerialization.CODEC.optionalFieldOf("name").forGetter(i -> Optional.ofNullable(i.getInfoDisplayName())),
+      Identifier.CODEC.xmap(loc -> ResourceKey.create(Registries.DIMENSION, loc), ResourceKey::identifier).fieldOf("dimension").forGetter(ILootrInfo::getInfoDimension),
+      Codec.INT.fieldOf("size").forGetter(ILootrInfo::getInfoContainerSize),
+      ItemStack.OPTIONAL_CODEC.listOf().xmap(list -> NonNullList.of(ItemStack.EMPTY, list.toArray(new ItemStack[0])), list -> list).optionalFieldOf("reference").forGetter(info -> info.isInfoReferenceInventory() ? Optional.ofNullable(info.getInfoReferenceInventory()) : Optional.empty()),
+      // Optional loot table and seed
+      Identifier.CODEC.xmap(loc -> ResourceKey.create(Registries.LOOT_TABLE, loc), ResourceKey::identifier).optionalFieldOf("table").forGetter(i -> Optional.ofNullable(i.getInfoLootTable())),
+      Codec.LONG.optionalFieldOf("seed").forGetter(info ->
+          info.getInfoLootTable() != null ? Optional.of(info.getInfoLootSeed()) : Optional.empty()
+      )
+  ).apply(instance, BaseLootrInfo::new));
 
   @Deprecated
-  enum LootrInfoType {
+  enum LootrInfoType implements StringRepresentable {
     CONTAINER_BLOCK_ENTITY,
     CONTAINER_ENTITY;
+
+    @Override
+    public String getSerializedName() {
+      return name().toLowerCase(Locale.ROOT);
+    }
+
+    public static final Codec<LootrInfoType> CODEC = StringRepresentable.fromEnum(LootrInfoType::values);
   }
 }

@@ -7,11 +7,13 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.ContainerUser;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Inventory;
@@ -87,8 +89,16 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     this.opened = opened;
   }
 
-  // TODO: Abstract this out into SimpleLootrEntity
   @Override
+  public boolean hurtServer(ServerLevel serverLevel, DamageSource damageSource, float f) {
+    if (isInvulnerableTo(damageSource)) {
+      return false;
+    }
+
+    return super.hurtServer(serverLevel, damageSource, f);
+  }
+
+  // TODO: Abstract this out into SimpleLootrEntity
   public boolean isInvulnerableTo(DamageSource source) {
     if (this.isInvulnerable() && source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
       return true;
@@ -146,11 +156,6 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
   @Override
-  public AbstractMinecart.Type getMinecartType() {
-    return AbstractMinecart.Type.CHEST;
-  }
-
-  @Override
   public BlockState getDefaultDisplayBlockState() {
     if (cartNormal == null) {
       cartNormal = LootrRegistry.getChestBlock().defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
@@ -190,14 +195,16 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     return InteractionResult.SUCCESS;
   }
 
+
+
   @Override
-  public void startOpen(Player player) {
-    if (!player.isSpectator()) {
+  public void startOpen(ContainerUser user) {
+    if (user instanceof ServerPlayer player) {
       if (!hasBeenOpened) {
         hasBeenOpened = true;
         markChanged();
       }
-      performOpen((ServerPlayer) player);
+      performOpen(player);
     }
   }
 
@@ -223,7 +230,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
 
   @Override
   public ResourceKey<LootTable> getInfoLootTable() {
-    return getLootTable();
+    return getContainerLootTable();
   }
 
   @Override
@@ -243,7 +250,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
 
   @Override
   public long getInfoLootSeed() {
-    return getLootTableSeed();
+    return getContainerLootTableSeed();
   }
 
   @Override
@@ -328,13 +335,13 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
   @Override
-  protected void applyNaturalSlowdown() {
+  protected Vec3 applyNaturalSlowdown(Vec3 incoming) {
     float f = 0.98F;
     if (this.isInWater()) {
       f *= 0.95F;
     }
 
-    this.setDeltaMovement(this.getDeltaMovement().multiply((double) f, 0.0, (double) f));
+    return incoming.multiply(f, 0, f);
   }
 
   @Override

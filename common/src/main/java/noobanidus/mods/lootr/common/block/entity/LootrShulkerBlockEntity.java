@@ -9,9 +9,11 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.ContainerUser;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.monster.Shulker;
@@ -28,6 +30,8 @@ import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -103,13 +107,14 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   public AABB getBoundingBox(BlockState pState) {
-    return Shulker.getProgressAabb(1.0F, pState.getValue(ShulkerBoxBlock.FACING), 0.5F * this.getProgress(1.0F));
+    Vec3 vec3 = new Vec3(0.5, 0.0, 0.5);
+    return Shulker.getProgressAabb(1.0F, pState.getValue(ShulkerBoxBlock.FACING), 0.5F * this.getProgress(1.0F), vec3);
   }
 
   private void moveCollidedEntities(Level pLevel, BlockPos pPos, BlockState pState) {
     if (pState.getBlock() instanceof ShulkerBoxBlock) {
       Direction direction = pState.getValue(ShulkerBoxBlock.FACING);
-      AABB aabb = Shulker.getProgressDeltaAabb(1.0F, direction, this.progressOld, this.progress).move(pPos);
+      AABB aabb = Shulker.getProgressDeltaAabb(1.0F, direction, this.progressOld, this.progress, pPos.getBottomCenter());
       List<Entity> list = pLevel.getEntities(null, aabb);
       for (Entity entity : list) {
         if (entity.getPistonPushReaction() != PushReaction.IGNORE) {
@@ -150,35 +155,39 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   @Override
-  public void startOpen(Player pPlayer) {
-    if (!this.remove && !pPlayer.isSpectator()) {
-      if (!this.simpleLootrInstance.hasBeenOpened()) {
-        this.simpleLootrInstance.setHasBeenOpened();
-        markChanged();
-      }
+  public void startOpen(ContainerUser user) {
+    if (user instanceof ServerPlayer pPlayer) {
+      if (!this.remove && !pPlayer.isSpectator()) {
+        if (!this.simpleLootrInstance.hasBeenOpened()) {
+          this.simpleLootrInstance.setHasBeenOpened();
+          markChanged();
+        }
 
 
-      if (this.openCount < 0) {
-        this.openCount = 0;
-      }
+        if (this.openCount < 0) {
+          this.openCount = 0;
+        }
 
-      this.openCount++;
-      this.level.blockEvent(this.worldPosition, this.getBlockState().getBlock(), 1, this.openCount);
-      if (this.openCount == 1) {
-        this.level.gameEvent(pPlayer, GameEvent.CONTAINER_OPEN, this.worldPosition);
-        this.level.playSound(null, this.worldPosition, SoundEvents.SHULKER_BOX_OPEN, SoundSource.BLOCKS, 0.5F, this.level.random.nextFloat() * 0.1F + 0.9F);
+        this.openCount++;
+        this.level.blockEvent(this.worldPosition, this.getBlockState().getBlock(), 1, this.openCount);
+        if (this.openCount == 1) {
+          this.level.gameEvent(pPlayer, GameEvent.CONTAINER_OPEN, this.worldPosition);
+          this.level.playSound(null, this.worldPosition, SoundEvents.SHULKER_BOX_OPEN, SoundSource.BLOCKS, 0.5F, this.level.random.nextFloat() * 0.1F + 0.9F);
+        }
       }
     }
   }
 
   @Override
-  public void stopOpen(Player pPlayer) {
-    if (!this.remove && !pPlayer.isSpectator()) {
-      this.openCount--;
-      this.level.blockEvent(this.worldPosition, this.getBlockState().getBlock(), 1, this.openCount);
-      if (this.openCount <= 0) {
-        this.level.gameEvent(pPlayer, GameEvent.CONTAINER_CLOSE, this.worldPosition);
-        this.level.playSound(null, this.worldPosition, SoundEvents.SHULKER_BOX_CLOSE, SoundSource.BLOCKS, 0.5F, this.level.random.nextFloat() * 0.1F + 0.9F);
+  public void stopOpen(ContainerUser user) {
+    if (user instanceof ServerPlayer pPlayer) {
+      if (!this.remove && !pPlayer.isSpectator()) {
+        this.openCount--;
+        this.level.blockEvent(this.worldPosition, this.getBlockState().getBlock(), 1, this.openCount);
+        if (this.openCount <= 0) {
+          this.level.gameEvent(pPlayer, GameEvent.CONTAINER_CLOSE, this.worldPosition);
+          this.level.playSound(null, this.worldPosition, SoundEvents.SHULKER_BOX_CLOSE, SoundSource.BLOCKS, 0.5F, this.level.random.nextFloat() * 0.1F + 0.9F);
+        }
       }
     }
   }
@@ -194,24 +203,24 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   @Override
-  public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider) {
-    super.loadAdditional(compound, provider);
-    this.tryLoadLootTable(compound);
-    this.simpleLootrInstance.loadAdditional(compound, provider);
+  public void loadAdditional(ValueInput input) {
+    super.loadAdditional(input);
+    this.tryLoadLootTable(input);
+    this.simpleLootrInstance.loadAdditional(input);
   }
 
-  @Override
+/*  @Override
   public void saveToItem(ItemStack itemstack, HolderLookup.Provider provider) {
     this.simpleLootrInstance.setSavingToItem(true);
     super.saveToItem(itemstack, provider);
     this.simpleLootrInstance.setSavingToItem(false);
-  }
+  }*/
 
   @Override
-  protected void saveAdditional(CompoundTag compound, HolderLookup.Provider provider) {
-    super.saveAdditional(compound, provider);
-    this.trySaveLootTable(compound);
-    this.simpleLootrInstance.saveAdditional(compound, provider, level != null && level.isClientSide());
+  protected void saveAdditional(ValueOutput output) {
+    super.saveAdditional(output);
+    this.trySaveLootTable(output);
+    this.simpleLootrInstance.saveAdditional(output, level != null && level.isClientSide());
   }
 
   @Override
@@ -272,7 +281,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   @NotNull
   public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
     CompoundTag result = super.getUpdateTag(provider);
-    this.simpleLootrInstance.fillUpdateTag(result, provider, level != null && level.isClientSide());
+    result.merge(this.simpleLootrInstance.fillUpdateTag(provider, level != null && level.isClientSide(), this));
     return result;
   }
 
