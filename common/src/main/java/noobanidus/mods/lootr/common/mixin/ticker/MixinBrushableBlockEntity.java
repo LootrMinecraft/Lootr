@@ -1,27 +1,33 @@
 package noobanidus.mods.lootr.common.mixin.ticker;
 
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.entity.BrushableBlockEntity;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.block.entity.BlockEntityTicker;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BrushableBlockEntity.class)
 public class MixinBrushableBlockEntity {
+  @Shadow
+  private ResourceKey<LootTable> lootTable;
+  @Shadow
+  private long lootTableSeed;
+
   // Confer MixinRandomizableContainer
   // Brushables are not a container
-  @WrapOperation(method = "tryLoadLootTable", at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/CompoundTag;contains(Ljava/lang/String;I)Z"))
-  public boolean lootr$tryLoadLootTable(CompoundTag instance, String string, int i, Operation<Boolean> original) {
-    if (original.call(instance, string, i)) {
-      BrushableBlockEntity bbe = (BrushableBlockEntity) (Object) this;
-      if (bbe.getLevel() != null) {
-        BlockEntityTicker.addEntity(bbe, bbe.getLevel(), new ChunkPos(bbe.getBlockPos()));
-      }
-      return true;
+  @Inject(method = "tryLoadLootTable", at = @At(value = "RETURN"), cancellable = true)
+  public void lootr$tryLoadLootTable(ValueInput input, CallbackInfoReturnable<Boolean> cir) {
+    BrushableBlockEntity instance = (BrushableBlockEntity) (Object) this;
+    if (instance.getLevel() != null && lootTable != null) {
+      // TODO: Something to cancel the window
+      BlockEntityTicker.addEntity(instance, instance.getLevel(), new ChunkPos(instance.getBlockPos()));
+      cir.setReturnValue(true);
     }
-    return false;
   }
 }
