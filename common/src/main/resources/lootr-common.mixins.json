@@ -15,6 +15,7 @@
     "brushing.MixinBrushItem",
     "cat.MixinCatSitOnBlockGoal",
     "chest_blocking.MixinChestBlock",
+    "directories.MixinServerChunkCache",
     "elytra.MixinEndCityPieces$EndCityPiece",
     "falling.MixinFallingBlockEntity",
     "filter.MixinLootTable",

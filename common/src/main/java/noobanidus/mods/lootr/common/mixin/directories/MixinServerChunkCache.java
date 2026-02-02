@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.io.IOException;
 import java.nio.file.Path;
 
-// An ugly solution
+// An ugly solution to an ugly problem
 @Mixin(ServerChunkCache.class)
 public class MixinServerChunkCache {
   @Inject(method = "<init>", at = @At(value = "RETURN"))
@@ -24,8 +24,14 @@ public class MixinServerChunkCache {
     }
 
     Path lootrDirectory = ((AccessorMixinDimensionDataStorage) cache.getDataStorage()).getDataFolder().resolve("lootr");
+    Path tickingDirectory = lootrDirectory.resolve("ticking");
+    Path refreshDirectory = tickingDirectory.resolve("refresh");
+    Path delayedDirectory = tickingDirectory.resolve("delayed");
     try {
       FileUtil.createDirectoriesSafe(lootrDirectory);
+      FileUtil.createDirectoriesSafe(tickingDirectory);
+      FileUtil.createDirectoriesSafe(refreshDirectory);
+      FileUtil.createDirectoriesSafe(delayedDirectory);
 
       for (String digit : LootrAPI._lootr$digits) {
         Path subPath1 = lootrDirectory.resolve(digit);
@@ -39,6 +45,7 @@ public class MixinServerChunkCache {
 
         }
       }
+
     } catch (IOException e) {
       LootrAPI.LOG.error("Failed to create initial Lootr data directory: {}", lootrDirectory);
     }
