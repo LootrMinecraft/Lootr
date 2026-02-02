@@ -99,7 +99,7 @@ public class NewTickingData {
   private Section getSection(MinecraftServer server, UUID id) {
     var level = server.overworld();
     var dataStorage = level.getDataStorage();
-    return dataStorage.computeIfAbsent(new SavedDataType<>(getFileName(id), () -> new Section(prefix), Section.CODEC.apply(prefix), null));
+    return dataStorage.computeIfAbsent(new SavedDataType<>(getFileName(id), () -> new Section(getBaseFileName(id)), Section.CODEC.apply(getBaseFileName(id)), null));
   }
 
   public static class SectionException extends Exception {
@@ -113,6 +113,7 @@ public class NewTickingData {
       ).apply(instance, TickEntry::new));
     }
 
+    // TODO: Codec here is completely wrong, it should be derived from the UUID
     public static final Function<String, Codec<Section>> CODEC = (name) -> TickEntry.CODEC.listOf()
         .xmap((data) -> new Section(name, data), o -> o.getTickMap().object2LongEntrySet().stream()
             .map(e -> new TickEntry(e.getKey(), e.getLongValue())).toList());
@@ -165,17 +166,6 @@ public class NewTickingData {
     private Object2LongMap<UUID> getTickMap() {
       return tickMap;
     }
-
-
-    // TODO:
-/*    @Override
-    public void save(File file, HolderLookup.Provider registries) {
-      if (isDirty()) {
-        //noinspection ResultOfMethodCallIgnored
-        file.getParentFile().mkdirs();
-      }
-      super.save(file, registries);
-    }*/
   }
 
   public enum TickingType {

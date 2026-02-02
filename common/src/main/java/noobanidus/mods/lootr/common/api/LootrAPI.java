@@ -62,6 +62,7 @@ public class LootrAPI {
   public static final ResourceKey<LootTable> TROPHY_REWARD = ResourceKey.create(Registries.LOOT_TABLE, LootrAPI.rl("reward/trophy"));
   public static final ResourceKey<LootTable> ITEM_FRAME_EMPTY = ResourceKey.create(Registries.LOOT_TABLE, LootrAPI.rl("entity/item_frame_empty"));
   public static final List<Identifier> PROBLEMATIC_CHESTS = Arrays.asList(LootrAPI.rl("twilightforest", "structures/stronghold_boss"), LootrAPI.rl("atum", "chests/pharaoh"));
+  public static final List<String> _lootr$digits = Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f");
 
   public static ILootrAPI INSTANCE = null;
   public static boolean shouldDiscardIdAndOpeners;
