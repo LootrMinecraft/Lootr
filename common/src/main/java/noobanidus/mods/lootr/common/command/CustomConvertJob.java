@@ -31,10 +31,6 @@ public final class CustomConvertJob {
   private static final ThreadFactory THREAD_FACTORY =
       new ThreadFactoryBuilder().setDaemon(true).setNameFormat("lootr-convert-%d").build();
 
-  // TODO: Ticket type needs to be registered
-  private static final TicketType CONVERT_TICKET = null;
-/*      TicketType.create("lootr_convert", Comparator.comparingLong(ChunkPos::toLong));*/
-
   private static Thread convertThread;
 
   private static final int TICKET_LEVEL = 2;
@@ -90,7 +86,6 @@ public final class CustomConvertJob {
             }
           });
 
-          // throttle: don’t enqueue infinite work faster than the server can tick
           batchDone.join();
         }
 
@@ -114,7 +109,7 @@ public final class CustomConvertJob {
       return 0;
     }
     // TODO:
-    level.getChunkSource().addRegionTicket(CONVERT_TICKET, pos, TICKET_LEVEL, pos);
+    level.getChunkSource().addTicketWithRadius(TicketType.FORCED, pos, 0);
     try {
       var chunk = level.getChunk(pos.x, pos.z);
 
@@ -142,14 +137,12 @@ public final class CustomConvertJob {
           continue;
         }
 
-        // paste your conversion body here; return true if you changed something
         changed += convertAt(level, bePos, be, src);
       }
 
       return changed;
     } finally {
-      // TODO:
-      level.getChunkSource().removeRegionTicket(CONVERT_TICKET, pos, TICKET_LEVEL, pos);
+      level.getChunkSource().removeTicketWithRadius(TicketType.FORCED, pos, 0);
     }
   }
 
