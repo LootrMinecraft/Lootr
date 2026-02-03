@@ -32,8 +32,6 @@ public class LootrShulkerBoxRenderer implements BlockEntityRenderer<LootrShulker
 
   public static final Material MATERIAL = new Material(Sheets.SHULKER_SHEET, LootrAPI.rl("shulker"));
   public static final Material MATERIAL2 = new Material(Sheets.SHULKER_SHEET, LootrAPI.rl("shulker_opened"));
-  public static final Material MATERIAL3 = new Material(Sheets.SHULKER_SHEET, LootrAPI.rl("old_shulker"));
-  public static final Material MATERIAL4 = new Material(Sheets.SHULKER_SHEET, LootrAPI.rl("old_shulker_opened"));
 
   private final MaterialSet materials;
   private final ShulkerBoxModel model;
@@ -57,7 +55,7 @@ public class LootrShulkerBoxRenderer implements BlockEntityRenderer<LootrShulker
     state.progress = blockEntity.getProgress(partialTicks);
     state.direction = blockEntity.getBlockState().getValueOrElse(ShulkerBoxBlock.FACING, Direction.UP);
     state.vanilla = LootrAPI.isVanillaTextures();
-    state.classic = LootrAPI.isOldTextures();
+    state.classic = false;
     state.visuallyOpen = Minecraft.getInstance().player != null && blockEntity.hasClientOpened(Minecraft.getInstance().player.getUUID());
   }
 
@@ -66,18 +64,10 @@ public class LootrShulkerBoxRenderer implements BlockEntityRenderer<LootrShulker
     if (state.vanilla) {
       return Sheets.DEFAULT_SHULKER_TEXTURE_LOCATION;
     }
-    if (state.classic) {
-      if (state.visuallyOpen) {
-        return MATERIAL4;
-      } else {
-        return MATERIAL3;
-      }
+    if (state.visuallyOpen) {
+      return MATERIAL2;
     } else {
-      if (state.visuallyOpen) {
-        return MATERIAL2;
-      } else {
-        return MATERIAL;
-      }
+      return MATERIAL;
     }
   }
 

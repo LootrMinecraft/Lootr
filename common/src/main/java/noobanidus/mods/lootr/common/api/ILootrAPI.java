@@ -119,11 +119,12 @@ public interface ILootrAPI {
   ClientTextureType getTextureType();
 
   default boolean isNewTextures() {
-    return getTextureType() == ClientTextureType.NEW;
+    return getTextureType() != ClientTextureType.VANILLA;
   }
 
+  @Deprecated
   default boolean isOldTextures() {
-    return getTextureType() == ClientTextureType.OLD;
+    return false;
   }
 
   default boolean isVanillaTextures() {
@@ -131,7 +132,7 @@ public interface ILootrAPI {
   }
 
   default boolean isDefaultTextures() {
-    return getTextureType() == ClientTextureType.NEW;
+    return getTextureType() != ClientTextureType.VANILLA;
   }
 
   boolean isDisabled();

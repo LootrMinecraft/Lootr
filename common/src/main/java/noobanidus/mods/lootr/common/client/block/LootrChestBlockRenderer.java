@@ -35,10 +35,6 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootrBlo
   public static final Material MATERIAL2 = new Material(Sheets.CHEST_SHEET, LootrAPI.rl("chest_opened"));
   public static final Material MATERIAL3 = new Material(Sheets.CHEST_SHEET, LootrAPI.rl("chest_trapped"));
   public static final Material MATERIAL4 = new Material(Sheets.CHEST_SHEET, LootrAPI.rl("chest_trapped_opened"));
-  public static final Material OLD_MATERIAL = new Material(Sheets.CHEST_SHEET, LootrAPI.rl("old_chest"));
-  public static final Material OLD_MATERIAL2 = new Material(Sheets.CHEST_SHEET, LootrAPI.rl("old_chest_opened"));
-  public static final Material OLD_MATERIAL3 = new Material(Sheets.CHEST_SHEET, LootrAPI.rl("old_chest_trapped"));
-  public static final Material OLD_MATERIAL4 = new Material(Sheets.CHEST_SHEET, LootrAPI.rl("old_chest_trapped_opened"));
 
   private final ChestModel singleModel;
   private final MaterialSet materials;
@@ -56,18 +52,10 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootrBlo
         return Sheets.CHEST_LOCATION;
       }
     }
-    if (LootrAPI.isOldTextures()) {
-      if (isOpened) {
-        return isTrapped ? OLD_MATERIAL4 : OLD_MATERIAL2;
-      } else {
-        return isTrapped ? OLD_MATERIAL3 : OLD_MATERIAL;
-      }
+    if (isOpened) {
+      return isTrapped ? MATERIAL4 : MATERIAL2;
     } else {
-      if (isOpened) {
-        return isTrapped ? MATERIAL4 : MATERIAL2;
-      } else {
-        return isTrapped ? MATERIAL3 : MATERIAL;
-      }
+      return isTrapped ? MATERIAL3 : MATERIAL;
     }
   }
 
@@ -91,7 +79,7 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootrBlo
     renderState.open = blockEntity.getOpenNess(partialTick);
     renderState.trapped = blockEntity.getBlockState().is(LootrTags.Blocks.TRAPPED_CHESTS);
     renderState.vanilla = LootrAPI.isVanillaTextures();
-    renderState.classic = LootrAPI.isOldTextures();
+    renderState.classic = false;
     renderState.visuallyOpen = Minecraft.getInstance().player != null && blockEntity.hasClientOpened(Minecraft.getInstance().player.getUUID());
     renderState.angle = blockstate.getValue(ChestBlock.FACING).toYRot();
   }

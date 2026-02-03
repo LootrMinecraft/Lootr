@@ -145,6 +145,7 @@ public class LootrAPI {
     return INSTANCE.getTextureType();
   }
 
+  @Deprecated
   public static boolean isOldTextures() {
     return INSTANCE.isOldTextures();
   }

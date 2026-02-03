@@ -9,6 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.block.LootrBarrelBlock;
@@ -20,33 +21,28 @@ public abstract class UnbakedBarrelBlockStateModel implements BlockStateModel.Un
     return RecordCodecBuilder.mapCodec(instance ->
         instance.group(Identifier.CODEC.fieldOf("unopened")
             .forGetter(UnbakedBarrelBlockStateModel::getUnopened), Identifier.CODEC.fieldOf("opened")
-            .forGetter(UnbakedBarrelBlockStateModel::getOpened), Identifier.CODEC.fieldOf("vanilla")
-            .forGetter(UnbakedBarrelBlockStateModel::getVanilla), Identifier.CODEC.fieldOf("old_opened")
-            .forGetter(UnbakedBarrelBlockStateModel::getOldOpened), Identifier.CODEC.fieldOf("old_unopened")
-            .forGetter(UnbakedBarrelBlockStateModel::getOldUnopened), Variant.SimpleModelState.MAP_CODEC.fieldOf("state")
+            .forGetter(UnbakedBarrelBlockStateModel::getOpened), Identifier.CODEC.fieldOf("vanilla").forGetter(UnbakedBarrelBlockStateModel::getVanilla), Variant.SimpleModelState.MAP_CODEC.fieldOf("state")
             .forGetter(UnbakedBarrelBlockStateModel::getState)
         ).apply(instance, provider::create));
   }
 
   @FunctionalInterface
   public interface Provider<T extends UnbakedBarrelBlockStateModel> {
-    T create(Identifier opened, Identifier unopened, Identifier vanilla, Identifier old_opened, Identifier old_unopened, Variant.SimpleModelState state);
+    T create(Identifier opened, Identifier unopened, Identifier vanilla, Variant.SimpleModelState state);
   }
 
   @FunctionalInterface
   public interface Baker {
-    BlockStateModel bake(BlockStateModel unopened, BlockStateModel opened, BlockStateModel vanilla, BlockStateModel old_opened, BlockStateModel old_unopened);
+    BlockStateModel bake(BlockStateModel unopened, BlockStateModel opened, BlockStateModel vanilla);
   }
 
-  protected final Identifier opened, unopened, vanilla, old_opened, old_unopened;
+  protected final Identifier opened, unopened, vanilla;
   protected final Variant.SimpleModelState state;
 
-  public UnbakedBarrelBlockStateModel(Identifier opened, Identifier unopened, Identifier vanilla, Identifier old_opened, Identifier old_unopened, Variant.SimpleModelState state) {
+  public UnbakedBarrelBlockStateModel(Identifier opened, Identifier unopened, Identifier vanilla, Variant.SimpleModelState state) {
     this.opened = opened;
     this.unopened = unopened;
     this.vanilla = vanilla;
-    this.old_opened = old_opened;
-    this.old_unopened = old_unopened;
     this.state = state;
   }
 
@@ -62,14 +58,6 @@ public abstract class UnbakedBarrelBlockStateModel implements BlockStateModel.Un
     return vanilla;
   }
 
-  public Identifier getOldOpened() {
-    return old_opened;
-  }
-
-  public Identifier getOldUnopened() {
-    return old_unopened;
-  }
-
   public Variant.SimpleModelState getState() {
     return state;
   }
@@ -81,9 +69,7 @@ public abstract class UnbakedBarrelBlockStateModel implements BlockStateModel.Un
     return getBaker().bake(
         new SingleVariant(SimpleModelWrapper.bake(baker, unopened, state.asModelState())),
         new SingleVariant(SimpleModelWrapper.bake(baker, opened, state.asModelState())),
-        new SingleVariant(SimpleModelWrapper.bake(baker, vanilla, state.asModelState())),
-        new SingleVariant(SimpleModelWrapper.bake(baker, old_opened, state.asModelState())),
-        new SingleVariant(SimpleModelWrapper.bake(baker, old_unopened, state.asModelState()))
+        new SingleVariant(SimpleModelWrapper.bake(baker, vanilla, state.asModelState()))
     );
   }
 
@@ -92,30 +78,24 @@ public abstract class UnbakedBarrelBlockStateModel implements BlockStateModel.Un
     resolver.markDependency(unopened);
     resolver.markDependency(opened);
     resolver.markDependency(vanilla);
-    resolver.markDependency(old_unopened);
-    resolver.markDependency(old_opened);
   }
 
-  public record BarrelKey(boolean vanilla, boolean old, boolean open, boolean visuallyOpen, int facing) {
+  public record BarrelKey(boolean vanilla, boolean open, boolean visuallyOpen, int facing) {
   }
 
   public abstract static class Baked implements BlockStateModel {
-    protected final BlockStateModel unopened, opened, vanilla, old_opened, old_unopened;
+    protected final BlockStateModel unopened, opened, vanilla;
 
-    public Baked(BlockStateModel unopened, BlockStateModel opened, BlockStateModel vanilla, BlockStateModel old_opened, BlockStateModel old_unopened) {
+    public Baked(BlockStateModel unopened, BlockStateModel opened, BlockStateModel vanilla) {
       this.unopened = unopened;
       this.opened = opened;
       this.vanilla = vanilla;
-      this.old_opened = old_opened;
-      this.old_unopened = old_unopened;
     }
 
     @Override
     public void collectParts(RandomSource random, List<BlockModelPart> output) {
       if (LootrAPI.isVanillaTextures()) {
         vanilla.collectParts(random, output);
-      } else if (LootrAPI.isOldTextures()) {
-        old_unopened.collectParts(random, output);
       } else {
         unopened.collectParts(random, output);
       }
@@ -127,10 +107,6 @@ public abstract class UnbakedBarrelBlockStateModel implements BlockStateModel.Un
         return vanilla.particleIcon();
       }
 
-      if (LootrAPI.isOldTextures()) {
-        return old_unopened.particleIcon();
-      }
-
       return unopened.particleIcon();
     }
 
@@ -138,11 +114,10 @@ public abstract class UnbakedBarrelBlockStateModel implements BlockStateModel.Un
 
     public Object internalCreateObjectKey(BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource random) {
       boolean visuallyOpen = isOpenFromBATG(level, pos, state, random);
-      boolean open = isOpenFromBATG(level, pos, state, random);
-      int facing = state.getValue(LootrBarrelBlock.FACING).ordinal();
+      boolean open = state.getValue(BarrelBlock.OPEN);
+      int facing = state.getValue(BarrelBlock.FACING).ordinal();
       boolean vanilla = LootrAPI.isVanillaTextures();
-      boolean old = LootrAPI.isOldTextures();
-      return new BarrelKey(vanilla, old, open, visuallyOpen, facing);
+      return new BarrelKey(vanilla, open, visuallyOpen, facing);
     }
   }
 }

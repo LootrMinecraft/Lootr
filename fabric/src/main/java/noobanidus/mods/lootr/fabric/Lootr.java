@@ -2,6 +2,7 @@ package noobanidus.mods.lootr.fabric;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.minecraft.client.renderer.block.model.BlockModelDefinition;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
@@ -18,6 +19,7 @@ import noobanidus.mods.lootr.fabric.network.to_server.PacketRequestUpdate;
 public class Lootr implements ModInitializer {
   @Override
   public void onInitialize() {
+    BlockModelDefinition
     LootrAPI.INSTANCE = new LootrAPIImpl();
     LootrRegistry.INSTANCE = new LootrRegistryImpl();
     PlatformAPI.INSTANCE = new PlatformAPIImpl();
