@@ -1,15 +1,12 @@
 package noobanidus.mods.lootr.neoforge.event;
 
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.LogicalSide;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.common.util.LogicalSidedProvider;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrConstants;
@@ -50,8 +47,7 @@ public class HandleCart {
           event.setCanceled(true);
 
           // TODO: Processing
-          var executor = LogicalSidedProvider.WORKQUEUE.get(LogicalSide.SERVER);
-          executor.tell(new TickTask(0, () -> event.getLevel().addFreshEntity(newItemFrame)));
+          level.getServer().execute(() -> event.getLevel().addFreshEntity(newItemFrame));
         }
       }
     } else if (entity.getType().is(LootrTags.Entity.CONVERT_ENTITIES)) {
@@ -74,8 +70,7 @@ public class HandleCart {
 
       LootrAPI.postProcess(level, lootrCart, lootTable, seed);
 
-      var executor = LogicalSidedProvider.WORKQUEUE.get(LogicalSide.SERVER);
-      executor.tell(new TickTask(0, () -> event.getLevel().addFreshEntity(lootrCart)));
+      level.getServer().execute(() -> event.getLevel().addFreshEntity(lootrCart));
     }
   }
 }

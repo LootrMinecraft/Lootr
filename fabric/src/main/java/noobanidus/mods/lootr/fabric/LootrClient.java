@@ -18,8 +18,6 @@ import noobanidus.mods.lootr.common.client.entity.LootrItemFrameRenderer;
 import noobanidus.mods.lootr.common.client.particle.UnopenedParticle;
 import noobanidus.mods.lootr.fabric.client.block.BarrelModelLoader;
 import noobanidus.mods.lootr.fabric.client.block.CustomModelLoader;
-import noobanidus.mods.lootr.fabric.client.block.LootrChestBlockRenderer;
-import noobanidus.mods.lootr.fabric.client.block.LootrShulkerBlockRenderer;
 import noobanidus.mods.lootr.fabric.client.entity.LootrChestCartRenderer;
 import noobanidus.mods.lootr.fabric.client.item.LootrChestItemRenderer;
 import noobanidus.mods.lootr.fabric.client.item.LootrDecoratedPotItemRenderer;

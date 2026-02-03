@@ -7,8 +7,6 @@ import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.common.data.SpriteSourceProvider;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.neoforge.client.block.LootrChestBlockRenderer;
-import noobanidus.mods.lootr.neoforge.client.block.LootrShulkerBlockRenderer;
 
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
