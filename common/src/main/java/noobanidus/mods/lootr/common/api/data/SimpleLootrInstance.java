@@ -36,7 +36,6 @@ public class SimpleLootrInstance {
 
   protected final Supplier<Set<UUID>> visualOpenersSupplier;
 
-  // What in the recursive, self-referential is this
   public SimpleLootrInstance(Supplier<Set<UUID>> visualOpenersSupplier, int size) {
     this.items = NonNullList.withSize(size, ItemStack.EMPTY);
     this.visualOpenersSupplier = visualOpenersSupplier;

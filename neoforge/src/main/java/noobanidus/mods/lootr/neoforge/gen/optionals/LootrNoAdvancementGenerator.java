@@ -42,7 +42,7 @@ public class LootrNoAdvancementGenerator {
   }
 
   @SubscribeEvent
-  public static void gatherData(GatherDataEvent event) {
+  public static void gatherData(GatherDataEvent.Client event) {
     PackOutput output = event.getGenerator().getPackOutput();
     CompletableFuture<HolderLookup.Provider> provider = event.getLookupProvider();
 
@@ -52,10 +52,10 @@ public class LootrNoAdvancementGenerator {
 
     // Data pack generation
     var generator = makeGenerator(datapacks.resolve("lootr_no_advancements"), Component.literal("Disable Lootr Advancements"));
-    generator.addProvider(event.includeDev(), new AdvancementProvider(generator.getPackOutput(), provider, List.of(new LootrAdvancementGenerator())));
+    generator.addProvider(true, new AdvancementProvider(generator.getPackOutput(), provider, List.of(new LootrAdvancementGenerator())));
 
     generator = makeGenerator(datapacks.resolve("lootr_no_suspicious_blocks"), Component.literal("Disable Lootr Suspicious Sand and Gravel"));
-    generator.addProvider(event.includeDev(), new LootrNoSuspiciousGenerator.LootrBlockTagProvider(generator.getPackOutput(), provider));
+    generator.addProvider(true, new LootrNoSuspiciousGenerator.LootrBlockTagProvider(generator.getPackOutput(), provider));
 
     try {
       for (DataGenerator toRun : generators) {

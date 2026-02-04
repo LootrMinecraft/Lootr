@@ -25,6 +25,7 @@ import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
 import net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSettings;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import noobanidus.mods.lootr.common.api.LootrAPI;
@@ -35,6 +36,7 @@ import java.util.Optional;
 import java.util.Set;
 
 // Only used for testing
+//@EventBusSubscriber(modid=LootrAPI.MODID)
 public class LootrDataPackGenerators {
   // Salts used for the randomization of structure placements
   private static final int STRUCTURE_SALT = 8266497;
@@ -43,9 +45,10 @@ public class LootrDataPackGenerators {
   private static final ResourceKey<StructureTemplatePool> LOOTR_TEST_START_POOL = ResourceKey.create(Registries.TEMPLATE_POOL, LootrAPI.rl("test_start_pool"));
   private static final ResourceKey<StructureSet> LOOTR_TEST_STRUCTURE_SET = ResourceKey.create(Registries.STRUCTURE_SET, LootrAPI.rl("test_structure_set"));
 
-  public static void onGatherData(GatherDataEvent event) {
+  //@SubscribeEvent
+  public static void onGatherData(GatherDataEvent.Client event) {
     event.getGenerator().addProvider(
-        event.includeDev(),
+        true,
         (DataProvider.Factory<DatapackBuiltinEntriesProvider>) output -> new DatapackBuiltinEntriesProvider(
             event.getGenerator().getPackOutput(),
             event.getLookupProvider(),
