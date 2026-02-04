@@ -210,7 +210,6 @@ public interface ILootrInfo {
     return getDefaultLevel();
   }
 
-  // TODO: WTF?????
   @Nullable
   default Level getDefaultLevel() {
     MinecraftServer server = LootrAPI.getServer();

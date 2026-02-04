@@ -128,7 +128,6 @@ public final class BlockEntityTicker {
       return false;
     }
 
-    // TODO: This is checked twice in theory but it might be faster to check it here
     if (!LootrAPI.isWorldBorderSafe(level, pos)) {
       return false;
     }
@@ -267,8 +266,7 @@ public final class BlockEntityTicker {
     ItemStack itemCopy = ItemStack.EMPTY;
     if (adapter.hasCopyableComponentsViaItem(be)) {
       itemCopy = new ItemStack(be.getBlockState().getBlock());
-      // TODO:
-/*      be.saveToItem(itemCopy, level.registryAccess());*/
+      itemCopy.applyComponents(be.collectComponents());
     }
     // IMPORTANT: Clear loot table to prevent loot drop when container is destroyed
     adapter.setLootTable(be, null, 0);

@@ -69,9 +69,7 @@ public class LootrDecoratedPotBlock extends DecoratedPotBlock {
   protected InteractionResult useItemOn(
       ItemStack itemStack, BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult
   ) {
-    return InteractionResult.PASS;
-    // TODO:
-    // return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+    return useWithoutItem(blockState, level, blockPos, player, blockHitResult);
   }
 
   @Override

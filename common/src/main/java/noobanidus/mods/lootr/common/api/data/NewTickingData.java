@@ -113,7 +113,7 @@ public class NewTickingData {
       ).apply(instance, TickEntry::new));
     }
 
-    // TODO: Codec here is completely wrong, it should be derived from the UUID
+    // The input is the first 2 characters of the UUID
     public static final Function<String, Codec<Section>> CODEC = (name) -> TickEntry.CODEC.listOf()
         .xmap((data) -> new Section(name, data), o -> o.getTickMap().object2LongEntrySet().stream()
             .map(e -> new TickEntry(e.getKey(), e.getLongValue())).toList());
