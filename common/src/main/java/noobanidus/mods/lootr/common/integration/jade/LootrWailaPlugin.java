@@ -10,7 +10,6 @@ public class LootrWailaPlugin implements IWailaPlugin {
   @Override
   public void registerClient(IWailaClientRegistration registration) {
     registration.addRayTraceCallback((hitResult, accessor, originalAccessor) -> {
-      // TODO: It can be null :/
       if (accessor instanceof BlockAccessor blockAccessor) {
         BlockState newState;
         if (blockAccessor.getBlockState().is(LootrTags.Blocks.SANDS)) {

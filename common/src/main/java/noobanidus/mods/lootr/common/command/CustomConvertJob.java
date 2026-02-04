@@ -108,7 +108,6 @@ public final class CustomConvertJob {
       src.sendFailure(Component.literal("Level not found."));
       return 0;
     }
-    // TODO:
     level.getChunkSource().addTicketWithRadius(TicketType.FORCED, pos, 0);
     try {
       var chunk = level.getChunk(pos.x, pos.z);

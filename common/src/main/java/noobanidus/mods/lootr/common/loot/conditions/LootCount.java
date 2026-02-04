@@ -7,6 +7,7 @@ import com.mojang.serialization.codecs.PrimitiveCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -59,12 +60,9 @@ public record LootCount(List<Operation> operations) implements LootItemCondition
     return false;
   }
 
-
-  // TODO:
-/*  @Override
-  public Set<LootContextParam<?>> getReferencedContextParams() {
+  public Set<ContextKey<?>> getReferencedContextParams() {
     return ImmutableSet.of(LootContextParams.ORIGIN);
-  }*/
+  }
 
   public enum Operand implements BiPredicate<Integer, Integer>, StringRepresentable {
     EQUALS(Integer::equals, 0),

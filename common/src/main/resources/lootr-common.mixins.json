@@ -12,6 +12,7 @@
     "accessor.AccessorMixinItemFrame",
     "accessor.AccessorMixinLootTable",
     "accessor.AccessorMixinMinecraftServer",
+    "accessor.MixinChunkMap",
     "brushing.MixinBrushItem",
     "cat.MixinCatSitOnBlockGoal",
     "chest_blocking.MixinChestBlock",

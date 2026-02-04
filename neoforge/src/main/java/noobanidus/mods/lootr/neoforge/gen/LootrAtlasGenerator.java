@@ -37,6 +37,6 @@ public class LootrAtlasGenerator extends SpriteSourceProvider {
     this.atlas(Identifier.withDefaultNamespace("decorated_pot"))
         .addSource(new SingleFile(LootrAPI.rl("entity/loot_pot"), Optional.empty()))
         .addSource(new SingleFile(LootrAPI.rl("entity/loot_pot_open"), Optional.empty()))
-        .addSource(new SingleFile(LootrAPI.rl("entity/decorated_pot/loot_pottery_pattern"), Optional.empty()));
+/*        .addSource(new SingleFile(LootrAPI.rl("entity/decorated_pot/loot_pottery_pattern"), Optional.empty()))*/;
   }
 }

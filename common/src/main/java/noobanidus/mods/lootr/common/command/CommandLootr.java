@@ -68,9 +68,10 @@ import noobanidus.mods.lootr.common.data.DataStorage;
 import noobanidus.mods.lootr.common.data.LootrInventory;
 import noobanidus.mods.lootr.common.data.LootrSavedData;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
+import noobanidus.mods.lootr.common.impl.IChunkMapGetChunks;
 import noobanidus.mods.lootr.common.impl.LootrServiceRegistry;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinBaseContainerBlockEntity;
-import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinChunkMap;
+import noobanidus.mods.lootr.common.mixin.accessor.MixinChunkMap;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinMinecraftServer;
 import org.jetbrains.annotations.Nullable;
 
@@ -543,7 +544,7 @@ public class CommandLootr {
     builder.then(Commands.literal("force_all")
         .executes(c -> {
           ServerLevel level = c.getSource().getLevel();
-          for (ChunkHolder holder : ((AccessorMixinChunkMap) level.getChunkSource().chunkMap).lootr$getChunks()) {
+          for (ChunkHolder holder : ((IChunkMapGetChunks) level.getChunkSource().chunkMap).lootr$getChunks()) {
             if (!holder.wasAccessibleSinceLastSave()) {
               continue;
             }

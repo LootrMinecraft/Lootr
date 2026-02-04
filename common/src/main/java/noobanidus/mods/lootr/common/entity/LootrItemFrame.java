@@ -285,7 +285,6 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
     return 0;
   }
 
-  // TODO:
   @Override
   public ItemStack getPickResult() {
     return new ItemStack(Items.ITEM_FRAME);
