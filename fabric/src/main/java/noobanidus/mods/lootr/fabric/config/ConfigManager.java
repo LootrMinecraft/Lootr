@@ -246,7 +246,6 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
     return !get().notifications.disable_notifications && (delay == -1 || remaining <= delay);
   }
 
-  // TODO: Why isn't this being used?
   public static boolean shouldPerformPiecewiseCheck() {
     return get().conversion.perform_piecewise_check;
   }
