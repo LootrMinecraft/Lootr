@@ -2,7 +2,6 @@ package noobanidus.mods.lootr.fabric.impl.models;
 
 import com.google.auto.service.AutoService;
 import noobanidus.mods.lootr.common.api.client.ILootrFabricModelProvider;
-import noobanidus.mods.lootr.fabric.client.block.BrushableLocations;
 
 @AutoService(ILootrFabricModelProvider.class)
 public class FabricBrushablesProvider implements ILootrFabricModelProvider {
