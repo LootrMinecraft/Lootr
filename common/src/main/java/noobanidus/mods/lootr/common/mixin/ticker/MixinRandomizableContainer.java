@@ -31,6 +31,7 @@ public interface MixinRandomizableContainer {
     original.call(instance, l);
     if (instance.getLevel() != null && !instance.getLevel()
         .isClientSide() && instance instanceof BlockEntity blockEntity && !(instance instanceof ILootrBlockEntity) && !(LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity)) {
+      // TODO: This is the one that should cancel/close the container menu
       BlockEntityTicker.addEntity(blockEntity, blockEntity.getLevel(), new ChunkPos(blockEntity.getBlockPos()));
     }
   }
