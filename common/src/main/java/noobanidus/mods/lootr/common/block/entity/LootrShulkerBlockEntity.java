@@ -209,12 +209,11 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
     this.simpleLootrInstance.loadAdditional(input);
   }
 
-/*  @Override
-  public void saveToItem(ItemStack itemstack, HolderLookup.Provider provider) {
-    this.simpleLootrInstance.setSavingToItem(true);
-    super.saveToItem(itemstack, provider);
-    this.simpleLootrInstance.setSavingToItem(false);
-  }*/
+  @Override
+  public void removeComponentsFromTag(ValueOutput output) {
+    super.removeComponentsFromTag(output);
+    output.discard("LootrId");
+  }
 
   @Override
   protected void saveAdditional(ValueOutput output) {

@@ -116,6 +116,12 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   public void unpackLootTable(@Nullable Player player) {
   }
 
+  @Override
+  public void removeComponentsFromTag(ValueOutput output) {
+    super.removeComponentsFromTag(output);
+    output.discard("LootrId");
+  }
+
   @SuppressWarnings("Duplicates")
   @Override
   public void loadAdditional(ValueInput input) {
@@ -123,13 +129,6 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     this.tryLoadLootTable(input);
     this.simpleLootrInstance.loadAdditional(input);
   }
-
-/*  @Override
-  public void saveToItem(ItemStack itemstack, HolderLookup.Provider provider) {
-    this.simpleLootrInstance.setSavingToItem(true);
-    super.saveToItem(itemstack, provider);
-    this.simpleLootrInstance.setSavingToItem(false);
-  }*/
 
   @Override
   protected void saveAdditional(ValueOutput output) {

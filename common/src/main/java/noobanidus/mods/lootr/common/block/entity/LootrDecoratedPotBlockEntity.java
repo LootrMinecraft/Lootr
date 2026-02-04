@@ -171,10 +171,6 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
     return this.decorations;
   }
 
-  public void setFromItem(ItemStack itemStack) {
-    this.applyComponentsFromItemStack(itemStack);
-  }
-
   public ItemStack getPotAsItem() {
     ItemStack itemStack = LootrRegistry.getDecoratedPotItem().getDefaultInstance();
     itemStack.applyComponents(this.collectComponents());
@@ -226,6 +222,7 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
     super.removeComponentsFromTag(output);
     output.discard("LootTable");
     output.discard("LootTableSeed");
+    output.discard("LootrId");
   }
 
   @Override
