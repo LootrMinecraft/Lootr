@@ -1,0 +1,48 @@
+{
+  "values": [
+    {
+      "id": "betternether:nether_reed_barrel",
+      "required": false
+    },
+    {
+      "id": "betternether:stalagnate_barrel",
+      "required": false
+    },
+    {
+      "id": "betternether:willow_barrel",
+      "required": false
+    },
+    {
+      "id": "betternether:wart_barrel",
+      "required": false
+    },
+    {
+      "id": "betternether:warped_barrel",
+      "required": false
+    },
+    {
+      "id": "betternether:crimson_barrel",
+      "required": false
+    },
+    {
+      "id": "betternether:rubeus_barrel",
+      "required": false
+    },
+    {
+      "id": "betternether:mushroom_fir_barrel",
+      "required": false
+    },
+    {
+      "id": "betternether:nether_mushroom_barrel",
+      "required": false
+    },
+    {
+      "id": "betternether:anchor_tree_barrel",
+      "required": false
+    },
+    {
+      "id": "betternether:nether_sakura_barrel",
+      "required": false
+    }
+  ]
+}
