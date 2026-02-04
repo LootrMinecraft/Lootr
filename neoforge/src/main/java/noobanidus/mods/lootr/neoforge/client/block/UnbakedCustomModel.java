@@ -4,6 +4,7 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.client.renderer.block.model.BlockModelPart;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.client.renderer.block.model.Variant;
+import net.minecraft.client.resources.model.ModelState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
@@ -24,9 +25,18 @@ public class UnbakedCustomModel extends noobanidus.mods.lootr.common.client.bloc
     super(opened, unopened, vanilla, state, open);
   }
 
+  public UnbakedCustomModel withState (Variant.SimpleModelState modelState) {
+    return new UnbakedCustomModel(this.opened, this.unopened, this.vanilla, modelState, open);
+  }
+
   @Override
   protected Baker getBaker() {
     return Baked::new;
+  }
+
+  @Override
+  protected Provider<? extends noobanidus.mods.lootr.common.client.block.UnbakedCustomModel> getProvider() {
+    return UnbakedCustomModel::new;
   }
 
   @Override

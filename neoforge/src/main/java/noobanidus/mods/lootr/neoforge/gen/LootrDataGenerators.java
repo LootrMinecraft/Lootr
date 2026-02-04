@@ -30,5 +30,6 @@ public class LootrDataGenerators {
     generator.addProvider(true, new LootrAtlasGenerator(output, provider));
     generator.addProvider(true, new LootrLangProvider(output));
     generator.addProvider(true, new LootrParticleProvider(output));
+    generator.addProvider(true, new LootrModelProvider(output));
   }
 }

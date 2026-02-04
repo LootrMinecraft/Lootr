@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.common.client.block;
 
+import com.mojang.math.Quadrant;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -72,6 +73,8 @@ public abstract class UnbakedCustomModel implements BlockStateModel.Unbaked {
 
   protected abstract Baker getBaker();
 
+  protected abstract Provider<? extends UnbakedCustomModel> getProvider();
+
   @Override
   public BlockStateModel bake(ModelBaker baker) {
     return getBaker().bake(
@@ -87,6 +90,26 @@ public abstract class UnbakedCustomModel implements BlockStateModel.Unbaked {
     resolver.markDependency(unopened);
     resolver.markDependency(opened);
     resolver.markDependency(vanilla);
+  }
+
+  public UnbakedCustomModel withXRot(Quadrant xRot) {
+    return this.withState(this.state.withX(xRot));
+  }
+
+  public UnbakedCustomModel withYRot(Quadrant yRot) {
+    return this.withState(this.state.withY(yRot));
+  }
+
+  public UnbakedCustomModel withZRot(Quadrant p_470694_) {
+    return this.withState(this.state.withZ(p_470694_));
+  }
+
+  public UnbakedCustomModel withUvLock(boolean uvLock) {
+    return this.withState(this.state.withUvLock(uvLock));
+  }
+
+  public UnbakedCustomModel withState(Variant.SimpleModelState state) {
+    return getProvider().create(unopened, opened, vanilla, state, open);
   }
 
   public record BarrelKey(boolean vanilla, boolean open, boolean visuallyOpen, int facing) {
