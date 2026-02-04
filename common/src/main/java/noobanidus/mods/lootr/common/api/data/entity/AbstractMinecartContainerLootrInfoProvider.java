@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Set;
 import java.util.UUID;
 
-// TODO: Continue supporting this?
+// TODO: 26.1 remove this
 public record AbstractMinecartContainerLootrInfoProvider(
     AbstractMinecartContainer minecart, String cachedId) implements ILootrEntity {
 
