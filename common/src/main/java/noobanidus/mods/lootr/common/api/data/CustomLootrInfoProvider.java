@@ -14,7 +14,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Set;
 import java.util.UUID;
 
-// TODO: Continue supporting this?
 public record CustomLootrInfoProvider(
     UUID id,
     String cachedKey,
@@ -25,6 +24,7 @@ public record CustomLootrInfoProvider(
     Component displayName,
     ResourceKey<Level> dimension,
     NonNullList<ItemStack> customInventory,
+    // TODO: 26.1 migrate to remove these parameters
     @Deprecated @Nullable LootrInfoType type,
     @Deprecated @Nullable LootrBlockType blockType,
     ILootrType newType) implements ILootrInfoProvider {
