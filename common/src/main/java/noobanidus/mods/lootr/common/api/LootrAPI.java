@@ -14,7 +14,10 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.TicketType;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Unit;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.ContainerUser;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.animal.golem.CopperGolem;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -22,9 +25,11 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.phys.AABB;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
 import noobanidus.mods.lootr.common.api.client.ClientTextureType;
@@ -46,6 +51,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * This is the standard access to the platform-specific implementations of ILootrAPI.
@@ -596,5 +602,17 @@ public class LootrAPI {
 
   public static long getGameTime () {
     return INSTANCE.getGameTime();
+  }
+
+  public static void closeContainers (BlockEntity blockEntity) {
+    if (!(blockEntity instanceof Container container)) {
+      return;
+    }
+
+    for (ContainerUser user : container.getEntitiesWithContainerOpen()) {
+      if (user instanceof ServerPlayer player) {
+        player.closeContainer();
+      }
+    }
   }
 }
