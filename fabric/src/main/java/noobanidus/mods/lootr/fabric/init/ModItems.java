@@ -8,18 +8,27 @@ import net.minecraft.world.item.Rarity;
 import noobanidus.mods.lootr.common.api.LootrConstants;
 
 public class ModItems {
-  public static final BlockItem CHEST = new BlockItem(ModBlocks.CHEST, new Item.Properties());
-  public static final BlockItem BARREL = new BlockItem(ModBlocks.BARREL, new Item.Properties());
-  public static final BlockItem TRAPPED_CHEST = new BlockItem(ModBlocks.TRAPPED_CHEST, new Item.Properties());
-  public static final BlockItem SHULKER = new BlockItem(ModBlocks.SHULKER, new Item.Properties());
-  public static final BlockItem INVENTORY = new BlockItem(ModBlocks.INVENTORY, new Item.Properties());
+  public static final BlockItem CHEST = new BlockItem(ModBlocks.CHEST, new Item.Properties().setId(LootrConstants.CHEST_ITEM_RESOURCE_KEY)
+      .useBlockDescriptionPrefix());
+  public static final BlockItem BARREL = new BlockItem(ModBlocks.BARREL, new Item.Properties().setId(LootrConstants.BARREL_ITEM_RESOURCE_KEY)
+      .useBlockDescriptionPrefix());
+  public static final BlockItem TRAPPED_CHEST = new BlockItem(ModBlocks.TRAPPED_CHEST, new Item.Properties().setId(LootrConstants.TRAPPED_CHEST_ITEM_RESOURCE_KEY)
+      .useBlockDescriptionPrefix());
+  public static final BlockItem SHULKER = new BlockItem(ModBlocks.SHULKER, new Item.Properties().setId(LootrConstants.SHULKER_ITEM_RESOURCE_KEY)
+      .useBlockDescriptionPrefix());
+  public static final BlockItem INVENTORY = new BlockItem(ModBlocks.INVENTORY, new Item.Properties().setId(LootrConstants.INVENTORY_ITEM_RESOURCE_KEY)
+      .useBlockDescriptionPrefix());
 
-  public static final BlockItem SUSPICIOUS_SAND = new BlockItem(ModBlocks.SUSPICIOUS_SAND, new Item.Properties());
-  public static final BlockItem SUSPICIOUS_GRAVEL = new BlockItem(ModBlocks.SUSPICIOUS_GRAVEL, new Item.Properties());
+  public static final BlockItem SUSPICIOUS_SAND = new BlockItem(ModBlocks.SUSPICIOUS_SAND, new Item.Properties().setId(LootrConstants.SUSPICIOUS_SAND_ITEM_RESOURCE_KEY)
+      .useBlockDescriptionPrefix());
+  public static final BlockItem SUSPICIOUS_GRAVEL = new BlockItem(ModBlocks.SUSPICIOUS_GRAVEL, new Item.Properties().setId(LootrConstants.SUSPICIOUS_GRAVEL_ITEM_RESOURCE_KEY)
+      .useBlockDescriptionPrefix());
 
-  public static final BlockItem DECORATED_POT = new BlockItem(ModBlocks.DECORATED_POT, new Item.Properties());
+  public static final BlockItem DECORATED_POT = new BlockItem(ModBlocks.DECORATED_POT, new Item.Properties().setId(LootrConstants.DECORATED_POT_ITEM_RESOURCE_KEY)
+      .useBlockDescriptionPrefix());
 
-  public static final BlockItem TROPHY = new BlockItem(ModBlocks.TROPHY, new Item.Properties().rarity(Rarity.EPIC));
+  public static final BlockItem TROPHY = new BlockItem(ModBlocks.TROPHY, new Item.Properties().rarity(Rarity.EPIC)
+      .setId(LootrConstants.TROPHY_ITEM_RESOURCE_KEY).useBlockDescriptionPrefix());
 
   public static void registerItems() {
     Registry.register(BuiltInRegistries.ITEM, LootrConstants.LOOTR_CHEST, CHEST);
