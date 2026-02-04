@@ -42,23 +42,22 @@ public class LootrShulkerSpecialRenderer implements NoDataSpecialModelRenderer {
     this.renderer.getExtents(this.orientation, this.openness, consumer);
   }
 
-  public record Unbaked(Identifier texture, Identifier oldTexture, float openness,
+  public record Unbaked(Identifier texture, float openness,
                         Direction orientation) implements SpecialModelRenderer.Unbaked {
     public static final MapCodec<Unbaked> MAP_CODEC = RecordCodecBuilder.mapCodec(
         instance -> instance.group(
             Identifier.CODEC.fieldOf("texture").forGetter(Unbaked::texture),
-            Identifier.CODEC.fieldOf("old_texture").forGetter(Unbaked::oldTexture),
             Codec.FLOAT.fieldOf("openness").forGetter(Unbaked::openness),
             Direction.CODEC.fieldOf("orientation").forGetter(Unbaked::orientation)
         ).apply(instance, Unbaked::new)
     );
 
-    public Unbaked(Identifier texture, Identifier oldTexture) {
-      this(texture, oldTexture, 0.0f, Direction.UP);
+    public Unbaked(Identifier texture) {
+      this(texture, 0.0f, Direction.UP);
     }
 
     public static Unbaked shulker() {
-      return new Unbaked(LootrShulkerBoxRenderer.MATERIAL.texture(), LootrShulkerBoxRenderer.MATERIAL3.texture());
+      return new Unbaked(LootrShulkerBoxRenderer.MATERIAL.texture());
     }
 
     @Nullable
@@ -68,8 +67,6 @@ public class LootrShulkerSpecialRenderer implements NoDataSpecialModelRenderer {
       Material material;
       if (LootrAPI.isVanillaTextures()) {
         material = Sheets.DEFAULT_SHULKER_TEXTURE_LOCATION;
-      } else if (LootrAPI.isOldTextures()) {
-        material = new Material(Sheets.SHULKER_SHEET, oldTexture);
       } else {
         material = new Material(Sheets.SHULKER_SHEET, texture);
       }

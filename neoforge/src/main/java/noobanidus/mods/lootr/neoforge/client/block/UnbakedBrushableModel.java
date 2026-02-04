@@ -1,0 +1,61 @@
+package noobanidus.mods.lootr.neoforge.client.block;
+
+import com.mojang.serialization.MapCodec;
+import net.minecraft.client.renderer.block.model.BlockModelPart;
+import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.renderer.block.model.Variant;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.neoforged.neoforge.client.model.DynamicBlockStateModel;
+import net.neoforged.neoforge.client.model.block.CustomUnbakedBlockStateModel;
+import noobanidus.mods.lootr.neoforge.init.ModBlockProperties;
+
+import java.util.List;
+
+public class UnbakedBrushableModel extends noobanidus.mods.lootr.common.client.block.UnbakedBrushableModel implements CustomUnbakedBlockStateModel {
+  public static final MapCodec<UnbakedBrushableModel> CODEC = getCodec(UnbakedBrushableModel::new);
+
+  public UnbakedBrushableModel(Identifier opened, Identifier stage_0, Identifier stage_1, Identifier stage_2, Identifier stage_3, Variant.SimpleModelState state) {
+    super(opened, stage_0, stage_1, stage_2, stage_3, state);
+  }
+
+  @Override
+  public MapCodec<? extends CustomUnbakedBlockStateModel> codec() {
+    return CODEC;
+  }
+
+  @Override
+  protected Baker getBaker() {
+    return Baked::new;
+  }
+
+  public static class Baked extends noobanidus.mods.lootr.common.client.block.UnbakedBrushableModel.Baked implements DynamicBlockStateModel {
+    public Baked(BlockStateModel opened, BlockStateModel stage_0, BlockStateModel stage_1, BlockStateModel stage_2, BlockStateModel stage_3) {
+      super(opened, stage_0, stage_1, stage_2, stage_3);
+    }
+
+    @Override
+    public void collectParts(BlockAndTintGetter blockAndTintGetter, BlockPos blockPos, BlockState blockState, RandomSource randomSource, List<BlockModelPart> list) {
+      if (isOpenFromBATG(blockAndTintGetter, blockPos, blockState, randomSource)) {
+        opened.collectParts(blockAndTintGetter, blockPos, blockState, randomSource, list);
+        return;
+      }
+      int stage = blockState.getValue(BlockStateProperties.DUSTED);
+      switch (stage) {
+        case 1 -> stage_1.collectParts(blockAndTintGetter, blockPos, blockState, randomSource, list);
+        case 2 -> stage_2.collectParts(blockAndTintGetter, blockPos, blockState, randomSource, list);
+        case 3 -> stage_3.collectParts(blockAndTintGetter, blockPos, blockState, randomSource, list);
+        default -> stage_0.collectParts(blockAndTintGetter, blockPos, blockState, randomSource, list);
+      }
+    }
+
+    @Override
+    protected boolean isOpenFromBATG(BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource random) {
+      return level.getModelData(pos).get(ModBlockProperties.OPENED) == Boolean.TRUE;
+    }
+  }
+}

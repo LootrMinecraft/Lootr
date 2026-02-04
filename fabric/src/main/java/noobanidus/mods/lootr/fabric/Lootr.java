@@ -19,7 +19,6 @@ import noobanidus.mods.lootr.fabric.network.to_server.PacketRequestUpdate;
 public class Lootr implements ModInitializer {
   @Override
   public void onInitialize() {
-    BlockModelDefinition
     LootrAPI.INSTANCE = new LootrAPIImpl();
     LootrRegistry.INSTANCE = new LootrRegistryImpl();
     PlatformAPI.INSTANCE = new PlatformAPIImpl();

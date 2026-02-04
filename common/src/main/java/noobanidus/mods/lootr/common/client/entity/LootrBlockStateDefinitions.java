@@ -17,8 +17,8 @@ import java.util.function.Function;
 public class LootrBlockStateDefinitions {
   private static final StateDefinition<Block, BlockState> LOOTR_ITEM_FRAME_FAKE_DEFINITION = createItemFrameFakeState();
   private static final StateDefinition<Block, BlockState> LOOTR_OPEN_ITEM_FRAME_FAKE_DEFINITION = createItemFrameFakeState();
-  private static final Identifier LOOTR_OPEN_ITEM_FRAME_LOCATION = LootrConstants.ITEM_FRAME;
-  private static final Identifier LOOTR_ITEM_FRAME_LOCATION = LootrConstants.ITEM_FRAME.withSuffix("_open");
+  public static final Identifier LOOTR_OPEN_ITEM_FRAME_LOCATION = LootrConstants.ITEM_FRAME;
+  public static final Identifier LOOTR_ITEM_FRAME_LOCATION = LootrConstants.ITEM_FRAME.withSuffix("_open");
   private static final Map<Identifier, StateDefinition<Block, BlockState>> STATIC_DEFINITIONS = Map.of(
       LOOTR_ITEM_FRAME_LOCATION, LOOTR_ITEM_FRAME_FAKE_DEFINITION, LOOTR_OPEN_ITEM_FRAME_LOCATION, LOOTR_OPEN_ITEM_FRAME_FAKE_DEFINITION
   );

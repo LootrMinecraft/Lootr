@@ -20,26 +20,25 @@ public class LootrChestSpecialRenderer extends ChestSpecialRenderer {
     super(materials, chestModel, material, f);
   }
 
-  public record Unbaked(Identifier texture, Identifier oldTexture, Identifier vanillaTexture, float openness) implements SpecialModelRenderer.Unbaked {
+  public record Unbaked(Identifier texture, Identifier vanillaTexture, float openness) implements SpecialModelRenderer.Unbaked {
     public static final MapCodec<Unbaked> MAP_CODEC = RecordCodecBuilder.mapCodec(
         instance -> instance.group(
             Identifier.CODEC.fieldOf("texture").forGetter(Unbaked::texture),
-            Identifier.CODEC.fieldOf("old_texture").forGetter(Unbaked::oldTexture),
             Identifier.CODEC.fieldOf("vanilla_texture").forGetter(Unbaked::vanillaTexture),
             Codec.FLOAT.fieldOf("openness").forGetter(Unbaked::openness)
         ).apply(instance, Unbaked::new)
     );
 
-    public Unbaked (Identifier texture, Identifier oldTexture, Identifier vanillaTexture) {
-      this(texture, oldTexture, vanillaTexture, 0.0f);
+    public Unbaked (Identifier texture, Identifier vanillaTexture) {
+      this(texture, vanillaTexture, 0.0f);
     }
 
     public static Unbaked chest () {
-      return new Unbaked(LootrChestBlockRenderer.MATERIAL.texture(), LootrChestBlockRenderer.OLD_MATERIAL.texture(), Sheets.CHEST_LOCATION.texture());
+      return new Unbaked(LootrChestBlockRenderer.MATERIAL.texture(), Sheets.CHEST_LOCATION.texture());
     }
 
     public static Unbaked trappedChest () {
-      return new Unbaked(LootrChestBlockRenderer.MATERIAL3.texture(), LootrChestBlockRenderer.OLD_MATERIAL3.texture(), Sheets.CHEST_TRAP_LOCATION.texture());
+      return new Unbaked(LootrChestBlockRenderer.MATERIAL3.texture(), Sheets.CHEST_TRAP_LOCATION.texture());
     }
 
     @Nullable
@@ -49,8 +48,6 @@ public class LootrChestSpecialRenderer extends ChestSpecialRenderer {
       Material material;
       if (LootrAPI.isVanillaTextures()) {
         material = new Material(Sheets.CHEST_SHEET, vanillaTexture);
-      } else if (LootrAPI.isOldTextures()) {
-        material = new Material(Sheets.CHEST_SHEET, oldTexture);
       } else {
         material = new Material(Sheets.CHEST_SHEET, texture);
       }

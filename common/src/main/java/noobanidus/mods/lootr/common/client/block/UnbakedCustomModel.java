@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.common.client.block;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.renderer.block.model.*;
@@ -12,38 +13,41 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.block.LootrBarrelBlock;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
-public abstract class UnbakedBarrelBlockStateModel implements BlockStateModel.Unbaked {
-  public static <T extends UnbakedBarrelBlockStateModel> MapCodec<T> getCodec(Provider<T> provider) {
+public abstract class UnbakedCustomModel implements BlockStateModel.Unbaked {
+  public static <T extends UnbakedCustomModel> MapCodec<T> getCodec(Provider<T> provider) {
     return RecordCodecBuilder.mapCodec(instance ->
         instance.group(Identifier.CODEC.fieldOf("unopened")
-            .forGetter(UnbakedBarrelBlockStateModel::getUnopened), Identifier.CODEC.fieldOf("opened")
-            .forGetter(UnbakedBarrelBlockStateModel::getOpened), Identifier.CODEC.fieldOf("vanilla").forGetter(UnbakedBarrelBlockStateModel::getVanilla), Variant.SimpleModelState.MAP_CODEC.fieldOf("state")
-            .forGetter(UnbakedBarrelBlockStateModel::getState)
+            .forGetter(UnbakedCustomModel::getUnopened), Identifier.CODEC.fieldOf("opened")
+            .forGetter(UnbakedCustomModel::getOpened), Identifier.CODEC.fieldOf("vanilla").forGetter(UnbakedCustomModel::getVanilla), Variant.SimpleModelState.MAP_CODEC.fieldOf("state")
+            .forGetter(UnbakedCustomModel::getState),
+            Codec.BOOL.fieldOf("open").forGetter(UnbakedCustomModel::getOpen)
         ).apply(instance, provider::create));
   }
 
   @FunctionalInterface
-  public interface Provider<T extends UnbakedBarrelBlockStateModel> {
-    T create(Identifier opened, Identifier unopened, Identifier vanilla, Variant.SimpleModelState state);
+  public interface Provider<T extends UnbakedCustomModel> {
+    T create(Identifier opened, Identifier unopened, Identifier vanilla, Variant.SimpleModelState state, boolean open);
   }
 
   @FunctionalInterface
   public interface Baker {
-    BlockStateModel bake(BlockStateModel unopened, BlockStateModel opened, BlockStateModel vanilla);
+    BlockStateModel bake(BlockStateModel unopened, BlockStateModel opened, BlockStateModel vanilla, boolean open);
   }
 
   protected final Identifier opened, unopened, vanilla;
   protected final Variant.SimpleModelState state;
+  protected final boolean open;
 
-  public UnbakedBarrelBlockStateModel(Identifier opened, Identifier unopened, Identifier vanilla, Variant.SimpleModelState state) {
+  public UnbakedCustomModel(Identifier opened, Identifier unopened, Identifier vanilla, Variant.SimpleModelState state, boolean open) {
     this.opened = opened;
     this.unopened = unopened;
     this.vanilla = vanilla;
     this.state = state;
+    this.open = open;
   }
 
   public Identifier getOpened() {
@@ -58,6 +62,10 @@ public abstract class UnbakedBarrelBlockStateModel implements BlockStateModel.Un
     return vanilla;
   }
 
+  public boolean getOpen () {
+    return open;
+  }
+
   public Variant.SimpleModelState getState() {
     return state;
   }
@@ -69,7 +77,8 @@ public abstract class UnbakedBarrelBlockStateModel implements BlockStateModel.Un
     return getBaker().bake(
         new SingleVariant(SimpleModelWrapper.bake(baker, unopened, state.asModelState())),
         new SingleVariant(SimpleModelWrapper.bake(baker, opened, state.asModelState())),
-        new SingleVariant(SimpleModelWrapper.bake(baker, vanilla, state.asModelState()))
+        new SingleVariant(SimpleModelWrapper.bake(baker, vanilla, state.asModelState())),
+        this.open
     );
   }
 
@@ -85,19 +94,25 @@ public abstract class UnbakedBarrelBlockStateModel implements BlockStateModel.Un
 
   public abstract static class Baked implements BlockStateModel {
     protected final BlockStateModel unopened, opened, vanilla;
+    protected final boolean open;
 
-    public Baked(BlockStateModel unopened, BlockStateModel opened, BlockStateModel vanilla) {
+    public Baked(BlockStateModel unopened, BlockStateModel opened, BlockStateModel vanilla, boolean open) {
       this.unopened = unopened;
       this.opened = opened;
       this.vanilla = vanilla;
+      this.open = open;
     }
 
     @Override
-    public void collectParts(RandomSource random, List<BlockModelPart> output) {
+    public void collectParts(@NonNull RandomSource random, @NonNull List<BlockModelPart> output) {
       if (LootrAPI.isVanillaTextures()) {
         vanilla.collectParts(random, output);
       } else {
-        unopened.collectParts(random, output);
+        if (open) {
+          opened.collectParts(random, output);
+        } else {
+          unopened.collectParts(random, output);
+        }
       }
     }
 
@@ -114,7 +129,6 @@ public abstract class UnbakedBarrelBlockStateModel implements BlockStateModel.Un
 
     public Object internalCreateObjectKey(BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource random) {
       boolean visuallyOpen = isOpenFromBATG(level, pos, state, random);
-      boolean open = state.getValue(BarrelBlock.OPEN);
       int facing = state.getValue(BarrelBlock.FACING).ordinal();
       boolean vanilla = LootrAPI.isVanillaTextures();
       return new BarrelKey(vanilla, open, visuallyOpen, facing);
