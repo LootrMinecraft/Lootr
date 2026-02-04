@@ -27,11 +27,11 @@ public class LootrInventoryBlockEntity extends LootrChestBlockEntity {
   @Override
   @Nullable
   public NonNullList<ItemStack> getInfoReferenceInventory() {
-    return simpleLootrInstance.getItems();
+    return simpleLootrInstance.getReferenceInventory();
   }
 
   public void setCustomInventory(NonNullList<ItemStack> customInventory) {
-    simpleLootrInstance.setItems(customInventory);
+    simpleLootrInstance.setReferenceInventory(customInventory);
   }
 
   @Override

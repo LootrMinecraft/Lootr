@@ -60,7 +60,15 @@ public record BaseLootrInfo(@Deprecated @Nullable LootrBlockType blockType,
     if (blockType != null) {
       return BuiltInLootrTypes.fromLegacy(blockType);
     }
-    return null; // TODO:
+    if (infoType != null) {
+      if (infoType == LootrInfoType.CONTAINER_BLOCK_ENTITY) {
+        return BuiltInLootrTypes.CHEST;
+      } else if (infoType == LootrInfoType.CONTAINER_ENTITY) {
+        return BuiltInLootrTypes.MINECART;
+      }
+    }
+
+    return BuiltInLootrTypes.CHEST;
   }
 
   @Override

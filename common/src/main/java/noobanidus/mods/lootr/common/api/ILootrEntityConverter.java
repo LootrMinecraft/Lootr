@@ -5,7 +5,7 @@ import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 
 import java.util.function.Function;
 
-// TODO: I can technically get away with renaming this from "Converter"
+// TODO 26.1: I can technically get away with renaming this from "Converter"
 // as it doesn't actually convert, it just wraps/resolves.
 
 /**

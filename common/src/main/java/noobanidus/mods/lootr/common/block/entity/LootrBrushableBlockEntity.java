@@ -459,12 +459,12 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
 
   @Override
   public @Nullable NonNullList<ItemStack> getInfoReferenceInventory() {
-    return null;
+    return simpleLootrInstance.getReferenceInventory();
   }
 
   @Override
   public boolean isInfoReferenceInventory() {
-    return false;
+    return simpleLootrInstance.isReferenceInventory();
   }
 
   @Override

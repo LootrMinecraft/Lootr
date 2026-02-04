@@ -253,6 +253,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     return getContainerLootTableSeed();
   }
 
+  // TODO:
   @Override
   public @Nullable NonNullList<ItemStack> getInfoReferenceInventory() {
     return null;

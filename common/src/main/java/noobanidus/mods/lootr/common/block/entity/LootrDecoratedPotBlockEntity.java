@@ -335,12 +335,12 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
 
   @Override
   public @Nullable NonNullList<ItemStack> getInfoReferenceInventory() {
-    return null;
+    return this.lootrInstance.getReferenceInventory();
   }
 
   @Override
   public boolean isInfoReferenceInventory() {
-    return false;
+    return this.lootrInstance.isReferenceInventory();
   }
 
   @Override

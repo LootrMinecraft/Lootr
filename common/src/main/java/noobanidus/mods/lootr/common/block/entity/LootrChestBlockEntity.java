@@ -251,12 +251,12 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
 
   @Override
   public @Nullable NonNullList<ItemStack> getInfoReferenceInventory() {
-    return null;
+    return this.simpleLootrInstance.getReferenceInventory();
   }
 
   @Override
   public boolean isInfoReferenceInventory() {
-    return false;
+    return this.simpleLootrInstance.isReferenceInventory();
   }
 
   @Override

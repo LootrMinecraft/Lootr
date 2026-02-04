@@ -260,12 +260,12 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
 
   @Override
   public @Nullable NonNullList<ItemStack> getInfoReferenceInventory() {
-    return null;
+    return simpleLootrInstance.getReferenceInventory();
   }
 
   @Override
   public boolean isInfoReferenceInventory() {
-    return false;
+    return simpleLootrInstance.isReferenceInventory();
   }
 
   @Override

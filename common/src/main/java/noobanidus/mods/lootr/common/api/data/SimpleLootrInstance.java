@@ -8,6 +8,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.ProblemReporter;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.TagValueOutput;
@@ -26,6 +27,7 @@ public class SimpleLootrInstance {
   private static final Logger LOGGER = LogUtils.getLogger();
 
   protected NonNullList<ItemStack> items;
+  protected NonNullList<ItemStack> referenceInventory = null;
   protected final Set<UUID> clientOpeners = new ObjectOpenHashSet<>();
   protected UUID infoId = null;
   protected boolean hasBeenOpened = false;
@@ -45,9 +47,12 @@ public class SimpleLootrInstance {
     return items;
   }
 
-  // TODO:
-  public void setItems(NonNullList<ItemStack> items) {
-    this.items = items;
+  public void setReferenceInventory(NonNullList<ItemStack> items) {
+    this.referenceInventory = items;
+  }
+
+  public NonNullList<ItemStack> getReferenceInventory () {
+    return this.referenceInventory;
   }
 
   public Set<UUID> getClientOpeners() {
@@ -101,6 +106,12 @@ public class SimpleLootrInstance {
     }
     clientOpeners.clear();
     input.read(NBTConstants.OPENERS, UUIDUtil.CODEC_SET).map(clientOpeners::addAll);
+    if (input.getBooleanOr(NBTConstants.IS_CUSTOM_INVENTORY, false)) {
+      if (this.referenceInventory == null) {
+        this.referenceInventory = NonNullList.withSize(getInfoContainerSize(), ItemStack.EMPTY);
+      }
+      ContainerHelper.loadAllItems(input, this.referenceInventory);
+    }
   }
 
   public void saveAdditional(ValueOutput output, boolean isClientSide) {
@@ -112,6 +123,12 @@ public class SimpleLootrInstance {
       if (!clientOpeners.isEmpty()) {
         output.store(NBTConstants.OPENERS, UUIDUtil.CODEC_SET, clientOpeners);
       }
+    }
+    if (this.referenceInventory != null) {
+      output.putBoolean(NBTConstants.IS_CUSTOM_INVENTORY, true);
+      ContainerHelper.saveAllItems(output, this.referenceInventory);
+    } else {
+      output.putBoolean(NBTConstants.IS_CUSTOM_INVENTORY, false);
     }
   }
 
@@ -130,5 +147,9 @@ public class SimpleLootrInstance {
 
       return output.buildResult();
     }
+  }
+
+  public boolean isReferenceInventory() {
+    return referenceInventory != null && !referenceInventory.isEmpty();
   }
 }

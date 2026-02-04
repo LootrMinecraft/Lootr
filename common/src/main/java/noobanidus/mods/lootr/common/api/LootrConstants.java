@@ -25,7 +25,7 @@ public class LootrConstants {
   public static final Identifier SHERDSAPI_POT_DECORATIONS = Identifier.fromNamespaceAndPath("sherdsapi", "stack_pot_decorations");
   public static final Identifier SHERDSAPI_SHERD_PATTERN = Identifier.fromNamespaceAndPath("sherdsapi", "sherd_pattern");
 
-  // TODO: Rename these eventually.
+  // TODO: 26.1 Rename these eventually.
   public static final Identifier LOOTR_CHEST = LootrAPI.rl("lootr_chest");
   public static final Identifier LOOTR_TRAPPED_CHEST = LootrAPI.rl("lootr_trapped_chest");
   public static final Identifier LOOTR_SHULKER = LootrAPI.rl("lootr_shulker");
@@ -39,7 +39,7 @@ public class LootrConstants {
   public static final Identifier CHEST = LootrAPI.rl("chest");
   public static final Identifier TRAPPED_CHEST = LootrAPI.rl("trapped_chest");
 
-  // TODO: Migrate shulker -> shulker_box
+  // TODO: 26.1 Migrate shulker -> shulker_box
   public static final Identifier SHULKER = LootrAPI.rl("shulker");
 
   public static final Identifier SHULKER_BOX = LootrAPI.rl("shulker_box");
@@ -65,7 +65,7 @@ public class LootrConstants {
   public static final Identifier CAN_CONVERT = LootrAPI.rl("lootr_can_convert_item_frame");
   public static final String CAN_CONVERT_TAG = CAN_CONVERT.toString();
 
-  // TODO: These are for backwards-compatibility
+  // TODO: 26.1 (remove) These are for backwards-compatibility
   public static final String LOOTR_SPECIAL_CHEST = "lootr:special_loot_chest";
   public static final String LOOTR_SPECIAL_BARREL = "lootr:special_loot_barrel";
   public static final String LOOTR_SPECIAL_TRAPPED_CHEST = "lootr:special_trapped_loot_chest";
