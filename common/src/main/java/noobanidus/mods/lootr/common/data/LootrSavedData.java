@@ -172,8 +172,7 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
   public void refresh() {
     inventories.clear();
     hasBeenOpened = false;
-    // TODO: 1.21.11 didn't have this
-    // markChanged();
+    markChanged();
   }
 
   // TODO: Is there disparity between the usage of "hasBeenOpened" in ILootrSavedData
