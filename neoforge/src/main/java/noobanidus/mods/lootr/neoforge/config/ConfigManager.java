@@ -326,7 +326,7 @@ public class ConfigManager extends ConfigManagerBase {
       return true;
     }
 
-    return !getLootModids().isEmpty() && getLootModids().contains(table.location().getNamespace());
+    return !getLootModids().isEmpty() && getLootModids().contains(table.identifier().getNamespace());
   }
 
   public static Set<ResourceKey<LootTable>> getDecayingTables() {
@@ -358,8 +358,8 @@ public class ConfigManager extends ConfigManagerBase {
   }
 
   public static boolean isDimensionBlocked(ResourceKey<Level> key) {
-    if (!getDimensionModidWhitelist().isEmpty() && !getDimensionModidWhitelist().contains(key.location()
-        .getNamespace()) || getDimensionModidBlacklist().contains(key.location().getNamespace())) {
+    if (!getDimensionModidWhitelist().isEmpty() && !getDimensionModidWhitelist().contains(key.identifier()
+        .getNamespace()) || getDimensionModidBlacklist().contains(key.identifier().getNamespace())) {
       return true;
     }
 
@@ -382,7 +382,7 @@ public class ConfigManager extends ConfigManagerBase {
       if (!getDecayingTables().isEmpty() && getDecayingTables().contains(provider.getInfoLootTable())) {
         return true;
       }
-      if (!getDecayMods().isEmpty() && getDecayMods().contains(provider.getInfoLootTable().location().getNamespace())) {
+      if (!getDecayMods().isEmpty() && getDecayMods().contains(provider.getInfoLootTable().identifier().getNamespace())) {
         return true;
       }
     }
@@ -400,7 +400,7 @@ public class ConfigManager extends ConfigManagerBase {
       if (!getRefreshingTables().isEmpty() && getRefreshingTables().contains(provider.getInfoLootTable())) {
         return true;
       }
-      if (!getRefreshMods().isEmpty() && getRefreshMods().contains(provider.getInfoLootTable().location()
+      if (!getRefreshMods().isEmpty() && getRefreshMods().contains(provider.getInfoLootTable().identifier()
           .getNamespace())) {
         return true;
       }

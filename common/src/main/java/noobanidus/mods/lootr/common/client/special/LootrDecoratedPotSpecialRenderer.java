@@ -36,7 +36,8 @@ public class LootrDecoratedPotSpecialRenderer implements SpecialModelRenderer<Po
   }
 
   public record Unbaked() implements SpecialModelRenderer.Unbaked {
-    public static final MapCodec<Unbaked> MAP_CODEC = MapCodec.unit(new Unbaked());
+    private static final Unbaked INSTANCE = new Unbaked();
+    public static final MapCodec<Unbaked> MAP_CODEC = MapCodec.unit(INSTANCE);
 
     @Override
     public SpecialModelRenderer<?> bake(BakingContext context) {
@@ -46,6 +47,10 @@ public class LootrDecoratedPotSpecialRenderer implements SpecialModelRenderer<Po
     @Override
     public MapCodec<? extends SpecialModelRenderer.Unbaked> type() {
       return MAP_CODEC;
+    }
+
+    public static Unbaked decoratedPot () {
+      return INSTANCE;
     }
   }
 }

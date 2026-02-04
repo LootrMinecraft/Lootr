@@ -54,11 +54,7 @@ public class UnbakedCustomModel extends noobanidus.mods.lootr.common.client.bloc
 
       if (blockState.isAir()) {
         if (!LootrAPI.isVanillaTextures()) {
-          if (open) {
-            opened.collectParts(blockAndTintGetter, blockPos, blockState, randomSource, list);
-          } else {
-            unopened.collectParts(blockAndTintGetter, blockPos, blockState, randomSource, list);
-          }
+          unopened.collectParts(blockAndTintGetter, blockPos, blockState, randomSource, list);
         }
         return;
       }
