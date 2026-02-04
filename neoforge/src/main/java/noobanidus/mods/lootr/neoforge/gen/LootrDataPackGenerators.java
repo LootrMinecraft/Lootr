@@ -48,7 +48,7 @@ public class LootrDataPackGenerators {
       return;
     }
     event.getGenerator().addProvider(
-        event.includeServer(),
+        event.includeDev(),
         (DataProvider.Factory<DatapackBuiltinEntriesProvider>) output -> new DatapackBuiltinEntriesProvider(
             event.getGenerator().getPackOutput(),
             event.getLookupProvider(),

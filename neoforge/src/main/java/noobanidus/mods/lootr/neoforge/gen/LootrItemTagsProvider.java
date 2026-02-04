@@ -2,21 +2,17 @@ package noobanidus.mods.lootr.neoforge.gen;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.tags.ItemTagsProvider;
-import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Block;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.data.ItemTagsProvider;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 
 public class LootrItemTagsProvider extends ItemTagsProvider {
-  public LootrItemTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookup, CompletableFuture<TagsProvider.TagLookup<Block>> blockTags, @Nullable ExistingFileHelper existingFileHelper) {
-    super(output, lookup, blockTags, LootrAPI.MODID, existingFileHelper);
+  public LootrItemTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookup) {
+    super(output, lookup, LootrAPI.MODID);
   }
 
   @Override

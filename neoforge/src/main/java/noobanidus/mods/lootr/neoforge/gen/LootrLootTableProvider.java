@@ -12,13 +12,13 @@ import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
@@ -41,8 +41,12 @@ public class LootrLootTableProvider {
       super(Set.of(), FeatureFlags.REGISTRY.allFlags(), arg2);
     }
 
-    protected LootTable.Builder lootrBlockDrop (Block block) {
-      return LootTable.lootTable().withPool(this.applyExplosionCondition(block, LootPool.lootPool().setRolls(ConstantValue.exactly(1.0f)).add(LootItem.lootTableItem(block).apply(CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY).include(DataComponents.CUSTOM_NAME)))));
+    protected LootTable.Builder lootrBlockDrop(Block block) {
+      return LootTable.lootTable()
+          .withPool(this.applyExplosionCondition(block, LootPool.lootPool().setRolls(ConstantValue.exactly(1.0f))
+              .add(LootItem.lootTableItem(block)
+                  .apply(CopyComponentsFunction.copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY)
+                      .include(DataComponents.CUSTOM_NAME)))));
     }
 
     @Override
@@ -60,15 +64,16 @@ public class LootrLootTableProvider {
       this.generate();
       HashSet<ResourceKey<LootTable>> set = new HashSet<>();
       for (Block block : List.of(ModBlocks.CHEST.get(), ModBlocks.BARREL.get(), ModBlocks.INVENTORY.get(), ModBlocks.TRAPPED_CHEST.get(), ModBlocks.SHULKER.get(), ModBlocks.TROPHY.get())) {
-        ResourceKey<LootTable> resourceKey = block.getLootTable();
-        if (resourceKey == BuiltInLootTables.EMPTY || !set.add(resourceKey)) {
-          continue;
-        }
-        LootTable.Builder builder = this.map.remove(resourceKey);
-        if (builder == null) {
-          throw new IllegalStateException(String.format(Locale.ROOT, "Missing loottable '%s' for '%s'", resourceKey.location(), BuiltInRegistries.BLOCK.getKey(block)));
-        }
-        biConsumer.accept(resourceKey, builder);
+        block.getLootTable().ifPresent(resourceKey -> {
+          if (!set.add(resourceKey)) {
+            return;
+          }
+          LootTable.Builder builder = this.map.remove(resourceKey);
+          if (builder == null) {
+            throw new IllegalStateException(String.format(Locale.ROOT, "Missing loottable '%s' for '%s'", resourceKey.identifier(), BuiltInRegistries.BLOCK.getKey(block)));
+          }
+          biConsumer.accept(resourceKey, builder);
+        });
       }
       if (!this.map.isEmpty()) {
         throw new IllegalStateException("Created block loot tables for non-blocks: " + this.map.keySet());
@@ -88,14 +93,16 @@ public class LootrLootTableProvider {
               .withPool(
                   LootPool.lootPool()
                       .setRolls(ConstantValue.exactly(1))
-                      .add(LootItem.lootTableItem(Items.ELYTRA).apply(SetItemCountFunction.setCount(ConstantValue.exactly(1))))));
+                      .add(LootItem.lootTableItem(Items.ELYTRA)
+                          .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1))))));
       consumer.accept(
           LootrAPI.TROPHY_REWARD,
           LootTable.lootTable()
               .withPool(
                   LootPool.lootPool()
                       .setRolls(ConstantValue.exactly(1))
-                      .add(LootItem.lootTableItem(LootrRegistry.getTrophyBlock()).apply(SetItemCountFunction.setCount(ConstantValue.exactly(1))))));
+                      .add(LootItem.lootTableItem(LootrRegistry.getTrophyBlock())
+                          .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1))))));
       consumer.accept(
           LootrAPI.ITEM_FRAME_EMPTY,
           LootTable.lootTable()

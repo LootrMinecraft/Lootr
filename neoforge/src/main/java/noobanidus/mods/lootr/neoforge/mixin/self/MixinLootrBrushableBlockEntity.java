@@ -1,8 +1,8 @@
 package noobanidus.mods.lootr.neoforge.mixin.self;
 
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.common.extensions.IBlockEntityExtension;
+import net.neoforged.neoforge.model.data.ModelData;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.block.entity.LootrBrushableBlockEntity;
 import noobanidus.mods.lootr.common.client.ClientHooks;
