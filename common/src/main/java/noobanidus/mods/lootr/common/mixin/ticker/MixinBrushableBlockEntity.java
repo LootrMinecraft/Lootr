@@ -19,13 +19,10 @@ public class MixinBrushableBlockEntity {
   @Shadow
   private long lootTableSeed;
 
-  // Confer MixinRandomizableContainer
-  // Brushables are not a container
   @Inject(method = "tryLoadLootTable", at = @At(value = "RETURN"), cancellable = true)
   public void lootr$tryLoadLootTable(ValueInput input, CallbackInfoReturnable<Boolean> cir) {
     BrushableBlockEntity instance = (BrushableBlockEntity) (Object) this;
     if (instance.getLevel() != null && lootTable != null) {
-      // TODO: Something to cancel the window
       BlockEntityTicker.addEntity(instance, instance.getLevel(), new ChunkPos(instance.getBlockPos()));
       cir.setReturnValue(true);
     }
