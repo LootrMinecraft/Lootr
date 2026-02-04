@@ -155,9 +155,8 @@ public class LootrServiceRegistry {
     }
     Function<T, ILootrBlockEntity> converter = getBlockEntity(blockEntity.getType());
     if (converter == null) {
-      // TODO: Is it worth checking T instanceof ILootrBlockEntity? If it has a converted
-      // registered then this check would fail, so it can properly provide whatever object
-      // it wishes to.
+      // Not worth checking if T is ILootrBlockEntity because they should always register a
+      // wrapper.
       return null;
     }
     return converter.apply(blockEntity);
