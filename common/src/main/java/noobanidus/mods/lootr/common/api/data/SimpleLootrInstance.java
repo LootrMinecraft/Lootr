@@ -31,7 +31,6 @@ public class SimpleLootrInstance {
   protected boolean hasBeenOpened = false;
   protected String cachedId;
   protected boolean clientOpened = false;
-  protected boolean savingToItem = false;
 
   protected boolean providesOwnUuid = false;
 
@@ -93,14 +92,6 @@ public class SimpleLootrInstance {
     this.hasBeenOpened = true;
   }
 
-  public boolean isSavingToItem() {
-    return savingToItem;
-  }
-
-  public void setSavingToItem(boolean saving) {
-    this.savingToItem = saving;
-  }
-
   public void loadAdditional(ValueInput input) {
     if (!providesOwnUuid) {
       this.infoId = input.read(NBTConstants.INSTANCE_ID, UUIDUtil.CODEC).orElse(null);
@@ -114,7 +105,7 @@ public class SimpleLootrInstance {
   }
 
   public void saveAdditional(ValueOutput output, boolean isClientSide) {
-    if (!LootrAPI.shouldDiscard() && !isSavingToItem() && !providesOwnUuid) {
+    if (!LootrAPI.shouldDiscard() && !providesOwnUuid) {
       output.store(NBTConstants.INSTANCE_ID, UUIDUtil.CODEC, getInfoUUID());
     }
     output.putBoolean(NBTConstants.HAS_BEEN_OPENED, this.hasBeenOpened);
