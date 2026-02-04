@@ -127,7 +127,6 @@ public record RandomizableContainerBlockEntityLootrInfoProvider(
     if (blockEntity.getLevel() != null && blockEntity.getLevel().isClientSide()) {
       return;
     }
-    // TODO: Ensure this is never called on the client
     ILootrSavedData data = LootrAPI.getData(this);
     if (data != null) {
       data.markChanged();
