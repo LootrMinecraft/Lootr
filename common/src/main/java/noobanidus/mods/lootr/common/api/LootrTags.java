@@ -67,7 +67,6 @@ public class LootrTags {
     public static TagKey<EntityType<?>> CONVERT_CARTS = tag("convert/minecarts");
     public static TagKey<EntityType<?>> CONVERT_ITEM_FRAMES = tag("convert/item_frames");
     public static TagKey<EntityType<?>> CONVERT_ENTITIES = tag("convert/entities");
-    // TODO: Use this
     public static TagKey<EntityType<?>> CONVERT_BLACKLIST = tag("blacklist");
 
     public static TagKey<EntityType<?>> MINECARTS = tag("minecarts");

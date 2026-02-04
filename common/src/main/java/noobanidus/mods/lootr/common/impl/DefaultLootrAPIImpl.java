@@ -336,14 +336,6 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
         if (DESERT_PYRAMID_ADDITIONAL.moved(center.getX(), center.getY(), center.getZ()).isInside(pos)) {
           return true;
         }
-/*      } else if (start.getStructure().type().equals(StructureType.JUNGLE_TEMPLE)) {
-        // Compensate for the fact that the jungle pyramid bounding box is 2 short
-        // TODO: I don't think it ever reaches this point even if it is the jungle temple
-        // due to inflation.
-        BoundingBox jungle = new BoundingBox(extended.minX(), extended.minY() - 2, extended.minZ(), extended.maxX(), extended.maxY(), extended.maxZ());
-        if (jungle.isInside(pos)) {
-          return true;
-        }*/
       }
     }
     if (LootrAPI.performPiecewiseCheck()) {

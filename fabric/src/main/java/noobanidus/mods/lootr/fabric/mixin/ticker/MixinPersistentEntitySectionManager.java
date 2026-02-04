@@ -60,7 +60,7 @@ public class MixinPersistentEntitySectionManager {
           level.getServer().execute(() -> level.addFreshEntity(newItemFrame));
         }
       }
-    } else if (entity.getType().is(LootrTags.Entity.CONVERT_ENTITIES)) {
+    } else if (entity.getType().is(LootrTags.Entity.CONVERT_ENTITIES) && !entity.getType().is(LootrTags.Entity.CONVERT_BLACKLIST)) {
       ILootrDataAdapter<Entity> adapter = LootrAPI.getAdapter(entity);
       if (adapter == null) {
         LootrAPI.LOG.error("No adapter found for entity '{}' even though it is tagged for conversion.", entity);
