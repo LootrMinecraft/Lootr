@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.fabric.mixin.data_fixer;
+package noobanidus.mods.lootr.fabric.mixin.self;
 
 import net.fabricmc.fabric.api.blockview.v2.RenderDataBlockEntity;
 import net.minecraft.world.entity.player.Player;

@@ -94,7 +94,7 @@ public class LootrDecoratedPotBlock extends DecoratedPotBlock {
 
   @Override
   protected ItemStack getCloneItemStack(LevelReader levelReader, BlockPos blockPos, BlockState blockState, boolean boolValue) {
-    // TODO: What is boolValue?
+    // boolValue is "include data"
     BlockEntity var5 = levelReader.getBlockEntity(blockPos);
     return var5 instanceof LootrDecoratedPotBlockEntity decoratedPotBlockEntity
         ? decoratedPotBlockEntity.getPotAsItem()
