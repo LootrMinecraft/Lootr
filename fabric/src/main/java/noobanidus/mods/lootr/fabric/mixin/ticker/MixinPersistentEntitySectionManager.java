@@ -1,7 +1,6 @@
 package noobanidus.mods.lootr.fabric.mixin.ticker;
 
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
@@ -58,7 +57,7 @@ public class MixinPersistentEntitySectionManager {
 
           cir.setReturnValue(false);
           cir.cancel();
-          level.getServer().tell(new TickTask(0, () -> level.addFreshEntity(newItemFrame)));
+          level.getServer().execute(() -> level.addFreshEntity(newItemFrame));
         }
       }
     } else if (entity.getType().is(LootrTags.Entity.CONVERT_ENTITIES)) {
@@ -82,7 +81,7 @@ public class MixinPersistentEntitySectionManager {
 
       cir.setReturnValue(false);
       cir.cancel();
-      level.getServer().tell(new TickTask(0, () -> level.addFreshEntity(lootrCart)));
+      level.getServer().execute(() -> level.addFreshEntity(lootrCart));
     }
   }
 }

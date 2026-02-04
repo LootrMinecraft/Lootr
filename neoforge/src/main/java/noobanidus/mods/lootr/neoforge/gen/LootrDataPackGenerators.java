@@ -44,9 +44,6 @@ public class LootrDataPackGenerators {
   private static final ResourceKey<StructureSet> LOOTR_TEST_STRUCTURE_SET = ResourceKey.create(Registries.STRUCTURE_SET, LootrAPI.rl("test_structure_set"));
 
   public static void onGatherData(GatherDataEvent event) {
-    if (!event.getMods().contains(LootrAPI.MODID)) {
-      return;
-    }
     event.getGenerator().addProvider(
         event.includeDev(),
         (DataProvider.Factory<DatapackBuiltinEntriesProvider>) output -> new DatapackBuiltinEntriesProvider(
@@ -62,7 +59,7 @@ public class LootrDataPackGenerators {
                 .add(Registries.STRUCTURE, bootstrap -> {
                   HolderGetter<Biome> biomeGetter = bootstrap.lookup(Registries.BIOME);
                   HolderGetter<StructureTemplatePool> poolGetter = bootstrap.lookup(Registries.TEMPLATE_POOL);
-                  bootstrap.register(LOOTR_TEST_STRUCTURE, new JigsawStructure(new Structure.StructureSettings(biomeGetter.getOrThrow(BiomeTags.HAS_BURIED_TREASURE), Collections.emptyMap(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.BEARD_BOX), poolGetter.getOrThrow(LOOTR_TEST_START_POOL), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.of(Heightmap.Types.WORLD_SURFACE_WG), 80, Collections.emptyList(), DimensionPadding.ZERO, LiquidSettings.IGNORE_WATERLOGGING));
+                  bootstrap.register(LOOTR_TEST_STRUCTURE, new JigsawStructure(new Structure.StructureSettings(biomeGetter.getOrThrow(BiomeTags.HAS_BURIED_TREASURE), Collections.emptyMap(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.BEARD_BOX), poolGetter.getOrThrow(LOOTR_TEST_START_POOL), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.of(Heightmap.Types.WORLD_SURFACE_WG), new JigsawStructure.MaxDistance(80), Collections.emptyList(), DimensionPadding.ZERO, LiquidSettings.IGNORE_WATERLOGGING));
                 })
                 .add(Registries.STRUCTURE_SET, bootstrap -> {
                   HolderGetter<Structure> structureGetter = bootstrap.lookup(Registries.STRUCTURE);

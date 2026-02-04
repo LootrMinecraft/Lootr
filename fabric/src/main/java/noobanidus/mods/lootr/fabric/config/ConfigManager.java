@@ -5,8 +5,8 @@ import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -156,7 +156,7 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
       return true;
     }
 
-    return getLootModidsBlacklist().contains(table.location().getNamespace());
+    return getLootModidsBlacklist().contains(table.identifier().getNamespace());
   }
 
   public static Set<ResourceKey<LootTable>> getDecayingTables() {
@@ -188,7 +188,8 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
   }
 
   public static boolean isDimensionBlocked(ResourceKey<Level> key) {
-    if (!getDimensionModidWhitelist().isEmpty() && !getDimensionModidWhitelist().contains(key.location().getNamespace()) || getDimensionModidBlacklist().contains(key.location().getNamespace())) {
+    if (!getDimensionModidWhitelist().isEmpty() && !getDimensionModidWhitelist().contains(key.identifier()
+        .getNamespace()) || getDimensionModidBlacklist().contains(key.identifier().getNamespace())) {
       return true;
     }
 
@@ -211,11 +212,11 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
       if (getDecayingTables().contains(tile.getInfoLootTable())) {
         return true;
       }
-      if (getDecayMods().contains(tile.getInfoLootTable().location().getNamespace())) {
+      if (getDecayMods().contains(tile.getInfoLootTable().identifier().getNamespace())) {
         return true;
       }
     }
-    if (LootrAPI.isTaggedStructurePresent((ServerLevel)tile.getInfoLevel(), new ChunkPos(tile.getInfoPos()), LootrTags.Structure.DECAY_STRUCTURES, tile.getInfoPos())) {
+    if (LootrAPI.isTaggedStructurePresent((ServerLevel) tile.getInfoLevel(), new ChunkPos(tile.getInfoPos()), LootrTags.Structure.DECAY_STRUCTURES, tile.getInfoPos())) {
       return true;
     }
     return isDimensionDecaying(tile.getInfoDimension());
@@ -229,11 +230,11 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
       if (getRefreshingTables().contains(tile.getInfoLootTable())) {
         return true;
       }
-      if (getRefreshMods().contains(tile.getInfoLootTable().location().getNamespace())) {
+      if (getRefreshMods().contains(tile.getInfoLootTable().identifier().getNamespace())) {
         return true;
       }
     }
-    if (LootrAPI.isTaggedStructurePresent((ServerLevel)tile.getInfoLevel(), new ChunkPos(tile.getInfoPos()), LootrTags.Structure.REFRESH_STRUCTURES, tile.getInfoPos())) {
+    if (LootrAPI.isTaggedStructurePresent((ServerLevel) tile.getInfoLevel(), new ChunkPos(tile.getInfoPos()), LootrTags.Structure.REFRESH_STRUCTURES, tile.getInfoPos())) {
       return true;
     }
     return isDimensionRefreshing(tile.getInfoDimension());
@@ -246,7 +247,7 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
   }
 
   // TODO: Why isn't this being used?
-  public static boolean shouldPerformPiecewiseCheck () {
+  public static boolean shouldPerformPiecewiseCheck() {
     return get().conversion.perform_piecewise_check;
   }
 
@@ -254,7 +255,7 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
     return get().client.vanilla_textures;
   }
 
-  public static boolean isNewTextures () {
+  public static boolean isNewTextures() {
     return get().client.new_textures;
   }
 

@@ -13,11 +13,11 @@ public class ModEntities {
   public static EntityType<LootrItemFrame> ITEM_FRAME;
 
   public static void registerEntities() {
-    LOOTR_MINECART_ENTITY = Registry.register(BuiltInRegistries.ENTITY_TYPE, LootrConstants.LOOTR_CART, EntityType.Builder.of((EntityType.EntityFactory<LootrChestMinecartEntity>) LootrChestMinecartEntity::new, MobCategory.MISC).sized(0.9f, 1.4f).clientTrackingRange(8).build());
+    LOOTR_MINECART_ENTITY = Registry.register(BuiltInRegistries.ENTITY_TYPE, LootrConstants.LOOTR_CART, EntityType.Builder.of((EntityType.EntityFactory<LootrChestMinecartEntity>) LootrChestMinecartEntity::new, MobCategory.MISC).sized(0.9f, 1.4f).clientTrackingRange(8).build(LootrConstants.FABRIC_LOOTR_CART_ENTITY));
     ITEM_FRAME = Registry.register(BuiltInRegistries.ENTITY_TYPE, LootrConstants.ITEM_FRAME, EntityType.Builder.<LootrItemFrame>of(LootrItemFrame::new, MobCategory.MISC)
         .sized(0.5F, 0.5F)
         .eyeHeight(0.0F)
         .clientTrackingRange(10)
-        .updateInterval(Integer.MAX_VALUE).build());
+        .updateInterval(Integer.MAX_VALUE).build(LootrConstants.ITEM_FRAME_ENTITY));
   }
 }

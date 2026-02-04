@@ -31,13 +31,7 @@ public class LootrBlockStateDefinitions {
     return (state.visuallyOpen ? LOOTR_OPEN_ITEM_FRAME_FAKE_DEFINITION : LOOTR_ITEM_FRAME_FAKE_DEFINITION).any().setValue(BlockStateProperties.MAP, false);
   }
 
-  public static Function<Identifier, StateDefinition<Block, BlockState>> definitionLocationToBlockStateMapper() {
-    Map<Identifier, StateDefinition<Block, BlockState>> map = new HashMap<>(STATIC_DEFINITIONS);
-
-    for (Block block : BuiltInRegistries.BLOCK) {
-      map.put(block.builtInRegistryHolder().key().identifier(), block.getStateDefinition());
-    }
-
-    return map::get;
+  public static Map<Identifier, StateDefinition<Block, BlockState>> getStaticDefinitions() {
+    return STATIC_DEFINITIONS;
   }
 }

@@ -5,9 +5,9 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
-import net.fabricmc.fabric.impl.resource.loader.ResourceManagerHelperImpl;
+import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
+import net.fabricmc.fabric.api.resource.v1.pack.PackActivationType;
+import net.fabricmc.fabric.impl.resource.ResourceLoaderImpl;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.network.chat.Component;
@@ -17,7 +17,6 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.block.entity.BlockEntityTicker;
 import noobanidus.mods.lootr.common.chunk.LoadedChunks;
 import noobanidus.mods.lootr.common.command.CommandLootr;
-import noobanidus.mods.lootr.common.data.DataStorage;
 
 public class LootrEventsInit {
   public static MinecraftServer serverInstance;
@@ -48,17 +47,17 @@ public class LootrEventsInit {
 
     ModContainer container = FabricLoader.getInstance().getModContainer(LootrAPI.MODID).orElseThrow();
 
-    ResourceManagerHelper.registerBuiltinResourcePack(LootrAPI.rl("old_textures"), container, Component.literal("Lootr - Old Textures"), ResourcePackActivationType.NORMAL);
+    ResourceLoader.registerBuiltinPack(LootrAPI.rl("old_textures"), container, Component.literal("Lootr - Old Textures"), PackActivationType.NORMAL);
     registerPack(container, "lootr_no_advancements", Component.literal("Disable Lootr Advancements"));
     registerPack(container, "lootr_no_suspicious_blocks", Component.literal("Disable Lootr Converting Suspicious Blocks"));
   }
 
-  private static void registerPack (ModContainer container, String name, Component desc) {
-    ResourceManagerHelperImpl.registerBuiltinResourcePack(
+  private static void registerPack(ModContainer container, String name, Component desc) {
+    ResourceLoaderImpl.registerBuiltinPack(
         Identifier.fromNamespaceAndPath(container.getMetadata().getId(), name),
         "datapacks/" + name,
         container,
         desc,
-        ResourcePackActivationType.NORMAL);
+        PackActivationType.NORMAL);
   }
 }

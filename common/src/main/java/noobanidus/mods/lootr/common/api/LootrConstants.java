@@ -1,6 +1,10 @@
 package noobanidus.mods.lootr.common.api;
 
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -28,6 +32,8 @@ public class LootrConstants {
   public static final Identifier LOOTR_INVENTORY = LootrAPI.rl("lootr_inventory");
   public static final Identifier LOOTR_CART = LootrAPI.rl("lootr_cart");
 
+  public static final ResourceKey<EntityType<?>> FABRIC_LOOTR_CART_ENTITY = ResourceKey.create(Registries.ENTITY_TYPE, LOOTR_CART);
+
   // Into these
   public static final Identifier CHEST = LootrAPI.rl("chest");
   public static final Identifier TRAPPED_CHEST = LootrAPI.rl("trapped_chest");
@@ -48,6 +54,9 @@ public class LootrConstants {
   public static final Identifier SUSPICIOUS_GRAVEL = LootrAPI.rl("suspicious_gravel");
   public static final Identifier ITEM_FRAME = LootrAPI.rl("item_frame");
   public static final Identifier UNOPENED_PARTICLE = LootrAPI.rl("unopened_particle");
+
+  public static final ResourceKey<EntityType<?>> ITEM_FRAME_ENTITY = ResourceKey.create(Registries.ENTITY_TYPE, ITEM_FRAME);
+  public static final ResourceKey<EntityType<?>> NEOFORGE_MINECART_WITH_CHEST = ResourceKey.create(Registries.ENTITY_TYPE, LootrAPI.rl("lootr_minecart"));
 
   public static final Identifier SIMPLE = LootrAPI.rl("simple");
 

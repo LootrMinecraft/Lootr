@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.fabric.init;
 
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -17,18 +18,18 @@ public class ModBlockEntities {
     Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrConstants.DECORATED_POT, LOOTR_DECORATED_POT);
   }
 
-  public static final BlockEntityType<LootrChestBlockEntity> LOOTR_CHEST = BlockEntityType.Builder.of(LootrChestBlockEntity::new, ModBlocks.CHEST)
-      .build(null);
-  public static final BlockEntityType<LootrBarrelBlockEntity> LOOTR_BARREL = BlockEntityType.Builder.of(LootrBarrelBlockEntity::new, ModBlocks.BARREL)
-      .build(null);
-  public static final BlockEntityType<LootrTrappedChestBlockEntity> LOOTR_TRAPPED_CHEST = BlockEntityType.Builder.of(LootrTrappedChestBlockEntity::new, ModBlocks.TRAPPED_CHEST)
-      .build(null);
-  public static final BlockEntityType<LootrShulkerBlockEntity> LOOTR_SHULKER = BlockEntityType.Builder.of(LootrShulkerBlockEntity::new, ModBlocks.SHULKER)
-      .build(null);
-  public static final BlockEntityType<LootrInventoryBlockEntity> LOOTR_INVENTORY = BlockEntityType.Builder.of(LootrInventoryBlockEntity::new, ModBlocks.INVENTORY)
-      .build(null);
-  public static final BlockEntityType<LootrBrushableBlockEntity> LOOTR_BRUSHABLE_BLOCK = BlockEntityType.Builder.of(LootrBrushableBlockEntity::new, ModBlocks.SUSPICIOUS_GRAVEL, ModBlocks.SUSPICIOUS_SAND)
-      .build(null);
-  public static final BlockEntityType<LootrDecoratedPotBlockEntity> LOOTR_DECORATED_POT = BlockEntityType.Builder.of(LootrDecoratedPotBlockEntity::new, ModBlocks.DECORATED_POT)
-      .build(null);
+  public static final BlockEntityType<LootrChestBlockEntity> LOOTR_CHEST = FabricBlockEntityTypeBuilder.create(LootrChestBlockEntity::new, ModBlocks.CHEST)
+      .build();
+  public static final BlockEntityType<LootrBarrelBlockEntity> LOOTR_BARREL = FabricBlockEntityTypeBuilder.create(LootrBarrelBlockEntity::new, ModBlocks.BARREL)
+      .build();
+  public static final BlockEntityType<LootrTrappedChestBlockEntity> LOOTR_TRAPPED_CHEST = FabricBlockEntityTypeBuilder.create(LootrTrappedChestBlockEntity::new, ModBlocks.TRAPPED_CHEST)
+      .build();
+  public static final BlockEntityType<LootrShulkerBlockEntity> LOOTR_SHULKER = FabricBlockEntityTypeBuilder.create(LootrShulkerBlockEntity::new, ModBlocks.SHULKER)
+      .build();
+  public static final BlockEntityType<LootrInventoryBlockEntity> LOOTR_INVENTORY = FabricBlockEntityTypeBuilder.create(LootrInventoryBlockEntity::new, ModBlocks.INVENTORY)
+      .build();
+  public static final BlockEntityType<LootrBrushableBlockEntity> LOOTR_BRUSHABLE_BLOCK = FabricBlockEntityTypeBuilder.create(LootrBrushableBlockEntity::new, ModBlocks.SUSPICIOUS_GRAVEL, ModBlocks.SUSPICIOUS_SAND)
+      .build();
+  public static final BlockEntityType<LootrDecoratedPotBlockEntity> LOOTR_DECORATED_POT = FabricBlockEntityTypeBuilder.create(LootrDecoratedPotBlockEntity::new, ModBlocks.DECORATED_POT)
+      .build();
 }
