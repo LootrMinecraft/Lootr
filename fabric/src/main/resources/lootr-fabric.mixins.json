@@ -18,7 +18,6 @@
   "client": [
     "client.MixinBlockStateDefinitions",
     "client.MixinClientLevel",
-    "client.MixinClientPacketListener",
-    "client.MixinModelBakery"
+    "client.MixinClientPacketListener"
   ]
 }
