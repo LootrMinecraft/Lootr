@@ -488,6 +488,7 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
     super.removeComponentsFromTag(compoundTag);
     compoundTag.discard("LootTable");
     compoundTag.discard("LootTableSeed");
+    compoundTag.discard("LootrId");
   }
 
   @Override
