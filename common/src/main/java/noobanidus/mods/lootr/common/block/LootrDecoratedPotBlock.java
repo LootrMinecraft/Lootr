@@ -173,16 +173,14 @@ public class LootrDecoratedPotBlock extends DecoratedPotBlock {
     OTHER
   }
 
-  // TODO:
   @Override
   protected boolean hasAnalogOutputSignal(BlockState blockState) {
-    return super.hasAnalogOutputSignal(blockState);
+    return false;
   }
 
-  // TODO:
   @Override
   protected int getAnalogOutputSignal(BlockState blockState, Level level, BlockPos blockPos, Direction direction) {
-    return super.getAnalogOutputSignal(blockState, level, blockPos, direction);
+    return 0;
   }
 
   @Override
