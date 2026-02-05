@@ -31,6 +31,7 @@ import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
 import noobanidus.mods.lootr.common.api.ILootrEntityConverter;
 import noobanidus.mods.lootr.common.api.ILootrType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.SimpleLootrEntityInstance;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
@@ -206,6 +207,11 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   @Override
   public ItemStack getItem() {
     return this.getEntityData().get(AccessorMixinItemFrame.lootr$getDataItem());
+  }
+
+  @Override
+  public @Nullable IContainerTrigger getTrigger() {
+    return LootrRegistry.getItemFrameTrigger();
   }
 
   @Override
