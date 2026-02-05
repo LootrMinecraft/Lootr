@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.fabric.mixin.client;
+package noobanidus.mods.lootr.common.mixin.client;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -18,7 +18,8 @@ import java.util.Map;
 public class MixinBlockStateDefinitions {
   @WrapOperation(method="definitionLocationToBlockStateMapper", at=@At(value="NEW", target="java/util/HashMap"))
   private static HashMap<Identifier, StateDefinition<Block, BlockState>> lootr$injectItemFrameModels(Map<Identifier, StateDefinition<Block, BlockState>>m, Operation<HashMap<Identifier, StateDefinition<Block, BlockState>>> original) {
-    m.putAll(LootrBlockStateDefinitions.getStaticDefinitions());
-    return original.call(m);
+    var map = new HashMap<>(m);
+    map.putAll(LootrBlockStateDefinitions.getStaticDefinitions());
+    return original.call(map);
   }
 }

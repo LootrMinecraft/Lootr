@@ -31,6 +31,7 @@
     "ticker.MixinStructureTemplate"
   ],
   "client": [
+    "client.MixinBlockStateDefinitions"
   ],
   "injectors": {
     "defaultRequire": 1

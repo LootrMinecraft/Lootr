@@ -25,6 +25,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CauldronBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
@@ -335,9 +336,9 @@ public interface ILootrInfo {
 
   @SuppressWarnings("deprecation")
   Codec<ILootrInfo> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-      LootrBlockType.CODEC.optionalFieldOf("blockType", null).forGetter(ILootrInfo::getInfoBlockType),
-      LootrInfoType.CODEC.optionalFieldOf("type", null).forGetter(ILootrInfo::getInfoType),
-      ILootrType.CODEC.optionalFieldOf("newType", null).forGetter(ILootrInfo::getInfoNewType),
+      LootrBlockType.CODEC.optionalFieldOf("blockType").forGetter(in -> Optional.ofNullable(in.getInfoBlockType())),
+      LootrInfoType.CODEC.optionalFieldOf("type").forGetter(in -> Optional.ofNullable(in.getInfoType())),
+      ILootrType.CODEC.optionalFieldOf("newType").forGetter(in -> Optional.ofNullable(in.getInfoNewType())),
       UUIDUtil.CODEC.fieldOf("uuid").forGetter(ILootrInfo::getInfoUUID),
       Codec.STRING.fieldOf("key").forGetter(ILootrInfo::getInfoKey),
       BlockPos.CODEC.fieldOf("position").forGetter(ILootrInfo::getInfoPos),

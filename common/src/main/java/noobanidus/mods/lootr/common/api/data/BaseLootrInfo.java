@@ -25,6 +25,11 @@ public record BaseLootrInfo(@Deprecated @Nullable LootrBlockType blockType,
                             String cachedKey, BlockPos pos, @Nullable Component name, ResourceKey<Level> dimension,
                             int containerSize, NonNullList<ItemStack> customInventory, ResourceKey<LootTable> table,
                             long seed) implements ILootrInfo {
+  @SuppressWarnings({"OptionalUsedAsFieldOrParameterType", "deprecation"})
+  public BaseLootrInfo(Optional<LootrBlockType> lootrBlockType, Optional<LootrInfoType> lootrInfoType, Optional<ILootrType> iLootrType, UUID uuid, String s, BlockPos pos, Optional<Component> component, ResourceKey<Level> levelResourceKey, Integer integer, Optional<NonNullList<ItemStack>> itemStacks, Optional<ResourceKey<LootTable>> lootTableResourceKey, Optional<Long> aLong) {
+    this(lootrBlockType.orElse(null), lootrInfoType.orElse(null), iLootrType.orElse(null), uuid, s, pos, component.orElse(null), levelResourceKey, integer, itemStacks.orElse(null), lootTableResourceKey.orElse(null), aLong.orElse(-1L));
+  }
+
   @SuppressWarnings("deprecation")
   public static BaseLootrInfo copy(ILootrInfo info) {
     return new BaseLootrInfo(info.getInfoBlockType(), info.getInfoType(), info.getInfoNewType(), info.getInfoUUID(), info.getInfoKey(), info.getInfoPos(), info.getInfoDisplayName(), info.getInfoDimension(), info.getInfoContainerSize(), info.getInfoReferenceInventory(), info.getInfoLootTable(), info.getInfoLootSeed());
@@ -44,12 +49,6 @@ public record BaseLootrInfo(@Deprecated @Nullable LootrBlockType blockType,
     this.customInventory = customInventory;
     this.table = table;
     this.seed = seed;
-  }
-
-  @SuppressWarnings({"deprecation", "OptionalUsedAsFieldOrParameterType"})
-  public BaseLootrInfo(LootrBlockType blockType, LootrInfoType infoType, ILootrType newType, UUID uuid, String cachedKey, BlockPos pos, Optional<Component> name, ResourceKey<Level> dimension,
-                       int containerSize, Optional<NonNullList<ItemStack>> customInventory, Optional<ResourceKey<LootTable>> table, Optional<Long> seed) {
-    this(blockType, infoType, newType, uuid, cachedKey, pos, name.orElse(null), dimension, containerSize, customInventory.orElse(null), table.orElse(null), seed.orElse(-1L));
   }
 
   @SuppressWarnings("deprecation")

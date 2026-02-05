@@ -24,11 +24,11 @@ public class LootrBlockStateDefinitions {
   );
 
   private static StateDefinition<Block, BlockState> createItemFrameFakeState() {
-    return new StateDefinition.Builder<Block, BlockState>(Blocks.AIR).add(BlockStateProperties.MAP).create(Block::defaultBlockState, BlockState::new);
+    return new StateDefinition.Builder<Block, BlockState>(Blocks.AIR).create(Block::defaultBlockState, BlockState::new);
   }
 
   public static BlockState getItemFrameFakeState(LootrItemFrameRenderState state) {
-    return (state.visuallyOpen ? LOOTR_OPEN_ITEM_FRAME_FAKE_DEFINITION : LOOTR_ITEM_FRAME_FAKE_DEFINITION).any().setValue(BlockStateProperties.MAP, false);
+    return (state.visuallyOpen ? LOOTR_OPEN_ITEM_FRAME_FAKE_DEFINITION : LOOTR_ITEM_FRAME_FAKE_DEFINITION).any();
   }
 
   public static Map<Identifier, StateDefinition<Block, BlockState>> getStaticDefinitions() {

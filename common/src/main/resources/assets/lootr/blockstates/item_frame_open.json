@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "lootr:block/item_frame_open" }
+  }
+}
