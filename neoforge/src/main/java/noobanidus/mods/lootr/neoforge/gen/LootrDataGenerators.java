@@ -36,8 +36,5 @@ public class LootrDataGenerators {
     generator.addProvider(true, new LootrLangProvider(output));
     generator.addProvider(true, new LootrParticleProvider(output));
     generator.addProvider(true, new LootrModelProvider(output));
-
-    generator.addProvider(true, new PackMetadataGenerator(generator.getPackOutput()).add(PackMetadataSection.CLIENT_TYPE, new PackMetadataSection(Component.literal("Lootr Assets"), SharedConstants.getCurrentVersion()
-        .packVersion(PackType.CLIENT_RESOURCES).minorRange())));
   }
 }
