@@ -7,10 +7,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.client.event.ModelEvent;
-import net.neoforged.neoforge.client.event.RegisterBlockStateModels;
-import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
+import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.model.standalone.SimpleUnbakedStandaloneModel;
 import net.neoforged.neoforge.client.model.standalone.StandaloneModelKey;
 import noobanidus.mods.lootr.common.api.LootrAPI;
@@ -24,6 +21,7 @@ import noobanidus.mods.lootr.common.client.entity.LootrBlockStateDefinitions;
 import noobanidus.mods.lootr.common.client.entity.LootrChestCartRenderer;
 import noobanidus.mods.lootr.common.client.entity.LootrItemFrameRenderer;
 import noobanidus.mods.lootr.common.client.particle.UnopenedParticle;
+import noobanidus.mods.lootr.common.client.select.SelectConfigType;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.common.entity.LootrItemFrame;
 import noobanidus.mods.lootr.neoforge.client.block.UnbakedBrushableModel;
@@ -69,5 +67,10 @@ public class ClientSetup {
   @SubscribeEvent
   public static void registerParticles(RegisterParticleProvidersEvent event) {
     event.registerSpriteSet(ModParticles.UNOPENED_PARTICLE.get(), UnopenedParticle.Provider::new);
+  }
+
+  @SubscribeEvent
+  public static void registerSelect (RegisterSelectItemModelPropertyEvent event) {
+    event.register(LootrAPI.rl("config_type"), SelectConfigType.TYPE);
   }
 }
