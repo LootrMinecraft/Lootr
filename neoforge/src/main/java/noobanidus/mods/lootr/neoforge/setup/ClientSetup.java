@@ -22,6 +22,9 @@ import noobanidus.mods.lootr.common.client.entity.LootrChestCartRenderer;
 import noobanidus.mods.lootr.common.client.entity.LootrItemFrameRenderer;
 import noobanidus.mods.lootr.common.client.particle.UnopenedParticle;
 import noobanidus.mods.lootr.common.client.select.SelectConfigType;
+import noobanidus.mods.lootr.common.client.special.LootrChestSpecialRenderer;
+import noobanidus.mods.lootr.common.client.special.LootrDecoratedPotSpecialRenderer;
+import noobanidus.mods.lootr.common.client.special.LootrShulkerSpecialRenderer;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.common.entity.LootrItemFrame;
 import noobanidus.mods.lootr.neoforge.client.block.UnbakedBrushableModel;
@@ -40,8 +43,16 @@ public class ClientSetup {
   }
 
   @SubscribeEvent
+  public static void registerSpecial (RegisterSpecialModelRendererEvent event) {
+    event.register(LootrAPI.rl("chest"), LootrChestSpecialRenderer.Unbaked.MAP_CODEC);
+    event.register(LootrAPI.rl("shulker_box"), LootrShulkerSpecialRenderer.Unbaked.MAP_CODEC);
+    event.register(LootrAPI.rl("decorated_pot"), LootrDecoratedPotSpecialRenderer.Unbaked.MAP_CODEC);
+  }
+
+  @SubscribeEvent
   public static void modelRegister(RegisterBlockStateModels event) {
-    event.registerModel(LootrAPI.rl("custom_barrel"), UnbakedCustomModel.CODEC);
+    // TODO: These should be constantified
+    event.registerModel(LootrAPI.rl("custom"), UnbakedCustomModel.CODEC);
     event.registerModel(LootrAPI.rl("brushable"), UnbakedBrushableModel.CODEC);
   }
 

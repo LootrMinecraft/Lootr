@@ -2,38 +2,38 @@
   "variants": {
     "dusted=0": {
       "type": "lootr:brushable",
-      "opened": "lootr:block/suspicious_gravel_open",
-      "stage_0": "minecraft:block/suspicious_gravel_0",
-      "stage_1": "minecraft:block/suspicious_gravel_1",
-      "stage_2": "minecraft:block/suspicious_gravel_2",
-      "stage_3": "minecraft:block/suspicious_gravel_3",
+      "opened": "lootr:block/suspicious_sand_open",
+      "stage_0": "minecraft:block/suspicious_sand_0",
+      "stage_1": "minecraft:block/suspicious_sand_1",
+      "stage_2": "minecraft:block/suspicious_sand_2",
+      "stage_3": "minecraft:block/suspicious_sand_3",
       "state": {}
     },
     "dusted=1": {
       "type": "lootr:brushable",
-      "opened": "lootr:block/suspicious_gravel_open",
-      "stage_0": "minecraft:block/suspicious_gravel_0",
-      "stage_1": "minecraft:block/suspicious_gravel_1",
-      "stage_2": "minecraft:block/suspicious_gravel_2",
-      "stage_3": "minecraft:block/suspicious_gravel_3",
+      "opened": "lootr:block/suspicious_sand_open",
+      "stage_0": "minecraft:block/suspicious_sand_0",
+      "stage_1": "minecraft:block/suspicious_sand_1",
+      "stage_2": "minecraft:block/suspicious_sand_2",
+      "stage_3": "minecraft:block/suspicious_sand_3",
       "state": {}
     },
     "dusted=2": {
       "type": "lootr:brushable",
-      "opened": "lootr:block/suspicious_gravel_open",
-      "stage_0": "minecraft:block/suspicious_gravel_0",
-      "stage_1": "minecraft:block/suspicious_gravel_1",
-      "stage_2": "minecraft:block/suspicious_gravel_2",
-      "stage_3": "minecraft:block/suspicious_gravel_3",
+      "opened": "lootr:block/suspicious_sand_open",
+      "stage_0": "minecraft:block/suspicious_sand_0",
+      "stage_1": "minecraft:block/suspicious_sand_1",
+      "stage_2": "minecraft:block/suspicious_sand_2",
+      "stage_3": "minecraft:block/suspicious_sand_3",
       "state": {}
     },
     "dusted=3": {
       "type": "lootr:brushable",
-      "opened": "lootr:block/suspicious_gravel_open",
-      "stage_0": "minecraft:block/suspicious_gravel_0",
-      "stage_1": "minecraft:block/suspicious_gravel_1",
-      "stage_2": "minecraft:block/suspicious_gravel_2",
-      "stage_3": "minecraft:block/suspicious_gravel_3",
+      "opened": "lootr:block/suspicious_sand_open",
+      "stage_0": "minecraft:block/suspicious_sand_0",
+      "stage_1": "minecraft:block/suspicious_sand_1",
+      "stage_2": "minecraft:block/suspicious_sand_2",
+      "stage_3": "minecraft:block/suspicious_sand_3",
       "state": {}
     }
   }

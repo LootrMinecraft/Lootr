@@ -1,6 +1,5 @@
 package noobanidus.mods.lootr.common.client.block;
 
-import com.mojang.math.Quadrant;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -21,10 +20,13 @@ import java.util.List;
 public abstract class UnbakedCustomModel implements BlockStateModel.Unbaked {
   public static <T extends UnbakedCustomModel> MapCodec<T> getCodec(Provider<T> provider) {
     return RecordCodecBuilder.mapCodec(instance ->
-        instance.group(Identifier.CODEC.fieldOf("unopened")
-            .forGetter(UnbakedCustomModel::getUnopened), Identifier.CODEC.fieldOf("opened")
-            .forGetter(UnbakedCustomModel::getOpened), Identifier.CODEC.fieldOf("vanilla").forGetter(UnbakedCustomModel::getVanilla), Variant.SimpleModelState.MAP_CODEC.fieldOf("state")
-            .forGetter(UnbakedCustomModel::getState),
+        instance.group(Identifier.CODEC.fieldOf("opened")
+                .forGetter(UnbakedCustomModel::getOpened),
+            Identifier.CODEC.fieldOf("unopened")
+                .forGetter(UnbakedCustomModel::getUnopened),
+            Identifier.CODEC.fieldOf("vanilla")
+                .forGetter(UnbakedCustomModel::getVanilla), Variant.SimpleModelState.MAP_CODEC.fieldOf("state")
+                .forGetter(UnbakedCustomModel::getState),
             Codec.BOOL.fieldOf("open").forGetter(UnbakedCustomModel::getOpen)
         ).apply(instance, provider::create));
   }
@@ -36,7 +38,7 @@ public abstract class UnbakedCustomModel implements BlockStateModel.Unbaked {
 
   @FunctionalInterface
   public interface Baker {
-    BlockStateModel bake(BlockStateModel unopened, BlockStateModel opened, BlockStateModel vanilla, boolean open);
+    BlockStateModel bake(BlockStateModel opened, BlockStateModel unopened, BlockStateModel vanilla, boolean open);
   }
 
   protected final Identifier opened, unopened, vanilla;
@@ -63,7 +65,7 @@ public abstract class UnbakedCustomModel implements BlockStateModel.Unbaked {
     return vanilla;
   }
 
-  public boolean getOpen () {
+  public boolean getOpen() {
     return open;
   }
 
@@ -73,13 +75,11 @@ public abstract class UnbakedCustomModel implements BlockStateModel.Unbaked {
 
   protected abstract Baker getBaker();
 
-  protected abstract Provider<? extends UnbakedCustomModel> getProvider();
-
   @Override
   public BlockStateModel bake(ModelBaker baker) {
     return getBaker().bake(
-        new SingleVariant(SimpleModelWrapper.bake(baker, unopened, state.asModelState())),
         new SingleVariant(SimpleModelWrapper.bake(baker, opened, state.asModelState())),
+        new SingleVariant(SimpleModelWrapper.bake(baker, unopened, state.asModelState())),
         new SingleVariant(SimpleModelWrapper.bake(baker, vanilla, state.asModelState())),
         this.open
     );
@@ -87,29 +87,9 @@ public abstract class UnbakedCustomModel implements BlockStateModel.Unbaked {
 
   @Override
   public void resolveDependencies(Resolver resolver) {
-    resolver.markDependency(unopened);
     resolver.markDependency(opened);
+    resolver.markDependency(unopened);
     resolver.markDependency(vanilla);
-  }
-
-  public UnbakedCustomModel withXRot(Quadrant xRot) {
-    return this.withState(this.state.withX(xRot));
-  }
-
-  public UnbakedCustomModel withYRot(Quadrant yRot) {
-    return this.withState(this.state.withY(yRot));
-  }
-
-  public UnbakedCustomModel withZRot(Quadrant p_470694_) {
-    return this.withState(this.state.withZ(p_470694_));
-  }
-
-  public UnbakedCustomModel withUvLock(boolean uvLock) {
-    return this.withState(this.state.withUvLock(uvLock));
-  }
-
-  public UnbakedCustomModel withState(Variant.SimpleModelState state) {
-    return getProvider().create(unopened, opened, vanilla, state, open);
   }
 
   public record BarrelKey(boolean vanilla, boolean open, boolean visuallyOpen, int facing) {
@@ -119,7 +99,7 @@ public abstract class UnbakedCustomModel implements BlockStateModel.Unbaked {
     protected final BlockStateModel unopened, opened, vanilla;
     protected final boolean open;
 
-    public Baked(BlockStateModel unopened, BlockStateModel opened, BlockStateModel vanilla, boolean open) {
+    public Baked(BlockStateModel opened, BlockStateModel unopened, BlockStateModel vanilla, boolean open) {
       this.unopened = unopened;
       this.opened = opened;
       this.vanilla = vanilla;

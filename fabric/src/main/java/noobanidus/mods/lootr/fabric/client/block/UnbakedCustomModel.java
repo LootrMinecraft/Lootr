@@ -30,11 +30,6 @@ public class UnbakedCustomModel extends noobanidus.mods.lootr.common.client.bloc
   }
 
   @Override
-  protected Provider<? extends noobanidus.mods.lootr.common.client.block.UnbakedCustomModel> getProvider() {
-    return UnbakedCustomModel::new;
-  }
-
-  @Override
   public MapCodec<? extends CustomUnbakedBlockStateModel> codec() {
     return CODEC;
   }

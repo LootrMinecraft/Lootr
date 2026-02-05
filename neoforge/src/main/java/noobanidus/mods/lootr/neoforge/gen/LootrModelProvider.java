@@ -10,6 +10,7 @@ import net.minecraft.client.data.models.blockstates.PropertyDispatch;
 import net.minecraft.client.renderer.block.model.Variant.SimpleModelState;
 import net.minecraft.client.renderer.item.BlockModelWrapper;
 import net.minecraft.client.renderer.item.SelectItemModel;
+import net.minecraft.client.renderer.item.SpecialModelWrapper;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.data.PackOutput;
@@ -22,6 +23,9 @@ import noobanidus.mods.lootr.common.api.ConfigDisplayType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.block.LootrBarrelBlock;
 import noobanidus.mods.lootr.common.client.select.SelectConfigType;
+import noobanidus.mods.lootr.common.client.special.LootrChestSpecialRenderer;
+import noobanidus.mods.lootr.common.client.special.LootrDecoratedPotSpecialRenderer;
+import noobanidus.mods.lootr.common.client.special.LootrShulkerSpecialRenderer;
 import noobanidus.mods.lootr.neoforge.client.block.UnbakedBrushableModel;
 import noobanidus.mods.lootr.neoforge.client.block.UnbakedCustomModel;
 import noobanidus.mods.lootr.neoforge.gen.builders.UnbakedBrushableModelBuilder;
@@ -59,21 +63,23 @@ public class LootrModelProvider extends ModelProvider {
                           .withX(rotX).withY(rotY))).build();
             })));
 
-    var sandBase = new UnbakedBrushableModel(LootrAPI.rl("block/suspicious_gravel_open"), Identifier.withDefaultNamespace("block/suspicious_gravel_0"), Identifier.withDefaultNamespace("block/suspicious_gravel_1"), Identifier.withDefaultNamespace("block/suspicious_gravel_2"), Identifier.withDefaultNamespace("block/suspicious_gravel_3"), SimpleModelState.DEFAULT);
+    var sandBase = new UnbakedBrushableModel(LootrAPI.rl("block/suspicious_sand_open"), Identifier.withDefaultNamespace("block/suspicious_sand_0"), Identifier.withDefaultNamespace("block/suspicious_sand_1"), Identifier.withDefaultNamespace("block/suspicious_sand_2"), Identifier.withDefaultNamespace("block/suspicious_sand_3"), SimpleModelState.DEFAULT);
 
     var sandVariants = MultiVariant.of(new UnbakedBrushableModelBuilder(sandBase));
 
     blockModels.blockStateOutput.accept(MultiVariantGenerator.dispatch(ModBlocks.SUSPICIOUS_SAND.get(), sandVariants)
-        .withUnbaked(PropertyDispatch.modifyUnbaked(BlockStateProperties.DUSTED).generate(stage -> UnbakedMutator.builder()
-            .add(UnbakedBrushableModel.class, unbaked -> unbaked)
-            .build())));
+        .withUnbaked(PropertyDispatch.modifyUnbaked(BlockStateProperties.DUSTED)
+            .generate(stage -> UnbakedMutator.builder()
+                .add(UnbakedBrushableModel.class, unbaked -> unbaked)
+                .build())));
 
     var gravelBase = new UnbakedBrushableModel(LootrAPI.rl("block/suspicious_gravel_open"), Identifier.withDefaultNamespace("block/suspicious_gravel_0"), Identifier.withDefaultNamespace("block/suspicious_gravel_1"), Identifier.withDefaultNamespace("block/suspicious_gravel_2"), Identifier.withDefaultNamespace("block/suspicious_gravel_3"), SimpleModelState.DEFAULT);
     var gravelVariants = MultiVariant.of(new UnbakedBrushableModelBuilder(gravelBase));
     blockModels.blockStateOutput.accept(MultiVariantGenerator.dispatch(ModBlocks.SUSPICIOUS_GRAVEL.get(), gravelVariants)
-        .withUnbaked(PropertyDispatch.modifyUnbaked(BlockStateProperties.DUSTED).generate(stage -> UnbakedMutator.builder()
-            .add(UnbakedBrushableModel.class, unbaked -> unbaked)
-            .build())));
+        .withUnbaked(PropertyDispatch.modifyUnbaked(BlockStateProperties.DUSTED)
+            .generate(stage -> UnbakedMutator.builder()
+                .add(UnbakedBrushableModel.class, unbaked -> unbaked)
+                .build())));
 
     itemModels.itemModelOutput.accept(
         ModItems.BARREL.get(),
@@ -112,6 +118,52 @@ public class LootrModelProvider extends ModelProvider {
         new BlockModelWrapper.Unbaked(
             Identifier.withDefaultNamespace("block/suspicious_sand_0"),
             Collections.emptyList())
+    );
+    itemModels.itemModelOutput.accept(
+        ModItems.CHEST.get(),
+        new SpecialModelWrapper.Unbaked(
+            Identifier.withDefaultNamespace("item/chest"),
+            new LootrChestSpecialRenderer.Unbaked(
+                LootrAPI.rl("chest"),
+                Identifier.withDefaultNamespace("entity/chest/normal")
+            )
+        )
+    );
+    itemModels.itemModelOutput.accept(
+        ModItems.TRAPPED_CHEST.get(),
+        new SpecialModelWrapper.Unbaked(
+            Identifier.withDefaultNamespace("item/chest"),
+            new LootrChestSpecialRenderer.Unbaked(
+                LootrAPI.rl("chest_trapped"),
+                Identifier.withDefaultNamespace("entity/chest/trapped")
+            )
+        )
+    );
+    itemModels.itemModelOutput.accept(
+        ModItems.INVENTORY.get(),
+        new SpecialModelWrapper.Unbaked(
+            Identifier.withDefaultNamespace("item/chest"),
+            new LootrChestSpecialRenderer.Unbaked(
+                LootrAPI.rl("chest"),
+                Identifier.withDefaultNamespace("entity/chest/normal")
+            )
+        )
+    );
+    itemModels.itemModelOutput.accept(
+        ModItems.SHULKER.get(),
+        new SpecialModelWrapper.Unbaked(
+            Identifier.withDefaultNamespace("item/shulker_box"),
+            new LootrShulkerSpecialRenderer.Unbaked(
+                LootrAPI.rl("shulker")
+            )
+        )
+    );
+    itemModels.itemModelOutput.accept(
+        ModItems.DECORATED_POT.get(),
+        new SpecialModelWrapper.Unbaked(
+            Identifier.withDefaultNamespace("item/decorated_pot"),
+            LootrDecoratedPotSpecialRenderer.Unbaked.decoratedPot()
+        )
     );
   }
 

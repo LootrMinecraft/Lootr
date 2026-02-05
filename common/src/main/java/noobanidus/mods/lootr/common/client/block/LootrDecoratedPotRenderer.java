@@ -174,6 +174,9 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
 
   public void submit(PoseStack poseStack, SubmitNodeCollector nodeCollector, int packedLight, int packedOverlay, PotDecorationsAdapter decorations, boolean visuallyOpen, int outlineColor) {
     TextureAtlasSprite textureatlassprite = this.materials.get(Sheets.DECORATED_POT_BASE);
+    if (decorations == null) {
+      decorations = PotDecorationsAdapter.EMPTY;
+    }
     if (visuallyOpen) {
       RenderType renderType = DECORATED_POT_OPENED.renderType(RenderTypes::entitySolid);
       nodeCollector.submitModelPart(this.open, poseStack, renderType, packedLight, packedOverlay, textureatlassprite, false, false, -1, null, outlineColor);
