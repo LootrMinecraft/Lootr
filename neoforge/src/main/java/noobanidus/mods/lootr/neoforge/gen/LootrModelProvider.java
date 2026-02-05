@@ -12,6 +12,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.client.model.generators.blockstate.UnbakedMutator;
 import noobanidus.mods.lootr.common.api.LootrAPI;
@@ -51,5 +52,10 @@ public class LootrModelProvider extends ModelProvider {
   @Override
   protected Stream<? extends Holder<Block>> getKnownBlocks() {
     return Stream.of(ModBlocks.BARREL);
+  }
+
+  @Override
+  protected Stream<? extends Holder<Item>> getKnownItems() {
+    return Stream.of();
   }
 }
