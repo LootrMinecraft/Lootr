@@ -97,9 +97,6 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
     }
 
     ItemStack result = inventory.getItem(0);
-    if (result.isEmpty()) {
-      return null;
-    }
 
     inventory.setItem(0, ItemStack.EMPTY);
     inventory.setChanged();
@@ -107,8 +104,10 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
     this.performTrigger(player);
     boolean shouldUpdate = false;
     if (!this.hasServerOpened(player)) {
-      player.awardStat(LootrRegistry.getLootedStat());
-      LootrRegistry.getStatTrigger().trigger(player);
+      if (!result.isEmpty()) {
+        player.awardStat(LootrRegistry.getLootedStat());
+        LootrRegistry.getStatTrigger().trigger(player);
+      }
     }
     if (this.addOpener(player)) {
       this.performOpen(player);
@@ -118,6 +117,10 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
 
     if (shouldUpdate) {
       this.performUpdate(player);
+    }
+
+    if (result.isEmpty()) {
+      return null;
     }
 
     return result;

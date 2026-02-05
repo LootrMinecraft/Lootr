@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.neoforge.setup;
 
 import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.renderer.block.model.BlockModelPart;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -33,13 +34,13 @@ import noobanidus.mods.lootr.neoforge.init.ModParticles;
 
 @EventBusSubscriber(modid = LootrAPI.MODID, value = Dist.CLIENT)
 public class ClientSetup {
-  public static final StandaloneModelKey<BlockStateModel> ITEM_FRAME = new StandaloneModelKey<>(LootrBlockStateDefinitions.LOOTR_ITEM_FRAME_LOCATION::toString);
-  public static final StandaloneModelKey<BlockStateModel> ITEM_FRAME_OPEN = new StandaloneModelKey<>(LootrBlockStateDefinitions.LOOTR_OPEN_ITEM_FRAME_LOCATION::toString);
+  public static final StandaloneModelKey<BlockModelPart> ITEM_FRAME = new StandaloneModelKey<>(LootrBlockStateDefinitions.LOOTR_ITEM_FRAME_LOCATION::toString);
+  public static final StandaloneModelKey<BlockModelPart> ITEM_FRAME_OPEN = new StandaloneModelKey<>(LootrBlockStateDefinitions.LOOTR_OPEN_ITEM_FRAME_LOCATION::toString);
 
   @SubscribeEvent
   public static void modelAdditional(ModelEvent.RegisterStandalone event) {
-    event.register(ITEM_FRAME, SimpleUnbakedStandaloneModel.blockStateModel(LootrBlockStateDefinitions.LOOTR_ITEM_FRAME_LOCATION));
-    event.register(ITEM_FRAME_OPEN, SimpleUnbakedStandaloneModel.blockStateModel(LootrBlockStateDefinitions.LOOTR_OPEN_ITEM_FRAME_LOCATION));
+    event.register(ITEM_FRAME, SimpleUnbakedStandaloneModel.simpleModelWrapper(LootrBlockStateDefinitions.LOOTR_ITEM_FRAME_LOCATION.withPrefix("block/")));
+    event.register(ITEM_FRAME_OPEN, SimpleUnbakedStandaloneModel.simpleModelWrapper(LootrBlockStateDefinitions.LOOTR_OPEN_ITEM_FRAME_LOCATION.withPrefix("block/")));
   }
 
   @SubscribeEvent

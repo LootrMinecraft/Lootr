@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.special.SpecialModelRenderer;
 import net.minecraft.client.renderer.special.SpecialModelRenderers;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.client.resources.model.MaterialSet;
@@ -39,6 +40,7 @@ import noobanidus.mods.lootr.common.client.state.LootrDecoratedPotBlockRenderSta
 import noobanidus.mods.lootr.common.integration.sherdsapi.SherdsIntegration;
 import org.joml.Vector3fc;
 import org.jspecify.annotations.Nullable;
+import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -152,19 +154,20 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
     Direction direction = renderState.direction;
     poseStack.translate(0.5, 0.0, 0.5);
     poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - direction.toYRot()));
-    poseStack.translate(-0.5, 0.0, -0.5);
-    if (renderState.wobbleProgress >= 0.0F && renderState.wobbleProgress <= 1.0F) {
-      if (renderState.wobbleStyle == DecoratedPotBlockEntity.WobbleStyle.POSITIVE) {
-        float f = 0.015625F;
-        float f1 = renderState.wobbleProgress * (float) (Math.PI * 2);
-        float f2 = -1.5F * (Mth.cos(f1) + 0.5F) * Mth.sin(f1 / 2.0F);
-        poseStack.rotateAround(Axis.XP.rotation(f2 * 0.015625F), 0.5F, 0.0F, 0.5F);
-        float f3 = Mth.sin(f1);
-        poseStack.rotateAround(Axis.ZP.rotation(f3 * 0.015625F), 0.5F, 0.0F, 0.5F);
-      } else {
-        float f4 = Mth.sin(-renderState.wobbleProgress * 3.0F * (float) Math.PI) * 0.125F;
-        float f5 = 1.0F - renderState.wobbleProgress;
-        poseStack.rotateAround(Axis.YP.rotation(f4 * f5), 0.5F, 0.0F, 0.5F);
+    if (!renderState.visuallyOpen) {
+      poseStack.translate(-0.5, 0.0, -0.5);
+      if (renderState.wobbleProgress >= 0.0F && renderState.wobbleProgress <= 1.0F) {
+        if (renderState.wobbleStyle == DecoratedPotBlockEntity.WobbleStyle.POSITIVE) {
+          float f1 = renderState.wobbleProgress * (float) (Math.PI * 2);
+          float f2 = -1.5F * (Mth.cos(f1) + 0.5F) * Mth.sin(f1 / 2.0F);
+          poseStack.rotateAround(Axis.XP.rotation(f2 * 0.015625F), 0.5F, 0.0F, 0.5F);
+          float f3 = Mth.sin(f1);
+          poseStack.rotateAround(Axis.ZP.rotation(f3 * 0.015625F), 0.5F, 0.0F, 0.5F);
+        } else {
+          float f4 = Mth.sin(-renderState.wobbleProgress * 3.0F * (float) Math.PI) * 0.125F;
+          float f5 = 1.0F - renderState.wobbleProgress;
+          poseStack.rotateAround(Axis.YP.rotation(f4 * f5), 0.5F, 0.0F, 0.5F);
+        }
       }
     }
 
@@ -173,14 +176,16 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
   }
 
   public void submit(PoseStack poseStack, SubmitNodeCollector nodeCollector, int packedLight, int packedOverlay, PotDecorationsAdapter decorations, boolean visuallyOpen, int outlineColor) {
-    TextureAtlasSprite textureatlassprite = this.materials.get(Sheets.DECORATED_POT_BASE);
+    TextureAtlasSprite textureatlassprite = this.materials.get(DECORATED_POT);
+    TextureAtlasSprite textureatlassprite2 = this.materials.get(DECORATED_POT_OPENED);
     if (decorations == null) {
       decorations = PotDecorationsAdapter.EMPTY;
     }
     if (visuallyOpen) {
+      poseStack.scale(1.0f, -1.0f, -1.0f);
       RenderType renderType = DECORATED_POT_OPENED.renderType(RenderTypes::entitySolid);
-      nodeCollector.submitModelPart(this.open, poseStack, renderType, packedLight, packedOverlay, textureatlassprite, false, false, -1, null, outlineColor);
-      nodeCollector.submitModelPart(this.sherds, poseStack, renderType, packedLight, packedOverlay, textureatlassprite, false, false, -1, null, outlineColor);
+      nodeCollector.submitModelPart(this.open, poseStack, renderType, packedLight, packedOverlay, textureatlassprite2, false, false, -1, null, outlineColor);
+      nodeCollector.submitModelPart(this.sherds, poseStack, renderType, packedLight, packedOverlay, textureatlassprite2, false, false, -1, null, outlineColor);
     } else {
       RenderType rendertype = DECORATED_POT.renderType(RenderTypes::entitySolid);
       nodeCollector.submitModelPart(this.neck, poseStack, rendertype, packedLight, packedOverlay, textureatlassprite, false, false, -1, null, outlineColor);

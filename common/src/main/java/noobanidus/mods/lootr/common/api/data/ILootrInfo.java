@@ -335,8 +335,8 @@ public interface ILootrInfo {
 
   @SuppressWarnings("deprecation")
   Codec<ILootrInfo> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-      LootrBlockType.CODEC.fieldOf("blockType").forGetter(ILootrInfo::getInfoBlockType),
-      LootrInfoType.CODEC.fieldOf("type").forGetter(ILootrInfo::getInfoType),
+      LootrBlockType.CODEC.optionalFieldOf("blockType", null).forGetter(ILootrInfo::getInfoBlockType),
+      LootrInfoType.CODEC.optionalFieldOf("type", null).forGetter(ILootrInfo::getInfoType),
       ILootrType.CODEC.optionalFieldOf("newType", null).forGetter(ILootrInfo::getInfoNewType),
       UUIDUtil.CODEC.fieldOf("uuid").forGetter(ILootrInfo::getInfoUUID),
       Codec.STRING.fieldOf("key").forGetter(ILootrInfo::getInfoKey),
