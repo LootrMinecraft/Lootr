@@ -36,7 +36,7 @@ public class LootrNoAdvancementGenerator {
 
   private static DataGenerator makeGenerator (Path path, Component description) {
     DataGenerator generator = new DataGenerator(path, DetectedVersion.tryDetectVersion(), true);
-    generator.addProvider(true, new PackMetadataGenerator(generator.getPackOutput()).add(PackMetadataSection.SERVER_TYPE, new PackMetadataSection(description, SharedConstants.getCurrentVersion().packVersion(PackType.CLIENT_RESOURCES).minorRange())));
+    generator.addProvider(true, new PackMetadataGenerator(generator.getPackOutput()).add(PackMetadataSection.SERVER_TYPE, new PackMetadataSection(description, SharedConstants.getCurrentVersion().packVersion(PackType.SERVER_DATA).minorRange())));
     generators.add(generator);
     return generator;
   }

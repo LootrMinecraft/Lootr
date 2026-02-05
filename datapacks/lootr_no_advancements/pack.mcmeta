@@ -1,7 +1,10 @@
 {
   "pack": {
     "description": "Disable Lootr Advancements",
-    "max_format": 75,
-    "min_format": 75
+    "max_format": 94,
+    "min_format": [
+      94,
+      1
+    ]
   }
 }
