@@ -189,7 +189,7 @@ public class CommandLootr {
     builder.then(Commands.literal("clear").executes(c -> {
       c.getSource().sendSuccess(() -> Component.literal("Must provide player name."), true);
       return 1;
-    }).executes(c -> {
+    }).then(Commands.argument("profile", StringArgumentType.string()).executes(c -> {
       String playerName = StringArgumentType.getString(c, "profile");
       Optional<NameAndId> opt_profile = c.getSource().getServer().services().profileRepository()
           .findProfileByName(playerName);
@@ -202,7 +202,7 @@ public class CommandLootr {
       c.getSource()
           .sendSuccess(() -> Component.literal(LootrAPI.clearPlayerLoot(profile.id()) ? "Cleared stored inventories for " + playerName : "No stored inventories for " + playerName + " to clear"), true);
       return 1;
-    }));
+    })));
     builder.then(Commands.literal("cart").executes(c -> {
       createBlock(c.getSource(), null, null);
       return 1;

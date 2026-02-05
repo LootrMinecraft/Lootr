@@ -82,7 +82,7 @@ public class LootrItemFrameRenderer extends EntityRenderer<LootrItemFrame, Lootr
       poseStack.translate(0.0F, 0.0F, 0.4375F);
     }
 
-    if (!renderState.item.isEmpty()) {
+    if (!renderState.item.isEmpty() && !renderState.visuallyOpen) {
       poseStack.mulPose(Axis.ZP.rotationDegrees(renderState.rotation * 360.0F / 8.0F));
       int k = renderState.lightCoords;
       poseStack.scale(0.5F, 0.5F, 0.5F);
