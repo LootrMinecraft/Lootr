@@ -165,6 +165,13 @@ public class LootrModelProvider extends ModelProvider {
             LootrDecoratedPotSpecialRenderer.Unbaked.decoratedPot()
         )
     );
+    itemModels.itemModelOutput.accept(
+        ModItems.TROPHY.get(),
+        new BlockModelWrapper.Unbaked(
+            LootrAPI.rl("block/trophy"),
+            Collections.emptyList()
+        )
+    );
   }
 
   @Override
