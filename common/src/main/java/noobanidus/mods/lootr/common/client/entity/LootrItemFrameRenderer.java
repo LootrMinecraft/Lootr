@@ -16,11 +16,13 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.client.ClientHooks;
 import noobanidus.mods.lootr.common.client.state.LootrItemFrameRenderState;
 import noobanidus.mods.lootr.common.entity.LootrItemFrame;
 
@@ -120,7 +122,8 @@ public class LootrItemFrameRenderer extends EntityRenderer<LootrItemFrame, Lootr
     reusedState.rotation = entity.getRotation();
     reusedState.isGlowFrame = entity.getType() == EntityType.GLOW_ITEM_FRAME;
     reusedState.mapId = null;
-    reusedState.visuallyOpen = entity.isClientOpened();
+    Player player = ClientHooks.getPlayer();
+    reusedState.visuallyOpen = player == null ? false : entity.hasClientOpened(player);
     reusedState.vanilla = LootrAPI.isVanillaTextures();
   }
 }
