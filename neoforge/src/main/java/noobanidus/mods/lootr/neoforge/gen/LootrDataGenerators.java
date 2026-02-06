@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.neoforge.gen;
 
+import net.minecraft.DetectedVersion;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
@@ -14,6 +15,8 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -36,5 +39,16 @@ public class LootrDataGenerators {
     generator.addProvider(true, new LootrLangProvider(output));
     generator.addProvider(true, new LootrParticleProvider(output));
     generator.addProvider(true, new LootrModelProvider(output));
+
+    Path root = output.getOutputFolder().getParent().getParent().getParent().getParent();
+    Path datapacks = root.resolve("neoforge").resolve("src").resolve("generated").resolve("resources"); // a hack
+
+    DataGenerator generator2 = new DataGenerator(datapacks, DetectedVersion.tryDetectVersion(), true);
+    generator2.addProvider(true,new LootrUnbakedModelProvider(output));
+    try {
+      generator2.run();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 }

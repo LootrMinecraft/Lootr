@@ -45,42 +45,6 @@ public class LootrModelProvider extends ModelProvider {
 
   @Override
   protected void registerModels(BlockModelGenerators blockModels, ItemModelGenerators itemModels) {
-    var opened = new UnbakedCustomModel(LootrAPI.rl("block/lootr_opened_barrel"), LootrAPI.rl("block/lootr_barrel_unopened"), Identifier.withDefaultNamespace("block/barrel"), SimpleModelState.DEFAULT, false);
-    var unopened = new UnbakedCustomModel(LootrAPI.rl("block/lootr_opened_barrel_open"), LootrAPI.rl("block/lootr_barrel_unopened_open"), Identifier.withDefaultNamespace("block/barrel_open"), SimpleModelState.DEFAULT, true);
-
-    var baseVariant = MultiVariant.of(new UnbakedCustomModelBuilder(opened));
-
-    blockModels.blockStateOutput.accept(MultiVariantGenerator.dispatch(ModBlocks.BARREL.get(), baseVariant)
-        .withUnbaked(PropertyDispatch.modifyUnbaked(LootrBarrelBlock.FACING, LootrBarrelBlock.OPEN)
-            .generate((facing, open) -> {
-              Quadrant rotX = facing == Direction.UP ? Quadrant.R180 : Quadrant.R90;
-              Quadrant rotY = facing.getAxis() != Direction.Axis.Y ? Quadrant.values()[(int) facing.toYRot() / 90] : Quadrant.R0;
-
-              return UnbakedMutator.builder()
-                  .add(UnbakedCustomModel.class, unbaked ->
-                      open ? unopened.withState(unbaked.getState()
-                          .withX(rotX).withY(rotY)) : opened.withState(unbaked.getState()
-                          .withX(rotX).withY(rotY))).build();
-            })));
-
-    var sandBase = new UnbakedBrushableModel(LootrAPI.rl("block/suspicious_sand_open"), Identifier.withDefaultNamespace("block/suspicious_sand_0"), Identifier.withDefaultNamespace("block/suspicious_sand_1"), Identifier.withDefaultNamespace("block/suspicious_sand_2"), Identifier.withDefaultNamespace("block/suspicious_sand_3"), SimpleModelState.DEFAULT);
-
-    var sandVariants = MultiVariant.of(new UnbakedBrushableModelBuilder(sandBase));
-
-    blockModels.blockStateOutput.accept(MultiVariantGenerator.dispatch(ModBlocks.SUSPICIOUS_SAND.get(), sandVariants)
-        .withUnbaked(PropertyDispatch.modifyUnbaked(BlockStateProperties.DUSTED)
-            .generate(stage -> UnbakedMutator.builder()
-                .add(UnbakedBrushableModel.class, unbaked -> unbaked)
-                .build())));
-
-    var gravelBase = new UnbakedBrushableModel(LootrAPI.rl("block/suspicious_gravel_open"), Identifier.withDefaultNamespace("block/suspicious_gravel_0"), Identifier.withDefaultNamespace("block/suspicious_gravel_1"), Identifier.withDefaultNamespace("block/suspicious_gravel_2"), Identifier.withDefaultNamespace("block/suspicious_gravel_3"), SimpleModelState.DEFAULT);
-    var gravelVariants = MultiVariant.of(new UnbakedBrushableModelBuilder(gravelBase));
-    blockModels.blockStateOutput.accept(MultiVariantGenerator.dispatch(ModBlocks.SUSPICIOUS_GRAVEL.get(), gravelVariants)
-        .withUnbaked(PropertyDispatch.modifyUnbaked(BlockStateProperties.DUSTED)
-            .generate(stage -> UnbakedMutator.builder()
-                .add(UnbakedBrushableModel.class, unbaked -> unbaked)
-                .build())));
-
     itemModels.itemModelOutput.accept(
         ModItems.BARREL.get(),
         new SelectItemModel.Unbaked(
@@ -176,11 +140,6 @@ public class LootrModelProvider extends ModelProvider {
 
   @Override
   protected Stream<? extends Holder<Block>> getKnownBlocks() {
-    return Stream.of(ModBlocks.BARREL);
-  }
-
-  @Override
-  protected Stream<? extends Holder<Item>> getKnownItems() {
     return Stream.of();
   }
 }
