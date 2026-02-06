@@ -202,6 +202,12 @@ tasks.named("sourcesJar", Jar) {
 processResources {
     from project.project(":common").sourceSets.main.resources
 
+    filesMatching("assets/**/blockstates/*.json") {
+        filter { String line ->
+            line.replaceAll(/"type"\s*:/, '"fabric:type":')
+        }
+    }
+
     from("../datapacks") {
         into("datapacks")
         include("lootr_no_advancements/**")

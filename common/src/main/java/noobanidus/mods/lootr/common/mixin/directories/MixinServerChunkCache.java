@@ -26,7 +26,7 @@ public class MixinServerChunkCache {
     Path lootrDirectory = ((AccessorMixinDimensionDataStorage) cache.getDataStorage()).getDataFolder().resolve("lootr");
     Path tickingDirectory = lootrDirectory.resolve("ticking");
     Path refreshDirectory = tickingDirectory.resolve("refresh");
-    Path decayedDirectory = tickingDirectory.resolve("delaced");
+    Path decayedDirectory = tickingDirectory.resolve("decay");
     try {
       FileUtil.createDirectoriesSafe(lootrDirectory);
       FileUtil.createDirectoriesSafe(tickingDirectory);
