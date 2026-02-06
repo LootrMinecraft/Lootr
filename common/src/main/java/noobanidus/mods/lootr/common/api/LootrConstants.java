@@ -31,9 +31,7 @@ public class LootrConstants {
   public static final Identifier LOOTR_SHULKER = LootrAPI.rl("lootr_shulker");
   public static final Identifier LOOTR_BARREL = LootrAPI.rl("lootr_barrel");
   public static final Identifier LOOTR_INVENTORY = LootrAPI.rl("lootr_inventory");
-  public static final Identifier LOOTR_CART = LootrAPI.rl("lootr_cart");
-
-  public static final ResourceKey<EntityType<?>> FABRIC_LOOTR_CART_ENTITY = ResourceKey.create(Registries.ENTITY_TYPE, LOOTR_CART);
+  public static final Identifier LOOTR_CART = LootrAPI.rl("lootr_minecart");
 
   // Into these
   public static final Identifier CHEST = LootrAPI.rl("chest");
@@ -57,7 +55,9 @@ public class LootrConstants {
   public static final Identifier UNOPENED_PARTICLE = LootrAPI.rl("unopened_particle");
 
   public static final ResourceKey<EntityType<?>> ITEM_FRAME_ENTITY = ResourceKey.create(Registries.ENTITY_TYPE, ITEM_FRAME);
-  public static final ResourceKey<EntityType<?>> NEOFORGE_MINECART_WITH_CHEST = ResourceKey.create(Registries.ENTITY_TYPE, LootrAPI.rl("lootr_minecart"));
+  public static final ResourceKey<EntityType<?>> MINECART_WITH_CHEST = ResourceKey.create(Registries.ENTITY_TYPE, LootrAPI.rl("lootr_minecart"));
+
+  public static final ResourceKey<EntityType<?>> FABRIC_LOOTR_CART_ENTITY = MINECART_WITH_CHEST;
 
   public static final Identifier SIMPLE = LootrAPI.rl("simple");
 

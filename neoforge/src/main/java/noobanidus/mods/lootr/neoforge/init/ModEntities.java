@@ -16,7 +16,7 @@ public class ModEntities {
   private static final DeferredRegister<EntityType<?>> REGISTER = DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, LootrAPI.MODID);
 
   @MigrateName(value="chest_minecart", in="26")
-  public static final DeferredHolder<EntityType<?>, EntityType<LootrChestMinecartEntity>> LOOTR_MINECART_ENTITY = REGISTER.register("lootr_minecart", () -> EntityType.Builder.<LootrChestMinecartEntity>of(LootrChestMinecartEntity::new, MobCategory.MISC).sized(0.98F, 0.7F).clientTrackingRange(8).build(LootrConstants.NEOFORGE_MINECART_WITH_CHEST));
+  public static final DeferredHolder<EntityType<?>, EntityType<LootrChestMinecartEntity>> LOOTR_MINECART_ENTITY = REGISTER.register("lootr_minecart", () -> EntityType.Builder.<LootrChestMinecartEntity>of(LootrChestMinecartEntity::new, MobCategory.MISC).sized(0.98F, 0.7F).clientTrackingRange(8).build(LootrConstants.MINECART_WITH_CHEST));
 
   public static final DeferredHolder<EntityType<?>, EntityType<LootrItemFrame>> ITEM_FRAME = REGISTER.register(LootrConstants.ITEM_FRAME.getPath(), () -> EntityType.Builder.<LootrItemFrame>of(LootrItemFrame::new, MobCategory.MISC)
       .sized(0.5F, 0.5F)
