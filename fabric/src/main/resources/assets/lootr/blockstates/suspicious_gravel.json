@@ -1,0 +1,40 @@
+{
+  "variants": {
+    "dusted=0": {
+      "fabric:type": "lootr:brushable",
+      "opened": "lootr:block/suspicious_gravel_open",
+      "stage_0": "minecraft:block/suspicious_gravel_0",
+      "stage_1": "minecraft:block/suspicious_gravel_1",
+      "stage_2": "minecraft:block/suspicious_gravel_2",
+      "stage_3": "minecraft:block/suspicious_gravel_3",
+      "state": {}
+    },
+    "dusted=1": {
+      "fabric:type": "lootr:brushable",
+      "opened": "lootr:block/suspicious_gravel_open",
+      "stage_0": "minecraft:block/suspicious_gravel_0",
+      "stage_1": "minecraft:block/suspicious_gravel_1",
+      "stage_2": "minecraft:block/suspicious_gravel_2",
+      "stage_3": "minecraft:block/suspicious_gravel_3",
+      "state": {}
+    },
+    "dusted=2": {
+      "fabric:type": "lootr:brushable",
+      "opened": "lootr:block/suspicious_gravel_open",
+      "stage_0": "minecraft:block/suspicious_gravel_0",
+      "stage_1": "minecraft:block/suspicious_gravel_1",
+      "stage_2": "minecraft:block/suspicious_gravel_2",
+      "stage_3": "minecraft:block/suspicious_gravel_3",
+      "state": {}
+    },
+    "dusted=3": {
+      "fabric:type": "lootr:brushable",
+      "opened": "lootr:block/suspicious_gravel_open",
+      "stage_0": "minecraft:block/suspicious_gravel_0",
+      "stage_1": "minecraft:block/suspicious_gravel_1",
+      "stage_2": "minecraft:block/suspicious_gravel_2",
+      "stage_3": "minecraft:block/suspicious_gravel_3",
+      "state": {}
+    }
+  }
+}
