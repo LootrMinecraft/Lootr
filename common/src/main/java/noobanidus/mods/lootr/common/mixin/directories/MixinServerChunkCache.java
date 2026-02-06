@@ -26,12 +26,12 @@ public class MixinServerChunkCache {
     Path lootrDirectory = ((AccessorMixinDimensionDataStorage) cache.getDataStorage()).getDataFolder().resolve("lootr");
     Path tickingDirectory = lootrDirectory.resolve("ticking");
     Path refreshDirectory = tickingDirectory.resolve("refresh");
-    Path delayedDirectory = tickingDirectory.resolve("delayed");
+    Path decayedDirectory = tickingDirectory.resolve("delaced");
     try {
       FileUtil.createDirectoriesSafe(lootrDirectory);
       FileUtil.createDirectoriesSafe(tickingDirectory);
       FileUtil.createDirectoriesSafe(refreshDirectory);
-      FileUtil.createDirectoriesSafe(delayedDirectory);
+      FileUtil.createDirectoriesSafe(decayedDirectory);
 
       for (String digit : LootrAPI._lootr$digits) {
         Path subPath1 = lootrDirectory.resolve(digit);
