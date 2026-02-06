@@ -1,0 +1,130 @@
+{
+  "variants": {
+    "facing=down,open=false": {
+      "type": "lootr:custom",
+      "open": false,
+      "opened": "lootr:block/lootr_opened_barrel",
+      "state": {
+        "x": 90
+      },
+      "unopened": "lootr:block/lootr_barrel_unopened",
+      "vanilla": "minecraft:block/barrel"
+    },
+    "facing=down,open=true": {
+      "type": "lootr:custom",
+      "open": true,
+      "opened": "lootr:block/lootr_opened_barrel_open",
+      "state": {
+        "x": 90
+      },
+      "unopened": "lootr:block/lootr_barrel_unopened_open",
+      "vanilla": "minecraft:block/barrel_open"
+    },
+    "facing=east,open=false": {
+      "type": "lootr:custom",
+      "open": false,
+      "opened": "lootr:block/lootr_opened_barrel",
+      "state": {
+        "x": 90,
+        "y": 270
+      },
+      "unopened": "lootr:block/lootr_barrel_unopened",
+      "vanilla": "minecraft:block/barrel"
+    },
+    "facing=east,open=true": {
+      "type": "lootr:custom",
+      "open": true,
+      "opened": "lootr:block/lootr_opened_barrel_open",
+      "state": {
+        "x": 90,
+        "y": 270
+      },
+      "unopened": "lootr:block/lootr_barrel_unopened_open",
+      "vanilla": "minecraft:block/barrel_open"
+    },
+    "facing=north,open=false": {
+      "type": "lootr:custom",
+      "open": false,
+      "opened": "lootr:block/lootr_opened_barrel",
+      "state": {
+        "x": 90,
+        "y": 180
+      },
+      "unopened": "lootr:block/lootr_barrel_unopened",
+      "vanilla": "minecraft:block/barrel"
+    },
+    "facing=north,open=true": {
+      "type": "lootr:custom",
+      "open": true,
+      "opened": "lootr:block/lootr_opened_barrel_open",
+      "state": {
+        "x": 90,
+        "y": 180
+      },
+      "unopened": "lootr:block/lootr_barrel_unopened_open",
+      "vanilla": "minecraft:block/barrel_open"
+    },
+    "facing=south,open=false": {
+      "type": "lootr:custom",
+      "open": false,
+      "opened": "lootr:block/lootr_opened_barrel",
+      "state": {
+        "x": 90
+      },
+      "unopened": "lootr:block/lootr_barrel_unopened",
+      "vanilla": "minecraft:block/barrel"
+    },
+    "facing=south,open=true": {
+      "type": "lootr:custom",
+      "open": true,
+      "opened": "lootr:block/lootr_opened_barrel_open",
+      "state": {
+        "x": 90
+      },
+      "unopened": "lootr:block/lootr_barrel_unopened_open",
+      "vanilla": "minecraft:block/barrel_open"
+    },
+    "facing=up,open=false": {
+      "type": "lootr:custom",
+      "open": false,
+      "opened": "lootr:block/lootr_opened_barrel",
+      "state": {
+        "x": 180
+      },
+      "unopened": "lootr:block/lootr_barrel_unopened",
+      "vanilla": "minecraft:block/barrel"
+    },
+    "facing=up,open=true": {
+      "type": "lootr:custom",
+      "open": true,
+      "opened": "lootr:block/lootr_opened_barrel_open",
+      "state": {
+        "x": 180
+      },
+      "unopened": "lootr:block/lootr_barrel_unopened_open",
+      "vanilla": "minecraft:block/barrel_open"
+    },
+    "facing=west,open=false": {
+      "type": "lootr:custom",
+      "open": false,
+      "opened": "lootr:block/lootr_opened_barrel",
+      "state": {
+        "x": 90,
+        "y": 90
+      },
+      "unopened": "lootr:block/lootr_barrel_unopened",
+      "vanilla": "minecraft:block/barrel"
+    },
+    "facing=west,open=true": {
+      "type": "lootr:custom",
+      "open": true,
+      "opened": "lootr:block/lootr_opened_barrel_open",
+      "state": {
+        "x": 90,
+        "y": 90
+      },
+      "unopened": "lootr:block/lootr_barrel_unopened_open",
+      "vanilla": "minecraft:block/barrel_open"
+    }
+  }
+}

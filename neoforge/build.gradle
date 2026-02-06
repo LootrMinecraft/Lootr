@@ -173,11 +173,7 @@ tasks.named("sourcesJar", Jar) {
 }
 
 processResources {
-    from(project.project(":common").sourceSets.main.resources)
-
-    from("src/generated/resources") {
-        include("assets")
-        exclude("**/.cache/**")
+    from(project.project(":common").sourceSets.main.resources) {
     }
 
     from("../datapacks") {
