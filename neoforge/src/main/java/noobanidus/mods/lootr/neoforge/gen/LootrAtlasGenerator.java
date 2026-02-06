@@ -31,7 +31,7 @@ public class LootrAtlasGenerator extends SpriteSourceProvider {
         .addSource(new SingleFile(LootrShulkerBoxRenderer.MATERIAL.texture(), Optional.empty()));
     this.atlas(AtlasIds.SHULKER_BOXES)
         .addSource(new SingleFile(LootrShulkerBoxRenderer.MATERIAL2.texture(), Optional.empty()));
-    this.atlas(AtlasIds.BLOCKS).addSource(new SingleFile(LootrAPI.rl("chest_opened"), Optional.empty()));
+    this.atlas(AtlasIds.BLOCKS).addSource(new SingleFile(LootrAPI.rl("chest_opened"), Optional.of(LootrAPI.rl("trophy_chest_block"))));
     this.atlas(AtlasIds.BLOCKS)
         .addSource(new SingleFile(LootrAPI.rl("minecraft", "entity/player/wide/steve"), Optional.empty()));
     this.atlas(Identifier.withDefaultNamespace("decorated_pot"))

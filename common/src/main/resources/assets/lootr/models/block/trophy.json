@@ -3,9 +3,9 @@
   "parent": "block/block",
   "textures": {
     "0": "minecraft:entity/player/wide/steve",
-    "1": "lootr:chest_opened",
-    "particle": "lootr:chest_opened",
-    "missing": "lootr:chest_opened"
+    "1": "lootr:trophy_chest_block",
+    "particle": "lootr:trophy_chest_block",
+    "missing": "lootr:trophy_chest_block"
   },
   "render_type": "minecraft:cutout",
   "elements": [

@@ -2,7 +2,8 @@
   "sources": [
     {
       "type": "minecraft:single",
-      "resource": "lootr:chest_opened"
+      "resource": "lootr:chest_opened",
+      "sprite": "lootr:trophy_chest_block"
     },
     {
       "type": "minecraft:single",
