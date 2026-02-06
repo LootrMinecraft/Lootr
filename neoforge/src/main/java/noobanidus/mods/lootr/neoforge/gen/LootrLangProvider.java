@@ -46,6 +46,7 @@ public class LootrLangProvider extends LanguageProvider {
     add(LootrRegistry.getSuspiciousSandBlock(), "Sand");
     add(LootrRegistry.getDecoratedPotBlock(), "Decorated Loot Pot");
     add(LootrRegistry.getItemFrame(), "Item Frame with Loot");
+    add("entity.lootr.lootr_cart", "Minecart with Loot Chest");
 
     add("stat.lootr.looted_stat", "Containers and entities looted");
 
