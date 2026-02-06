@@ -81,7 +81,6 @@ public class ConfigManager extends ConfigManagerBase {
   public static final ModConfigSpec.BooleanValue SHOULD_WARN_NO_LOOT_TABLE_AT_GENERATION;
   // Client-only
   public static final ModConfigSpec.BooleanValue VANILLA_TEXTURES;
-  public static final ModConfigSpec.BooleanValue NEW_TEXTURES;
   public static final ModConfigSpec.BooleanValue UNOPENED_PARTICLES;
   private static final ModConfigSpec.Builder COMMON_BUILDER = new ModConfigSpec.Builder();
   private static final ModConfigSpec.Builder CLIENT_BUILDER = new ModConfigSpec.Builder();
@@ -221,7 +220,6 @@ public class ConfigManager extends ConfigManagerBase {
     CLIENT_BUILDER.push("textures").comment("configuration options for textures");
     VANILLA_TEXTURES = CLIENT_BUILDER.comment("set to true to use vanilla textures instead of Lootr special textures. Note: this will prevent previously opened chests from rendering differently")
         .define("vanilla_textures", false);
-    NEW_TEXTURES = CLIENT_BUILDER.comment("set to true to use the new Lootr textures").define("new_textures", true);
     CLIENT_BUILDER.pop();
     CLIENT_BUILDER.push("particles").comment("configuration options for particles");
     UNOPENED_PARTICLES = CLIENT_BUILDER.comment("set to true to enable 'unopened particles' to spawn from containers that the player has not yet opened").define("unopened_particles", true);
@@ -422,7 +420,7 @@ public class ConfigManager extends ConfigManagerBase {
   }
 
   public static boolean isNewTextures() {
-    return NEW_TEXTURES.get();
+    return true;
   }
 
   public static boolean shouldPerformPiecewiseCheck() {

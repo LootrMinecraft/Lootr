@@ -150,6 +150,8 @@ public class LootrLangProvider extends LanguageProvider {
     var skip_logging = "Skip Logging LootTable-less Block Entities during Generation";
     var brushables = "Lootr Brushable Blocks Don't Fall";
     var supported = "Lootr Item Frames Don't Break";
+    var particles = "Particles";
+    var unopened_particles = "Display Particles from Unopened Containers";
     add("text.autoconfig.lootr.option.debug", debug);
     add("text.autoconfig.lootr.option.debug.report_invalid_tables", report_invalid_tables);
     add("text.autoconfig.lootr.option.seed", seed);
@@ -212,6 +214,7 @@ public class LootrLangProvider extends LanguageProvider {
     add("text.autoconfig.lootr.option.refresh.start_tick_refresh", start_tick_refresh);
     add("text.autoconfig.lootr.option.conversion.rename_container_block_entities", rename_container_block_entities);
     add("text.autoconfig.lootr.option.conversion.perform_piecewise_check", perform_piecewise_check);
+    add("text.autoconfig.lootr.option.client.unopened_particles", unopened_particles);
     add("lootr.configuration.conversion", conversion);
     add("lootr.configuration.refresh", refresh);
     add("lootr.configuration.breaking", breaking);
@@ -272,6 +275,8 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.configuration.convert_elytras_to_item_frames", elytra_frame);
     add("lootr.configuration.brushables_self_support", brushables);
     add("lootr.configuration.item_frames_self_support", supported);
+    add("lootr.configuration.particles", particles);
+    add("lootr.configuration.unopened_particles", unopened_particles);
 
     // Tags
     add(LootrTags.Blocks.CONVERT_BARRELS, "Blocks that Convert to Lootr Barrels");

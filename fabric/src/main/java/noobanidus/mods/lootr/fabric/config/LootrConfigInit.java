@@ -10,11 +10,11 @@ public class LootrConfigInit {
     AutoConfig.register(ConfigManager.class, GsonConfigSerializer::new);
     ConfigHolder<ConfigManager> config = AutoConfig.getConfigHolder(ConfigManager.class);
     config.registerLoadListener((manager, configData) -> {
-      configData.reset();
+      ConfigManager.reset();
       return InteractionResult.PASS;
     });
     config.registerSaveListener((manager, configData) -> {
-      configData.reset();
+      ConfigManager.reset();
       return InteractionResult.PASS;
     });
   }

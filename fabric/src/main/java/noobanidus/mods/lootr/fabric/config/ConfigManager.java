@@ -255,7 +255,7 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
   }
 
   public static boolean isNewTextures() {
-    return get().client.new_textures;
+    return true;
   }
 
   public static class Debug {
@@ -336,7 +336,6 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
 
   public static class Client {
     public boolean vanilla_textures = false;
-    public boolean new_textures = true;
     public boolean unopened_particles = true;
   }
 }
