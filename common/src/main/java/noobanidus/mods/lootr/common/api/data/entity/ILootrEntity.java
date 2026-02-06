@@ -57,7 +57,7 @@ public interface ILootrEntity extends ILootrInfoProvider {
       //noinspection deprecation
       EntityType<?> type = getReplacementEntity();
       if (type != null) {
-        Entity newCart = type.create(level, EntitySpawnReason.CONVERSION);
+        Entity newCart = type.create(level, EntitySpawnReason.COMMAND);
         if (newCart != null) {
           // TODO: Does anything else need to be copied over?
           newCart.setPos(entity.position());
