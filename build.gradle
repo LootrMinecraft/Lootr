@@ -3,12 +3,12 @@ plugins {
     id "maven-publish"
     id "me.modmuss50.mod-publish-plugin" version "0.8.4" apply false
     id "net.neoforged.moddev" version "2.0.134" apply false
-    id("fabric-loom") version("1.14.7") apply(false)
-    id("net.fabricmc.fabric-loom-companion") version("1.14.7")
-    id ("org.jetbrains.gradle.plugin.idea-ext") version "1.3"
+    id "net.fabricmc.fabric-loom" version "1.15.2" apply false
+    id("net.fabricmc.fabric-loom-companion") version("1.15.2")
+    id("org.jetbrains.gradle.plugin.idea-ext") version "1.3"
 }
 
-def javaVersion = 21
+def javaVersion = 25
 
 allprojects {
     version = "${rootProject.minecraft_version}-${rootProject.mod_version}"
@@ -57,35 +57,6 @@ allprojects {
             filter {
                 includeGroupByRegex("dev\\.emi.*")
             }
-        }
-        exclusiveContent {
-            forRepository {
-                maven {
-                    url = "https://maven.shedaniel.me"
-                }
-            }
-            filter {
-                includeGroupAndSubgroups("me.shedaniel.cloth")
-                includeGroupAndSubgroups("me.shedaniel")
-            }
-        }
-        exclusiveContent {
-            forRepository {
-                maven {
-                    name = 'Sherds API'
-                    url = 'https://dl.cloudsmith.io/public/thomasglasser/sherdsapi/maven/'
-                }
-            }
-            filter { includeGroupAndSubgroups "dev.thomasglasser.sherdsapi" }
-        }
-        exclusiveContent {
-            forRepository {
-                maven {
-                    name = 'TommyLib'
-                    url = 'https://dl.cloudsmith.io/public/thomasglasser/tommylib/maven/'
-                }
-            }
-            filter { includeGroupAndSubgroups "dev.thomasglasser.tommylib" }
         }
     }
 

@@ -20,10 +20,10 @@ dependencies {
     compileOnly(project(':common')) {
         transitive = false
     }
-    compileOnly "dev.thomasglasser.sherdsapi:sherdsapi-neoforge-${minecraft_version}:${sherdsapi_version}"
+    //compileOnly "dev.thomasglasser.sherdsapi:sherdsapi-neoforge-${minecraft_version}:${sherdsapi_version}"
     implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:${rootProject.mixin_extras_version}"))
     implementation("io.github.llamalad7:mixinextras-neoforge:${rootProject.mixin_extras_version}")
-    implementation "maven.modrinth:jade:${rootProject.jade_version}+neoforge"
+    //implementation "maven.modrinth:jade:${rootProject.jade_version}+neoforge"
 
     // Locally sourced extra mods for runtime (i.e. testing)
     for (extraModJar in fileTree(dir: extraModsDir, include: '*.jar')) {
@@ -94,11 +94,6 @@ publishMods {
 
 neoForge {
     version = project.neoforge_version
-
-    parchment {
-        minecraftVersion = project.parchment_minecraft_version
-        mappingsVersion = project.parchment_mappings_version
-    }
 
     def atFile = project.file("src/main/resources/META-INF/accesstransformer_neoforge.cfg")
     if (atFile.exists()) {
