@@ -7,7 +7,7 @@
     "accessor.AccessorMixinBlock",
     "accessor.AccessorMixinBrushableBlockEntity",
     "accessor.AccessorMixinChunkMap",
-    "accessor.AccessorMixinDimensionDataStorage",
+    "accessor.AccessorMixinSavedDataStorage",
     "accessor.AccessorMixinFallingBlockEntity",
     "accessor.AccessorMixinItemFrame",
     "accessor.AccessorMixinLootTable",

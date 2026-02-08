@@ -4,9 +4,9 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.model.loading.v1.CustomUnbakedBlockStateModel;
-import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
+import net.fabricmc.fabric.api.client.particle.v1.ParticleProviderRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.ChunkSectionLayerMap;
+import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.SpecialBlockRendererRegistry;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
@@ -40,12 +40,13 @@ public class LootrClient implements ClientModInitializer {
   public void onInitializeClient() {
     LootrClientNetworkingInit.register();
 
-    BlockRenderLayerMap.putBlock(ModBlocks.CHEST, ChunkSectionLayer.CUTOUT);
-    BlockRenderLayerMap.putBlock(ModBlocks.TRAPPED_CHEST, ChunkSectionLayer.CUTOUT);
-    BlockRenderLayerMap.putBlock(ModBlocks.INVENTORY, ChunkSectionLayer.CUTOUT);
-    BlockRenderLayerMap.putBlock(ModBlocks.SHULKER, ChunkSectionLayer.CUTOUT);
-    BlockRenderLayerMap.putBlock(ModBlocks.BARREL, ChunkSectionLayer.CUTOUT);
-    BlockRenderLayerMap.putBlock(ModBlocks.TROPHY, ChunkSectionLayer.CUTOUT);
+
+    ChunkSectionLayerMap.putBlock(ModBlocks.CHEST, ChunkSectionLayer.CUTOUT);
+    ChunkSectionLayerMap.putBlock(ModBlocks.TRAPPED_CHEST, ChunkSectionLayer.CUTOUT);
+    ChunkSectionLayerMap.putBlock(ModBlocks.INVENTORY, ChunkSectionLayer.CUTOUT);
+    ChunkSectionLayerMap.putBlock(ModBlocks.SHULKER, ChunkSectionLayer.CUTOUT);
+    ChunkSectionLayerMap.putBlock(ModBlocks.BARREL, ChunkSectionLayer.CUTOUT);
+    ChunkSectionLayerMap.putBlock(ModBlocks.TROPHY, ChunkSectionLayer.CUTOUT);
 
     BlockEntityRenderers.register(ModBlockEntities.LOOTR_CHEST, LootrChestBlockRenderer::new);
     BlockEntityRenderers.register(ModBlockEntities.LOOTR_TRAPPED_CHEST, LootrChestBlockRenderer::new);
@@ -70,9 +71,9 @@ public class LootrClient implements ClientModInitializer {
     EntityRenderers.register(ModEntities.LOOTR_MINECART_ENTITY, (context) -> new LootrChestCartRenderer<>(context, ModelLayers.CHEST_MINECART));
     EntityRenderers.register(ModEntities.ITEM_FRAME, LootrItemFrameRenderer::new);
 
-    EntityModelLayerRegistry.registerModelLayer(LootrDecoratedPotRenderer.OPEN_POT_LAYER, LootrDecoratedPotRenderer::createBodyLayer);
+    ModelLayerRegistry.registerModelLayer(LootrDecoratedPotRenderer.OPEN_POT_LAYER, LootrDecoratedPotRenderer::createBodyLayer);
 
-    ParticleFactoryRegistry.getInstance().register(ModParticles.UNOPENED_PARTCLE, UnopenedParticle.Provider::new);
+    ParticleProviderRegistry.getInstance().register(ModParticles.UNOPENED_PARTCLE, UnopenedParticle.Provider::new);
 
     SelectItemModelProperties.ID_MAPPER.put(LootrAPI.rl("config_type"), SelectConfigType.TYPE);
   }

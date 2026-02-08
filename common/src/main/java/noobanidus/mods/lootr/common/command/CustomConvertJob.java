@@ -110,7 +110,7 @@ public final class CustomConvertJob {
     }
     level.getChunkSource().addTicketWithRadius(TicketType.FORCED, pos, 0);
     try {
-      var chunk = level.getChunk(pos.x, pos.z);
+      var chunk = level.getChunk(pos.x(), pos.z());
 
       int changed = 0;
 

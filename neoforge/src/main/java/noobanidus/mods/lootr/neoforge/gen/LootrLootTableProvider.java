@@ -2,7 +2,6 @@ package noobanidus.mods.lootr.neoforge.gen;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.data.loot.LootTableProvider;
@@ -24,9 +23,7 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.neoforge.init.ModBlocks;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
@@ -60,24 +57,8 @@ public class LootrLootTableProvider {
     }
 
     @Override
-    public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> biConsumer) {
-      this.generate();
-      HashSet<ResourceKey<LootTable>> set = new HashSet<>();
-      for (Block block : List.of(ModBlocks.CHEST.get(), ModBlocks.BARREL.get(), ModBlocks.INVENTORY.get(), ModBlocks.TRAPPED_CHEST.get(), ModBlocks.SHULKER.get(), ModBlocks.TROPHY.get())) {
-        block.getLootTable().ifPresent(resourceKey -> {
-          if (!set.add(resourceKey)) {
-            return;
-          }
-          LootTable.Builder builder = this.map.remove(resourceKey);
-          if (builder == null) {
-            throw new IllegalStateException(String.format(Locale.ROOT, "Missing loottable '%s' for '%s'", resourceKey.identifier(), BuiltInRegistries.BLOCK.getKey(block)));
-          }
-          biConsumer.accept(resourceKey, builder);
-        });
-      }
-      if (!this.map.isEmpty()) {
-        throw new IllegalStateException("Created block loot tables for non-blocks: " + this.map.keySet());
-      }
+    protected Iterable<Block> getKnownBlocks() {
+      return List.of(ModBlocks.CHEST.get(), ModBlocks.BARREL.get(), ModBlocks.INVENTORY.get(), ModBlocks.TRAPPED_CHEST.get(), ModBlocks.SHULKER.get(), ModBlocks.TROPHY.get());
     }
   }
 

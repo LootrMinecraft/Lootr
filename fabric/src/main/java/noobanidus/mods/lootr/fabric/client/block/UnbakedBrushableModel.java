@@ -2,7 +2,7 @@ package noobanidus.mods.lootr.fabric.client.block;
 
 import com.mojang.serialization.MapCodec;
 import net.fabricmc.fabric.api.client.model.loading.v1.CustomUnbakedBlockStateModel;
-import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
+import net.fabricmc.fabric.api.client.renderer.v1.mesh.QuadEmitter;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.client.renderer.block.model.Variant;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -65,15 +65,15 @@ public class UnbakedBrushableModel extends noobanidus.mods.lootr.common.client.b
     }
 
     @Override
-    public TextureAtlasSprite particleSprite(BlockAndTintGetter blockView, BlockPos pos, BlockState state) {
+    public TextureAtlasSprite particleIcon(BlockAndTintGetter blockView, BlockPos pos, BlockState state) {
       if (isOpenFromBATG(blockView, pos, state, null)) {
-        return opened.particleSprite(blockView, pos, state);
+        return opened.particleIcon(blockView, pos, state);
       }
       return switch (state.getValue(BlockStateProperties.DUSTED)) {
-        case 1 -> stage_1.particleSprite(blockView, pos, state);
-        case 2 -> stage_2.particleSprite(blockView, pos, state);
-        case 3 -> stage_3.particleSprite(blockView, pos, state);
-        default -> stage_0.particleSprite(blockView, pos, state);
+        case 1 -> stage_1.particleIcon(blockView, pos, state);
+        case 2 -> stage_2.particleIcon(blockView, pos, state);
+        case 3 -> stage_3.particleIcon(blockView, pos, state);
+        default -> stage_0.particleIcon(blockView, pos, state);
       };
     }
   }

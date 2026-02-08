@@ -181,8 +181,10 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     }
   }
 
+
+
   @Override
-  public InteractionResult interact(Player player, InteractionHand hand) {
+  public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
     if (level().isClientSide() || player.isSpectator() || !(player instanceof ServerPlayer serverPlayer)) {
       return InteractionResult.CONSUME;
     }

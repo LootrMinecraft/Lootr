@@ -1,6 +1,6 @@
 package noobanidus.mods.lootr.fabric.mixin.self;
 
-import net.fabricmc.fabric.api.blockview.v2.RenderDataBlockEntity;
+import net.fabricmc.fabric.api.blockgetter.v2.RenderDataBlockEntity;
 import net.minecraft.world.entity.player.Player;
 import noobanidus.mods.lootr.common.block.entity.LootrBarrelBlockEntity;
 import noobanidus.mods.lootr.common.client.ClientHooks;
@@ -16,6 +16,6 @@ public class MixinLootrBarrelBlockEntity implements RenderDataBlockEntity {
       return null;
     }
 
-    return ((LootrBarrelBlockEntity) (Object)this).hasClientOpened(player.getUUID());
+    return ((LootrBarrelBlockEntity) (Object) this).hasClientOpened(player.getUUID());
   }
 }

@@ -2,7 +2,6 @@ package noobanidus.mods.lootr.fabric;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
-import net.minecraft.client.renderer.block.model.BlockModelDefinition;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
@@ -23,13 +22,15 @@ public class Lootr implements ModInitializer {
     LootrRegistry.INSTANCE = new LootrRegistryImpl();
     PlatformAPI.INSTANCE = new PlatformAPIImpl();
 
-    PayloadTypeRegistry.playS2C().register(PacketOpenCart.TYPE, PacketOpenCart.STREAM_CODEC);
-    PayloadTypeRegistry.playS2C().register(PacketCloseCart.TYPE, PacketCloseCart.STREAM_CODEC);
-    PayloadTypeRegistry.playS2C().register(PacketOpenContainer.TYPE, PacketOpenContainer.STREAM_CODEC);
-    PayloadTypeRegistry.playS2C().register(PacketCloseContainer.TYPE, PacketCloseContainer.STREAM_CODEC);
-    PayloadTypeRegistry.playS2C().register(PacketRefreshSection.TYPE, PacketRefreshSection.STREAM_CODEC);
-    PayloadTypeRegistry.playS2C().register(PacketPerformBreakEffect.TYPE, PacketPerformBreakEffect.STREAM_CODEC);
-    PayloadTypeRegistry.playC2S().register(PacketRequestUpdate.TYPE, PacketRequestUpdate.STREAM_CODEC);
+    var toClient = PayloadTypeRegistry.clientboundPlay();
+
+    toClient.register(PacketOpenCart.TYPE, PacketOpenCart.STREAM_CODEC);
+    toClient.register(PacketCloseCart.TYPE, PacketCloseCart.STREAM_CODEC);
+    toClient.register(PacketOpenContainer.TYPE, PacketOpenContainer.STREAM_CODEC);
+    toClient.register(PacketCloseContainer.TYPE, PacketCloseContainer.STREAM_CODEC);
+    toClient.register(PacketRefreshSection.TYPE, PacketRefreshSection.STREAM_CODEC);
+    toClient.register(PacketPerformBreakEffect.TYPE, PacketPerformBreakEffect.STREAM_CODEC);
+    toClient.register(PacketRequestUpdate.TYPE, PacketRequestUpdate.STREAM_CODEC);
 
     LootrNetworkingInit.register();
 

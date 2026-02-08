@@ -26,7 +26,7 @@ public class LootrCompatDataGenerators {
   private static final List<DataGenerator> generators = new ArrayList<>();
 
   private static DataGenerator makeGenerator (Path path, Component description) {
-    DataGenerator generator = new DataGenerator(path, DetectedVersion.tryDetectVersion(), true);
+    DataGenerator generator = new DataGenerator.Cached(path, DetectedVersion.tryDetectVersion(), true);
     generator.addProvider(true, new PackMetadataGenerator(generator.getPackOutput()).add(PackMetadataSection.SERVER_TYPE, new PackMetadataSection(description, PackFormat.of(15).minorRange()))); // 15 for compatibility
     generators.add(generator);
     return generator;

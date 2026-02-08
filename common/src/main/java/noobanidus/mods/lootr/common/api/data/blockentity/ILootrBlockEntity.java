@@ -80,7 +80,7 @@ public interface ILootrBlockEntity extends ILootrInfoProvider {
     if (entity.getLevel() instanceof ServerLevel level) {
       Packet<?> packet = entity.getUpdatePacket();
       if (packet != null) {
-        level.getChunkSource().chunkMap.getPlayers(new ChunkPos(entity.getBlockPos()), false).forEach(player -> player.connection.send(packet));
+        level.getChunkSource().chunkMap.getPlayers(ChunkPos.containing(entity.getBlockPos()), false).forEach(player -> player.connection.send(packet));
       }
     }
   }

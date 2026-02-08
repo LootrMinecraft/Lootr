@@ -1,9 +1,5 @@
 package noobanidus.mods.lootr.fabric.config;
 
-import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.ConfigData;
-import me.shedaniel.autoconfig.annotation.Config;
-import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -22,54 +18,31 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-@Config(name = LootrAPI.MODID)
-public class ConfigManager extends ConfigManagerBase implements ConfigData {
-  @ConfigEntry.Gui.Excluded
+public class ConfigManager extends ConfigManagerBase {
   private static final List<Identifier> PROBLEMATIC_CHESTS = Arrays.asList(Identifier.fromNamespaceAndPath("atum", "chests/pharaoh"), Identifier.fromNamespaceAndPath("twilightforest", "structures/stronghold_boss"));
 
-  @ConfigEntry.Gui.Excluded
   private static Set<String> DECAY_MODS = null;
-  @ConfigEntry.Gui.Excluded
   private static Set<ResourceKey<LootTable>> DECAY_TABLES = null;
-  @ConfigEntry.Gui.Excluded
   private static Set<String> REFRESH_MODS = null;
-  @ConfigEntry.Gui.Excluded
   private static Set<ResourceKey<LootTable>> REFRESH_TABLES = null;
 
-  @ConfigEntry.Gui.Excluded
   private static Set<ResourceKey<Level>> DIM_WHITELIST = null;
-  @ConfigEntry.Gui.Excluded
   private static Set<String> MODID_DIM_WHITELIST = null;
-  @ConfigEntry.Gui.Excluded
   private static Set<ResourceKey<Level>> DIM_BLACKLIST = null;
-  @ConfigEntry.Gui.Excluded
   private static Set<String> MODID_DIM_BLACKLIST = null;
-  @ConfigEntry.Gui.Excluded
   private static Set<ResourceKey<Level>> DECAY_DIMS = null;
-  @ConfigEntry.Gui.Excluded
   private static Set<ResourceKey<Level>> REFRESH_DIMS = null;
-  @ConfigEntry.Gui.Excluded
   private static Set<ResourceKey<LootTable>> LOOT_BLACKLIST = null;
-  @ConfigEntry.Gui.Excluded
   private static Set<String> LOOT_MODIDS = null;
 
-  @ConfigEntry.Gui.CollapsibleObject
   public Debug debug = new Debug();
-  @ConfigEntry.Gui.CollapsibleObject
   public Seed seed = new Seed();
-  @ConfigEntry.Gui.CollapsibleObject
   public Conversion conversion = new Conversion();
-  @ConfigEntry.Gui.CollapsibleObject
   public Breaking breaking = new Breaking();
-  @ConfigEntry.Gui.CollapsibleObject
   public Lists lists = new Lists();
-  @ConfigEntry.Gui.CollapsibleObject
   public Decay decay = new Decay();
-  @ConfigEntry.Gui.CollapsibleObject
   public Refresh refresh = new Refresh();
-  @ConfigEntry.Gui.CollapsibleObject
   public Notifications notifications = new Notifications();
-  @ConfigEntry.Gui.CollapsibleObject
   public Client client = new Client();
 
   public static void reset() {
@@ -90,7 +63,7 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
   }
 
   public static ConfigManager get() {
-    return AutoConfig.getConfigHolder(ConfigManager.class).getConfig();
+    return null;
   }
 
   public static Set<ResourceKey<Level>> getDimensionWhitelist() {
@@ -216,7 +189,7 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
         return true;
       }
     }
-    if (LootrAPI.isTaggedStructurePresent((ServerLevel) tile.getInfoLevel(), new ChunkPos(tile.getInfoPos()), LootrTags.Structure.DECAY_STRUCTURES, tile.getInfoPos())) {
+    if (LootrAPI.isTaggedStructurePresent((ServerLevel) tile.getInfoLevel(), ChunkPos.containing(tile.getInfoPos()), LootrTags.Structure.DECAY_STRUCTURES, tile.getInfoPos())) {
       return true;
     }
     return isDimensionDecaying(tile.getInfoDimension());
@@ -234,7 +207,7 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
         return true;
       }
     }
-    if (LootrAPI.isTaggedStructurePresent((ServerLevel) tile.getInfoLevel(), new ChunkPos(tile.getInfoPos()), LootrTags.Structure.REFRESH_STRUCTURES, tile.getInfoPos())) {
+    if (LootrAPI.isTaggedStructurePresent((ServerLevel) tile.getInfoLevel(), ChunkPos.containing(tile.getInfoPos()), LootrTags.Structure.REFRESH_STRUCTURES, tile.getInfoPos())) {
       return true;
     }
     return isDimensionRefreshing(tile.getInfoDimension());
@@ -277,7 +250,6 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
     public boolean perform_piecewise_check = true;
     public boolean bypass_spawn_protection = true;
     public boolean skip_logging_no_loot_table_at_generation = true;
-    @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
     public SaveMode save_mode = SaveMode.SMART;
   }
 
@@ -306,9 +278,7 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
   public static class Decay {
     public int decay_value = 6000;
     public boolean decay_all = false;
-    @ConfigEntry.Gui.RequiresRestart
     public boolean perform_tick_decay = true;
-    @ConfigEntry.Gui.RequiresRestart
     public boolean start_tick_decay = false;
     public List<String> decay_modids = List.of();
     public List<String> decay_loot_tables = List.of();
@@ -319,9 +289,7 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
   public static class Refresh {
     public int refresh_value = 24000;
     public boolean refresh_all = false;
-    @ConfigEntry.Gui.RequiresRestart
     public boolean perform_tick_refresh = true;
-    @ConfigEntry.Gui.RequiresRestart
     public boolean start_tick_refresh = true;
     public List<String> refresh_modids = List.of();
     public List<String> refresh_loot_tables = List.of();

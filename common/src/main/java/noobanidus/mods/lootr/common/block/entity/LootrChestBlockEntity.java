@@ -291,7 +291,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
     double d1 = (double) pPos.getY() + 0.5D;
     double d2 = (double) pPos.getZ() + 0.5D;
 
-    pLevel.playSound(null, d0, d1, d2, pSound, SoundSource.BLOCKS, 0.5F, pLevel.random.nextFloat() * 0.1F + 0.9F);
+    pLevel.playSound(null, d0, d1, d2, pSound, SoundSource.BLOCKS, 0.5F, pLevel.getRandom().nextFloat() * 0.1F + 0.9F);
   }
 
   @AutoService(ILootrBlockEntityConverter.class)

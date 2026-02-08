@@ -1,6 +1,5 @@
 package noobanidus.mods.lootr.common.api.registry;
 
-import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.stats.Stat;
 import net.minecraft.world.entity.EntityType;
@@ -10,7 +9,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import noobanidus.mods.lootr.common.api.advancement.IAdvancementTrigger;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.advancement.ILootedStatTrigger;
@@ -28,7 +26,7 @@ public interface ILootrRegistry {
 
   Block getTrophyBlock();
 
-  default Block getShulker () {
+  default Block getShulker() {
     return getShulkerBlock();
   }
 
@@ -52,15 +50,17 @@ public interface ILootrRegistry {
 
   Item getShulkerItem();
 
-  Item getSuspiciousSandItem ();
-  Item getSuspiciousGravelItem ();
+  Item getSuspiciousSandItem();
 
-  Item getDecoratedPotItem ();
+  Item getSuspiciousGravelItem();
+
+  Item getDecoratedPotItem();
 
   EntityType<?> getMinecart();
+
   EntityType<? extends ItemFrame> getItemFrame();
 
-  BlockEntityType<?> getBrushableBlockEntity ();
+  BlockEntityType<?> getBrushableBlockEntity();
 
   BlockEntityType<?> getBarrelBlockEntity();
 
@@ -72,7 +72,7 @@ public interface ILootrRegistry {
 
   BlockEntityType<?> getShulkerBlockEntity();
 
-  BlockEntityType<?> getDecoratedPotBlockEntity ();
+  BlockEntityType<?> getDecoratedPotBlockEntity();
 
   IAdvancementTrigger getAdvancementTrigger();
 
@@ -86,12 +86,11 @@ public interface ILootrRegistry {
 
   ILootedStatTrigger getStatTrigger();
 
-  IContainerTrigger getSandTrigger ();
-  IContainerTrigger getGravelTrigger ();
+  IContainerTrigger getSandTrigger();
 
-  IContainerTrigger getPotTrigger ();
+  IContainerTrigger getGravelTrigger();
 
-  LootItemConditionType getLootCount();
+  IContainerTrigger getPotTrigger();
 
   Stat<?> getLootedStat();
 
@@ -99,5 +98,5 @@ public interface ILootrRegistry {
 
   IContainerTrigger getItemFrameTrigger();
 
-  SimpleParticleType getUnopenedParticleType ();
+  SimpleParticleType getUnopenedParticleType();
 }

@@ -105,7 +105,7 @@ public class CommandLootr {
   public static void createBlock(CommandSourceStack c, @Nullable Block block, @Nullable ResourceKey<LootTable> incomingTable) {
     Level world = c.getLevel();
     Vec3 incomingPos = c.getPosition();
-    BlockPos pos = new BlockPos((int) incomingPos.x, (int) incomingPos.y, (int) incomingPos.z);
+    BlockPos pos = new BlockPos((int) incomingPos.x(), (int) incomingPos.y, (int) incomingPos.z());
     ResourceKey<LootTable> table;
     if (incomingTable == null) {
       table = getTables(c.getServer()).get(world.getRandom().nextInt(getTables(c.getServer()).size()));
@@ -424,17 +424,17 @@ public class CommandLootr {
     builder.then(Commands.literal("custom-area").then(Commands.argument("from", BlockPosArgument.blockPos())
         .then(Commands.argument("to", BlockPosArgument.blockPos()).executes(context -> {
           BoundingBox bounds = BoundingBox.fromCorners(BlockPosArgument.getLoadedBlockPos(context, "from"), BlockPosArgument.getLoadedBlockPos(context, "to"));
-          ChunkPos start = new ChunkPos(new BlockPos(bounds.minX(), bounds.minY(), bounds.minZ()));
-          ChunkPos stop = new ChunkPos(new BlockPos(bounds.maxX(), bounds.maxY(), bounds.maxZ()));
+          ChunkPos start = ChunkPos.containing(new BlockPos(bounds.minX(), bounds.minY(), bounds.minZ()));
+          ChunkPos stop = ChunkPos.containing(new BlockPos(bounds.maxX(), bounds.maxY(), bounds.maxZ()));
           List<ChunkPos> positions = new ArrayList<>();
-          for (int x = start.x; x <= stop.x; x++) {
-            for (int z = start.z; z <= stop.z; z++) {
+          for (int x = start.x(); x <= stop.x(); x++) {
+            for (int z = start.z(); z <= stop.z(); z++) {
               positions.add(new ChunkPos(x, z));
             }
           }
           ServerLevel level = context.getSource().getLevel();
           for (ChunkPos chunkPos : positions) {
-            LevelChunk chunk = level.getChunk(chunkPos.x, chunkPos.z);
+            LevelChunk chunk = level.getChunk(chunkPos.x(), chunkPos.z());
             List<BlockPos> convertableBlocks = new ArrayList<>();
             for (BlockPos pos : chunk.getBlockEntitiesPos()) {
               if (!bounds.isInside(pos)) {
@@ -498,9 +498,9 @@ public class CommandLootr {
     }));
     builder.then(Commands.literal("force_chunk")
         .executes(c -> {
-          ChunkPos pos = new ChunkPos(BlockPos.containing(c.getSource().getPosition()));
+          ChunkPos pos = ChunkPos.containing(BlockPos.containing(c.getSource().getPosition()));
           ServerLevel level = c.getSource().getLevel();
-          var source = level.getChunkSource().getChunk(pos.x, pos.z, ChunkStatus.FULL, false);
+          var source = level.getChunkSource().getChunk(pos.x(), pos.z(), ChunkStatus.FULL, false);
           if (source instanceof LevelChunk levelChunk) {
             for (BlockEntity be : levelChunk.getBlockEntities().values()) {
               c.getSource()
@@ -509,7 +509,7 @@ public class CommandLootr {
             }
           } else {
             c.getSource()
-                .sendFailure(Component.literal("Chunk at " + pos.x + ", " + pos.z + " is not loaded somehow!"));
+                .sendFailure(Component.literal("Chunk at " + pos.x() + ", " + pos.z() + " is not loaded somehow!"));
             return 0;
           }
           return 1;
@@ -525,11 +525,11 @@ public class CommandLootr {
             return 0;
           }
           ServerLevel level = c.getSource().getLevel();
-          ChunkPos center = new ChunkPos(BlockPos.containing(c.getSource().getPosition()));
-          for (int x = center.x - radius; x <= center.x + radius; x++) {
-            for (int z = center.z - radius; z <= center.z + radius; z++) {
+          ChunkPos center = ChunkPos.containing(BlockPos.containing(c.getSource().getPosition()));
+          for (int x = center.x() - radius; x <= center.x() + radius; x++) {
+            for (int z = center.z() - radius; z <= center.z() + radius; z++) {
               ChunkPos pos = new ChunkPos(x, z);
-              var source = level.getChunkSource().getChunk(pos.x, pos.z, ChunkStatus.FULL, false);
+              var source = level.getChunkSource().getChunk(pos.x(), pos.z(), ChunkStatus.FULL, false);
               if (source instanceof LevelChunk levelChunk) {
                 for (BlockEntity be : levelChunk.getBlockEntities().values()) {
                   c.getSource()

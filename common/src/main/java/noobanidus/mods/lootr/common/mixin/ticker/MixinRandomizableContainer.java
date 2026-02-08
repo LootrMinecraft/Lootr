@@ -34,7 +34,7 @@ public interface MixinRandomizableContainer {
         .isClientSide() && instance instanceof BlockEntity blockEntity && !(instance instanceof ILootrBlockEntity) && !(LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity)) {
       // The likelihood of the container *not* being converted is extremely low at this point, so it should be safe to close the container. TODO: Maybe not?
       LootrAPI.closeContainers(blockEntity);
-      BlockEntityTicker.addEntity(blockEntity, blockEntity.getLevel(), new ChunkPos(blockEntity.getBlockPos()));
+      BlockEntityTicker.addEntity(blockEntity, blockEntity.getLevel(), ChunkPos.containing(blockEntity.getBlockPos()));
     }
   }
 
@@ -43,7 +43,7 @@ public interface MixinRandomizableContainer {
     original.call(instance, table);
     if (table != null && instance.getLevel() != null && !instance.getLevel()
         .isClientSide() && instance instanceof BlockEntity blockEntity && !(instance instanceof ILootrBlockEntity) && !(LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity)) {
-      BlockEntityTicker.addEntity(blockEntity, blockEntity.getLevel(), new ChunkPos(blockEntity.getBlockPos()));
+      BlockEntityTicker.addEntity(blockEntity, blockEntity.getLevel(), ChunkPos.containing(blockEntity.getBlockPos()));
     }
   }
 
@@ -52,7 +52,7 @@ public interface MixinRandomizableContainer {
   default void lootr$unpackLootTable(Player player, CallbackInfo ci) {
     if (this instanceof BlockEntity blockEntity) {
       if (BlockEntityTicker.isValidEntityFull(blockEntity)) {
-        BlockEntityTicker.addEntity(blockEntity, blockEntity.getLevel(), new ChunkPos(blockEntity.getBlockPos()));
+        BlockEntityTicker.addEntity(blockEntity, blockEntity.getLevel(), ChunkPos.containing(blockEntity.getBlockPos()));
         ci.cancel();
       }
     }

@@ -10,7 +10,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import noobanidus.mods.lootr.common.api.advancement.IAdvancementTrigger;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.advancement.ILootedStatTrigger;
@@ -111,10 +111,6 @@ public class LootrRegistry {
 
   public static BlockEntityType<?> getDecoratedPotBlockEntity() {
     return INSTANCE.getDecoratedPotBlockEntity();
-  }
-
-  public static LootItemConditionType getLootCount() {
-    return INSTANCE.getLootCount();
   }
 
   public static IAdvancementTrigger getAdvancementTrigger() {

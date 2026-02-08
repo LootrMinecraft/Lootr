@@ -6,7 +6,6 @@ import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.item.ItemModelResolver;
 import net.minecraft.client.renderer.state.CameraRenderState;
@@ -39,7 +38,7 @@ public class LootrBrushableBlockRenderer implements BlockEntityRenderer<LootrBru
     renderState.hitDirection = blockEntity.getHitDirection();
     renderState.dustProgress = blockEntity.getBlockState().getValue(BlockStateProperties.DUSTED);
     if (blockEntity.getLevel() != null && blockEntity.getHitDirection() != null) {
-      renderState.lightCoords = LevelRenderer.getLightColor(
+      renderState.lightCoords = LevelRenderer.getLightCoords(
           LevelRenderer.BrightnessGetter.DEFAULT,
           blockEntity.getLevel(),
           blockEntity.getBlockState(),

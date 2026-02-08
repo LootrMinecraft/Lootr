@@ -2,7 +2,7 @@ package noobanidus.mods.lootr.fabric.client.block;
 
 import com.mojang.serialization.MapCodec;
 import net.fabricmc.fabric.api.client.model.loading.v1.CustomUnbakedBlockStateModel;
-import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
+import net.fabricmc.fabric.api.client.renderer.v1.mesh.QuadEmitter;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.client.renderer.block.model.Variant;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -62,13 +62,13 @@ public class UnbakedCustomModel extends noobanidus.mods.lootr.common.client.bloc
     }
 
     @Override
-    public TextureAtlasSprite particleSprite(BlockAndTintGetter blockView, BlockPos pos, BlockState state) {
+    public TextureAtlasSprite particleIcon(BlockAndTintGetter blockView, BlockPos pos, BlockState state) {
       boolean visuallyOpen = isOpenFromBATG(blockView, pos, state, null);
 
       if (visuallyOpen) {
-        return opened.particleSprite(blockView, pos, state);
+        return opened.particleIcon(blockView, pos, state);
       } else {
-        return unopened.particleSprite(blockView, pos, state);
+        return unopened.particleIcon(blockView, pos, state);
       }
     }
 

@@ -23,7 +23,7 @@ public class MixinBrushableBlockEntity {
   public void lootr$tryLoadLootTable(ValueInput input, CallbackInfoReturnable<Boolean> cir) {
     BrushableBlockEntity instance = (BrushableBlockEntity) (Object) this;
     if (instance.getLevel() != null && lootTable != null) {
-      BlockEntityTicker.addEntity(instance, instance.getLevel(), new ChunkPos(instance.getBlockPos()));
+      BlockEntityTicker.addEntity(instance, instance.getLevel(), ChunkPos.containing(instance.getBlockPos()));
       cir.setReturnValue(true);
     }
   }

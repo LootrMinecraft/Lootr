@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.neoforge.event;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -16,7 +17,9 @@ public class HandleChunk {
   public static void onChunkLoad(ChunkEvent.Load event) {
     if (event.getChunk() instanceof LevelChunk levelChunk) {
       LevelAccessor level = event.getLevel();
-      LoadedChunks.onChunkLoad(level, levelChunk);
+      if (level instanceof ServerLevel level2) {
+        LoadedChunks.onChunkLoad(level2, levelChunk, event.isNewChunk());
+      }
     }
   }
 

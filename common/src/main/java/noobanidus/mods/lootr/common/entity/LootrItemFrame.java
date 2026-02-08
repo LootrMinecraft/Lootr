@@ -274,7 +274,7 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   }
 
   @Override
-  public InteractionResult interact(Player player, InteractionHand hand) {
+  public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
     if (!this.level().isClientSide()) {
       this.playSound(this.getRotateItemSound(), 1.0F, 1.0F);
       this.setRotation(this.getRotation() + 1);

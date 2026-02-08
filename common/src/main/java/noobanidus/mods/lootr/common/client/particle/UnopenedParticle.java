@@ -26,8 +26,8 @@ public class UnopenedParticle extends SingleQuadParticle {
   }
 
   @Override
-  protected int getLightColor(float partialTick) {
-    return 0xf000f0 | super.getLightColor(partialTick) & 0xff0000;
+  protected int getLightCoords(float a) {
+    return 0xf000f0 | super.getLightCoords(a) & 0xff0000;
   }
 
   @Override

@@ -108,7 +108,7 @@ public class NewTickingData {
   private Section getSection(MinecraftServer server, UUID id) {
     var level = server.overworld();
     var dataStorage = level.getDataStorage();
-    return dataStorage.computeIfAbsent(new SavedDataType<>(getFileName(id), () -> new Section(getBaseFileName(id)), Section.CODEC.apply(getBaseFileName(id)), null));
+    return dataStorage.computeIfAbsent(new SavedDataType<>(LootrAPI.rl(getFileName(id)), () -> new Section(getBaseFileName(id)), Section.CODEC.apply(getBaseFileName(id)), null));
   }
 
   public static class SectionException extends Exception {

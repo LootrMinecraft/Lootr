@@ -1,8 +1,8 @@
 package noobanidus.mods.lootr.neoforge.config;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -222,7 +222,8 @@ public class ConfigManager extends ConfigManagerBase {
         .define("vanilla_textures", false);
     CLIENT_BUILDER.pop();
     CLIENT_BUILDER.push("particles").comment("configuration options for particles");
-    UNOPENED_PARTICLES = CLIENT_BUILDER.comment("set to true to enable 'unopened particles' to spawn from containers that the player has not yet opened").define("unopened_particles", true);
+    UNOPENED_PARTICLES = CLIENT_BUILDER.comment("set to true to enable 'unopened particles' to spawn from containers that the player has not yet opened")
+        .define("unopened_particles", true);
     CLIENT_BUILDER.pop();
     CLIENT_CONFIG = CLIENT_BUILDER.build();
   }
@@ -380,11 +381,12 @@ public class ConfigManager extends ConfigManagerBase {
       if (!getDecayingTables().isEmpty() && getDecayingTables().contains(provider.getInfoLootTable())) {
         return true;
       }
-      if (!getDecayMods().isEmpty() && getDecayMods().contains(provider.getInfoLootTable().identifier().getNamespace())) {
+      if (!getDecayMods().isEmpty() && getDecayMods().contains(provider.getInfoLootTable().identifier()
+          .getNamespace())) {
         return true;
       }
     }
-    if (LootrAPI.isTaggedStructurePresent((ServerLevel) provider.getInfoLevel(), new ChunkPos(provider.getInfoPos()), LootrTags.Structure.DECAY_STRUCTURES, provider.getInfoPos())) {
+    if (LootrAPI.isTaggedStructurePresent((ServerLevel) provider.getInfoLevel(), ChunkPos.containing(provider.getInfoPos()), LootrTags.Structure.DECAY_STRUCTURES, provider.getInfoPos())) {
       return true;
     }
     return isDimensionDecaying(provider.getInfoDimension());
@@ -403,7 +405,7 @@ public class ConfigManager extends ConfigManagerBase {
         return true;
       }
     }
-    if (LootrAPI.isTaggedStructurePresent((ServerLevel) provider.getInfoLevel(), new ChunkPos(provider.getInfoPos()), LootrTags.Structure.REFRESH_STRUCTURES, provider.getInfoPos())) {
+    if (LootrAPI.isTaggedStructurePresent((ServerLevel) provider.getInfoLevel(), ChunkPos.containing(provider.getInfoPos()), LootrTags.Structure.REFRESH_STRUCTURES, provider.getInfoPos())) {
       return true;
     }
     return isDimensionRefreshing(provider.getInfoDimension());

@@ -184,7 +184,7 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
         double g = (double) blockPos.getX() + 0.5 * e + f;
         double h = (double) blockPos.getY() + 0.5 + (double) (EntityType.ITEM.getHeight() / 2.0F);
         double i = (double) blockPos.getZ() + 0.5 * e + f;
-        ItemEntity itemEntity = new ItemEntity(this.level, g, h, i, theItem.split(this.level.random.nextInt(21) + 10));
+        ItemEntity itemEntity = new ItemEntity(this.level, g, h, i, theItem.split(this.level.getRandom().nextInt(21) + 10));
         itemEntity.setDeltaMovement(Vec3.ZERO);
         this.level.addFreshEntity(itemEntity);
         this.item = ItemStack.EMPTY;

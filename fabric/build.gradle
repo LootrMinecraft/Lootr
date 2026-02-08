@@ -135,8 +135,6 @@ publishMods {
 }
 
 loom {
-    splitEnvironmentSourceSets()
-
     mods {
         "${mod_id}" {
             // Tell Loom about each source set used by your mod here. This ensures that your mod's classes are properly transformed by Loader.

@@ -2,6 +2,7 @@ package noobanidus.mods.lootr.common.chunk;
 
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.FullChunkStatus;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -15,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class LoadedChunks {
   private static final Map<ResourceKey<Level>, Set<ChunkPos>> LOADED_CHUNKS = new ConcurrentHashMap<>();
 
-  public static void onChunkLoad(LevelAccessor level, LevelChunk chunk) {
+  public static void onChunkLoad(ServerLevel level, LevelChunk chunk, boolean whoKnows) {
     if (!level.isClientSide()) {
       if (chunk.getFullStatus().isOrAfter(FullChunkStatus.FULL)) {
         ResourceKey<Level> dimension = chunk.getLevel().dimension();

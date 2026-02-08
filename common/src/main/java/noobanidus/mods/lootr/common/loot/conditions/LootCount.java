@@ -12,7 +12,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
@@ -31,11 +30,6 @@ public record LootCount(List<Operation> operations) implements LootItemCondition
           )
           .apply(builder, LootCount::new)
   );
-
-  @Override
-  public LootItemConditionType getType() {
-    return LootrRegistry.getLootCount();
-  }
 
   @Override
   public boolean test(LootContext lootContext) {
@@ -62,6 +56,11 @@ public record LootCount(List<Operation> operations) implements LootItemCondition
 
   public Set<ContextKey<?>> getReferencedContextParams() {
     return ImmutableSet.of(LootContextParams.ORIGIN);
+  }
+
+  @Override
+  public MapCodec<? extends LootItemCondition> codec() {
+    return CODEC;
   }
 
   public enum Operand implements BiPredicate<Integer, Integer>, StringRepresentable {

@@ -150,7 +150,7 @@ public final class BlockEntityTicker {
       return false;
     }
 
-    Entry testEntry = new Entry(new ChunkPos(pos), Set.of(pos));
+    Entry testEntry = new Entry(ChunkPos.containing(pos), Set.of(pos));
     Set<ChunkPos> loadedChunks = LoadedChunks.getLoadedChunks(level.dimension());
     if (testEntry.getChunkLoadStatus(serverLevel, loadedChunks) != ChunkLoadStatus.COMPLETE) {
       return false;
@@ -209,7 +209,7 @@ public final class BlockEntityTicker {
   }
 
   private static boolean checkStructureValidity(ServerLevel level, ChunkPos chunkPos, BlockPos position) {
-    if (!level.getServer().getWorldData().worldGenOptions().generateStructures()) {
+    if (!level.structureManager().shouldGenerateStructures()) {
       return true;
     }
     Registry<Structure> registry = level.registryAccess().lookupOrThrow(Registries.STRUCTURE);
@@ -302,16 +302,16 @@ public final class BlockEntityTicker {
   public record Entry(ChunkPos chunkPos, Set<BlockPos> entityPositions) {
     public ChunkLoadStatus getChunkLoadStatus(ServerLevel level, Set<ChunkPos> loadedChunks) {
       ChunkSource chunkSource = level.getChunkSource();
-      if (!LootrAPI.isWorldBorderSafe(level, chunkPos) || !chunkSource.hasChunk(chunkPos.x, chunkPos.z)) {
+      if (!LootrAPI.isWorldBorderSafe(level, chunkPos) || !chunkSource.hasChunk(chunkPos.x(), chunkPos.z())) {
         return ChunkLoadStatus.UNLOADED;
       }
       if (!loadedChunks.contains(chunkPos)) {
         return ChunkLoadStatus.NOT_FULLY_LOADED;
       }
 
-      for (int x = chunkPos.x - 2; x <= chunkPos.x + 2; x++) {
-        for (int z = chunkPos.z - 2; z <= chunkPos.z + 2; z++) {
-          if (x == chunkPos.x && z == chunkPos.z) {
+      for (int x = chunkPos.x() - 2; x <= chunkPos.x() + 2; x++) {
+        for (int z = chunkPos.z() - 2; z <= chunkPos.z() + 2; z++) {
+          if (x == chunkPos.x() && z == chunkPos.z()) {
             // this case is already checked above
             continue;
           }

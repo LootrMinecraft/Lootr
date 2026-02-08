@@ -4,7 +4,7 @@ import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.util.FileUtil;
 import net.minecraft.world.level.Level;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinDimensionDataStorage;
+import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinSavedDataStorage;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -23,7 +23,7 @@ public class MixinServerChunkCache {
       return;
     }
 
-    Path lootrDirectory = ((AccessorMixinDimensionDataStorage) cache.getDataStorage()).getDataFolder().resolve("lootr");
+    Path lootrDirectory = ((AccessorMixinSavedDataStorage) cache.getDataStorage()).getDataFolder().resolve("lootr");
     Path tickingDirectory = lootrDirectory.resolve("ticking");
     Path refreshDirectory = tickingDirectory.resolve("refresh");
     Path decayedDirectory = tickingDirectory.resolve("decay");

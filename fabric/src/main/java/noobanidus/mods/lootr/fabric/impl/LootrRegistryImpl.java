@@ -9,7 +9,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import noobanidus.mods.lootr.common.api.advancement.IAdvancementTrigger;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.advancement.ILootedStatTrigger;
@@ -195,11 +194,6 @@ public class LootrRegistryImpl implements ILootrRegistry {
   @Override
   public IContainerTrigger getPotTrigger() {
     return ModAdvancements.POT;
-  }
-
-  @Override
-  public LootItemConditionType getLootCount() {
-    return ModLoot.LOOT_COUNT;
   }
 
   @Override
