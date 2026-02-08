@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "lootr:block/trapped_chest"
+    }
+  }
+}
