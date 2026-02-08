@@ -27,12 +27,11 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
-import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
-import noobanidus.mods.lootr.common.api.ILootrEntityConverter;
-import noobanidus.mods.lootr.common.api.ILootrType;
+import noobanidus.mods.lootr.common.api.type.BuiltInLootrTypes;
+import noobanidus.mods.lootr.common.api.wrapper.ILootrEntityWrapper;
+import noobanidus.mods.lootr.common.api.type.ILootrType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
-import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.SimpleLootrEntityInstance;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
@@ -322,13 +321,7 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   }
 
   @Override
-  @Deprecated
-  public LootrBlockType getInfoBlockType() {
-    return null;
-  }
-
-  @Override
-  public ILootrType getInfoNewType() {
+  public ILootrType getInfoType() {
     return BuiltInLootrTypes.ITEM_FRAME;
   }
 
@@ -434,8 +427,8 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
     }
   }
 
-  @AutoService(ILootrEntityConverter.class)
-  public static class DefaultConverter implements ILootrEntityConverter<LootrItemFrame> {
+  @AutoService(ILootrEntityWrapper.class)
+  public static class DefaultWrapper implements ILootrEntityWrapper<LootrItemFrame> {
     @Override
     public ILootrEntity apply(LootrItemFrame entity) {
       return entity;

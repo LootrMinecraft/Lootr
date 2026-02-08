@@ -243,8 +243,6 @@ public class ConfigManager extends ConfigManagerBase {
     public boolean disable = false;
     public boolean convert_elytras_to_chests = false;
     public boolean convert_elytras_to_item_frames = true;
-    @Deprecated
-    public boolean convert_mineshafts = true;
     public boolean convert_structure_item_frames = true;
     public boolean world_border = false;
     public boolean perform_piecewise_check = true;

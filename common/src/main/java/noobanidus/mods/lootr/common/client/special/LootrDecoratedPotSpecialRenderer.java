@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import noobanidus.mods.lootr.common.api.PotDecorationsAdapter;
+import noobanidus.mods.lootr.common.api.integration.PotDecorationsAdapter;
 import noobanidus.mods.lootr.common.client.block.LootrDecoratedPotRenderer;
 import noobanidus.mods.lootr.common.integration.sherdsapi.SherdsIntegration;
 import org.joml.Vector3fc;

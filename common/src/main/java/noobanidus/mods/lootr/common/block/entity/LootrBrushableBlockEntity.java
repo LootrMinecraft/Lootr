@@ -31,11 +31,14 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.*;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
-import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.SimpleLootrInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
+import noobanidus.mods.lootr.common.api.integration.IBrushable;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.common.api.type.BuiltInLootrTypes;
+import noobanidus.mods.lootr.common.api.type.ILootrType;
+import noobanidus.mods.lootr.common.api.wrapper.ILootrBlockEntityWrapper;
 import noobanidus.mods.lootr.common.integration.digsite_workshop.IModdedBrushItem;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinFallingBlockEntity;
 import org.jetbrains.annotations.NotNull;
@@ -401,13 +404,7 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
   }
 
   @Override
-  @Deprecated
-  public LootrBlockType getInfoBlockType() {
-    return LootrBlockType.CHEST;
-  }
-
-  @Override
-  public ILootrType getInfoNewType() {
+  public ILootrType getInfoType() {
     if (this.getBlockState().is(LootrTags.Blocks.SANDS)) {
       return BuiltInLootrTypes.SAND;
     } else if (this.getBlockState().is(LootrTags.Blocks.GRAVELS)) {
@@ -531,8 +528,8 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
   }
 
 
-  @AutoService(ILootrBlockEntityConverter.class)
-  public static class DefaultBlockEntityConverter implements ILootrBlockEntityConverter<LootrBrushableBlockEntity> {
+  @AutoService(ILootrBlockEntityWrapper.class)
+  public static class DefaultBlockEntityWrapper implements ILootrBlockEntityWrapper<LootrBrushableBlockEntity> {
     @Override
     public ILootrBlockEntity apply(LootrBrushableBlockEntity blockEntity) {
       return blockEntity;

@@ -9,11 +9,11 @@ import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.common.entity.LootrItemFrame;
 
 public class ModEntities {
-  public static EntityType<LootrChestMinecartEntity> LOOTR_MINECART_ENTITY;
+  public static EntityType<LootrChestMinecartEntity> MINECART_WITH_CHEST;
   public static EntityType<LootrItemFrame> ITEM_FRAME;
 
   public static void registerEntities() {
-    LOOTR_MINECART_ENTITY = Registry.register(BuiltInRegistries.ENTITY_TYPE, LootrConstants.LOOTR_CART, EntityType.Builder.of((EntityType.EntityFactory<LootrChestMinecartEntity>) LootrChestMinecartEntity::new, MobCategory.MISC).sized(0.9f, 1.4f).clientTrackingRange(8).build(LootrConstants.FABRIC_LOOTR_CART_ENTITY));
+    MINECART_WITH_CHEST = Registry.register(BuiltInRegistries.ENTITY_TYPE, LootrConstants.MINECART_WITH_CHEST, EntityType.Builder.of((EntityType.EntityFactory<LootrChestMinecartEntity>) LootrChestMinecartEntity::new, MobCategory.MISC).sized(0.9f, 1.4f).clientTrackingRange(8).build(LootrConstants.MINECART_WITH_CHEST_ENTITY));
     ITEM_FRAME = Registry.register(BuiltInRegistries.ENTITY_TYPE, LootrConstants.ITEM_FRAME, EntityType.Builder.<LootrItemFrame>of(LootrItemFrame::new, MobCategory.MISC)
         .sized(0.5F, 0.5F)
         .eyeHeight(0.0F)

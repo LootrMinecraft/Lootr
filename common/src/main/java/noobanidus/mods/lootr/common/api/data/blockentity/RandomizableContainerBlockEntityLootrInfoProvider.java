@@ -7,16 +7,12 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BarrelBlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
-import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
-import net.minecraft.world.level.block.entity.TrappedChestBlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
-import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
-import noobanidus.mods.lootr.common.api.ILootrType;
+import noobanidus.mods.lootr.common.api.type.BuiltInLootrTypes;
+import noobanidus.mods.lootr.common.api.type.ILootrType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.ILootrSavedData;
-import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,18 +26,7 @@ public record RandomizableContainerBlockEntityLootrInfoProvider(
     NonNullList<ItemStack> customInventory) implements ILootrBlockEntity {
 
   @Override
-  @Deprecated
-  public LootrBlockType getInfoBlockType() {
-    return switch (blockEntity) {
-      case BarrelBlockEntity ignored -> LootrBlockType.BARREL;
-      case TrappedChestBlockEntity ignored -> LootrBlockType.TRAPPED_CHEST;
-      case ShulkerBoxBlockEntity ignored -> LootrBlockType.SHULKER;
-      default -> LootrBlockType.CHEST;
-    };
-  }
-
-  @Override
-  public ILootrType getInfoNewType() {
+  public ILootrType getInfoType() {
     return BuiltInLootrTypes.SIMPLE;
   }
 

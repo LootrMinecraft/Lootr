@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.common.api;
+package noobanidus.mods.lootr.common.api.client;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.util.StringRepresentable;
@@ -7,7 +7,6 @@ import java.util.Locale;
 
 public enum ConfigDisplayType implements StringRepresentable {
   DEFAULT,
-  OLD,
   VANILLA;
 
   @Override

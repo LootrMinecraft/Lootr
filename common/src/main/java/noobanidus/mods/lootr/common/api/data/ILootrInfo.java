@@ -3,42 +3,34 @@ package noobanidus.mods.lootr.common.api.data;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.Container;
-import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.CauldronBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
-import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
-import noobanidus.mods.lootr.common.api.ILootrType;
+import noobanidus.mods.lootr.common.api.type.ILootrType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
-import java.util.*;
-import java.util.function.Function;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * The base class for all Lootr information holders.
@@ -54,19 +46,11 @@ import java.util.function.Function;
  */
 @ApiStatus.Internal
 public interface ILootrInfo {
-  @Deprecated
-  @Nullable
-  LootrBlockType getInfoBlockType();
-
-  @Deprecated
-  @Nullable
-  LootrInfoType getInfoType();
-
-  @Nullable
-  ILootrType getInfoNewType();
+  @NonNull
+  ILootrType getInfoType();
 
   default LootFiller getDefaultFiller() {
-    ILootrType type = getInfoNewType();
+    ILootrType type = getInfoType();
     if (type == null) {
       return DefaultLootFiller.getInstance();
     } else {
@@ -75,7 +59,7 @@ public interface ILootrInfo {
   }
 
   default boolean canRefresh() {
-    ILootrType type = getInfoNewType();
+    ILootrType type = getInfoType();
     if (type == null) {
       return true;
     } else {
@@ -84,7 +68,7 @@ public interface ILootrInfo {
   }
 
   default boolean canDecay() {
-    ILootrType type = getInfoNewType();
+    ILootrType type = getInfoType();
     if (type == null) {
       return true;
     } else {
@@ -93,7 +77,7 @@ public interface ILootrInfo {
   }
 
   default boolean canBeMarkedUnopened() {
-    ILootrType type = getInfoNewType();
+    ILootrType type = getInfoType();
     if (type == null) {
       return true;
     } else {
@@ -102,7 +86,7 @@ public interface ILootrInfo {
   }
 
   default boolean canDropContentsWhenBroken() {
-    ILootrType type = getInfoNewType();
+    ILootrType type = getInfoType();
     if (type == null) {
       return true;
     } else {
@@ -110,13 +94,13 @@ public interface ILootrInfo {
     }
   }
 
-  // Prefer using getInfoNewType().getReplacementBlock()
+/*  // Prefer using getInfoNewType().getReplacementBlock()
   // This exists for backwards compatibility with "simple"
   // implementations.
   @Nullable
   @Deprecated
   default Block getReplacementBlock() {
-    ILootrType type = getInfoNewType();
+    ILootrType type = getInfoType();
     if (type == null) {
       return null;
     } else {
@@ -130,26 +114,26 @@ public interface ILootrInfo {
   @Nullable
   @Deprecated
   default EntityType<?> getReplacementEntity() {
-    ILootrType type = getInfoNewType();
+    ILootrType type = getInfoType();
     if (type == null) {
       return null;
     } else {
       return type.getReplacementEntity();
     }
-  }
+  }*/
 
-  // Prefer using getInfoNewType().isEntity() This exists
+/*  // Prefer using getInfoNewType().isEntity() This exists
   // exists for backwards compatibility with "simple"
   // implementations.
   @Deprecated
-  default boolean isEntity () {
-    ILootrType type = getInfoNewType();
+  default boolean isEntity() {
+    ILootrType type = getInfoType();
     if (type == null) {
       return false;
     } else {
       return type.isEntity();
     }
-  }
+  }*/
 
   @NotNull
   default Vec3 getInfoVec() {
@@ -185,11 +169,11 @@ public interface ILootrInfo {
   @Nullable
   NonNullList<ItemStack> getInfoReferenceInventory();
 
-  default boolean canPlayerOpen (ServerPlayer player) {
+  default boolean canPlayerOpen(ServerPlayer player) {
     return true;
   }
 
-  default void informPlayerCannotOpen (ServerPlayer player) {
+  default void informPlayerCannotOpen(ServerPlayer player) {
   }
 
   boolean isInfoReferenceInventory();
@@ -227,7 +211,7 @@ public interface ILootrInfo {
       return null;
     }
 
-    if (getInfoNewType() == null) {
+    if (getInfoType() == null) {
       // Try to guess
       BlockEntity be = level.getBlockEntity(getInfoPos());
       if (be instanceof Container container) {
@@ -240,7 +224,7 @@ public interface ILootrInfo {
       LootrAPI.LOG.warn("Unable to guess container type for LootrInfo with key '{}'", getInfoKey());
       return null;
     } else {
-      return getInfoNewType().getContainer(this, level);
+      return getInfoType().getContainer(this, level);
     }
   }
 
@@ -336,34 +320,22 @@ public interface ILootrInfo {
 
   @SuppressWarnings("deprecation")
   Codec<ILootrInfo> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-      LootrBlockType.CODEC.optionalFieldOf("blockType").forGetter(in -> Optional.ofNullable(in.getInfoBlockType())),
-      LootrInfoType.CODEC.optionalFieldOf("type").forGetter(in -> Optional.ofNullable(in.getInfoType())),
-      ILootrType.CODEC.optionalFieldOf("newType").forGetter(in -> Optional.ofNullable(in.getInfoNewType())),
+      ILootrType.CODEC.fieldOf("type").forGetter(ILootrInfo::getInfoType),
       UUIDUtil.CODEC.fieldOf("uuid").forGetter(ILootrInfo::getInfoUUID),
       Codec.STRING.fieldOf("key").forGetter(ILootrInfo::getInfoKey),
       BlockPos.CODEC.fieldOf("position").forGetter(ILootrInfo::getInfoPos),
-      // Optional display name
       ComponentSerialization.CODEC.optionalFieldOf("name").forGetter(i -> Optional.ofNullable(i.getInfoDisplayName())),
-      Identifier.CODEC.xmap(loc -> ResourceKey.create(Registries.DIMENSION, loc), ResourceKey::identifier).fieldOf("dimension").forGetter(ILootrInfo::getInfoDimension),
+      Identifier.CODEC.xmap(loc -> ResourceKey.create(Registries.DIMENSION, loc), ResourceKey::identifier)
+          .fieldOf("dimension").forGetter(ILootrInfo::getInfoDimension),
       Codec.INT.fieldOf("size").forGetter(ILootrInfo::getInfoContainerSize),
-      ItemStack.OPTIONAL_CODEC.listOf().xmap(list -> NonNullList.of(ItemStack.EMPTY, list.toArray(new ItemStack[0])), list -> list).optionalFieldOf("reference").forGetter(info -> info.isInfoReferenceInventory() ? Optional.ofNullable(info.getInfoReferenceInventory()) : Optional.empty()),
-      // Optional loot table and seed
-      Identifier.CODEC.xmap(loc -> ResourceKey.create(Registries.LOOT_TABLE, loc), ResourceKey::identifier).optionalFieldOf("table").forGetter(i -> Optional.ofNullable(i.getInfoLootTable())),
+      ItemStack.OPTIONAL_CODEC.listOf()
+          .xmap(list -> NonNullList.of(ItemStack.EMPTY, list.toArray(new ItemStack[0])), list -> list)
+          .optionalFieldOf("reference")
+          .forGetter(info -> info.isInfoReferenceInventory() ? Optional.ofNullable(info.getInfoReferenceInventory()) : Optional.empty()),
+      Identifier.CODEC.xmap(loc -> ResourceKey.create(Registries.LOOT_TABLE, loc), ResourceKey::identifier)
+          .optionalFieldOf("table").forGetter(i -> Optional.ofNullable(i.getInfoLootTable())),
       Codec.LONG.optionalFieldOf("seed").forGetter(info ->
           info.getInfoLootTable() != null ? Optional.of(info.getInfoLootSeed()) : Optional.empty()
       )
   ).apply(instance, BaseLootrInfo::new));
-
-  @Deprecated
-  enum LootrInfoType implements StringRepresentable {
-    CONTAINER_BLOCK_ENTITY,
-    CONTAINER_ENTITY;
-
-    @Override
-    public String getSerializedName() {
-      return name().toLowerCase(Locale.ROOT);
-    }
-
-    public static final Codec<LootrInfoType> CODEC = StringRepresentable.fromEnum(LootrInfoType::values);
-  }
 }

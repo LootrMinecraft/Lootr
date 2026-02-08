@@ -1,7 +1,7 @@
 package noobanidus.mods.lootr.common.impl.type;
 
 import net.minecraft.world.entity.EntityType;
-import noobanidus.mods.lootr.common.api.ILootrType;
+import noobanidus.mods.lootr.common.api.type.ILootrType;
 import noobanidus.mods.lootr.common.api.data.DefaultBrushableLootFiller;
 import noobanidus.mods.lootr.common.api.data.LootFiller;
 import org.jetbrains.annotations.Nullable;

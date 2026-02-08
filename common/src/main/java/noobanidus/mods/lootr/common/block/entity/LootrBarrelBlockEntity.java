@@ -29,11 +29,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootTable;
-import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
-import noobanidus.mods.lootr.common.api.ILootrBlockEntityConverter;
-import noobanidus.mods.lootr.common.api.ILootrType;
+import noobanidus.mods.lootr.common.api.type.BuiltInLootrTypes;
+import noobanidus.mods.lootr.common.api.wrapper.ILootrBlockEntityWrapper;
+import noobanidus.mods.lootr.common.api.type.ILootrType;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
-import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.SimpleLootrInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
@@ -82,13 +81,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   }
 
   @Override
-  @Deprecated
-  public LootrBlockType getInfoBlockType() {
-    return LootrBlockType.BARREL;
-  }
-
-  @Override
-  public ILootrType getInfoNewType() {
+  public ILootrType getInfoType() {
     return BuiltInLootrTypes.BARREL;
   }
 
@@ -293,8 +286,8 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     return 1.1;
   }
 
-  @AutoService(ILootrBlockEntityConverter.class)
-  public static class DefaultBlockEntityConverter implements ILootrBlockEntityConverter<LootrBarrelBlockEntity> {
+  @AutoService(ILootrBlockEntityWrapper.class)
+  public static class DefaultBlockEntityWrapper implements ILootrBlockEntityWrapper<LootrBarrelBlockEntity> {
     @Override
     public ILootrBlockEntity apply(LootrBarrelBlockEntity blockEntity) {
       return blockEntity;

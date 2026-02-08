@@ -63,7 +63,6 @@ public class LootrChestCartRenderer<T extends LootrChestMinecartEntity> extends 
   public void extractRenderState(T abstractMinecart, LootrChestCartRenderState minecartRenderState, float f) {
     super.extractRenderState(abstractMinecart, minecartRenderState, f);
     minecartRenderState.open = abstractMinecart.isClientOpened();
-    minecartRenderState.classic = LootrAPI.isOldTextures();
     minecartRenderState.vanilla = LootrAPI.isVanillaTextures();
   }
 }

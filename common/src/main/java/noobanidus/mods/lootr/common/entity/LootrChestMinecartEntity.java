@@ -18,7 +18,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
 import net.minecraft.world.entity.vehicle.minecart.AbstractMinecartContainer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
@@ -31,13 +30,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
-import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
-import noobanidus.mods.lootr.common.api.ILootrEntityConverter;
-import noobanidus.mods.lootr.common.api.ILootrType;
+import noobanidus.mods.lootr.common.api.type.BuiltInLootrTypes;
+import noobanidus.mods.lootr.common.api.wrapper.ILootrEntityWrapper;
+import noobanidus.mods.lootr.common.api.type.ILootrType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.data.ILootrInfo;
-import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import org.jetbrains.annotations.NotNull;
@@ -272,13 +270,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
   @Override
-  @Deprecated
-  public LootrBlockType getInfoBlockType() {
-    return LootrBlockType.ENTITY;
-  }
-
-  @Override
-  public ILootrType getInfoNewType() {
+  public ILootrType getInfoType() {
     return BuiltInLootrTypes.MINECART;
   }
 
@@ -352,8 +344,8 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     return Items.CHEST_MINECART;
   }
 
-  @AutoService(ILootrEntityConverter.class)
-  public static class DefaultConverter implements ILootrEntityConverter<LootrChestMinecartEntity> {
+  @AutoService(ILootrEntityWrapper.class)
+  public static class DefaultWrapper implements ILootrEntityWrapper<LootrChestMinecartEntity> {
     @Override
     public ILootrEntity apply(LootrChestMinecartEntity entity) {
       return entity;

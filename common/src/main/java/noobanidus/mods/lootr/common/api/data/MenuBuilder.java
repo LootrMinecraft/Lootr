@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.common.api;
+package noobanidus.mods.lootr.common.api.data;
 
 
 import net.minecraft.world.Container;

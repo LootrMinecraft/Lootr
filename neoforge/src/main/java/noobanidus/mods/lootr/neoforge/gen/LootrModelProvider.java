@@ -18,8 +18,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.client.model.generators.blockstate.UnbakedMutator;
-import noobanidus.mods.lootr.common.api.ConfigDisplayType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.client.ConfigDisplayType;
 import noobanidus.mods.lootr.common.block.LootrBarrelBlock;
 import noobanidus.mods.lootr.common.client.select.SelectConfigType;
 import noobanidus.mods.lootr.common.client.special.LootrChestSpecialRenderer;
@@ -93,7 +93,7 @@ public class LootrModelProvider extends ModelProvider {
                             Collections.emptyList()
                         )),
                     new SelectItemModel.SwitchCase<>(
-                        List.of(ConfigDisplayType.OLD, ConfigDisplayType.DEFAULT),
+                        List.of(ConfigDisplayType.DEFAULT),
                         new BlockModelWrapper.Unbaked(
                             LootrAPI.rl("block/lootr_barrel_unopened"),
                             Collections.emptyList()))

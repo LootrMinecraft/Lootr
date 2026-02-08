@@ -43,7 +43,7 @@ public class LootrRegistryImpl implements ILootrRegistry {
 
   @Override
   public Block getShulkerBlock() {
-    return ModBlocks.SHULKER;
+    return ModBlocks.SHULKER_BOX;
   }
 
   @Override
@@ -63,32 +63,32 @@ public class LootrRegistryImpl implements ILootrRegistry {
 
   @Override
   public BlockEntityType<?> getBarrelBlockEntity() {
-    return ModBlockEntities.LOOTR_BARREL;
+    return ModBlockEntities.BARREL;
   }
 
   @Override
   public BlockEntityType<? extends ChestBlockEntity> getChestBlockEntity() {
-    return ModBlockEntities.LOOTR_CHEST;
+    return ModBlockEntities.CHEST;
   }
 
   @Override
   public BlockEntityType<? extends ChestBlockEntity> getTrappedChestBlockEntity() {
-    return ModBlockEntities.LOOTR_TRAPPED_CHEST;
+    return ModBlockEntities.TRAPPED_CHEST;
   }
 
   @Override
   public BlockEntityType<? extends ChestBlockEntity> getInventoryBlockEntity() {
-    return ModBlockEntities.LOOTR_INVENTORY;
+    return ModBlockEntities.INVENTORY;
   }
 
   @Override
   public BlockEntityType<?> getShulkerBlockEntity() {
-    return ModBlockEntities.LOOTR_SHULKER;
+    return ModBlockEntities.SHULKER_BOX;
   }
 
   @Override
   public BlockEntityType<?> getDecoratedPotBlockEntity() {
-    return ModBlockEntities.LOOTR_DECORATED_POT;
+    return ModBlockEntities.DECORATED_POT;
   }
 
   @Override
@@ -118,7 +118,7 @@ public class LootrRegistryImpl implements ILootrRegistry {
 
   @Override
   public Item getShulkerItem() {
-    return ModItems.SHULKER;
+    return ModItems.SHULKER_BOX;
   }
 
   @Override
@@ -138,7 +138,7 @@ public class LootrRegistryImpl implements ILootrRegistry {
 
   @Override
   public EntityType<?> getMinecart() {
-    return ModEntities.LOOTR_MINECART_ENTITY;
+    return ModEntities.MINECART_WITH_CHEST;
   }
 
   @Override
@@ -148,7 +148,7 @@ public class LootrRegistryImpl implements ILootrRegistry {
 
   @Override
   public BlockEntityType<?> getBrushableBlockEntity() {
-    return ModBlockEntities.LOOTR_BRUSHABLE_BLOCK;
+    return ModBlockEntities.BRUSHABLE_BLOCK;
   }
   
   @Override

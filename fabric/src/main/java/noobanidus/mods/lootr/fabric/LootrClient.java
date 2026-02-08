@@ -44,16 +44,16 @@ public class LootrClient implements ClientModInitializer {
     ChunkSectionLayerMap.putBlock(ModBlocks.CHEST, ChunkSectionLayer.CUTOUT);
     ChunkSectionLayerMap.putBlock(ModBlocks.TRAPPED_CHEST, ChunkSectionLayer.CUTOUT);
     ChunkSectionLayerMap.putBlock(ModBlocks.INVENTORY, ChunkSectionLayer.CUTOUT);
-    ChunkSectionLayerMap.putBlock(ModBlocks.SHULKER, ChunkSectionLayer.CUTOUT);
+    ChunkSectionLayerMap.putBlock(ModBlocks.SHULKER_BOX, ChunkSectionLayer.CUTOUT);
     ChunkSectionLayerMap.putBlock(ModBlocks.BARREL, ChunkSectionLayer.CUTOUT);
     ChunkSectionLayerMap.putBlock(ModBlocks.TROPHY, ChunkSectionLayer.CUTOUT);
 
-    BlockEntityRenderers.register(ModBlockEntities.LOOTR_CHEST, LootrChestBlockRenderer::new);
-    BlockEntityRenderers.register(ModBlockEntities.LOOTR_TRAPPED_CHEST, LootrChestBlockRenderer::new);
-    BlockEntityRenderers.register(ModBlockEntities.LOOTR_INVENTORY, LootrChestBlockRenderer::new);
-    BlockEntityRenderers.register(ModBlockEntities.LOOTR_SHULKER, LootrShulkerBoxRenderer::new);
-    BlockEntityRenderers.register(ModBlockEntities.LOOTR_BRUSHABLE_BLOCK, LootrBrushableBlockRenderer::new);
-    BlockEntityRenderers.register(ModBlockEntities.LOOTR_DECORATED_POT, LootrDecoratedPotRenderer::new);
+    BlockEntityRenderers.register(ModBlockEntities.CHEST, LootrChestBlockRenderer::new);
+    BlockEntityRenderers.register(ModBlockEntities.TRAPPED_CHEST, LootrChestBlockRenderer::new);
+    BlockEntityRenderers.register(ModBlockEntities.INVENTORY, LootrChestBlockRenderer::new);
+    BlockEntityRenderers.register(ModBlockEntities.SHULKER_BOX, LootrShulkerBoxRenderer::new);
+    BlockEntityRenderers.register(ModBlockEntities.BRUSHABLE_BLOCK, LootrBrushableBlockRenderer::new);
+    BlockEntityRenderers.register(ModBlockEntities.DECORATED_POT, LootrDecoratedPotRenderer::new);
 
     SpecialModelRenderers.ID_MAPPER.put(LootrAPI.rl("chest"), LootrChestSpecialRenderer.Unbaked.MAP_CODEC);
     SpecialModelRenderers.ID_MAPPER.put(LootrAPI.rl("shulker_box"), LootrShulkerSpecialRenderer.Unbaked.MAP_CODEC);
@@ -62,13 +62,13 @@ public class LootrClient implements ClientModInitializer {
     SpecialBlockRendererRegistry.register(ModBlocks.TRAPPED_CHEST, LootrChestSpecialRenderer.Unbaked.trappedChest());
     SpecialBlockRendererRegistry.register(ModBlocks.CHEST, LootrChestSpecialRenderer.Unbaked.chest());
     SpecialBlockRendererRegistry.register(ModBlocks.INVENTORY, LootrChestSpecialRenderer.Unbaked.chest());
-    SpecialBlockRendererRegistry.register(ModBlocks.SHULKER, LootrShulkerSpecialRenderer.Unbaked.shulker());
+    SpecialBlockRendererRegistry.register(ModBlocks.SHULKER_BOX, LootrShulkerSpecialRenderer.Unbaked.shulker());
     SpecialBlockRendererRegistry.register(ModBlocks.DECORATED_POT, LootrDecoratedPotSpecialRenderer.Unbaked.decoratedPot());
 
     CustomUnbakedBlockStateModel.register(LootrAPI.rl("custom"), UnbakedCustomModel.CODEC);
     CustomUnbakedBlockStateModel.register(LootrAPI.rl("brushable"), UnbakedBrushableModel.CODEC);
 
-    EntityRenderers.register(ModEntities.LOOTR_MINECART_ENTITY, (context) -> new LootrChestCartRenderer<>(context, ModelLayers.CHEST_MINECART));
+    EntityRenderers.register(ModEntities.MINECART_WITH_CHEST, (context) -> new LootrChestCartRenderer<>(context, ModelLayers.CHEST_MINECART));
     EntityRenderers.register(ModEntities.ITEM_FRAME, LootrItemFrameRenderer::new);
 
     ModelLayerRegistry.registerModelLayer(LootrDecoratedPotRenderer.OPEN_POT_LAYER, LootrDecoratedPotRenderer::createBodyLayer);

@@ -52,13 +52,13 @@ public class LootrLootTableProvider {
       this.add(ModBlocks.BARREL.get(), lootrBlockDrop(Blocks.BARREL));
       this.add(ModBlocks.INVENTORY.get(), lootrBlockDrop(Blocks.CHEST));
       this.add(ModBlocks.TRAPPED_CHEST.get(), lootrBlockDrop(Blocks.TRAPPED_CHEST));
-      this.add(ModBlocks.SHULKER.get(), lootrBlockDrop(Blocks.SHULKER_BOX));
+      this.add(ModBlocks.SHULKER_BOX.get(), lootrBlockDrop(Blocks.SHULKER_BOX));
       this.dropSelf(ModBlocks.TROPHY.get());
     }
 
     @Override
     protected Iterable<Block> getKnownBlocks() {
-      return List.of(ModBlocks.CHEST.get(), ModBlocks.BARREL.get(), ModBlocks.INVENTORY.get(), ModBlocks.TRAPPED_CHEST.get(), ModBlocks.SHULKER.get(), ModBlocks.TROPHY.get());
+      return List.of(ModBlocks.CHEST.get(), ModBlocks.BARREL.get(), ModBlocks.INVENTORY.get(), ModBlocks.TRAPPED_CHEST.get(), ModBlocks.SHULKER_BOX.get(), ModBlocks.TROPHY.get());
     }
   }
 

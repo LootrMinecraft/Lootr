@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.item.properties.select.SelectItemModelPrope
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import noobanidus.mods.lootr.common.api.ConfigDisplayType;
+import noobanidus.mods.lootr.common.api.client.ConfigDisplayType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,9 +21,6 @@ public record SelectConfigType() implements SelectItemModelProperty<ConfigDispla
   public @Nullable ConfigDisplayType get(ItemStack p_387845_, @Nullable ClientLevel p_387945_, @Nullable LivingEntity p_388349_, int p_388630_, ItemDisplayContext p_388902_) {
     if (LootrAPI.isVanillaTextures()) {
       return ConfigDisplayType.VANILLA;
-    }
-    if (LootrAPI.isOldTextures()) {
-      return ConfigDisplayType.OLD;
     }
     return ConfigDisplayType.DEFAULT;
   }

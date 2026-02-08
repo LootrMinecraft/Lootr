@@ -13,7 +13,7 @@ import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import noobanidus.mods.lootr.common.api.MenuBuilder;
+import noobanidus.mods.lootr.common.api.data.MenuBuilder;
 import noobanidus.mods.lootr.common.api.data.ILootrInfo;
 import noobanidus.mods.lootr.common.api.data.ILootrSavedData;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;

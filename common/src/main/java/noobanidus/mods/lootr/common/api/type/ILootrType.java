@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.common.api;
+package noobanidus.mods.lootr.common.api.type;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.server.level.ServerLevel;
@@ -7,10 +7,10 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.DefaultLootFiller;
 import noobanidus.mods.lootr.common.api.data.ILootrInfo;
 import noobanidus.mods.lootr.common.api.data.LootFiller;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**

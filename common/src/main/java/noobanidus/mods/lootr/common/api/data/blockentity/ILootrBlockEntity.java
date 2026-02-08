@@ -66,12 +66,6 @@ public interface ILootrBlockEntity extends ILootrInfoProvider {
     throw new NullPointerException("ILootrBlockEntity implementation is not a BlockEntity and doesn't provide asBlockEntity()!");
   }
 
-  @Override
-  @Deprecated
-  default LootrInfoType getInfoType() {
-    return LootrInfoType.CONTAINER_BLOCK_ENTITY;
-  }
-
   default void updatePacketViaForce () {
     updatePacketViaForce(asBlockEntity());
   }
@@ -117,7 +111,7 @@ public interface ILootrBlockEntity extends ILootrInfoProvider {
     level.destroyBlock(getInfoPos(), !replaceWhenDecayed);
     if (replaceWhenDecayed) {
       //noinspection deprecation
-      Block replacementBlock = getReplacementBlock();
+      Block replacementBlock = getInfoType().getReplacementBlock();
       if (replacementBlock != null) {
         BlockState replacementState = replacementBlock.defaultBlockState();
         for (Property<?> prop : replacementState.getProperties()) {

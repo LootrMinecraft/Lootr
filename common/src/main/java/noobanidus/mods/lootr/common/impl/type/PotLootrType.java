@@ -4,18 +4,15 @@ import com.google.auto.service.AutoService;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
-import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
-import noobanidus.mods.lootr.common.api.ILootrType;
-import noobanidus.mods.lootr.common.block.entity.LootrDecoratedPotBlockEntity;
+import noobanidus.mods.lootr.common.api.type.BuiltInLootrTypes;
+import noobanidus.mods.lootr.common.api.type.ILootrType;
 import org.jetbrains.annotations.Nullable;
 
 @AutoService(ILootrType.class)
 public class PotLootrType implements ILootrType {
   @Override
   public String getName() {
-    return BuiltInLootrTypes.TYPE_POT;
+    return BuiltInLootrTypes.TYPE_DECORATED_POT;
   }
 
   @Override
@@ -40,6 +37,6 @@ public class PotLootrType implements ILootrType {
 
   @Override
   public void callback() {
-    BuiltInLootrTypes.POT = this;
+    BuiltInLootrTypes.DECORATED_POT = this;
   }
 }

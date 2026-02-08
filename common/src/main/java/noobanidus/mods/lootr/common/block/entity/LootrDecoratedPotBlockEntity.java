@@ -31,11 +31,14 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.ticks.ContainerSingleItem;
 import noobanidus.mods.lootr.common.api.*;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
-import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.SimpleLootrInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
+import noobanidus.mods.lootr.common.api.integration.PotDecorationsAdapter;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.common.api.type.BuiltInLootrTypes;
+import noobanidus.mods.lootr.common.api.type.ILootrType;
+import noobanidus.mods.lootr.common.api.wrapper.ILootrBlockEntityWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -286,14 +289,8 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   }
 
   @Override
-  @Deprecated
-  public LootrBlockType getInfoBlockType() {
-    return LootrBlockType.CHEST;
-  }
-
-  @Override
-  public ILootrType getInfoNewType() {
-    return BuiltInLootrTypes.POT;
+  public ILootrType getInfoType() {
+    return BuiltInLootrTypes.DECORATED_POT;
   }
 
   @Override
@@ -381,8 +378,8 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
     return new double[]{0.4, 0.6};
   }
 
-  @AutoService(ILootrBlockEntityConverter.class)
-  public static class DefaultBlockEntityConverter implements ILootrBlockEntityConverter<LootrDecoratedPotBlockEntity> {
+  @AutoService(ILootrBlockEntityWrapper.class)
+  public static class DefaultBlockEntityWrapper implements ILootrBlockEntityWrapper<LootrDecoratedPotBlockEntity> {
     @Override
     public ILootrBlockEntity apply(LootrDecoratedPotBlockEntity blockEntity) {
       return blockEntity;

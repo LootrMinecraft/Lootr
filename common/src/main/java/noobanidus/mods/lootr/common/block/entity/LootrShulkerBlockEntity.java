@@ -35,11 +35,10 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
-import noobanidus.mods.lootr.common.api.ILootrBlockEntityConverter;
-import noobanidus.mods.lootr.common.api.ILootrType;
+import noobanidus.mods.lootr.common.api.type.BuiltInLootrTypes;
+import noobanidus.mods.lootr.common.api.wrapper.ILootrBlockEntityWrapper;
+import noobanidus.mods.lootr.common.api.type.ILootrType;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
-import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.SimpleLootrInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
@@ -245,14 +244,8 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   @Override
-  @Deprecated
-  public LootrBlockType getInfoBlockType() {
-    return LootrBlockType.SHULKER;
-  }
-
-  @Override
-  public ILootrType getInfoNewType() {
-    return BuiltInLootrTypes.SHULKER;
+  public ILootrType getInfoType() {
+    return BuiltInLootrTypes.SHULKER_BOX;
   }
 
   @Override
@@ -375,8 +368,8 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
     pLevel.updateNeighborsAt(pPos, pState.getBlock());
   }
 
-  @AutoService(ILootrBlockEntityConverter.class)
-  public static class DefaultBlockEntityConverter implements ILootrBlockEntityConverter<LootrShulkerBlockEntity> {
+  @AutoService(ILootrBlockEntityWrapper.class)
+  public static class DefaultBlockEntityWrapper implements ILootrBlockEntityWrapper<LootrShulkerBlockEntity> {
     @Override
     public ILootrBlockEntity apply(LootrShulkerBlockEntity blockEntity) {
       return blockEntity;

@@ -8,13 +8,12 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import noobanidus.mods.lootr.common.api.ILootrAPI;
-import noobanidus.mods.lootr.common.api.ILootrBlockEntityConverter;
-import noobanidus.mods.lootr.common.api.ILootrEntityConverter;
-import noobanidus.mods.lootr.common.api.ILootrType;
+import noobanidus.mods.lootr.common.api.wrapper.ILootrBlockEntityWrapper;
+import noobanidus.mods.lootr.common.api.wrapper.ILootrEntityWrapper;
+import noobanidus.mods.lootr.common.api.type.ILootrType;
 import noobanidus.mods.lootr.common.api.adapter.AdapterMap;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
-import noobanidus.mods.lootr.common.api.client.ILootrFabricModelProvider;
 import noobanidus.mods.lootr.common.api.command.ILootrCommandExtension;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
@@ -46,7 +45,6 @@ public class LootrServiceRegistry {
   private final BlockReplacementMap replacementMap = new BlockReplacementMap();
   private final Map<String, ILootrType> typeMap = new Object2ObjectOpenHashMap<>();
   // Only used on Fabric
-  private final List<ILootrFabricModelProvider> fabricModelProviders = new ObjectArrayList<>();
   private final List<ILootrCommandExtension> commandExtensions = new ObjectArrayList<>();
 
   private final String commands;
@@ -54,14 +52,14 @@ public class LootrServiceRegistry {
   @SuppressWarnings("rawtypes")
   public LootrServiceRegistry() {
     ClassLoader classLoader = ILootrAPI.class.getClassLoader();
-    ServiceLoader<ILootrBlockEntityConverter> loader = ServiceLoader.load(ILootrBlockEntityConverter.class, classLoader);
+    ServiceLoader<ILootrBlockEntityWrapper> loader = ServiceLoader.load(ILootrBlockEntityWrapper.class, classLoader);
 
-    for (ILootrBlockEntityConverter<?> converter : loader) {
+    for (ILootrBlockEntityWrapper<?> converter : loader) {
       blockEntityConverterMap.put(converter.getBlockEntityType(), converter);
     }
 
-    ServiceLoader<ILootrEntityConverter> loader2 = ServiceLoader.load(ILootrEntityConverter.class, classLoader);
-    for (ILootrEntityConverter<?> converter2 : loader2) {
+    ServiceLoader<ILootrEntityWrapper> loader2 = ServiceLoader.load(ILootrEntityWrapper.class, classLoader);
+    for (ILootrEntityWrapper<?> converter2 : loader2) {
       entityConverterMap.put(converter2.getEntityType(), converter2);
     }
 
@@ -107,11 +105,6 @@ public class LootrServiceRegistry {
     for (ILootrType type : loader10) {
       typeMap.put(type.getName(), type);
       type.callback();
-    }
-
-    ServiceLoader<ILootrFabricModelProvider> loader11 = ServiceLoader.load(ILootrFabricModelProvider.class, classLoader);
-    for (ILootrFabricModelProvider appender : loader11) {
-      fabricModelProviders.add(appender);
     }
 
     StringJoiner commandsTemp = new StringJoiner(" | ");
@@ -215,11 +208,6 @@ public class LootrServiceRegistry {
   @Nullable
   static ILootrType getType(String type) {
     return getInstance().typeMap.get(type);
-  }
-
-  @ApiStatus.Internal
-  public static List<ILootrFabricModelProvider> getModelAppenders() {
-    return getInstance().fabricModelProviders;
   }
 
   @ApiStatus.Internal

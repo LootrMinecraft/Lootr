@@ -5,7 +5,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.vehicle.minecart.AbstractMinecartContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -13,11 +12,10 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.IClientOpeners;
-import noobanidus.mods.lootr.common.api.ILootrType;
+import noobanidus.mods.lootr.common.api.type.ILootrType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.data.blockentity.RandomizableContainerBlockEntityLootrInfoProvider;
-import noobanidus.mods.lootr.common.api.data.entity.AbstractMinecartContainerLootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import org.jetbrains.annotations.Nullable;
 
@@ -65,21 +63,8 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
     return new RandomizableContainerBlockEntityLootrInfoProvider(blockEntity, id, ILootrInfo.generateInfoKey(id), customInventory);
   }
 
-  static ILootrInfoProvider of(AbstractMinecartContainer minecart) {
-    if (minecart instanceof ILootrInfoProvider provider) {
-      return provider;
-    }
-    return new AbstractMinecartContainerLootrInfoProvider(minecart, ILootrInfo.generateInfoKey(minecart.getUUID()));
-  }
-
-  @Deprecated
-  static ILootrInfoProvider of(UUID id, BlockPos pos, int containerSize, ResourceKey<LootTable> lootTable, long lootSeed, Component displayName, ResourceKey<Level> dimension, NonNullList<ItemStack> customInventory, @Deprecated LootrInfoType type, @Deprecated LootrBlockType blockType) {
-    return
-        new CustomLootrInfoProvider(id, ILootrInfo.generateInfoKey(id), pos, containerSize, lootTable, lootSeed, displayName, dimension, customInventory, type, blockType, BaseLootrInfo.resolveType(blockType, type, null));
-  }
-
-  static ILootrInfoProvider of(UUID id, BlockPos pos, int containerSize, ResourceKey<LootTable> lootTable, long lootSeed, Component displayName, ResourceKey<Level> dimension, NonNullList<ItemStack> customInventory, ILootrType type) {
-    return new CustomLootrInfoProvider(id, ILootrInfo.generateInfoKey(id), pos, containerSize, lootTable, lootSeed, displayName, dimension, customInventory, null, null, type);
+  static ILootrInfoProvider of(ILootrType type, UUID id, BlockPos pos, int containerSize, ResourceKey<LootTable> lootTable, long lootSeed, Component displayName, ResourceKey<Level> dimension, NonNullList<ItemStack> customInventory) {
+    return new CustomLootrInfoProvider(type, id, ILootrInfo.generateInfoKey(id), pos, containerSize, lootTable, lootSeed, displayName, dimension, customInventory);
   }
 
   // This matters for actual implementations of ILootrBlockEntity
@@ -157,7 +142,7 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
     if (data != null) {
       data.refresh();
       data.clearOpeners();
-      NewTickingData.getRefreshData().clearTicking(LootrAPI.getServer(), this.getInfoUUID());
+      TickingData.getRefreshData().clearTicking(LootrAPI.getServer(), this.getInfoUUID());
       markChanged();
     }
   }

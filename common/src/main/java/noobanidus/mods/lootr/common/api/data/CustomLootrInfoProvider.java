@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootTable;
-import noobanidus.mods.lootr.common.api.ILootrType;
+import noobanidus.mods.lootr.common.api.type.ILootrType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public record CustomLootrInfoProvider(
+    ILootrType type,
     UUID id,
     String cachedKey,
     BlockPos pos,
@@ -23,14 +24,11 @@ public record CustomLootrInfoProvider(
     long lootSeed,
     Component displayName,
     ResourceKey<Level> dimension,
-    NonNullList<ItemStack> customInventory,
-    // TODO: 26.1 migrate to remove these parameters
-    @Deprecated @Nullable LootrInfoType type,
-    @Deprecated @Nullable LootrBlockType blockType,
-    ILootrType newType) implements ILootrInfoProvider {
+    NonNullList<ItemStack> customInventory) implements ILootrInfoProvider {
 
   @SuppressWarnings("deprecation")
-  public CustomLootrInfoProvider(UUID id, String cachedKey, BlockPos pos, int containerSize, ResourceKey<LootTable> lootTable, long lootSeed, Component displayName, ResourceKey<Level> dimension, NonNullList<ItemStack> customInventory, @Deprecated @Nullable LootrInfoType type, @Deprecated @Nullable LootrBlockType blockType, ILootrType newType) {
+  public CustomLootrInfoProvider(ILootrType type, UUID id, String cachedKey, BlockPos pos, int containerSize, ResourceKey<LootTable> lootTable, long lootSeed, Component displayName, ResourceKey<Level> dimension, NonNullList<ItemStack> customInventory) {
+    this.type = type;
     this.id = id;
     this.cachedKey = cachedKey;
     this.pos = pos;
@@ -40,26 +38,11 @@ public record CustomLootrInfoProvider(
     this.displayName = displayName;
     this.dimension = dimension;
     this.customInventory = customInventory;
-    this.type = type;
-    this.blockType = blockType;
-    this.newType = BaseLootrInfo.resolveType(blockType, type, newType);
   }
 
   @Override
-  @Deprecated
-  public LootrBlockType getInfoBlockType() {
-    return blockType();
-  }
-
-  @Override
-  @Deprecated
-  public LootrInfoType getInfoType() {
+  public ILootrType getInfoType() {
     return type();
-  }
-
-  @Override
-  public ILootrType getInfoNewType() {
-    return newType();
   }
 
   @Override

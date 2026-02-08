@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.common.api;
+package noobanidus.mods.lootr.common.api.integration;
 
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;

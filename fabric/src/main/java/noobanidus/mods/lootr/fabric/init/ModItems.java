@@ -14,7 +14,7 @@ public class ModItems {
       .useBlockDescriptionPrefix());
   public static final BlockItem TRAPPED_CHEST = new BlockItem(ModBlocks.TRAPPED_CHEST, new Item.Properties().setId(LootrConstants.TRAPPED_CHEST_ITEM_RESOURCE_KEY)
       .useBlockDescriptionPrefix());
-  public static final BlockItem SHULKER = new BlockItem(ModBlocks.SHULKER, new Item.Properties().setId(LootrConstants.SHULKER_ITEM_RESOURCE_KEY)
+  public static final BlockItem SHULKER_BOX = new BlockItem(ModBlocks.SHULKER_BOX, new Item.Properties().setId(LootrConstants.SHULKER_BOX_ITEM_RESOURCE_KEY)
       .useBlockDescriptionPrefix());
   public static final BlockItem INVENTORY = new BlockItem(ModBlocks.INVENTORY, new Item.Properties().setId(LootrConstants.INVENTORY_ITEM_RESOURCE_KEY)
       .useBlockDescriptionPrefix());
@@ -31,11 +31,11 @@ public class ModItems {
       .setId(LootrConstants.TROPHY_ITEM_RESOURCE_KEY).useBlockDescriptionPrefix());
 
   public static void registerItems() {
-    Registry.register(BuiltInRegistries.ITEM, LootrConstants.LOOTR_CHEST, CHEST);
-    Registry.register(BuiltInRegistries.ITEM, LootrConstants.LOOTR_BARREL, BARREL);
-    Registry.register(BuiltInRegistries.ITEM, LootrConstants.LOOTR_TRAPPED_CHEST, TRAPPED_CHEST);
-    Registry.register(BuiltInRegistries.ITEM, LootrConstants.LOOTR_SHULKER, SHULKER);
-    Registry.register(BuiltInRegistries.ITEM, LootrConstants.LOOTR_INVENTORY, INVENTORY);
+    Registry.register(BuiltInRegistries.ITEM, LootrConstants.CHEST, CHEST);
+    Registry.register(BuiltInRegistries.ITEM, LootrConstants.BARREL, BARREL);
+    Registry.register(BuiltInRegistries.ITEM, LootrConstants.TRAPPED_CHEST, TRAPPED_CHEST);
+    Registry.register(BuiltInRegistries.ITEM, LootrConstants.SHULKER_BOX, SHULKER_BOX);
+    Registry.register(BuiltInRegistries.ITEM, LootrConstants.INVENTORY, INVENTORY);
     Registry.register(BuiltInRegistries.ITEM, LootrConstants.SUSPICIOUS_SAND, SUSPICIOUS_SAND);
     Registry.register(BuiltInRegistries.ITEM, LootrConstants.SUSPICIOUS_GRAVEL, SUSPICIOUS_GRAVEL);
     Registry.register(BuiltInRegistries.ITEM, LootrConstants.DECORATED_POT, DECORATED_POT);

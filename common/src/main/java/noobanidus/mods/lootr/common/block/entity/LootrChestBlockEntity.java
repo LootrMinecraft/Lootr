@@ -23,11 +23,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootTable;
-import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
-import noobanidus.mods.lootr.common.api.ILootrBlockEntityConverter;
-import noobanidus.mods.lootr.common.api.ILootrType;
+import noobanidus.mods.lootr.common.api.type.BuiltInLootrTypes;
+import noobanidus.mods.lootr.common.api.wrapper.ILootrBlockEntityWrapper;
+import noobanidus.mods.lootr.common.api.type.ILootrType;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
-import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.SimpleLootrInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
@@ -172,13 +171,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   }
 
   @Override
-  @Deprecated
-  public LootrBlockType getInfoBlockType() {
-    return LootrBlockType.CHEST;
-  }
-
-  @Override
-  public ILootrType getInfoNewType() {
+  public ILootrType getInfoType() {
     return BuiltInLootrTypes.CHEST;
   }
 
@@ -294,8 +287,8 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
     pLevel.playSound(null, d0, d1, d2, pSound, SoundSource.BLOCKS, 0.5F, pLevel.getRandom().nextFloat() * 0.1F + 0.9F);
   }
 
-  @AutoService(ILootrBlockEntityConverter.class)
-  public static class DefaultBlockEntityConverter implements ILootrBlockEntityConverter<LootrChestBlockEntity> {
+  @AutoService(ILootrBlockEntityWrapper.class)
+  public static class DefaultBlockEntityWrapper implements ILootrBlockEntityWrapper<LootrChestBlockEntity> {
     @Override
     public ILootrBlockEntity apply(LootrChestBlockEntity blockEntity) {
       return blockEntity;

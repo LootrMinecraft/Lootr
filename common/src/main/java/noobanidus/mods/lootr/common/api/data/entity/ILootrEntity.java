@@ -11,12 +11,6 @@ import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 
 public interface ILootrEntity extends ILootrInfoProvider {
-  @Override
-  @Deprecated
-  default LootrInfoType getInfoType() {
-    return LootrInfoType.CONTAINER_ENTITY;
-  }
-
   default Entity asEntity () {
     if (this instanceof Entity entity) {
       return entity;
@@ -55,7 +49,7 @@ public interface ILootrEntity extends ILootrInfoProvider {
     Entity entity = asEntity();
     if (replaceWhenDecayed) {
       //noinspection deprecation
-      EntityType<?> type = getReplacementEntity();
+      EntityType<?> type = getInfoType().getReplacementEntity();
       if (type != null) {
         Entity newCart = type.create(level, EntitySpawnReason.COMMAND);
         if (newCart != null) {

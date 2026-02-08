@@ -3,25 +3,14 @@ package noobanidus.mods.lootr.common.data;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.UUIDUtil;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.nbt.Tag;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.ContainerHelper;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.saveddata.SavedData;
-import noobanidus.mods.lootr.common.api.ILootrType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.*;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -29,6 +18,7 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 public class LootrSavedData extends SavedData implements ILootrSavedData {
+  @SuppressWarnings("unchecked")
   public static final Codec<LootrSavedData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
       Codec.BOOL.fieldOf("hasBeenOpened").forGetter(LootrSavedData::hasBeenOpened),
       ILootrInfo.CODEC.fieldOf("info").forGetter(data -> data.info),

@@ -78,22 +78,12 @@ public interface IOpeners extends IMarkChanged {
     return false;
   }
 
-  @Deprecated
-  default boolean hasOpened(UUID uuid) {
-    return hasServerOpened(uuid);
-  }
-
   default boolean hasServerOpened (UUID uuid) {
     Set<UUID> openers = getActualOpeners();
     if (openers == null) {
       return false;
     }
     return !openers.isEmpty() && openers.contains(uuid);
-  }
-
-  @Deprecated
-  default boolean hasOpened(Player player) {
-    return hasServerOpened(player.getUUID());
   }
 
   // So technically we have 3 types of openers. This is only for the

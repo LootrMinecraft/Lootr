@@ -4,15 +4,15 @@ import com.google.auto.service.AutoService;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
-import noobanidus.mods.lootr.common.api.ILootrType;
+import noobanidus.mods.lootr.common.api.type.BuiltInLootrTypes;
+import noobanidus.mods.lootr.common.api.type.ILootrType;
 import org.jetbrains.annotations.Nullable;
 
 @AutoService(ILootrType.class)
 public class ShulkerLootrType implements ILootrType {
   @Override
   public String getName() {
-    return BuiltInLootrTypes.TYPE_SHULKER;
+    return BuiltInLootrTypes.TYPE_SHULKER_BOX;
   }
 
   @Override
@@ -27,6 +27,6 @@ public class ShulkerLootrType implements ILootrType {
 
   @Override
   public void callback() {
-    BuiltInLootrTypes.SHULKER = this;
+    BuiltInLootrTypes.SHULKER_BOX = this;
   }
 }

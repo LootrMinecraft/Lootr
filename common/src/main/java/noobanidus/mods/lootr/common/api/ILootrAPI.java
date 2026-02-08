@@ -28,12 +28,15 @@ import noobanidus.mods.lootr.common.api.config.SaveMode;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.ILootrSavedData;
 import noobanidus.mods.lootr.common.api.data.LootFiller;
+import noobanidus.mods.lootr.common.api.data.MenuBuilder;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
+import noobanidus.mods.lootr.common.api.integration.PotDecorationsAdapter;
 import noobanidus.mods.lootr.common.api.processor.ILootrBlockEntityProcessor;
 import noobanidus.mods.lootr.common.api.processor.ILootrEntityProcessor;
+import noobanidus.mods.lootr.common.api.type.ILootrType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -64,11 +67,6 @@ public interface ILootrAPI {
   }
 
   boolean clearPlayerLoot(UUID id);
-
-  // Get specified inventory
-  @Nullable
-  @Deprecated
-  ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler);
 
   @Nullable
   default ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, @Nullable MenuBuilder builder) {
@@ -120,11 +118,6 @@ public interface ILootrAPI {
 
   default boolean isNewTextures() {
     return getTextureType() != ClientTextureType.VANILLA;
-  }
-
-  @Deprecated
-  default boolean isOldTextures() {
-    return false;
   }
 
   default boolean isVanillaTextures() {
@@ -183,11 +176,6 @@ public interface ILootrAPI {
 
   boolean shouldCheckWorldBorder();
 
-  boolean shouldConvertMineshafts();
-
-  @Deprecated
-  boolean shouldConvertElytras();
-
   boolean shouldConvertElytrasToChests();
 
   boolean shouldConvertElytrasToItemFrames();
@@ -236,32 +224,13 @@ public interface ILootrAPI {
 
   boolean shouldWarnNoLootTables();
 
-
   boolean performPiecewiseCheck();
-
-  @Deprecated
-  default boolean isAwarded(ILootrInfoProvider provider, ServerPlayer player) {
-    return isAwarded(provider.getInfoUUID(), player);
-  }
-
-  @Deprecated
-  boolean isAwarded(UUID uuid, ServerPlayer player);
-
-  @Deprecated
-  default void award(ILootrInfoProvider provider, ServerPlayer player) {
-    award(provider.getInfoUUID(), player);
-  }
-
-  @Deprecated
-  void award(UUID id, ServerPlayer player);
 
   int getRemainingDecayValue(ILootrInfoProvider provider);
 
   boolean isDecayed(ILootrInfoProvider provider);
 
   void setDecaying(ILootrInfoProvider provider);
-
-  void removeDecayed(ILootrInfoProvider provider);
 
   int getRemainingRefreshValue(ILootrInfoProvider provider);
 

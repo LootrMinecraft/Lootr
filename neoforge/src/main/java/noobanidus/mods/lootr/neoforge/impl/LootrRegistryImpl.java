@@ -9,7 +9,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import noobanidus.mods.lootr.common.api.advancement.IAdvancementTrigger;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.advancement.ILootedStatTrigger;
@@ -44,7 +43,7 @@ public class LootrRegistryImpl implements ILootrRegistry {
 
   @Override
   public Block getShulkerBlock() {
-    return ModBlocks.SHULKER.get();
+    return ModBlocks.SHULKER_BOX.get();
   }
 
   @Override
@@ -64,27 +63,27 @@ public class LootrRegistryImpl implements ILootrRegistry {
 
   @Override
   public BlockEntityType<?> getBarrelBlockEntity() {
-    return ModBlockEntities.LOOTR_BARREL.get();
+    return ModBlockEntities.BARREL.get();
   }
 
   @Override
   public BlockEntityType<? extends ChestBlockEntity> getChestBlockEntity() {
-    return ModBlockEntities.LOOTR_CHEST.get();
+    return ModBlockEntities.CHEST.get();
   }
 
   @Override
   public BlockEntityType<? extends ChestBlockEntity> getTrappedChestBlockEntity() {
-    return ModBlockEntities.LOOTR_TRAPPED_CHEST.get();
+    return ModBlockEntities.TRAPPED_CHEST.get();
   }
 
   @Override
   public BlockEntityType<? extends ChestBlockEntity> getInventoryBlockEntity() {
-    return ModBlockEntities.LOOTR_INVENTORY.get();
+    return ModBlockEntities.INVENTORY.get();
   }
 
   @Override
   public BlockEntityType<?> getShulkerBlockEntity() {
-    return ModBlockEntities.LOOTR_SHULKER.get();
+    return ModBlockEntities.SHULKER_BOX.get();
   }
 
   @Override
@@ -139,7 +138,7 @@ public class LootrRegistryImpl implements ILootrRegistry {
 
   @Override
   public EntityType<?> getMinecart() {
-    return ModEntities.LOOTR_MINECART_ENTITY.get();
+    return ModEntities.MINECART_WITH_CHEST.get();
   }
 
   @Override

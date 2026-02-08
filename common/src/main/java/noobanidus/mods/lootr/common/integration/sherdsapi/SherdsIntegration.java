@@ -4,7 +4,7 @@ import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import noobanidus.mods.lootr.common.api.PotDecorationsAdapter;
+import noobanidus.mods.lootr.common.api.integration.PotDecorationsAdapter;
 import noobanidus.mods.lootr.common.integration.sherdsapi.impl.SherdsIntegrationImpl;
 import org.jetbrains.annotations.Nullable;
 

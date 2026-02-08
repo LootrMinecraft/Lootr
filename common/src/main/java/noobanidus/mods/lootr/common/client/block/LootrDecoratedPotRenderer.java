@@ -1,24 +1,19 @@
 package noobanidus.mods.lootr.common.client.block;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.model.geom.*;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.renderer.blockentity.state.DecoratedPotRenderState;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
-import net.minecraft.client.renderer.special.SpecialModelRenderers;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.client.resources.model.MaterialSet;
@@ -29,10 +24,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.world.level.block.entity.DecoratedPotPatterns;
-import net.minecraft.world.level.block.entity.PotDecorations;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.PotDecorationsAdapter;
+import noobanidus.mods.lootr.common.api.integration.PotDecorationsAdapter;
 import noobanidus.mods.lootr.common.api.LootrConstants;
 import noobanidus.mods.lootr.common.block.entity.LootrDecoratedPotBlockEntity;
 import noobanidus.mods.lootr.common.client.ClientHooks;
@@ -40,7 +34,6 @@ import noobanidus.mods.lootr.common.client.state.LootrDecoratedPotBlockRenderSta
 import noobanidus.mods.lootr.common.integration.sherdsapi.SherdsIntegration;
 import org.joml.Vector3fc;
 import org.jspecify.annotations.Nullable;
-import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.Map;

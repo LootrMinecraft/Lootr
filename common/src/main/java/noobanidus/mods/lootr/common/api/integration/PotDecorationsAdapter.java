@@ -1,8 +1,6 @@
-package noobanidus.mods.lootr.common.api;
+package noobanidus.mods.lootr.common.api.integration;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;

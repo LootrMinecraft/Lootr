@@ -11,13 +11,10 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.level.TicketType;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.Unit;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.ContainerUser;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.animal.golem.CopperGolem;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -25,11 +22,9 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.phys.AABB;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
 import noobanidus.mods.lootr.common.api.client.ClientTextureType;
@@ -37,12 +32,15 @@ import noobanidus.mods.lootr.common.api.config.SaveMode;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.ILootrSavedData;
 import noobanidus.mods.lootr.common.api.data.LootFiller;
+import noobanidus.mods.lootr.common.api.data.MenuBuilder;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
+import noobanidus.mods.lootr.common.api.integration.PotDecorationsAdapter;
 import noobanidus.mods.lootr.common.api.processor.ILootrBlockEntityProcessor;
 import noobanidus.mods.lootr.common.api.processor.ILootrEntityProcessor;
+import noobanidus.mods.lootr.common.api.type.ILootrType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
@@ -51,7 +49,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * This is the standard access to the platform-specific implementations of ILootrAPI.
@@ -149,11 +146,6 @@ public class LootrAPI {
 
   public static ClientTextureType getTextureType() {
     return INSTANCE.getTextureType();
-  }
-
-  @Deprecated
-  public static boolean isOldTextures() {
-    return INSTANCE.isOldTextures();
   }
 
   public static boolean isNewTextures() {
@@ -265,19 +257,8 @@ public class LootrAPI {
     return INSTANCE.isWorldBorderSafe(level, pos);
   }
 
-  @Deprecated
   public static boolean shouldCheckWorldBorder() {
     return INSTANCE.shouldCheckWorldBorder();
-  }
-
-  @Deprecated
-  public static boolean shouldConvertMineshafts() {
-    return INSTANCE.shouldConvertMineshafts();
-  }
-
-  @Deprecated
-  public static boolean shouldConvertElytras() {
-    return INSTANCE.shouldConvertElytras();
   }
 
   public static boolean shouldConvertElytrasToChests() {
@@ -385,13 +366,6 @@ public class LootrAPI {
     return INSTANCE.replacementBlockState(original);
   }
 
-
-  @Nullable
-  @Deprecated // Prefer getInventory with MenuBuilder
-  public static ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler) {
-    return INSTANCE.getInventory(provider, player, filler);
-  }
-
   @Nullable
   public static ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, @Nullable MenuBuilder builder) {
     return INSTANCE.getInventory(provider, player, builder);
@@ -413,26 +387,6 @@ public class LootrAPI {
     return INSTANCE.getData(provider);
   }
 
-  @Deprecated
-  public static boolean isAwarded(ILootrInfoProvider provider, ServerPlayer player) {
-    return INSTANCE.isAwarded(provider, player);
-  }
-
-  @Deprecated
-  public static boolean isAwarded(UUID uuid, ServerPlayer player) {
-    return INSTANCE.isAwarded(uuid, player);
-  }
-
-  @Deprecated
-  public static void award(ILootrInfoProvider provider, ServerPlayer player) {
-    INSTANCE.award(provider, player);
-  }
-
-  @Deprecated
-  public static void award(UUID id, ServerPlayer player) {
-    INSTANCE.award(id, player);
-  }
-
   public static int getRemainingDecayValue(ILootrInfoProvider provider) {
     return INSTANCE.getRemainingDecayValue(provider);
   }
@@ -443,11 +397,6 @@ public class LootrAPI {
 
   public static void setDecaying(ILootrInfoProvider provider) {
     INSTANCE.setDecaying(provider);
-  }
-
-  @Deprecated
-  public static void removeDecayed(ILootrInfoProvider provider) {
-    INSTANCE.removeDecayed(provider);
   }
 
   public static int getRemainingRefreshValue(ILootrInfoProvider provider) {
@@ -462,7 +411,6 @@ public class LootrAPI {
     INSTANCE.setRefreshing(provider);
   }
 
-  @Deprecated
   public static void removeRefreshed(ILootrInfoProvider provider) {
     INSTANCE.removeRefreshed(provider);
   }

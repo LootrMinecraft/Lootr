@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BrushableBlockEntity;
 import net.minecraft.world.phys.BlockHitResult;
-import noobanidus.mods.lootr.common.api.IBrushable;
+import noobanidus.mods.lootr.common.api.integration.IBrushable;
 import noobanidus.mods.lootr.common.integration.digsite_workshop.IModdedBrushItem;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;

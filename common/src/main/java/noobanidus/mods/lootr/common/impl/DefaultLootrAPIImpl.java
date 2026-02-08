@@ -32,13 +32,16 @@ import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.ILootrSavedData;
 import noobanidus.mods.lootr.common.api.data.LootFiller;
+import noobanidus.mods.lootr.common.api.data.MenuBuilder;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
+import noobanidus.mods.lootr.common.api.integration.PotDecorationsAdapter;
 import noobanidus.mods.lootr.common.api.processor.ILootrBlockEntityProcessor;
 import noobanidus.mods.lootr.common.api.processor.ILootrEntityProcessor;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.common.api.type.ILootrType;
 import noobanidus.mods.lootr.common.client.ClientHooks;
 import noobanidus.mods.lootr.common.data.DataStorage;
 import noobanidus.mods.lootr.common.integration.sherdsapi.SherdsIntegration;
@@ -195,8 +198,8 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
     }
 
     if (LootrAPI.shouldDisplayUnopenedParticles()) {
-      var type = provider.getInfoNewType();
-      if (type != null && type.displaysUnopenedParticle()) {
+      var type = provider.getInfoType();
+      if (type.displaysUnopenedParticle()) {
         ClientHooks.performUnopenedParticles(provider);
       }
     }
@@ -230,12 +233,6 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  @Deprecated
-  public final ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler) {
-    return DataStorage.getInventory(provider, player, filler);
-  }
-
-  @Override
   public final ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler, @Nullable MenuBuilder menuBuilder) {
     ILootrInventory inventory = DataStorage.getInventory(provider, player, filler);
     if (inventory != null && menuBuilder != null) {
@@ -255,18 +252,6 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  @Deprecated
-  public final boolean isAwarded(UUID uuid, ServerPlayer player) {
-    return DataStorage.isAwarded(uuid, player);
-  }
-
-  @Deprecated
-  @Override
-  public final void award(UUID id, ServerPlayer player) {
-    DataStorage.award(id, player);
-  }
-
-  @Override
   public final int getRemainingDecayValue(ILootrInfoProvider provider) {
     return DataStorage.getDecayValue(provider);
   }
@@ -279,11 +264,6 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   @Override
   public final void setDecaying(ILootrInfoProvider provider) {
     DataStorage.setDecaying(provider);
-  }
-
-  @Override
-  @Deprecated
-  public final void removeDecayed(ILootrInfoProvider provider) {
   }
 
   @Override
@@ -302,8 +282,8 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  @Deprecated
   public final void removeRefreshed(ILootrInfoProvider provider) {
+    DataStorage.removeRefreshed(provider);
   }
 
   @Override

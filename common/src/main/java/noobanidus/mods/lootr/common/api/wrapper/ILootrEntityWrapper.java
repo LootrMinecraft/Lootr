@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.common.api;
+package noobanidus.mods.lootr.common.api.wrapper;
 
 import net.minecraft.world.entity.EntityType;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
@@ -27,7 +27,7 @@ import java.util.function.Function;
  * if it is also installed, but otherwise want to function as a normal block entity
  * with Vanilla-esque (i.e., single loot generation) when it is not installed.*
  **/
-public interface ILootrEntityConverter<T> extends Function<T, ILootrEntity> {
+public interface ILootrEntityWrapper<T> extends Function<T, ILootrEntity> {
   @Override
   ILootrEntity apply(T entity);
 

@@ -233,18 +233,6 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   }
 
   @Override
-  @Deprecated
-  public boolean shouldConvertMineshafts() {
-    return ConfigManager.get().conversion.convert_mineshafts;
-  }
-
-  @Override
-  @Deprecated
-  public boolean shouldConvertElytras() {
-    return false;
-  }
-
-  @Override
   public boolean shouldConvertElytrasToChests() {
     return ConfigManager.get().conversion.convert_elytras_to_chests;
   }

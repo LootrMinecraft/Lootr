@@ -1,14 +1,12 @@
 package noobanidus.mods.lootr.common.api.data.inventory;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.item.ItemStack;
-import noobanidus.mods.lootr.common.api.MenuBuilder;
+import noobanidus.mods.lootr.common.api.data.MenuBuilder;
 import noobanidus.mods.lootr.common.api.data.ILootrInfo;
 import noobanidus.mods.lootr.common.api.data.ILootrSavedData;
 import noobanidus.mods.lootr.common.data.LootrInventory;
