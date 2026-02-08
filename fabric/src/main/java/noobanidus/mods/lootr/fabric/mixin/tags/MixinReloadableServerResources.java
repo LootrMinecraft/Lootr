@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ReloadableServerResources.class)
 public class MixinReloadableServerResources {
-  @Inject(method= "updateStaticRegistryTags", at=@At("RETURN"))
+  @Inject(method= "updateComponentsAndStaticRegistryTags", at=@At("RETURN"))
   public void LootrCheckTags (CallbackInfo ci) {
     TagChecker.checkTags();
   }

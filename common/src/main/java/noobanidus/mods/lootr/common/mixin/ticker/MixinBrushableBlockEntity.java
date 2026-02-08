@@ -16,8 +16,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinBrushableBlockEntity {
   @Shadow
   private ResourceKey<LootTable> lootTable;
-  @Shadow
-  private long lootTableSeed;
 
   @Inject(method = "tryLoadLootTable", at = @At(value = "RETURN"), cancellable = true)
   public void lootr$tryLoadLootTable(ValueInput input, CallbackInfoReturnable<Boolean> cir) {

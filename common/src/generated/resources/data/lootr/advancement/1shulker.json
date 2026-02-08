@@ -10,8 +10,7 @@
       "translate": "lootr.advancements.1shulker.description"
     },
     "icon": {
-      "count": 1,
-      "id": "lootr:lootr_shulker"
+      "id": "lootr:shulker_box"
     },
     "title": {
       "translate": "lootr.advancements.1shulker.title"

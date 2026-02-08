@@ -10,8 +10,7 @@
       "translate": "lootr.advancements.1barrel.description"
     },
     "icon": {
-      "count": 1,
-      "id": "lootr:lootr_barrel"
+      "id": "lootr:barrel"
     },
     "title": {
       "translate": "lootr.advancements.1barrel.title"

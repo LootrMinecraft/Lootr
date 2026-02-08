@@ -11,10 +11,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+// TODO: Needs to target the lambda
 // Does this even do anything at this point?
 @Mixin(ClientPacketListener.class)
 public class MixinClientPacketListener {
-  @Inject(method="method_38542", at=@At("RETURN"))
+  @Inject(method="handleBlockEntityData", at=@At("RETURN"))
   private void LootrInjectClientBlockEntityUpdateTag(ClientboundBlockEntityDataPacket clientboundBlockEntityDataPacket, BlockEntity blockEntity, CallbackInfo ci) {
     if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity) {
       ClientHooks.clearCache(blockEntity.getBlockPos());

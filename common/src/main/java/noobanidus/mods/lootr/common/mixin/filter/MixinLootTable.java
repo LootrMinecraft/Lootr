@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(LootTable.class)
 public class MixinLootTable {
   @Inject(method = "fill", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/storage/loot/LootTable;shuffleAndSplitItems(Lit/unimi/dsi/fastutil/objects/ObjectArrayList;ILnet/minecraft/util/RandomSource;)V"))
-  private void LootrFill(Container container, LootParams lootParams, long l, CallbackInfo ci, @Local LootContext lootContext, @Local ObjectArrayList<ItemStack> items, @Local RandomSource random) {
+  private void LootrFill(Container container, LootParams lootParams, long l, CallbackInfo ci, @Local(name = "context") LootContext lootContext, @Local(name = "itemStacks") ObjectArrayList<ItemStack> items, @Local(name = "random") RandomSource random) {
     for (ILootrFilter filter : LootrAPI.getFilters()) {
       if (filter.mutate(items, DefaultLootFiller.getFillerState(), lootContext, random)) {
         break;

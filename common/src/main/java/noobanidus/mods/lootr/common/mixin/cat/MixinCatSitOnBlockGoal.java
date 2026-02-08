@@ -18,12 +18,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(CatSitOnBlockGoal.class)
 public class MixinCatSitOnBlockGoal {
-  @Redirect(method = "isValidTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;is(Lnet/minecraft/world/level/block/Block;)Z"))
-  protected boolean LootrIsIn(BlockState state, Block block) {
+  @Redirect(method = "isValidTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;is(Ljava/lang/Object;)Z"))
+  protected boolean LootrIsIn(BlockState state, Object block) {
     if (LootrRegistry.isReady()) {
-      return state.is(block) || state.is(LootrTags.Blocks.CATS_CAN_BLOCK);
+      return state.is((Block)block) || state.is(LootrTags.Blocks.CATS_CAN_BLOCK);
     } else {
-      return state.is(block);
+      return state.is((Block)block);
     }
   }
 

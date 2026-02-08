@@ -20,11 +20,11 @@
               "source": "block_entity"
             }
           ],
-          "name": "minecraft:trapped_chest"
+          "name": "minecraft:chest"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "lootr:blocks/lootr_trapped_chest"
+  "random_sequence": "lootr:blocks/inventory"
 }

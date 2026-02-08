@@ -22,7 +22,7 @@ public class MixinBrushItem {
   @Definition(id = "BrushableBlockEntity", type = BrushableBlockEntity.class)
   @Expression("? instanceof BrushableBlockEntity")
   @ModifyExpressionValue(method = "onUseTick", at = @At("MIXINEXTRAS:EXPRESSION"))
-  private boolean lootr$AllowBrushingOtherBlockEntities(boolean original, @Local(argsOnly = true) Level level, @Local(argsOnly = true) LivingEntity livingEntity, @Local(argsOnly = true) ItemStack itemStack, @Local BlockHitResult blockHitResult) {
+  private boolean lootr$AllowBrushingOtherBlockEntities(boolean original, @Local(argsOnly = true) Level level, @Local(argsOnly = true) LivingEntity livingEntity, @Local(argsOnly = true) ItemStack itemStack, @Local(name = "blockHitResult") BlockHitResult blockHitResult) {
     BlockPos pos = blockHitResult.getBlockPos();
     if (level.getBlockEntity(pos) instanceof IBrushable brushable && livingEntity instanceof Player player) {
       boolean bl2 = brushable.IBrushable$brush(level.getGameTime(), player, blockHitResult.getDirection());

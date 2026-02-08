@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.io.IOException;
 import java.nio.file.Path;
 
-// An ugly solution to an ugly problem
+// TODO:
 @Mixin(ServerChunkCache.class)
 public class MixinServerChunkCache {
   @Inject(method = "<init>", at = @At(value = "RETURN"))

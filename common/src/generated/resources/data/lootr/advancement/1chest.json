@@ -10,8 +10,7 @@
       "translate": "lootr.advancements.1chest.description"
     },
     "icon": {
-      "count": 1,
-      "id": "lootr:lootr_chest"
+      "id": "lootr:chest"
     },
     "title": {
       "translate": "lootr.advancements.1chest.title"

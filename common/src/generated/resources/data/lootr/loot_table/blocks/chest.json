@@ -20,11 +20,11 @@
               "source": "block_entity"
             }
           ],
-          "name": "minecraft:shulker_box"
+          "name": "minecraft:chest"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "lootr:blocks/lootr_shulker"
+  "random_sequence": "lootr:blocks/chest"
 }

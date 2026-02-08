@@ -1,8 +1,8 @@
 {
   "values": [
-    "lootr:lootr_chest",
-    "lootr:lootr_trapped_chest",
-    "lootr:lootr_barrel",
-    "lootr:lootr_inventory"
+    "lootr:chest",
+    "lootr:trapped_chest",
+    "lootr:barrel",
+    "lootr:inventory"
   ]
 }
