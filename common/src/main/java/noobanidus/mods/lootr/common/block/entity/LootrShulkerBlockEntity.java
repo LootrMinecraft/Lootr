@@ -47,7 +47,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity implements ILootrBlockEntity {
-  protected final SimpleLootrInstance simpleLootrInstance = new SimpleLootrInstance(this::getVisualOpeners, 27);
+  protected final SimpleLootrInstance simpleLootrInstance = new SimpleLootrInstance(this::getVisualOpeners, this::getContainerSize);
 
   private int openCount;
   private ShulkerBoxBlockEntity.AnimationStatus animationStatus = ShulkerBoxBlockEntity.AnimationStatus.CLOSED;
@@ -216,7 +216,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
 
   @Override
   protected NonNullList<ItemStack> getItems() {
-    return this.simpleLootrInstance.getItems();
+    return this.simpleLootrInstance.getEmptyItemList();
   }
 
   @Override

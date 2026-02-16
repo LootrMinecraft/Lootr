@@ -45,7 +45,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBlockEntity, IBrushable {
-  private final SimpleLootrInstance simpleLootrInstance = new SimpleLootrInstance(this::getVisualOpeners, 1);
+  private final SimpleLootrInstance simpleLootrInstance = new SimpleLootrInstance(this::getVisualOpeners, SimpleLootrInstance.SINGLE_ITEM);
 
   @Nullable
   private UUID brushingPlayer;
@@ -423,7 +423,8 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
     } else if (this.getBlockState().is(LootrTags.Blocks.GRAVELS)) {
       return BuiltInLootrTypes.GRAVEL;
     } else {
-      return BuiltInLootrTypes.CHEST;
+      LootrAPI.LOG.error("Brushable {} at {} in {} is neither sand nor gravel and does not provide ILootrType. Defaulting to 'simple'", this.getBlockState(), this.getBlockPos(), this.getInfoDimension());
+      return BuiltInLootrTypes.SIMPLE;
     }
   }
 

@@ -30,6 +30,7 @@ import noobanidus.mods.lootr.common.api.*;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
+import noobanidus.mods.lootr.common.api.data.SimpleLootrEntityInstance;
 import noobanidus.mods.lootr.common.api.data.SimpleLootrInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
@@ -50,7 +51,7 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   protected ResourceKey<LootTable> lootTable;
   protected long lootTableSeed;
 
-  private final SimpleLootrInstance lootrInstance = new SimpleLootrInstance(this::getVisualOpeners, 1);
+  private final SimpleLootrInstance lootrInstance = new SimpleLootrInstance(this::getVisualOpeners, SimpleLootrInstance.SINGLE_ITEM);
 
   public LootrDecoratedPotBlockEntity(BlockPos blockPos, BlockState blockState) {
     super(LootrRegistry.getDecoratedPotBlockEntity(), blockPos, blockState);

@@ -21,6 +21,7 @@ public class BuiltInLootrTypes {
   public static ILootrType CHEST;
   public static ILootrType TRAPPED_CHEST;
   public static ILootrType BARREL;
+  // TODO: Rename
   public static ILootrType SHULKER;
   public static ILootrType INVENTORY;
   public static ILootrType MINECART;

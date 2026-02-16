@@ -8,17 +8,24 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.NBTConstants;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
 public class SimpleLootrInstance {
-  protected final NonNullList<ItemStack> items;
+  public static final IntSupplier SINGLE_ITEM = () -> 1;
+
+  protected final NonNullList<ItemStack> emptyItemList;
+  protected NonNullList<ItemStack> customInventory = null;
+  protected boolean isCustomInventory = false;
   protected final Set<UUID> clientOpeners = new ObjectOpenHashSet<>();
   protected UUID infoId = null;
   protected boolean hasBeenOpened = false;
@@ -30,14 +37,40 @@ public class SimpleLootrInstance {
 
   protected final Supplier<Set<UUID>> visualOpenersSupplier;
 
-  // What in the recursive, self-referential is this
+  public SimpleLootrInstance (Supplier<Set<UUID>> visualOpenersSupplier, IntSupplier sizeSupplier) {
+    this(visualOpenersSupplier, sizeSupplier.getAsInt());
+  }
+
+  @Deprecated
   public SimpleLootrInstance(Supplier<Set<UUID>> visualOpenersSupplier, int size) {
-    this.items = NonNullList.withSize(size, ItemStack.EMPTY);
+    this.emptyItemList = NonNullList.withSize(size, ItemStack.EMPTY);
     this.visualOpenersSupplier = visualOpenersSupplier;
   }
 
-  public NonNullList<ItemStack> getItems() {
-    return items;
+  public NonNullList<ItemStack> getEmptyItemList() {
+    return emptyItemList;
+  }
+
+  @Nullable
+  public NonNullList<ItemStack> getCustomInventory () {
+    return customInventory;
+  }
+
+  public boolean isCustomInventory () {
+    if (isCustomInventory) {
+      return true;
+    } else {
+      if (customInventory != null && !customInventory.isEmpty()) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  public void setCustomInventory (NonNullList<ItemStack> customInventory) {
+    this.customInventory = customInventory;
+    this.isCustomInventory = true;
   }
 
   public Set<UUID> getClientOpeners() {
@@ -74,7 +107,7 @@ public class SimpleLootrInstance {
   }
 
   public int getInfoContainerSize() {
-    return items.size();
+    return emptyItemList.size();
   }
 
   public void setHasBeenOpened() {
@@ -108,6 +141,12 @@ public class SimpleLootrInstance {
         clientOpeners.add(NbtUtils.loadUUID(thisTag));
       }
     }
+
+    if (compound.contains(NBTConstants.CUSTOM_INVENTORY)) {
+      this.customInventory = NonNullList.withSize(getInfoContainerSize(), ItemStack.EMPTY);
+      ContainerHelper.loadAllItems(compound.getCompound(NBTConstants.CUSTOM_INVENTORY), customInventory, provder);
+      this.isCustomInventory = true;
+    }
   }
 
   public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider, boolean isClientSide) {
@@ -122,6 +161,14 @@ public class SimpleLootrInstance {
           list.add(NbtUtils.createUUID(opener));
         }
         compound.put(NBTConstants.OPENERS, list);
+      }
+    }
+
+    if (isCustomInventory) {
+      if (customInventory != null && !customInventory.isEmpty()) {
+        CompoundTag itemTag = new CompoundTag();
+        ContainerHelper.saveAllItems(itemTag, customInventory, provider);
+        compound.put(NBTConstants.CUSTOM_INVENTORY, itemTag);
       }
     }
   }

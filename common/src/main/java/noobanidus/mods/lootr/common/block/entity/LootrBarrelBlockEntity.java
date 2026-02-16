@@ -39,7 +39,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity implements ILootrBlockEntity {
-  protected final SimpleLootrInstance simpleLootrInstance = new SimpleLootrInstance(this::getVisualOpeners, 27);
+  protected final SimpleLootrInstance simpleLootrInstance = new SimpleLootrInstance(this::getVisualOpeners, this::getContainerSize);
 
   private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
     @Override
@@ -99,7 +99,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
 
   @Override
   protected NonNullList<ItemStack> getItems() {
-    return this.simpleLootrInstance.getItems();
+    return this.simpleLootrInstance.getEmptyItemList();
   }
 
   @Override
