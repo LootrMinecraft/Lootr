@@ -69,7 +69,11 @@ public class SimpleLootrInstance {
   }
 
   public void setCustomInventory (NonNullList<ItemStack> customInventory) {
-    this.customInventory = customInventory;
+    NonNullList<ItemStack> copy = NonNullList.withSize(customInventory.size(), ItemStack.EMPTY);
+    for (int i = 0; i < customInventory.size(); i++) {
+      copy.set(i, customInventory.get(i).copy());
+    }
+    this.customInventory = copy;
     this.isCustomInventory = true;
   }
 

@@ -181,6 +181,8 @@ public interface ILootrInfo {
   @Nullable
   NonNullList<ItemStack> getInfoReferenceInventory();
 
+  void setInfoReferenceInventory (NonNullList<ItemStack> reference);
+
   default boolean canPlayerOpen (ServerPlayer player) {
     return true;
   }
@@ -189,6 +191,13 @@ public interface ILootrInfo {
   }
 
   boolean isInfoReferenceInventory();
+
+  default boolean isInfoReferenceInventoryInternal (boolean isReferenceInventory) {
+    if (isReferenceInventory && getInfoLootTable() != null) {
+      LootrAPI.LOG.error("Lootr container {} at {} in {} has both a loot table and a custom inventory. This is not supported and may cause issues.", this, getInfoPos(), getInfoDimension());
+    }
+    return isReferenceInventory;
+  }
 
   // This can be null but only if it is a custom inventory.
   @Nullable

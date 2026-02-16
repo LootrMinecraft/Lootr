@@ -22,6 +22,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.SeededContainerLoot;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -169,6 +170,12 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
 
       if (shouldUpdate) {
         this.performUpdate((ServerPlayer) player);
+      }
+
+      if (LootrAPI.isCustomTrapped() && isInfoReferenceInventory()) {
+        Block block = this.getBlockState().getBlock();
+        level.updateNeighborsAt(getBlockPos(), block);
+        level.updateNeighborsAt(getBlockPos().below(), block);
       }
     }
   }
@@ -471,12 +478,17 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
 
   @Override
   public @Nullable NonNullList<ItemStack> getInfoReferenceInventory() {
-    return null;
+    return simpleLootrInstance.getCustomInventory();
+  }
+
+  @Override
+  public void setInfoReferenceInventory(NonNullList<ItemStack> reference) {
+    simpleLootrInstance.setCustomInventory(reference);
   }
 
   @Override
   public boolean isInfoReferenceInventory() {
-    return false;
+    return isInfoReferenceInventoryInternal(simpleLootrInstance.isCustomInventory());
   }
 
   @Override

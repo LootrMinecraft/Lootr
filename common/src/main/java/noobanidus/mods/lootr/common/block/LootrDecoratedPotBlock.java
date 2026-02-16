@@ -32,6 +32,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.block.entity.LootrDecoratedPotBlockEntity;
@@ -175,16 +176,14 @@ public class LootrDecoratedPotBlock extends DecoratedPotBlock {
     OTHER
   }
 
-  // TODO:
   @Override
   protected boolean hasAnalogOutputSignal(BlockState blockState) {
-    return super.hasAnalogOutputSignal(blockState);
+    return true;
   }
 
-  // TODO:
   @Override
   protected int getAnalogOutputSignal(BlockState blockState, Level level, BlockPos blockPos) {
-    return super.getAnalogOutputSignal(blockState, level, blockPos);
+    return LootrAPI.getAnalogOutputSignal(blockState, level, blockPos, 0);
   }
 
   @Override

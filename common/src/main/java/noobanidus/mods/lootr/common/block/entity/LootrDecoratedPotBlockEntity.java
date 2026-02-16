@@ -18,6 +18,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.SeededContainerLoot;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
@@ -116,6 +117,12 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
 
     if (shouldUpdate) {
       this.performUpdate(player);
+    }
+
+    if (LootrAPI.isCustomTrapped() && isInfoReferenceInventory()) {
+      Block block = this.getBlockState().getBlock();
+      level.updateNeighborsAt(getBlockPos(), block);
+      level.updateNeighborsAt(getBlockPos().below(), block);
     }
 
     return result;
@@ -331,17 +338,22 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
 
   @Override
   public int getInfoContainerSize() {
-    return 1;
+    return lootrInstance.getInfoContainerSize();
   }
 
   @Override
   public @Nullable NonNullList<ItemStack> getInfoReferenceInventory() {
-    return null;
+    return lootrInstance.getCustomInventory();
+  }
+
+  @Override
+  public void setInfoReferenceInventory(NonNullList<ItemStack> reference) {
+    lootrInstance.setCustomInventory(reference);
   }
 
   @Override
   public boolean isInfoReferenceInventory() {
-    return false;
+    return isInfoReferenceInventoryInternal(lootrInstance.isCustomInventory());
   }
 
   @Override

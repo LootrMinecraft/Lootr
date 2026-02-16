@@ -20,6 +20,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -34,6 +35,7 @@ import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
 import noobanidus.mods.lootr.common.api.ILootrBlockEntityConverter;
 import noobanidus.mods.lootr.common.api.ILootrType;
+import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.SimpleLootrInstance;
@@ -167,6 +169,12 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
       if (this.openCount == 1) {
         this.level.gameEvent(pPlayer, GameEvent.CONTAINER_OPEN, this.worldPosition);
         this.level.playSound(null, this.worldPosition, SoundEvents.SHULKER_BOX_OPEN, SoundSource.BLOCKS, 0.5F, this.level.random.nextFloat() * 0.1F + 0.9F);
+      }
+
+      if (!level.isClientSide() && LootrAPI.isCustomTrapped() && isInfoReferenceInventory()) {
+        Block block = this.getBlockState().getBlock();
+        level.updateNeighborsAt(getBlockPos(), block);
+        level.updateNeighborsAt(getBlockPos().below(), block);
       }
     }
   }
@@ -334,12 +342,17 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
 
   @Override
   public @Nullable NonNullList<ItemStack> getInfoReferenceInventory() {
-    return null;
+    return simpleLootrInstance.getCustomInventory();
+  }
+
+  @Override
+  public void setInfoReferenceInventory(NonNullList<ItemStack> reference) {
+    simpleLootrInstance.setCustomInventory(reference);
   }
 
   @Override
   public boolean isInfoReferenceInventory() {
-    return false;
+    return simpleLootrInstance.isCustomInventory();
   }
 
   @Override

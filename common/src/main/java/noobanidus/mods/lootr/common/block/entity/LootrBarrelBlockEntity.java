@@ -19,13 +19,17 @@ import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BarrelBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
-import noobanidus.mods.lootr.common.api.*;
+import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
+import noobanidus.mods.lootr.common.api.ILootrBlockEntityConverter;
+import noobanidus.mods.lootr.common.api.ILootrType;
+import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.SimpleLootrInstance;
@@ -50,6 +54,13 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
       }
       LootrBarrelBlockEntity.this.playSound(state, SoundEvents.BARREL_OPEN);
       LootrBarrelBlockEntity.this.updateBlockState(state, true);
+
+      // Is this redundant with `updateBlockState`?
+      if (LootrAPI.isCustomTrapped() && isInfoReferenceInventory()) {
+        Block block = state.getBlock();
+        level.updateNeighborsAt(pos, block);
+        level.updateNeighborsAt(pos.below(), block);
+      }
     }
 
     @Override
@@ -251,12 +262,17 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
 
   @Override
   public @Nullable NonNullList<ItemStack> getInfoReferenceInventory() {
-    return null;
+    return simpleLootrInstance.getCustomInventory();
+  }
+
+  @Override
+  public void setInfoReferenceInventory(NonNullList<ItemStack> reference) {
+    simpleLootrInstance.setCustomInventory(reference);
   }
 
   @Override
   public boolean isInfoReferenceInventory() {
-    return false;
+    return isInfoReferenceInventoryInternal(simpleLootrInstance.isCustomInventory());
   }
 
   @Override

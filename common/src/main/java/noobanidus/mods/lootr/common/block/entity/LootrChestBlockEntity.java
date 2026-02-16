@@ -16,12 +16,14 @@ import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
 import noobanidus.mods.lootr.common.api.ILootrBlockEntityConverter;
 import noobanidus.mods.lootr.common.api.ILootrType;
+import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.SimpleLootrInstance;
@@ -244,12 +246,17 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
 
   @Override
   public @Nullable NonNullList<ItemStack> getInfoReferenceInventory() {
-    return null;
+    return simpleLootrInstance.getCustomInventory();
+  }
+
+  @Override
+  public void setInfoReferenceInventory(NonNullList<ItemStack> reference) {
+    simpleLootrInstance.setCustomInventory(reference);
   }
 
   @Override
   public boolean isInfoReferenceInventory() {
-    return false;
+    return simpleLootrInstance.isCustomInventory();
   }
 
   @Override
@@ -265,6 +272,16 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   @Override
   public @Nullable IContainerTrigger getTrigger() {
     return LootrRegistry.getChestTrigger();
+  }
+
+  @Override
+  protected void signalOpenCount(Level level, BlockPos pos, BlockState state, int p_155868_, int p_155869_) {
+    super.signalOpenCount(level, pos, state, p_155868_, p_155869_);
+    if (LootrAPI.isCustomTrapped() && p_155868_ != p_155869_ && isInfoReferenceInventory()) {
+      Block block = state.getBlock();
+      level.updateNeighborsAt(pos, block);
+      level.updateNeighborsAt(pos.below(), block);
+    }
   }
 
   public static int getOpenCount(BlockGetter pLevel, BlockPos pPos) {
