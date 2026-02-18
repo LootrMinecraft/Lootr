@@ -21,6 +21,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentUtils;
 import net.minecraft.network.chat.Style;
@@ -55,9 +56,11 @@ import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrConstants;
 import noobanidus.mods.lootr.common.api.LootrTags;
+import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.api.command.ILootrCommandExtension;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.common.api.replacement.BlockReplacementMap;
 import noobanidus.mods.lootr.common.block.LootrBarrelBlock;
 import noobanidus.mods.lootr.common.block.LootrChestBlock;
 import noobanidus.mods.lootr.common.block.LootrShulkerBlock;
@@ -227,7 +230,9 @@ public class CommandLootr {
       createBlock(c.getSource(), null, ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
       return 1;
     })));
-    builder.then(Commands.literal("custom-chest").executes(c -> {
+
+
+    builder.then(Commands.literal("custom-chest-old").executes(c -> {
       BlockPos pos = BlockPos.containing(c.getSource().getPosition());
       Level level = c.getSource().getLevel();
       BlockState state = level.getBlockState(pos);
@@ -254,13 +259,76 @@ public class CommandLootr {
           c.getSource()
               .sendSuccess(() -> Component.literal("Unable to convert chest, BlockState is not a Lootr Inventory block."), false);
         } else {
-          inventory.setCustomInventory(custom);
+          inventory.setInfoReferenceInventory(custom);
           inventory.setChanged();
 
         }
       }
       return 1;
     }));
+
+
+    builder.then(Commands.literal("custom-chest")
+        .then(Commands.argument("target", BlockPosArgument.blockPos()).executes(c -> {
+              BlockPos pos = BlockPosArgument.getLoadedBlockPos(c, "target");
+              ServerLevel level = c.getSource().getLevel();
+
+              BlockEntity blockEntity = level.getBlockEntity(pos);
+              if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity) {
+                c.getSource()
+                    .sendSuccess(() -> Component.literal("The block at " + pos + " is already a Lootr container."), true);
+                return 0;
+              } else if (blockEntity == null) {
+                c.getSource()
+                    .sendSuccess(() -> Component.literal("The block at " + pos + " doesn't have a block entity."), true);
+                return 0;
+              }
+
+              ILootrDataAdapter<BlockEntity> adapter = LootrAPI.getAdapter(blockEntity);
+              if (adapter != null) {
+                ResourceKey<LootTable> table = adapter.getLootTable(blockEntity);
+                if (table != null) {
+                  c.getSource()
+                      .sendSuccess(() -> Component.literal("The block at " + pos + " has a loot table."), true);
+                  return 0;
+                }
+
+                NonNullList<ItemStack> custom = adapter.getInventory(blockEntity);
+                if (custom == null) {
+                  c.getSource()
+                      .sendSuccess(() -> Component.literal("Could not obtain inventory of block at " + pos + "."), true);
+                  return 0;
+                }
+
+                BlockState state = level.getBlockState(pos);
+                BlockState newState = LootrAPI.replacementBlockState(state);
+
+                if (newState == null) {
+                  c.getSource()
+                      .sendSuccess(() -> Component.literal("The block at " + pos + " has no eligible replacement block state."), true);
+                  return 0;
+                }
+
+                CompoundTag completeCopy = blockEntity.saveWithFullMetadata(c.getSource().registryAccess());
+
+                level.setBlock(pos, newState, 3);
+
+                BlockEntity newBlockEntity = level.getBlockEntity(pos);
+                if (LootrAPI.resolveBlockEntity(newBlockEntity) instanceof ILootrBlockEntity newInventory) {
+                  newInventory.setInfoReferenceInventory(custom);
+                  newInventory.markChanged();
+                } else {
+                  c.getSource()
+                      .sendSuccess(() -> Component.literal("The block at " + pos + " did not successfully convert."), true);
+
+                  level.setBlock(pos, state, 3);
+                  level.getChunk(pos).setBlockEntityNbt(completeCopy);
+                  return 0;
+                }
+              }
+              return 1;
+            })));
+
     builder.then(Commands.literal("open_as").executes(c -> {
       c.getSource().sendSuccess(() -> Component.literal("Must provide player name."), true);
       return 1;
@@ -486,7 +554,7 @@ public class CommandLootr {
                   context.getSource()
                       .sendFailure(Component.literal("Unable to convert chest at '" + pos + "', BlockState is not a Lootr Inventory block."));
                 } else {
-                  inventory.setCustomInventory(custom);
+                  inventory.setInfoReferenceInventory(custom);
                   inventory.setChanged();
                 }
               }

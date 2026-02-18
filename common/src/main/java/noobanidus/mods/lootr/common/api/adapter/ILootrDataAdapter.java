@@ -2,6 +2,7 @@ package noobanidus.mods.lootr.common.api.adapter;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -30,5 +31,10 @@ public non-sealed interface ILootrDataAdapter<T> extends ILootrAdapter<T> {
 
   default boolean hasCopyableComponentsViaItem(T entity) {
     return false;
+  }
+
+  @Nullable
+  default NonNullList<ItemStack> getInventory (T entity) {
+    return null;
   }
 }

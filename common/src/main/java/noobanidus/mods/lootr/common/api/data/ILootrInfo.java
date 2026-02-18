@@ -181,7 +181,9 @@ public interface ILootrInfo {
   @Nullable
   NonNullList<ItemStack> getInfoReferenceInventory();
 
-  void setInfoReferenceInventory (NonNullList<ItemStack> reference);
+  default void setInfoReferenceInventory (NonNullList<ItemStack> reference) {
+    throw new NotImplementedException(this + " does not declare setInfoReferenceInventory.");
+  }
 
   default boolean canPlayerOpen (ServerPlayer player) {
     return true;
