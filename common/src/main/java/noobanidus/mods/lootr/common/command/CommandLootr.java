@@ -7,6 +7,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import jdk.jshell.spi.ExecutionControl;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -74,6 +75,7 @@ import noobanidus.mods.lootr.common.impl.LootrServiceRegistry;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinBaseContainerBlockEntity;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinChunkMap;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinMinecraftServer;
+import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -267,7 +269,6 @@ public class CommandLootr {
       return 1;
     }));
 
-
     builder.then(Commands.literal("custom-chest")
         .then(Commands.argument("target", BlockPosArgument.blockPos()).executes(c -> {
               BlockPos pos = BlockPosArgument.getLoadedBlockPos(c, "target");
@@ -315,8 +316,17 @@ public class CommandLootr {
 
                 BlockEntity newBlockEntity = level.getBlockEntity(pos);
                 if (LootrAPI.resolveBlockEntity(newBlockEntity) instanceof ILootrBlockEntity newInventory) {
-                  newInventory.setInfoReferenceInventory(custom);
-                  newInventory.markChanged();
+                  try {
+                    newInventory.setInfoReferenceInventory(custom);
+                    newInventory.markChanged();
+                  } catch (NotImplementedException exception) {
+                    c.getSource()
+                        .sendSuccess(() -> Component.literal("The block at " + pos + " was converted, but the inventory could not be transferred."), true);
+
+                    level.setBlock(pos, state, 3);
+                    level.getChunk(pos).setBlockEntityNbt(completeCopy);
+                    return 0;
+                  }
                 } else {
                   c.getSource()
                       .sendSuccess(() -> Component.literal("The block at " + pos + " did not successfully convert."), true);
