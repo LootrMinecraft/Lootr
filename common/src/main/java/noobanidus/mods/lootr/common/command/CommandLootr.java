@@ -274,6 +274,8 @@ public class CommandLootr {
               BlockPos pos = BlockPosArgument.getLoadedBlockPos(c, "target");
               ServerLevel level = c.getSource().getLevel();
 
+              // TODO: Abstract this out to reuse for custom-map and custom-area.
+
               BlockEntity blockEntity = level.getBlockEntity(pos);
               if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity) {
                 c.getSource()
