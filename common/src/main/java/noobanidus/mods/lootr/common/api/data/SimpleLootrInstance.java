@@ -146,8 +146,9 @@ public class SimpleLootrInstance {
       }
     }
 
-    if (compound.contains(NBTConstants.CUSTOM_INVENTORY)) {
-      this.customInventory = NonNullList.withSize(getInfoContainerSize(), ItemStack.EMPTY);
+    if (compound.contains(NBTConstants.CUSTOM_INVENTORY) && compound.contains(NBTConstants.CUSTOM_SIZE)) {
+      int size = Math.max(compound.getInt(NBTConstants.CUSTOM_SIZE), getInfoContainerSize());
+      this.customInventory = NonNullList.withSize(size, ItemStack.EMPTY);
       ContainerHelper.loadAllItems(compound.getCompound(NBTConstants.CUSTOM_INVENTORY), customInventory, provder);
       this.isCustomInventory = true;
     }
@@ -173,6 +174,7 @@ public class SimpleLootrInstance {
         CompoundTag itemTag = new CompoundTag();
         ContainerHelper.saveAllItems(itemTag, customInventory, provider);
         compound.put(NBTConstants.CUSTOM_INVENTORY, itemTag);
+        compound.putInt(NBTConstants.CUSTOM_SIZE, customInventory.size());
       }
     }
   }
