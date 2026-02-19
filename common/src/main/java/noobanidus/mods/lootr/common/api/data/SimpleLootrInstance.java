@@ -21,8 +21,6 @@ import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
 public class SimpleLootrInstance {
-  public static final IntSupplier SINGLE_ITEM = () -> 1;
-
   protected final NonNullList<ItemStack> emptyItemList;
   protected NonNullList<ItemStack> customInventory = null;
   protected boolean isCustomInventory = false;
@@ -37,11 +35,6 @@ public class SimpleLootrInstance {
 
   protected final Supplier<Set<UUID>> visualOpenersSupplier;
 
-  public SimpleLootrInstance (Supplier<Set<UUID>> visualOpenersSupplier, IntSupplier sizeSupplier) {
-    this(visualOpenersSupplier, sizeSupplier.getAsInt());
-  }
-
-  @Deprecated
   public SimpleLootrInstance(Supplier<Set<UUID>> visualOpenersSupplier, int size) {
     this.emptyItemList = NonNullList.withSize(size, ItemStack.EMPTY);
     this.visualOpenersSupplier = visualOpenersSupplier;

@@ -46,7 +46,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBlockEntity, IBrushable {
-  private final SimpleLootrInstance simpleLootrInstance = new SimpleLootrInstance(this::getVisualOpeners, SimpleLootrInstance.SINGLE_ITEM);
+  private final SimpleLootrInstance simpleLootrInstance = new SimpleLootrInstance(this::getVisualOpeners, 1);
 
   @Nullable
   private UUID brushingPlayer;

@@ -43,7 +43,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity implements ILootrBlockEntity {
-  protected final SimpleLootrInstance simpleLootrInstance = new SimpleLootrInstance(this::getVisualOpeners, this::getContainerSize);
+  protected final SimpleLootrInstance simpleLootrInstance = new SimpleLootrInstance(this::getVisualOpeners, 27);
 
   private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
     @Override

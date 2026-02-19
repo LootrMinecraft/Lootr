@@ -52,7 +52,7 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   protected ResourceKey<LootTable> lootTable;
   protected long lootTableSeed;
 
-  private final SimpleLootrInstance lootrInstance = new SimpleLootrInstance(this::getVisualOpeners, SimpleLootrInstance.SINGLE_ITEM);
+  private final SimpleLootrInstance lootrInstance = new SimpleLootrInstance(this::getVisualOpeners, 1);
 
   public LootrDecoratedPotBlockEntity(BlockPos blockPos, BlockState blockState) {
     super(LootrRegistry.getDecoratedPotBlockEntity(), blockPos, blockState);
