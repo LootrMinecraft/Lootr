@@ -40,6 +40,11 @@ public class SimpleLootrInstance {
     this.visualOpenersSupplier = visualOpenersSupplier;
   }
 
+  @Deprecated
+  public NonNullList<ItemStack> getItems () {
+    return getEmptyItemList();
+  }
+
   public NonNullList<ItemStack> getEmptyItemList() {
     return emptyItemList;
   }
