@@ -736,12 +736,8 @@ public class CommandLootr {
         return false;
       }
 
-      CompoundTag completeCopy = blockEntity.saveWithFullMetadata(provider);
-
-
       // Prevents dropping custom contents on the ground
       adapter.clear(blockEntity);
-
 
       level.setBlock(pos, newState, 3);
 
