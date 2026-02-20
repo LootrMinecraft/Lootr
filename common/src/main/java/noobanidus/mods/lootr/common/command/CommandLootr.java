@@ -715,6 +715,7 @@ public class CommandLootr {
         return false;
       }
 
+      // Guaranteed copy
       NonNullList<ItemStack> custom = adapter.getInventoryCopy(blockEntity);
       if (custom == null) {
         c.accept("Could not obtain inventory of block at " + pos + ".");
@@ -725,6 +726,9 @@ public class CommandLootr {
         c.accept("The block at " + pos + " has an empty inventory, cannot convert.");
         return false;
       }
+
+      // Prevents dropping custom contents on the ground
+      adapter.clear(blockEntity);
 
       BlockState state = level.getBlockState(pos);
       BlockState newState = LootrAPI.replacementBlockState(state);

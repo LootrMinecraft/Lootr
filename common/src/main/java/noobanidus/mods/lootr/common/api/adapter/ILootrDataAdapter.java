@@ -2,6 +2,7 @@ package noobanidus.mods.lootr.common.api.adapter;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.Clearable;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.Nullable;
@@ -25,7 +26,7 @@ public non-sealed interface ILootrDataAdapter<T> extends ILootrAdapter<T> {
 
   long getLootSeed(T entity);
 
-  void setLootTable(T entity, ResourceKey<LootTable> table, long seed);
+  void setLootTable(T entity, @Nullable ResourceKey<LootTable> table, long seed);
 
   default boolean hasCopyableComponentsViaItem(T entity) {
     return false;
@@ -34,5 +35,10 @@ public non-sealed interface ILootrDataAdapter<T> extends ILootrAdapter<T> {
   @Nullable
   default NonNullList<ItemStack> getInventoryCopy(T entity) {
     return null;
+  }
+
+  default void clear (T entity) {
+    Clearable.tryClear(entity);
+    setLootTable(entity, null, 0);
   }
 }

@@ -3,6 +3,7 @@ package noobanidus.mods.lootr.common.impl.adapter;
 import com.google.auto.service.AutoService;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.Clearable;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -29,7 +30,7 @@ public class RandomizableContainerBlockEntityAdapter implements ILootrDataAdapte
   }
 
   @Override
-  public void setLootTable(RandomizableContainerBlockEntity entity, ResourceKey<LootTable> table, long seed) {
+  public void setLootTable(RandomizableContainerBlockEntity entity, @Nullable ResourceKey<LootTable> table, long seed) {
     entity.setLootTable(table, seed);
   }
 
