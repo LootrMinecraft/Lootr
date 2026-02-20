@@ -36,7 +36,7 @@ public class MinecartChestAdapter implements ILootrDataAdapter<MinecartChest> {
     if (getLootTable(entity) == null) {
       NonNullList<ItemStack> result = NonNullList.withSize(entity.getContainerSize(), ItemStack.EMPTY);
       for (int i = 0; i < entity.getContainerSize(); i++) {
-        result.set(i, entity.getItem(i));
+        result.set(i, entity.getItem(i).copy());
       }
       return result;
     }

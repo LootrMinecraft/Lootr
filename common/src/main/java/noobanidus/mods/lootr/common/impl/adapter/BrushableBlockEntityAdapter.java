@@ -36,7 +36,7 @@ public class BrushableBlockEntityAdapter implements ILootrDataAdapter<BrushableB
   public @Nullable NonNullList<ItemStack> getInventoryCopy(BrushableBlockEntity entity) {
     if (getLootTable(entity) == null) {
       NonNullList<ItemStack> result = NonNullList.withSize(1, ItemStack.EMPTY);
-      result.set(0, entity.getItem());
+      result.set(0, entity.getItem().copy());
       return result;
     }
 
