@@ -34,8 +34,16 @@ public class RandomizableContainerBlockEntityAdapter implements ILootrDataAdapte
   }
 
   @Override
-  public @Nullable NonNullList<ItemStack> getInventory(RandomizableContainerBlockEntity entity) {
-    return ((AccessorMixinBaseContainerBlockEntity)entity).invokeGetItems();
+  public @Nullable NonNullList<ItemStack> getInventoryCopy(RandomizableContainerBlockEntity entity) {
+    if (getLootTable(entity) == null) {
+      NonNullList<ItemStack> result = NonNullList.withSize(entity.getContainerSize(), ItemStack.EMPTY);
+      for (int i = 0; i < entity.getContainerSize(); i++) {
+        result.set(i, entity.getItem(i).copy());
+      }
+      return result;
+    }
+
+    return null;
   }
 
   @Override

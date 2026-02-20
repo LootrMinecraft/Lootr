@@ -715,7 +715,7 @@ public class CommandLootr {
         return false;
       }
 
-      NonNullList<ItemStack> custom = adapter.getInventory(blockEntity);
+      NonNullList<ItemStack> custom = adapter.getInventoryCopy(blockEntity);
       if (custom == null) {
         c.accept("Could not obtain inventory of block at " + pos + ".");
         return false;

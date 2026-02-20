@@ -40,7 +40,7 @@ public class DecoratedPotBlockEntityAdapter implements ILootrDataAdapter<Decorat
   }
 
   @Override
-  public @Nullable NonNullList<ItemStack> getInventory(DecoratedPotBlockEntity entity) {
+  public @Nullable NonNullList<ItemStack> getInventoryCopy(DecoratedPotBlockEntity entity) {
     if (getLootTable(entity) == null) {
       NonNullList<ItemStack> result = NonNullList.withSize(1, ItemStack.EMPTY);
       result.set(0, entity.getTheItem());

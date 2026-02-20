@@ -32,7 +32,7 @@ public class MinecartChestAdapter implements ILootrDataAdapter<MinecartChest> {
   }
 
   @Override
-  public @Nullable NonNullList<ItemStack> getInventory(MinecartChest entity) {
+  public @Nullable NonNullList<ItemStack> getInventoryCopy(MinecartChest entity) {
     if (getLootTable(entity) == null) {
       NonNullList<ItemStack> result = NonNullList.withSize(entity.getContainerSize(), ItemStack.EMPTY);
       for (int i = 0; i < entity.getContainerSize(); i++) {
