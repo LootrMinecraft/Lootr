@@ -39,6 +39,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -727,9 +728,6 @@ public class CommandLootr {
         return false;
       }
 
-      // Prevents dropping custom contents on the ground
-      adapter.clear(blockEntity);
-
       BlockState state = level.getBlockState(pos);
       BlockState newState = LootrAPI.replacementBlockState(state);
 
@@ -740,6 +738,11 @@ public class CommandLootr {
 
       CompoundTag completeCopy = blockEntity.saveWithFullMetadata(provider);
 
+
+      // Prevents dropping custom contents on the ground
+      adapter.clear(blockEntity);
+
+
       level.setBlock(pos, newState, 3);
 
       BlockEntity newBlockEntity = level.getBlockEntity(pos);
@@ -749,16 +752,10 @@ public class CommandLootr {
           newInventory.markChanged();
         } catch (NotImplementedException exception) {
           c.accept("The block at " + pos + " was converted, but the inventory could not be transferred.");
-
-          level.setBlock(pos, state, 3);
-          level.getChunk(pos).setBlockEntityNbt(completeCopy);
           return false;
         }
       } else {
         c.accept("The block at " + pos + " did not successfully convert.");
-
-        level.setBlock(pos, state, 3);
-        level.getChunk(pos).setBlockEntityNbt(completeCopy);
         return false;
       }
     }
