@@ -158,6 +158,7 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
     if (data != null) {
       data.refresh();
       data.clearOpeners();
+      NewTickingData.getRefreshData().clearTicking(LootrAPI.getServer(), this.getInfoUUID());
       markChanged();
     }
   }

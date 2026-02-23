@@ -279,7 +279,7 @@ public interface ILootrAPI {
 
   void handleProviderTick(@Nullable ILootrInfoProvider provider);
 
-  void handleProviderClientTick (@Nullable ILootrInfoProvider provider);
+  void handleProviderClientTick(@Nullable ILootrInfoProvider provider);
 
   @Nullable
   <T extends BlockEntity> ILootrBlockEntity resolveBlockEntity(T blockEntity);
@@ -306,7 +306,7 @@ public interface ILootrAPI {
   <T> ILootrDataAdapter<T> getAdapter(T type);
 
   @Nullable
-  <T>ILootrItemFrameAdapter<T> getItemFrameAdapter (T type);
+  <T> ILootrItemFrameAdapter<T> getItemFrameAdapter(T type);
 
   ILootrType getType(String type);
 
@@ -320,11 +320,11 @@ public interface ILootrAPI {
 
   PotDecorationsAdapter getDecorationsAdapter(BlockEntity.DataComponentInput input);
 
-  SaveMode getFileSaveMode ();
+  SaveMode getFileSaveMode();
 
-  boolean shouldDisplayUnopenedParticles ();
+  boolean shouldDisplayUnopenedParticles();
 
-  default long getGameTime () {
+  default long getGameTime() {
     var server = LootrAPI.getServer();
 
     if (server == null) {

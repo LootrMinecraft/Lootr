@@ -67,7 +67,16 @@ public class NewTickingData {
     }
   }
 
-  public long howLongUntilComplete (MinecraftServer server, UUID id) {
+  public void clearTicking (MinecraftServer server, UUID id) {
+    Section section = getSection(server, id);
+    try {
+      section.setCompletesAt(id, -1L);
+    } catch (SectionException e) {
+      LootrAPI.LOG.error("Unable to clear {} ticking data for id {}: section mismatch, expected {}", type.getPrefix(), id, section.cachedName);
+    }
+  }
+
+  public long howLongUntilComplete(MinecraftServer server, UUID id) {
     Section section = getSection(server, id);
     try {
       long completesAt = section.completesAt(id);
