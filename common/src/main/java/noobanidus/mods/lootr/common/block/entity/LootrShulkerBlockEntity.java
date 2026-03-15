@@ -352,7 +352,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
 
   @Override
   public boolean isInfoReferenceInventory() {
-    return simpleLootrInstance.isCustomInventory();
+    return isInfoReferenceInventoryInternal(simpleLootrInstance.isCustomInventory());
   }
 
   @Override

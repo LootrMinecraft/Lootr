@@ -17,13 +17,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 import java.util.UUID;
-import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
 public class SimpleLootrInstance {
   protected final NonNullList<ItemStack> emptyItemList;
   protected NonNullList<ItemStack> customInventory = null;
-  protected boolean isCustomInventory = false;
   protected final Set<UUID> clientOpeners = new ObjectOpenHashSet<>();
   protected UUID infoId = null;
   protected boolean hasBeenOpened = false;
@@ -41,7 +39,7 @@ public class SimpleLootrInstance {
   }
 
   @Deprecated
-  public NonNullList<ItemStack> getItems () {
+  public NonNullList<ItemStack> getItems() {
     return getEmptyItemList();
   }
 
@@ -50,29 +48,20 @@ public class SimpleLootrInstance {
   }
 
   @Nullable
-  public NonNullList<ItemStack> getCustomInventory () {
+  public NonNullList<ItemStack> getCustomInventory() {
     return customInventory;
   }
 
-  public boolean isCustomInventory () {
-    if (isCustomInventory) {
-      return true;
-    } else {
-      if (customInventory != null && !customInventory.isEmpty()) {
-        return true;
-      }
-    }
-
-    return false;
+  public boolean isCustomInventory() {
+    return customInventory != null && !customInventory.isEmpty();
   }
 
-  public void setCustomInventory (NonNullList<ItemStack> customInventory) {
+  public void setCustomInventory(NonNullList<ItemStack> customInventory) {
     NonNullList<ItemStack> copy = NonNullList.withSize(customInventory.size(), ItemStack.EMPTY);
     for (int i = 0; i < customInventory.size(); i++) {
       copy.set(i, customInventory.get(i).copy());
     }
     this.customInventory = copy;
-    this.isCustomInventory = true;
   }
 
   public Set<UUID> getClientOpeners() {
@@ -148,7 +137,6 @@ public class SimpleLootrInstance {
       int size = Math.max(compound.getInt(NBTConstants.CUSTOM_SIZE), getInfoContainerSize());
       this.customInventory = NonNullList.withSize(size, ItemStack.EMPTY);
       ContainerHelper.loadAllItems(compound.getCompound(NBTConstants.CUSTOM_INVENTORY), customInventory, provder);
-      this.isCustomInventory = true;
     }
   }
 
@@ -167,13 +155,11 @@ public class SimpleLootrInstance {
       }
     }
 
-    if (isCustomInventory) {
-      if (customInventory != null && !customInventory.isEmpty()) {
-        CompoundTag itemTag = new CompoundTag();
-        ContainerHelper.saveAllItems(itemTag, customInventory, provider);
-        compound.put(NBTConstants.CUSTOM_INVENTORY, itemTag);
-        compound.putInt(NBTConstants.CUSTOM_SIZE, customInventory.size());
-      }
+    if (customInventory != null && !customInventory.isEmpty()) {
+      CompoundTag itemTag = new CompoundTag();
+      ContainerHelper.saveAllItems(itemTag, customInventory, provider);
+      compound.put(NBTConstants.CUSTOM_INVENTORY, itemTag);
+      compound.putInt(NBTConstants.CUSTOM_SIZE, customInventory.size());
     }
   }
 
