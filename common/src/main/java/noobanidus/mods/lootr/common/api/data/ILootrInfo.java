@@ -279,9 +279,12 @@ public interface ILootrInfo {
       tag.putString("name", Component.Serializer.toJson(getInfoDisplayName(), provider));
     }
     if (isInfoReferenceInventory()) {
-      //noinspection DataFlowIssue
-      tag.putInt("referenceSize", getInfoReferenceInventory().size());
-      tag.put("reference", ContainerHelper.saveAllItems(new CompoundTag(), getInfoReferenceInventory(), true, provider));
+      if (getInfoReferenceInventory() != null) {
+        tag.putInt("referenceSize", getInfoReferenceInventory().size());
+        tag.put("reference", ContainerHelper.saveAllItems(new CompoundTag(), getInfoReferenceInventory(), true, provider));
+      } else {
+        LootrAPI.LOG.error("Info at {} with ID {} is marked as reference inventory but getInfoReferenceInventory() returns null. This may cause issues.", getInfoPos(), getInfoKey());
+      }
     }
   }
 
@@ -339,7 +342,7 @@ public interface ILootrInfo {
       LootrAPI.LOG.error("Couldn't determine LootrType when loading LootrInfo from tag, guessing chest: {}", tag);
       type = BuiltInLootrTypes.CHEST;
     }
-    return new BaseLootrInfo(null, null, type, uuid, ILootrInfo.generateInfoKey(uuid), pos, name, dimension, size, reference, table, seed);
+    return new BaseLootrInfo(null, null, type, uuid, ILootrInfo.generateInfoKey(uuid), pos, name, dimension, size, /* TODO: This makes me uncomfortable, as it's being stored in two places, technically. */ reference, table, seed);
   }
 
   @Deprecated
