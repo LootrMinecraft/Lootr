@@ -6,6 +6,7 @@ import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.block.state.properties.Property;
+import noobanidus.mods.lootr.common.api.LootrTags;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -35,6 +36,12 @@ public class BlockReplacementMap {
       return null;
     }
 
+    @SuppressWarnings("deprecation") var holder = block.builtInRegistryHolder();
+    if (holder.is(LootrTags.Blocks.CONVERT_BLACKLIST)) {
+      ignoredBlocks.add(block);
+      return null;
+    }
+
     Block result = replacements.get(block);
 
     if (result == null) {
@@ -51,7 +58,6 @@ public class BlockReplacementMap {
       ignoredBlocks.add(block);
       return null;
     }
-
 
     BlockState replacement = result.defaultBlockState();
     for (Property<?> prop : replacement.getProperties()) {
