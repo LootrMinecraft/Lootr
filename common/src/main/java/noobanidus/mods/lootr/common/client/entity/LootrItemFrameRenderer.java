@@ -42,7 +42,6 @@ public class LootrItemFrameRenderer extends EntityRenderer<LootrItemFrame, Lootr
     Direction direction = state.direction;
     Vec3 renderOffset = this.getRenderOffset(state);
     poseStack.translate(-renderOffset.x(), -renderOffset.y(), -renderOffset.z());
-    double offs = 0.46875;
     poseStack.translate(direction.getStepX() * 0.46875, direction.getStepY() * 0.46875, direction.getStepZ() * 0.46875);
     float xRot;
     float yRot;
@@ -69,7 +68,7 @@ public class LootrItemFrameRenderer extends EntityRenderer<LootrItemFrame, Lootr
       poseStack.translate(0.0F, 0.0F, 0.4375F);
     }
 
-    if (!state.item.isEmpty()) {
+    if (!state.item.isEmpty() && !state.visuallyOpen) {
       poseStack.mulPose(Axis.ZP.rotationDegrees(state.rotation * 360.0F / 8.0F));
       int lightVal = this.getLightCoords(state.isGlowFrame, 15728880, state.lightCoords);
       poseStack.scale(0.5F, 0.5F, 0.5F);
@@ -132,5 +131,8 @@ public class LootrItemFrameRenderer extends EntityRenderer<LootrItemFrame, Lootr
     } else {
       state.frameModel.clear();
     }
+
+    state.visuallyOpen = visuallyOpen;
+    state.vanilla = vanilla;
   }
 }
