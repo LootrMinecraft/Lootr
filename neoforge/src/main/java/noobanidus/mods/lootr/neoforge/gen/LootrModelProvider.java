@@ -45,8 +45,8 @@ public class LootrModelProvider extends ModelProvider {
 
   @Override
   protected void registerModels(BlockModelGenerators blockModels, ItemModelGenerators itemModels) {
-    var opened = new UnbakedCustomModel(LootrAPI.rl("block/lootr_opened_barrel"), LootrAPI.rl("block/lootr_barrel_unopened"), Identifier.withDefaultNamespace("block/barrel"), Variant.SimpleModelState.DEFAULT, false);
-    var unopened = new UnbakedCustomModel(LootrAPI.rl("block/lootr_opened_barrel_open"), LootrAPI.rl("block/lootr_barrel_unopened_open"), Identifier.withDefaultNamespace("block/barrel_open"), Variant.SimpleModelState.DEFAULT, true);
+    var opened = new UnbakedCustomModel(LootrAPI.rl("block/opened_barrel"), LootrAPI.rl("block/barrel_unopened"), Identifier.withDefaultNamespace("block/barrel"), Variant.SimpleModelState.DEFAULT, false);
+    var unopened = new UnbakedCustomModel(LootrAPI.rl("block/opened_barrel_open"), LootrAPI.rl("block/barrel_unopened_open"), Identifier.withDefaultNamespace("block/barrel_open"), Variant.SimpleModelState.DEFAULT, true);
 
     var baseVariant = MultiVariant.of(new UnbakedCustomModelBuilder(opened));
 
@@ -98,14 +98,14 @@ public class LootrModelProvider extends ModelProvider {
                     new SelectItemModel.SwitchCase<>(
                         List.of(ConfigDisplayType.DEFAULT),
                         new CuboidItemModelWrapper.Unbaked(
-                            LootrAPI.rl("block/lootr_barrel_unopened"),
+                            LootrAPI.rl("block/barrel_unopened"),
                             Optional.empty(),
                             Collections.emptyList()))
                 )
             ),
             Optional.of(
                 new CuboidItemModelWrapper.Unbaked(
-                    LootrAPI.rl("block/lootr_barrel_unopened"),
+                    LootrAPI.rl("block/barrel_unopened"),
                     Optional.empty(),
                     Collections.emptyList()))
         )

@@ -30,8 +30,8 @@ import java.util.function.Consumer;
 
 public class LootrShulkerBoxRenderer implements BlockEntityRenderer<LootrShulkerBlockEntity, LootrShulkerBoxRenderState> {
 
-  public static final SpriteId MATERIAL = new SpriteId(Sheets.SHULKER_SHEET, LootrAPI.rl("shulker"));
-  public static final SpriteId MATERIAL2 = new SpriteId(Sheets.SHULKER_SHEET, LootrAPI.rl("shulker_opened"));
+  public static final SpriteId MATERIAL = new SpriteId(Sheets.SHULKER_SHEET, LootrAPI.rl("shulker_box"));
+  public static final SpriteId MATERIAL2 = new SpriteId(Sheets.SHULKER_SHEET, LootrAPI.rl("shulker_box_opened"));
 
   private final SpriteGetter materials;
   private final ShulkerBoxModel model;

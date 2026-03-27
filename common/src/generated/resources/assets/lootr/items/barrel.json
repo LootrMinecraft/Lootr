@@ -12,14 +12,14 @@
       {
         "model": {
           "type": "minecraft:model",
-          "model": "lootr:block/lootr_barrel_unopened"
+          "model": "lootr:block/barrel_unopened"
         },
         "when": "default"
       }
     ],
     "fallback": {
       "type": "minecraft:model",
-      "model": "lootr:block/lootr_barrel_unopened"
+      "model": "lootr:block/barrel_unopened"
     },
     "property": "lootr:config_type"
   }
