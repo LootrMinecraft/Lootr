@@ -67,37 +67,37 @@ public class LootrCommonConfig {
     @ConfigEntry(id = "dimension_whitelist", translation = "lootr.configuration.dimension_whitelist")
     @Comment(value = "", translation = "lootr.configuration.dimension_whitelist.desc")
     @ConfigOption.Regex(value = IDENTIFIER_REGEX)
-    public static final Observable<String[]> dimensionWhitelist = Observable.of(new String[]{});
+    public static Observable<String[]> dimensionWhitelist = Observable.of(new String[]{});
 
     @ConfigEntry(id = "dimension_blacklist", translation = "lootr.configuration.dimension_blacklist")
     @Comment(value = "", translation = "lootr.configuration.dimension_blacklist.desc")
     @ConfigOption.Regex(value = IDENTIFIER_REGEX)
-    public static final Observable<String[]> dimensionBlacklist = Observable.of(new String[]{});
+    public static Observable<String[]> dimensionBlacklist = Observable.of(new String[]{});
 
     @ConfigEntry(id = "modid_dimension_whitelist", translation = "lootr.configuration.modid_dimension_whitelist")
     @Comment(value = "", translation = "lootr.configuration.modid_dimension_whitelist.desc")
     @ConfigOption.Regex(value = "^" + Identifier.ALLOWED_NAMESPACE_CHARACTERS + "+$")
-    public static final Observable<String[]> modidDimensionWhitelist = Observable.of(new String[]{});
+    public static Observable<String[]> modidDimensionWhitelist = Observable.of(new String[]{});
 
     @ConfigEntry(id = "modid_dimension_blacklist", translation = "lootr.configuration.modid_dimension_blacklist")
     @Comment(value = "", translation = "lootr.configuration.modid_dimension_blacklist.desc")
     @ConfigOption.Regex(value = "^" + Identifier.ALLOWED_NAMESPACE_CHARACTERS + "+$")
-    public static final Observable<String[]> modidDimensionBlacklist = Observable.of(new String[]{});
+    public static Observable<String[]> modidDimensionBlacklist = Observable.of(new String[]{});
 
     @ConfigEntry(id = "loot_table_blacklist", translation = "lootr.configuration.loot_table_blacklist")
     @Comment(value = "", translation = "lootr.configuration.loot_table_blacklist.desc")
     @ConfigOption.Regex(value = IDENTIFIER_REGEX)
-    public static final Observable<String[]> lootTableBlacklist = Observable.of(new String[]{});
+    public static Observable<String[]> lootTableBlacklist = Observable.of(new String[]{});
 
     @ConfigEntry(id = "loot_table_modid_blacklist", translation = "lootr.configuration.loot_table_modid_blacklist")
     @Comment(value = "", translation = "lootr.configuration.loot_table_modid_blacklist.desc")
     @ConfigOption.Regex(value = "^" + Identifier.ALLOWED_NAMESPACE_CHARACTERS + "+$")
-    public static final Observable<String[]> lootTableModidBlacklist = Observable.of(new String[]{});
+    public static Observable<String[]> lootTableModidBlacklist = Observable.of(new String[]{});
 
     @ConfigEntry(id = "problematic_loot_tables", translation = "lootr.configuration.problematic_loot_tables")
     @Comment(value = "", translation = "lootr.configuration.problematic_loot_tables.desc")
     @ConfigOption.Regex(value = IDENTIFIER_REGEX)
-    public static final Observable<String[]> problematicLootTables = Observable.of(LootrAPI.PROBLEMATIC_CHESTS.stream()
+    public static Observable<String[]> problematicLootTables = Observable.of(LootrAPI.PROBLEMATIC_CHESTS.stream()
         .map(Identifier::toString).toArray(String[]::new));
   }
 
@@ -183,17 +183,17 @@ public class LootrCommonConfig {
     @ConfigEntry(id = "decay_loot_tables", translation = "lootr.configuration.decay_loot_tables")
     @Comment(value = "", translation = "lootr.configuration.decay_loot_tables.desc")
     @ConfigOption.Regex(value = IDENTIFIER_REGEX)
-    public static final Observable<String[]> decayLootTables = Observable.of(new String[]{});
+    public static Observable<String[]> decayLootTables = Observable.of(new String[]{});
 
     @ConfigEntry(id="decay_loot_table_modids", translation = "lootr.configuration.decay_loot_table_modids")
     @Comment(value = "", translation = "lootr.configuration.decay_loot_table_modids.desc")
     @ConfigOption.Regex(value = "^" + Identifier.ALLOWED_NAMESPACE_CHARACTERS + "+$")
-    public static final Observable<String[]> decayLootTableModids = Observable.of(new String[]{});
+    public static Observable<String[]> decayLootTableModids = Observable.of(new String[]{});
 
     @ConfigEntry(id="decay_dimensions", translation = "lootr.configuration.decay_dimensions")
     @Comment(value = "", translation = "lootr.configuration.decay_dimensions.desc")
     @ConfigOption.Regex(value = IDENTIFIER_REGEX)
-    public static final Observable<String[]> decayDimensions = Observable.of(new String[]{});
+    public static Observable<String[]> decayDimensions = Observable.of(new String[]{});
 
     @ConfigEntry(id="replace_when_decayed", translation = "lootr.configuration.replace_when_decayed")
     @Comment(value = "", translation = "lootr.configuration.replace_when_decayed.desc")
@@ -223,17 +223,17 @@ public class LootrCommonConfig {
     @ConfigEntry(id = "refresh_loot_tables", translation = "lootr.configuration.refresh_loot_tables")
     @Comment(value = "", translation = "lootr.configuration.refresh_loot_tables.desc")
     @ConfigOption.Regex(value = IDENTIFIER_REGEX)
-    public static final Observable<String[]> refreshLootTables = Observable.of(new String[]{});
+    public static Observable<String[]> refreshLootTables = Observable.of(new String[]{});
 
     @ConfigEntry(id="refresh_loot_table_modids", translation = "lootr.configuration.refresh_loot_table_modids")
     @Comment(value = "", translation = "lootr.configuration.refresh_loot_table_modids.desc")
     @ConfigOption.Regex(value = "^" + Identifier.ALLOWED_NAMESPACE_CHARACTERS + "+$")
-    public static final Observable<String[]> refreshLootTableModids = Observable.of(new String[]{});
+    public static Observable<String[]> refreshLootTableModids = Observable.of(new String[]{});
 
     @ConfigEntry(id="refresh_dimensions", translation = "lootr.configuration.refresh_dimensions")
     @Comment(value = "", translation = "lootr.configuration.refresh_dimensions.desc")
     @ConfigOption.Regex(value = IDENTIFIER_REGEX)
-    public static final Observable<String[]> refreshDimensions = Observable.of(new String[]{});
+    public static Observable<String[]> refreshDimensions = Observable.of(new String[]{});
 
     @ConfigEntry(id="perform_refresh_while_ticking", translation = "lootr.configuration.perform_refresh_while_ticking")
     @Comment(value = "", translation = "lootr.configuration.perform_refresh_while_ticking.desc")

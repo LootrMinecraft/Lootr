@@ -27,10 +27,10 @@ import org.spongepowered.asm.mixin.injection.At;
  */
 @Mixin(BaseContainerBlockEntity.class)
 public class MixinBaseContainerBlockEntity {
-  @WrapOperation(method = "sendChestLockedNotifications", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;displayClientMessage(Lnet/minecraft/network/chat/Component;Z)V"))
-  private static void lootr$suppressLockMessage(Player instance, Component chatComponent, boolean actionBar, Operation<Void> original) {
+  @WrapOperation(method = "sendChestLockedNotifications", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;sendOverlayMessage(Lnet/minecraft/network/chat/Component;)V"))
+  private static void lootr$suppressLockMessage(Player instance, Component message, Operation<Void> original) {
     if (!LockMessageSuppression.isSuppressed()) {
-      original.call(instance, chatComponent, actionBar);
+      original.call(instance, message);
     }
   }
 
