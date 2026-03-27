@@ -13,10 +13,10 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.resources.model.Material;
-import net.minecraft.client.resources.model.MaterialSet;
+import net.minecraft.client.resources.model.sprite.SpriteGetter;
+import net.minecraft.client.resources.model.sprite.SpriteId;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.phys.Vec3;
@@ -30,21 +30,21 @@ import java.util.function.Consumer;
 
 public class LootrShulkerBoxRenderer implements BlockEntityRenderer<LootrShulkerBlockEntity, LootrShulkerBoxRenderState> {
 
-  public static final Material MATERIAL = new Material(Sheets.SHULKER_SHEET, LootrAPI.rl("shulker"));
-  public static final Material MATERIAL2 = new Material(Sheets.SHULKER_SHEET, LootrAPI.rl("shulker_opened"));
+  public static final SpriteId MATERIAL = new SpriteId(Sheets.SHULKER_SHEET, LootrAPI.rl("shulker"));
+  public static final SpriteId MATERIAL2 = new SpriteId(Sheets.SHULKER_SHEET, LootrAPI.rl("shulker_opened"));
 
-  private final MaterialSet materials;
+  private final SpriteGetter materials;
   private final ShulkerBoxModel model;
 
   public LootrShulkerBoxRenderer(BlockEntityRendererProvider.Context context) {
-    this(context.entityModelSet(), context.materials());
+    this(context.entityModelSet(), context.sprites());
   }
 
   public LootrShulkerBoxRenderer(SpecialModelRenderer.BakingContext context) {
-    this(context.entityModelSet(), context.materials());
+    this(context.entityModelSet(), context.sprites());
   }
 
-  public LootrShulkerBoxRenderer(EntityModelSet modelSet, MaterialSet materials) {
+  public LootrShulkerBoxRenderer(EntityModelSet modelSet, SpriteGetter materials) {
     this.materials = materials;
     this.model = new ShulkerBoxModel(modelSet.bakeLayer(ModelLayers.SHULKER_BOX));
   }
@@ -59,7 +59,7 @@ public class LootrShulkerBoxRenderer implements BlockEntityRenderer<LootrShulker
     state.visuallyOpen = Minecraft.getInstance().player != null && blockEntity.hasClientOpened(Minecraft.getInstance().player.getUUID());
   }
 
-  protected Material getMaterial(LootrShulkerBoxRenderState state) {
+  protected SpriteId getSpriteId(LootrShulkerBoxRenderState state) {
 
     if (state.vanilla) {
       return Sheets.DEFAULT_SHULKER_TEXTURE_LOCATION;
@@ -78,11 +78,11 @@ public class LootrShulkerBoxRenderer implements BlockEntityRenderer<LootrShulker
 
   @Override
   public void submit(LootrShulkerBoxRenderState state, PoseStack pose, SubmitNodeCollector collector, CameraRenderState camera) {
-    Material material = getMaterial(state);
+    SpriteId material = getSpriteId(state);
     this.submit(pose, collector, state.lightCoords, OverlayTexture.NO_OVERLAY, state.direction, state.progress, state.breakProgress, material, 0);
   }
 
-  public void submit(PoseStack poseStack, SubmitNodeCollector nodeCollector, int packedLight, int packedOverlay, Direction direction, float progress, @Nullable ModelFeatureRenderer.CrumblingOverlay crumblingOverlay, Material material, int outlineColor) {
+  public void submit(PoseStack poseStack, SubmitNodeCollector nodeCollector, int packedLight, int packedOverlay, Direction direction, float progress, @Nullable ModelFeatureRenderer.CrumblingOverlay crumblingOverlay, SpriteId material, int outlineColor) {
     poseStack.pushPose();
     this.prepareModel(poseStack, direction, progress);
     nodeCollector.submitModel(this.model, progress, poseStack, material.renderType(this.model::renderType), packedLight, packedOverlay, -1, this.materials.get(material), outlineColor, crumblingOverlay);

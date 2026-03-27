@@ -7,8 +7,6 @@ public enum SaveMode {
   SMART,
   WHEN_OPENED;
 
-
-
   public static SaveMode fromString(String name) {
     for (SaveMode mode : values()) {
       if (mode.name().toLowerCase(Locale.ROOT).equals(name.toLowerCase(Locale.ROOT))) {
@@ -18,7 +16,7 @@ public enum SaveMode {
     return SMART;
   }
 
-  public String toString () {
+  public String toString() {
     return this.name().toLowerCase(Locale.ROOT);
   }
 }

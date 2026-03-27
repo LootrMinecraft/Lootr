@@ -1,17 +1,18 @@
 package noobanidus.mods.lootr.neoforge;
 
+import com.teamresourceful.resourcefulconfig.api.loader.Configurator;
 import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.command.CommandLootr;
-import noobanidus.mods.lootr.neoforge.config.ConfigManager;
+import noobanidus.mods.lootr.common.config.LootrCommonConfig;
+import noobanidus.mods.lootr.common.config.LootrConfig;
 import noobanidus.mods.lootr.neoforge.impl.LootrAPIImpl;
 import noobanidus.mods.lootr.neoforge.impl.LootrRegistryImpl;
 import noobanidus.mods.lootr.neoforge.impl.PlatformAPIImpl;
@@ -28,8 +29,10 @@ public class Lootr {
     LootrRegistry.INSTANCE = new LootrRegistryImpl();
     PlatformAPI.INSTANCE = new PlatformAPIImpl();
 
-    modContainer.registerConfig(ModConfig.Type.COMMON, ConfigManager.COMMON_CONFIG);
-    modContainer.registerConfig(ModConfig.Type.CLIENT, ConfigManager.CLIENT_CONFIG);
+    LootrConfig.getConfigurator().register(LootrCommonConfig.class);
+
+    //modContainer.registerConfig(ModConfig.Type.COMMON, ConfigManager.COMMON_CONFIG);
+    //modContainer.registerConfig(ModConfig.Type.CLIENT, ConfigManager.CLIENT_CONFIG);
     NeoForge.EVENT_BUS.addListener(this::onCommands);
     ModTabs.register(modBus);
     ModBlockEntities.register(modBus);

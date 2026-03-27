@@ -7,8 +7,8 @@ import net.minecraft.client.data.models.ModelProvider;
 import net.minecraft.client.data.models.MultiVariant;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.client.data.models.blockstates.PropertyDispatch;
-import net.minecraft.client.renderer.block.model.Variant;
-import net.minecraft.client.renderer.item.BlockModelWrapper;
+import net.minecraft.client.renderer.block.dispatch.Variant;
+import net.minecraft.client.renderer.item.CuboidItemModelWrapper;
 import net.minecraft.client.renderer.item.SelectItemModel;
 import net.minecraft.client.renderer.item.SpecialModelWrapper;
 import net.minecraft.core.Direction;
@@ -35,6 +35,7 @@ import noobanidus.mods.lootr.neoforge.init.ModItems;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalLong;
 import java.util.stream.Stream;
 
 public class LootrModelProvider extends ModelProvider {
@@ -83,45 +84,52 @@ public class LootrModelProvider extends ModelProvider {
     itemModels.itemModelOutput.accept(
         ModItems.BARREL.get(),
         new SelectItemModel.Unbaked(
+            Optional.empty(),
             new SelectItemModel.UnbakedSwitch<>(
                 new SelectConfigType(),
                 List.of(
                     new SelectItemModel.SwitchCase<>(
                         List.of(ConfigDisplayType.VANILLA),
-                        new BlockModelWrapper.Unbaked(
+                        new CuboidItemModelWrapper.Unbaked(
                             Identifier.withDefaultNamespace("block/barrel"),
+                            Optional.empty(),
                             Collections.emptyList()
                         )),
                     new SelectItemModel.SwitchCase<>(
                         List.of(ConfigDisplayType.DEFAULT),
-                        new BlockModelWrapper.Unbaked(
+                        new CuboidItemModelWrapper.Unbaked(
                             LootrAPI.rl("block/lootr_barrel_unopened"),
+                            Optional.empty(),
                             Collections.emptyList()))
                 )
             ),
             Optional.of(
-                new BlockModelWrapper.Unbaked(
+                new CuboidItemModelWrapper.Unbaked(
                     LootrAPI.rl("block/lootr_barrel_unopened"),
+                    Optional.empty(),
                     Collections.emptyList()))
         )
     );
 
     itemModels.itemModelOutput.accept(
         ModItems.SUSPICIOUS_GRAVEL.get(),
-        new BlockModelWrapper.Unbaked(
+        new CuboidItemModelWrapper.Unbaked(
             Identifier.withDefaultNamespace("block/suspicious_gravel_0"),
+            Optional.empty(),
             Collections.emptyList())
     );
     itemModels.itemModelOutput.accept(
         ModItems.SUSPICIOUS_SAND.get(),
-        new BlockModelWrapper.Unbaked(
+        new CuboidItemModelWrapper.Unbaked(
             Identifier.withDefaultNamespace("block/suspicious_sand_0"),
+            Optional.empty(),
             Collections.emptyList())
     );
     itemModels.itemModelOutput.accept(
         ModItems.CHEST.get(),
         new SpecialModelWrapper.Unbaked(
             Identifier.withDefaultNamespace("item/chest"),
+            Optional.empty(),
             new LootrChestSpecialRenderer.Unbaked(
                 LootrAPI.rl("chest"),
                 Identifier.withDefaultNamespace("entity/chest/normal")
@@ -132,6 +140,7 @@ public class LootrModelProvider extends ModelProvider {
         ModItems.TRAPPED_CHEST.get(),
         new SpecialModelWrapper.Unbaked(
             Identifier.withDefaultNamespace("item/chest"),
+            Optional.empty(),
             new LootrChestSpecialRenderer.Unbaked(
                 LootrAPI.rl("chest_trapped"),
                 Identifier.withDefaultNamespace("entity/chest/trapped")
@@ -142,6 +151,7 @@ public class LootrModelProvider extends ModelProvider {
         ModItems.INVENTORY.get(),
         new SpecialModelWrapper.Unbaked(
             Identifier.withDefaultNamespace("item/chest"),
+            Optional.empty(),
             new LootrChestSpecialRenderer.Unbaked(
                 LootrAPI.rl("chest"),
                 Identifier.withDefaultNamespace("entity/chest/normal")
@@ -152,6 +162,7 @@ public class LootrModelProvider extends ModelProvider {
         ModItems.SHULKER.get(),
         new SpecialModelWrapper.Unbaked(
             Identifier.withDefaultNamespace("item/shulker_box"),
+            Optional.empty(),
             new LootrShulkerSpecialRenderer.Unbaked(
                 LootrAPI.rl("shulker")
             )
@@ -161,13 +172,15 @@ public class LootrModelProvider extends ModelProvider {
         ModItems.DECORATED_POT.get(),
         new SpecialModelWrapper.Unbaked(
             Identifier.withDefaultNamespace("item/decorated_pot"),
+            Optional.empty(),
             LootrDecoratedPotSpecialRenderer.Unbaked.decoratedPot()
         )
     );
     itemModels.itemModelOutput.accept(
         ModItems.TROPHY.get(),
-        new BlockModelWrapper.Unbaked(
+        new CuboidItemModelWrapper.Unbaked(
             LootrAPI.rl("block/trophy"),
+            Optional.empty(),
             Collections.emptyList()
         )
     );

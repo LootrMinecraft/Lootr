@@ -27,6 +27,10 @@ public class LootrBlockStateDefinitions {
     return new StateDefinition.Builder<Block, BlockState>(Blocks.AIR).create(Block::defaultBlockState, BlockState::new);
   }
 
+  public static BlockState getItemFrameFakeState (boolean visuallyOpen) {
+    return (visuallyOpen ? LOOTR_OPEN_ITEM_FRAME_FAKE_DEFINITION : LOOTR_ITEM_FRAME_FAKE_DEFINITION).any();
+  }
+
   public static BlockState getItemFrameFakeState(LootrItemFrameRenderState state) {
     return (state.visuallyOpen ? LOOTR_OPEN_ITEM_FRAME_FAKE_DEFINITION : LOOTR_ITEM_FRAME_FAKE_DEFINITION).any();
   }

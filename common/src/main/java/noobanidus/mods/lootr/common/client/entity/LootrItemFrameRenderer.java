@@ -4,15 +4,14 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.SubmitNodeCollector;
-import net.minecraft.client.renderer.block.BlockRenderDispatcher;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.renderer.block.BlockModelResolver;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.ItemFrameRenderer;
 import net.minecraft.client.renderer.item.ItemModelResolver;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.resources.model.BlockStateDefinitions;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EntityType;
@@ -28,65 +27,53 @@ import noobanidus.mods.lootr.common.entity.LootrItemFrame;
 
 public class LootrItemFrameRenderer extends EntityRenderer<LootrItemFrame, LootrItemFrameRenderState> {
   private final ItemModelResolver itemModelResolver;
-  private final BlockRenderDispatcher blockRenderer;
+  private final BlockModelResolver blockRenderer;
 
   public LootrItemFrameRenderer(EntityRendererProvider.Context context) {
     super(context);
     this.itemModelResolver = context.getItemModelResolver();
-    this.blockRenderer = context.getBlockRenderDispatcher();
+    this.blockRenderer = context.getBlockModelResolver();
   }
 
   @Override
-  public void submit(LootrItemFrameRenderState renderState, PoseStack poseStack, SubmitNodeCollector nodeCollector, CameraRenderState cameraRenderState) {
-    super.submit(renderState, poseStack, nodeCollector, cameraRenderState);
+  public void submit(LootrItemFrameRenderState state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState) {
+    super.submit(state, poseStack, submitNodeCollector, cameraRenderState);
     poseStack.pushPose();
-    Direction direction = renderState.direction;
-    Vec3 vec3 = this.getRenderOffset(renderState);
-    poseStack.translate(-vec3.x(), -vec3.y(), -vec3.z());
+    Direction direction = state.direction;
+    Vec3 renderOffset = this.getRenderOffset(state);
+    poseStack.translate(-renderOffset.x(), -renderOffset.y(), -renderOffset.z());
+    double offs = 0.46875;
     poseStack.translate(direction.getStepX() * 0.46875, direction.getStepY() * 0.46875, direction.getStepZ() * 0.46875);
-    float f;
-    float f1;
+    float xRot;
+    float yRot;
     if (direction.getAxis().isHorizontal()) {
-      f = 0.0F;
-      f1 = 180.0F - direction.toYRot();
+      xRot = 0.0F;
+      yRot = 180.0F - direction.toYRot();
     } else {
-      f = -90 * direction.getAxisDirection().getStep();
-      f1 = 180.0F;
+      xRot = -90 * direction.getAxisDirection().getStep();
+      yRot = 180.0F;
     }
 
-    poseStack.mulPose(Axis.XP.rotationDegrees(f));
-    poseStack.mulPose(Axis.YP.rotationDegrees(f1));
-    if (!renderState.isInvisible) {
-      BlockState blockstate = LootrBlockStateDefinitions.getItemFrameFakeState(renderState);
-      BlockStateModel blockstatemodel = this.blockRenderer.getBlockModel(blockstate);
+    poseStack.mulPose(Axis.XP.rotationDegrees(xRot));
+    poseStack.mulPose(Axis.YP.rotationDegrees(yRot));
+    if (!state.frameModel.isEmpty()) {
       poseStack.pushPose();
       poseStack.translate(-0.5F, -0.5F, -0.5F);
-      //noinspection deprecation
-      nodeCollector.submitBlockModel(
-          poseStack,
-          RenderTypes.entitySolidZOffsetForward(TextureAtlas.LOCATION_BLOCKS),
-          blockstatemodel,
-          1.0F,
-          1.0F,
-          1.0F,
-          renderState.lightCoords,
-          OverlayTexture.NO_OVERLAY,
-          renderState.outlineColor
-      );
+      state.frameModel.submitWithZOffset(poseStack, submitNodeCollector, state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor);
       poseStack.popPose();
     }
 
-    if (renderState.isInvisible) {
+    if (state.isInvisible) {
       poseStack.translate(0.0F, 0.0F, 0.5F);
     } else {
       poseStack.translate(0.0F, 0.0F, 0.4375F);
     }
 
-    if (!renderState.item.isEmpty() && !renderState.visuallyOpen) {
-      poseStack.mulPose(Axis.ZP.rotationDegrees(renderState.rotation * 360.0F / 8.0F));
-      int k = renderState.lightCoords;
+    if (!state.item.isEmpty()) {
+      poseStack.mulPose(Axis.ZP.rotationDegrees(state.rotation * 360.0F / 8.0F));
+      int lightVal = this.getLightCoords(state.isGlowFrame, 15728880, state.lightCoords);
       poseStack.scale(0.5F, 0.5F, 0.5F);
-      renderState.item.submit(poseStack, nodeCollector, k, OverlayTexture.NO_OVERLAY, renderState.outlineColor);
+      state.item.submit(poseStack, submitNodeCollector, lightVal, OverlayTexture.NO_OVERLAY, state.outlineColor);
     }
 
     poseStack.popPose();
@@ -95,6 +82,10 @@ public class LootrItemFrameRenderer extends EntityRenderer<LootrItemFrame, Lootr
   @Override
   public Vec3 getRenderOffset(LootrItemFrameRenderState renderState) {
     return new Vec3(renderState.direction.getStepX() * 0.3F, -0.25, renderState.direction.getStepZ() * 0.3F);
+  }
+
+  private int getLightCoords(boolean isGlowFrame, int glowLightCoords, int originalLightCoords) {
+    return isGlowFrame ? glowLightCoords : originalLightCoords;
   }
 
   @Override
@@ -114,16 +105,32 @@ public class LootrItemFrameRenderer extends EntityRenderer<LootrItemFrame, Lootr
   }
 
   @Override
-  public void extractRenderState(LootrItemFrame entity, LootrItemFrameRenderState reusedState, float partialTick) {
-    super.extractRenderState(entity, reusedState, partialTick);
-    reusedState.direction = entity.getDirection();
-    ItemStack itemstack = entity.getItem();
-    this.itemModelResolver.updateForNonLiving(reusedState.item, itemstack, ItemDisplayContext.FIXED, entity);
-    reusedState.rotation = entity.getRotation();
-    reusedState.isGlowFrame = entity.getType() == EntityType.GLOW_ITEM_FRAME;
-    reusedState.mapId = null;
+  public void extractRenderState(LootrItemFrame entity, LootrItemFrameRenderState state, float partialTick) {
+    super.extractRenderState(entity, state, partialTick);
+    state.direction = entity.getDirection();
+    ItemStack itemStack = entity.getItem();
+    this.itemModelResolver.updateForNonLiving(state.item, itemStack, ItemDisplayContext.FIXED, entity);
+    state.rotation = entity.getRotation();
+    state.isGlowFrame = entity.is(EntityType.GLOW_ITEM_FRAME);
+    state.mapId = null;
+
     Player player = ClientHooks.getPlayer();
-    reusedState.visuallyOpen = player == null ? false : entity.hasClientOpened(player);
-    reusedState.vanilla = LootrAPI.isVanillaTextures();
+    boolean visuallyOpen = player != null && entity.hasClientOpened(player);
+    boolean vanilla = LootrAPI.isVanillaTextures();
+
+    if (!state.isInvisible) {
+      // TODO: The frame state is here
+      // this controls vanilla vs lootr vs lootr opened
+      BlockState fakeState;
+      if (vanilla) {
+        fakeState = BlockStateDefinitions.getItemFrameFakeState(state.isGlowFrame, false);
+      } else {
+        fakeState = LootrBlockStateDefinitions.getItemFrameFakeState(visuallyOpen);
+      }
+
+      this.blockRenderer.update(state.frameModel, fakeState, ItemFrameRenderer.BLOCK_DISPLAY_CONTEXT);
+    } else {
+      state.frameModel.clear();
+    }
   }
 }

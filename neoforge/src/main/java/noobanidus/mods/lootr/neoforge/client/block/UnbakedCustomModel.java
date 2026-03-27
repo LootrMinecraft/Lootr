@@ -1,14 +1,15 @@
 package noobanidus.mods.lootr.neoforge.client.block;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.client.renderer.block.model.BlockModelPart;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
-import net.minecraft.client.renderer.block.model.Variant;
-import net.minecraft.client.resources.model.ModelState;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
+import net.minecraft.client.renderer.block.dispatch.Variant;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.DynamicBlockStateModel;
 import net.neoforged.neoforge.client.model.block.CustomUnbakedBlockStateModel;
@@ -51,7 +52,7 @@ public class UnbakedCustomModel extends noobanidus.mods.lootr.common.client.bloc
     }
 
     @Override
-    public void collectParts(BlockAndTintGetter blockAndTintGetter, BlockPos blockPos, BlockState blockState, RandomSource randomSource, List<BlockModelPart> list) {
+    public void collectParts(BlockAndTintGetter blockAndTintGetter, BlockPos blockPos, BlockState blockState, RandomSource randomSource, List<BlockStateModelPart> list) {
       if (LootrAPI.isVanillaTextures()) {
         vanilla.collectParts(blockAndTintGetter, blockPos, blockState, randomSource, list);
         return;
@@ -76,6 +77,16 @@ public class UnbakedCustomModel extends noobanidus.mods.lootr.common.client.bloc
     @Override
     public @Nullable Object createGeometryKey(BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource random) {
       return internalCreateObjectKey(level, pos, state, random);
+    }
+
+    @Override
+    public Material.Baked particleMaterial() {
+      return opened.particleMaterial();
+    }
+
+    @Override
+    public @BakedQuad.MaterialFlags int materialFlags() {
+      return opened.materialFlags();
     }
   }
 }

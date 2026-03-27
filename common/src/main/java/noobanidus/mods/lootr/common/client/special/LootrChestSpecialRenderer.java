@@ -8,19 +8,19 @@ import net.minecraft.client.model.object.chest.ChestModel;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.special.ChestSpecialRenderer;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
-import net.minecraft.client.resources.model.Material;
-import net.minecraft.client.resources.model.MaterialSet;
+import net.minecraft.client.resources.model.sprite.SpriteGetter;
+import net.minecraft.client.resources.model.sprite.SpriteId;
 import net.minecraft.resources.Identifier;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.client.block.LootrChestBlockRenderer;
-import org.jetbrains.annotations.Nullable;
 
 public class LootrChestSpecialRenderer extends ChestSpecialRenderer {
-  public LootrChestSpecialRenderer(MaterialSet materials, ChestModel chestModel, Material material, float f) {
+  public LootrChestSpecialRenderer(SpriteGetter materials, ChestModel chestModel, SpriteId material, float f) {
     super(materials, chestModel, material, f);
   }
 
-  public record Unbaked(Identifier texture, Identifier vanillaTexture, float openness) implements SpecialModelRenderer.Unbaked {
+  public record Unbaked(Identifier texture, Identifier vanillaTexture,
+                        float openness) implements SpecialModelRenderer.Unbaked<Void> {
     public static final MapCodec<Unbaked> MAP_CODEC = RecordCodecBuilder.mapCodec(
         instance -> instance.group(
             Identifier.CODEC.fieldOf("texture").forGetter(Unbaked::texture),
@@ -29,33 +29,32 @@ public class LootrChestSpecialRenderer extends ChestSpecialRenderer {
         ).apply(instance, Unbaked::new)
     );
 
-    public Unbaked (Identifier texture, Identifier vanillaTexture) {
+    public Unbaked(Identifier texture, Identifier vanillaTexture) {
       this(texture, vanillaTexture, 0.0f);
     }
 
-    public static Unbaked chest () {
-      return new Unbaked(LootrChestBlockRenderer.MATERIAL.texture(), Sheets.CHEST_LOCATION.texture());
+    public static Unbaked chest() {
+      return new Unbaked(LootrChestBlockRenderer.MATERIAL.texture(), Sheets.CHEST_REGULAR.single().texture());
     }
 
-    public static Unbaked trappedChest () {
-      return new Unbaked(LootrChestBlockRenderer.MATERIAL3.texture(), Sheets.CHEST_TRAP_LOCATION.texture());
+    public static Unbaked trappedChest() {
+      return new Unbaked(LootrChestBlockRenderer.MATERIAL3.texture(), Sheets.CHEST_TRAPPED.single().texture());
     }
 
-    @Nullable
     @Override
-    public SpecialModelRenderer<?> bake(BakingContext context) {
+    public SpecialModelRenderer<Void> bake(BakingContext context) {
       ChestModel model = new ChestModel(context.entityModelSet().bakeLayer(ModelLayers.CHEST));
-      Material material;
+      SpriteId material;
       if (LootrAPI.isVanillaTextures()) {
-        material = new Material(Sheets.CHEST_SHEET, vanillaTexture);
+        material = new SpriteId(Sheets.CHEST_SHEET, vanillaTexture);
       } else {
-        material = new Material(Sheets.CHEST_SHEET, texture);
+        material = new SpriteId(Sheets.CHEST_SHEET, texture);
       }
-      return new LootrChestSpecialRenderer(context.materials(), model, material, openness);
+      return new LootrChestSpecialRenderer(context.sprites(), model, material, openness);
     }
 
     @Override
-    public MapCodec<? extends SpecialModelRenderer.Unbaked> type() {
+    public MapCodec<? extends SpecialModelRenderer.Unbaked<Void>> type() {
       return MAP_CODEC;
     }
   }

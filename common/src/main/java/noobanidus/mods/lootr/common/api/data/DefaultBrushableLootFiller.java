@@ -50,7 +50,7 @@ public class DefaultBrushableLootFiller implements LootFiller {
         LootrAPI.LOG.error("Unable to fill loot container in {} at {} as the loot table '{}' couldn't be resolved! Please search the loot table in `latest.log` to see if there are errors in loading.", level.dimension()
             .identifier(), pos, lootTable.identifier());
         if (LootrAPI.reportUnresolvedTables()) {
-          player.displayClientMessage(LootrAPI.getInvalidTableComponent(lootTable), false);
+          player.sendSystemMessage(LootrAPI.getInvalidTableComponent(lootTable));
         }
       }
 

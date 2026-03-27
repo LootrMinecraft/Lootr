@@ -45,12 +45,13 @@ dependencies {
 
     //modImplementation "maven.modrinth:jade:${project.jade_version}+fabric"
 
-    //modCompileOnly("me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config}")
-    //modLocalRuntime("me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config}")
     //modCompileOnly "dev.thomasglasser.sherdsapi:sherdsapi-fabric-${minecraft_version}:${sherdsapi_version}"
 
     implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:${rootProject.mixin_extras_version}"))
     implementation("io.github.llamalad7:mixinextras-fabric:${rootProject.mixin_extras_version}")
+
+
+    implementation "com.teamresourceful.resourcefulconfig:resourcefulconfig-fabric-26.1:4.0.0"
 }
 
 publishMods {
@@ -204,7 +205,7 @@ processResources {
     }
 
     from("../datapacks") {
-        into("datapacks")
+        into("resourcepacks")
         include("lootr_no_advancements/**")
         include("lootr_no_suspicious_blocks/**")
         exclude("**/.cache/**")

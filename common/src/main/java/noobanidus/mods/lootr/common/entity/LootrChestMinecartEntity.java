@@ -30,14 +30,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
-import noobanidus.mods.lootr.common.api.type.BuiltInLootrTypes;
-import noobanidus.mods.lootr.common.api.wrapper.ILootrEntityWrapper;
-import noobanidus.mods.lootr.common.api.type.ILootrType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.data.ILootrInfo;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.common.api.type.BuiltInLootrTypes;
+import noobanidus.mods.lootr.common.api.type.ILootrType;
+import noobanidus.mods.lootr.common.api.wrapper.ILootrEntityWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -109,22 +109,22 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
       if (LootrAPI.isBreakDisabled()) {
         if (player.getAbilities().instabuild) {
           if (!player.isShiftKeyDown()) {
-            player.displayClientMessage(Component.translatable("lootr.message.cannot_break_sneak")
-                .setStyle(LootrAPI.getChatStyle()), false);
+            player.sendSystemMessage(Component.translatable("lootr.message.cannot_break_sneak")
+                .setStyle(LootrAPI.getChatStyle()));
             return true;
           } else {
             return false;
           }
         } else {
-          player.displayClientMessage(Component.translatable("lootr.message.cannot_break")
-              .setStyle(LootrAPI.getChatStyle()), false);
+          player.sendSystemMessage(Component.translatable("lootr.message.cannot_break")
+              .setStyle(LootrAPI.getChatStyle()));
           return true;
         }
       } else if (!source.getEntity().isShiftKeyDown()) {
-        ((Player) source.getEntity()).displayClientMessage(Component.translatable("lootr.message.cart_should_sneak")
-            .setStyle(LootrAPI.getChatStyle()), false);
-        ((Player) source.getEntity()).displayClientMessage(Component.translatable("lootr.message.cart_should_sneak2")
-            .setStyle(LootrAPI.getChatStyle()), false);
+        ((Player) source.getEntity()).sendSystemMessage(Component.translatable("lootr.message.cart_should_sneak")
+            .setStyle(LootrAPI.getChatStyle()));
+        ((Player) source.getEntity()).sendSystemMessage(Component.translatable("lootr.message.cart_should_sneak2")
+            .setStyle(LootrAPI.getChatStyle()));
         return true;
       } else //noinspection RedundantIfStatement
         if (source.getEntity().isShiftKeyDown()) {
@@ -180,7 +180,6 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
 
-
   @Override
   public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
     if (level().isClientSide() || player.isSpectator() || !(player instanceof ServerPlayer serverPlayer)) {
@@ -194,7 +193,6 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     }
     return InteractionResult.SUCCESS;
   }
-
 
 
   @Override

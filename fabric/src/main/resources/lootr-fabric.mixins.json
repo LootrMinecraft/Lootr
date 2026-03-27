@@ -15,7 +15,6 @@
     "defaultRequire": 1
   },
   "client": [
-    "client.MixinClientLevel",
-    "client.MixinClientPacketListener"
+    "client.MixinClientLevel"
   ]
 }

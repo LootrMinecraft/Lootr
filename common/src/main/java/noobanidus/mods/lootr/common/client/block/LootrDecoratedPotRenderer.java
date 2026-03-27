@@ -12,11 +12,11 @@ import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.Material;
-import net.minecraft.client.resources.model.MaterialSet;
+import net.minecraft.client.resources.model.sprite.SpriteGetter;
+import net.minecraft.client.resources.model.sprite.SpriteId;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
@@ -26,8 +26,8 @@ import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.world.level.block.entity.DecoratedPotPatterns;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.integration.PotDecorationsAdapter;
 import noobanidus.mods.lootr.common.api.LootrConstants;
+import noobanidus.mods.lootr.common.api.integration.PotDecorationsAdapter;
 import noobanidus.mods.lootr.common.block.entity.LootrDecoratedPotBlockEntity;
 import noobanidus.mods.lootr.common.client.ClientHooks;
 import noobanidus.mods.lootr.common.client.state.LootrDecoratedPotBlockRenderState;
@@ -41,12 +41,12 @@ import java.util.function.Consumer;
 
 public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecoratedPotBlockEntity, LootrDecoratedPotBlockRenderState> {
   public static final Identifier DECORATED_POT_SHEET = Identifier.withDefaultNamespace("textures/atlas/decorated_pot.png");
-  private static final Material DECORATED_POT = new Material(DECORATED_POT_SHEET, LootrAPI.rl("entity/loot_pot"));
-  private static final Material DECORATED_POT_OPENED = new Material(DECORATED_POT_SHEET, LootrAPI.rl("entity/loot_pot_open"));
+  private static final SpriteId DECORATED_POT = new SpriteId(DECORATED_POT_SHEET, LootrAPI.rl("entity/loot_pot"));
+  private static final SpriteId DECORATED_POT_OPENED = new SpriteId(DECORATED_POT_SHEET, LootrAPI.rl("entity/loot_pot_open"));
 
   public static final ModelLayerLocation OPEN_POT_LAYER = new ModelLayerLocation(LootrConstants.DECORATED_POT, "main");
 
-  private final MaterialSet materials;
+  private final SpriteGetter materials;
 
   private final ModelPart neck;
   private final ModelPart frontSide;
@@ -60,14 +60,14 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
   private final ModelPart sherds;
 
   public LootrDecoratedPotRenderer(BlockEntityRendererProvider.Context context) {
-    this(context.entityModelSet(), context.materials());
+    this(context.entityModelSet(), context.sprites());
   }
 
-  public LootrDecoratedPotRenderer (SpecialModelRenderer.BakingContext context) {
-    this(context.entityModelSet(), context.materials());
+  public LootrDecoratedPotRenderer(SpecialModelRenderer.BakingContext context) {
+    this(context.entityModelSet(), context.sprites());
   }
 
-  public LootrDecoratedPotRenderer(EntityModelSet context, MaterialSet materials) {
+  public LootrDecoratedPotRenderer(EntityModelSet context, SpriteGetter materials) {
     this.materials = materials;
     ModelPart modelPart = context.bakeLayer(ModelLayers.DECORATED_POT_BASE);
     this.neck = modelPart.getChild("neck");
@@ -83,33 +83,38 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
     this.sherds = modelPart3.getChild("sherds");
   }
 
-	public static LayerDefinition createBodyLayer() {
-		MeshDefinition meshdefinition = new MeshDefinition();
-		PartDefinition partdefinition = meshdefinition.getRoot();
+  public static LayerDefinition createBodyLayer() {
+    MeshDefinition meshdefinition = new MeshDefinition();
+    PartDefinition partdefinition = meshdefinition.getRoot();
 
-		PartDefinition sherds = partdefinition.addOrReplaceChild("sherds", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+    PartDefinition sherds = partdefinition.addOrReplaceChild("sherds", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		sherds.addOrReplaceChild("angled_sherd1_r1", CubeListBuilder.create().texOffs(17, 21).addBox(-0.5F, -0.5F, -4.5F, 5.0F, 1.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.5F, -3.5F, 1.5F, 0.0F, 0.0F, 0.829F));
+    sherds.addOrReplaceChild("angled_sherd1_r1", CubeListBuilder.create().texOffs(17, 21)
+        .addBox(-0.5F, -0.5F, -4.5F, 5.0F, 1.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.5F, -3.5F, 1.5F, 0.0F, 0.0F, 0.829F));
 
-		sherds.addOrReplaceChild("sherd2_r1", CubeListBuilder.create().texOffs(14, 19).addBox(-4.5F, -0.5F, -4.5F, 9.0F, 1.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.0F, -1.5F, 0.5F, 0.0F, 0.1309F, 0.0F));
+    sherds.addOrReplaceChild("sherd2_r1", CubeListBuilder.create().texOffs(14, 19)
+        .addBox(-4.5F, -0.5F, -4.5F, 9.0F, 1.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.0F, -1.5F, 0.5F, 0.0F, 0.1309F, 0.0F));
 
-		sherds.addOrReplaceChild("sherd1_r1", CubeListBuilder.create().texOffs(4, 16).addBox(-4.5F, -0.5F, -3.5F, 10.0F, 1.0F, 11.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.5F, -0.5F, -1.5F, 0.0F, -0.3054F, 0.0F));
+    sherds.addOrReplaceChild("sherd1_r1", CubeListBuilder.create().texOffs(4, 16)
+        .addBox(-4.5F, -0.5F, -3.5F, 10.0F, 1.0F, 11.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.5F, -0.5F, -1.5F, 0.0F, -0.3054F, 0.0F));
 
-		partdefinition.addOrReplaceChild("open", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -4.0F, 8.0F, 3.0F, 8.0F, new CubeDeformation(0.0F))
-		.texOffs(0, 5).addBox(-2.8257F, 2.4924F, -3.0F, 6.0F, 1.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.75F, -5F, 0.0F, 0.0F, -0.1309F, -0.0873F));
+    partdefinition.addOrReplaceChild("open", CubeListBuilder.create().texOffs(0, 0)
+        .addBox(-4.0F, -0.5F, -4.0F, 8.0F, 3.0F, 8.0F, new CubeDeformation(0.0F))
+        .texOffs(0, 5)
+        .addBox(-2.8257F, 2.4924F, -3.0F, 6.0F, 1.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.75F, -5F, 0.0F, 0.0F, -0.1309F, -0.0873F));
 
-		return LayerDefinition.create(meshdefinition, 64, 32);
-	}
+    return LayerDefinition.create(meshdefinition, 64, 32);
+  }
 
-  private static final Map<Identifier, Material> cachedMaterials = new HashMap<>();
+  private static final Map<Identifier, SpriteId> cachedSpriteIds = new HashMap<>();
 
-  private static Material getSideMaterial(ItemStack item) {
+  private static SpriteId getSideSpriteId(ItemStack item) {
     if (!item.isEmpty()) {
       Identifier customSide = SherdsIntegration.getCustomSideTexture(item);
       if (customSide != null) {
-        return cachedMaterials.computeIfAbsent(customSide, rl -> new Material(DECORATED_POT_SHEET, rl.withPrefix("entity/decorated_pot/")));
+        return cachedSpriteIds.computeIfAbsent(customSide, rl -> new SpriteId(DECORATED_POT_SHEET, rl.withPrefix("entity/decorated_pot/")));
       } else {
-        Material material = Sheets.getDecoratedPotMaterial(DecoratedPotPatterns.getPatternFromItem(item.getItem()));
+        SpriteId material = Sheets.getDecoratedPotSprite(DecoratedPotPatterns.getPatternFromItem(item.getItem()));
         if (material != null) {
           return material;
         }
@@ -132,7 +137,8 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
     renderState.direction = blockEntity.getDirection();
     DecoratedPotBlockEntity.WobbleStyle decoratedpotblockentity$wobblestyle = blockEntity.lastWobbleStyle;
     if (decoratedpotblockentity$wobblestyle != null && blockEntity.getLevel() != null) {
-      renderState.wobbleProgress = ((float)(blockEntity.getLevel().getGameTime() - blockEntity.wobbleStartedAtTick) + partialTick)
+      renderState.wobbleProgress = ((float) (blockEntity.getLevel()
+          .getGameTime() - blockEntity.wobbleStartedAtTick) + partialTick)
           / decoratedpotblockentity$wobblestyle.duration;
     } else {
       renderState.wobbleProgress = 0.0F;
@@ -184,7 +190,7 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
       nodeCollector.submitModelPart(this.neck, poseStack, rendertype, packedLight, packedOverlay, textureatlassprite, false, false, -1, null, outlineColor);
       nodeCollector.submitModelPart(this.top, poseStack, rendertype, packedLight, packedOverlay, textureatlassprite, false, false, -1, null, outlineColor);
       nodeCollector.submitModelPart(this.bottom, poseStack, rendertype, packedLight, packedOverlay, textureatlassprite, false, false, -1, null, outlineColor);
-      Material material = getSideMaterial(decorations.front());
+      SpriteId material = getSideSpriteId(decorations.front());
       nodeCollector.submitModelPart(
           this.frontSide,
           poseStack,
@@ -198,7 +204,7 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
           null,
           outlineColor
       );
-      Material material1 = getSideMaterial(decorations.back());
+      SpriteId material1 = getSideSpriteId(decorations.back());
       nodeCollector.submitModelPart(
           this.backSide,
           poseStack,
@@ -212,7 +218,7 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
           null,
           outlineColor
       );
-      Material material2 = getSideMaterial(decorations.left());
+      SpriteId material2 = getSideSpriteId(decorations.left());
       nodeCollector.submitModelPart(
           this.leftSide,
           poseStack,
@@ -226,7 +232,7 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
           null,
           outlineColor
       );
-      Material material3 = getSideMaterial(decorations.right());
+      SpriteId material3 = getSideSpriteId(decorations.right());
       nodeCollector.submitModelPart(
           this.rightSide,
           poseStack,

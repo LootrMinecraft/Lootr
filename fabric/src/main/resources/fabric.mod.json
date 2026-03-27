@@ -22,12 +22,6 @@
     ],
     "client": [
       "noobanidus.mods.lootr.fabric.LootrClient"
-    ],
-    "modmenu": [
-      "noobanidus.mods.lootr.fabric.integration.ModMenuIntegration"
-    ],
-    "jade": [
-      "noobanidus.mods.lootr.common.integration.jade.LootrWailaPlugin"
     ]
   },
   "mixins": [
@@ -35,10 +29,6 @@
     "lootr-fabric.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.18",
-    "fabric": ">=0.140",
-    "minecraft": "${minecraft_version}",
-    "java": ">=21",
-    "cloth-config": ">=21.11.153"
+
   }
 }

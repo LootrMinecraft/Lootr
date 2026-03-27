@@ -154,18 +154,18 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
       if (LootrAPI.isBreakDisabled()) {
         if (player.getAbilities().instabuild) {
           if (!player.isShiftKeyDown()) {
-            player.displayClientMessage(Component.translatable("lootr.message.cannot_break_sneak")
-                .setStyle(LootrAPI.getChatStyle()), false);
+            player.sendSystemMessage(Component.translatable("lootr.message.cannot_break_sneak")
+                .setStyle(LootrAPI.getChatStyle()));
           }
         } else {
-          player.displayClientMessage(Component.translatable("lootr.message.cannot_break")
-              .setStyle(LootrAPI.getChatStyle()), false);
+          player.sendSystemMessage(Component.translatable("lootr.message.cannot_break")
+              .setStyle(LootrAPI.getChatStyle()));
         }
       } else if (!source.getEntity().isShiftKeyDown()) {
-        ((Player) source.getEntity()).displayClientMessage(Component.translatable("lootr.message.cart_should_sneak")
-            .setStyle(LootrAPI.getChatStyle()), false);
-        ((Player) source.getEntity()).displayClientMessage(Component.translatable("lootr.message.cart_should_sneak2")
-            .setStyle(LootrAPI.getChatStyle()), false);
+        ((Player) source.getEntity()).sendSystemMessage(Component.translatable("lootr.message.cart_should_sneak")
+            .setStyle(LootrAPI.getChatStyle()));
+        ((Player) source.getEntity()).sendSystemMessage(Component.translatable("lootr.message.cart_should_sneak2")
+            .setStyle(LootrAPI.getChatStyle()));
       }
     }
   }

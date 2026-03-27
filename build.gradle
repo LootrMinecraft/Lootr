@@ -56,6 +56,18 @@ allprojects {
                 includeGroupByRegex("dev\\.emi.*")
             }
         }
+        exclusiveContent {
+            forRepository {
+                maven {
+                    // Location of the maven that hosts Team Resourceful's jars.
+                    name = "Team Resourceful Maven"
+                    url = "https://maven.teamresourceful.com/repository/maven-public/"
+                }
+            }
+            filter {
+                includeGroupAndSubgroups("com.teamresourceful.resourcefulconfig")
+            }
+        }
     }
 
     tasks.register('buildAndRelease') {
@@ -78,6 +90,7 @@ subprojects {
         compileOnly "org.jetbrains:annotations:${jetbrains_annotations_version}"
         compileOnly("com.google.auto.service:auto-service-annotations:${rootProject.auto_service_version}")
         annotationProcessor("com.google.auto.service:auto-service:${rootProject.auto_service_version}")
+        implementation "com.teamresourceful.resourcefulconfig:resourcefulconfig-common-26.1:4.0.0"
     }
 
     processResources {

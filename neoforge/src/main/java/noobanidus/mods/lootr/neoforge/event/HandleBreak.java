@@ -33,22 +33,22 @@ public class HandleBreak {
         if (player.getAbilities().instabuild) {
           if (!player.isShiftKeyDown()) {
             event.setCanceled(true);
-            player.displayClientMessage(Component.translatable("lootr.message.cannot_break_sneak")
-                .setStyle(LootrAPI.getChatStyle()), false);
+            player.sendSystemMessage(Component.translatable("lootr.message.cannot_break_sneak")
+                .setStyle(LootrAPI.getChatStyle()));
           }
         } else {
           event.setCanceled(true);
-          player.displayClientMessage(Component.translatable("lootr.message.cannot_break")
-              .setStyle(LootrAPI.getChatStyle()), false);
+          player.sendSystemMessage(Component.translatable("lootr.message.cannot_break")
+              .setStyle(LootrAPI.getChatStyle()));
         }
       } else {
         if (!event.getPlayer().isShiftKeyDown()) {
           event.setCanceled(true);
-          event.getPlayer().displayClientMessage(Component.translatable("lootr.message.should_sneak")
-              .setStyle(LootrAPI.getChatStyle()), false);
+          event.getPlayer().sendSystemMessage(Component.translatable("lootr.message.should_sneak")
+              .setStyle(LootrAPI.getChatStyle()));
           event.getPlayer()
-              .displayClientMessage(Component.translatable("lootr.message.should_sneak2")
-                  .setStyle(LootrAPI.getChatStyle()), false);
+              .sendSystemMessage(Component.translatable("lootr.message.should_sneak2")
+                  .setStyle(LootrAPI.getChatStyle()));
         }
       }
     }

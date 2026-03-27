@@ -4,12 +4,12 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
-import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import noobanidus.mods.lootr.common.api.integration.PotDecorationsAdapter;
 import noobanidus.mods.lootr.common.client.block.LootrDecoratedPotRenderer;
 import noobanidus.mods.lootr.common.integration.sherdsapi.SherdsIntegration;
 import org.joml.Vector3fc;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 
@@ -26,8 +26,8 @@ public class LootrDecoratedPotSpecialRenderer implements SpecialModelRenderer<Po
   }
 
   @Override
-  public void submit(@org.jspecify.annotations.Nullable PotDecorationsAdapter argument, ItemDisplayContext displayContext, PoseStack poseStack, SubmitNodeCollector nodeCollector, int packedLight, int packedOverlay, boolean hasFoil, int outlineColor) {
-    this.renderer.submit(poseStack, nodeCollector, packedLight, packedOverlay, argument, false, outlineColor);
+  public void submit(@Nullable PotDecorationsAdapter argument, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, int overlayCoords, boolean hasFoil, int outlineColor) {
+    this.renderer.submit(poseStack, submitNodeCollector, lightCoords, overlayCoords, argument, hasFoil, outlineColor);
   }
 
   @Override
@@ -35,21 +35,21 @@ public class LootrDecoratedPotSpecialRenderer implements SpecialModelRenderer<Po
     renderer.getExtents(p_470829_);
   }
 
-  public record Unbaked() implements SpecialModelRenderer.Unbaked {
+  public record Unbaked() implements SpecialModelRenderer.Unbaked<PotDecorationsAdapter> {
     private static final Unbaked INSTANCE = new Unbaked();
     public static final MapCodec<Unbaked> MAP_CODEC = MapCodec.unit(INSTANCE);
 
     @Override
-    public SpecialModelRenderer<?> bake(BakingContext context) {
+    public SpecialModelRenderer<PotDecorationsAdapter> bake(BakingContext context) {
       return new LootrDecoratedPotSpecialRenderer(new LootrDecoratedPotRenderer(context));
     }
 
     @Override
-    public MapCodec<? extends SpecialModelRenderer.Unbaked> type() {
+    public MapCodec<? extends SpecialModelRenderer.Unbaked<PotDecorationsAdapter>> type() {
       return MAP_CODEC;
     }
 
-    public static Unbaked decoratedPot () {
+    public static Unbaked decoratedPot() {
       return INSTANCE;
     }
   }

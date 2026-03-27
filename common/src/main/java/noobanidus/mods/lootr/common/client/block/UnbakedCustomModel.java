@@ -3,13 +3,16 @@ package noobanidus.mods.lootr.common.client.block;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.client.renderer.block.model.*;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
+import net.minecraft.client.renderer.block.dispatch.SingleVariant;
+import net.minecraft.client.renderer.block.dispatch.Variant;
 import net.minecraft.client.resources.model.ModelBaker;
+import net.minecraft.client.resources.model.SimpleModelWrapper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import noobanidus.mods.lootr.common.api.LootrAPI;
@@ -107,7 +110,7 @@ public abstract class UnbakedCustomModel implements BlockStateModel.Unbaked {
     }
 
     @Override
-    public void collectParts(@NonNull RandomSource random, @NonNull List<BlockModelPart> output) {
+    public void collectParts(@NonNull RandomSource random, @NonNull List<BlockStateModelPart> output) {
       if (LootrAPI.isVanillaTextures()) {
         vanilla.collectParts(random, output);
       } else {
@@ -117,15 +120,6 @@ public abstract class UnbakedCustomModel implements BlockStateModel.Unbaked {
           unopened.collectParts(random, output);
         }
       }
-    }
-
-    @Override
-    public TextureAtlasSprite particleIcon() {
-      if (LootrAPI.isVanillaTextures()) {
-        return vanilla.particleIcon();
-      }
-
-      return unopened.particleIcon();
     }
 
     protected abstract boolean isOpenFromBATG(BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource random);

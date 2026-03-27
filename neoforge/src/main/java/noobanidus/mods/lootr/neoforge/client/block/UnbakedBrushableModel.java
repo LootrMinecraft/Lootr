@@ -1,13 +1,15 @@
 package noobanidus.mods.lootr.neoforge.client.block;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.client.renderer.block.model.BlockModelPart;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
-import net.minecraft.client.renderer.block.model.Variant;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
+import net.minecraft.client.renderer.block.dispatch.Variant;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.client.model.DynamicBlockStateModel;
@@ -39,7 +41,7 @@ public class UnbakedBrushableModel extends noobanidus.mods.lootr.common.client.b
     }
 
     @Override
-    public void collectParts(BlockAndTintGetter blockAndTintGetter, BlockPos blockPos, BlockState blockState, RandomSource randomSource, List<BlockModelPart> list) {
+    public void collectParts(BlockAndTintGetter blockAndTintGetter, BlockPos blockPos, BlockState blockState, RandomSource randomSource, List<BlockStateModelPart> list) {
       if (isOpenFromBATG(blockAndTintGetter, blockPos, blockState, randomSource)) {
         opened.collectParts(blockAndTintGetter, blockPos, blockState, randomSource, list);
         return;
@@ -56,6 +58,16 @@ public class UnbakedBrushableModel extends noobanidus.mods.lootr.common.client.b
     @Override
     protected boolean isOpenFromBATG(BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource random) {
       return level.getModelData(pos).get(ModBlockProperties.OPENED) == Boolean.TRUE;
+    }
+
+    @Override
+    public Material.Baked particleMaterial() {
+      return stage_0.particleMaterial();
+    }
+
+    @Override
+    public @BakedQuad.MaterialFlags int materialFlags() {
+      return stage_0.materialFlags();
     }
   }
 }

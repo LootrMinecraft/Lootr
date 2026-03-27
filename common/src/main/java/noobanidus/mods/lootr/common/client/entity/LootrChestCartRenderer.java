@@ -5,38 +5,39 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.object.chest.ChestModel;
 import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.block.BlockModelRenderState;
 import net.minecraft.client.renderer.entity.AbstractMinecartRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.Material;
-import net.minecraft.client.resources.model.MaterialSet;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.resources.model.sprite.SpriteGetter;
+import net.minecraft.client.resources.model.sprite.SpriteId;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.client.block.LootrChestBlockRenderer;
 import noobanidus.mods.lootr.common.client.state.LootrChestCartRenderState;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
 
 public class LootrChestCartRenderer<T extends LootrChestMinecartEntity> extends AbstractMinecartRenderer<T, LootrChestCartRenderState> {
-  private final MaterialSet materials;
+  private final SpriteGetter materials;
   private final ChestModel chestModel;
 
   public LootrChestCartRenderer(EntityRendererProvider.Context context, ModelLayerLocation modelLayerLocation) {
     super(context, modelLayerLocation);
     this.chestModel = new ChestModel(context.bakeLayer(ModelLayers.CHEST));
-    this.materials = context.getMaterials();
+    this.materials = context.getSprites();
   }
 
   @Override
-  protected void submitMinecartContents(LootrChestCartRenderState renderState, BlockState blockState, PoseStack poseStack, SubmitNodeCollector nodeCollector, int packedLight) {
+  protected void submitMinecartContents(LootrChestCartRenderState renderState, BlockModelRenderState blockModel, PoseStack poseStack, SubmitNodeCollector nodeCollector, int lightCoords) {
+    super.submitMinecartContents(renderState, blockModel, poseStack, nodeCollector, lightCoords);
     poseStack.pushPose();
     poseStack.translate(0.5F, 0.5F, 0.5F);
     poseStack.translate(-0.5F, -0.5F, -0.5F);
     float f = 0;
     f = 1.0F - f;
     f = 1.0F - f * f * f;
-    Material material = LootrChestBlockRenderer.getMaterial(false, renderState.open);
+    SpriteId material = LootrChestBlockRenderer.getMaterial(false, renderState.open);
     RenderType rendertype = material.renderType(this.chestModel::renderType);
     TextureAtlasSprite textureatlassprite = this.materials.get(material);
     nodeCollector.submitModel(

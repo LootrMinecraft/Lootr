@@ -26,7 +26,9 @@ import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.world.level.block.entity.PotDecorations;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.*;
-import noobanidus.mods.lootr.common.api.*;
+import noobanidus.mods.lootr.common.api.ILootrAPI;
+import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.LootrConstants;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
@@ -90,20 +92,20 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
     }
     if (LootrAPI.isDecayed(provider) && provider.canDecay()) {
       provider.performDecay();
-      player.displayClientMessage(Component.translatable("lootr.message.decayed")
-          .setStyle(LootrAPI.getDecayStyle()), true);
+      player.sendOverlayMessage(Component.translatable("lootr.message.decayed")
+          .setStyle(LootrAPI.getDecayStyle()));
       return;
     } else {
       if (provider.canDecay()) {
         int decayValue = LootrAPI.getRemainingDecayValue(provider);
         if (decayValue > 0 && LootrAPI.shouldNotify(decayValue)) {
-          player.displayClientMessage(Component.translatable("lootr.message.decay_in", decayValue / 20)
-              .setStyle(LootrAPI.getDecayStyle()), true);
+          player.sendOverlayMessage(Component.translatable("lootr.message.decay_in", decayValue / 20)
+              .setStyle(LootrAPI.getDecayStyle()));
         } else if (decayValue == -1) {
           if (LootrAPI.isDecaying(provider)) {
             LootrAPI.setDecaying(provider);
-            player.displayClientMessage(Component.translatable("lootr.message.decay_start", LootrAPI.getDecayValue() / 20)
-                .setStyle(LootrAPI.getDecayStyle()), true);
+            player.sendOverlayMessage(Component.translatable("lootr.message.decay_start", LootrAPI.getDecayValue() / 20)
+                .setStyle(LootrAPI.getDecayStyle()));
           }
         }
       }
@@ -113,20 +115,20 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
     if (LootrAPI.isRefreshed(provider) && provider.canRefresh()) {
       provider.performRefresh();
       provider.performClose();
-      player.displayClientMessage(Component.translatable("lootr.message.refreshed")
-          .setStyle(LootrAPI.getRefreshStyle()), true);
+      player.sendOverlayMessage(Component.translatable("lootr.message.refreshed")
+          .setStyle(LootrAPI.getRefreshStyle()));
       shouldUpdate = true;
     }
     if (provider.canRefresh()) {
       int refreshValue = LootrAPI.getRemainingRefreshValue(provider);
       if (refreshValue > 0 && LootrAPI.shouldNotify(refreshValue)) {
-        player.displayClientMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20)
-            .setStyle(LootrAPI.getRefreshStyle()), true);
+        player.sendOverlayMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20)
+            .setStyle(LootrAPI.getRefreshStyle()));
       } else if (refreshValue == -1) {
         if (LootrAPI.isRefreshing(provider)) {
           LootrAPI.setRefreshing(provider);
-          player.displayClientMessage(Component.translatable("lootr.message.refresh_start", LootrAPI.getRefreshValue() / 20)
-              .setStyle(LootrAPI.getRefreshStyle()), true);
+          player.sendOverlayMessage(Component.translatable("lootr.message.refresh_start", LootrAPI.getRefreshValue() / 20)
+              .setStyle(LootrAPI.getRefreshStyle()));
         }
       }
     }
