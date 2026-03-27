@@ -17,7 +17,8 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(StructureTemplate.class)
 public class MixinStructureTemplate {
-  @WrapOperation(method = "lambda$placeEntities$0", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/ServerLevelAccessor;addFreshEntityWithPassengers(Lnet/minecraft/world/entity/Entity;)V"))
+  @SuppressWarnings("UnresolvedMixinReference")
+  @WrapOperation(method = {"lambda$placeEntities$0", "lambda$addEntitiesToWorld$0"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/ServerLevelAccessor;addFreshEntityWithPassengers(Lnet/minecraft/world/entity/Entity;)V"))
   private static void lootr$AddEntitiesToWorldInject(ServerLevelAccessor level, Entity entity, Operation<Void> original) {
     if (LootrAPI.shouldConvertStructureItemFrames() && entity.is(LootrTags.Entity.CONVERT_ITEM_FRAMES) && !entity.entityTags()
         .contains(LootrConstants.CAN_CONVERT_TAG) /* CAN_CONVERT_TAG is handled elsewhere */) {
