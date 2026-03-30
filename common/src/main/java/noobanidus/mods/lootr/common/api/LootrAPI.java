@@ -452,6 +452,10 @@ public class LootrAPI {
     INSTANCE.refreshSections();
   }
 
+  public static void refreshServices () {
+    INSTANCE.refreshServices();
+  }
+
   public static List<ILootrFilter> getFilters() {
     return INSTANCE.getFilters();
   }

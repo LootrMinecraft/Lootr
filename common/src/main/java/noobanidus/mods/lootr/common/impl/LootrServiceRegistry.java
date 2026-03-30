@@ -8,9 +8,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import noobanidus.mods.lootr.common.api.ILootrAPI;
-import noobanidus.mods.lootr.common.api.wrapper.ILootrBlockEntityWrapper;
-import noobanidus.mods.lootr.common.api.wrapper.ILootrEntityWrapper;
-import noobanidus.mods.lootr.common.api.type.ILootrType;
 import noobanidus.mods.lootr.common.api.adapter.AdapterMap;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
@@ -23,6 +20,9 @@ import noobanidus.mods.lootr.common.api.processor.ILootrBlockEntityProcessor;
 import noobanidus.mods.lootr.common.api.processor.ILootrEntityProcessor;
 import noobanidus.mods.lootr.common.api.replacement.BlockReplacementMap;
 import noobanidus.mods.lootr.common.api.replacement.ILootrBlockReplacementProvider;
+import noobanidus.mods.lootr.common.api.type.ILootrType;
+import noobanidus.mods.lootr.common.api.wrapper.ILootrBlockEntityWrapper;
+import noobanidus.mods.lootr.common.api.wrapper.ILootrEntityWrapper;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -201,8 +201,8 @@ public class LootrServiceRegistry {
   }
 
   @Nullable
-  static <T>ILootrItemFrameAdapter<T> getItemFrameAdapter (T type) {
-    return (ILootrItemFrameAdapter<T>)  getInstance().itemFrameAdapterMap.getAdapter(type);
+  static <T> ILootrItemFrameAdapter<T> getItemFrameAdapter(T type) {
+    return (ILootrItemFrameAdapter<T>) getInstance().itemFrameAdapterMap.getAdapter(type);
   }
 
   @Nullable

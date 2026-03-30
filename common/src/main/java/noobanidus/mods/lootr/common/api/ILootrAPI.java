@@ -303,6 +303,8 @@ public interface ILootrAPI {
 
     return server.getWorldData().overworldData().getGameTime();
   }
+
+  void refreshServices();
 }
 
 

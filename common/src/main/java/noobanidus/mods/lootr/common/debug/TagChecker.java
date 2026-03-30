@@ -27,7 +27,7 @@ public class TagChecker {
       return;
     }
 
-    LootrServiceRegistry.clearReplacements();
+    LootrAPI.refreshSections();
     BuiltInRegistries.BLOCK.get(LootrTags.Blocks.CONVERT_BARRELS).ifPresentOrElse(tag -> {
       if (tag.size() == 0) {
         LootrAPI.LOG.error("[Lootr Tag Error] Block tag `lootr:convert/barrels` is empty. Barrels will not be converted to Lootr barrels. If this is intentional, you can disregard this message.");

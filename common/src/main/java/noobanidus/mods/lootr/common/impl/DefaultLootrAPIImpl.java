@@ -387,6 +387,11 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
+  public void refreshServices() {
+    LootrServiceRegistry.clearReplacements();
+  }
+
+  @Override
   @Nullable
   public BlockState replacementBlockState(BlockState original) {
     return LootrServiceRegistry.getReplacementBlockState(original);

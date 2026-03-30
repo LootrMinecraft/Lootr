@@ -10,7 +10,6 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
-import noobanidus.mods.lootr.common.impl.LootrServiceRegistry;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -34,8 +33,6 @@ public class ConfigManager {
   private static Set<String> LOOT_MODIDS = null;
 
   public static void reset() {
-    // TODO: This needs to be reset via ApI
-    LootrServiceRegistry.clearReplacements();
     MODID_DIM_WHITELIST = null;
     MODID_DIM_BLACKLIST = null;
     DIM_WHITELIST = null;
@@ -49,6 +46,7 @@ public class ConfigManager {
     REFRESH_MODS = null;
     REFRESH_TABLES = null;
     LootrAPI.refreshSections();
+    LootrAPI.refreshServices();
   }
 
   public static Set<ResourceKey<Level>> getDimensionWhitelist() {
