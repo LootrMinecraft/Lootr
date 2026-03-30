@@ -1,12 +1,9 @@
-package noobanidus.mods.lootr.common.config;
+package noobanidus.mods.lootr.common.api.config;
 
 import com.teamresourceful.resourcefulconfig.api.annotations.*;
 import com.teamresourceful.resourcefulconfig.api.types.entries.Observable;
 import net.minecraft.resources.Identifier;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.config.BreakMode;
-import noobanidus.mods.lootr.common.api.config.ResistanceMode;
-import noobanidus.mods.lootr.common.api.config.SaveMode;
 
 @Config(value = "lootr-common",
     categories = {

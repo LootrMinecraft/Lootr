@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.common.config;
+package noobanidus.mods.lootr.common.api.config;
 
 import com.teamresourceful.resourcefulconfig.api.loader.Configurator;
 import noobanidus.mods.lootr.common.api.LootrAPI;

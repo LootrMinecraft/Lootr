@@ -4,11 +4,9 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.client.gui.ConfigurationScreen;
-import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.config.LootrClientConfig;
-import noobanidus.mods.lootr.common.config.LootrConfig;
+import noobanidus.mods.lootr.common.api.config.LootrClientConfig;
+import noobanidus.mods.lootr.common.api.config.LootrConfig;
 
 @Mod(value= LootrAPI.MODID, dist= Dist.CLIENT)
 public class LootrClient {

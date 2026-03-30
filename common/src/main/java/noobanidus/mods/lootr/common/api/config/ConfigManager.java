@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.common.config;
+package noobanidus.mods.lootr.common.api.config;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -34,6 +34,7 @@ public class ConfigManager {
   private static Set<String> LOOT_MODIDS = null;
 
   public static void reset() {
+    // TODO: This needs to be reset via ApI
     LootrServiceRegistry.clearReplacements();
     MODID_DIM_WHITELIST = null;
     MODID_DIM_BLACKLIST = null;
