@@ -480,10 +480,6 @@ public class LootrAPI {
     return INSTANCE.shouldReplaceWhenDecayed();
   }
 
-  public static boolean shouldWarnNoLootTables() {
-    return INSTANCE.shouldWarnNoLootTables();
-  }
-
   public static void postProcess(ServerLevel level, BlockPos position, BlockEntity newBlockEntity, BlockState newState, ResourceKey<LootTable> lootTable, long lootTableSeed) {
     for (ILootrBlockEntityProcessor.Post processor : getBlockEntityPostProcessors()) {
       processor.process(level, position, newBlockEntity, newState, lootTable, lootTableSeed);

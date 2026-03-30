@@ -13,8 +13,6 @@ import noobanidus.mods.lootr.common.config.LootrConfig;
 @Mod(value= LootrAPI.MODID, dist= Dist.CLIENT)
 public class LootrClient {
   public LootrClient(ModContainer modContainer, IEventBus modBus) {
-    modContainer.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
-
     LootrConfig.getConfigurator().register(LootrClientConfig.class);
   }
 }

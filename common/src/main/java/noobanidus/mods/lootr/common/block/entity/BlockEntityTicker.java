@@ -241,9 +241,6 @@ public final class BlockEntityTicker {
       ResourceKey<LootTable> table = adapter.getLootTable(blockEntity);
       long seed = adapter.getLootSeed(blockEntity);
       if (table == null) {
-        if (LootrAPI.shouldWarnNoLootTables()) {
-          LootrAPI.LOG.warn("Potential block entity {} has no loot table in {} ({})", blockEntity, level.dimension(), entityPos);
-        }
         continue;
       }
       if (LootrAPI.isLootTableBlacklisted(table)) {
