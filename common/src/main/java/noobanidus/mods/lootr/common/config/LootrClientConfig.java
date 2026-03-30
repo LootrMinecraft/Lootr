@@ -10,7 +10,7 @@ public class LootrClientConfig {
   public static class Particles {
     @ConfigEntry(id="unopened_particles", translation="lootr.config.particles.unopened_particles")
     @Comment(value="", translation = "lootr.config.particles.unopened_particles.desc")
-    public boolean showUnopenedParticles = true;
+    public static boolean showUnopenedParticles = true;
   }
 
   @Category("Textures")
@@ -18,6 +18,6 @@ public class LootrClientConfig {
   public static class Textures {
     @ConfigEntry(id="vanilla_textures", translation="lootr.config.textures.vanilla_textures")
     @Comment(value="", translation = "lootr.config.textures.vanilla_textures.desc")
-    public boolean useVanillaTextures = false;
+    public static boolean useVanillaTextures = false;
   }
 }

@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
-import noobanidus.mods.lootr.fabric.config.ConfigManager;
+import noobanidus.mods.lootr.common.config.ConfigManager;
 import org.jetbrains.annotations.Nullable;
 
 public class HandleBreak {

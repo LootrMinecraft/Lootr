@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.fabric.config;
+package noobanidus.mods.lootr.common.config;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -9,18 +9,16 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
-import noobanidus.mods.lootr.common.api.config.SaveMode;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
-import noobanidus.mods.lootr.common.config.ConfigManagerBase;
 import noobanidus.mods.lootr.common.impl.LootrServiceRegistry;
 
-import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 
-public class ConfigManager extends ConfigManagerBase {
-  private static final List<Identifier> PROBLEMATIC_CHESTS = Arrays.asList(Identifier.fromNamespaceAndPath("atum", "chests/pharaoh"), Identifier.fromNamespaceAndPath("twilightforest", "structures/stronghold_boss"));
-
+public class ConfigManager {
   private static Set<String> DECAY_MODS = null;
   private static Set<ResourceKey<LootTable>> DECAY_TABLES = null;
   private static Set<String> REFRESH_MODS = null;
@@ -34,16 +32,6 @@ public class ConfigManager extends ConfigManagerBase {
   private static Set<ResourceKey<Level>> REFRESH_DIMS = null;
   private static Set<ResourceKey<LootTable>> LOOT_BLACKLIST = null;
   private static Set<String> LOOT_MODIDS = null;
-
-  public Debug debug = new Debug();
-  public Seed seed = new Seed();
-  public Conversion conversion = new Conversion();
-  public Breaking breaking = new Breaking();
-  public Lists lists = new Lists();
-  public Decay decay = new Decay();
-  public Refresh refresh = new Refresh();
-  public Notifications notifications = new Notifications();
-  public Client client = new Client();
 
   public static void reset() {
     LootrServiceRegistry.clearReplacements();
@@ -62,64 +50,61 @@ public class ConfigManager extends ConfigManagerBase {
     LootrAPI.refreshSections();
   }
 
-  public static ConfigManager get() {
-    return null;
-  }
-
   public static Set<ResourceKey<Level>> getDimensionWhitelist() {
     if (DIM_WHITELIST == null) {
-      DIM_WHITELIST = validateDimensions(get().lists.dimension_whitelist, "dimension_whitelist");
+      DIM_WHITELIST = validateDimensions(LootrCommonConfig.Restrictions.dimensionWhitelist.get(), "dimension_whitelist");
     }
     return DIM_WHITELIST;
   }
 
   public static Set<String> getDimensionModidWhitelist() {
     if (MODID_DIM_WHITELIST == null) {
-      MODID_DIM_WHITELIST = validateStringList(get().lists.modid_dimension_whitelist, "modid_dimension_whitelist");
+      MODID_DIM_WHITELIST = validateStringList(LootrCommonConfig.Restrictions.modidDimensionWhitelist.get(), "modid_dimension_whitelist");
     }
     return MODID_DIM_WHITELIST;
   }
 
   public static Set<ResourceKey<Level>> getDimensionBlacklist() {
     if (DIM_BLACKLIST == null) {
-      DIM_BLACKLIST = validateDimensions(get().lists.dimension_blacklist, "dimension_blacklist");
+      DIM_BLACKLIST = validateDimensions(LootrCommonConfig.Restrictions.dimensionBlacklist.get(), "dimension_blacklist");
     }
     return DIM_BLACKLIST;
   }
 
   public static Set<String> getDimensionModidBlacklist() {
     if (MODID_DIM_BLACKLIST == null) {
-      MODID_DIM_BLACKLIST = validateStringList(get().lists.modid_dimension_blacklist, "modid_dimension_blacklist");
+      MODID_DIM_BLACKLIST = validateStringList(LootrCommonConfig.Restrictions.modidDimensionBlacklist.get(), "modid_dimension_blacklist");
     }
     return MODID_DIM_BLACKLIST;
   }
 
   public static Set<ResourceKey<Level>> getDecayDimensions() {
     if (DECAY_DIMS == null) {
-      DECAY_DIMS = validateDimensions(get().decay.decay_dimensions, "decay_dimensions");
+      DECAY_DIMS = validateDimensions(LootrCommonConfig.Decay.decayDimensions.get(), "decay_dimensions");
     }
     return DECAY_DIMS;
   }
 
   public static Set<ResourceKey<Level>> getRefreshDimensions() {
     if (REFRESH_DIMS == null) {
-      REFRESH_DIMS = validateDimensions(get().refresh.refresh_dimensions, "refresh_dimensions");
+      REFRESH_DIMS = validateDimensions(LootrCommonConfig.Refresh.refreshDimensions.get(), "refresh_dimensions");
     }
     return REFRESH_DIMS;
   }
 
   public static Set<ResourceKey<LootTable>> getLootBlacklist() {
     if (LOOT_BLACKLIST == null) {
-      LOOT_BLACKLIST = validateResourceKeyList(get().lists.loot_table_blacklist, "loot_blacklist", o -> ResourceKey.create(Registries.LOOT_TABLE, o));
+      LOOT_BLACKLIST = validateResourceKeyList(LootrCommonConfig.Restrictions.lootTableBlacklist.get(), "loot_blacklist", o -> ResourceKey.create(Registries.LOOT_TABLE, o));
       // Fixes for #79 and #74
-      PROBLEMATIC_CHESTS.forEach(o -> LOOT_BLACKLIST.add(ResourceKey.create(Registries.LOOT_TABLE, o)));
+      // TODO:
+      LootrAPI.PROBLEMATIC_CHESTS.forEach(o -> LOOT_BLACKLIST.add(ResourceKey.create(Registries.LOOT_TABLE, o)));
     }
     return LOOT_BLACKLIST;
   }
 
   public static Set<String> getLootModidsBlacklist() {
     if (LOOT_MODIDS == null) {
-      LOOT_MODIDS = validateStringList(get().lists.loot_modid_blacklist, "loot_modid_blacklist");
+      LOOT_MODIDS = validateStringList(LootrCommonConfig.Restrictions.lootTableModidBlacklist.get(), "loot_modid_blacklist");
     }
     return LOOT_MODIDS;
   }
@@ -134,28 +119,28 @@ public class ConfigManager extends ConfigManagerBase {
 
   public static Set<ResourceKey<LootTable>> getDecayingTables() {
     if (DECAY_TABLES == null) {
-      DECAY_TABLES = validateResourceKeyList(get().decay.decay_loot_tables, "decay_loot_tables", o -> ResourceKey.create(Registries.LOOT_TABLE, o));
+      DECAY_TABLES = validateResourceKeyList(LootrCommonConfig.Decay.decayLootTables.get(), "decay_loot_tables", o -> ResourceKey.create(Registries.LOOT_TABLE, o));
     }
     return DECAY_TABLES;
   }
 
   public static Set<String> getDecayMods() {
     if (DECAY_MODS == null) {
-      DECAY_MODS = validateStringList(get().decay.decay_modids, "decay_mods");
+      DECAY_MODS = validateStringList(LootrCommonConfig.Decay.decayLootTableModids.get(), "decay_mods");
     }
     return DECAY_MODS;
   }
 
   public static Set<ResourceKey<LootTable>> getRefreshingTables() {
     if (REFRESH_TABLES == null) {
-      REFRESH_TABLES = validateResourceKeyList(get().refresh.refresh_loot_tables, "refresh_tables", o -> ResourceKey.create(Registries.LOOT_TABLE, o));
+      REFRESH_TABLES = validateResourceKeyList(LootrCommonConfig.Refresh.refreshLootTables.get(), "refresh_tables", o -> ResourceKey.create(Registries.LOOT_TABLE, o));
     }
     return REFRESH_TABLES;
   }
 
   public static Set<String> getRefreshMods() {
     if (REFRESH_MODS == null) {
-      REFRESH_MODS = validateStringList(get().refresh.refresh_modids, "refresh_modids");
+      REFRESH_MODS = validateStringList(LootrCommonConfig.Refresh.refreshLootTableModids.get(), "refresh_modids");
     }
     return REFRESH_MODS;
   }
@@ -178,7 +163,7 @@ public class ConfigManager extends ConfigManagerBase {
   }
 
   public static boolean isDecaying(ILootrInfoProvider tile) {
-    if (get().decay.decay_all) {
+    if (LootrCommonConfig.Decay.decayAll) {
       return true;
     }
     if (tile.getInfoLootTable() != null) {
@@ -196,7 +181,7 @@ public class ConfigManager extends ConfigManagerBase {
   }
 
   public static boolean isRefreshing(ILootrInfoProvider tile) {
-    if (get().refresh.refresh_all) {
+    if (LootrCommonConfig.Refresh.refreshAll) {
       return true;
     }
     if (tile.getInfoLootTable() != null) {
@@ -215,93 +200,65 @@ public class ConfigManager extends ConfigManagerBase {
 
 
   public static boolean shouldNotify(int remaining) {
-    int delay = get().notifications.notification_delay;
-    return !get().notifications.disable_notifications && (delay == -1 || remaining <= delay);
+    int delay = LootrCommonConfig.Notifications.maximumNotificationDelay;
+    return !LootrCommonConfig.Notifications.disableNotifications && (delay == -1 || remaining <= delay);
   }
 
   public static boolean shouldPerformPiecewiseCheck() {
-    return get().conversion.perform_piecewise_check;
+    return LootrCommonConfig.Conversion.performPiecewiseCheck;
   }
 
   public static boolean isVanillaTextures() {
-    return get().client.vanilla_textures;
+    return LootrClientConfig.Textures.useVanillaTextures;
   }
 
-  public static boolean isNewTextures() {
-    return true;
+  protected static Set<String> validateStringList (String[] incomingList, String listKey) {
+    return validateStringList(List.of(incomingList), listKey);
   }
 
-  public static class Debug {
-    public boolean report_unresolved_tables = true;
+  protected static Set<String> validateStringList(Collection<? extends String> incomingList, String listKey) {
+    Set<String> validatedList = new HashSet<>();
+    for (String entry : incomingList) {
+      if (entry == null || entry.isEmpty()) {
+        LootrAPI.LOG.error("Error found when validating a configuration list for '{}'. One of the entries is null or empty and cannot be converted to a String.", listKey);
+        continue;
+      }
+      validatedList.add(entry);
+    }
+    return validatedList;
   }
 
-  public static class Seed {
-    public boolean randomize_seed = true;
+  protected static Set<ResourceKey<Level>> validateDimensions (String[] incomingList, String listKey) {
+    return validateDimensions(List.of(incomingList), listKey);
   }
 
-  public static class Conversion {
-    public boolean disable = false;
-    public boolean convert_elytras_to_chests = false;
-    public boolean convert_elytras_to_item_frames = true;
-    public boolean convert_structure_item_frames = true;
-    public boolean world_border = false;
-    public boolean perform_piecewise_check = true;
-    public boolean bypass_spawn_protection = true;
-    public boolean skip_logging_no_loot_table_at_generation = true;
-    public SaveMode save_mode = SaveMode.SMART;
+  protected static Set<ResourceKey<Level>> validateDimensions(Collection<? extends String> incomingList, String listKey) {
+    return validateResourceKeyList(incomingList, listKey, o -> ResourceKey.create(Registries.DIMENSION, o));
   }
 
-  public static class Breaking {
-    public boolean disable_break = false;
-    public boolean enable_break = false;
-    public boolean enable_fake_player_break = false;
-    public boolean power_comparators = true;
-    public boolean blast_resistant = false;
-    public boolean blast_immune = false;
-    public boolean trapped_custom = false;
-    public boolean should_drop_player_loot = false;
-    public boolean brushables_self_support = false;
-    public boolean item_frames_self_support = false;
+  protected static <T> Set<ResourceKey<T>> validateResourceKeyList (String[] incomingList, String listKey, Function<Identifier, ResourceKey<T>> builder) {
+    return validateResourceKeyList(List.of(incomingList), listKey, builder);
   }
 
-  public static class Lists {
-    public List<String> dimension_whitelist = List.of();
-    public List<String> dimension_blacklist = List.of();
-    public List<String> loot_table_blacklist = List.of();
-    public List<String> loot_modid_blacklist = List.of();
-    public List<String> modid_dimension_whitelist = List.of();
-    public List<String> modid_dimension_blacklist = List.of();
-  }
+  protected static <T> Set<ResourceKey<T>> validateResourceKeyList (Collection<? extends String> incomingList, String listKey, Function<Identifier, ResourceKey<T>> builder) {
+    Set<ResourceKey<T>> validatedList = new HashSet<>();
+    for (String entry : incomingList) {
+      if (entry == null || entry.isEmpty()) {
+        throw new RuntimeException("Error found when validating a configuration list for '" + listKey + "'. One of the entries is null or empty and cannot be converted to a Identifier.");
+      }
+      Identifier location;
+      try {
+        location = Identifier.parse(entry);
+      } catch (Exception e) {
+        throw new RuntimeException("Error found when validating a configuration list for '" + listKey + "'. The value found in the list, '" + entry + "', is not a valid Identifier.", e);
+      }
 
-  public static class Decay {
-    public int decay_value = 6000;
-    public boolean decay_all = false;
-    public boolean perform_tick_decay = true;
-    public boolean start_tick_decay = false;
-    public List<String> decay_modids = List.of();
-    public List<String> decay_loot_tables = List.of();
-    public List<String> decay_dimensions = List.of();
-    public boolean replace_when_decayed = false;
-  }
-
-  public static class Refresh {
-    public int refresh_value = 24000;
-    public boolean refresh_all = false;
-    public boolean perform_tick_refresh = true;
-    public boolean start_tick_refresh = true;
-    public List<String> refresh_modids = List.of();
-    public List<String> refresh_loot_tables = List.of();
-    public List<String> refresh_dimensions = List.of();
-  }
-
-  public static class Notifications {
-    public int notification_delay = 30 * 20;
-    public boolean disable_notifications = false;
-    public boolean disable_message_styles = false;
-  }
-
-  public static class Client {
-    public boolean vanilla_textures = false;
-    public boolean unopened_particles = true;
+      try {
+        validatedList.add(builder.apply(location));
+      } catch (Exception e) {
+        throw new RuntimeException("Error found when validating a configuration list for '" + listKey + "'. The value found in the list, '" + entry + "', is not valid to create a ResourceKey.", e);
+      }
+    }
+    return validatedList;
   }
 }

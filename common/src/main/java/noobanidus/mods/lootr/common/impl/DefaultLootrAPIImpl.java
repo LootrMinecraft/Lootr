@@ -1,6 +1,8 @@
 package noobanidus.mods.lootr.common.impl;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentGetter;
@@ -9,6 +11,9 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -19,18 +24,25 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.world.level.block.entity.PotDecorations;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.*;
+import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.ILootrAPI;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrConstants;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
+import noobanidus.mods.lootr.common.api.client.ClientTextureType;
+import noobanidus.mods.lootr.common.api.config.BreakMode;
+import noobanidus.mods.lootr.common.api.config.ResistanceMode;
+import noobanidus.mods.lootr.common.api.config.SaveMode;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.ILootrSavedData;
 import noobanidus.mods.lootr.common.api.data.LootFiller;
@@ -45,6 +57,9 @@ import noobanidus.mods.lootr.common.api.processor.ILootrEntityProcessor;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.api.type.ILootrType;
 import noobanidus.mods.lootr.common.client.ClientHooks;
+import noobanidus.mods.lootr.common.config.ConfigManager;
+import noobanidus.mods.lootr.common.config.LootrClientConfig;
+import noobanidus.mods.lootr.common.config.LootrCommonConfig;
 import noobanidus.mods.lootr.common.data.DataStorage;
 import noobanidus.mods.lootr.common.integration.sherdsapi.SherdsIntegration;
 import org.jetbrains.annotations.Nullable;
@@ -53,6 +68,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   @Override
@@ -479,5 +495,338 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
     }
 
     return null;
+  }
+
+  @Override
+  public long getLootSeed(long seed) {
+    if (LootrCommonConfig.Conversion.randomiseSeed || seed == -1 || seed == 0) {
+      return ThreadLocalRandom.current().nextLong();
+    }
+    return seed;
+  }
+
+  @Override
+  public float getExplosionResistance(Block block, float defaultResistance) {
+    return switch (LootrCommonConfig.Breaking.blastResistance) {
+      case NONE -> defaultResistance;
+      case IMMUNE -> Float.MAX_VALUE;
+      case RESISTANT -> 16.0f;
+    };
+  }
+
+  @Override
+  public boolean isBlastResistant() {
+    return LootrCommonConfig.Breaking.blastResistance == ResistanceMode.RESISTANT;
+  }
+
+  @Override
+  public boolean isBlastImmune() {
+    return LootrCommonConfig.Breaking.blastResistance == ResistanceMode.IMMUNE;
+  }
+
+  @Override
+  public float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos position, float defaultProgress) {
+    if (LootrCommonConfig.Breaking.breakMode == BreakMode.NEVER) {
+      return 0f;
+    }
+    return defaultProgress;
+  }
+
+  @Override
+  public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos, int defaultSignal, Direction direction) {
+    if (shouldPowerComparators()) {
+      return 1;
+    }
+    return defaultSignal;
+  }
+
+  @Override
+  public boolean shouldPowerComparators() {
+    return LootrCommonConfig.Redstone.powerComparators;
+  }
+
+  @Override
+  public boolean shouldNotify(int remaining) {
+    return ConfigManager.shouldNotify(remaining);
+  }
+
+  @Override
+  public int getNotificationDelay() {
+    return LootrCommonConfig.Notifications.maximumNotificationDelay;
+  }
+
+  @Override
+  public boolean isNotificationsEnabled() {
+    return !LootrCommonConfig.Notifications.disableNotifications;
+  }
+
+  @Override
+  public boolean isMessageStylesEnabled() {
+    return !LootrCommonConfig.Notifications.disableMessageStyles;
+  }
+
+  @Override
+  public ClientTextureType getTextureType() {
+    if (ConfigManager.isVanillaTextures()) {
+      return ClientTextureType.VANILLA;
+    } else {
+      return ClientTextureType.NEW;
+    }
+  }
+
+  @Override
+  public boolean isDisabled() {
+    return LootrCommonConfig.Conversion.disable;
+  }
+
+  @Override
+  public boolean isLootTableBlacklisted(ResourceKey<LootTable> table) {
+    return ConfigManager.isBlacklisted(table);
+  }
+
+  @Override
+  public boolean isDimensionBlocked(ResourceKey<Level> dimension) {
+    return ConfigManager.isDimensionBlocked(dimension);
+  }
+
+  @Override
+  public boolean isDimensionDecaying(ResourceKey<Level> dimension) {
+    return ConfigManager.isDimensionDecaying(dimension);
+  }
+
+  @Override
+  public boolean isDimensionRefreshing(ResourceKey<Level> dimension) {
+    return ConfigManager.isDimensionRefreshing(dimension);
+  }
+
+  @Override
+  public Set<ResourceKey<Level>> getDimensionBlacklist() {
+    return ConfigManager.getDimensionBlacklist();
+  }
+
+  @Override
+  public Set<ResourceKey<Level>> getDimensionWhitelist() {
+    return ConfigManager.getDimensionWhitelist();
+  }
+
+  @Override
+  public Set<ResourceKey<LootTable>> getLootTableBlacklist() {
+    return ConfigManager.getLootBlacklist();
+  }
+
+  @Override
+  public Set<String> getLootModidBlacklist() {
+    return ConfigManager.getLootModidsBlacklist();
+  }
+
+  @Override
+  public Set<String> getModidDimensionWhitelist() {
+    return ConfigManager.getDimensionModidWhitelist();
+  }
+
+  @Override
+  public Set<String> getModidDimensionBlacklist() {
+    return ConfigManager.getDimensionModidBlacklist();
+  }
+
+  @Override
+  public boolean isDecaying(ILootrInfoProvider provider) {
+    return ConfigManager.isDecaying(provider);
+  }
+
+  @Override
+  public boolean isRefreshing(ILootrInfoProvider provider) {
+    return ConfigManager.isRefreshing(provider);
+  }
+
+  @Override
+  public Set<String> getModidDecayWhitelist() {
+    return ConfigManager.getDecayMods();
+  }
+
+  @Override
+  public Set<ResourceKey<LootTable>> getDecayWhitelist() {
+    return ConfigManager.getDecayingTables();
+  }
+
+  @Override
+  public Set<ResourceKey<Level>> getDecayDimensions() {
+    return ConfigManager.getDecayDimensions();
+  }
+
+  @Override
+  public Set<String> getRefreshModids() {
+    return ConfigManager.getRefreshMods();
+  }
+
+  @Override
+  public Set<ResourceKey<LootTable>> getRefreshWhitelist() {
+    return ConfigManager.getRefreshingTables();
+  }
+
+  @Override
+  public Set<ResourceKey<Level>> getRefreshDimensions() {
+    return ConfigManager.getRefreshDimensions();
+  }
+
+  @Override
+  public boolean reportUnresolvedTables() {
+    return LootrCommonConfig.Notifications.reportUnresolvedTables;
+  }
+
+  @Override
+  public boolean isCustomTrapped() {
+    return LootrCommonConfig.Redstone.customTrapped;
+  }
+
+  @Override
+  public boolean shouldCheckWorldBorder() {
+    return LootrCommonConfig.Conversion.checkWorldBorder;
+  }
+
+  @Override
+  public boolean shouldConvertElytrasToChests() {
+    return LootrCommonConfig.Conversion.convertElytrasToChests;
+  }
+
+  @Override
+  public boolean shouldConvertElytrasToItemFrames() {
+    return LootrCommonConfig.Conversion.convertElytrasToItemFrames;
+  }
+
+  @Override
+  public boolean shouldConvertStructureItemFrames() {
+    return LootrCommonConfig.Conversion.convertStructureItemFrames;
+  }
+
+  @Override
+  public int getDecayValue() {
+    return LootrCommonConfig.Decay.decayValue;
+  }
+
+  @Override
+  public boolean shouldDecayAll() {
+    return LootrCommonConfig.Decay.decayAll;
+  }
+
+  @Override
+  public int getRefreshValue() {
+    return LootrCommonConfig.Refresh.refreshValue;
+  }
+
+  @Override
+  public boolean shouldRefreshAll() {
+    return LootrCommonConfig.Refresh.refreshAll;
+  }
+
+  @Override
+  public Style getInvalidStyle() {
+    return isMessageStylesEnabled() ? Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED))
+        .withBold(true) : Style.EMPTY;
+  }
+
+  @Override
+  public Style getDecayStyle() {
+    return isMessageStylesEnabled() ? Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED))
+        .withBold(true) : Style.EMPTY;
+  }
+
+  @Override
+  public Style getRefreshStyle() {
+    return isMessageStylesEnabled() ? Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE))
+        .withBold(true) : Style.EMPTY;
+  }
+
+  @Override
+  public Style getChatStyle() {
+    return isMessageStylesEnabled() ? Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA)) : Style.EMPTY;
+  }
+
+  @Override
+  public boolean canDestroyOrBreak(Player player) {
+    return (isFakePlayer(player) && isFakePlayerBreakEnabled()) || LootrCommonConfig.Breaking.breakMode == BreakMode.ALWAYS;
+  }
+
+  @Override
+  public boolean isBreakDisabled() {
+    return LootrCommonConfig.Breaking.breakMode == BreakMode.NEVER;
+  }
+
+  @Override
+  public boolean isBreakEnabled() {
+    return LootrCommonConfig.Breaking.breakMode == BreakMode.ALWAYS;
+  }
+
+  @Override
+  public boolean isFakePlayerBreakEnabled() {
+    return LootrCommonConfig.Breaking.enableFakePlayerBreak;
+  }
+
+  @Override
+  public boolean canBrushablesSelfSupport() {
+    return LootrCommonConfig.Breaking.brushablesSelfSupport;
+  }
+
+  @Override
+  public boolean canItemFramesSelfSupport() {
+    return LootrCommonConfig.Breaking.itemFramesSelfSupport;
+  }
+
+  @Override
+  public boolean shouldDropPlayerLoot() {
+    return LootrCommonConfig.Breaking.shouldDropPlayerLoot;
+  }
+
+  @Override
+  public boolean shouldPerformDecayWhileTicking() {
+    return LootrCommonConfig.Decay.performDecayWhileTicking;
+  }
+
+  @Override
+  public boolean shouldPerformRefreshWhileTicking() {
+    return LootrCommonConfig.Refresh.performRefreshWhileTicking;
+  }
+
+  @Override
+  public boolean shouldStartDecayWhileTicking() {
+    return LootrCommonConfig.Decay.startDecayWhileTicking;
+  }
+
+  @Override
+  public boolean shouldStartRefreshWhileTicking() {
+    return LootrCommonConfig.Refresh.startRefreshWhileTicking;
+  }
+
+  @Override
+  public boolean performPiecewiseCheck() {
+    return ConfigManager.shouldPerformPiecewiseCheck();
+  }
+
+  @Override
+  public boolean shouldBypassSpawnProtection() {
+    return LootrCommonConfig.Interaction.bypassSpawnProtection;
+  }
+
+  @Override
+  public boolean shouldReplaceWhenDecayed() {
+    return LootrCommonConfig.Decay.replaceWhenDecayed;
+  }
+
+  @Override
+  public SaveMode getFileSaveMode() {
+    return LootrCommonConfig.Conversion.saveMode;
+  }
+
+  @Override
+  public boolean shouldDisplayUnopenedParticles() {
+    return LootrClientConfig.Particles.showUnopenedParticles;
+  }
+
+  @Override
+  public Component getInvalidTableComponent(ResourceKey<LootTable> lootTable) {
+    return Component.translatable("lootr.message.invalid_table", lootTable.identifier()
+            .getNamespace(), lootTable.toString())
+        .setStyle(isMessageStylesEnabled() ? Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED))
+            .withBold(true) : Style.EMPTY);
   }
 }

@@ -222,8 +222,6 @@ public interface ILootrAPI {
 
   boolean shouldStartRefreshWhileTicking();
 
-  boolean shouldWarnNoLootTables();
-
   boolean performPiecewiseCheck();
 
   int getRemainingDecayValue(ILootrInfoProvider provider);

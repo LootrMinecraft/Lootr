@@ -5,7 +5,6 @@ import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
-import noobanidus.mods.lootr.fabric.config.LootrConfigInit;
 import noobanidus.mods.lootr.fabric.event.LootrEventsInit;
 import noobanidus.mods.lootr.fabric.impl.LootrAPIImpl;
 import noobanidus.mods.lootr.fabric.impl.LootrRegistryImpl;
@@ -37,7 +36,6 @@ public class Lootr implements ModInitializer {
 
     LootrNetworkingInit.register();
 
-    LootrConfigInit.registerConfig();
     ModItems.registerItems();
     ModBlocks.registerBlocks();
     ModTabs.registerTabs();
