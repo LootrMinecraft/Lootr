@@ -2,7 +2,10 @@ package noobanidus.mods.lootr.common.config;
 
 import com.teamresourceful.resourcefulconfig.api.annotations.*;
 
-@Config(value="lootr-client")
+@Config(value="lootr-client", categories = {
+    LootrClientConfig.Particles.class,
+    LootrClientConfig.Textures.class
+})
 @ConfigInfo(titleTranslation = "lootr.config.client.title", descriptionTranslation = "lootr.config.client.desc")
 public class LootrClientConfig {
   @Category("Particles")
