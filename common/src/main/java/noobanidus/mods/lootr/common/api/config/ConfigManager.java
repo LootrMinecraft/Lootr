@@ -31,6 +31,7 @@ public class ConfigManager {
   private static Set<ResourceKey<Level>> REFRESH_DIMS = null;
   private static Set<ResourceKey<LootTable>> LOOT_BLACKLIST = null;
   private static Set<String> LOOT_MODIDS = null;
+  private static Set<ResourceKey<LootTable>> PROBLEMATIC_LOOT_TABLES = null;
 
   public static void reset() {
     MODID_DIM_WHITELIST = null;
@@ -45,6 +46,7 @@ public class ConfigManager {
     REFRESH_DIMS = null;
     REFRESH_MODS = null;
     REFRESH_TABLES = null;
+    PROBLEMATIC_LOOT_TABLES = null;
     LootrAPI.refreshSections();
     LootrAPI.refreshServices();
   }
@@ -95,8 +97,7 @@ public class ConfigManager {
     if (LOOT_BLACKLIST == null) {
       LOOT_BLACKLIST = validateResourceKeyList(LootrCommonConfig.Restrictions.lootTableBlacklist.get(), "loot_blacklist", o -> ResourceKey.create(Registries.LOOT_TABLE, o));
       // Fixes for #79 and #74
-      // TODO:
-      LootrAPI.PROBLEMATIC_CHESTS.forEach(o -> LOOT_BLACKLIST.add(ResourceKey.create(Registries.LOOT_TABLE, o)));
+      LOOT_BLACKLIST.addAll(getProblematicLootTables());
     }
     return LOOT_BLACKLIST;
   }
@@ -211,7 +212,14 @@ public class ConfigManager {
     return LootrClientConfig.Textures.useVanillaTextures;
   }
 
-  protected static Set<String> validateStringList (String[] incomingList, String listKey) {
+  public static Set<ResourceKey<LootTable>> getProblematicLootTables() {
+    if (PROBLEMATIC_LOOT_TABLES == null) {
+      PROBLEMATIC_LOOT_TABLES = validateResourceKeyList(LootrCommonConfig.Restrictions.problematicLootTables.get(), "problematic_loot_tables", o -> ResourceKey.create(Registries.LOOT_TABLE, o));
+    }
+    return PROBLEMATIC_LOOT_TABLES;
+  }
+
+  protected static Set<String> validateStringList(String[] incomingList, String listKey) {
     return validateStringList(List.of(incomingList), listKey);
   }
 
@@ -227,7 +235,7 @@ public class ConfigManager {
     return validatedList;
   }
 
-  protected static Set<ResourceKey<Level>> validateDimensions (String[] incomingList, String listKey) {
+  protected static Set<ResourceKey<Level>> validateDimensions(String[] incomingList, String listKey) {
     return validateDimensions(List.of(incomingList), listKey);
   }
 
@@ -235,11 +243,11 @@ public class ConfigManager {
     return validateResourceKeyList(incomingList, listKey, o -> ResourceKey.create(Registries.DIMENSION, o));
   }
 
-  protected static <T> Set<ResourceKey<T>> validateResourceKeyList (String[] incomingList, String listKey, Function<Identifier, ResourceKey<T>> builder) {
+  protected static <T> Set<ResourceKey<T>> validateResourceKeyList(String[] incomingList, String listKey, Function<Identifier, ResourceKey<T>> builder) {
     return validateResourceKeyList(List.of(incomingList), listKey, builder);
   }
 
-  protected static <T> Set<ResourceKey<T>> validateResourceKeyList (Collection<? extends String> incomingList, String listKey, Function<Identifier, ResourceKey<T>> builder) {
+  protected static <T> Set<ResourceKey<T>> validateResourceKeyList(Collection<? extends String> incomingList, String listKey, Function<Identifier, ResourceKey<T>> builder) {
     Set<ResourceKey<T>> validatedList = new HashSet<>();
     for (String entry : incomingList) {
       if (entry == null || entry.isEmpty()) {
