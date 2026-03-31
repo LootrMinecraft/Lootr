@@ -6,6 +6,6 @@ public final class NBTConstants {
   public static final String OPENERS = "LootrOpeners";
   public static final String CUSTOM_SIZE = "customSize";
   public static final String CUSTOM_INVENTORY = "customInventory";
-  public static final String IS_CUSTOM_INVENTORY = "isCustomInventory";
+  public static final String IS_CUSTOM_INVENTORY = "LootrIsCustomInventory";
   public static final String DECORATIONS = "LootrDecorations";
 }
