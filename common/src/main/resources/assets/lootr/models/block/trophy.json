@@ -2,10 +2,10 @@
   "credit": "Made with Blockbench",
   "parent": "block/block",
   "textures": {
-    "0": "minecraft:entity/player/wide/steve",
-    "1": "lootr:trophy_chest_block",
-    "particle": "lootr:trophy_chest_block",
-    "missing": "lootr:trophy_chest_block"
+    "0": "lootr:block/trophy_steve",
+    "1": "lootr:block/trophy_chest",
+    "particle": "lootr:block/trophy_chest",
+    "missing": "lootr:block/trophy_chest"
   },
   "render_type": "minecraft:cutout",
   "elements": [

@@ -6,7 +6,7 @@
       "type": "lootr:shulker_box",
       "openness": 0.0,
       "orientation": "up",
-      "texture": "lootr:shulker"
+      "texture": "lootr:entity/shulker_box/normal"
     }
   }
 }

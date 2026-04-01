@@ -2,12 +2,13 @@
   "sources": [
     {
       "type": "minecraft:single",
-      "resource": "lootr:chest_opened",
-      "sprite": "lootr:trophy_chest_block"
+      "resource": "lootr:entity/chest/normal_opened",
+      "sprite": "lootr:block/trophy_chest"
     },
     {
       "type": "minecraft:single",
-      "resource": "minecraft:entity/player/wide/steve"
+      "resource": "minecraft:entity/player/wide/steve",
+      "sprite": "lootr:block/trophy_steve"
     }
   ]
 }

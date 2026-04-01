@@ -2,19 +2,19 @@
   "sources": [
     {
       "type": "minecraft:single",
-      "resource": "lootr:chest"
+      "resource": "lootr:entity/chest/normal"
     },
     {
       "type": "minecraft:single",
-      "resource": "lootr:chest_opened"
+      "resource": "lootr:entity/chest/normal_opened"
     },
     {
       "type": "minecraft:single",
-      "resource": "lootr:chest_trapped"
+      "resource": "lootr:entity/chest/trapped"
     },
     {
       "type": "minecraft:single",
-      "resource": "lootr:chest_trapped_opened"
+      "resource": "lootr:entity/chest/trapped_opened"
     }
   ]
 }

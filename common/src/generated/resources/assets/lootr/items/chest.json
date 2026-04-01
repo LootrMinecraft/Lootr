@@ -5,7 +5,7 @@
     "model": {
       "type": "lootr:chest",
       "openness": 0.0,
-      "texture": "lootr:chest",
+      "texture": "lootr:entity/chest/normal",
       "vanilla_texture": "minecraft:entity/chest/normal"
     }
   }

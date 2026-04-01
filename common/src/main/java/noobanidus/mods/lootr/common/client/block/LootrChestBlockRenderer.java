@@ -30,10 +30,10 @@ import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("NullableProblems")
 public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootrBlockEntity> implements BlockEntityRenderer<T, LootrChestBlockRenderState> {
-  public static final SpriteId MATERIAL = new SpriteId(Sheets.CHEST_SHEET, LootrAPI.rl("chest"));
-  public static final SpriteId MATERIAL2 = new SpriteId(Sheets.CHEST_SHEET, LootrAPI.rl("chest_opened"));
-  public static final SpriteId MATERIAL3 = new SpriteId(Sheets.CHEST_SHEET, LootrAPI.rl("chest_trapped"));
-  public static final SpriteId MATERIAL4 = new SpriteId(Sheets.CHEST_SHEET, LootrAPI.rl("chest_trapped_opened"));
+  public static final SpriteId MATERIAL = new SpriteId(Sheets.CHEST_SHEET, LootrAPI.rl("entity/chest/normal"));
+  public static final SpriteId MATERIAL2 = new SpriteId(Sheets.CHEST_SHEET, LootrAPI.rl("entity/chest/normal_opened"));
+  public static final SpriteId MATERIAL3 = new SpriteId(Sheets.CHEST_SHEET, LootrAPI.rl("entity/chest/trapped"));
+  public static final SpriteId MATERIAL4 = new SpriteId(Sheets.CHEST_SHEET, LootrAPI.rl("entity/chest/trapped_opened"));
 
   private final ChestModel singleModel;
   private final SpriteGetter materials;

@@ -2,11 +2,11 @@
   "sources": [
     {
       "type": "minecraft:single",
-      "resource": "lootr:entity/loot_pot"
+      "resource": "lootr:entity/pot/normal"
     },
     {
       "type": "minecraft:single",
-      "resource": "lootr:entity/loot_pot_open"
+      "resource": "lootr:entity/pot/normal_opened"
     }
   ]
 }

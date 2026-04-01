@@ -31,12 +31,12 @@ public class LootrAtlasGenerator extends SpriteSourceProvider {
         .addSource(new SingleFile(LootrShulkerBoxRenderer.MATERIAL.texture(), Optional.empty()));
     this.atlas(AtlasIds.SHULKER_BOXES)
         .addSource(new SingleFile(LootrShulkerBoxRenderer.MATERIAL2.texture(), Optional.empty()));
-    this.atlas(AtlasIds.BLOCKS).addSource(new SingleFile(LootrAPI.rl("chest_opened"), Optional.of(LootrAPI.rl("trophy_chest_block"))));
+    this.atlas(AtlasIds.BLOCKS).addSource(new SingleFile(LootrAPI.rl("entity/chest/normal_opened"), Optional.of(LootrAPI.rl("block/trophy_chest"))));
     this.atlas(AtlasIds.BLOCKS)
-        .addSource(new SingleFile(LootrAPI.rl("minecraft", "entity/player/wide/steve"), Optional.empty()));
+        .addSource(new SingleFile(LootrAPI.rl("minecraft", "entity/player/wide/steve"), Optional.of(LootrAPI.rl("block/trophy_steve"))));
     this.atlas(Identifier.withDefaultNamespace("decorated_pot"))
-        .addSource(new SingleFile(LootrAPI.rl("entity/loot_pot"), Optional.empty()))
-        .addSource(new SingleFile(LootrAPI.rl("entity/loot_pot_open"), Optional.empty()))
+        .addSource(new SingleFile(LootrAPI.rl("entity/pot/normal"), Optional.empty()))
+        .addSource(new SingleFile(LootrAPI.rl("entity/pot/normal_opened"), Optional.empty()))
 /*        .addSource(new SingleFile(LootrAPI.rl("entity/decorated_pot/loot_pottery_pattern"), Optional.empty()))*/;
   }
 }

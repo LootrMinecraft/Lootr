@@ -41,8 +41,8 @@ import java.util.function.Consumer;
 
 public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecoratedPotBlockEntity, LootrDecoratedPotBlockRenderState> {
   public static final Identifier DECORATED_POT_SHEET = Identifier.withDefaultNamespace("textures/atlas/decorated_pot.png");
-  private static final SpriteId DECORATED_POT = new SpriteId(DECORATED_POT_SHEET, LootrAPI.rl("entity/loot_pot"));
-  private static final SpriteId DECORATED_POT_OPENED = new SpriteId(DECORATED_POT_SHEET, LootrAPI.rl("entity/loot_pot_open"));
+  private static final SpriteId DECORATED_POT = new SpriteId(DECORATED_POT_SHEET, LootrAPI.rl("entity/pot/normal"));
+  private static final SpriteId DECORATED_POT_OPENED = new SpriteId(DECORATED_POT_SHEET, LootrAPI.rl("entity/pot/normal_opened"));
 
   public static final ModelLayerLocation OPEN_POT_LAYER = new ModelLayerLocation(LootrConstants.DECORATED_POT, "main");
 

@@ -131,7 +131,7 @@ public class LootrModelProvider extends ModelProvider {
             Identifier.withDefaultNamespace("item/chest"),
             Optional.empty(),
             new LootrChestSpecialRenderer.Unbaked(
-                LootrAPI.rl("chest"),
+                LootrAPI.rl("entity/chest/normal"),
                 Identifier.withDefaultNamespace("entity/chest/normal")
             )
         )
@@ -142,7 +142,7 @@ public class LootrModelProvider extends ModelProvider {
             Identifier.withDefaultNamespace("item/chest"),
             Optional.empty(),
             new LootrChestSpecialRenderer.Unbaked(
-                LootrAPI.rl("chest_trapped"),
+                LootrAPI.rl("entity/chest/trapped"),
                 Identifier.withDefaultNamespace("entity/chest/trapped")
             )
         )
@@ -153,7 +153,7 @@ public class LootrModelProvider extends ModelProvider {
             Identifier.withDefaultNamespace("item/chest"),
             Optional.empty(),
             new LootrChestSpecialRenderer.Unbaked(
-                LootrAPI.rl("chest"),
+                LootrAPI.rl("entity/chest/normal"),
                 Identifier.withDefaultNamespace("entity/chest/normal")
             )
         )
@@ -164,7 +164,7 @@ public class LootrModelProvider extends ModelProvider {
             Identifier.withDefaultNamespace("item/shulker_box"),
             Optional.empty(),
             new LootrShulkerSpecialRenderer.Unbaked(
-                LootrAPI.rl("shulker")
+                LootrAPI.rl("entity/shulker_box/normal")
             )
         )
     );
