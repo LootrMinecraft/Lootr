@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
+import noobanidus.mods.lootr.common.api.config.LootrCommonConfig;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.config.ConfigManager;
 import org.jetbrains.annotations.Nullable;
@@ -38,21 +39,21 @@ public class HandleBreak {
     if (LootrAPI.isBreakDisabled()) {
       if (player.getAbilities().instabuild) {
         if (!player.isShiftKeyDown()) {
-          player.displayClientMessage(Component.translatable("lootr.message.cannot_break_sneak")
-              .setStyle(getChatStyle()), false);
+          player.sendSystemMessage(Component.translatable("lootr.message.cannot_break_sneak")
+              .setStyle(getChatStyle()));
           return false;
         }
       } else {
-        player.displayClientMessage(Component.translatable("lootr.message.cannot_break")
-            .setStyle(getChatStyle()), false);
+        player.sendSystemMessage(Component.translatable("lootr.message.cannot_break")
+            .setStyle(getChatStyle()));
         return false;
       }
     } else {
       if (!player.isShiftKeyDown()) {
-        player.displayClientMessage(Component.translatable("lootr.message.should_sneak")
-            .setStyle(getChatStyle()), false);
-        player.displayClientMessage(Component.translatable("lootr.message.should_sneak2")
-            .setStyle(getChatStyle()), false);
+        player.sendSystemMessage(Component.translatable("lootr.message.should_sneak")
+            .setStyle(getChatStyle()));
+        player.sendSystemMessage(Component.translatable("lootr.message.should_sneak2")
+            .setStyle(getChatStyle()));
         return false;
       }
     }
@@ -70,7 +71,7 @@ public class HandleBreak {
   }
 
   public static Style getChatStyle() {
-    if (ConfigManager.get().notifications.disable_message_styles) {
+    if (LootrCommonConfig.Notifications.disableMessageStyles) {
       return Style.EMPTY;
     }
 

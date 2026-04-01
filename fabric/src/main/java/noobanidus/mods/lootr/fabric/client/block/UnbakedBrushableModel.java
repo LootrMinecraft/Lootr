@@ -3,14 +3,15 @@ package noobanidus.mods.lootr.fabric.client.block;
 import com.mojang.serialization.MapCodec;
 import net.fabricmc.fabric.api.client.model.loading.v1.CustomUnbakedBlockStateModel;
 import net.fabricmc.fabric.api.client.renderer.v1.mesh.QuadEmitter;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
-import net.minecraft.client.renderer.block.model.Variant;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.Variant;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
@@ -65,16 +66,26 @@ public class UnbakedBrushableModel extends noobanidus.mods.lootr.common.client.b
     }
 
     @Override
-    public TextureAtlasSprite particleIcon(BlockAndTintGetter blockView, BlockPos pos, BlockState state) {
+    public Material.Baked particleMaterial(BlockAndTintGetter blockView, BlockPos pos, BlockState state) {
       if (isOpenFromBATG(blockView, pos, state, null)) {
-        return opened.particleIcon(blockView, pos, state);
+        return opened.particleMaterial(blockView, pos, state);
       }
       return switch (state.getValue(BlockStateProperties.DUSTED)) {
-        case 1 -> stage_1.particleIcon(blockView, pos, state);
-        case 2 -> stage_2.particleIcon(blockView, pos, state);
-        case 3 -> stage_3.particleIcon(blockView, pos, state);
-        default -> stage_0.particleIcon(blockView, pos, state);
+        case 1 -> stage_1.particleMaterial(blockView, pos, state);
+        case 2 -> stage_2.particleMaterial(blockView, pos, state);
+        case 3 -> stage_3.particleMaterial(blockView, pos, state);
+        default -> stage_0.particleMaterial(blockView, pos, state);
       };
+    }
+
+    @Override
+    public Material.Baked particleMaterial() {
+      return stage_0.particleMaterial();
+    }
+
+    @Override
+    public @BakedQuad.MaterialFlags int materialFlags() {
+      return stage_0.materialFlags();
     }
   }
 }

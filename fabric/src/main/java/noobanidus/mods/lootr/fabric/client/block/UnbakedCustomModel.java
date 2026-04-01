@@ -3,14 +3,16 @@ package noobanidus.mods.lootr.fabric.client.block;
 import com.mojang.serialization.MapCodec;
 import net.fabricmc.fabric.api.client.model.loading.v1.CustomUnbakedBlockStateModel;
 import net.fabricmc.fabric.api.client.renderer.v1.mesh.QuadEmitter;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
-import net.minecraft.client.renderer.block.model.Variant;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.Variant;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import org.jspecify.annotations.Nullable;
@@ -62,19 +64,29 @@ public class UnbakedCustomModel extends noobanidus.mods.lootr.common.client.bloc
     }
 
     @Override
-    public TextureAtlasSprite particleIcon(BlockAndTintGetter blockView, BlockPos pos, BlockState state) {
+    public Material.Baked particleMaterial(BlockAndTintGetter blockView, BlockPos pos, BlockState state) {
       boolean visuallyOpen = isOpenFromBATG(blockView, pos, state, null);
 
       if (visuallyOpen) {
-        return opened.particleIcon(blockView, pos, state);
+        return opened.particleMaterial(blockView, pos, state);
       } else {
-        return unopened.particleIcon(blockView, pos, state);
+        return unopened.particleMaterial(blockView, pos, state);
       }
     }
 
     @Override
     public @Nullable Object createGeometryKey(BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource random) {
       return internalCreateObjectKey(level, pos, state, random);
+    }
+
+    @Override
+    public Material.Baked particleMaterial() {
+      return opened.particleMaterial();
+    }
+
+    @Override
+    public @BakedQuad.MaterialFlags int materialFlags() {
+      return opened.materialFlags();
     }
   }
 }

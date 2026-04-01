@@ -5,9 +5,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.model.loading.v1.CustomUnbakedBlockStateModel;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleProviderRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.ChunkSectionLayerMap;
+import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.SpecialBlockRendererRegistry;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
@@ -41,12 +40,12 @@ public class LootrClient implements ClientModInitializer {
     LootrClientNetworkingInit.register();
 
 
-    ChunkSectionLayerMap.putBlock(ModBlocks.CHEST, ChunkSectionLayer.CUTOUT);
+/*    ChunkSectionLayerMap.putBlock(ModBlocks.CHEST, ChunkSectionLayer.CUTOUT);
     ChunkSectionLayerMap.putBlock(ModBlocks.TRAPPED_CHEST, ChunkSectionLayer.CUTOUT);
     ChunkSectionLayerMap.putBlock(ModBlocks.INVENTORY, ChunkSectionLayer.CUTOUT);
     ChunkSectionLayerMap.putBlock(ModBlocks.SHULKER_BOX, ChunkSectionLayer.CUTOUT);
     ChunkSectionLayerMap.putBlock(ModBlocks.BARREL, ChunkSectionLayer.CUTOUT);
-    ChunkSectionLayerMap.putBlock(ModBlocks.TROPHY, ChunkSectionLayer.CUTOUT);
+    ChunkSectionLayerMap.putBlock(ModBlocks.TROPHY, ChunkSectionLayer.CUTOUT);*/
 
     BlockEntityRenderers.register(ModBlockEntities.CHEST, LootrChestBlockRenderer::new);
     BlockEntityRenderers.register(ModBlockEntities.TRAPPED_CHEST, LootrChestBlockRenderer::new);
@@ -58,12 +57,6 @@ public class LootrClient implements ClientModInitializer {
     SpecialModelRenderers.ID_MAPPER.put(LootrAPI.rl("chest"), LootrChestSpecialRenderer.Unbaked.MAP_CODEC);
     SpecialModelRenderers.ID_MAPPER.put(LootrAPI.rl("shulker_box"), LootrShulkerSpecialRenderer.Unbaked.MAP_CODEC);
     SpecialModelRenderers.ID_MAPPER.put(LootrAPI.rl("decorated_pot"), LootrDecoratedPotSpecialRenderer.Unbaked.MAP_CODEC);
-
-    SpecialBlockRendererRegistry.register(ModBlocks.TRAPPED_CHEST, LootrChestSpecialRenderer.Unbaked.trappedChest());
-    SpecialBlockRendererRegistry.register(ModBlocks.CHEST, LootrChestSpecialRenderer.Unbaked.chest());
-    SpecialBlockRendererRegistry.register(ModBlocks.INVENTORY, LootrChestSpecialRenderer.Unbaked.chest());
-    SpecialBlockRendererRegistry.register(ModBlocks.SHULKER_BOX, LootrShulkerSpecialRenderer.Unbaked.shulker());
-    SpecialBlockRendererRegistry.register(ModBlocks.DECORATED_POT, LootrDecoratedPotSpecialRenderer.Unbaked.decoratedPot());
 
     CustomUnbakedBlockStateModel.register(LootrAPI.rl("custom"), UnbakedCustomModel.CODEC);
     CustomUnbakedBlockStateModel.register(LootrAPI.rl("brushable"), UnbakedBrushableModel.CODEC);
