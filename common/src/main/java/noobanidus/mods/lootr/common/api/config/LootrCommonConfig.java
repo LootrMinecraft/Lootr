@@ -71,37 +71,37 @@ public class LootrCommonConfig {
     @ConfigEntry(id = "dimension_whitelist", translation = "lootr.configuration.dimension_whitelist")
     @Comment(value = LootrConfigStrings.DIMENSION_WHITELIST_DESC, translation = "lootr.configuration.dimension_whitelist.desc")
     @ConfigOption.Regex(value = IDENTIFIER_REGEX)
-    public static List<String> dimensionWhitelist = new ArrayList<>();
+    public static final List<String> dimensionWhitelist = new ArrayList<>();
 
     @ConfigEntry(id = "dimension_blacklist", translation = "lootr.configuration.dimension_blacklist")
     @Comment(value = LootrConfigStrings.DIMENSION_BLACKLIST_DESC, translation = "lootr.configuration.dimension_blacklist.desc")
     @ConfigOption.Regex(value = IDENTIFIER_REGEX)
-    public static List<String> dimensionBlacklist = new ArrayList<>();
+    public static final List<String> dimensionBlacklist = new ArrayList<>();
 
     @ConfigEntry(id = "modid_dimension_whitelist", translation = "lootr.configuration.modid_dimension_whitelist")
     @Comment(value = LootrConfigStrings.MODID_DIMENSION_WHITELIST_DESC, translation = "lootr.configuration.modid_dimension_whitelist.desc")
     @ConfigOption.Regex(value = "^" + Identifier.ALLOWED_NAMESPACE_CHARACTERS + "+$")
-    public static List<String> modidDimensionWhitelist = new ArrayList<>();
+    public static final List<String> modidDimensionWhitelist = new ArrayList<>();
 
     @ConfigEntry(id = "modid_dimension_blacklist", translation = "lootr.configuration.modid_dimension_blacklist")
     @Comment(value = LootrConfigStrings.MODID_DIMENSION_BLACKLIST_DESC, translation = "lootr.configuration.modid_dimension_blacklist.desc")
     @ConfigOption.Regex(value = "^" + Identifier.ALLOWED_NAMESPACE_CHARACTERS + "+$")
-    public static List<String> modidDimensionBlacklist = new ArrayList<>();
+    public static final List<String> modidDimensionBlacklist = new ArrayList<>();
 
     @ConfigEntry(id = "loot_table_blacklist", translation = "lootr.configuration.loot_table_blacklist")
     @Comment(value = LootrConfigStrings.LOOT_TABLE_BLACKLIST_DESC, translation = "lootr.configuration.loot_table_blacklist.desc")
     @ConfigOption.Regex(value = IDENTIFIER_REGEX)
-    public static List<String> lootTableBlacklist = new ArrayList<>();
+    public static final List<String> lootTableBlacklist = new ArrayList<>();
 
     @ConfigEntry(id = "loot_table_modid_blacklist", translation = "lootr.configuration.loot_table_modid_blacklist")
     @Comment(value = LootrConfigStrings.LOOT_TABLE_MODID_BLACKLIST_DESC, translation = "lootr.configuration.loot_table_modid_blacklist.desc")
     @ConfigOption.Regex(value = "^" + Identifier.ALLOWED_NAMESPACE_CHARACTERS + "+$")
-    public static List<String> lootTableModidBlacklist = new ArrayList<>();
+    public static final List<String> lootTableModidBlacklist = new ArrayList<>();
 
     @ConfigEntry(id = "problematic_loot_tables", translation = "lootr.configuration.problematic_loot_tables")
     @Comment(value = LootrConfigStrings.PROBLEMATIC_LOOT_TABLES_DESC, translation = "lootr.configuration.problematic_loot_tables.desc")
     @ConfigOption.Regex(value = IDENTIFIER_REGEX)
-    public static List<String> problematicLootTables = LootrAPI.PROBLEMATIC_CHESTS.stream()
+    public static final List<String> problematicLootTables = LootrAPI.PROBLEMATIC_CHESTS.stream()
         .map(Identifier::toString).collect(Collectors.toCollection(ArrayList::new));
   }
 
@@ -187,17 +187,17 @@ public class LootrCommonConfig {
     @ConfigEntry(id = "decay_loot_tables", translation = "lootr.configuration.decay_loot_tables")
     @Comment(value = LootrConfigStrings.DECAY_LOOT_TABLES_DESC, translation = "lootr.configuration.decay_loot_tables.desc")
     @ConfigOption.Regex(value = IDENTIFIER_REGEX)
-    public static List<String> decayLootTables = new ArrayList<>();
+    public static final List<String> decayLootTables = new ArrayList<>();
 
     @ConfigEntry(id = "decay_loot_table_modids", translation = "lootr.configuration.decay_loot_table_modids")
     @Comment(value = LootrConfigStrings.DECAY_LOOT_TABLE_MODIDS_DESC, translation = "lootr.configuration.decay_loot_table_modids.desc")
     @ConfigOption.Regex(value = "^" + Identifier.ALLOWED_NAMESPACE_CHARACTERS + "+$")
-    public static List<String> decayLootTableModids = new ArrayList<>();
+    public static final List<String> decayLootTableModids = new ArrayList<>();
 
     @ConfigEntry(id = "decay_dimensions", translation = "lootr.configuration.decay_dimensions")
     @Comment(value = LootrConfigStrings.DECAY_DIMENSIONS_DESC, translation = "lootr.configuration.decay_dimensions.desc")
     @ConfigOption.Regex(value = IDENTIFIER_REGEX)
-    public static List<String> decayDimensions = new ArrayList<>();
+    public static final List<String> decayDimensions = new ArrayList<>();
 
     @ConfigEntry(id = "replace_when_decayed", translation = "lootr.configuration.replace_when_decayed")
     @Comment(value = LootrConfigStrings.REPLACE_WHEN_DECAYED_DESC, translation = "lootr.configuration.replace_when_decayed.desc")
@@ -227,17 +227,17 @@ public class LootrCommonConfig {
     @ConfigEntry(id = "refresh_loot_tables", translation = "lootr.configuration.refresh_loot_tables")
     @Comment(value = LootrConfigStrings.REFRESH_LOOT_TABLES_DESC, translation = "lootr.configuration.refresh_loot_tables.desc")
     @ConfigOption.Regex(value = IDENTIFIER_REGEX)
-    public static List<String> refreshLootTables = new ArrayList<>();
+    public static final List<String> refreshLootTables = new ArrayList<>();
 
     @ConfigEntry(id = "refresh_loot_table_modids", translation = "lootr.configuration.refresh_loot_table_modids")
     @Comment(value = LootrConfigStrings.REFRESH_LOOT_TABLE_MODIDS_DESC, translation = "lootr.configuration.refresh_loot_table_modids.desc")
     @ConfigOption.Regex(value = "^" + Identifier.ALLOWED_NAMESPACE_CHARACTERS + "+$")
-    public static List<String> refreshLootTableModids = new ArrayList<>();
+    public static final List<String> refreshLootTableModids = new ArrayList<>();
 
     @ConfigEntry(id = "refresh_dimensions", translation = "lootr.configuration.refresh_dimensions")
     @Comment(value = LootrConfigStrings.REFRESH_DIMENSIONS_DESC, translation = "lootr.configuration.refresh_dimensions.desc")
     @ConfigOption.Regex(value = IDENTIFIER_REGEX)
-    public static List<String> refreshDimensions = new ArrayList<>();
+    public static final List<String> refreshDimensions = new ArrayList<>();
 
     @ConfigEntry(id = "perform_refresh_while_ticking", translation = "lootr.configuration.perform_refresh_while_ticking")
     @Comment(value = LootrConfigStrings.PERFORM_REFRESH_WHILE_TICKING_DESC, translation = "lootr.configuration.perform_refresh_while_ticking.desc")

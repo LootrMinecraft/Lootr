@@ -11,10 +11,7 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
 public class ConfigManager {
@@ -32,6 +29,20 @@ public class ConfigManager {
   private static Set<ResourceKey<LootTable>> LOOT_BLACKLIST = null;
   private static Set<String> LOOT_MODIDS = null;
   private static Set<ResourceKey<LootTable>> PROBLEMATIC_LOOT_TABLES = null;
+
+  private static List<String> LAST_DECAY_DIMS = null;
+  private static List<String> LAST_REFRESH_DIMS = null;
+  private static List<String> LAST_DECAY_MODS = null;
+  private static List<String> LAST_DECAY_TABLES = null;
+  private static List<String> LAST_REFRESH_MODS = null;
+  private static List<String> LAST_REFRESH_TABLES = null;
+  private static List<String> LAST_DIM_WHITELIST = null;
+  private static List<String> LAST_MODID_DIM_WHITELIST = null;
+  private static List<String> LAST_DIM_BLACKLIST = null;
+  private static List<String> LAST_MODID_DIM_BLACKLIST = null;
+  private static List<String> LAST_LOOT_BLACKLIST = null;
+  private static List<String> LAST_LOOT_MODIDS = null;
+  private static List<String> LAST_PROBLEMATIC_LOOT_TABLES = null;
 
   public static void reset() {
     MODID_DIM_WHITELIST = null;
@@ -52,50 +63,57 @@ public class ConfigManager {
   }
 
   public static Set<ResourceKey<Level>> getDimensionWhitelist() {
-    if (DIM_WHITELIST == null) {
-      DIM_WHITELIST = validateDimensions(LootrCommonConfig.Restrictions.dimensionWhitelist.get(), "dimension_whitelist");
+    if (DIM_WHITELIST == null || !LootrCommonConfig.Restrictions.dimensionWhitelist.equals(LAST_DIM_WHITELIST)) {
+      LAST_DIM_WHITELIST = new ArrayList<>(LootrCommonConfig.Restrictions.dimensionWhitelist);
+      DIM_WHITELIST = validateDimensions(LootrCommonConfig.Restrictions.dimensionWhitelist, "dimension_whitelist");
     }
     return DIM_WHITELIST;
   }
 
   public static Set<String> getDimensionModidWhitelist() {
-    if (MODID_DIM_WHITELIST == null) {
-      MODID_DIM_WHITELIST = validateStringList(LootrCommonConfig.Restrictions.modidDimensionWhitelist.get(), "modid_dimension_whitelist");
+    if (MODID_DIM_WHITELIST == null || !LootrCommonConfig.Restrictions.modidDimensionWhitelist.equals(LAST_MODID_DIM_WHITELIST)) {
+      LAST_MODID_DIM_WHITELIST = new ArrayList<>(LootrCommonConfig.Restrictions.modidDimensionWhitelist);
+      MODID_DIM_WHITELIST = validateStringList(LootrCommonConfig.Restrictions.modidDimensionWhitelist, "modid_dimension_whitelist");
     }
     return MODID_DIM_WHITELIST;
   }
 
   public static Set<ResourceKey<Level>> getDimensionBlacklist() {
-    if (DIM_BLACKLIST == null) {
-      DIM_BLACKLIST = validateDimensions(LootrCommonConfig.Restrictions.dimensionBlacklist.get(), "dimension_blacklist");
+    if (DIM_BLACKLIST == null || !LootrCommonConfig.Restrictions.dimensionBlacklist.equals(LAST_DIM_BLACKLIST)) {
+      LAST_DIM_BLACKLIST = new ArrayList<>(LootrCommonConfig.Restrictions.dimensionBlacklist);
+      DIM_BLACKLIST = validateDimensions(LootrCommonConfig.Restrictions.dimensionBlacklist, "dimension_blacklist");
     }
     return DIM_BLACKLIST;
   }
 
   public static Set<String> getDimensionModidBlacklist() {
-    if (MODID_DIM_BLACKLIST == null) {
-      MODID_DIM_BLACKLIST = validateStringList(LootrCommonConfig.Restrictions.modidDimensionBlacklist.get(), "modid_dimension_blacklist");
+    if (MODID_DIM_BLACKLIST == null || !LootrCommonConfig.Restrictions.modidDimensionBlacklist.equals(LAST_MODID_DIM_BLACKLIST)) {
+      LAST_MODID_DIM_BLACKLIST = new ArrayList<>(LootrCommonConfig.Restrictions.modidDimensionBlacklist);
+      MODID_DIM_BLACKLIST = validateStringList(LootrCommonConfig.Restrictions.modidDimensionBlacklist, "modid_dimension_blacklist");
     }
     return MODID_DIM_BLACKLIST;
   }
 
   public static Set<ResourceKey<Level>> getDecayDimensions() {
-    if (DECAY_DIMS == null) {
-      DECAY_DIMS = validateDimensions(LootrCommonConfig.Decay.decayDimensions.get(), "decay_dimensions");
+    if (DECAY_DIMS == null || !LootrCommonConfig.Decay.decayDimensions.equals(LAST_DECAY_DIMS)) {
+      LAST_DECAY_DIMS = new ArrayList<>(LootrCommonConfig.Decay.decayDimensions);
+      DECAY_DIMS = validateDimensions(LootrCommonConfig.Decay.decayDimensions, "decay_dimensions");
     }
     return DECAY_DIMS;
   }
 
   public static Set<ResourceKey<Level>> getRefreshDimensions() {
-    if (REFRESH_DIMS == null) {
-      REFRESH_DIMS = validateDimensions(LootrCommonConfig.Refresh.refreshDimensions.get(), "refresh_dimensions");
+    if (REFRESH_DIMS == null || !LootrCommonConfig.Refresh.refreshDimensions.equals(LAST_REFRESH_DIMS)) {
+      LAST_REFRESH_DIMS = new ArrayList<>(LootrCommonConfig.Refresh.refreshDimensions);
+      REFRESH_DIMS = validateDimensions(LootrCommonConfig.Refresh.refreshDimensions, "refresh_dimensions");
     }
     return REFRESH_DIMS;
   }
 
   public static Set<ResourceKey<LootTable>> getLootBlacklist() {
-    if (LOOT_BLACKLIST == null) {
-      LOOT_BLACKLIST = validateResourceKeyList(LootrCommonConfig.Restrictions.lootTableBlacklist.get(), "loot_blacklist", o -> ResourceKey.create(Registries.LOOT_TABLE, o));
+    if (LOOT_BLACKLIST == null || !LootrCommonConfig.Restrictions.lootTableBlacklist.equals(LAST_LOOT_BLACKLIST)) {
+      LAST_LOOT_BLACKLIST = new ArrayList<>(LootrCommonConfig.Restrictions.lootTableBlacklist);
+      LOOT_BLACKLIST = validateResourceKeyList(LootrCommonConfig.Restrictions.lootTableBlacklist, "loot_blacklist", o -> ResourceKey.create(Registries.LOOT_TABLE, o));
       // Fixes for #79 and #74
       LOOT_BLACKLIST.addAll(getProblematicLootTables());
     }
@@ -103,8 +121,9 @@ public class ConfigManager {
   }
 
   public static Set<String> getLootModidsBlacklist() {
-    if (LOOT_MODIDS == null) {
-      LOOT_MODIDS = validateStringList(LootrCommonConfig.Restrictions.lootTableModidBlacklist.get(), "loot_modid_blacklist");
+    if (LOOT_MODIDS == null || !LootrCommonConfig.Restrictions.lootTableModidBlacklist.equals(LAST_LOOT_MODIDS)) {
+      LAST_LOOT_MODIDS = new ArrayList<>(LootrCommonConfig.Restrictions.lootTableModidBlacklist);
+      LOOT_MODIDS = validateStringList(LootrCommonConfig.Restrictions.lootTableModidBlacklist, "loot_modid_blacklist");
     }
     return LOOT_MODIDS;
   }
@@ -118,29 +137,33 @@ public class ConfigManager {
   }
 
   public static Set<ResourceKey<LootTable>> getDecayingTables() {
-    if (DECAY_TABLES == null) {
-      DECAY_TABLES = validateResourceKeyList(LootrCommonConfig.Decay.decayLootTables.get(), "decay_loot_tables", o -> ResourceKey.create(Registries.LOOT_TABLE, o));
+    if (DECAY_TABLES == null || !LootrCommonConfig.Decay.decayLootTables.equals(LAST_DECAY_TABLES)) {
+      LAST_DECAY_TABLES = new ArrayList<>(LootrCommonConfig.Decay.decayLootTables);
+      DECAY_TABLES = validateResourceKeyList(LootrCommonConfig.Decay.decayLootTables, "decay_loot_tables", o -> ResourceKey.create(Registries.LOOT_TABLE, o));
     }
     return DECAY_TABLES;
   }
 
   public static Set<String> getDecayMods() {
-    if (DECAY_MODS == null) {
-      DECAY_MODS = validateStringList(LootrCommonConfig.Decay.decayLootTableModids.get(), "decay_mods");
+    if (DECAY_MODS == null || !LootrCommonConfig.Decay.decayLootTableModids.equals(LAST_DECAY_MODS)) {
+      LAST_DECAY_MODS = new ArrayList<>(LootrCommonConfig.Decay.decayLootTableModids);
+      DECAY_MODS = validateStringList(LootrCommonConfig.Decay.decayLootTableModids, "decay_mods");
     }
     return DECAY_MODS;
   }
 
   public static Set<ResourceKey<LootTable>> getRefreshingTables() {
-    if (REFRESH_TABLES == null) {
-      REFRESH_TABLES = validateResourceKeyList(LootrCommonConfig.Refresh.refreshLootTables.get(), "refresh_tables", o -> ResourceKey.create(Registries.LOOT_TABLE, o));
+    if (REFRESH_TABLES == null || !LootrCommonConfig.Refresh.refreshLootTables.equals(LAST_REFRESH_TABLES)) {
+      LAST_REFRESH_TABLES = new ArrayList<>(LootrCommonConfig.Refresh.refreshLootTables);
+      REFRESH_TABLES = validateResourceKeyList(LootrCommonConfig.Refresh.refreshLootTables, "refresh_tables", o -> ResourceKey.create(Registries.LOOT_TABLE, o));
     }
     return REFRESH_TABLES;
   }
 
   public static Set<String> getRefreshMods() {
-    if (REFRESH_MODS == null) {
-      REFRESH_MODS = validateStringList(LootrCommonConfig.Refresh.refreshLootTableModids.get(), "refresh_modids");
+    if (REFRESH_MODS == null || !LootrCommonConfig.Refresh.refreshLootTableModids.equals(LAST_REFRESH_MODS)) {
+      LAST_REFRESH_MODS = new ArrayList<>(LootrCommonConfig.Refresh.refreshLootTableModids);
+      REFRESH_MODS = validateStringList(LootrCommonConfig.Refresh.refreshLootTableModids, "refresh_modids");
     }
     return REFRESH_MODS;
   }
@@ -214,7 +237,7 @@ public class ConfigManager {
 
   public static Set<ResourceKey<LootTable>> getProblematicLootTables() {
     if (PROBLEMATIC_LOOT_TABLES == null) {
-      PROBLEMATIC_LOOT_TABLES = validateResourceKeyList(LootrCommonConfig.Restrictions.problematicLootTables.get(), "problematic_loot_tables", o -> ResourceKey.create(Registries.LOOT_TABLE, o));
+      PROBLEMATIC_LOOT_TABLES = validateResourceKeyList(LootrCommonConfig.Restrictions.problematicLootTables, "problematic_loot_tables", o -> ResourceKey.create(Registries.LOOT_TABLE, o));
     }
     return PROBLEMATIC_LOOT_TABLES;
   }
@@ -247,6 +270,7 @@ public class ConfigManager {
     return validateResourceKeyList(List.of(incomingList), listKey, builder);
   }
 
+  // TODO: Don't crash, just say the config is invalid
   protected static <T> Set<ResourceKey<T>> validateResourceKeyList(Collection<? extends String> incomingList, String listKey, Function<Identifier, ResourceKey<T>> builder) {
     Set<ResourceKey<T>> validatedList = new HashSet<>();
     for (String entry : incomingList) {
