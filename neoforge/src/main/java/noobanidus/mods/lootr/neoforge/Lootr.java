@@ -8,6 +8,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
+import noobanidus.mods.lootr.common.api.config.LootrClientConfig;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.command.CommandLootr;
 import noobanidus.mods.lootr.common.api.config.LootrCommonConfig;
@@ -29,6 +30,7 @@ public class Lootr {
     PlatformAPI.INSTANCE = new PlatformAPIImpl();
 
     LootrConfig.getConfigurator().register(LootrCommonConfig.class);
+    LootrConfig.getConfigurator().register(LootrClientConfig.class);
 
     NeoForge.EVENT_BUS.addListener(this::onCommands);
     ModTabs.register(modBus);

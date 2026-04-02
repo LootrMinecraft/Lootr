@@ -270,24 +270,26 @@ public class ConfigManager {
     return validateResourceKeyList(List.of(incomingList), listKey, builder);
   }
 
-  // TODO: Don't crash, just say the config is invalid
   protected static <T> Set<ResourceKey<T>> validateResourceKeyList(Collection<? extends String> incomingList, String listKey, Function<Identifier, ResourceKey<T>> builder) {
     Set<ResourceKey<T>> validatedList = new HashSet<>();
     for (String entry : incomingList) {
       if (entry == null || entry.isEmpty()) {
-        throw new RuntimeException("Error found when validating a configuration list for '" + listKey + "'. One of the entries is null or empty and cannot be converted to a Identifier.");
+        LootrAPI.LOG.error(new RuntimeException("Error found when validating a configuration list for '" + listKey + "'. One of the entries is null or empty and cannot be converted to a Identifier."));
+        continue;
       }
       Identifier location;
       try {
         location = Identifier.parse(entry);
       } catch (Exception e) {
-        throw new RuntimeException("Error found when validating a configuration list for '" + listKey + "'. The value found in the list, '" + entry + "', is not a valid Identifier.", e);
+        LootrAPI.LOG.error(new RuntimeException("Error found when validating a configuration list for '" + listKey + "'. The value found in the list, '" + entry + "', is not a valid Identifier.", e));
+        continue;
       }
 
       try {
         validatedList.add(builder.apply(location));
       } catch (Exception e) {
-        throw new RuntimeException("Error found when validating a configuration list for '" + listKey + "'. The value found in the list, '" + entry + "', is not valid to create a ResourceKey.", e);
+        LootrAPI.LOG.error(new RuntimeException("Error found when validating a configuration list for '" + listKey + "'. The value found in the list, '" + entry + "', is not valid to create a ResourceKey.", e));
+        continue;
       }
     }
     return validatedList;

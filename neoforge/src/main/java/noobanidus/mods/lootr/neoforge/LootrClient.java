@@ -11,6 +11,5 @@ import noobanidus.mods.lootr.common.api.config.LootrConfig;
 @Mod(value= LootrAPI.MODID, dist= Dist.CLIENT)
 public class LootrClient {
   public LootrClient(ModContainer modContainer, IEventBus modBus) {
-    LootrConfig.getConfigurator().register(LootrClientConfig.class);
   }
 }
