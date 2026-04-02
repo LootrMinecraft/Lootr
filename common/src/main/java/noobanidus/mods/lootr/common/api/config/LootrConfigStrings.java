@@ -1,5 +1,7 @@
 package noobanidus.mods.lootr.common.api.config;
 
+// These strings are used for the default json file comments
+// and to supply the language provider for translation.
 public final class LootrConfigStrings {
   private LootrConfigStrings() {
   }
