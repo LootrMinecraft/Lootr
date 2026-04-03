@@ -4,6 +4,9 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
+import noobanidus.mods.lootr.common.api.config.LootrClientConfig;
+import noobanidus.mods.lootr.common.api.config.LootrCommonConfig;
+import noobanidus.mods.lootr.common.api.config.LootrConfig;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.fabric.event.LootrEventsInit;
 import noobanidus.mods.lootr.fabric.impl.LootrAPIImpl;
@@ -21,6 +24,9 @@ public class Lootr implements ModInitializer {
     LootrRegistry.INSTANCE = new LootrRegistryImpl();
     PlatformAPI.INSTANCE = new PlatformAPIImpl();
 
+    LootrConfig.getConfigurator().register(LootrCommonConfig.class);
+    LootrConfig.getConfigurator().register(LootrClientConfig.class);
+
     var toClient = PayloadTypeRegistry.clientboundPlay();
 
     toClient.register(PacketOpenCart.TYPE, PacketOpenCart.STREAM_CODEC);
@@ -32,7 +38,6 @@ public class Lootr implements ModInitializer {
 
     var toServer = PayloadTypeRegistry.serverboundPlay();
     toServer.register(PacketRequestUpdate.TYPE, PacketRequestUpdate.STREAM_CODEC);
-
 
     LootrNetworkingInit.register();
 
