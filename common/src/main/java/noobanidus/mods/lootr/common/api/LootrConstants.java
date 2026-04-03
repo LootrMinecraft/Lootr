@@ -38,6 +38,7 @@ public class LootrConstants {
   public static final Identifier SUSPICIOUS_GRAVEL = LootrAPI.rl("suspicious_gravel");
   public static final Identifier ITEM_FRAME = LootrAPI.rl("item_frame");
   public static final Identifier UNOPENED_PARTICLE = LootrAPI.rl("unopened_particle");
+  public static final Identifier REFRESH_PARTICLE = LootrAPI.rl("refresh_particle");
 
   public static final ResourceKey<EntityType<?>> ITEM_FRAME_ENTITY = ResourceKey.create(Registries.ENTITY_TYPE, ITEM_FRAME);
   public static final ResourceKey<EntityType<?>> MINECART_WITH_CHEST_ENTITY = ResourceKey.create(Registries.ENTITY_TYPE, MINECART_WITH_CHEST);
