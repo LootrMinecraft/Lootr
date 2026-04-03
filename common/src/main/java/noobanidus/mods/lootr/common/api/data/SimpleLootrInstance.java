@@ -7,6 +7,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
@@ -31,7 +32,8 @@ public class SimpleLootrInstance {
   protected final Set<UUID> clientOpeners = new ObjectOpenHashSet<>();
   protected UUID infoId = null;
   protected boolean hasBeenOpened = false;
-  protected String cachedId;
+  protected int cachedKey;
+  protected Identifier cachedIdentifier;
   protected boolean clientOpened = false;
 
   protected boolean providesOwnUuid = false;
@@ -73,15 +75,24 @@ public class SimpleLootrInstance {
     }
     if (this.infoId == null) {
       this.infoId = UUID.randomUUID();
+      this.cachedKey = IKeyedData.generateInfoIntKey(this.infoId);
+      this.cachedIdentifier = IKeyedData.generateInfoIdentifier(this.infoId);
     }
     return this.infoId;
   }
 
-  public String getInfoKey() {
-    if (cachedId == null) {
-      cachedId = ILootrInfo.generateInfoKey(getInfoUUID());
+  public int getInfoKey() {
+    if (!providesOwnUuid && this.infoId == null) {
+      getInfoUUID();
     }
-    return cachedId;
+    return cachedKey;
+  }
+
+  public Identifier getInfoIdentifier () {
+    if (cachedIdentifier == null) {
+      getInfoUUID();
+    }
+    return cachedIdentifier;
   }
 
   public boolean hasBeenOpened() {

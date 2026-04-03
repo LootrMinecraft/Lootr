@@ -66,12 +66,11 @@ import noobanidus.mods.lootr.common.block.entity.BlockEntityTicker;
 import noobanidus.mods.lootr.common.block.entity.LootrInventoryBlockEntity;
 import noobanidus.mods.lootr.common.data.DataStorage;
 import noobanidus.mods.lootr.common.data.LootrInventory;
-import noobanidus.mods.lootr.common.data.LootrSavedData;
+import noobanidus.mods.lootr.common.data.LootrContainerData;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.common.impl.IChunkMapGetChunks;
 import noobanidus.mods.lootr.common.impl.LootrServiceRegistry;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinBaseContainerBlockEntity;
-import noobanidus.mods.lootr.common.mixin.accessor.MixinChunkMap;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinMinecraftServer;
 import org.jetbrains.annotations.Nullable;
 
@@ -270,7 +269,7 @@ public class CommandLootr {
         return 0;
       }
 
-      LootrSavedData data = DataStorage.getData(ibe);
+      LootrContainerData data = DataStorage.getData(ibe);
       if (data == null) {
         c.getSource().sendSuccess(() -> Component.literal("No Lootr data found for this container."), false);
         return 0;
@@ -316,7 +315,7 @@ public class CommandLootr {
         return 0;
       }
 
-      LootrSavedData data = DataStorage.getData(ibe);
+      LootrContainerData data = DataStorage.getData(ibe);
       if (data == null) {
         c.getSource().sendSuccess(() -> Component.literal("No Lootr data found for this container."), true);
         return 0;

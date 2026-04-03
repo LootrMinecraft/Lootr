@@ -17,15 +17,15 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-public class LootrSavedData extends SavedData implements ILootrSavedData {
+public class LootrContainerData extends SavedData implements ILootrContainerData {
   @SuppressWarnings("unchecked")
-  public static final Codec<LootrSavedData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-      Codec.BOOL.fieldOf("hasBeenOpened").forGetter(LootrSavedData::hasBeenOpened),
+  public static final Codec<LootrContainerData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+      Codec.BOOL.fieldOf("hasBeenOpened").forGetter(LootrContainerData::hasBeenOpened),
       ILootrInfo.CODEC.fieldOf("info").forGetter(data -> data.info),
       Codec.unboundedMap(Codec.STRING.xmap(UUID::fromString, UUID::toString), (Codec<LootrInventory>)(Object) ILootrInventory.CODEC).fieldOf("inventories").forGetter(data -> data.inventories),
       UUIDUtil.CODEC_LINKED_SET.fieldOf("openers").forGetter(data -> data.openers),
       UUIDUtil.CODEC_LINKED_SET.fieldOf("actualOpeners").forGetter(data -> data.actualOpeners)
-  ).apply(instance, LootrSavedData::new));
+  ).apply(instance, LootrContainerData::new));
 
   private boolean hasBeenOpened;
   private ILootrInfo info;
@@ -33,11 +33,11 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
   private final Set<UUID> openers = new ObjectLinkedOpenHashSet<>();
   private final Set<UUID> actualOpeners = new ObjectLinkedOpenHashSet<>();
 
-  protected LootrSavedData(ILootrInfo info) {
+  protected LootrContainerData(ILootrInfo info) {
     this(info, false);
   }
 
-  protected LootrSavedData(ILootrInfo info, boolean noCopy) {
+  protected LootrContainerData(ILootrInfo info, boolean noCopy) {
     if (noCopy) {
       this.info = info;
     } else {
@@ -45,7 +45,7 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
     }
   }
 
-  private LootrSavedData(boolean hasBeenOpened, ILootrInfo info, Map<UUID, LootrInventory> map, Set<UUID> openers, Set<UUID> actualOpeners) {
+  private LootrContainerData(boolean hasBeenOpened, ILootrInfo info, Map<UUID, LootrInventory> map, Set<UUID> openers, Set<UUID> actualOpeners) {
     this.hasBeenOpened = hasBeenOpened;
     this.info = info;
     this.inventories.putAll(map);
@@ -56,8 +56,8 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
     this.actualOpeners.addAll(actualOpeners);
   }
 
-  public static Supplier<LootrSavedData> fromInfo(ILootrInfo info) {
-    return () -> new LootrSavedData(info);
+  public static Supplier<LootrContainerData> fromInfo(ILootrInfo info) {
+    return () -> new LootrContainerData(info);
   }
 
   @Override
@@ -72,7 +72,7 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
 
   @Override
   public boolean addVisualOpener(UUID uuid) {
-    boolean result = ILootrSavedData.super.addVisualOpener(uuid);
+    boolean result = ILootrContainerData.super.addVisualOpener(uuid);
     if (result) {
       setDirty();
     }
@@ -81,7 +81,7 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
 
   @Override
   public boolean removeVisualOpener(UUID uuid) {
-    boolean result = ILootrSavedData.super.removeVisualOpener(uuid);
+    boolean result = ILootrContainerData.super.removeVisualOpener(uuid);
     if (result) {
       setDirty();
     }
@@ -90,7 +90,7 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
 
   @Override
   public boolean addActualOpener(UUID uuid) {
-    boolean result = ILootrSavedData.super.addActualOpener(uuid);
+    boolean result = ILootrContainerData.super.addActualOpener(uuid);
     if (result) {
       setDirty();
     }

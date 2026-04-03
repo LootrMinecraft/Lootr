@@ -30,7 +30,7 @@ import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
 import noobanidus.mods.lootr.common.api.client.ClientTextureType;
 import noobanidus.mods.lootr.common.api.config.SaveMode;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
-import noobanidus.mods.lootr.common.api.data.ILootrSavedData;
+import noobanidus.mods.lootr.common.api.data.ILootrContainerData;
 import noobanidus.mods.lootr.common.api.data.LootFiller;
 import noobanidus.mods.lootr.common.api.data.MenuBuilder;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
@@ -383,7 +383,7 @@ public class LootrAPI {
   }
 
   @Nullable
-  public static ILootrSavedData getData(ILootrInfoProvider provider) {
+  public static ILootrContainerData getData(ILootrInfoProvider provider) {
     return INSTANCE.getData(provider);
   }
 

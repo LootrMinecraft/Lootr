@@ -15,6 +15,7 @@ import noobanidus.mods.lootr.common.api.type.BuiltInLootrTypes;
 import noobanidus.mods.lootr.common.api.type.ILootrType;
 import noobanidus.mods.lootr.common.api.wrapper.ILootrBlockEntityWrapper;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 public class LootrInventoryBlockEntity extends LootrChestBlockEntity {
   public LootrInventoryBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
@@ -42,7 +43,7 @@ public class LootrInventoryBlockEntity extends LootrChestBlockEntity {
   }
 
   @Override
-  public ILootrType getInfoType() {
+  public @NonNull ILootrType getInfoType() {
     return BuiltInLootrTypes.INVENTORY;
   }
 

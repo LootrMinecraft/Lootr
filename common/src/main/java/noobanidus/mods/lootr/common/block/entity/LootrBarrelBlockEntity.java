@@ -8,6 +8,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -39,6 +40,7 @@ import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Set;
 import java.util.UUID;
@@ -81,7 +83,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   }
 
   @Override
-  public ILootrType getInfoType() {
+  public @NonNull ILootrType getInfoType() {
     return BuiltInLootrTypes.BARREL;
   }
 
@@ -89,6 +91,16 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   @NotNull
   public UUID getInfoUUID() {
     return this.simpleLootrInstance.getInfoUUID();
+  }
+
+  @Override
+  public int getInfoKey() {
+    return this.simpleLootrInstance.getInfoKey();
+  }
+
+  @Override
+  public Identifier getInfoIdentifier() {
+    return this.simpleLootrInstance.getInfoIdentifier();
   }
 
   @Override
@@ -269,11 +281,6 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   @Override
   public @Nullable IContainerTrigger getTrigger() {
     return LootrRegistry.getBarrelTrigger();
-  }
-
-  @Override
-  public String getInfoKey() {
-    return this.simpleLootrInstance.getInfoKey();
   }
 
   @Override

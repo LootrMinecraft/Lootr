@@ -3,6 +3,7 @@ package noobanidus.mods.lootr.common.api.data;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
@@ -17,6 +18,7 @@ import noobanidus.mods.lootr.common.api.IRedirect;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.UUID;
 
@@ -26,7 +28,7 @@ import java.util.UUID;
  * is a custom class), whereas the SavedData never has an associated
  * level, block entity, etc.
  */
-public interface ILootrSavedData extends IRedirect<ILootrInfo>, ILootrInfo, IOpeners, IMarkChanged {
+public interface ILootrContainerData extends IRedirect<ILootrInfo>, ILootrInfo, IOpeners, IMarkChanged {
 
   void update(ILootrInfo info);
 
@@ -61,7 +63,7 @@ public interface ILootrSavedData extends IRedirect<ILootrInfo>, ILootrInfo, IOpe
   ILootrInventory createInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler);
 
   @Override
-  default ILootrType getInfoType() {
+  default @NonNull ILootrType getInfoType() {
     return getRedirect().getInfoType();
   }
 
@@ -76,8 +78,13 @@ public interface ILootrSavedData extends IRedirect<ILootrInfo>, ILootrInfo, IOpe
   }
 
   @Override
-  default String getInfoKey() {
+  default int getInfoKey () {
     return getRedirect().getInfoKey();
+  }
+
+  @Override
+  default Identifier getInfoIdentifier() {
+    return getRedirect().getInfoIdentifier();
   }
 
   @Override

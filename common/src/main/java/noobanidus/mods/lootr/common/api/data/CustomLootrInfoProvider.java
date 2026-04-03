@@ -3,6 +3,7 @@ package noobanidus.mods.lootr.common.api.data;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -10,6 +11,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.type.ILootrType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Set;
 import java.util.UUID;
@@ -17,7 +19,8 @@ import java.util.UUID;
 public record CustomLootrInfoProvider(
     ILootrType type,
     UUID id,
-    String cachedKey,
+    int key,
+    Identifier identifier,
     BlockPos pos,
     int containerSize,
     ResourceKey<LootTable> lootTable,
@@ -27,10 +30,11 @@ public record CustomLootrInfoProvider(
     NonNullList<ItemStack> customInventory) implements ILootrInfoProvider {
 
   @SuppressWarnings("deprecation")
-  public CustomLootrInfoProvider(ILootrType type, UUID id, String cachedKey, BlockPos pos, int containerSize, ResourceKey<LootTable> lootTable, long lootSeed, Component displayName, ResourceKey<Level> dimension, NonNullList<ItemStack> customInventory) {
+  public CustomLootrInfoProvider(ILootrType type, UUID id, int key, Identifier identifier, BlockPos pos, int containerSize, ResourceKey<LootTable> lootTable, long lootSeed, Component displayName, ResourceKey<Level> dimension, NonNullList<ItemStack> customInventory) {
     this.type = type;
     this.id = id;
-    this.cachedKey = cachedKey;
+    this.key = key;
+    this.identifier = identifier;
     this.pos = pos;
     this.containerSize = containerSize;
     this.lootTable = lootTable;
@@ -41,7 +45,7 @@ public record CustomLootrInfoProvider(
   }
 
   @Override
-  public ILootrType getInfoType() {
+  public @NonNull ILootrType getInfoType() {
     return type();
   }
 
@@ -51,8 +55,13 @@ public record CustomLootrInfoProvider(
   }
 
   @Override
-  public String getInfoKey() {
-    return cachedKey();
+  public int getInfoKey() {
+    return key();
+  }
+
+  @Override
+  public Identifier getInfoIdentifier() {
+    return identifier();
   }
 
   @Override

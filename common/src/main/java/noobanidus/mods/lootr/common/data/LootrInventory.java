@@ -15,7 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import noobanidus.mods.lootr.common.api.data.MenuBuilder;
 import noobanidus.mods.lootr.common.api.data.ILootrInfo;
-import noobanidus.mods.lootr.common.api.data.ILootrSavedData;
+import noobanidus.mods.lootr.common.api.data.ILootrContainerData;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class LootrInventory implements ILootrInventory {
   private NonNullList<ItemStack> contents = null;
-  private ILootrSavedData info;
+  private ILootrContainerData info;
   private MenuBuilder menuBuilder = null;
 
   public LootrInventory(NonNullList<ItemStack> contents) {
@@ -34,7 +34,7 @@ public class LootrInventory implements ILootrInventory {
     }
   }
 
-  void setLootrSavedData(ILootrSavedData savedData) {
+  void setLootrSavedData(ILootrContainerData savedData) {
     this.info = savedData;
     if (this.contents == null) {
       this.contents = info.buildInitialInventory();
@@ -129,7 +129,7 @@ public class LootrInventory implements ILootrInventory {
   }
 
   @Override
-  public void setInfo(ILootrSavedData info) {
+  public void setInfo(ILootrContainerData info) {
     this.info = info;
   }
 

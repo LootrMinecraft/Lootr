@@ -10,6 +10,7 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -43,6 +44,8 @@ import noobanidus.mods.lootr.common.integration.digsite_workshop.IModdedBrushIte
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinFallingBlockEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.spongepowered.asm.mixin.transformer.ext.IDecompiler;
 
 import java.util.Objects;
 import java.util.Set;
@@ -404,7 +407,7 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
   }
 
   @Override
-  public ILootrType getInfoType() {
+  public @NonNull ILootrType getInfoType() {
     if (this.getBlockState().is(LootrTags.Blocks.SANDS)) {
       return BuiltInLootrTypes.SAND;
     } else if (this.getBlockState().is(LootrTags.Blocks.GRAVELS)) {
@@ -420,8 +423,13 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
   }
 
   @Override
-  public String getInfoKey() {
+  public int getInfoKey() {
     return simpleLootrInstance.getInfoKey();
+  }
+
+  @Override
+  public Identifier getInfoIdentifier() {
+    return simpleLootrInstance.getInfoIdentifier();
   }
 
   @Override

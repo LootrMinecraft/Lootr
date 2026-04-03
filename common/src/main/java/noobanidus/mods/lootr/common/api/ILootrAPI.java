@@ -26,7 +26,7 @@ import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
 import noobanidus.mods.lootr.common.api.client.ClientTextureType;
 import noobanidus.mods.lootr.common.api.config.SaveMode;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
-import noobanidus.mods.lootr.common.api.data.ILootrSavedData;
+import noobanidus.mods.lootr.common.api.data.ILootrContainerData;
 import noobanidus.mods.lootr.common.api.data.LootFiller;
 import noobanidus.mods.lootr.common.api.data.MenuBuilder;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
@@ -79,7 +79,7 @@ public interface ILootrAPI {
 
   // Get saved data for specific provider
   @Nullable
-  ILootrSavedData getData(ILootrInfoProvider provider);
+  ILootrContainerData getData(ILootrInfoProvider provider);
 
   // Calculate seed according to configuration
   long getLootSeed(long seed);

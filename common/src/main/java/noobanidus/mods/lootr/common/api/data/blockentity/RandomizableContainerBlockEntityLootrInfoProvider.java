@@ -3,6 +3,7 @@ package noobanidus.mods.lootr.common.api.data.blockentity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
@@ -12,9 +13,10 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.type.BuiltInLootrTypes;
 import noobanidus.mods.lootr.common.api.type.ILootrType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.data.ILootrSavedData;
+import noobanidus.mods.lootr.common.api.data.ILootrContainerData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Set;
 import java.util.UUID;
@@ -22,11 +24,11 @@ import java.util.UUID;
 // Currently used by:
 // - Bumblezone integration
 public record RandomizableContainerBlockEntityLootrInfoProvider(
-    @NotNull RandomizableContainerBlockEntity blockEntity, UUID id, String cachedId,
+    @NotNull RandomizableContainerBlockEntity blockEntity, UUID id, int key, Identifier identifier,
     NonNullList<ItemStack> customInventory) implements ILootrBlockEntity {
 
   @Override
-  public ILootrType getInfoType() {
+  public @NonNull ILootrType getInfoType() {
     return BuiltInLootrTypes.SIMPLE;
   }
 
@@ -36,8 +38,13 @@ public record RandomizableContainerBlockEntityLootrInfoProvider(
   }
 
   @Override
-  public String getInfoKey() {
-    return cachedId();
+  public int getInfoKey() {
+    return key();
+  }
+
+  @Override
+  public Identifier getInfoIdentifier() {
+    return identifier();
   }
 
   @Override
@@ -112,7 +119,7 @@ public record RandomizableContainerBlockEntityLootrInfoProvider(
     if (blockEntity.getLevel() != null && blockEntity.getLevel().isClientSide()) {
       return;
     }
-    ILootrSavedData data = LootrAPI.getData(this);
+    ILootrContainerData data = LootrAPI.getData(this);
     if (data != null) {
       data.markChanged();
     }

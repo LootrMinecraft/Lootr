@@ -11,6 +11,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.RandomizableContainer;
@@ -41,6 +42,7 @@ import noobanidus.mods.lootr.common.api.type.ILootrType;
 import noobanidus.mods.lootr.common.api.wrapper.ILootrBlockEntityWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Set;
 import java.util.UUID;
@@ -289,7 +291,7 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   }
 
   @Override
-  public ILootrType getInfoType() {
+  public @NonNull ILootrType getInfoType() {
     return BuiltInLootrTypes.DECORATED_POT;
   }
 
@@ -299,8 +301,13 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   }
 
   @Override
-  public String getInfoKey() {
+  public int getInfoKey() {
     return lootrInstance.getInfoKey();
+  }
+
+  @Override
+  public Identifier getInfoIdentifier() {
+    return lootrInstance.getInfoIdentifier();
   }
 
   @Override

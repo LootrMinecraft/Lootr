@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -39,6 +40,7 @@ import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinItemFrame;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Set;
 import java.util.UUID;
@@ -321,7 +323,7 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   }
 
   @Override
-  public ILootrType getInfoType() {
+  public @NonNull ILootrType getInfoType() {
     return BuiltInLootrTypes.ITEM_FRAME;
   }
 
@@ -331,8 +333,13 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   }
 
   @Override
-  public String getInfoKey() {
+  public int getInfoKey() {
     return instance.getInfoKey();
+  }
+
+  @Override
+  public Identifier getInfoIdentifier() {
+    return instance.getInfoIdentifier();
   }
 
   @Override

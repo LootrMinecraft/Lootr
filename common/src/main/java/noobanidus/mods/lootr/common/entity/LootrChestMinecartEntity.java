@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -32,6 +33,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
+import noobanidus.mods.lootr.common.api.data.IKeyedData;
 import noobanidus.mods.lootr.common.api.data.ILootrInfo;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
@@ -40,6 +42,7 @@ import noobanidus.mods.lootr.common.api.type.ILootrType;
 import noobanidus.mods.lootr.common.api.wrapper.ILootrEntityWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Set;
 import java.util.UUID;
@@ -52,7 +55,8 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   private boolean hasBeenOpened = false;
   // This is only ever set via packet
   private boolean opened = false;
-  private String cachedId;
+  private int cachedKey;
+  private Identifier cachedIdentifier;
 
   public LootrChestMinecartEntity(EntityType<LootrChestMinecartEntity> type, Level world) {
     super(type, world);
@@ -268,7 +272,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
   @Override
-  public ILootrType getInfoType() {
+  public @NonNull ILootrType getInfoType() {
     return BuiltInLootrTypes.MINECART;
   }
 
@@ -283,12 +287,23 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     return getUUID();
   }
 
+  private boolean cacheChecked = false;
+
   @Override
-  public String getInfoKey() {
-    if (cachedId == null) {
-      cachedId = ILootrInfo.generateInfoKey(getInfoUUID());
+  public int getInfoKey() {
+    if (!cacheChecked) {
+      cacheChecked = true;
+      this.cachedKey = IKeyedData.generateInfoIntKey(getInfoUUID());
     }
-    return cachedId;
+    return cachedKey;
+  }
+
+  @Override
+  public Identifier getInfoIdentifier() {
+    if (this.cachedIdentifier == null) {
+      this.cachedIdentifier = IKeyedData.generateInfoIdentifier(getInfoUUID());
+    }
+    return cachedIdentifier;
   }
 
   @Override

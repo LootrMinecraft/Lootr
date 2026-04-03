@@ -11,6 +11,7 @@ import noobanidus.mods.lootr.common.api.wrapper.ILootrBlockEntityWrapper;
 import noobanidus.mods.lootr.common.api.type.ILootrType;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import org.jspecify.annotations.NonNull;
 
 public class LootrTrappedChestBlockEntity extends LootrChestBlockEntity {
   public LootrTrappedChestBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
@@ -28,7 +29,7 @@ public class LootrTrappedChestBlockEntity extends LootrChestBlockEntity {
   }
 
   @Override
-  public ILootrType getInfoType () {
+  public @NonNull ILootrType getInfoType () {
     return BuiltInLootrTypes.TRAPPED_CHEST;
   }
 

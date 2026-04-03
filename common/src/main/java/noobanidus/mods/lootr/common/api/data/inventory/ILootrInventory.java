@@ -8,7 +8,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.item.ItemStack;
 import noobanidus.mods.lootr.common.api.data.MenuBuilder;
 import noobanidus.mods.lootr.common.api.data.ILootrInfo;
-import noobanidus.mods.lootr.common.api.data.ILootrSavedData;
+import noobanidus.mods.lootr.common.api.data.ILootrContainerData;
 import noobanidus.mods.lootr.common.data.LootrInventory;
 
 /**
@@ -20,7 +20,7 @@ public interface ILootrInventory extends Container, MenuProvider {
 
   ILootrInfo getInfo();
 
-  void setInfo(ILootrSavedData info);
+  void setInfo(ILootrContainerData info);
 
   @Override
   default Component getDisplayName() {

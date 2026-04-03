@@ -19,6 +19,7 @@ import noobanidus.mods.lootr.common.api.data.blockentity.RandomizableContainerBl
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import org.jetbrains.annotations.Nullable;
 
+import java.security.InvalidKeyException;
 import java.util.Set;
 import java.util.UUID;
 
@@ -51,7 +52,7 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
     } else if (blockEntity instanceof ILootrInfoProvider provider) {
       return provider;
     }
-    return new RandomizableContainerBlockEntityLootrInfoProvider(blockEntity, id, ILootrInfo.generateInfoKey(id), null);
+    return new RandomizableContainerBlockEntityLootrInfoProvider(blockEntity, id, IKeyedData.generateInfoIntKey(id), IKeyedData.generateInfoIdentifier(id), null);
   }
 
   static ILootrInfoProvider of(RandomizableContainerBlockEntity blockEntity, UUID id, NonNullList<ItemStack> customInventory) {
@@ -60,11 +61,11 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
     } else if (blockEntity instanceof ILootrInfoProvider provider) {
       return provider;
     }
-    return new RandomizableContainerBlockEntityLootrInfoProvider(blockEntity, id, ILootrInfo.generateInfoKey(id), customInventory);
+    return new RandomizableContainerBlockEntityLootrInfoProvider(blockEntity, id, IKeyedData.generateInfoIntKey(id), IKeyedData.generateInfoIdentifier(id), customInventory);
   }
 
   static ILootrInfoProvider of(ILootrType type, UUID id, BlockPos pos, int containerSize, ResourceKey<LootTable> lootTable, long lootSeed, Component displayName, ResourceKey<Level> dimension, NonNullList<ItemStack> customInventory) {
-    return new CustomLootrInfoProvider(type, id, ILootrInfo.generateInfoKey(id), pos, containerSize, lootTable, lootSeed, displayName, dimension, customInventory);
+    return new CustomLootrInfoProvider(type, id, IKeyedData.generateInfoIntKey(id), IKeyedData.generateInfoIdentifier(id), pos, containerSize, lootTable, lootSeed, displayName, dimension, customInventory);
   }
 
   // This matters for actual implementations of ILootrBlockEntity
@@ -77,7 +78,7 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
 
   @Override
   default Set<UUID> getVisualOpeners() {
-    ILootrSavedData data = LootrAPI.getData(this);
+    ILootrContainerData data = LootrAPI.getData(this);
     if (data != null) {
       return data.getVisualOpeners();
     }
@@ -86,7 +87,7 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
 
   @Override
   default Set<UUID> getActualOpeners() {
-    ILootrSavedData data = LootrAPI.getData(this);
+    ILootrContainerData data = LootrAPI.getData(this);
     if (data != null) {
       return data.getActualOpeners();
     }
@@ -138,7 +139,7 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
   }
 
   default void performRefresh() {
-    ILootrSavedData data = LootrAPI.getData(this);
+    ILootrContainerData data = LootrAPI.getData(this);
     if (data != null) {
       data.refresh();
       data.clearOpeners();
@@ -155,7 +156,7 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
 
   @Override
   default void markDataChanged() {
-    ILootrSavedData data = LootrAPI.getData(this);
+    ILootrContainerData data = LootrAPI.getData(this);
     if (data != null) {
       data.markChanged();
     }

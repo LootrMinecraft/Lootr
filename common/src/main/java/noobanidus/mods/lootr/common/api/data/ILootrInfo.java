@@ -20,8 +20,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
-import noobanidus.mods.lootr.common.api.type.ILootrType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.type.ILootrType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -45,110 +45,48 @@ import java.util.UUID;
  * Instead, implement ILootrInfoProvider, ILootrEntity or ILootrBlockEntity.
  */
 @ApiStatus.Internal
-public interface ILootrInfo {
+public interface ILootrInfo extends IKeyedData {
   @NonNull
   ILootrType getInfoType();
 
   default LootFiller getDefaultFiller() {
     ILootrType type = getInfoType();
-    if (type == null) {
-      return DefaultLootFiller.getInstance();
-    } else {
-      return type.getDefaultFiller();
-    }
+    return type.getDefaultFiller();
   }
 
   default boolean canRefresh() {
     ILootrType type = getInfoType();
-    if (type == null) {
-      return true;
-    } else {
-      return type.canRefresh();
-    }
+    return type.canRefresh();
   }
 
   default boolean canDecay() {
     ILootrType type = getInfoType();
-    if (type == null) {
-      return true;
-    } else {
-      return type.canDecay();
-    }
+    return type.canDecay();
   }
 
   default boolean canBeMarkedUnopened() {
     ILootrType type = getInfoType();
-    if (type == null) {
-      return true;
-    } else {
-      return type.canBeMarkedUnopened();
-    }
+    return type.canBeMarkedUnopened();
   }
 
   default boolean canDropContentsWhenBroken() {
     ILootrType type = getInfoType();
-    if (type == null) {
-      return true;
-    } else {
-      return type.canDropContentsWhenBroken();
-    }
+    return type.canDropContentsWhenBroken();
   }
-
-/*  // Prefer using getInfoNewType().getReplacementBlock()
-  // This exists for backwards compatibility with "simple"
-  // implementations.
-  @Nullable
-  @Deprecated
-  default Block getReplacementBlock() {
-    ILootrType type = getInfoType();
-    if (type == null) {
-      return null;
-    } else {
-      return type.getReplacementBlock();
-    }
-  }
-
-  // Prefer using getInfoNewType().getReplacementEntity()
-  // This exists for backwards compatibility with "simple"
-  // implementations.
-  @Nullable
-  @Deprecated
-  default EntityType<?> getReplacementEntity() {
-    ILootrType type = getInfoType();
-    if (type == null) {
-      return null;
-    } else {
-      return type.getReplacementEntity();
-    }
-  }*/
-
-/*  // Prefer using getInfoNewType().isEntity() This exists
-  // exists for backwards compatibility with "simple"
-  // implementations.
-  @Deprecated
-  default boolean isEntity() {
-    ILootrType type = getInfoType();
-    if (type == null) {
-      return false;
-    } else {
-      return type.isEntity();
-    }
-  }*/
 
   @NotNull
   default Vec3 getInfoVec() {
     return Vec3.atCenterOf(getInfoPos());
   }
 
-  @NotNull
+  @Override
   UUID getInfoUUID();
 
-  String getInfoKey();
+  @Override
+  int getInfoKey();
 
-  static String generateInfoKey(UUID id) {
-    String idString = id.toString();
-    return "lootr/" + idString.charAt(0) + "/" + idString.substring(0, 2) + "/" + idString;
-  }
+  @Override
+  Identifier getInfoIdentifier();
 
   // The container has been opened at some point in time and has at least one inventory contained (unless inventories have been cleared).
   boolean hasBeenOpened();
@@ -211,118 +149,18 @@ public interface ILootrInfo {
       return null;
     }
 
-    if (getInfoType() == null) {
-      // Try to guess
-      BlockEntity be = level.getBlockEntity(getInfoPos());
-      if (be instanceof Container container) {
-        return container;
-      }
-      Entity entity = level.getEntity(getInfoUUID());
-      if (entity instanceof Container container) {
-        return container;
-      }
-      LootrAPI.LOG.warn("Unable to guess container type for LootrInfo with key '{}'", getInfoKey());
-      return null;
-    } else {
-      return getInfoType().getContainer(this, level);
-    }
+    return getInfoType().getContainer(this, level);
   }
 
   default NonNullList<ItemStack> buildInitialInventory() {
     return NonNullList.withSize(getInfoContainerSize(), ItemStack.EMPTY);
   }
 
-/*  default void saveInfoToTag(CompoundTag tag, HolderLookup.Provider provider) {
-    if (getInfoType() != null) {
-      tag.putInt("type", getInfoType().ordinal());
-    }
-    if (getInfoNewType() != null) {
-      tag.putString("newType", getInfoNewType().getName());
-    }
-    if (getInfoBlockType() != null) {
-      tag.putInt("blockType", getInfoBlockType().ordinal());
-    }
-    tag.put("position", NbtUtils.writeBlockPos(getInfoPos()));
-    tag.putString("key", getInfoKey());
-    tag.putString("dimension", getInfoDimension().location().toString());
-    tag.putUUID("uuid", getInfoUUID());
-    tag.putInt("size", getInfoContainerSize());
-    if (getInfoLootTable() != null) {
-      tag.putString("table", getInfoLootTable().location().toString());
-      tag.putLong("seed", getInfoLootSeed());
-    }
-    if (getInfoDisplayName() != null) {
-      tag.putString("name", Component.Serializer.toJson(getInfoDisplayName(), provider));
-    }
-    if (isInfoReferenceInventory()) {
-      //noinspection DataFlowIssue
-      tag.putInt("referenceSize", getInfoReferenceInventory().size());
-      tag.put("reference", ContainerHelper.saveAllItems(new CompoundTag(), getInfoReferenceInventory(), true, provider));
-    }
-  }
-
-  static ILootrInfo loadInfoFromTag(CompoundTag tag, HolderLookup.Provider provider) {
-    ILootrType type = null;
-
-    if (tag.contains("newType", CompoundTag.TAG_STRING)) {
-      type = LootrAPI.getType(tag.getString("newType"));
-
-      if (type == null) {
-        LootrAPI.LOG.error("Couldn't find LootrType '{}' when loading LootrInfo from tag: {}", tag.getString("newType"), tag);
-        throw new IllegalStateException("Couldn't find LootrType '" + tag.getString("newType") + "' when loading LootrInfo from tag: " + tag);
-      }
-    }
-
-    // LEGACY
-    if (type == null) {
-      if (tag.contains("blockType", CompoundTag.TAG_INT)) {
-        //noinspection deprecation
-        LootrBlockType oldType = LootrBlockType.values()[tag.getInt("blockType")];
-        //noinspection deprecation
-        type = BuiltInLootrTypes.fromLegacy(oldType);
-      } else {
-        if (tag.contains("type", CompoundTag.TAG_INT)) {
-          type = BuiltInLootrTypes.CHEST;
-          // LEGACY
-        } else if (tag.contains("entity") && tag.getBoolean("entity")) {
-          type = BuiltInLootrTypes.MINECART;
-        }
-      }
-    }
-    BlockPos pos = NbtUtils.readBlockPos(tag, "position").orElse(BlockPos.ZERO);
-    UUID uuid = tag.getUUID("uuid");
-    ResourceKey<Level> dimension = ResourceKey.create(Registries.DIMENSION, Identifier.parse(tag.getString("dimension")));
-    int size = tag.getInt("size").get();
-    Component name = null;
-    if (tag.contains("name")) {
-      name = Component.Serializer.fromJson(tag.getString("name"), provider);
-    }
-    NonNullList<ItemStack> reference = null;
-    if (tag.contains("reference") && tag.contains("referenceSize")) {
-      reference = NonNullList.withSize(tag.getInt("referenceSize"), ItemStack.EMPTY);
-      ContainerHelper.loadAllItems(tag.getCompound("reference"), reference, provider);
-      type = BuiltInLootrTypes.INVENTORY;
-    }
-
-    ResourceKey<LootTable> table = null;
-    long seed = -1;
-    if (tag.contains("table")) {
-      table = ResourceKey.create(Registries.LOOT_TABLE, Identifier.parse(tag.getString("table")));
-      seed = tag.getLong("seed");
-    }
-
-    if (type == null) {
-      LootrAPI.LOG.error("Couldn't determine LootrType when loading LootrInfo from tag, guessing chest: {}", tag);
-      type = BuiltInLootrTypes.CHEST;
-    }
-    return new BaseLootrInfo(null, null, type, uuid, ILootrInfo.generateInfoKey(uuid), pos, name, dimension, size, reference, table, seed);
-  }*/
-
-  @SuppressWarnings("deprecation")
   Codec<ILootrInfo> CODEC = RecordCodecBuilder.create(instance -> instance.group(
       ILootrType.CODEC.fieldOf("type").forGetter(ILootrInfo::getInfoType),
       UUIDUtil.CODEC.fieldOf("uuid").forGetter(ILootrInfo::getInfoUUID),
-      Codec.STRING.fieldOf("key").forGetter(ILootrInfo::getInfoKey),
+      Codec.INT.fieldOf("key").forGetter(ILootrInfo::getInfoKey),
+      Identifier.CODEC.fieldOf("identifier").forGetter(ILootrInfo::getInfoIdentifier),
       BlockPos.CODEC.fieldOf("position").forGetter(ILootrInfo::getInfoPos),
       ComponentSerialization.CODEC.optionalFieldOf("name").forGetter(i -> Optional.ofNullable(i.getInfoDisplayName())),
       Identifier.CODEC.xmap(loc -> ResourceKey.create(Registries.DIMENSION, loc), ResourceKey::identifier)

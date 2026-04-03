@@ -3,6 +3,7 @@ package noobanidus.mods.lootr.common.api.data;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -10,6 +11,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.type.ILootrType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -20,24 +22,24 @@ import java.util.UUID;
  * It is specifically used to store data in `LootrSavedData`.
  */
 public record BaseLootrInfo(ILootrType type, UUID uuid,
-                            String cachedKey, BlockPos pos, @Nullable Component name, ResourceKey<Level> dimension,
+                            int key, Identifier identifier, BlockPos pos, @Nullable Component name,
+                            ResourceKey<Level> dimension,
                             int containerSize, NonNullList<ItemStack> customInventory, ResourceKey<LootTable> table,
                             long seed) implements ILootrInfo {
   @SuppressWarnings({"OptionalUsedAsFieldOrParameterType"})
-  public BaseLootrInfo(ILootrType iLootrType, UUID uuid, String s, BlockPos pos, Optional<Component> component, ResourceKey<Level> levelResourceKey, Integer integer, Optional<NonNullList<ItemStack>> itemStacks, Optional<ResourceKey<LootTable>> lootTableResourceKey, Optional<Long> aLong) {
-    this(iLootrType, uuid, s, pos, component.orElse(null), levelResourceKey, integer, itemStacks.orElse(null), lootTableResourceKey.orElse(null), aLong.orElse(-1L));
+  public BaseLootrInfo(ILootrType iLootrType, UUID uuid, int key, Identifier identifier, BlockPos pos, Optional<Component> component, ResourceKey<Level> levelResourceKey, Integer integer, Optional<NonNullList<ItemStack>> itemStacks, Optional<ResourceKey<LootTable>> lootTableResourceKey, Optional<Long> aLong) {
+    this(iLootrType, uuid, key, identifier, pos, component.orElse(null), levelResourceKey, integer, itemStacks.orElse(null), lootTableResourceKey.orElse(null), aLong.orElse(-1L));
   }
 
-  @SuppressWarnings("deprecation")
   public static BaseLootrInfo copy(ILootrInfo info) {
-    return new BaseLootrInfo(info.getInfoType(), info.getInfoUUID(), info.getInfoKey(), info.getInfoPos(), info.getInfoDisplayName(), info.getInfoDimension(), info.getInfoContainerSize(), info.getInfoReferenceInventory(), info.getInfoLootTable(), info.getInfoLootSeed());
+    return new BaseLootrInfo(info.getInfoType(), info.getInfoUUID(), info.getInfoKey(), info.getInfoIdentifier(), info.getInfoPos(), info.getInfoDisplayName(), info.getInfoDimension(), info.getInfoContainerSize(), info.getInfoReferenceInventory(), info.getInfoLootTable(), info.getInfoLootSeed());
   }
 
-  @SuppressWarnings("deprecation")
-  public BaseLootrInfo(ILootrType type, UUID uuid, String cachedKey, BlockPos pos, @Nullable Component name, ResourceKey<Level> dimension, int containerSize, NonNullList<ItemStack> customInventory, ResourceKey<LootTable> table, long seed) {
+  public BaseLootrInfo(ILootrType type, UUID uuid, int key, Identifier identifier, BlockPos pos, @Nullable Component name, ResourceKey<Level> dimension, int containerSize, NonNullList<ItemStack> customInventory, ResourceKey<LootTable> table, long seed) {
     this.type = type;
     this.uuid = uuid;
-    this.cachedKey = cachedKey;
+    this.key = key;
+    this.identifier = identifier;
     this.pos = pos;
     this.name = name;
     this.dimension = dimension;
@@ -48,8 +50,7 @@ public record BaseLootrInfo(ILootrType type, UUID uuid,
   }
 
   @Override
-  @Nullable
-  public ILootrType getInfoType() {
+  public @NonNull ILootrType getInfoType() {
     return type();
   }
 
@@ -59,8 +60,13 @@ public record BaseLootrInfo(ILootrType type, UUID uuid,
   }
 
   @Override
-  public String getInfoKey() {
-    return cachedKey();
+  public int getInfoKey() {
+    return key();
+  }
+
+  @Override
+  public Identifier getInfoIdentifier() {
+    return identifier();
   }
 
   @Override

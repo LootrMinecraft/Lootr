@@ -44,7 +44,7 @@ import noobanidus.mods.lootr.common.api.config.BreakMode;
 import noobanidus.mods.lootr.common.api.config.ResistanceMode;
 import noobanidus.mods.lootr.common.api.config.SaveMode;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
-import noobanidus.mods.lootr.common.api.data.ILootrSavedData;
+import noobanidus.mods.lootr.common.api.data.ILootrContainerData;
 import noobanidus.mods.lootr.common.api.data.LootFiller;
 import noobanidus.mods.lootr.common.api.data.MenuBuilder;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
@@ -260,7 +260,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  public final @Nullable ILootrSavedData getData(ILootrInfoProvider provider) {
+  public final @Nullable ILootrContainerData getData(ILootrInfoProvider provider) {
     return DataStorage.getData(provider);
   }
 
