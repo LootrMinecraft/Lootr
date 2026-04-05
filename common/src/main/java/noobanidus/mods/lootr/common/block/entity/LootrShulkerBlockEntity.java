@@ -225,7 +225,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
 
   @Override
   protected NonNullList<ItemStack> getItems() {
-    return this.simpleLootrInstance.getItems();
+    return this.simpleLootrInstance.getEmptyInventory();
   }
 
   @Override

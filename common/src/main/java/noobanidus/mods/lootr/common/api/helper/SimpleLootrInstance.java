@@ -1,7 +1,6 @@
 package noobanidus.mods.lootr.common.api.helper;
 
 import com.google.common.collect.Sets;
-import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
@@ -19,42 +18,42 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.NBTConstants;
 import noobanidus.mods.lootr.common.api.data.IKeyedData;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
 
 public class SimpleLootrInstance {
-  private static final Logger LOGGER = LogUtils.getLogger();
-
-  protected NonNullList<ItemStack> items;
-  protected NonNullList<ItemStack> referenceInventory = null;
+  protected final NonNullList<ItemStack> items;
+  protected final Supplier<Set<UUID>> visualOpenersSupplier;
   protected final Set<UUID> clientOpeners = new ObjectOpenHashSet<>();
-  protected UUID infoId = null;
-  protected boolean hasBeenOpened = false;
+
+  protected NonNullList<ItemStack> referenceInventory = null;
+  protected UUID id = null;
   protected int cachedKey;
   protected Identifier cachedIdentifier;
   protected boolean clientOpened = false;
-
+  protected boolean hasBeenOpened = false;
   protected boolean providesOwnUuid = false;
 
-  protected final Supplier<Set<UUID>> visualOpenersSupplier;
 
   public SimpleLootrInstance(Supplier<Set<UUID>> visualOpenersSupplier, int size) {
     this.items = NonNullList.withSize(size, ItemStack.EMPTY);
     this.visualOpenersSupplier = visualOpenersSupplier;
   }
 
-  public NonNullList<ItemStack> getItems() {
+  @NotNull
+  public NonNullList<ItemStack> getEmptyInventory() {
     return items;
   }
 
-  public void setReferenceInventory(NonNullList<ItemStack> items) {
+  public void setReferenceInventory(@Nullable NonNullList<ItemStack> items) {
     this.referenceInventory = items;
   }
 
-  public NonNullList<ItemStack> getReferenceInventory () {
+  @Nullable
+  public NonNullList<ItemStack> getReferenceInventory() {
     return this.referenceInventory;
   }
 
@@ -74,16 +73,16 @@ public class SimpleLootrInstance {
     if (providesOwnUuid) {
       throw new IllegalStateException("This instance provides its own UUID but hasn't overriden `getInfoUUID`: " + this);
     }
-    if (this.infoId == null) {
-      this.infoId = UUID.randomUUID();
-      this.cachedKey = IKeyedData.generateInfoIntKey(this.infoId);
-      this.cachedIdentifier = IKeyedData.generateInfoIdentifier(this.infoId);
+    if (this.id == null) {
+      this.id = UUID.randomUUID();
+      this.cachedKey = IKeyedData.generateInfoIntKey(this.id);
+      this.cachedIdentifier = IKeyedData.generateInfoIdentifier(this.id);
     }
-    return this.infoId;
+    return this.id;
   }
 
   public int getKey() {
-    if (!providesOwnUuid && this.infoId == null) {
+    if (!providesOwnUuid && this.id == null) {
       getId();
     }
     return cachedKey;
@@ -96,12 +95,12 @@ public class SimpleLootrInstance {
     return cachedIdentifier;
   }
 
-  public boolean hasBeenOpened() {
-    return hasBeenOpened;
-  }
-
   public int getContainerSize() {
     return items.size();
+  }
+
+  public boolean hasBeenOpened() {
+    return hasBeenOpened;
   }
 
   public void setHasBeenOpened() {
@@ -110,10 +109,10 @@ public class SimpleLootrInstance {
 
   public void loadAdditional(ValueInput input) {
     if (!providesOwnUuid) {
-      this.infoId = input.read(NBTConstants.INSTANCE_ID, UUIDUtil.CODEC).orElse(null);
+      this.id = input.read(NBTConstants.INSTANCE_ID, UUIDUtil.CODEC).orElse(null);
     }
     this.hasBeenOpened = input.getBooleanOr(NBTConstants.HAS_BEEN_OPENED, false);
-    if (this.infoId == null && !providesOwnUuid) {
+    if (this.id == null && !providesOwnUuid) {
       getId();
     }
     clientOpeners.clear();
@@ -145,7 +144,7 @@ public class SimpleLootrInstance {
   }
 
   public CompoundTag fillUpdateTag(HolderLookup.Provider provider, boolean isClientSide, BlockEntity parent) {
-    try (ProblemReporter.ScopedCollector p = new ProblemReporter.ScopedCollector(LOGGER)) {
+    try (ProblemReporter.ScopedCollector p = new ProblemReporter.ScopedCollector(LootrAPI.LOG)) {
       ProblemReporter p2 = p.forChild(parent.problemPath());
       TagValueOutput output = TagValueOutput.createWithContext(p2, provider);
 

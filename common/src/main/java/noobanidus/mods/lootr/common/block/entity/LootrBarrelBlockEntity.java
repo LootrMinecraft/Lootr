@@ -110,7 +110,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
 
   @Override
   protected NonNullList<ItemStack> getItems() {
-    return this.simpleLootrInstance.getItems();
+    return this.simpleLootrInstance.getEmptyInventory();
   }
 
   @Override
