@@ -4,7 +4,7 @@ import com.google.auto.service.AutoService;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.entity.BrushableBlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
-import noobanidus.mods.lootr.common.api.accessor.ILootrDataAccessor;
+import noobanidus.mods.lootr.common.api.interfaces.accessor.ILootrDataAccessor;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinBrushableBlockEntity;
 
 @AutoService(ILootrDataAccessor.class)

@@ -7,7 +7,7 @@ import net.minecraft.advancements.criterion.ContextAwarePredicate;
 import net.minecraft.advancements.criterion.MinMaxBounds;
 import net.minecraft.advancements.criterion.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
-import noobanidus.mods.lootr.common.api.advancement.ILootedStatTrigger;
+import noobanidus.mods.lootr.common.api.interfaces.advancement.ILootedStatTrigger;
 import noobanidus.mods.lootr.common.api.LootrRegistry;
 
 import java.util.Optional;

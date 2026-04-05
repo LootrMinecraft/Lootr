@@ -17,7 +17,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.data.base.BaseLootrData;
 import noobanidus.mods.lootr.common.api.filler.ILootFiller;
-import noobanidus.mods.lootr.common.api.type.ILootrType;
+import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

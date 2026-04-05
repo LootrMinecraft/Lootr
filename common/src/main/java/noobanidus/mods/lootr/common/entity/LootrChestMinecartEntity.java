@@ -32,13 +32,13 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
+import noobanidus.mods.lootr.common.api.interfaces.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.data.IKeyedData;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.api.LootrRegistry;
-import noobanidus.mods.lootr.common.api.type.BuiltInLootrTypes;
-import noobanidus.mods.lootr.common.api.type.ILootrType;
-import noobanidus.mods.lootr.common.api.wrapper.ILootrEntityWrapper;
+import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
+import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
+import noobanidus.mods.lootr.common.api.interfaces.wrapper.ILootrEntityWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
@@ -203,7 +203,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     if (user instanceof ServerPlayer player) {
       if (!hasBeenOpened) {
         hasBeenOpened = true;
-        markChanged();
+        markInstanceChanged();
       }
       performOpen(player);
     }
@@ -316,9 +316,9 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
   @Override
-  public void markChanged() {
+  public void markInstanceChanged() {
     setChanged();
-    markDataChanged();
+    markSectionChanged();
   }
 
   @Override

@@ -9,8 +9,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
-import noobanidus.mods.lootr.common.api.type.BuiltInLootrTypes;
-import noobanidus.mods.lootr.common.api.type.ILootrType;
+import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
+import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.ILootrInventoryStore;
 import org.jetbrains.annotations.NotNull;
@@ -104,18 +104,18 @@ public record RandomizableContainerInstance(
   }
 
   @Override
-  public void markChanged() {
+  public void markInstanceChanged() {
     blockEntity.setChanged();
   }
 
   @Override
-  public void markDataChanged() {
+  public void markSectionChanged() {
     if (blockEntity.getLevel() != null && blockEntity.getLevel().isClientSide()) {
       return;
     }
     ILootrInventoryStore data = LootrAPI.getData(this);
     if (data != null) {
-      data.markChanged();
+      data.markInstanceChanged();
     }
   }
 

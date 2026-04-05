@@ -13,11 +13,11 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.data.base.CustomLootrContainerInstance;
 import noobanidus.mods.lootr.common.api.interfaces.IClientHasOpeners;
-import noobanidus.mods.lootr.common.api.type.ILootrType;
+import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
+import noobanidus.mods.lootr.common.api.interfaces.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.data.blockentity.RandomizableContainerInstance;
-import noobanidus.mods.lootr.common.api.inventory.ILootrInventory;
+import noobanidus.mods.lootr.common.api.interfaces.inventory.ILootrInventory;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
@@ -146,7 +146,7 @@ public interface ILootrContainerInstance extends ILootrData, IClientHasOpeners {
       data.performRefresh();
       data.clearOpeners();
       TickingData.getRefreshData().clearTicking(LootrAPI.getServer(), this.getDataId());
-      markChanged();
+      markInstanceChanged();
     }
   }
 
@@ -157,10 +157,10 @@ public interface ILootrContainerInstance extends ILootrData, IClientHasOpeners {
   }
 
   @Override
-  default void markDataChanged() {
+  default void markSectionChanged() {
     ILootrInventoryStore data = LootrAPI.getData(this);
     if (data != null) {
-      data.markChanged();
+      data.markInstanceChanged();
     }
   }
 

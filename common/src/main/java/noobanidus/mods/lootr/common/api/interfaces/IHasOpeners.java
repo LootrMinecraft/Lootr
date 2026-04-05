@@ -1,7 +1,7 @@
 package noobanidus.mods.lootr.common.api.interfaces;
 
 import net.minecraft.world.entity.player.Player;
-import noobanidus.mods.lootr.common.api.annotation.ServerOnly;
+import noobanidus.mods.lootr.common.api.interfaces.annotation.ServerOnly;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
@@ -28,7 +28,7 @@ public interface IHasOpeners extends IMarkChanged {
     }
     if (!openers.isEmpty()) {
       openers.clear();
-      markChanged();
+      markInstanceChanged();
       return true;
     }
     return false;
@@ -40,7 +40,7 @@ public interface IHasOpeners extends IMarkChanged {
       return false;
     }
     if (openers.add(uuid)) {
-      markChanged();
+      markInstanceChanged();
       return true;
     }
     return false;
@@ -60,7 +60,7 @@ public interface IHasOpeners extends IMarkChanged {
       return false;
     }
     if (openers.remove(uuid)) {
-      markChanged();
+      markInstanceChanged();
       return true;
     }
     return false;
@@ -72,7 +72,7 @@ public interface IHasOpeners extends IMarkChanged {
       return false;
     }
     if (openers.add(uuid)) {
-      markChanged();
+      markInstanceChanged();
       return true;
     }
     return false;

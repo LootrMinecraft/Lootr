@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.network.ILootrPacket;
+import noobanidus.mods.lootr.common.api.interfaces.network.ILootrPacket;
 
 public record PacketRefreshSection() implements ILootrPacket {
   public static final PacketRefreshSection INSTANCE = new PacketRefreshSection();

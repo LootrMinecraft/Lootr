@@ -5,7 +5,7 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
 import net.minecraft.world.item.ItemStack;
-import noobanidus.mods.lootr.common.api.integration.decorated_pot.PotDecorationsAdapter;
+import noobanidus.mods.lootr.common.api.integration.decorated.PotDecorationsAdapter;
 import noobanidus.mods.lootr.common.client.block.LootrDecoratedPotRenderer;
 import noobanidus.mods.lootr.common.integration.sherdsapi.SherdsIntegration;
 import org.joml.Vector3fc;

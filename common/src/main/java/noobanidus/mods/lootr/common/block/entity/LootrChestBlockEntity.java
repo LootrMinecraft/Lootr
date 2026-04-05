@@ -24,10 +24,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootTable;
-import noobanidus.mods.lootr.common.api.type.BuiltInLootrTypes;
-import noobanidus.mods.lootr.common.api.wrapper.ILootrBlockEntityWrapper;
-import noobanidus.mods.lootr.common.api.type.ILootrType;
-import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
+import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
+import noobanidus.mods.lootr.common.api.interfaces.wrapper.ILootrBlockEntityWrapper;
+import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
+import noobanidus.mods.lootr.common.api.interfaces.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.helper.SimpleLootrInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.LootrRegistry;
@@ -48,7 +48,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
     protected void onOpen(Level level, BlockPos pos, BlockState state) {
       if (!LootrChestBlockEntity.this.hasBeenOpened()) {
         LootrChestBlockEntity.this.simpleLootrInstance.setHasBeenOpened();
-        LootrChestBlockEntity.this.markChanged();
+        LootrChestBlockEntity.this.markInstanceChanged();
       }
       LootrChestBlockEntity.playSound(level, pos, state, SoundEvents.CHEST_OPEN);
     }
@@ -178,9 +178,9 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   }
 
   @Override
-  public void markChanged() {
+  public void markInstanceChanged() {
     setChanged();
-    markDataChanged();
+    markSectionChanged();
   }
 
   @Override

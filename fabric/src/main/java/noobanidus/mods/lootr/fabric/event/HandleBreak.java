@@ -14,7 +14,6 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.config.LootrCommonConfig;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
-import noobanidus.mods.lootr.common.api.config.ConfigManager;
 import org.jetbrains.annotations.Nullable;
 
 public class HandleBreak {

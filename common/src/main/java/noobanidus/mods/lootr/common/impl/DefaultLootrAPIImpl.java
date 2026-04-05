@@ -34,32 +34,27 @@ import net.minecraft.world.level.block.entity.PotDecorations;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.*;
 import net.minecraft.world.level.storage.loot.LootTable;
-import noobanidus.mods.lootr.common.api.interfaces.ILootrAPI;
+import noobanidus.mods.lootr.common.api.config.*;
+import noobanidus.mods.lootr.common.api.interfaces.lootr.ILootrAPI;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrConstants;
-import noobanidus.mods.lootr.common.api.accessor.ILootrDataAccessor;
-import noobanidus.mods.lootr.common.api.accessor.ILootrItemFrameAccessor;
+import noobanidus.mods.lootr.common.api.interfaces.accessor.ILootrDataAccessor;
+import noobanidus.mods.lootr.common.api.interfaces.accessor.ILootrItemFrameAccessor;
 import noobanidus.mods.lootr.common.api.config.client.ClientTextureType;
-import noobanidus.mods.lootr.common.api.config.BreakMode;
-import noobanidus.mods.lootr.common.api.config.ResistanceMode;
-import noobanidus.mods.lootr.common.api.config.SaveMode;
 import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
 import noobanidus.mods.lootr.common.api.data.ILootrInventoryStore;
 import noobanidus.mods.lootr.common.api.filler.ILootFiller;
-import noobanidus.mods.lootr.common.api.interfaces.IMenuBuilder;
+import noobanidus.mods.lootr.common.api.interfaces.container.IMenuBuilder;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
-import noobanidus.mods.lootr.common.api.inventory.ILootrInventory;
-import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
-import noobanidus.mods.lootr.common.api.integration.decorated_pot.PotDecorationsAdapter;
-import noobanidus.mods.lootr.common.api.processor.ILootrBlockEntityProcessor;
-import noobanidus.mods.lootr.common.api.processor.ILootrEntityProcessor;
+import noobanidus.mods.lootr.common.api.interfaces.inventory.ILootrInventory;
+import noobanidus.mods.lootr.common.api.interfaces.filter.ILootrFilter;
+import noobanidus.mods.lootr.common.api.integration.decorated.PotDecorationsAdapter;
+import noobanidus.mods.lootr.common.api.interfaces.processor.ILootrBlockEntityProcessor;
+import noobanidus.mods.lootr.common.api.interfaces.processor.ILootrEntityProcessor;
 import noobanidus.mods.lootr.common.api.LootrRegistry;
-import noobanidus.mods.lootr.common.api.type.ILootrType;
+import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
 import noobanidus.mods.lootr.common.client.ClientHooks;
-import noobanidus.mods.lootr.common.api.config.ConfigManager;
-import noobanidus.mods.lootr.common.api.config.LootrClientConfig;
-import noobanidus.mods.lootr.common.api.config.LootrCommonConfig;
 import noobanidus.mods.lootr.common.data.DataStorage;
 import noobanidus.mods.lootr.common.integration.sherdsapi.SherdsIntegration;
 import org.jetbrains.annotations.Nullable;
@@ -552,7 +547,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
 
   @Override
   public boolean shouldNotify(int remaining) {
-    return ConfigManager.shouldNotify(remaining);
+    return LootrConfig.shouldNotify(remaining);
   }
 
   @Override
@@ -572,7 +567,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
 
   @Override
   public ClientTextureType getTextureType() {
-    if (ConfigManager.isVanillaTextures()) {
+    if (LootrConfig.isVanillaTextures()) {
       return ClientTextureType.VANILLA;
     } else {
       return ClientTextureType.NEW;
@@ -586,92 +581,92 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
 
   @Override
   public boolean isLootTableBlacklisted(ResourceKey<LootTable> table) {
-    return ConfigManager.isBlacklisted(table);
+    return LootrConfig.isBlacklisted(table);
   }
 
   @Override
   public boolean isDimensionBlocked(ResourceKey<Level> dimension) {
-    return ConfigManager.isDimensionBlocked(dimension);
+    return LootrConfig.isDimensionBlocked(dimension);
   }
 
   @Override
   public boolean isDimensionDecaying(ResourceKey<Level> dimension) {
-    return ConfigManager.isDimensionDecaying(dimension);
+    return LootrConfig.isDimensionDecaying(dimension);
   }
 
   @Override
   public boolean isDimensionRefreshing(ResourceKey<Level> dimension) {
-    return ConfigManager.isDimensionRefreshing(dimension);
+    return LootrConfig.isDimensionRefreshing(dimension);
   }
 
   @Override
   public Set<ResourceKey<Level>> getDimensionBlacklist() {
-    return ConfigManager.getDimensionBlacklist();
+    return LootrConfig.getDimensionBlacklist();
   }
 
   @Override
   public Set<ResourceKey<Level>> getDimensionWhitelist() {
-    return ConfigManager.getDimensionWhitelist();
+    return LootrConfig.getDimensionWhitelist();
   }
 
   @Override
   public Set<ResourceKey<LootTable>> getLootTableBlacklist() {
-    return ConfigManager.getLootBlacklist();
+    return LootrConfig.getLootBlacklist();
   }
 
   @Override
   public Set<String> getLootModidBlacklist() {
-    return ConfigManager.getLootModidsBlacklist();
+    return LootrConfig.getLootModidsBlacklist();
   }
 
   @Override
   public Set<String> getModidDimensionWhitelist() {
-    return ConfigManager.getDimensionModidWhitelist();
+    return LootrConfig.getDimensionModidWhitelist();
   }
 
   @Override
   public Set<String> getModidDimensionBlacklist() {
-    return ConfigManager.getDimensionModidBlacklist();
+    return LootrConfig.getDimensionModidBlacklist();
   }
 
   @Override
   public boolean isDecaying(ILootrContainerInstance provider) {
-    return ConfigManager.isDecaying(provider);
+    return LootrConfig.isDecaying(provider);
   }
 
   @Override
   public boolean isRefreshing(ILootrContainerInstance provider) {
-    return ConfigManager.isRefreshing(provider);
+    return LootrConfig.isRefreshing(provider);
   }
 
   @Override
   public Set<String> getModidDecayWhitelist() {
-    return ConfigManager.getDecayMods();
+    return LootrConfig.getDecayMods();
   }
 
   @Override
   public Set<ResourceKey<LootTable>> getDecayWhitelist() {
-    return ConfigManager.getDecayingTables();
+    return LootrConfig.getDecayingTables();
   }
 
   @Override
   public Set<ResourceKey<Level>> getDecayDimensions() {
-    return ConfigManager.getDecayDimensions();
+    return LootrConfig.getDecayDimensions();
   }
 
   @Override
   public Set<String> getRefreshModids() {
-    return ConfigManager.getRefreshMods();
+    return LootrConfig.getRefreshMods();
   }
 
   @Override
   public Set<ResourceKey<LootTable>> getRefreshWhitelist() {
-    return ConfigManager.getRefreshingTables();
+    return LootrConfig.getRefreshingTables();
   }
 
   @Override
   public Set<ResourceKey<Level>> getRefreshDimensions() {
-    return ConfigManager.getRefreshDimensions();
+    return LootrConfig.getRefreshDimensions();
   }
 
   @Override
@@ -804,7 +799,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
 
   @Override
   public boolean performPiecewiseCheck() {
-    return ConfigManager.shouldPerformPiecewiseCheck();
+    return LootrConfig.shouldPerformPiecewiseCheck();
   }
 
   @Override

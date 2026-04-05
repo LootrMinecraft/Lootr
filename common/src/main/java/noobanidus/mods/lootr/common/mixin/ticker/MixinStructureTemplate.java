@@ -10,7 +10,7 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrConstants;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
-import noobanidus.mods.lootr.common.api.accessor.ILootrItemFrameAccessor;
+import noobanidus.mods.lootr.common.api.interfaces.accessor.ILootrItemFrameAccessor;
 import noobanidus.mods.lootr.common.entity.LootrItemFrame;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

@@ -36,10 +36,10 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import noobanidus.mods.lootr.common.api.type.BuiltInLootrTypes;
-import noobanidus.mods.lootr.common.api.wrapper.ILootrBlockEntityWrapper;
-import noobanidus.mods.lootr.common.api.type.ILootrType;
-import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
+import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
+import noobanidus.mods.lootr.common.api.interfaces.wrapper.ILootrBlockEntityWrapper;
+import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
+import noobanidus.mods.lootr.common.api.interfaces.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.helper.SimpleLootrInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.LootrRegistry;
@@ -161,7 +161,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
       if (!this.remove && !pPlayer.isSpectator()) {
         if (!this.simpleLootrInstance.hasBeenOpened()) {
           this.simpleLootrInstance.setHasBeenOpened();
-          markChanged();
+          markInstanceChanged();
         }
 
 
@@ -295,9 +295,9 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   @Override
-  public void markChanged() {
+  public void markInstanceChanged() {
     setChanged();
-    markDataChanged();
+    markSectionChanged();
   }
 
   @Override

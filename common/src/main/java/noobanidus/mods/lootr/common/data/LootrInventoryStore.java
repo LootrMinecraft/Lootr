@@ -5,11 +5,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.saveddata.SavedData;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.*;
 import noobanidus.mods.lootr.common.api.data.base.BaseLootrData;
-import noobanidus.mods.lootr.common.api.inventory.ILootrInventory;
+import noobanidus.mods.lootr.common.api.interfaces.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.filler.ILootFiller;
 import org.jetbrains.annotations.Nullable;
 
@@ -83,7 +82,7 @@ public class LootrInventoryStore implements ILootrInventoryStore {
   public boolean addVisualOpener(UUID uuid) {
     boolean result = ILootrInventoryStore.super.addVisualOpener(uuid);
     if (result) {
-      markChanged();
+      markInstanceChanged();
     }
     return result;
   }
@@ -92,7 +91,7 @@ public class LootrInventoryStore implements ILootrInventoryStore {
   public boolean removeVisualOpener(UUID uuid) {
     boolean result = ILootrInventoryStore.super.removeVisualOpener(uuid);
     if (result) {
-      markChanged();
+      markInstanceChanged();
     }
     return result;
   }
@@ -101,7 +100,7 @@ public class LootrInventoryStore implements ILootrInventoryStore {
   public boolean addActualOpener(UUID uuid) {
     boolean result = ILootrInventoryStore.super.addActualOpener(uuid);
     if (result) {
-      markChanged();
+      markInstanceChanged();
     }
     return result;
   }
@@ -110,7 +109,7 @@ public class LootrInventoryStore implements ILootrInventoryStore {
     Set<UUID> visualOpeners = getVisualOpeners();
     if (visualOpeners != null) {
       if (visualOpeners.remove(uuid)) {
-        markChanged();
+        markInstanceChanged();
       }
     }
   }
@@ -121,15 +120,15 @@ public class LootrInventoryStore implements ILootrInventoryStore {
   }
 
   @Override
-  public void markChanged() {
+  public void markInstanceChanged() {
     // TODO:
     //setDirty();
   }
 
   @Override
-  public void markDataChanged() {
+  public void markSectionChanged() {
     // TODO:
-    markChanged();
+    markInstanceChanged();
   }
 
   @Override
@@ -153,7 +152,7 @@ public class LootrInventoryStore implements ILootrInventoryStore {
       inventories.put(player.getUUID(), result);
       hasInventories = true;
       // TODO:
-      markChanged();
+      markInstanceChanged();
       return result;
     } else {
       provider.informPlayerCannotOpen(player);
@@ -175,7 +174,7 @@ public class LootrInventoryStore implements ILootrInventoryStore {
   public void update(ILootrData info) {
     BaseLootrData infoCopy = BaseLootrData.copy(info);
     if (!infoCopy.equals(this.info)) {
-      markChanged();
+      markInstanceChanged();
       this.info = info;
     }
   }
@@ -184,7 +183,7 @@ public class LootrInventoryStore implements ILootrInventoryStore {
   public void performRefresh() {
     inventories.clear();
     hasInventories = false;
-    markChanged();
+    markInstanceChanged();
   }
 
   // TODO: Is there disparity between the usage of "hasBeenOpened" in ILootrSavedData
@@ -210,7 +209,7 @@ public class LootrInventoryStore implements ILootrInventoryStore {
   public boolean clearInventories(UUID id) {
     if (inventories.remove(id) != null) {
       removeOpener(id);
-      markChanged();
+      markInstanceChanged();
       return true;
     }
 

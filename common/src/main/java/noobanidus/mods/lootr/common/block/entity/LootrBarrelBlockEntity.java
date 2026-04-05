@@ -30,13 +30,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootTable;
-import noobanidus.mods.lootr.common.api.type.BuiltInLootrTypes;
-import noobanidus.mods.lootr.common.api.wrapper.ILootrBlockEntityWrapper;
-import noobanidus.mods.lootr.common.api.type.ILootrType;
-import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
+import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
+import noobanidus.mods.lootr.common.api.interfaces.wrapper.ILootrBlockEntityWrapper;
+import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
+import noobanidus.mods.lootr.common.api.interfaces.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.helper.SimpleLootrInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
-import noobanidus.mods.lootr.common.api.inventory.ILootrInventory;
+import noobanidus.mods.lootr.common.api.interfaces.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.LootrRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -53,7 +53,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     protected void onOpen(Level level, BlockPos pos, BlockState state) {
       if (!LootrBarrelBlockEntity.this.hasBeenOpened()) {
         LootrBarrelBlockEntity.this.simpleLootrInstance.setHasBeenOpened();
-        LootrBarrelBlockEntity.this.markChanged();
+        LootrBarrelBlockEntity.this.markInstanceChanged();
       }
       LootrBarrelBlockEntity.this.playSound(state, SoundEvents.BARREL_OPEN);
       LootrBarrelBlockEntity.this.updateBlockState(state, true);
@@ -194,9 +194,9 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   }
 
   @Override
-  public void markChanged() {
+  public void markInstanceChanged() {
     setChanged();
-    markDataChanged();
+    markSectionChanged();
   }
 
   @Override

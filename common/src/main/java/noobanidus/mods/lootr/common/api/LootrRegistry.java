@@ -9,10 +9,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
-import noobanidus.mods.lootr.common.api.advancement.IAdvancementTrigger;
-import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
-import noobanidus.mods.lootr.common.api.advancement.ILootedStatTrigger;
-import noobanidus.mods.lootr.common.api.interfaces.ILootrRegistry;
+import noobanidus.mods.lootr.common.api.interfaces.advancement.IAdvancementTrigger;
+import noobanidus.mods.lootr.common.api.interfaces.advancement.IContainerTrigger;
+import noobanidus.mods.lootr.common.api.interfaces.advancement.ILootedStatTrigger;
+import noobanidus.mods.lootr.common.api.interfaces.lootr.ILootrRegistry;
 
 /**
  * Platform-independent way to access registered objects.

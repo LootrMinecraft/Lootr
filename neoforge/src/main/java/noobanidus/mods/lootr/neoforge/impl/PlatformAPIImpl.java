@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.network.PacketDistributor;
 import noobanidus.mods.lootr.common.api.data.DataToCopy;
-import noobanidus.mods.lootr.common.api.interfaces.IPlatformAPI;
+import noobanidus.mods.lootr.common.api.interfaces.lootr.IPlatformAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.impl.DefaultPlatformAPIImpl;

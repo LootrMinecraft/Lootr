@@ -117,7 +117,7 @@ public interface ILootrBlockEntity extends ILootrContainerInstance {
 
   @Override
   default void performUpdate() {
-    markChanged();
+    markInstanceChanged();
     updatePacketViaForce();
   }
 

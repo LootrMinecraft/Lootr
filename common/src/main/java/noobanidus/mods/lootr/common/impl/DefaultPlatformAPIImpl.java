@@ -1,6 +1,6 @@
 package noobanidus.mods.lootr.common.impl;
 
-import noobanidus.mods.lootr.common.api.interfaces.IPlatformAPI;
+import noobanidus.mods.lootr.common.api.interfaces.lootr.IPlatformAPI;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.config.SaveMode;
 

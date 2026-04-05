@@ -4,7 +4,7 @@ import net.minecraft.server.level.ServerPlayer;
 import noobanidus.mods.lootr.common.api.filler.ILootFiller;
 import noobanidus.mods.lootr.common.api.interfaces.IMarkChanged;
 import noobanidus.mods.lootr.common.api.interfaces.IHasOpeners;
-import noobanidus.mods.lootr.common.api.inventory.ILootrInventory;
+import noobanidus.mods.lootr.common.api.interfaces.inventory.ILootrInventory;
 
 import java.util.UUID;
 

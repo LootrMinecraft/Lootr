@@ -5,8 +5,8 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.integration.decorated_pot.PotDecorationsAdapter;
-import noobanidus.mods.lootr.common.api.accessor.ILootrDataAccessor;
+import noobanidus.mods.lootr.common.api.integration.decorated.PotDecorationsAdapter;
+import noobanidus.mods.lootr.common.api.interfaces.accessor.ILootrDataAccessor;
 import org.jetbrains.annotations.Nullable;
 
 @AutoService(ILootrDataAccessor.class)

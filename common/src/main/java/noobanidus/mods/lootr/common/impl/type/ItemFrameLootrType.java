@@ -3,8 +3,8 @@ package noobanidus.mods.lootr.common.impl.type;
 import com.google.auto.service.AutoService;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
-import noobanidus.mods.lootr.common.api.type.BuiltInLootrTypes;
-import noobanidus.mods.lootr.common.api.type.ILootrType;
+import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
+import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
 import noobanidus.mods.lootr.common.api.LootrRegistry;
 import org.jetbrains.annotations.Nullable;
 

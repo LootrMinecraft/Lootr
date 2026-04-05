@@ -11,7 +11,7 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
 import noobanidus.mods.lootr.common.api.filler.ILootFiller;
 import noobanidus.mods.lootr.common.api.data.TickingData;
-import noobanidus.mods.lootr.common.api.inventory.ILootrInventory;
+import noobanidus.mods.lootr.common.api.interfaces.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.command.IOUtil;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinSavedDataStorage;
 import org.jetbrains.annotations.ApiStatus;

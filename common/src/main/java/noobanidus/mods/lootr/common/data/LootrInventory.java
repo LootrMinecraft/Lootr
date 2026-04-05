@@ -15,9 +15,9 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import noobanidus.mods.lootr.common.api.interfaces.IMenuBuilder;
+import noobanidus.mods.lootr.common.api.interfaces.container.IMenuBuilder;
 import noobanidus.mods.lootr.common.api.data.ILootrInventoryStore;
-import noobanidus.mods.lootr.common.api.inventory.ILootrInventory;
+import noobanidus.mods.lootr.common.api.interfaces.inventory.ILootrInventory;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -109,7 +109,7 @@ public class LootrInventory implements ILootrInventory {
 
   @Override
   public void setChanged() {
-    inventoryStore.markChanged();
+    inventoryStore.markInstanceChanged();
   }
 
   @Override

@@ -3,12 +3,12 @@ package noobanidus.mods.lootr.common.api;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import noobanidus.mods.lootr.common.api.accessor.ILootrDataAccessor;
-import noobanidus.mods.lootr.common.api.accessor.ILootrItemFrameAccessor;
+import noobanidus.mods.lootr.common.api.interfaces.accessor.ILootrDataAccessor;
+import noobanidus.mods.lootr.common.api.interfaces.accessor.ILootrItemFrameAccessor;
 import noobanidus.mods.lootr.common.api.data.DataToCopy;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
-import noobanidus.mods.lootr.common.api.interfaces.IPlatformAPI;
+import noobanidus.mods.lootr.common.api.interfaces.lootr.IPlatformAPI;
 
 /**
  * This contains platform-specific (i.e., NeoForge/Fabric) methods.

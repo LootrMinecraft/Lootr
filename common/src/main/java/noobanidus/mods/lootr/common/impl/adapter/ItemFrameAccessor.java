@@ -5,7 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.item.ItemStack;
-import noobanidus.mods.lootr.common.api.accessor.ILootrItemFrameAccessor;
+import noobanidus.mods.lootr.common.api.interfaces.accessor.ILootrItemFrameAccessor;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinItemFrame;
 
 @AutoService(ILootrItemFrameAccessor.class)

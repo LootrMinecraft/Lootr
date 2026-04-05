@@ -21,7 +21,7 @@ import noobanidus.mods.lootr.common.api.data.DataToCopy;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
-import noobanidus.mods.lootr.common.api.accessor.ILootrDataAccessor;
+import noobanidus.mods.lootr.common.api.interfaces.accessor.ILootrDataAccessor;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.chunk.LoadedChunks;
 import org.jetbrains.annotations.Nullable;

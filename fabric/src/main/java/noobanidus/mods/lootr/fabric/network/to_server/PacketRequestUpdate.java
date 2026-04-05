@@ -5,7 +5,7 @@ import net.minecraft.core.GlobalPos;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.network.ILootrPacket;
+import noobanidus.mods.lootr.common.api.interfaces.network.ILootrPacket;
 
 public record PacketRequestUpdate(GlobalPos position) implements ILootrPacket {
   public static final CustomPacketPayload.Type<PacketRequestUpdate> TYPE = new CustomPacketPayload.Type<>(LootrAPI.rl("request_update"));

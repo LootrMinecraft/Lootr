@@ -1,7 +1,7 @@
 package noobanidus.mods.lootr.common.api.interfaces;
 
 import net.minecraft.world.entity.player.Player;
-import noobanidus.mods.lootr.common.api.annotation.ClientOnly;
+import noobanidus.mods.lootr.common.api.interfaces.annotation.ClientOnly;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,7 +24,7 @@ public interface IClientHasOpeners extends IHasOpeners {
     Set<UUID> clientOpeners = getClientOpeners();
     if (clientOpeners != null && !clientOpeners.isEmpty()) {
       clientOpeners.clear();
-      markChanged();
+      markInstanceChanged();
       return true;
     }
     return result;
