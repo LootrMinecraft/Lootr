@@ -68,6 +68,24 @@ allprojects {
                 includeGroupAndSubgroups("com.teamresourceful.resourcefulconfig")
             }
         }
+        exclusiveContent {
+            forRepository {
+                maven {
+                    name = 'Sherds API'
+                    url = 'https://dl.cloudsmith.io/public/thomasglasser/sherdsapi/maven/'
+                }
+            }
+            filter { includeGroupAndSubgroups "dev.thomasglasser.sherdsapi" }
+        }
+        exclusiveContent {
+            forRepository {
+                maven {
+                    name = 'TommyLib'
+                    url = 'https://dl.cloudsmith.io/public/thomasglasser/tommylib/maven/'
+                }
+            }
+            filter { includeGroupAndSubgroups "dev.thomasglasser.tommylib" }
+        }
     }
 
     tasks.register('buildAndRelease') {

@@ -35,23 +35,16 @@ dependencies {
     implementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
     implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
-    // COMPAT
-    //modCompileOnly("com.terraformersmc:modmenu:${project.mod_menu_version}") {
-    //    transitive = false
-    //}
-    //modLocalRuntime("com.terraformersmc:modmenu:${project.mod_menu_version}") {
-    //    transitive = false
-    //}
+    compileOnly "maven.modrinth:jade:${project.jade_version}+fabric"
+    runtimeOnly "maven.modrinth:jade:${project.jade_version}+fabric"
 
-    //modImplementation "maven.modrinth:jade:${project.jade_version}+fabric"
-
-    //modCompileOnly "dev.thomasglasser.sherdsapi:sherdsapi-fabric-${minecraft_version}:${sherdsapi_version}"
+    compileOnly "dev.thomasglasser.sherdsapi:sherdsapi-fabric-${minecraft_version}:${sherdsapi_version}"
+    runtimeOnly "dev.thomasglasser.sherdsapi:sherdsapi-fabric-${minecraft_version}:${sherdsapi_version}"
 
     implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:${rootProject.mixin_extras_version}"))
     implementation("io.github.llamalad7:mixinextras-fabric:${rootProject.mixin_extras_version}")
 
-
-    implementation "com.teamresourceful.resourcefulconfig:resourcefulconfig-fabric-26.1:${rootProject.resourceful_config_version}"
+    include(implementation "com.teamresourceful.resourcefulconfig:resourcefulconfig-fabric-26.1:${rootProject.resourceful_config_version}")
 }
 
 publishMods {

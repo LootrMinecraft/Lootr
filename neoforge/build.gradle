@@ -20,11 +20,13 @@ dependencies {
     compileOnly(project(':common')) {
         transitive = false
     }
-    //compileOnly "dev.thomasglasser.sherdsapi:sherdsapi-neoforge-${minecraft_version}:${sherdsapi_version}"
+    compileOnly "dev.thomasglasser.sherdsapi:sherdsapi-neoforge-${minecraft_version}:${sherdsapi_version}"
+    runtimeOnly "dev.thomasglasser.sherdsapi:sherdsapi-neoforge-${minecraft_version}:${sherdsapi_version}"
     implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:${rootProject.mixin_extras_version}"))
     implementation("io.github.llamalad7:mixinextras-neoforge:${rootProject.mixin_extras_version}")
-    //implementation "maven.modrinth:jade:${rootProject.jade_version}+neoforge"
-    implementation "com.teamresourceful.resourcefulconfig:resourcefulconfig-neoforge-26.1:${rootProject.resourceful_config_version}"
+    compileOnly "maven.modrinth:jade:${rootProject.jade_version}+neoforge"
+    runtimeOnly "maven.modrinth:jade:${rootProject.jade_version}+neoforge"
+    jarJar(implementation "com.teamresourceful.resourcefulconfig:resourcefulconfig-neoforge-26.1:${rootProject.resourceful_config_version}")
 
     // Locally sourced extra mods for runtime (i.e. testing)
     for (extraModJar in fileTree(dir: extraModsDir, include: '*.jar')) {
