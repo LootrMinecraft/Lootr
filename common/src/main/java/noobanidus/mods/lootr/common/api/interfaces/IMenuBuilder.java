@@ -11,6 +11,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
  * size of the container itself, as found in `LootrInventory::createMenu`.
  */
 @FunctionalInterface
-public interface MenuBuilder {
+public interface IMenuBuilder {
   AbstractContainerMenu build(int id, Inventory inventory, Container container, int rows);
 }

@@ -15,7 +15,7 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import noobanidus.mods.lootr.common.api.interfaces.MenuBuilder;
+import noobanidus.mods.lootr.common.api.interfaces.IMenuBuilder;
 import noobanidus.mods.lootr.common.api.data.ILootrInventoryStore;
 import noobanidus.mods.lootr.common.api.inventory.ILootrInventory;
 import org.jetbrains.annotations.Nullable;
@@ -27,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
 public class LootrInventory implements ILootrInventory {
   private NonNullList<ItemStack> contents = null;
   private ILootrInventoryStore inventoryStore;
-  private MenuBuilder menuBuilder = null;
+  private IMenuBuilder menuBuilder = null;
 
   public LootrInventory(NonNullList<ItemStack> contents) {
     if (!contents.isEmpty()) {
@@ -43,7 +43,7 @@ public class LootrInventory implements ILootrInventory {
   }
 
   @Override
-  public void setMenuBuilder(MenuBuilder builder) {
+  public void setMenuBuilder(IMenuBuilder builder) {
     this.menuBuilder = builder;
   }
 

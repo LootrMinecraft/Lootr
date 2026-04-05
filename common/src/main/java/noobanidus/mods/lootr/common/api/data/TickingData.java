@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
 
+@Deprecated
 public class TickingData {
   private static final TickingData REFRESH_DATA = new TickingData(TickingType.REFRESH);
   private static final TickingData DECAY_DATA = new TickingData(TickingType.DECAY);

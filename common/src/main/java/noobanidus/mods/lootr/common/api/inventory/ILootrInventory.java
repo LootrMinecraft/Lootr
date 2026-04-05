@@ -8,7 +8,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import noobanidus.mods.lootr.common.api.data.ILootrData;
-import noobanidus.mods.lootr.common.api.interfaces.MenuBuilder;
+import noobanidus.mods.lootr.common.api.interfaces.IMenuBuilder;
 import noobanidus.mods.lootr.common.api.data.ILootrInventoryStore;
 import noobanidus.mods.lootr.common.data.LootrInventory;
 
@@ -38,7 +38,7 @@ public interface ILootrInventory extends Container, MenuProvider {
 
   NonNullList<ItemStack> getInventoryContents();
 
-  void setMenuBuilder(MenuBuilder builder);
+  void setMenuBuilder(IMenuBuilder builder);
 
   Container getContainer (Level level);
 }

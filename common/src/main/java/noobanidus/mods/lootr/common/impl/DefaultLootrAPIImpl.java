@@ -46,7 +46,7 @@ import noobanidus.mods.lootr.common.api.config.SaveMode;
 import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
 import noobanidus.mods.lootr.common.api.data.ILootrInventoryStore;
 import noobanidus.mods.lootr.common.api.filler.ILootFiller;
-import noobanidus.mods.lootr.common.api.interfaces.MenuBuilder;
+import noobanidus.mods.lootr.common.api.interfaces.IMenuBuilder;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.api.inventory.ILootrInventory;
@@ -91,7 +91,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  public final void handleProviderOpen(@Nullable ILootrContainerInstance provider, ServerPlayer player, @Nullable MenuBuilder menuBuilder) {
+  public final void handleProviderOpen(@Nullable ILootrContainerInstance provider, ServerPlayer player, @Nullable IMenuBuilder menuBuilder) {
     if (provider == null) {
       return;
     }
@@ -251,7 +251,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  public final ILootrInventory getInventory(ILootrContainerInstance provider, ServerPlayer player, ILootFiller filler, @Nullable MenuBuilder menuBuilder) {
+  public final ILootrInventory getInventory(ILootrContainerInstance provider, ServerPlayer player, ILootFiller filler, @Nullable IMenuBuilder menuBuilder) {
     ILootrInventory inventory = DataStorage.getInventory(provider, player, filler);
     if (inventory != null && menuBuilder != null) {
       inventory.setMenuBuilder(menuBuilder);

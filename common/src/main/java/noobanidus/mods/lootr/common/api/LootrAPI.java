@@ -32,7 +32,7 @@ import noobanidus.mods.lootr.common.api.config.SaveMode;
 import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
 import noobanidus.mods.lootr.common.api.data.ILootrInventoryStore;
 import noobanidus.mods.lootr.common.api.filler.ILootFiller;
-import noobanidus.mods.lootr.common.api.interfaces.MenuBuilder;
+import noobanidus.mods.lootr.common.api.interfaces.IMenuBuilder;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.api.inventory.ILootrInventory;
@@ -367,18 +367,18 @@ public final class LootrAPI {
   }
 
   @Nullable
-  public static ILootrInventory getInventory(ILootrContainerInstance provider, ServerPlayer player, @Nullable MenuBuilder builder) {
+  public static ILootrInventory getInventory(ILootrContainerInstance provider, ServerPlayer player, @Nullable IMenuBuilder builder) {
     return INSTANCE.getInventory(provider, player, builder);
   }
 
   @Nullable
   public static ILootrInventory getInventory(ILootrContainerInstance provider, ServerPlayer player) {
-    return INSTANCE.getInventory(provider, player, (MenuBuilder) null);
+    return INSTANCE.getInventory(provider, player, (IMenuBuilder) null);
   }
 
   // This is only used when wanting to override the loot filler from the default
   @Nullable
-  public static ILootrInventory getInventory(ILootrContainerInstance provider, ServerPlayer player, ILootFiller filler, @Nullable MenuBuilder builder) {
+  public static ILootrInventory getInventory(ILootrContainerInstance provider, ServerPlayer player, ILootFiller filler, @Nullable IMenuBuilder builder) {
     return INSTANCE.getInventory(provider, player, filler, builder);
   }
 

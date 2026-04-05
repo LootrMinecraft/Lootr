@@ -28,7 +28,7 @@ import noobanidus.mods.lootr.common.api.config.SaveMode;
 import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
 import noobanidus.mods.lootr.common.api.data.ILootrInventoryStore;
 import noobanidus.mods.lootr.common.api.filler.ILootFiller;
-import noobanidus.mods.lootr.common.api.interfaces.MenuBuilder;
+import noobanidus.mods.lootr.common.api.interfaces.IMenuBuilder;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.api.inventory.ILootrInventory;
@@ -69,13 +69,13 @@ public interface ILootrAPI {
   boolean clearPlayerLoot(UUID id);
 
   @Nullable
-  default ILootrInventory getInventory(ILootrContainerInstance provider, ServerPlayer player, @Nullable MenuBuilder builder) {
+  default ILootrInventory getInventory(ILootrContainerInstance provider, ServerPlayer player, @Nullable IMenuBuilder builder) {
     return getInventory(provider, player, provider.getDefaultFiller(), builder);
   }
 
   // Get specified inventory using menubuilder
   @Nullable
-  ILootrInventory getInventory(ILootrContainerInstance provider, ServerPlayer player, ILootFiller filler, @Nullable MenuBuilder builder);
+  ILootrInventory getInventory(ILootrContainerInstance provider, ServerPlayer player, ILootFiller filler, @Nullable IMenuBuilder builder);
 
   // Get saved data for specific provider
   @Nullable
@@ -245,7 +245,7 @@ public interface ILootrAPI {
 
   void handleProviderOpen(@Nullable ILootrContainerInstance provider, ServerPlayer player);
 
-  void handleProviderOpen(@Nullable ILootrContainerInstance provider, ServerPlayer player, MenuBuilder menuBuilder);
+  void handleProviderOpen(@Nullable ILootrContainerInstance provider, ServerPlayer player, IMenuBuilder menuBuilder);
 
   void handleProviderTick(@Nullable ILootrContainerInstance provider);
 
