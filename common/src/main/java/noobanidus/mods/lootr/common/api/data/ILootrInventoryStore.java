@@ -8,11 +8,17 @@ import noobanidus.mods.lootr.common.api.inventory.ILootrInventory;
 
 import java.util.UUID;
 
+// Stores inventories (ILootrInventory) for a specific container
+// Also stores ticking data and anything else that's needed
 public interface ILootrInventoryStore extends IHasOpeners, IMarkChanged {
+
+  boolean isRefreshing();
+
+  boolean isDecaying();
 
   void update(ILootrData info);
 
-  void refresh();
+  void performRefresh();
 
   default boolean clearInventories(ServerPlayer player) {
     return clearInventories(player.getUUID());
@@ -26,96 +32,21 @@ public interface ILootrInventoryStore extends IHasOpeners, IMarkChanged {
     return getInventory(player.getUUID());
   }
 
-  default ILootrInventory getOrCreateInventory(ILootrContainerInstance provider, ServerPlayer player, ILootFiller filler) {
-    if (provider.canPlayerOpen(player)) {
+  default ILootrInventory getOrCreateInventory(ILootrContainerInstance instance, ServerPlayer player, ILootFiller filler) {
+    if (instance.canPlayerOpen(player)) {
       ILootrInventory result = getInventory(player);
       if (result != null) {
         return result;
       }
 
-      return createInventory(provider, player, filler);
+      return createInventory(instance, player, filler);
     } else {
-      provider.informPlayerCannotOpen(player);
+      instance.informPlayerCannotOpen(player);
       return null;
     }
   }
 
   ILootrInventory getInventory(UUID id);
 
-  ILootrInventory createInventory(ILootrContainerInstance provider, ServerPlayer player, ILootFiller filler);
-
-/*  @Override
-  default @NonNull ILootrType getInfoType() {
-    return getRedirect().getInfoType();
-  }
-
-  @Override
-  default @NotNull Vec3 getInfoVec() {
-    return getRedirect().getInfoVec();
-  }
-
-  @Override
-  default @NotNull UUID getInfoUUID() {
-    return getRedirect().getInfoUUID();
-  }
-
-  @Override
-  default int getInfoKey () {
-    return getRedirect().getInfoKey();
-  }
-
-  @Override
-  default Identifier getInfoIdentifier() {
-    return getRedirect().getInfoIdentifier();
-  }
-
-  @Override
-  default @NotNull BlockPos getInfoPos() {
-    return getRedirect().getInfoPos();
-  }
-
-  @Override
-  default @Nullable Component getInfoDisplayName() {
-    return getRedirect().getInfoDisplayName();
-  }
-
-  @Override
-  default @NotNull ResourceKey<Level> getInfoDimension() {
-    return getRedirect().getInfoDimension();
-  }
-
-  @Override
-  default int getInfoContainerSize() {
-    return getRedirect().getInfoContainerSize();
-  }
-
-  @Override
-  default @Nullable Level getInfoLevel() {
-    return getRedirect().getInfoLevel();
-  }
-
-  @Override
-  default @Nullable Container getInfoContainer() {
-    return getRedirect().getInfoContainer();
-  }
-
-  @Override
-  default @Nullable NonNullList<ItemStack> getInfoReferenceInventory() {
-    return getRedirect().getInfoReferenceInventory();
-  }
-
-  @Override
-  default boolean isInfoReferenceInventory() {
-    return getRedirect().isInfoReferenceInventory();
-  }
-
-  @Override
-  default ResourceKey<LootTable> getInfoLootTable() {
-    return getRedirect().getInfoLootTable();
-  }
-
-  @Override
-  default long getInfoLootSeed() {
-    return getRedirect().getInfoLootSeed();
-  }*/
+  ILootrInventory createInventory(ILootrContainerInstance instance, ServerPlayer player, ILootFiller filler);
 }

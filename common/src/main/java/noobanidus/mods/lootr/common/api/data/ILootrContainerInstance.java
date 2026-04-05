@@ -24,7 +24,8 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * This denotes an actual *instance* of a Lootr container.
+ * This denotes the physical instance of a Lootr container, such as an entity, a block entity
+ * etc.
  * <br />
  * This interface should, however, be used whenever a function interacts
  * with a Lootr container but doesn't need to know about what the actual type is.
@@ -142,7 +143,7 @@ public interface ILootrContainerInstance extends ILootrData, IClientHasOpeners {
   default void performRefresh() {
     ILootrInventoryStore data = LootrAPI.getData(this);
     if (data != null) {
-      data.refresh();
+      data.performRefresh();
       data.clearOpeners();
       TickingData.getRefreshData().clearTicking(LootrAPI.getServer(), this.getDataId());
       markChanged();

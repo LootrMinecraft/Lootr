@@ -7,6 +7,7 @@ import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.core.UUIDUtil;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
@@ -17,9 +18,6 @@ import java.util.UUID;
 import java.util.function.Function;
 
 public class TickingData {
-  private static final Object2ObjectMap<UUID, String> CACHED_NAMES = new Object2ObjectOpenHashMap<>();
-  private static final Object2ObjectMap<UUID, String> CACHED_FILE_NAMES = new Object2ObjectOpenHashMap<>();
-
   private static final TickingData REFRESH_DATA = new TickingData(TickingType.REFRESH);
   private static final TickingData DECAY_DATA = new TickingData(TickingType.DECAY);
 
@@ -31,20 +29,18 @@ public class TickingData {
     return DECAY_DATA;
   }
 
-  private final String prefix;
   private final TickingType type;
 
   protected TickingData(TickingType type) {
     this.type = type;
-    this.prefix = "lootr/ticking/" + type.getPrefix() + "/";
   }
 
-  public void setCompletesIn(MinecraftServer server, UUID id, long tickTime) {
-    Section section = getSection(server, id);
+  public void setCompletesIn(MinecraftServer server, ILootrData data, long tickTime) {
+    Section section = getSection(server, data);
     try {
-      section.setCompletesAt(id, server.getWorldData().overworldData().getGameTime() + tickTime);
+      section.setCompletesAt(data, server.getWorldData().overworldData().getGameTime() + tickTime);
     } catch (SectionException e) {
-      LootrAPI.LOG.error("Unable to set {} ticking data for id {}: section mismatch, expected {}", type.getPrefix(), id, section.cachedName);
+      LootrAPI.LOG.error("Unable to set {} ticking data for id {}: section mismatch, expected {}", type.getPrefix(), data.getDataIdentifier(), section.identifier);
     }
   }
 
@@ -72,26 +68,11 @@ public class TickingData {
     }
   }
 
-  private static String getCached(UUID id) {
-    return CACHED_NAMES.computeIfAbsent(id, UUID::toString);
-  }
-
-  private static String getBaseFileName(UUID id) {
-    return CACHED_FILE_NAMES.computeIfAbsent(id, (UUID uuid) -> {
-      var name = getCached(uuid);
-      return name.substring(0, 2);
-    });
-  }
-
-  private String getFileName(UUID id) {
-    return prefix + getBaseFileName(id);
-  }
-
   @SuppressWarnings("DataFlowIssue")
-  private Section getSection(MinecraftServer server, UUID id) {
+  private Section getSection(MinecraftServer server, ILootrData id) {
     var level = server.overworld();
     var dataStorage = level.getDataStorage();
-    return dataStorage.computeIfAbsent(new SavedDataType<>(LootrAPI.rl(getFileName(id)), () -> new Section(getBaseFileName(id)), Section.CODEC.apply(getBaseFileName(id)), null));
+    return dataStorage.computeIfAbsent(new SavedDataType<>(id.getDataIdentifier(), () -> new Section(id.getDataIdentifier(), Section.CODEC.apply(id.getDataIdentifier()), null)));
   }
 
   public static class SectionException extends Exception {
@@ -106,30 +87,30 @@ public class TickingData {
     }
 
     // The input is the first 2 characters of the UUID
-    public static final Function<String, Codec<Section>> CODEC = (name) -> TickEntry.CODEC.listOf()
+    public static final Function<Identifier, Codec<Section>> CODEC = (name) -> TickEntry.CODEC.listOf()
         .xmap((data) -> new Section(name, data), o -> o.getTickMap().object2LongEntrySet().stream()
             .map(e -> new TickEntry(e.getKey(), e.getLongValue())).toList());
 
     private final Object2LongMap<UUID> tickMap = new Object2LongOpenHashMap<>();
-    private final String cachedName;
+    private final Identifier identifier;
 
-    public Section(String cachedName) {
+    public Section(Identifier identifier) {
       this.tickMap.defaultReturnValue(-1L);
-      this.cachedName = cachedName;
+      this.identifier = identifier;
     }
 
-    private Section(String cachedName, List<TickEntry> entries) {
-      this(cachedName);
+    private Section(Identifier identifier, List<TickEntry> entries) {
+      this(identifier);
       for (TickEntry entry : entries) {
         this.tickMap.put(entry.id(), entry.value());
       }
     }
 
-    private boolean excludes(UUID id) {
-      return !this.cachedName.equals(getBaseFileName(id));
+    private boolean excludes(ILootrData id) {
+      return !id.getDataIdentifier().equals(this.identifier);
     }
 
-    public boolean completed(MinecraftServer server, UUID id) throws SectionException {
+    public boolean completed(MinecraftServer server, ILootrData id) throws SectionException {
       if (excludes(id)) {
         throw new SectionException();
       }
@@ -140,18 +121,18 @@ public class TickingData {
       return server.getWorldData().overworldData().getGameTime() >= completesAt;
     }
 
-    public long completesAt(UUID id) throws SectionException {
+    public long completesAt(ILootrData id) throws SectionException {
       if (excludes(id)) {
         throw new SectionException();
       }
-      return tickMap.getLong(id);
+      return tickMap.getLong(id.getDataId());
     }
 
-    public void setCompletesAt(UUID id, long tickTime) throws SectionException {
+    public void setCompletesAt(ILootrData id, long tickTime) throws SectionException {
       if (excludes(id)) {
         throw new SectionException();
       }
-      tickMap.put(id, tickTime);
+      tickMap.put(id.getDataId(), tickTime);
       setDirty();
     }
 

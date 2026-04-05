@@ -19,15 +19,20 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-public class LootrInventoryStore extends SavedData implements ILootrInventoryStore {
+public class LootrInventoryStore implements ILootrInventoryStore {
   @SuppressWarnings("unchecked")
   public static final Codec<LootrInventoryStore> CODEC = RecordCodecBuilder.create(instance -> instance.group(
       Codec.BOOL.fieldOf("hasInventories").forGetter(LootrInventoryStore::hasInventories),
       ILootrData.CODEC.fieldOf("info").forGetter(data -> data.info),
       Codec.unboundedMap(Codec.STRING.xmap(UUID::fromString, UUID::toString), (Codec<LootrInventory>)(Object) ILootrInventory.CODEC).fieldOf("inventories").forGetter(data -> data.inventories),
       UUIDUtil.CODEC_LINKED_SET.fieldOf("openers").forGetter(data -> data.openers),
-      UUIDUtil.CODEC_LINKED_SET.fieldOf("actualOpeners").forGetter(data -> data.actualOpeners)
+      UUIDUtil.CODEC_LINKED_SET.fieldOf("actualOpeners").forGetter(data -> data.actualOpeners),
+      Codec.LONG.fieldOf("decayTime").forGetter(data -> data.decayTime),
+      Codec.LONG.fieldOf("refreshTime").forGetter(data -> data.refreshTime)
   ).apply(instance, LootrInventoryStore::new));
+
+  private long decayTime = -1;
+  private long refreshTime = -1;
 
   private boolean hasInventories;
   private ILootrData info;
@@ -47,7 +52,7 @@ public class LootrInventoryStore extends SavedData implements ILootrInventorySto
     }
   }
 
-  private LootrInventoryStore(boolean hasInventories, ILootrData info, Map<UUID, LootrInventory> map, Set<UUID> openers, Set<UUID> actualOpeners) {
+  private LootrInventoryStore(boolean hasInventories, ILootrData info, Map<UUID, LootrInventory> map, Set<UUID> openers, Set<UUID> actualOpeners, long decayTime, long refreshTime) {
     this.hasInventories = hasInventories;
     this.info = info;
     this.inventories.putAll(map);
@@ -56,6 +61,8 @@ public class LootrInventoryStore extends SavedData implements ILootrInventorySto
     }
     this.openers.addAll(openers);
     this.actualOpeners.addAll(actualOpeners);
+    this.decayTime = decayTime;
+    this.refreshTime = refreshTime;
   }
 
   public static Supplier<LootrInventoryStore> fromInfo(ILootrData info) {
@@ -76,7 +83,7 @@ public class LootrInventoryStore extends SavedData implements ILootrInventorySto
   public boolean addVisualOpener(UUID uuid) {
     boolean result = ILootrInventoryStore.super.addVisualOpener(uuid);
     if (result) {
-      setDirty();
+      markChanged();
     }
     return result;
   }
@@ -85,7 +92,7 @@ public class LootrInventoryStore extends SavedData implements ILootrInventorySto
   public boolean removeVisualOpener(UUID uuid) {
     boolean result = ILootrInventoryStore.super.removeVisualOpener(uuid);
     if (result) {
-      setDirty();
+      markChanged();
     }
     return result;
   }
@@ -94,7 +101,7 @@ public class LootrInventoryStore extends SavedData implements ILootrInventorySto
   public boolean addActualOpener(UUID uuid) {
     boolean result = ILootrInventoryStore.super.addActualOpener(uuid);
     if (result) {
-      setDirty();
+      markChanged();
     }
     return result;
   }
@@ -103,7 +110,7 @@ public class LootrInventoryStore extends SavedData implements ILootrInventorySto
     Set<UUID> visualOpeners = getVisualOpeners();
     if (visualOpeners != null) {
       if (visualOpeners.remove(uuid)) {
-        setDirty();
+        markChanged();
       }
     }
   }
@@ -115,11 +122,13 @@ public class LootrInventoryStore extends SavedData implements ILootrInventorySto
 
   @Override
   public void markChanged() {
-    setDirty();
+    // TODO:
+    //setDirty();
   }
 
   @Override
   public void markDataChanged() {
+    // TODO:
     markChanged();
   }
 
@@ -143,12 +152,23 @@ public class LootrInventoryStore extends SavedData implements ILootrInventorySto
       }
       inventories.put(player.getUUID(), result);
       hasInventories = true;
-      setDirty();
+      // TODO:
+      markChanged();
       return result;
     } else {
       provider.informPlayerCannotOpen(player);
       return null;
     }
+  }
+
+  @Override
+  public boolean isRefreshing() {
+    return refreshTime != -1;
+  }
+
+  @Override
+  public boolean isDecaying() {
+    return decayTime != -1;
   }
 
   @Override
@@ -161,7 +181,7 @@ public class LootrInventoryStore extends SavedData implements ILootrInventorySto
   }
 
   @Override
-  public void refresh() {
+  public void performRefresh() {
     inventories.clear();
     hasInventories = false;
     markChanged();
@@ -190,7 +210,7 @@ public class LootrInventoryStore extends SavedData implements ILootrInventorySto
   public boolean clearInventories(UUID id) {
     if (inventories.remove(id) != null) {
       removeOpener(id);
-      setDirty();
+      markChanged();
       return true;
     }
 
