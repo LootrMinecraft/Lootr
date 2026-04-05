@@ -1,5 +1,8 @@
 package noobanidus.mods.lootr.common.integration.sherdsapi.impl;
 
+import dev.thomasglasser.sherdsapi.impl.SherdsApi;
+import dev.thomasglasser.sherdsapi.impl.StackPotDecorations;
+import dev.thomasglasser.sherdsapi.impl.StackPotDecorationsHolder;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -55,14 +58,12 @@ public class SherdsIntegrationImpl {
       return null;
     }
 
-/*    @Nullable StackPotDecorations decorations = stack.get(sherdsType);
+    @SuppressWarnings("unchecked") @Nullable StackPotDecorations decorations = stack.get((DataComponentType<StackPotDecorations>) sherdsType);
     if (decorations == null) {
       return null;
     } else {
       return new PotDecorationsAdapter(decorations.ordered());
-    }*/
-
-    return null;
+    }
   }
 
   @Nullable
@@ -76,20 +77,17 @@ public class SherdsIntegrationImpl {
       return null;
     }
 
-/*    @Nullable StackPotDecorations decorations = stack.get(sherdsType);
+    @SuppressWarnings("unchecked") @Nullable StackPotDecorations decorations = stack.get((DataComponentType<StackPotDecorations>) sherdsType);
     if (decorations == null) {
       return null;
     } else {
       return new PotDecorationsAdapter(decorations.ordered());
-    }*/
-
-    return null;
+    }
   }
 
   @Nullable
   public static PotDecorationsAdapter getAdapterFrom(BlockEntity blockEntity) {
-    return null;
-/*    if (!(blockEntity instanceof StackPotDecorationsHolder holderType)) {
+    if (!(blockEntity instanceof StackPotDecorationsHolder holderType)) {
       return null;
     }
 
@@ -98,7 +96,7 @@ public class SherdsIntegrationImpl {
       return null;
     } else {
       return new PotDecorationsAdapter(decorations.ordered());
-    }*/
+    }
   }
 
   @Nullable
