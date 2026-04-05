@@ -90,7 +90,7 @@ subprojects {
         compileOnly "org.jetbrains:annotations:${jetbrains_annotations_version}"
         compileOnly("com.google.auto.service:auto-service-annotations:${rootProject.auto_service_version}")
         annotationProcessor("com.google.auto.service:auto-service:${rootProject.auto_service_version}")
-        implementation "com.teamresourceful.resourcefulconfig:resourcefulconfig-common-26.1:4.0.0"
+        implementation "com.teamresourceful.resourcefulconfig:resourcefulconfig-common-26.1:${rootProject.resourceful_config_version}"
     }
 
     processResources {

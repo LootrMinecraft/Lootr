@@ -24,7 +24,7 @@ dependencies {
     implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:${rootProject.mixin_extras_version}"))
     implementation("io.github.llamalad7:mixinextras-neoforge:${rootProject.mixin_extras_version}")
     //implementation "maven.modrinth:jade:${rootProject.jade_version}+neoforge"
-    implementation "com.teamresourceful.resourcefulconfig:resourcefulconfig-neoforge-26.1:4.0.0"
+    implementation "com.teamresourceful.resourcefulconfig:resourcefulconfig-neoforge-26.1:${rootProject.resourceful_config_version}"
 
     // Locally sourced extra mods for runtime (i.e. testing)
     for (extraModJar in fileTree(dir: extraModsDir, include: '*.jar')) {

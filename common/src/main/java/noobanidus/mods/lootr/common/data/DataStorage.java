@@ -44,14 +44,7 @@ public class DataStorage {
       LootrAPI.LOG.error("MinecraftServer is null at this stage; Lootr cannot fetch data storage.");
       return null;
     }
-    ServerLevel overworld = server.overworld();
-    // Sometimes `overworld` returns null. I have no idea why.
-    //noinspection ConstantValue
-    if (overworld == null) {
-      LootrAPI.LOG.error("The Overworld is null at this stage; Lootr cannot fetch data storage.");
-      return null;
-    }
-    return overworld.getDataStorage();
+    return server.getDataStorage();
   }
 
   @SuppressWarnings("deprecation")
