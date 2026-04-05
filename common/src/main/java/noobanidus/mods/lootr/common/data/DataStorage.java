@@ -27,7 +27,10 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 @SuppressWarnings({"unused", "DataFlowIssue"})
-public class DataStorage {
+public final class DataStorage {
+  // Data storage is *always* the 'universal' server-based storage,
+  // as there's the possibility that containers will be moved between
+  // dimensions.
   @ApiStatus.Internal
   @Nullable
   public static SavedDataStorage getDataStorage() {

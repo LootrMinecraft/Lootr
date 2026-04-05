@@ -141,7 +141,7 @@ public class CommandLootr {
         }
       }
       world.setBlock(pos, placementState, 2);
-      if (LootrAPI.resolveBlockEntity(world.getBlockEntity(pos)) instanceof ILootrBlockEntity randomizableBe) {
+      if (LootrAPI.wrapBlockEntity(world.getBlockEntity(pos)) instanceof ILootrBlockEntity randomizableBe) {
         randomizableBe.setLootTableInternal(table, world.getRandom().nextLong());
       }
       c.sendSuccess(() -> Component.translatable("lootr.commands.create", Component.translatable(block.getDescriptionId()), ComponentUtils.wrapInSquareBrackets(Component.translatable("lootr.commands.blockpos", pos.getX(), pos.getY(), pos.getZ())
@@ -259,11 +259,11 @@ public class CommandLootr {
       BlockPos pos = BlockPos.containing(c.getSource().getPosition());
       Level level = c.getSource().getLevel();
       BlockEntity te = level.getBlockEntity(pos);
-      if (!(LootrAPI.resolveBlockEntity(te) instanceof ILootrBlockEntity)) {
+      if (!(LootrAPI.wrapBlockEntity(te) instanceof ILootrBlockEntity)) {
         pos = pos.below();
         te = level.getBlockEntity(pos);
       }
-      ILootrBlockEntity ibe = LootrAPI.resolveBlockEntity(te);
+      ILootrBlockEntity ibe = LootrAPI.wrapBlockEntity(te);
       if (ibe == null) {
         c.getSource().sendSuccess(() -> Component.literal("Please stand on a valid Lootr container."), false);
         return 0;
@@ -305,11 +305,11 @@ public class CommandLootr {
       BlockPos pos = BlockPos.containing(c.getSource().getPosition());
       Level level = c.getSource().getLevel();
       BlockEntity te = level.getBlockEntity(pos);
-      if (!(LootrAPI.resolveBlockEntity(te) instanceof ILootrBlockEntity)) {
+      if (!(LootrAPI.wrapBlockEntity(te) instanceof ILootrBlockEntity)) {
         pos = pos.below();
         te = level.getBlockEntity(pos);
       }
-      ILootrBlockEntity ibe = LootrAPI.resolveBlockEntity(te);
+      ILootrBlockEntity ibe = LootrAPI.wrapBlockEntity(te);
       if (ibe == null) {
         c.getSource().sendSuccess(() -> Component.literal("Please stand on a valid Lootr container."), false);
         return 0;
@@ -340,11 +340,11 @@ public class CommandLootr {
       BlockPos pos = BlockPos.containing(c.getSource().getPosition());
       Level world = c.getSource().getLevel();
       BlockEntity te = world.getBlockEntity(pos);
-      if (!(LootrAPI.resolveBlockEntity(te) instanceof ILootrBlockEntity)) {
+      if (!(LootrAPI.wrapBlockEntity(te) instanceof ILootrBlockEntity)) {
         pos = pos.below();
         te = world.getBlockEntity(pos);
       }
-      ILootrBlockEntity ibe = LootrAPI.resolveBlockEntity(te);
+      ILootrBlockEntity ibe = LootrAPI.wrapBlockEntity(te);
       if (ibe == null) {
         c.getSource().sendSuccess(() -> Component.literal("Please stand on a valid Lootr container."), false);
       } else {
@@ -357,11 +357,11 @@ public class CommandLootr {
       BlockPos pos = BlockPos.containing(c.getSource().getPosition());
       Level level = c.getSource().getLevel();
       BlockEntity be = level.getBlockEntity(pos);
-      if (!(LootrAPI.resolveBlockEntity(be) instanceof ILootrBlockEntity)) {
+      if (!(LootrAPI.wrapBlockEntity(be) instanceof ILootrBlockEntity)) {
         pos = pos.below();
         be = level.getBlockEntity(pos);
       }
-      ILootrBlockEntity ibe = LootrAPI.resolveBlockEntity(be);
+      ILootrBlockEntity ibe = LootrAPI.wrapBlockEntity(be);
       if (ibe != null) {
         LootrAPI.setRefreshing(ibe);
         c.getSource()
@@ -376,11 +376,11 @@ public class CommandLootr {
       Level level = c.getSource().getLevel();
       BlockEntity be = level.getBlockEntity(pos);
 
-      if (!(LootrAPI.resolveBlockEntity(be) instanceof ILootrBlockEntity)) {
+      if (!(LootrAPI.wrapBlockEntity(be) instanceof ILootrBlockEntity)) {
         pos = pos.below();
         be = level.getBlockEntity(pos);
       }
-      ILootrBlockEntity ibe = LootrAPI.resolveBlockEntity(be);
+      ILootrBlockEntity ibe = LootrAPI.wrapBlockEntity(be);
       if (ibe != null) {
         LootrAPI.setDecaying(ibe);
         c.getSource()
@@ -394,7 +394,7 @@ public class CommandLootr {
       BlockPos position = Vec3Argument.getCoordinates(c, "location").getBlockPos(c.getSource());
       Level world = c.getSource().getLevel();
       BlockEntity blockEntity = world.getBlockEntity(position);
-      ILootrBlockEntity ibe = LootrAPI.resolveBlockEntity(blockEntity);
+      ILootrBlockEntity ibe = LootrAPI.wrapBlockEntity(blockEntity);
       if (ibe != null) {
         Set<UUID> openers = ibe.getActualOpeners();
         if (openers != null) {

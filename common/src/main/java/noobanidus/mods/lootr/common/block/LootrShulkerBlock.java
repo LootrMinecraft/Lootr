@@ -67,9 +67,9 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
       return InteractionResult.PASS;
     }
     if (serverPlayer.isShiftKeyDown()) {
-      LootrAPI.handleProviderSneak(ILootrContainerInstance.of(pos, level), serverPlayer);
+      LootrAPI.handleInstanceSneak(ILootrContainerInstance.of(pos, level), serverPlayer);
     } else {
-      LootrAPI.handleProviderOpen(ILootrContainerInstance.of(pos, level), serverPlayer);
+      LootrAPI.handleInstanceOpen(ILootrContainerInstance.of(pos, level), serverPlayer);
       player.awardStat(Stats.OPEN_SHULKER_BOX);
     }
     return InteractionResult.SUCCESS;

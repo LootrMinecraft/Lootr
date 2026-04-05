@@ -36,7 +36,7 @@ public record LootCount(List<Operation> operations) implements LootItemCondition
     Vec3 incomingPos = lootContext.getParameter(LootContextParams.ORIGIN);
     BlockPos position = new BlockPos((int) incomingPos.x, (int) incomingPos.y, (int) incomingPos.z);
     BlockEntity blockEntity = lootContext.getLevel().getBlockEntity(position);
-    ILootrBlockEntity ibe = LootrAPI.resolveBlockEntity(blockEntity);
+    ILootrBlockEntity ibe = LootrAPI.wrapBlockEntity(blockEntity);
     if (ibe != null && ibe.hasLootTable()) {
       Set<UUID> actualOpeners = ibe.getActualOpeners();
       if (actualOpeners == null) {

@@ -30,7 +30,7 @@ public class MixinCatSitOnBlockGoal {
   @Inject(method = "isValidTarget", at = @At(target = "Lnet/minecraft/world/level/block/entity/ChestBlockEntity;getOpenCount(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;)I", value = "INVOKE"), cancellable = true)
   protected void LootrPlayersUsing(LevelReader reader, BlockPos pos, CallbackInfoReturnable<Boolean> info) {
     BlockEntity blockEntity = reader.getBlockEntity(pos);
-    if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity lootrBlockEntity) {
+    if (LootrAPI.wrapBlockEntity(blockEntity) instanceof ILootrBlockEntity lootrBlockEntity) {
       if (lootrBlockEntity.getPhysicalOpenerCount() < 1) {
         info.setReturnValue(true);
         info.cancel();

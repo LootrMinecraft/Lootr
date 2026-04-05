@@ -25,7 +25,7 @@ public class ClientHandlers {
       return;
     }
 
-    if (LootrAPI.resolveEntity(cart) instanceof ILootrEntity lootrCart) {
+    if (LootrAPI.wrapEntity(cart) instanceof ILootrEntity lootrCart) {
       lootrCart.setClientOpened(false);
       return;
     }
@@ -45,7 +45,7 @@ public class ClientHandlers {
       return;
     }
 
-    if (LootrAPI.resolveEntity(cart) instanceof ILootrEntity lootrCart) {
+    if (LootrAPI.wrapEntity(cart) instanceof ILootrEntity lootrCart) {
       lootrCart.setClientOpened(true);
       return;
     }
@@ -59,7 +59,7 @@ public class ClientHandlers {
       return;
     }
     BlockEntity blockEntity = level.getBlockEntity(pos);
-    if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity lootrBlockEntity) {
+    if (LootrAPI.wrapBlockEntity(blockEntity) instanceof ILootrBlockEntity lootrBlockEntity) {
       lootrBlockEntity.setClientOpened(true);
       lootrBlockEntity.asBlockEntity().requestModelDataUpdate();
     }
@@ -72,7 +72,7 @@ public class ClientHandlers {
       return;
     }
     BlockEntity blockEntity = level.getBlockEntity(pos);
-    if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity lootrBlockEntity) {
+    if (LootrAPI.wrapBlockEntity(blockEntity) instanceof ILootrBlockEntity lootrBlockEntity) {
       lootrBlockEntity.setClientOpened(false);
       lootrBlockEntity.asBlockEntity().requestModelDataUpdate();
     }

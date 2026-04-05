@@ -37,7 +37,7 @@ public interface ILootrContainerInstance extends ILootrData, IClientHasOpeners {
       return null;
     }
     BlockEntity blockEntity = level.getBlockEntity(pos);
-    if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrContainerInstance instance) {
+    if (LootrAPI.wrapBlockEntity(blockEntity) instanceof ILootrContainerInstance instance) {
       return instance;
     } else if (blockEntity instanceof ILootrContainerInstance instance) {
       return instance;
@@ -46,7 +46,7 @@ public interface ILootrContainerInstance extends ILootrData, IClientHasOpeners {
   }
 
   static ILootrContainerInstance of(RandomizableContainerBlockEntity blockEntity, UUID id) {
-    if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrContainerInstance instance) {
+    if (LootrAPI.wrapBlockEntity(blockEntity) instanceof ILootrContainerInstance instance) {
       return instance;
     } else if (blockEntity instanceof ILootrContainerInstance instance) {
       return instance;
@@ -55,7 +55,7 @@ public interface ILootrContainerInstance extends ILootrData, IClientHasOpeners {
   }
 
   static ILootrContainerInstance of(RandomizableContainerBlockEntity blockEntity, UUID id, NonNullList<ItemStack> customInventory) {
-    if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrContainerInstance instance) {
+    if (LootrAPI.wrapBlockEntity(blockEntity) instanceof ILootrContainerInstance instance) {
       return instance;
     } else if (blockEntity instanceof ILootrContainerInstance instance) {
       return instance;

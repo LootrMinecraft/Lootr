@@ -62,13 +62,12 @@ import java.util.UUID;
 public final class LootrAPI {
   public static final Logger LOG = LogUtils.getLogger();
   public static final String MODID = "lootr";
-  public static final String NETWORK_VERSION = "lootr-1.21.0-1";
+  public static final String NETWORK_VERSION = "lootr-26.1-1";
   public static final ResourceKey<LootTable> ELYTRA_CHEST = ResourceKey.create(Registries.LOOT_TABLE, LootrAPI.rl("chests/elytra"));
   public static final ResourceKey<LootTable> TROPHY_REWARD = ResourceKey.create(Registries.LOOT_TABLE, LootrAPI.rl("reward/trophy"));
   public static final ResourceKey<LootTable> ITEM_FRAME_EMPTY = ResourceKey.create(Registries.LOOT_TABLE, LootrAPI.rl("entity/item_frame_empty"));
   public static final ResourceKey<LootTable> EMPTY_CHEST = ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath("c", "empty"));
   public static final List<Identifier> PROBLEMATIC_CHESTS = Arrays.asList(LootrAPI.rl("twilightforest", "structures/stronghold_boss"), LootrAPI.rl("atum", "chests/pharaoh"));
-  public static final List<String> _lootr$digits = Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f");
 
   public static ILootrAPI INSTANCE = null;
   public static boolean shouldDiscardIdAndOpeners;
@@ -185,6 +184,7 @@ public final class LootrAPI {
     return INSTANCE.isDimensionBlocked(dimension);
   }
 
+  // Unused
   public static Set<ResourceKey<Level>> getDimensionBlacklist() {
     return INSTANCE.getDimensionBlacklist();
   }
@@ -209,8 +209,8 @@ public final class LootrAPI {
     return INSTANCE.getModidDimensionBlacklist();
   }
 
-  public static boolean isDecaying(ILootrContainerInstance provider) {
-    return INSTANCE.isDecaying(provider);
+  public static boolean isDecaying(ILootrContainerInstance instance) {
+    return INSTANCE.isDecaying(instance);
   }
 
 
@@ -238,8 +238,8 @@ public final class LootrAPI {
     return INSTANCE.getRefreshDimensions();
   }
 
-  public static boolean isRefreshing(ILootrContainerInstance provider) {
-    return INSTANCE.isRefreshing(provider);
+  public static boolean isRefreshing(ILootrContainerInstance instance) {
+    return INSTANCE.isRefreshing(instance);
   }
 
   public static boolean reportUnresolvedTables() {
@@ -368,77 +368,78 @@ public final class LootrAPI {
   }
 
   @Nullable
-  public static ILootrInventory getInventory(ILootrContainerInstance provider, ServerPlayer player, @Nullable IMenuBuilder builder) {
-    return INSTANCE.getInventory(provider, player, builder);
+  public static ILootrInventory getInventory(ILootrContainerInstance instance, ServerPlayer player, @Nullable IMenuBuilder builder) {
+    return INSTANCE.getInventory(instance, player, builder);
   }
 
   @Nullable
-  public static ILootrInventory getInventory(ILootrContainerInstance provider, ServerPlayer player) {
-    return INSTANCE.getInventory(provider, player, (IMenuBuilder) null);
+  public static ILootrInventory getInventory(ILootrContainerInstance instance, ServerPlayer player) {
+    return INSTANCE.getInventory(instance, player, (IMenuBuilder) null);
   }
 
   // This is only used when wanting to override the loot filler from the default
   @Nullable
-  public static ILootrInventory getInventory(ILootrContainerInstance provider, ServerPlayer player, ILootFiller filler, @Nullable IMenuBuilder builder) {
-    return INSTANCE.getInventory(provider, player, filler, builder);
+  public static ILootrInventory getInventory(ILootrContainerInstance instance, ServerPlayer player, ILootFiller filler, @Nullable IMenuBuilder builder) {
+    return INSTANCE.getInventory(instance, player, filler, builder);
   }
 
   @Nullable
-  public static ILootrInventoryStore getData(ILootrContainerInstance provider) {
-    return INSTANCE.getData(provider);
+  public static ILootrInventoryStore getData(ILootrContainerInstance instance) {
+    return INSTANCE.getData(instance);
   }
 
-  public static int getRemainingDecayValue(ILootrContainerInstance provider) {
-    return INSTANCE.getRemainingDecayValue(provider);
+  public static int getRemainingDecayValue(ILootrContainerInstance instance) {
+    return INSTANCE.getRemainingDecayValue(instance);
   }
 
-  public static boolean isDecayed(ILootrContainerInstance provider) {
-    return INSTANCE.isDecayed(provider);
+  public static boolean isDecayed(ILootrContainerInstance instance) {
+    return INSTANCE.isDecayed(instance);
   }
 
-  public static void setDecaying(ILootrContainerInstance provider) {
-    INSTANCE.setDecaying(provider);
+  public static void setDecaying(ILootrContainerInstance instance) {
+    INSTANCE.setDecaying(instance);
   }
 
-  public static int getRemainingRefreshValue(ILootrContainerInstance provider) {
-    return INSTANCE.getRemainingRefreshValue(provider);
+  public static int getRemainingRefreshValue(ILootrContainerInstance instance) {
+    return INSTANCE.getRemainingRefreshValue(instance);
   }
 
-  public static boolean isRefreshed(ILootrContainerInstance provider) {
-    return INSTANCE.isRefreshed(provider);
+  public static boolean isRefreshed(ILootrContainerInstance instance) {
+    return INSTANCE.isRefreshed(instance);
   }
 
-  public static void setRefreshing(ILootrContainerInstance provider) {
-    INSTANCE.setRefreshing(provider);
+  public static void setRefreshing(ILootrContainerInstance instance) {
+    INSTANCE.setRefreshing(instance);
   }
 
-  public static void removeRefreshed(ILootrContainerInstance provider) {
-    INSTANCE.removeRefreshed(provider);
+  public static void removeRefreshed(ILootrContainerInstance instance) {
+    INSTANCE.removeRefreshed(instance);
   }
 
-  public static void handleProviderOpen(@Nullable ILootrContainerInstance provider, ServerPlayer player) {
-    INSTANCE.handleProviderOpen(provider, player);
+  public static void handleInstanceOpen(@Nullable ILootrContainerInstance instance, ServerPlayer player) {
+    INSTANCE.handleInstanceOpen(instance, player);
   }
 
-  public static void handleProviderSneak(@Nullable ILootrContainerInstance provider, ServerPlayer player) {
-    INSTANCE.handleProviderSneak(provider, player);
+  public static void handleInstanceSneak(@Nullable ILootrContainerInstance instance, ServerPlayer player) {
+    INSTANCE.handleInstanceSneak(instance, player);
   }
 
-  public static void handleProviderTick(@Nullable ILootrContainerInstance provider) {
-    INSTANCE.handleProviderTick(provider);
+  public static void handleInstanceTick(@Nullable ILootrContainerInstance instance) {
+    INSTANCE.handleInstanceTick(instance);
   }
 
-  public static void handleProviderClientTick (@Nullable ILootrContainerInstance provider) {
-    INSTANCE.handleProviderClientTick(provider);
+  public static void handleInstanceClientTick(@Nullable ILootrContainerInstance instance) {
+    INSTANCE.handleInstanceClientTick(instance);
   }
 
   @Nullable
-  public static <T extends BlockEntity> ILootrBlockEntity resolveBlockEntity(T blockEntity) {
-    return INSTANCE.resolveBlockEntity(blockEntity);
+  public static <T extends BlockEntity> ILootrBlockEntity wrapBlockEntity(T blockEntity) {
+    return INSTANCE.wrapBlockEntity(blockEntity);
   }
 
-  public static <T extends Entity> ILootrEntity resolveEntity(T entity) {
-    return INSTANCE.resolveEntity(entity);
+  @Nullable
+  public static <T extends Entity> ILootrEntity wrapEntity(T entity) {
+    return INSTANCE.wrapEntity(entity);
   }
 
   public static boolean isTaggedStructurePresent(ServerLevel level, ChunkPos chunkPos, TagKey<Structure> tag, BlockPos pos) {

@@ -10,7 +10,7 @@ import java.nio.file.Path;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
-public class IOUtil {
+public final class IOUtil {
   private static CompletableFuture<Void> deleteFileTasks = CompletableFuture.completedFuture(null);
 
   public static void withIOWorker (Runnable task) {

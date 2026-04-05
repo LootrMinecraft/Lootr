@@ -144,9 +144,9 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   public void tick() {
     super.tick();
     if (!this.level().isClientSide()) {
-      LootrAPI.handleProviderTick(this);
+      LootrAPI.handleInstanceTick(this);
     } else {
-      LootrAPI.handleProviderClientTick(this);
+      LootrAPI.handleInstanceClientTick(this);
     }
   }
 
@@ -190,9 +190,9 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     }
 
     if (player.isShiftKeyDown()) {
-      LootrAPI.handleProviderSneak(this, serverPlayer);
+      LootrAPI.handleInstanceSneak(this, serverPlayer);
     } else {
-      LootrAPI.handleProviderOpen(this, serverPlayer);
+      LootrAPI.handleInstanceOpen(this, serverPlayer);
     }
     return InteractionResult.SUCCESS;
   }

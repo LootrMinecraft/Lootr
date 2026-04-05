@@ -24,7 +24,7 @@ import org.jetbrains.annotations.ApiStatus;
 
 public interface ILootrBlockEntity extends ILootrContainerInstance {
   static <T extends BlockEntity> void ticker (Level level, BlockPos pos, BlockState state, T blockEntity) {
-    if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity t && (level.isClientSide() || t.hasLootTable())) {
+    if (LootrAPI.wrapBlockEntity(blockEntity) instanceof ILootrBlockEntity t && (level.isClientSide() || t.hasLootTable())) {
       t.defaultTick(level, pos, state);
     }
   }
@@ -38,9 +38,9 @@ public interface ILootrBlockEntity extends ILootrContainerInstance {
 
   default void defaultTick (Level level, BlockPos pos, BlockState state) {
     if (!level.isClientSide()) {
-      LootrAPI.handleProviderTick(this);
+      LootrAPI.handleInstanceTick(this);
     } else {
-      LootrAPI.handleProviderClientTick(this);
+      LootrAPI.handleInstanceClientTick(this);
     }
   }
 

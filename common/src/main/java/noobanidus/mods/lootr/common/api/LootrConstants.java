@@ -16,7 +16,7 @@ import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 public final class LootrConstants {
   private static final BlockBehaviour.StatePredicate posPredicate = (state, level, pos) -> {
     BlockEntity blockentity = level.getBlockEntity(pos);
-    if (LootrAPI.resolveBlockEntity(blockentity) instanceof ILootrBlockEntity ibe) {
+    if (LootrAPI.wrapBlockEntity(blockentity) instanceof ILootrBlockEntity ibe) {
       return !ibe.isPhysicallyOpen();
     }
     return false;

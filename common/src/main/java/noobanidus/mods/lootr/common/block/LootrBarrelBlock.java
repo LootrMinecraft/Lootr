@@ -39,9 +39,9 @@ public class LootrBarrelBlock extends BarrelBlock {
       return InteractionResult.CONSUME;
     }
     if (serverPlayer.isShiftKeyDown()) {
-      LootrAPI.handleProviderSneak(ILootrContainerInstance.of(pos, level), serverPlayer);
+      LootrAPI.handleInstanceSneak(ILootrContainerInstance.of(pos, level), serverPlayer);
     } else {
-      LootrAPI.handleProviderOpen(ILootrContainerInstance.of(pos, level), serverPlayer);
+      LootrAPI.handleInstanceOpen(ILootrContainerInstance.of(pos, level), serverPlayer);
     }
     return InteractionResult.SUCCESS;
   }

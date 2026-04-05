@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinClientPacketListener {
   @Inject(method="handleBlockEntityData", at=@At("RETURN"))
   private void LootrInjectClientBlockEntityUpdateTag(ClientboundBlockEntityDataPacket clientboundBlockEntityDataPacket, BlockEntity blockEntity, CallbackInfo ci) {
-    if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity) {
+    if (LootrAPI.wrapBlockEntity(blockEntity) instanceof ILootrBlockEntity) {
       ClientHooks.clearCache(blockEntity.getBlockPos());
     }
   }

@@ -26,7 +26,7 @@ public class LootrNetworkingInit {
           return;
         }
 
-        ILootrBlockEntity resolved = LootrAPI.resolveBlockEntity(blockEntity);
+        ILootrBlockEntity resolved = LootrAPI.wrapBlockEntity(blockEntity);
         if (resolved == null) {
           return;
         }

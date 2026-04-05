@@ -268,9 +268,9 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   public void tick() {
     super.tick();
     if (!this.level().isClientSide()) {
-      LootrAPI.handleProviderTick(this);
+      LootrAPI.handleInstanceTick(this);
     } else {
-      LootrAPI.handleProviderClientTick(this);
+      LootrAPI.handleInstanceClientTick(this);
     }
   }
 

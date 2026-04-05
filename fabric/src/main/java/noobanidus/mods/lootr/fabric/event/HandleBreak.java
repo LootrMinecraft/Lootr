@@ -22,7 +22,7 @@ public class HandleBreak {
       return true;
     }
 
-    if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity lbe) {
+    if (LootrAPI.wrapBlockEntity(blockEntity) instanceof ILootrBlockEntity lbe) {
       if (!lbe.hasLootTable()) {
         return true;
       }
@@ -63,7 +63,7 @@ public class HandleBreak {
   public static void afterBlockBreak(Level world, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity) {
     if (state.is(LootrTags.Blocks.CONTAINERS)) {
       blockEntity.setChanged();
-      if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity lbe) {
+      if (LootrAPI.wrapBlockEntity(blockEntity) instanceof ILootrBlockEntity lbe) {
         lbe.updatePacketViaForce(blockEntity);
       }
     }

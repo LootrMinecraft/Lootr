@@ -85,7 +85,7 @@ public final class BlockEntityTicker {
     if (LootrTags.BlockEntity.isTagged(entity, LootrTags.BlockEntity.CONVERT_BLACKLIST)) {
       return false;
     }
-    if (entity instanceof ILootrBlockEntity || LootrAPI.resolveBlockEntity(entity) instanceof ILootrBlockEntity) {
+    if (entity instanceof ILootrBlockEntity || LootrAPI.wrapBlockEntity(entity) instanceof ILootrBlockEntity) {
       return false;
     }
     ILootrDataAccessor<BlockEntity> adapter = LootrAPI.getAdapter(entity);
@@ -114,7 +114,7 @@ public final class BlockEntityTicker {
       return false;
     }
 
-    if (entity instanceof ILootrBlockEntity || LootrAPI.resolveBlockEntity(entity) instanceof ILootrBlockEntity) {
+    if (entity instanceof ILootrBlockEntity || LootrAPI.wrapBlockEntity(entity) instanceof ILootrBlockEntity) {
       return false;
     }
 
@@ -229,7 +229,7 @@ public final class BlockEntityTicker {
         continue;
       }
       BlockEntity blockEntity = level.getBlockEntity(entityPos);
-      if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity) {
+      if (LootrAPI.wrapBlockEntity(blockEntity) instanceof ILootrBlockEntity) {
         continue;
       }
 
@@ -269,7 +269,7 @@ public final class BlockEntityTicker {
     adapter.setLootTable(be, null, 0);
     level.setBlock(entityPos, replacement, Block.UPDATE_CLIENTS);
     BlockEntity newBlockEntity = level.getBlockEntity(entityPos);
-    if (LootrAPI.resolveBlockEntity(newBlockEntity) instanceof ILootrBlockEntity ibe) {
+    if (LootrAPI.wrapBlockEntity(newBlockEntity) instanceof ILootrBlockEntity ibe) {
       if (!itemCopy.isEmpty()) {
         ibe.asBlockEntity().applyComponentsFromItemStack(itemCopy);
       }

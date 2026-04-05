@@ -67,153 +67,148 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   @Override
-  public final void handleProviderSneak(@Nullable ILootrContainerInstance provider, ServerPlayer player) {
-    if (provider == null) {
+  public final void handleInstanceSneak(@Nullable ILootrContainerInstance instance, ServerPlayer player) {
+    if (instance == null) {
       return;
     }
-    if (!provider.canBeMarkedUnopened()) {
+    if (!instance.canBeMarkedUnopened()) {
       return;
     }
-    if (provider.removeVisualOpener(player)) {
-      provider.performClose(player);
-      provider.performUpdate(player);
+    if (instance.removeVisualOpener(player)) {
+      instance.performClose(player);
+      instance.performUpdate(player);
     }
   }
 
   @Override
-  public final void handleProviderOpen(@Nullable ILootrContainerInstance provider, ServerPlayer player) {
-    handleProviderOpen(provider, player, null);
-  }
-
-  @Override
-  public final void handleProviderOpen(@Nullable ILootrContainerInstance provider, ServerPlayer player, @Nullable IMenuBuilder menuBuilder) {
-    if (provider == null) {
+  public final void handleInstanceOpen(@Nullable ILootrContainerInstance instance, ServerPlayer player, @Nullable IMenuBuilder menuBuilder) {
+    if (instance == null) {
       return;
     }
     if (player.isSpectator()) {
       player.openMenu(null);
       return;
     }
-    if (provider.getDataLevel() == null || provider.getDataLevel().isClientSide()) {
+    if (instance.getDataLevel() == null || instance.getDataLevel().isClientSide()) {
       return;
     }
 
-    if (!provider.canPlayerOpen(player)) {
+    if (!instance.canPlayerOpen(player)) {
       return;
     }
-    if (LootrAPI.isDecayed(provider) && provider.canDecay()) {
-      provider.performDecay();
+    if (LootrAPI.isDecayed(instance) && instance.canDecay()) {
+      instance.performDecay();
       player.sendOverlayMessage(Component.translatable("lootr.message.decayed")
           .setStyle(LootrAPI.getDecayStyle()));
       return;
     } else {
-      if (provider.canDecay()) {
-        int decayValue = LootrAPI.getRemainingDecayValue(provider);
+      if (instance.canDecay()) {
+        int decayValue = LootrAPI.getRemainingDecayValue(instance);
         if (decayValue > 0 && LootrAPI.shouldNotify(decayValue)) {
           player.sendOverlayMessage(Component.translatable("lootr.message.decay_in", decayValue / 20)
               .setStyle(LootrAPI.getDecayStyle()));
         } else if (decayValue == -1) {
-          if (LootrAPI.isDecaying(provider)) {
-            LootrAPI.setDecaying(provider);
+          if (LootrAPI.isDecaying(instance)) {
+            LootrAPI.setDecaying(instance);
             player.sendOverlayMessage(Component.translatable("lootr.message.decay_start", LootrAPI.getDecayValue() / 20)
                 .setStyle(LootrAPI.getDecayStyle()));
           }
         }
       }
     }
-    provider.performTrigger(player);
+    instance.performTrigger(player);
     boolean shouldUpdate = false;
-    if (LootrAPI.isRefreshed(provider) && provider.canRefresh()) {
-      provider.performRefresh();
-      provider.performClose();
+    if (LootrAPI.isRefreshed(instance) && instance.canRefresh()) {
+      instance.performRefresh();
+      instance.performClose();
       player.sendOverlayMessage(Component.translatable("lootr.message.refreshed")
           .setStyle(LootrAPI.getRefreshStyle()));
       shouldUpdate = true;
     }
-    if (provider.canRefresh()) {
-      int refreshValue = LootrAPI.getRemainingRefreshValue(provider);
+    if (instance.canRefresh()) {
+      int refreshValue = LootrAPI.getRemainingRefreshValue(instance);
       if (refreshValue > 0 && LootrAPI.shouldNotify(refreshValue)) {
         player.sendOverlayMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20)
             .setStyle(LootrAPI.getRefreshStyle()));
       } else if (refreshValue == -1) {
-        if (LootrAPI.isRefreshing(provider)) {
-          LootrAPI.setRefreshing(provider);
+        if (LootrAPI.isRefreshing(instance)) {
+          LootrAPI.setRefreshing(instance);
           player.sendOverlayMessage(Component.translatable("lootr.message.refresh_start", LootrAPI.getRefreshValue() / 20)
               .setStyle(LootrAPI.getRefreshStyle()));
         }
       }
     }
-    MenuProvider menuProvider = LootrAPI.getInventory(provider, player, menuBuilder);
+    MenuProvider menuProvider = LootrAPI.getInventory(instance, player, menuBuilder);
     if (menuProvider == null) {
       return;
     }
     // This is pretty important, should be moved out of here
-    if (!provider.hasServerOpened(player)) {
+    if (!instance.hasServerOpened(player)) {
       player.awardStat(LootrRegistry.getLootedStat());
       LootrRegistry.getStatTrigger().trigger(player);
     }
-    if (provider.addOpener(player)) {
-      provider.performOpen(player);
+    if (instance.addOpener(player)) {
+      instance.performOpen(player);
       shouldUpdate = true;
     }
 
     if (shouldUpdate) {
-      provider.performUpdate(player);
+      instance.performUpdate(player);
     }
     player.openMenu(menuProvider);
     PiglinAi.angerNearbyPiglins(player.level(), player, true);
   }
 
   @Override
-  public final void handleProviderTick(@Nullable ILootrContainerInstance provider) {
-    if (provider == null) {
+  public final void handleInstanceTick(@Nullable ILootrContainerInstance instance) {
+    if (instance == null) {
       return;
     }
 
-    if (provider.getDataLevel() == null || provider.getDataLevel().isClientSide()) {
+    if (instance.getDataLevel() == null || instance.getDataLevel().isClientSide()) {
       return;
     }
 
-    if (LootrAPI.shouldPerformDecayWhileTicking() && LootrAPI.isDecayed(provider) && provider.hasBeenOpened() && provider.canDecay()) {
-      provider.performDecay();
+    if (LootrAPI.shouldPerformDecayWhileTicking() && LootrAPI.isDecayed(instance) && instance.hasBeenOpened() && instance.canDecay()) {
+      instance.performDecay();
       return;
-    } else if (LootrAPI.shouldStartDecayWhileTicking() && !LootrAPI.isDecayed(provider) && provider.hasBeenOpened() && provider.canDecay()) {
-      int decayValue = LootrAPI.getRemainingDecayValue(provider);
+    } else if (LootrAPI.shouldStartDecayWhileTicking() && !LootrAPI.isDecayed(instance) && instance.hasBeenOpened() && instance.canDecay()) {
+      int decayValue = LootrAPI.getRemainingDecayValue(instance);
       if (decayValue == -1) {
-        if (LootrAPI.isDecaying(provider)) {
-          LootrAPI.setDecaying(provider);
+        if (LootrAPI.isDecaying(instance)) {
+          LootrAPI.setDecaying(instance);
         }
       }
     }
-    if (LootrAPI.shouldPerformRefreshWhileTicking() && LootrAPI.isRefreshed(provider) && provider.hasBeenOpened() && provider.canRefresh()) {
-      provider.performRefresh();
-      provider.performClose();
-      provider.performUpdate();
+    if (LootrAPI.shouldPerformRefreshWhileTicking() && LootrAPI.isRefreshed(instance) && instance.hasBeenOpened() && instance.canRefresh()) {
+      instance.performRefresh();
+      instance.performClose();
+      instance.performUpdate();
     }
-    if (LootrAPI.shouldStartRefreshWhileTicking() && !LootrAPI.isRefreshed(provider) && provider.hasBeenOpened() && provider.canRefresh()) {
-      int refreshValue = LootrAPI.getRemainingRefreshValue(provider);
+    if (LootrAPI.shouldStartRefreshWhileTicking() && !LootrAPI.isRefreshed(instance) && instance.hasBeenOpened() && instance.canRefresh()) {
+      int refreshValue = LootrAPI.getRemainingRefreshValue(instance);
       if (refreshValue == -1) {
-        if (LootrAPI.isRefreshing(provider)) {
-          LootrAPI.setRefreshing(provider);
+        if (LootrAPI.isRefreshing(instance)) {
+          LootrAPI.setRefreshing(instance);
         }
       }
     }
   }
 
   @Override
-  public final void handleProviderClientTick(@Nullable ILootrContainerInstance provider) {
-    if (provider == null) {
+  public final void handleInstanceClientTick(@Nullable ILootrContainerInstance instance) {
+    if (instance == null) {
       return;
     }
 
-    if (provider.getDataLevel() == null || !provider.getDataLevel().isClientSide()) {
+    if (instance.getDataLevel() == null || !instance.getDataLevel().isClientSide()) {
       return;
     }
 
     if (LootrAPI.shouldDisplayUnopenedParticles()) {
-      var type = provider.getDataType();
+      var type = instance.getDataType();
       if (type.displaysUnopenedParticle()) {
-        ClientHooks.performUnopenedParticles(provider);
+        ClientHooks.performUnopenedParticles(instance);
       }
     }
   }
@@ -246,8 +241,8 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  public final ILootrInventory getInventory(ILootrContainerInstance provider, ServerPlayer player, ILootFiller filler, @Nullable IMenuBuilder menuBuilder) {
-    ILootrInventory inventory = DataStorage.getInventory(provider, player, filler);
+  public final ILootrInventory getInventory(ILootrContainerInstance instance, ServerPlayer player, ILootFiller filler, @Nullable IMenuBuilder menuBuilder) {
+    ILootrInventory inventory = DataStorage.getInventory(instance, player, filler);
     if (inventory != null && menuBuilder != null) {
       inventory.setMenuBuilder(menuBuilder);
     }
@@ -255,8 +250,8 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  public final @Nullable ILootrInventoryStore getData(ILootrContainerInstance provider) {
-    return DataStorage.getData(provider);
+  public final @Nullable ILootrInventoryStore getData(ILootrContainerInstance instance) {
+    return DataStorage.getData(instance);
   }
 
   @Override
@@ -265,48 +260,48 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  public final int getRemainingDecayValue(ILootrContainerInstance provider) {
-    return DataStorage.getDecayValue(provider);
+  public final int getRemainingDecayValue(ILootrContainerInstance instance) {
+    return DataStorage.getDecayValue(instance);
   }
 
   @Override
-  public final boolean isDecayed(ILootrContainerInstance provider) {
-    return DataStorage.isDecayed(provider);
+  public final boolean isDecayed(ILootrContainerInstance instance) {
+    return DataStorage.isDecayed(instance);
   }
 
   @Override
-  public final void setDecaying(ILootrContainerInstance provider) {
-    DataStorage.setDecaying(provider);
+  public final void setDecaying(ILootrContainerInstance instance) {
+    DataStorage.setDecaying(instance);
   }
 
   @Override
-  public final int getRemainingRefreshValue(ILootrContainerInstance provider) {
-    return DataStorage.getRefreshValue(provider);
+  public final int getRemainingRefreshValue(ILootrContainerInstance instance) {
+    return DataStorage.getRefreshValue(instance);
   }
 
   @Override
-  public final boolean isRefreshed(ILootrContainerInstance provider) {
-    return DataStorage.isRefreshed(provider);
+  public final boolean isRefreshed(ILootrContainerInstance instance) {
+    return DataStorage.isRefreshed(instance);
   }
 
   @Override
-  public final void setRefreshing(ILootrContainerInstance provider) {
-    DataStorage.setRefreshing(provider);
+  public final void setRefreshing(ILootrContainerInstance instance) {
+    DataStorage.setRefreshing(instance);
   }
 
   @Override
-  public final void removeRefreshed(ILootrContainerInstance provider) {
-    DataStorage.removeRefreshed(provider);
+  public final void removeRefreshed(ILootrContainerInstance instance) {
+    DataStorage.removeRefreshed(instance);
   }
 
   @Override
   @Nullable
-  public final <T extends BlockEntity> ILootrBlockEntity resolveBlockEntity(T blockEntity) {
+  public final <T extends BlockEntity> ILootrBlockEntity wrapBlockEntity(T blockEntity) {
     return LootrServiceRegistry.wrapBlockEntity(blockEntity);
   }
 
   @Override
-  public final <T extends Entity> ILootrEntity resolveEntity(T entity) {
+  public final <T extends Entity> ILootrEntity wrapEntity(T entity) {
     return LootrServiceRegistry.wrapEntity(entity);
   }
 
@@ -365,8 +360,8 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
       return;
     }
 
-    if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrContainerInstance provider && player instanceof ServerPlayer serverPlayer && provider.canDropContentsWhenBroken()) {
-      ILootrInventory inventory = getInventory(provider, serverPlayer, provider.getDefaultFiller(), null);
+    if (LootrAPI.wrapBlockEntity(blockEntity) instanceof ILootrContainerInstance instance && player instanceof ServerPlayer serverPlayer && instance.canDropContentsWhenBroken()) {
+      ILootrInventory inventory = getInventory(instance, serverPlayer, instance.getDefaultFiller(), null);
       if (inventory != null) {
         Containers.dropContents(level, pos, inventory);
       }
@@ -630,13 +625,13 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  public boolean isDecaying(ILootrContainerInstance provider) {
-    return LootrConfig.isDecaying(provider);
+  public boolean isDecaying(ILootrContainerInstance instance) {
+    return LootrConfig.isDecaying(instance);
   }
 
   @Override
-  public boolean isRefreshing(ILootrContainerInstance provider) {
-    return LootrConfig.isRefreshing(provider);
+  public boolean isRefreshing(ILootrContainerInstance instance) {
+    return LootrConfig.isRefreshing(instance);
   }
 
   @Override

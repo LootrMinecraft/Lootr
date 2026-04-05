@@ -17,7 +17,7 @@ public class MixinFallingBlockEntity {
   private void lootr$onSetChanged(BlockEntity instance, Operation<Void> original) {
     original.call(instance);
     ILootrBlockEntity resolved = null;
-    if (LootrAPI.resolveBlockEntity(instance) instanceof ILootrBlockEntity resolved2) {
+    if (LootrAPI.wrapBlockEntity(instance) instanceof ILootrBlockEntity resolved2) {
       resolved = resolved2;
     } else if (instance instanceof ILootrBlockEntity resolved2) {
       resolved = resolved2;

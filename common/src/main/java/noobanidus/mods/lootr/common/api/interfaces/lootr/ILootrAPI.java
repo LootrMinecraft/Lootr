@@ -70,17 +70,17 @@ public interface ILootrAPI {
   boolean clearPlayerLoot(UUID id);
 
   @Nullable
-  default ILootrInventory getInventory(ILootrContainerInstance provider, ServerPlayer player, @Nullable IMenuBuilder builder) {
-    return getInventory(provider, player, provider.getDefaultFiller(), builder);
+  default ILootrInventory getInventory(ILootrContainerInstance instance, ServerPlayer player, @Nullable IMenuBuilder builder) {
+    return getInventory(instance, player, instance.getDefaultFiller(), builder);
   }
 
   // Get specified inventory using menubuilder
   @Nullable
-  ILootrInventory getInventory(ILootrContainerInstance provider, ServerPlayer player, ILootFiller filler, @Nullable IMenuBuilder builder);
+  ILootrInventory getInventory(ILootrContainerInstance instance, ServerPlayer player, ILootFiller filler, @Nullable IMenuBuilder builder);
 
-  // Get saved data for specific provider
+  // Get saved data for specific instance
   @Nullable
-  ILootrInventoryStore getData(ILootrContainerInstance provider);
+  ILootrInventoryStore getData(ILootrContainerInstance instance);
 
   // Calculate seed according to configuration
   long getLootSeed(long seed);
@@ -151,9 +151,9 @@ public interface ILootrAPI {
 
   Set<String> getModidDimensionBlacklist();
 
-  boolean isDecaying(ILootrContainerInstance provider);
+  boolean isDecaying(ILootrContainerInstance instance);
 
-  boolean isRefreshing(ILootrContainerInstance provider);
+  boolean isRefreshing(ILootrContainerInstance instance);
 
   Set<String> getModidDecayWhitelist();
 
@@ -225,37 +225,40 @@ public interface ILootrAPI {
 
   boolean performPiecewiseCheck();
 
-  int getRemainingDecayValue(ILootrContainerInstance provider);
+  int getRemainingDecayValue(ILootrContainerInstance instance);
 
-  boolean isDecayed(ILootrContainerInstance provider);
+  boolean isDecayed(ILootrContainerInstance instance);
 
-  void setDecaying(ILootrContainerInstance provider);
+  void setDecaying(ILootrContainerInstance instance);
 
-  int getRemainingRefreshValue(ILootrContainerInstance provider);
+  int getRemainingRefreshValue(ILootrContainerInstance instance);
 
-  boolean isRefreshed(ILootrContainerInstance provider);
+  boolean isRefreshed(ILootrContainerInstance instance);
 
-  void setRefreshing(ILootrContainerInstance provider);
+  void setRefreshing(ILootrContainerInstance instance);
 
-  void removeRefreshed(ILootrContainerInstance provider);
+  void removeRefreshed(ILootrContainerInstance instance);
 
   @Nullable
   BlockState replacementBlockState(BlockState original);
 
-  void handleProviderSneak(@Nullable ILootrContainerInstance provider, ServerPlayer player);
+  void handleInstanceSneak(@Nullable ILootrContainerInstance instance, ServerPlayer player);
 
-  void handleProviderOpen(@Nullable ILootrContainerInstance provider, ServerPlayer player);
+  default void handleInstanceOpen(@Nullable ILootrContainerInstance instance, ServerPlayer player) {
+    handleInstanceOpen(instance, player, null);
+  }
 
-  void handleProviderOpen(@Nullable ILootrContainerInstance provider, ServerPlayer player, IMenuBuilder menuBuilder);
+  void handleInstanceOpen(@Nullable ILootrContainerInstance instance, ServerPlayer player, @Nullable  IMenuBuilder menuBuilder);
 
-  void handleProviderTick(@Nullable ILootrContainerInstance provider);
+  void handleInstanceTick(@Nullable ILootrContainerInstance instance);
 
-  void handleProviderClientTick(@Nullable ILootrContainerInstance provider);
+  void handleInstanceClientTick(@Nullable ILootrContainerInstance instance);
 
   @Nullable
-  <T extends BlockEntity> ILootrBlockEntity resolveBlockEntity(T blockEntity);
+  <T extends BlockEntity> ILootrBlockEntity wrapBlockEntity(T blockEntity);
 
-  <T extends Entity> ILootrEntity resolveEntity(T entity);
+  @Nullable
+  <T extends Entity> ILootrEntity wrapEntity(T entity);
 
   boolean isTaggedStructurePresent(ServerLevel level, ChunkPos chunkPos, TagKey<Structure> tag, BlockPos pos);
 

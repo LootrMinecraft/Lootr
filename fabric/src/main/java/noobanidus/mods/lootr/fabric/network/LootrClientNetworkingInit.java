@@ -17,7 +17,7 @@ public class LootrClientNetworkingInit {
       context.client().execute(() -> {
         if (context.client().player != null && context.client().player.level() != null) {
           Entity potential = context.client().player.level().getEntity(entityId);
-          if (LootrAPI.resolveEntity(potential) instanceof ILootrEntity cart) {
+          if (LootrAPI.wrapEntity(potential) instanceof ILootrEntity cart) {
             cart.setClientOpened(false);
           }
         }
@@ -29,7 +29,7 @@ public class LootrClientNetworkingInit {
       context.client().execute(() -> {
         if (context.client().player != null && context.client().player.level() != null) {
           Entity potential = context.client().player.level().getEntity(entityId);
-          if (LootrAPI.resolveEntity(potential) instanceof ILootrEntity cart) {
+          if (LootrAPI.wrapEntity(potential) instanceof ILootrEntity cart) {
             cart.setClientOpened(true);
           }
         }
@@ -41,7 +41,7 @@ public class LootrClientNetworkingInit {
       context.client().execute(() -> {
         if (context.client().player != null && context.client().player.level() != null) {
           BlockEntity potential = context.client().player.level().getBlockEntity(position);
-          if (LootrAPI.resolveBlockEntity(potential) instanceof ILootrBlockEntity blockEntity) {
+          if (LootrAPI.wrapBlockEntity(potential) instanceof ILootrBlockEntity blockEntity) {
             blockEntity.setClientOpened(true);
             ClientHooks.clearCache(position);
           }
@@ -63,7 +63,7 @@ public class LootrClientNetworkingInit {
       context.client().execute(() -> {
         if (context.client().player != null && context.client().player.level() != null) {
           BlockEntity potential = context.client().player.level().getBlockEntity(position);
-          if (LootrAPI.resolveBlockEntity(potential) instanceof ILootrBlockEntity blockEntity) {
+          if (LootrAPI.wrapBlockEntity(potential) instanceof ILootrBlockEntity blockEntity) {
             blockEntity.setClientOpened(false);
             ClientHooks.clearCache(position);
           }
