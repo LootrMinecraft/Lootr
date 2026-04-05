@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.PushReaction;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 
-public class LootrConstants {
+public final class LootrConstants {
   private static final BlockBehaviour.StatePredicate posPredicate = (state, level, pos) -> {
     BlockEntity blockentity = level.getBlockEntity(pos);
     if (LootrAPI.resolveBlockEntity(blockentity) instanceof ILootrBlockEntity ibe) {

@@ -27,7 +27,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
+import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.block.entity.LootrShulkerBlockEntity;
 import org.jetbrains.annotations.Nullable;
@@ -66,9 +66,9 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
       return InteractionResult.PASS;
     }
     if (serverPlayer.isShiftKeyDown()) {
-      LootrAPI.handleProviderSneak(ILootrInfoProvider.of(pos, level), serverPlayer);
+      LootrAPI.handleProviderSneak(ILootrContainerInstance.of(pos, level), serverPlayer);
     } else {
-      LootrAPI.handleProviderOpen(ILootrInfoProvider.of(pos, level), serverPlayer);
+      LootrAPI.handleProviderOpen(ILootrContainerInstance.of(pos, level), serverPlayer);
       player.awardStat(Stats.OPEN_SHULKER_BOX);
     }
     return InteractionResult.SUCCESS;

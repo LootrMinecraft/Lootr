@@ -28,7 +28,7 @@ import noobanidus.mods.lootr.common.api.type.BuiltInLootrTypes;
 import noobanidus.mods.lootr.common.api.wrapper.ILootrBlockEntityWrapper;
 import noobanidus.mods.lootr.common.api.type.ILootrType;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
-import noobanidus.mods.lootr.common.api.data.SimpleLootrInstance;
+import noobanidus.mods.lootr.common.api.helper.SimpleLootrInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.data.LootrInventory;
@@ -67,7 +67,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
     public boolean isOwnContainer(Player player) {
       if ((player.containerMenu instanceof ChestMenu menu)) {
         if (menu.getContainer() instanceof LootrInventory data) {
-          return LootrChestBlockEntity.this.getInfoUUID().equals(data.getInfo().getInfoUUID());
+          return LootrChestBlockEntity.this.getDataId().equals(data.getInventoryStore().getData().getDataId());
         }
       }
 
@@ -173,7 +173,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   }
 
   @Override
-  public @NonNull ILootrType getInfoType() {
+  public @NonNull ILootrType getDataType() {
     return BuiltInLootrTypes.CHEST;
   }
 
@@ -185,17 +185,17 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
 
   @Override
   @NotNull
-  public UUID getInfoUUID() {
+  public UUID getDataId() {
     return this.simpleLootrInstance.getInfoUUID();
   }
 
   @Override
-  public int getInfoKey() {
+  public int getDataKey() {
     return this.simpleLootrInstance.getInfoKey();
   }
 
   @Override
-  public Identifier getInfoIdentifier() {
+  public Identifier getDataIdentifier() {
     return this.simpleLootrInstance.getInfoIdentifier();
   }
 
@@ -220,47 +220,47 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   }
 
   @Override
-  public @NotNull BlockPos getInfoPos() {
+  public @NotNull BlockPos getDataPos() {
     return getBlockPos();
   }
 
   @Override
-  public ResourceKey<LootTable> getInfoLootTable() {
+  public ResourceKey<LootTable> getDataLootTable() {
     return getLootTable();
   }
 
   @Override
-  public @Nullable Component getInfoDisplayName() {
+  public @Nullable Component getDataDisplayName() {
     return getDisplayName();
   }
 
   @Override
-  public @NotNull ResourceKey<Level> getInfoDimension() {
+  public @NotNull ResourceKey<Level> getDataDimension() {
     return getLevel().dimension();
   }
 
   @Override
-  public int getInfoContainerSize() {
+  public int getDataContainerSize() {
     return this.simpleLootrInstance.getInfoContainerSize();
   }
 
   @Override
-  public long getInfoLootSeed() {
+  public long getDataLootSeed() {
     return getLootTableSeed();
   }
 
   @Override
-  public @Nullable NonNullList<ItemStack> getInfoReferenceInventory() {
+  public @Nullable NonNullList<ItemStack> getDataReferenceInventory() {
     return this.simpleLootrInstance.getReferenceInventory();
   }
 
   @Override
-  public boolean isInfoReferenceInventory() {
+  public boolean isDataReferenceInventory() {
     return this.simpleLootrInstance.isReferenceInventory();
   }
 
   @Override
-  public Level getInfoLevel() {
+  public Level getDataLevel() {
     return getLevel();
   }
 

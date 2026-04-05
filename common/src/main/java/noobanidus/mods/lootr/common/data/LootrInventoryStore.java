@@ -1,0 +1,199 @@
+package noobanidus.mods.lootr.common.data;
+
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
+import net.minecraft.core.UUIDUtil;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.saveddata.SavedData;
+import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.data.*;
+import noobanidus.mods.lootr.common.api.data.base.BaseLootrData;
+import noobanidus.mods.lootr.common.api.inventory.ILootrInventory;
+import noobanidus.mods.lootr.common.api.filler.ILootFiller;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.function.Supplier;
+
+public class LootrInventoryStore extends SavedData implements ILootrInventoryStore {
+  @SuppressWarnings("unchecked")
+  public static final Codec<LootrInventoryStore> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+      Codec.BOOL.fieldOf("hasInventories").forGetter(LootrInventoryStore::hasInventories),
+      ILootrData.CODEC.fieldOf("info").forGetter(data -> data.info),
+      Codec.unboundedMap(Codec.STRING.xmap(UUID::fromString, UUID::toString), (Codec<LootrInventory>)(Object) ILootrInventory.CODEC).fieldOf("inventories").forGetter(data -> data.inventories),
+      UUIDUtil.CODEC_LINKED_SET.fieldOf("openers").forGetter(data -> data.openers),
+      UUIDUtil.CODEC_LINKED_SET.fieldOf("actualOpeners").forGetter(data -> data.actualOpeners)
+  ).apply(instance, LootrInventoryStore::new));
+
+  private boolean hasInventories;
+  private ILootrData info;
+  private final Map<UUID, LootrInventory> inventories = new HashMap<>();
+  private final Set<UUID> openers = new ObjectLinkedOpenHashSet<>();
+  private final Set<UUID> actualOpeners = new ObjectLinkedOpenHashSet<>();
+
+  protected LootrInventoryStore(ILootrData info) {
+    this(info, false);
+  }
+
+  protected LootrInventoryStore(ILootrData info, boolean noCopy) {
+    if (noCopy) {
+      this.info = info;
+    } else {
+      this.info = BaseLootrData.copy(info);
+    }
+  }
+
+  private LootrInventoryStore(boolean hasInventories, ILootrData info, Map<UUID, LootrInventory> map, Set<UUID> openers, Set<UUID> actualOpeners) {
+    this.hasInventories = hasInventories;
+    this.info = info;
+    this.inventories.putAll(map);
+    for (var inv : this.inventories.values()) {
+      inv.setLootrSavedData(this);
+    }
+    this.openers.addAll(openers);
+    this.actualOpeners.addAll(actualOpeners);
+  }
+
+  public static Supplier<LootrInventoryStore> fromInfo(ILootrData info) {
+    return () -> new LootrInventoryStore(info);
+  }
+
+  @Override
+  public ILootrData getData() {
+    return info;
+  }
+
+  @Override
+  public Set<UUID> getVisualOpeners() {
+    return openers;
+  }
+
+  @Override
+  public boolean addVisualOpener(UUID uuid) {
+    boolean result = ILootrInventoryStore.super.addVisualOpener(uuid);
+    if (result) {
+      setDirty();
+    }
+    return result;
+  }
+
+  @Override
+  public boolean removeVisualOpener(UUID uuid) {
+    boolean result = ILootrInventoryStore.super.removeVisualOpener(uuid);
+    if (result) {
+      setDirty();
+    }
+    return result;
+  }
+
+  @Override
+  public boolean addActualOpener(UUID uuid) {
+    boolean result = ILootrInventoryStore.super.addActualOpener(uuid);
+    if (result) {
+      setDirty();
+    }
+    return result;
+  }
+
+  private void removeOpener (UUID uuid) {
+    Set<UUID> visualOpeners = getVisualOpeners();
+    if (visualOpeners != null) {
+      if (visualOpeners.remove(uuid)) {
+        setDirty();
+      }
+    }
+  }
+
+  @Override
+  public Set<UUID> getActualOpeners() {
+    return actualOpeners;
+  }
+
+  @Override
+  public void markChanged() {
+    setDirty();
+  }
+
+  @Override
+  public void markDataChanged() {
+    markChanged();
+  }
+
+  @Override
+  @Nullable
+  public LootrInventory getInventory(UUID id) {
+    LootrInventory inventory = inventories.get(id);
+    if (inventory != null) {
+      inventory.setInventoryStore(this);
+    }
+    return inventory;
+  }
+
+  @Override
+  public LootrInventory createInventory(ILootrContainerInstance provider, ServerPlayer player, ILootFiller filler) {
+    if (provider.canPlayerOpen(player)) {
+      LootrInventory result = new LootrInventory(provider.buildInitialInventory());
+      result.setLootrSavedData(this);
+      if (!LootrAPI.isFakePlayer(player)) {
+        filler.unpackLootTable(provider, player, result);
+      }
+      inventories.put(player.getUUID(), result);
+      hasInventories = true;
+      setDirty();
+      return result;
+    } else {
+      provider.informPlayerCannotOpen(player);
+      return null;
+    }
+  }
+
+  @Override
+  public void update(ILootrData info) {
+    BaseLootrData infoCopy = BaseLootrData.copy(info);
+    if (!infoCopy.equals(this.info)) {
+      markChanged();
+      this.info = info;
+    }
+  }
+
+  @Override
+  public void refresh() {
+    inventories.clear();
+    hasInventories = false;
+    markChanged();
+  }
+
+  // TODO: Is there disparity between the usage of "hasBeenOpened" in ILootrSavedData
+  // versus "hasBeenOpened" in ILootrInfoProvider? There's no synchronization between them.
+  // The main reason it exists in the provider is to prevent tick events from causing
+  // data to be created and then saved, which was apparently causing TPS lag for someone.
+  // It's also used to ignore specific saved data files when clearing via command.
+
+  // This is triggered in createInventory and reset in refresh.
+  public boolean hasInventories() {
+    return hasInventories;
+  }
+
+  public boolean canBeCulled () {
+    if (!inventories.isEmpty()) {
+      return false;
+    }
+
+    return !hasInventories();
+  }
+
+  @Override
+  public boolean clearInventories(UUID id) {
+    if (inventories.remove(id) != null) {
+      removeOpener(id);
+      setDirty();
+      return true;
+    }
+
+    return false;
+  }
+}

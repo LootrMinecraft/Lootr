@@ -24,7 +24,7 @@ public class LootrInventoryBlockEntity extends LootrChestBlockEntity {
 
   @Override
   @Nullable
-  public NonNullList<ItemStack> getInfoReferenceInventory() {
+  public NonNullList<ItemStack> getDataReferenceInventory() {
     return simpleLootrInstance.getReferenceInventory();
   }
 
@@ -43,12 +43,12 @@ public class LootrInventoryBlockEntity extends LootrChestBlockEntity {
   }
 
   @Override
-  public @NonNull ILootrType getInfoType() {
+  public @NonNull ILootrType getDataType() {
     return BuiltInLootrTypes.INVENTORY;
   }
 
   @Override
-  public boolean isInfoReferenceInventory() {
+  public boolean isDataReferenceInventory() {
     return true;
   }
 

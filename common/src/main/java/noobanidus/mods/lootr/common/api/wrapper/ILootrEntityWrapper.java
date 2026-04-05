@@ -5,20 +5,17 @@ import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 
 import java.util.function.Function;
 
-// TODO 26.1: I can technically get away with renaming this from "Converter"
-// as it doesn't actually convert, it just wraps/resolves.
-
 /**
- * Converts an object (of any type) into an ILootrEntity.
+ * Wraps an object (of any type) into an ILootrEntity.
  * <br />
- * Converters are loaded via services. Specifically, the class implementing this
- * converter should be listed (fully qualified name) in a file located at:
- * META-INF/services/noobanidus.mods.lootr.common.api.ILootrEntityConverter
+ * Wrappers are loaded via services. Specifically, the class implementing this
+ * wrapper should be listed (fully qualified name) in a file located at:
+ * META-INF/services/noobanidus.mods.lootr.common.api.ILootrEntityWraper
  * <br />
- * These converters are then used to resolve entities into ILootrEntity
+ * These wrappers are then used to resolve entities into ILootrEntity
  * rather than using specific "instanceof" checks or casts.
  * <br />
- * While the default implementations of this (i.e., LootrChestMinecartEntity$DefaultEntityConverter)
+ * While the default implementations of this (i.e., LootrChestMinecartEntity$DefaultEntityWraper)
  * returns itself (thus meaning that the output of `apply` is the same
  * as the input), this is not a requirement and there may be no relationship between
  * them.

@@ -11,8 +11,8 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrConstants;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
-import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
-import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
+import noobanidus.mods.lootr.common.api.accessor.ILootrDataAccessor;
+import noobanidus.mods.lootr.common.api.accessor.ILootrItemFrameAccessor;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.common.entity.LootrItemFrame;
 import org.spongepowered.asm.mixin.Mixin;
@@ -39,7 +39,7 @@ public class MixinPersistentEntitySectionManager {
     }
     if (LootrAPI.shouldConvertStructureItemFrames() && entity.is(LootrTags.Entity.CONVERT_ITEM_FRAMES) && entity.entityTags()
         .contains(LootrConstants.CAN_CONVERT_TAG) /* Item frames without CAN_CONVERT_TAG are handled elsewhere */) {
-      ILootrItemFrameAdapter<Entity> adapter = LootrAPI.getItemFrameAdapter(entity);
+      ILootrItemFrameAccessor<Entity> adapter = LootrAPI.getItemFrameAdapter(entity);
       if (adapter == null) {
         LootrAPI.LOG.error("No item frame adapter found for entity '{}' even though it is tagged for conversion.", entity);
         return;
@@ -60,7 +60,7 @@ public class MixinPersistentEntitySectionManager {
         }
       }
     } else if (entity.is(LootrTags.Entity.CONVERT_ENTITIES) && !entity.is(LootrTags.Entity.CONVERT_BLACKLIST)) {
-      ILootrDataAdapter<Entity> adapter = LootrAPI.getAdapter(entity);
+      ILootrDataAccessor<Entity> adapter = LootrAPI.getAdapter(entity);
       if (adapter == null) {
         LootrAPI.LOG.error("No adapter found for entity '{}' even though it is tagged for conversion.", entity);
         return;

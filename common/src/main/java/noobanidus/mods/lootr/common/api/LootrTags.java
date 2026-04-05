@@ -7,8 +7,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
-public class LootrTags {
-  public static class Blocks extends LootrTags {
+public final class LootrTags {
+  public static class Blocks  {
     public static final TagKey<Block> CONVERT_CHESTS = tag("convert/chests");
     public static final TagKey<Block> CONVERT_TRAPPED_CHESTS = tag("convert/trapped_chests");
     public static final TagKey<Block> CONVERT_SHULKERS = tag("convert/shulkers");
@@ -46,7 +46,7 @@ public class LootrTags {
     }
   }
 
-  public static class Items extends LootrTags {
+  public static class Items  {
     public static TagKey<Item> CHESTS = tag("chests");
     public static TagKey<Item> TRAPPED_CHESTS = tag("trapped_chests");
     public static TagKey<Item> SHULKERS = tag("shulkers");
@@ -63,7 +63,7 @@ public class LootrTags {
     }
   }
 
-  public static class Entity extends LootrTags {
+  public static class Entity  {
     public static TagKey<EntityType<?>> CONVERT_CARTS = tag("convert/minecarts");
     public static TagKey<EntityType<?>> CONVERT_ITEM_FRAMES = tag("convert/item_frames");
     public static TagKey<EntityType<?>> CONVERT_ENTITIES = tag("convert/entities");
@@ -79,14 +79,15 @@ public class LootrTags {
     }
   }
 
-  public static class BlockEntity extends LootrTags {
+  public static class BlockEntity  {
     public static TagKey<BlockEntityType<?>> LOOTR_OBJECT = tag("object");
     public static TagKey<BlockEntityType<?>> TRAPPED = tag("trapped");
     public static TagKey<BlockEntityType<?>> CUSTOM_INELIGIBLE = tag("custom_ineligible");
     public static TagKey<BlockEntityType<?>> CONVERT_BLACKLIST = tag("convert/blacklist");
 
+    @Deprecated
     public static boolean isTagged(net.minecraft.world.level.block.entity.BlockEntity blockEntity, TagKey<BlockEntityType<?>> tag) {
-      return blockEntity.getType().builtInRegistryHolder().is(tag);
+      return blockEntity.is(tag);
     }
 
     static TagKey<BlockEntityType<?>> tag(String name) {
@@ -94,7 +95,7 @@ public class LootrTags {
     }
   }
 
-  public static class Structure extends LootrTags {
+  public static class Structure  {
     public static TagKey<net.minecraft.world.level.levelgen.structure.Structure> STRUCTURE_BLACKLIST = tag("blacklist");
     public static TagKey<net.minecraft.world.level.levelgen.structure.Structure> STRUCTURE_WHITELIST = tag("whitelist");
 

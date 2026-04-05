@@ -37,19 +37,19 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.ILootrAPI;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrConstants;
-import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
-import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
-import noobanidus.mods.lootr.common.api.client.ClientTextureType;
+import noobanidus.mods.lootr.common.api.accessor.ILootrDataAccessor;
+import noobanidus.mods.lootr.common.api.accessor.ILootrItemFrameAccessor;
+import noobanidus.mods.lootr.common.api.config.client.ClientTextureType;
 import noobanidus.mods.lootr.common.api.config.BreakMode;
 import noobanidus.mods.lootr.common.api.config.ResistanceMode;
 import noobanidus.mods.lootr.common.api.config.SaveMode;
-import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
-import noobanidus.mods.lootr.common.api.data.ILootrContainerData;
-import noobanidus.mods.lootr.common.api.data.LootFiller;
-import noobanidus.mods.lootr.common.api.data.MenuBuilder;
+import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
+import noobanidus.mods.lootr.common.api.data.ILootrInventoryStore;
+import noobanidus.mods.lootr.common.api.filler.ILootFiller;
+import noobanidus.mods.lootr.common.api.interfaces.MenuBuilder;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
-import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
+import noobanidus.mods.lootr.common.api.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
 import noobanidus.mods.lootr.common.api.integration.PotDecorationsAdapter;
 import noobanidus.mods.lootr.common.api.processor.ILootrBlockEntityProcessor;
@@ -72,7 +72,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   @Override
-  public final void handleProviderSneak(@Nullable ILootrInfoProvider provider, ServerPlayer player) {
+  public final void handleProviderSneak(@Nullable ILootrContainerInstance provider, ServerPlayer player) {
     if (provider == null) {
       return;
     }
@@ -86,12 +86,12 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  public final void handleProviderOpen(@Nullable ILootrInfoProvider provider, ServerPlayer player) {
+  public final void handleProviderOpen(@Nullable ILootrContainerInstance provider, ServerPlayer player) {
     handleProviderOpen(provider, player, null);
   }
 
   @Override
-  public final void handleProviderOpen(@Nullable ILootrInfoProvider provider, ServerPlayer player, @Nullable MenuBuilder menuBuilder) {
+  public final void handleProviderOpen(@Nullable ILootrContainerInstance provider, ServerPlayer player, @Nullable MenuBuilder menuBuilder) {
     if (provider == null) {
       return;
     }
@@ -99,7 +99,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
       player.openMenu(null);
       return;
     }
-    if (provider.getInfoLevel() == null || provider.getInfoLevel().isClientSide()) {
+    if (provider.getDataLevel() == null || provider.getDataLevel().isClientSide()) {
       return;
     }
 
@@ -170,12 +170,12 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  public final void handleProviderTick(@Nullable ILootrInfoProvider provider) {
+  public final void handleProviderTick(@Nullable ILootrContainerInstance provider) {
     if (provider == null) {
       return;
     }
 
-    if (provider.getInfoLevel() == null || provider.getInfoLevel().isClientSide()) {
+    if (provider.getDataLevel() == null || provider.getDataLevel().isClientSide()) {
       return;
     }
 
@@ -206,17 +206,17 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  public final void handleProviderClientTick(@Nullable ILootrInfoProvider provider) {
+  public final void handleProviderClientTick(@Nullable ILootrContainerInstance provider) {
     if (provider == null) {
       return;
     }
 
-    if (provider.getInfoLevel() == null || !provider.getInfoLevel().isClientSide()) {
+    if (provider.getDataLevel() == null || !provider.getDataLevel().isClientSide()) {
       return;
     }
 
     if (LootrAPI.shouldDisplayUnopenedParticles()) {
-      var type = provider.getInfoType();
+      var type = provider.getDataType();
       if (type.displaysUnopenedParticle()) {
         ClientHooks.performUnopenedParticles(provider);
       }
@@ -251,7 +251,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  public final ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler, @Nullable MenuBuilder menuBuilder) {
+  public final ILootrInventory getInventory(ILootrContainerInstance provider, ServerPlayer player, ILootFiller filler, @Nullable MenuBuilder menuBuilder) {
     ILootrInventory inventory = DataStorage.getInventory(provider, player, filler);
     if (inventory != null && menuBuilder != null) {
       inventory.setMenuBuilder(menuBuilder);
@@ -260,7 +260,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  public final @Nullable ILootrContainerData getData(ILootrInfoProvider provider) {
+  public final @Nullable ILootrInventoryStore getData(ILootrContainerInstance provider) {
     return DataStorage.getData(provider);
   }
 
@@ -270,49 +270,49 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  public final int getRemainingDecayValue(ILootrInfoProvider provider) {
+  public final int getRemainingDecayValue(ILootrContainerInstance provider) {
     return DataStorage.getDecayValue(provider);
   }
 
   @Override
-  public final boolean isDecayed(ILootrInfoProvider provider) {
+  public final boolean isDecayed(ILootrContainerInstance provider) {
     return DataStorage.isDecayed(provider);
   }
 
   @Override
-  public final void setDecaying(ILootrInfoProvider provider) {
+  public final void setDecaying(ILootrContainerInstance provider) {
     DataStorage.setDecaying(provider);
   }
 
   @Override
-  public final int getRemainingRefreshValue(ILootrInfoProvider provider) {
+  public final int getRemainingRefreshValue(ILootrContainerInstance provider) {
     return DataStorage.getRefreshValue(provider);
   }
 
   @Override
-  public final boolean isRefreshed(ILootrInfoProvider provider) {
+  public final boolean isRefreshed(ILootrContainerInstance provider) {
     return DataStorage.isRefreshed(provider);
   }
 
   @Override
-  public final void setRefreshing(ILootrInfoProvider provider) {
+  public final void setRefreshing(ILootrContainerInstance provider) {
     DataStorage.setRefreshing(provider);
   }
 
   @Override
-  public final void removeRefreshed(ILootrInfoProvider provider) {
+  public final void removeRefreshed(ILootrContainerInstance provider) {
     DataStorage.removeRefreshed(provider);
   }
 
   @Override
   @Nullable
   public final <T extends BlockEntity> ILootrBlockEntity resolveBlockEntity(T blockEntity) {
-    return LootrServiceRegistry.convertBlockEntity(blockEntity);
+    return LootrServiceRegistry.wrapBlockEntity(blockEntity);
   }
 
   @Override
   public final <T extends Entity> ILootrEntity resolveEntity(T entity) {
-    return LootrServiceRegistry.convertEntity(entity);
+    return LootrServiceRegistry.wrapEntity(entity);
   }
 
   private static final BoundingBox DESERT_PYRAMID_ADDITIONAL = new BoundingBox(-5, -30, -5, 5, 4, 4);
@@ -370,7 +370,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
       return;
     }
 
-    if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrInfoProvider provider && player instanceof ServerPlayer serverPlayer && provider.canDropContentsWhenBroken()) {
+    if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrContainerInstance provider && player instanceof ServerPlayer serverPlayer && provider.canDropContentsWhenBroken()) {
       ILootrInventory inventory = getInventory(provider, serverPlayer, provider.getDefaultFiller(), null);
       if (inventory != null) {
         Containers.dropContents(level, pos, inventory);
@@ -388,13 +388,13 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
 
   @Override
   public void refreshServices() {
-    LootrServiceRegistry.clearReplacements();
+    LootrServiceRegistry.clearBlockConverters();
   }
 
   @Override
   @Nullable
   public BlockState replacementBlockState(BlockState original) {
-    return LootrServiceRegistry.getReplacementBlockState(original);
+    return LootrServiceRegistry.getConvertedBlockState(original);
   }
 
   @Override
@@ -424,14 +424,14 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
 
   @Nullable
   @Override
-  public <T> ILootrDataAdapter<T> getAdapter(T type) {
-    return LootrServiceRegistry.getAdapter(type);
+  public <T> ILootrDataAccessor<T> getAdapter(T type) {
+    return LootrServiceRegistry.getDataAccessor(type);
   }
 
   @Nullable
   @Override
-  public <T> ILootrItemFrameAdapter<T> getItemFrameAdapter(T type) {
-    return LootrServiceRegistry.getItemFrameAdapter(type);
+  public <T> ILootrItemFrameAccessor<T> getItemFrameAdapter(T type) {
+    return LootrServiceRegistry.getItemFrameDataAccessor(type);
   }
 
   @Override
@@ -635,12 +635,12 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  public boolean isDecaying(ILootrInfoProvider provider) {
+  public boolean isDecaying(ILootrContainerInstance provider) {
     return ConfigManager.isDecaying(provider);
   }
 
   @Override
-  public boolean isRefreshing(ILootrInfoProvider provider) {
+  public boolean isRefreshing(ILootrContainerInstance provider) {
     return ConfigManager.isRefreshing(provider);
   }
 

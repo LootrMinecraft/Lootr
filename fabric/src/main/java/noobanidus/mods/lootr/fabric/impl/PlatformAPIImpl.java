@@ -24,7 +24,7 @@ public class PlatformAPIImpl extends DefaultPlatformAPIImpl implements IPlatform
 
   @Override
   public void performEntityOpen(ILootrEntity entity) {
-    if (entity.getInfoLevel() instanceof ServerLevel serverLevel) {
+    if (entity.getDataLevel() instanceof ServerLevel serverLevel) {
       Packet<?> packet = ServerPlayNetworking.createClientboundPacket(new PacketOpenCart(entity.asEntity().getId()));
       serverLevel.getChunkSource().chunkMap.getPlayers(ChunkPos.containing(entity.asEntity().blockPosition()), false).forEach(player -> player.connection.send(packet));
     }
@@ -37,7 +37,7 @@ public class PlatformAPIImpl extends DefaultPlatformAPIImpl implements IPlatform
 
   @Override
   public void performEntityClose(ILootrEntity entity) {
-    if (entity.getInfoLevel() instanceof ServerLevel serverLevel) {
+    if (entity.getDataLevel() instanceof ServerLevel serverLevel) {
       Packet<?> packet = ServerPlayNetworking.createClientboundPacket(new PacketCloseCart(entity.asEntity().getId()));
       serverLevel.getChunkSource().chunkMap.getPlayers(ChunkPos.containing(entity.asEntity().blockPosition()), false).forEach(player -> player.connection.send(packet));
     }
@@ -50,7 +50,7 @@ public class PlatformAPIImpl extends DefaultPlatformAPIImpl implements IPlatform
 
   @Override
   public void performBlockOpen(ILootrBlockEntity blockEntity) {
-    if (blockEntity.getInfoLevel() instanceof ServerLevel serverLevel) {
+    if (blockEntity.getDataLevel() instanceof ServerLevel serverLevel) {
       Packet<?> packet = ServerPlayNetworking.createClientboundPacket(new PacketOpenContainer(blockEntity.asBlockEntity().getBlockPos()));
       serverLevel.getChunkSource().chunkMap.getPlayers(ChunkPos.containing(blockEntity.asBlockEntity().getBlockPos()), false).forEach(player -> player.connection.send(packet));
     }
@@ -63,7 +63,7 @@ public class PlatformAPIImpl extends DefaultPlatformAPIImpl implements IPlatform
 
   @Override
   public void performBlockClose(ILootrBlockEntity blockEntity) {
-    if (blockEntity.getInfoLevel() instanceof ServerLevel serverLevel) {
+    if (blockEntity.getDataLevel() instanceof ServerLevel serverLevel) {
       Packet<?> packet = ServerPlayNetworking.createClientboundPacket(new PacketCloseContainer(blockEntity.asBlockEntity().getBlockPos()));
       serverLevel.getChunkSource().chunkMap.getPlayers(ChunkPos.containing(blockEntity.asBlockEntity().getBlockPos()), false).forEach(player -> player.connection.send(packet));
     }
@@ -92,7 +92,7 @@ public class PlatformAPIImpl extends DefaultPlatformAPIImpl implements IPlatform
 
   @Override
   public void performPotBreak(ILootrBlockEntity blockEntity, ServerPlayer player) {
-    if (blockEntity.getInfoLevel() instanceof ServerLevel serverLevel) {
+    if (blockEntity.getDataLevel() instanceof ServerLevel serverLevel) {
       Packet<?> packet = ServerPlayNetworking.createClientboundPacket(new PacketPerformBreakEffect(player.getId(), blockEntity.asBlockEntity().getBlockPos()));
       serverLevel.getChunkSource().chunkMap.getPlayers(ChunkPos.containing(blockEntity.asBlockEntity().getBlockPos()), false).forEach(splayer -> splayer.connection.send(packet));
     }

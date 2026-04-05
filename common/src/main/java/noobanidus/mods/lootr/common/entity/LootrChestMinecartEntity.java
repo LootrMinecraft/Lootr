@@ -34,7 +34,6 @@ import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.data.IKeyedData;
-import noobanidus.mods.lootr.common.api.data.ILootrInfo;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.api.type.BuiltInLootrTypes;
@@ -226,82 +225,82 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
   @Override
-  public @NotNull BlockPos getInfoPos() {
+  public @NotNull BlockPos getDataPos() {
     return blockPosition();
   }
 
   @Override
-  public ResourceKey<LootTable> getInfoLootTable() {
+  public ResourceKey<LootTable> getDataLootTable() {
     return getContainerLootTable();
   }
 
   @Override
-  public @Nullable Component getInfoDisplayName() {
+  public @Nullable Component getDataDisplayName() {
     return getDisplayName();
   }
 
   @Override
-  public @NotNull ResourceKey<Level> getInfoDimension() {
+  public @NotNull ResourceKey<Level> getDataDimension() {
     return level().dimension();
   }
 
   @Override
-  public int getInfoContainerSize() {
+  public int getDataContainerSize() {
     return getContainerSize();
   }
 
   @Override
-  public long getInfoLootSeed() {
+  public long getDataLootSeed() {
     return getContainerLootTableSeed();
   }
 
   // TODO:
   @Override
-  public @Nullable NonNullList<ItemStack> getInfoReferenceInventory() {
+  public @Nullable NonNullList<ItemStack> getDataReferenceInventory() {
     return null;
   }
 
   @Override
-  public boolean isInfoReferenceInventory() {
+  public boolean isDataReferenceInventory() {
     return false;
   }
 
   @Override
-  public Level getInfoLevel() {
+  public Level getDataLevel() {
     return level();
   }
 
   @Override
-  public @NonNull ILootrType getInfoType() {
+  public @NonNull ILootrType getDataType() {
     return BuiltInLootrTypes.MINECART;
   }
 
   @Override
-  public @NotNull Vec3 getInfoVec() {
+  public @NotNull Vec3 getDataVec() {
     return position();
   }
 
   @Override
   @NotNull
-  public UUID getInfoUUID() {
+  public UUID getDataId() {
     return getUUID();
   }
 
   private boolean cacheChecked = false;
 
   @Override
-  public int getInfoKey() {
+  public int getDataKey() {
     if (!cacheChecked) {
       cacheChecked = true;
-      this.cachedKey = IKeyedData.generateInfoIntKey(getInfoUUID());
+      this.cachedKey = IKeyedData.generateInfoIntKey(getDataId());
     }
     return cachedKey;
   }
 
   @Override
-  public Identifier getInfoIdentifier() {
+  public Identifier getDataIdentifier() {
     if (this.cachedIdentifier == null) {
-      this.cachedIdentifier = IKeyedData.generateInfoIdentifier(getInfoUUID());
+      this.cachedIdentifier = IKeyedData.generateInfoIdentifier(getDataId());
     }
     return cachedIdentifier;
   }

@@ -2,6 +2,7 @@ package noobanidus.mods.lootr.common.data;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.ContainerUser;
@@ -12,11 +13,11 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import noobanidus.mods.lootr.common.api.data.MenuBuilder;
-import noobanidus.mods.lootr.common.api.data.ILootrInfo;
-import noobanidus.mods.lootr.common.api.data.ILootrContainerData;
-import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
+import noobanidus.mods.lootr.common.api.interfaces.MenuBuilder;
+import noobanidus.mods.lootr.common.api.data.ILootrInventoryStore;
+import noobanidus.mods.lootr.common.api.inventory.ILootrInventory;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -25,7 +26,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class LootrInventory implements ILootrInventory {
   private NonNullList<ItemStack> contents = null;
-  private ILootrContainerData info;
+  private ILootrInventoryStore inventoryStore;
   private MenuBuilder menuBuilder = null;
 
   public LootrInventory(NonNullList<ItemStack> contents) {
@@ -34,10 +35,10 @@ public class LootrInventory implements ILootrInventory {
     }
   }
 
-  void setLootrSavedData(ILootrContainerData savedData) {
-    this.info = savedData;
+  void setLootrSavedData(ILootrInventoryStore savedData) {
+    this.inventoryStore = savedData;
     if (this.contents == null) {
-      this.contents = info.buildInitialInventory();
+      this.contents = getData().buildInitialInventory();
     }
   }
 
@@ -47,8 +48,17 @@ public class LootrInventory implements ILootrInventory {
   }
 
   @Override
+  public Container getContainer(Level level) {
+    if (!(level instanceof ServerLevel sLevel) || sLevel.isClientSide()) {
+      return null;
+    }
+
+    return getData().getDataType().getContainer(getData(), sLevel);
+  }
+
+  @Override
   public int getContainerSize() {
-    return info.getInfoContainerSize();
+    return getData().getDataContainerSize();
   }
 
   @Override
@@ -99,16 +109,16 @@ public class LootrInventory implements ILootrInventory {
 
   @Override
   public void setChanged() {
-    info.markChanged();
+    inventoryStore.markChanged();
   }
 
   @Override
   public boolean stillValid(Player player) {
-    if (!player.level().dimension().equals(info.getInfoDimension())) {
+    if (!player.level().dimension().equals(getData().getDataDimension())) {
       return false;
     }
 
-    Container container = info.getInfoContainer();
+    Container container = getContainer(player.level());
     return switch (container) {
       case BlockEntity blockEntity -> Container.stillValidBlockEntity(blockEntity, player);
       case ContainerEntity containerEntity -> containerEntity.isChestVehicleStillValid(player);
@@ -124,18 +134,18 @@ public class LootrInventory implements ILootrInventory {
   }
 
   @Override
-  public ILootrInfo getInfo() {
-    return this.info;
+  public ILootrInventoryStore getInventoryStore() {
+    return this.inventoryStore;
   }
 
   @Override
-  public void setInfo(ILootrContainerData info) {
-    this.info = info;
+  public void setInventoryStore(ILootrInventoryStore containerStore) {
+    this.inventoryStore = containerStore;
   }
 
   @Override
   public Component getDisplayName() {
-    Component component = info.getInfoDisplayName();
+    Component component = getData().getDataDisplayName();
     if (component == null) {
       return Component.empty();
     }
@@ -159,9 +169,8 @@ public class LootrInventory implements ILootrInventory {
   }
 
   @Override
-
   public void startOpen(ContainerUser user) {
-    Container container = info.getInfoContainer();
+    Container container = getContainer(user.getLivingEntity().level());
     if (container != null) {
       container.startOpen(user);
     }
@@ -170,7 +179,7 @@ public class LootrInventory implements ILootrInventory {
   @Override
   public void stopOpen(ContainerUser user) {
     setChanged();
-    Container container = info.getInfoContainer();
+    Container container = getContainer(user.getLivingEntity().level());
     if (container != null) {
       container.stopOpen(user);
     }

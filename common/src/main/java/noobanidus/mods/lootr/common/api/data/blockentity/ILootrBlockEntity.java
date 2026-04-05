@@ -1,42 +1,28 @@
 package noobanidus.mods.lootr.common.api.data.blockentity;
 
-import com.google.common.collect.Sets;
-import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.UUIDUtil;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.RandomizableContainer;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.world.level.storage.TagValueOutput;
-import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootTable;
+import noobanidus.mods.lootr.common.api.LockMessageSuppression;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.NBTConstants;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
-import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
-import noobanidus.mods.lootr.common.api.replacement.BlockReplacementMap;
+import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
+import noobanidus.mods.lootr.common.api.conversion.BlockConversionMap;
 import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.ApiStatus;
-import org.slf4j.Logger;
 
-import java.util.Set;
-import java.util.UUID;
-
-public interface ILootrBlockEntity extends ILootrInfoProvider {
+public interface ILootrBlockEntity extends ILootrContainerInstance {
   static <T extends BlockEntity> void ticker (Level level, BlockPos pos, BlockState state, T blockEntity) {
     if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity t && (level.isClientSide() || t.hasLootTable())) {
       t.defaultTick(level, pos, state);
@@ -47,7 +33,7 @@ public interface ILootrBlockEntity extends ILootrInfoProvider {
    * @return It is actually possible for addon-associated block entities to not have a loot table associated with them, meaning they function as a "normal" container. This will never actually happen with Lootr containers, however it should always be checked.
    */
   default boolean hasLootTable () {
-    return getInfoLootTable() != null;
+    return getDataLootTable() != null;
   }
 
   default void defaultTick (Level level, BlockPos pos, BlockState state) {
@@ -101,25 +87,25 @@ public interface ILootrBlockEntity extends ILootrInfoProvider {
 
   @Override
   default void performDecay() {
-    Level level = getInfoLevel();
+    Level level = getDataLevel();
     if (level == null || level.isClientSide()) {
       return;
     }
     // TODO: Put this somewhere else
-    BlockState stateAt = level.getBlockState(getInfoPos());
+    BlockState stateAt = level.getBlockState(getDataPos());
     boolean replaceWhenDecayed = LootrAPI.shouldReplaceWhenDecayed();
-    level.destroyBlock(getInfoPos(), !replaceWhenDecayed);
+    level.destroyBlock(getDataPos(), !replaceWhenDecayed);
     if (replaceWhenDecayed) {
       //noinspection deprecation
-      Block replacementBlock = getInfoType().getReplacementBlock();
+      Block replacementBlock = getDataType().getReplacementBlock();
       if (replacementBlock != null) {
         BlockState replacementState = replacementBlock.defaultBlockState();
         for (Property<?> prop : replacementState.getProperties()) {
           if (stateAt.hasProperty(prop)) {
-            replacementState = BlockReplacementMap.safeReplace(replacementState, stateAt, prop);
+            replacementState = BlockConversionMap.safeReplace(replacementState, stateAt, prop);
           }
         }
-        level.setBlock(getInfoPos(), replacementState, Block.UPDATE_CLIENTS);
+        level.setBlock(getDataPos(), replacementState, Block.UPDATE_CLIENTS);
       }
     }
   }

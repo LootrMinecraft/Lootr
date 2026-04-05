@@ -6,11 +6,11 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import java.util.UUID;
 
 public interface IKeyedData {
-  UUID getInfoUUID ();
+  UUID getDataId();
 
-  Identifier getInfoIdentifier ();
+  Identifier getDataIdentifier();
 
-  int getInfoKey ();
+  int getDataKey();
 
   static int generateInfoIntKey (UUID id) {
     // >>> 'cos signedednessingthing

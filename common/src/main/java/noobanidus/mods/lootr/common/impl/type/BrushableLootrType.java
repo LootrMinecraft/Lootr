@@ -2,8 +2,8 @@ package noobanidus.mods.lootr.common.impl.type;
 
 import net.minecraft.world.entity.EntityType;
 import noobanidus.mods.lootr.common.api.type.ILootrType;
-import noobanidus.mods.lootr.common.api.data.DefaultBrushableLootFiller;
-import noobanidus.mods.lootr.common.api.data.LootFiller;
+import noobanidus.mods.lootr.common.api.filler.DefaultBrushableLootFiller;
+import noobanidus.mods.lootr.common.api.filler.ILootFiller;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class BrushableLootrType implements ILootrType {
@@ -13,7 +13,7 @@ public abstract class BrushableLootrType implements ILootrType {
   }
 
   @Override
-  public LootFiller getDefaultFiller() {
+  public ILootFiller getDefaultFiller() {
     return DefaultBrushableLootFiller.getInstance();
   }
 

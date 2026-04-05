@@ -28,7 +28,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
+import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.block.entity.LootrChestBlockEntity;
@@ -51,9 +51,9 @@ public class LootrInventoryBlock extends ChestBlock {
       return InteractionResult.CONSUME;
     }
     if (serverPlayer.isShiftKeyDown()) {
-      LootrAPI.handleProviderSneak(ILootrInfoProvider.of(pos, level), serverPlayer);
+      LootrAPI.handleProviderSneak(ILootrContainerInstance.of(pos, level), serverPlayer);
     } else if (!isChestBlockedAt(level, pos)) {
-      LootrAPI.handleProviderOpen(ILootrInfoProvider.of(pos, level), serverPlayer);
+      LootrAPI.handleProviderOpen(ILootrContainerInstance.of(pos, level), serverPlayer);
     }
     return InteractionResult.SUCCESS;
   }

@@ -66,7 +66,7 @@ import noobanidus.mods.lootr.common.block.entity.BlockEntityTicker;
 import noobanidus.mods.lootr.common.block.entity.LootrInventoryBlockEntity;
 import noobanidus.mods.lootr.common.data.DataStorage;
 import noobanidus.mods.lootr.common.data.LootrInventory;
-import noobanidus.mods.lootr.common.data.LootrContainerData;
+import noobanidus.mods.lootr.common.data.LootrInventoryStore;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.common.impl.IChunkMapGetChunks;
 import noobanidus.mods.lootr.common.impl.LootrServiceRegistry;
@@ -269,7 +269,7 @@ public class CommandLootr {
         return 0;
       }
 
-      LootrContainerData data = DataStorage.getData(ibe);
+      LootrInventoryStore data = DataStorage.getData(ibe);
       if (data == null) {
         c.getSource().sendSuccess(() -> Component.literal("No Lootr data found for this container."), false);
         return 0;
@@ -315,7 +315,7 @@ public class CommandLootr {
         return 0;
       }
 
-      LootrContainerData data = DataStorage.getData(ibe);
+      LootrInventoryStore data = DataStorage.getData(ibe);
       if (data == null) {
         c.getSource().sendSuccess(() -> Component.literal("No Lootr data found for this container."), true);
         return 0;
@@ -349,7 +349,7 @@ public class CommandLootr {
         c.getSource().sendSuccess(() -> Component.literal("Please stand on a valid Lootr container."), false);
       } else {
         c.getSource().sendSuccess(() -> Component.literal("The ID of this inventory is: ")
-            .append(ComponentUtils.copyOnClickText(ibe.getInfoUUID().toString())), false);
+            .append(ComponentUtils.copyOnClickText(ibe.getDataId().toString())), false);
       }
       return 1;
     }));
@@ -365,7 +365,7 @@ public class CommandLootr {
       if (ibe != null) {
         LootrAPI.setRefreshing(ibe);
         c.getSource()
-            .sendSuccess(() -> Component.literal("Container with ID " + (ibe).getInfoUUID() + " has been set to refresh with a delay of " + LootrAPI.getRefreshValue()), false);
+            .sendSuccess(() -> Component.literal("Container with ID " + (ibe).getDataId() + " has been set to refresh with a delay of " + LootrAPI.getRefreshValue()), false);
       } else {
         c.getSource().sendSuccess(() -> Component.literal("Please stand on a valid Lootr container."), false);
       }
@@ -384,7 +384,7 @@ public class CommandLootr {
       if (ibe != null) {
         LootrAPI.setDecaying(ibe);
         c.getSource()
-            .sendSuccess(() -> Component.literal("Container with ID " + (ibe).getInfoUUID() + " has been set to decay with a delay of " + LootrAPI.getDecayValue()), false);
+            .sendSuccess(() -> Component.literal("Container with ID " + (ibe).getDataId() + " has been set to decay with a delay of " + LootrAPI.getDecayValue()), false);
       } else {
         c.getSource().sendSuccess(() -> Component.literal("Please stand on a valid Lootr container."), false);
       }

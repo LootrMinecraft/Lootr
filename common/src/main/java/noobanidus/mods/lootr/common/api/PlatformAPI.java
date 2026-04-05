@@ -3,8 +3,8 @@ package noobanidus.mods.lootr.common.api;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
-import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
+import noobanidus.mods.lootr.common.api.accessor.ILootrDataAccessor;
+import noobanidus.mods.lootr.common.api.accessor.ILootrItemFrameAccessor;
 import noobanidus.mods.lootr.common.api.data.DataToCopy;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
@@ -14,7 +14,7 @@ import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
  * <br />
  * It is separate from LootrAPI simply just because.
  **/
-public class PlatformAPI {
+public final class PlatformAPI {
   public static IPlatformAPI INSTANCE;
 
   public static void performEntityOpen(ILootrEntity entity, ServerPlayer player) {
@@ -57,11 +57,11 @@ public class PlatformAPI {
     INSTANCE.restoreSpecificData(data, newBlockEntity);
   }
 
-  public static void copyEntityData(ILootrDataAdapter<Entity> adapter, Entity entity1, ILootrEntity entity2) {
+  public static void copyEntityData(ILootrDataAccessor<Entity> adapter, Entity entity1, ILootrEntity entity2) {
     INSTANCE.copyEntityData(adapter, entity1, entity2);
   }
 
-  public static void copyEntityData(ILootrItemFrameAdapter<Entity> adapter, Entity entity1, ILootrEntity entity2) {
+  public static void copyEntityData(ILootrItemFrameAccessor<Entity> adapter, Entity entity1, ILootrEntity entity2) {
     INSTANCE.copyEntityData(adapter, entity1, entity2);
   }
 

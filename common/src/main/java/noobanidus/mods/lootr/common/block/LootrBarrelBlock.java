@@ -5,8 +5,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.Container;
-import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -19,7 +17,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
+import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.block.entity.LootrBarrelBlockEntity;
 import org.jetbrains.annotations.Nullable;
@@ -40,9 +38,9 @@ public class LootrBarrelBlock extends BarrelBlock {
       return InteractionResult.CONSUME;
     }
     if (serverPlayer.isShiftKeyDown()) {
-      LootrAPI.handleProviderSneak(ILootrInfoProvider.of(pos, level), serverPlayer);
+      LootrAPI.handleProviderSneak(ILootrContainerInstance.of(pos, level), serverPlayer);
     } else {
-      LootrAPI.handleProviderOpen(ILootrInfoProvider.of(pos, level), serverPlayer);
+      LootrAPI.handleProviderOpen(ILootrContainerInstance.of(pos, level), serverPlayer);
     }
     return InteractionResult.SUCCESS;
   }

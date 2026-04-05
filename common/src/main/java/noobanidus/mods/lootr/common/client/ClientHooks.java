@@ -11,7 +11,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
+import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinBlock;
@@ -84,7 +84,7 @@ public class ClientHooks {
     return min + random.nextDouble() * (max - min);
   }
 
-  public static void performUnopenedParticles(ILootrInfoProvider provider) {
+  public static void performUnopenedParticles(ILootrContainerInstance provider) {
     Player player = getPlayer();
     if (player != null) {
       Level level = Minecraft.getInstance().level;

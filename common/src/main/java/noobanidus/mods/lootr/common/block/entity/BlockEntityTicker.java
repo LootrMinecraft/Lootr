@@ -21,7 +21,7 @@ import noobanidus.mods.lootr.common.api.data.DataToCopy;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
-import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
+import noobanidus.mods.lootr.common.api.accessor.ILootrDataAccessor;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.chunk.LoadedChunks;
 import org.jetbrains.annotations.Nullable;
@@ -88,7 +88,7 @@ public final class BlockEntityTicker {
     if (entity instanceof ILootrBlockEntity || LootrAPI.resolveBlockEntity(entity) instanceof ILootrBlockEntity) {
       return false;
     }
-    ILootrDataAdapter<BlockEntity> adapter = LootrAPI.getAdapter(entity);
+    ILootrDataAccessor<BlockEntity> adapter = LootrAPI.getAdapter(entity);
     // IMPORTANT: Do *not* check the loot table here as this is called before nbt is loaded, etc
     return adapter != null;
   }
@@ -136,7 +136,7 @@ public final class BlockEntityTicker {
       return false;
     }
 
-    ILootrDataAdapter<BlockEntity> adapter = LootrAPI.getAdapter(entity);
+    ILootrDataAccessor<BlockEntity> adapter = LootrAPI.getAdapter(entity);
     if (adapter == null) {
       return false;
     }
@@ -233,7 +233,7 @@ public final class BlockEntityTicker {
         continue;
       }
 
-      ILootrDataAdapter<BlockEntity> adapter = LootrAPI.getAdapter(blockEntity);
+      ILootrDataAccessor<BlockEntity> adapter = LootrAPI.getAdapter(blockEntity);
       // I'm not sure how we could've reached this stage.
       if (adapter == null) {
         continue;
@@ -256,7 +256,7 @@ public final class BlockEntityTicker {
     }
   }
 
-  private static void replaceEntity(ServerLevel level, BlockPos entityPos, ILootrDataAdapter<BlockEntity> adapter, BlockEntity be, BlockState replacement, ResourceKey<LootTable> table, long seed) {
+  private static void replaceEntity(ServerLevel level, BlockPos entityPos, ILootrDataAccessor<BlockEntity> adapter, BlockEntity be, BlockState replacement, ResourceKey<LootTable> table, long seed) {
     LootrAPI.preProcess(level, entityPos, be, replacement, table, seed);
     // Save specific data. Currently, this includes the LockCode (all platforms), along with NeoForge's getPersistentData.
     DataToCopy data = PlatformAPI.copySpecificData(be);

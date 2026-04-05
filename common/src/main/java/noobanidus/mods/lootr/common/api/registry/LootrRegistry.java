@@ -18,7 +18,7 @@ import noobanidus.mods.lootr.common.api.advancement.ILootedStatTrigger;
 /**
  * Platform-independent way to access registered objects.
  */
-public class LootrRegistry {
+public final class LootrRegistry {
   public static ILootrRegistry INSTANCE = null;
 
   public static boolean isReady() {

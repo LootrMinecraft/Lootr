@@ -8,9 +8,9 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.data.DefaultLootFiller;
-import noobanidus.mods.lootr.common.api.data.ILootrInfo;
-import noobanidus.mods.lootr.common.api.data.LootFiller;
+import noobanidus.mods.lootr.common.api.filler.DefaultLootFiller;
+import noobanidus.mods.lootr.common.api.data.ILootrData;
+import noobanidus.mods.lootr.common.api.filler.ILootFiller;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -38,7 +38,7 @@ public interface ILootrType {
 
   }
 
-  default LootFiller getDefaultFiller () {
+  default ILootFiller getDefaultFiller () {
     return DefaultLootFiller.getInstance();
   }
 
@@ -67,14 +67,14 @@ public interface ILootrType {
   }
 
   @Nullable
-  default Container getContainer (ILootrInfo info, ServerLevel level) {
+  default Container getContainer (ILootrData info, ServerLevel level) {
     if (isEntity() && getReplacementEntity() != null) {
-      Entity entity = level.getEntity(info.getInfoUUID());
+      Entity entity = level.getEntity(info.getDataId());
       if (entity instanceof Container container) {
         return container;
       }
     } else if (!isEntity()) {
-      BlockEntity be = level.getBlockEntity(info.getInfoPos());
+      BlockEntity be = level.getBlockEntity(info.getDataPos());
       if (be instanceof Container container) {
         return container;
       }

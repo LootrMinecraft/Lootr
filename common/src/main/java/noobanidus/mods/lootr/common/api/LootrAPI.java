@@ -25,17 +25,17 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.storage.loot.LootTable;
-import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
-import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
-import noobanidus.mods.lootr.common.api.client.ClientTextureType;
+import noobanidus.mods.lootr.common.api.accessor.ILootrDataAccessor;
+import noobanidus.mods.lootr.common.api.accessor.ILootrItemFrameAccessor;
+import noobanidus.mods.lootr.common.api.config.client.ClientTextureType;
 import noobanidus.mods.lootr.common.api.config.SaveMode;
-import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
-import noobanidus.mods.lootr.common.api.data.ILootrContainerData;
-import noobanidus.mods.lootr.common.api.data.LootFiller;
-import noobanidus.mods.lootr.common.api.data.MenuBuilder;
+import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
+import noobanidus.mods.lootr.common.api.data.ILootrInventoryStore;
+import noobanidus.mods.lootr.common.api.filler.ILootFiller;
+import noobanidus.mods.lootr.common.api.interfaces.MenuBuilder;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
-import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
+import noobanidus.mods.lootr.common.api.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
 import noobanidus.mods.lootr.common.api.integration.PotDecorationsAdapter;
 import noobanidus.mods.lootr.common.api.processor.ILootrBlockEntityProcessor;
@@ -58,7 +58,7 @@ import java.util.UUID;
  * <br />
  * All non-platform methods are implemented in DefaultLootrAPIImpl.
  */
-public class LootrAPI {
+public final class LootrAPI {
   public static final Logger LOG = LogManager.getLogger();
   public static final String MODID = "lootr";
   public static final String NETWORK_VERSION = "lootr-1.21.0-1";
@@ -208,7 +208,7 @@ public class LootrAPI {
     return INSTANCE.getModidDimensionBlacklist();
   }
 
-  public static boolean isDecaying(ILootrInfoProvider provider) {
+  public static boolean isDecaying(ILootrContainerInstance provider) {
     return INSTANCE.isDecaying(provider);
   }
 
@@ -237,7 +237,7 @@ public class LootrAPI {
     return INSTANCE.getRefreshDimensions();
   }
 
-  public static boolean isRefreshing(ILootrInfoProvider provider) {
+  public static boolean isRefreshing(ILootrContainerInstance provider) {
     return INSTANCE.isRefreshing(provider);
   }
 
@@ -367,67 +367,67 @@ public class LootrAPI {
   }
 
   @Nullable
-  public static ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, @Nullable MenuBuilder builder) {
+  public static ILootrInventory getInventory(ILootrContainerInstance provider, ServerPlayer player, @Nullable MenuBuilder builder) {
     return INSTANCE.getInventory(provider, player, builder);
   }
 
   @Nullable
-  public static ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player) {
+  public static ILootrInventory getInventory(ILootrContainerInstance provider, ServerPlayer player) {
     return INSTANCE.getInventory(provider, player, (MenuBuilder) null);
   }
 
   // This is only used when wanting to override the loot filler from the default
   @Nullable
-  public static ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler, @Nullable MenuBuilder builder) {
+  public static ILootrInventory getInventory(ILootrContainerInstance provider, ServerPlayer player, ILootFiller filler, @Nullable MenuBuilder builder) {
     return INSTANCE.getInventory(provider, player, filler, builder);
   }
 
   @Nullable
-  public static ILootrContainerData getData(ILootrInfoProvider provider) {
+  public static ILootrInventoryStore getData(ILootrContainerInstance provider) {
     return INSTANCE.getData(provider);
   }
 
-  public static int getRemainingDecayValue(ILootrInfoProvider provider) {
+  public static int getRemainingDecayValue(ILootrContainerInstance provider) {
     return INSTANCE.getRemainingDecayValue(provider);
   }
 
-  public static boolean isDecayed(ILootrInfoProvider provider) {
+  public static boolean isDecayed(ILootrContainerInstance provider) {
     return INSTANCE.isDecayed(provider);
   }
 
-  public static void setDecaying(ILootrInfoProvider provider) {
+  public static void setDecaying(ILootrContainerInstance provider) {
     INSTANCE.setDecaying(provider);
   }
 
-  public static int getRemainingRefreshValue(ILootrInfoProvider provider) {
+  public static int getRemainingRefreshValue(ILootrContainerInstance provider) {
     return INSTANCE.getRemainingRefreshValue(provider);
   }
 
-  public static boolean isRefreshed(ILootrInfoProvider provider) {
+  public static boolean isRefreshed(ILootrContainerInstance provider) {
     return INSTANCE.isRefreshed(provider);
   }
 
-  public static void setRefreshing(ILootrInfoProvider provider) {
+  public static void setRefreshing(ILootrContainerInstance provider) {
     INSTANCE.setRefreshing(provider);
   }
 
-  public static void removeRefreshed(ILootrInfoProvider provider) {
+  public static void removeRefreshed(ILootrContainerInstance provider) {
     INSTANCE.removeRefreshed(provider);
   }
 
-  public static void handleProviderOpen(@Nullable ILootrInfoProvider provider, ServerPlayer player) {
+  public static void handleProviderOpen(@Nullable ILootrContainerInstance provider, ServerPlayer player) {
     INSTANCE.handleProviderOpen(provider, player);
   }
 
-  public static void handleProviderSneak(@Nullable ILootrInfoProvider provider, ServerPlayer player) {
+  public static void handleProviderSneak(@Nullable ILootrContainerInstance provider, ServerPlayer player) {
     INSTANCE.handleProviderSneak(provider, player);
   }
 
-  public static void handleProviderTick(@Nullable ILootrInfoProvider provider) {
+  public static void handleProviderTick(@Nullable ILootrContainerInstance provider) {
     INSTANCE.handleProviderTick(provider);
   }
 
-  public static void handleProviderClientTick (@Nullable ILootrInfoProvider provider) {
+  public static void handleProviderClientTick (@Nullable ILootrContainerInstance provider) {
     INSTANCE.handleProviderClientTick(provider);
   }
 
@@ -511,12 +511,12 @@ public class LootrAPI {
   }
 
   @Nullable
-  public static <T> ILootrDataAdapter<T> getAdapter(T type) {
+  public static <T> ILootrDataAccessor<T> getAdapter(T type) {
     return INSTANCE.getAdapter(type);
   }
 
   @Nullable
-  public static <T>ILootrItemFrameAdapter<T> getItemFrameAdapter (T type) {
+  public static <T> ILootrItemFrameAccessor<T> getItemFrameAdapter (T type) {
     return INSTANCE.getItemFrameAdapter(type);
   }
 

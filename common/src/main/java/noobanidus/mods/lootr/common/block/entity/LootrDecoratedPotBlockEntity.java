@@ -32,9 +32,9 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.ticks.ContainerSingleItem;
 import noobanidus.mods.lootr.common.api.*;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
-import noobanidus.mods.lootr.common.api.data.SimpleLootrInstance;
+import noobanidus.mods.lootr.common.api.helper.SimpleLootrInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
-import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
+import noobanidus.mods.lootr.common.api.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.integration.PotDecorationsAdapter;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.api.type.BuiltInLootrTypes;
@@ -291,22 +291,22 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   }
 
   @Override
-  public @NonNull ILootrType getInfoType() {
+  public @NonNull ILootrType getDataType() {
     return BuiltInLootrTypes.DECORATED_POT;
   }
 
   @Override
-  public @NotNull UUID getInfoUUID() {
+  public @NotNull UUID getDataId() {
     return lootrInstance.getInfoUUID();
   }
 
   @Override
-  public int getInfoKey() {
+  public int getDataKey() {
     return lootrInstance.getInfoKey();
   }
 
   @Override
-  public Identifier getInfoIdentifier() {
+  public Identifier getDataIdentifier() {
     return lootrInstance.getInfoIdentifier();
   }
 
@@ -321,47 +321,47 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   }
 
   @Override
-  public @NotNull BlockPos getInfoPos() {
+  public @NotNull BlockPos getDataPos() {
     return getBlockPos();
   }
 
   @Override
-  public @Nullable Component getInfoDisplayName() {
+  public @Nullable Component getDataDisplayName() {
     return null;
   }
 
   @Override
-  public @NotNull ResourceKey<Level> getInfoDimension() {
+  public @NotNull ResourceKey<Level> getDataDimension() {
     return level.dimension();
   }
 
   @Override
-  public int getInfoContainerSize() {
+  public int getDataContainerSize() {
     return 1;
   }
 
   @Override
-  public @Nullable NonNullList<ItemStack> getInfoReferenceInventory() {
+  public @Nullable NonNullList<ItemStack> getDataReferenceInventory() {
     return this.lootrInstance.getReferenceInventory();
   }
 
   @Override
-  public boolean isInfoReferenceInventory() {
+  public boolean isDataReferenceInventory() {
     return this.lootrInstance.isReferenceInventory();
   }
 
   @Override
-  public @Nullable ResourceKey<LootTable> getInfoLootTable() {
+  public @Nullable ResourceKey<LootTable> getDataLootTable() {
     return lootTable;
   }
 
   @Override
-  public long getInfoLootSeed() {
+  public long getDataLootSeed() {
     return lootTableSeed;
   }
 
   @Override
-  public Level getInfoLevel() {
+  public Level getDataLevel() {
     return level;
   }
 

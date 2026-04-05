@@ -8,9 +8,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
-import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
+import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
 
-public interface ILootrEntity extends ILootrInfoProvider {
+public interface ILootrEntity extends ILootrContainerInstance {
   default Entity asEntity () {
     if (this instanceof Entity entity) {
       return entity;
@@ -41,7 +41,7 @@ public interface ILootrEntity extends ILootrInfoProvider {
 
   @Override
   default void performDecay() {
-    Level level = getInfoLevel();
+    Level level = getDataLevel();
     if (level == null || level.isClientSide()) {
       return;
     }
@@ -49,7 +49,7 @@ public interface ILootrEntity extends ILootrInfoProvider {
     Entity entity = asEntity();
     if (replaceWhenDecayed) {
       //noinspection deprecation
-      EntityType<?> type = getInfoType().getReplacementEntity();
+      EntityType<?> type = getDataType().getReplacementEntity();
       if (type != null) {
         Entity newCart = type.create(level, EntitySpawnReason.COMMAND);
         if (newCart != null) {

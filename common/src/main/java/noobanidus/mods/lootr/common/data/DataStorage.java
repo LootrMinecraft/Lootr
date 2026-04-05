@@ -1,25 +1,17 @@
 package noobanidus.mods.lootr.common.data;
 
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerChunkCache;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
 import net.minecraft.world.level.storage.LevelResource;
 import net.minecraft.world.level.storage.SavedDataStorage;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
-import noobanidus.mods.lootr.common.api.data.LootFiller;
+import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
+import noobanidus.mods.lootr.common.api.filler.ILootFiller;
 import noobanidus.mods.lootr.common.api.data.TickingData;
-import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
-import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
-import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
-import noobanidus.mods.lootr.common.chunk.LoadedChunks;
+import noobanidus.mods.lootr.common.api.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.command.IOUtil;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinSavedDataStorage;
 import org.jetbrains.annotations.ApiStatus;
@@ -49,117 +41,117 @@ public class DataStorage {
 
   @SuppressWarnings("deprecation")
   @ApiStatus.Internal
-  public static int getDecayValue(ILootrInfoProvider provider) {
+  public static int getDecayValue(ILootrContainerInstance provider) {
     SavedDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
-      if (provider.getInfoLevel() == null || (provider.getInfoLevel() != null && provider.getInfoLevel()
+      if (provider.getDataLevel() == null || (provider.getDataLevel() != null && provider.getDataLevel()
           .isClientSide())) {
         return -1;
       }
-      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot determine the decay value for {}.", provider.getInfoUUID());
+      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot determine the decay value for {}.", provider.getDataId());
       return -1;
     }
     var server = LootrAPI.getServer();
     TickingData data = TickingData.getDecayData();
     // Safe to down-cast as the value should always be quite small
-    return (int) data.howLongUntilComplete(server, provider.getInfoUUID());
+    return (int) data.howLongUntilComplete(server, provider.getDataId());
   }
 
   @ApiStatus.Internal
-  public static boolean isDecayed(ILootrInfoProvider provider) {
+  public static boolean isDecayed(ILootrContainerInstance provider) {
     return getDecayValue(provider) == 0;
   }
 
   @SuppressWarnings("deprecation")
   @ApiStatus.Internal
-  public static void setDecaying(ILootrInfoProvider provider) {
+  public static void setDecaying(ILootrContainerInstance provider) {
     SavedDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
-      if (provider.getInfoLevel() == null || (provider.getInfoLevel() != null && provider.getInfoLevel()
+      if (provider.getDataLevel() == null || (provider.getDataLevel() != null && provider.getDataLevel()
           .isClientSide())) {
         return;
       }
-      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot set the decay value for {}.", provider.getInfoUUID());
+      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot set the decay value for {}.", provider.getDataId());
       return;
     }
     TickingData data = TickingData.getDecayData();
     var server = LootrAPI.getServer();
-    data.setCompletesIn(server, provider.getInfoUUID(), LootrAPI.getDecayValue());
+    data.setCompletesIn(server, provider.getDataId(), LootrAPI.getDecayValue());
   }
 
   @ApiStatus.Internal
-  public static int getRefreshValue(ILootrInfoProvider provider) {
+  public static int getRefreshValue(ILootrContainerInstance provider) {
     SavedDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
-      if (provider.getInfoLevel() == null || (provider.getInfoLevel() != null && provider.getInfoLevel()
+      if (provider.getDataLevel() == null || (provider.getDataLevel() != null && provider.getDataLevel()
           .isClientSide())) {
         return -1;
       }
-      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot determine the refresh value for {}.", provider.getInfoUUID());
+      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot determine the refresh value for {}.", provider.getDataId());
       return -1;
     }
     TickingData data = TickingData.getRefreshData();
     var server = LootrAPI.getServer();
-    int result = (int) data.howLongUntilComplete(server, provider.getInfoUUID());
+    int result = (int) data.howLongUntilComplete(server, provider.getDataId());
     return result;
   }
 
   @ApiStatus.Internal
-  public static boolean isRefreshed(ILootrInfoProvider provider) {
+  public static boolean isRefreshed(ILootrContainerInstance provider) {
     return getRefreshValue(provider) == 0;
   }
 
   @ApiStatus.Internal
-  public static void setRefreshing(ILootrInfoProvider provider) {
+  public static void setRefreshing(ILootrContainerInstance provider) {
     SavedDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
-      if (provider.getInfoLevel() == null || (provider.getInfoLevel() != null && provider.getInfoLevel()
+      if (provider.getDataLevel() == null || (provider.getDataLevel() != null && provider.getDataLevel()
           .isClientSide())) {
         return;
       }
-      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot set the refresh value for {}.", provider.getInfoUUID());
+      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot set the refresh value for {}.", provider.getDataId());
       return;
     }
     TickingData newData = TickingData.getRefreshData();
     var server = LootrAPI.getServer();
-    newData.setCompletesIn(server, provider.getInfoUUID(), LootrAPI.getRefreshValue());
+    newData.setCompletesIn(server, provider.getDataId(), LootrAPI.getRefreshValue());
   }
 
   @ApiStatus.Internal
-  public static void removeRefreshed(ILootrInfoProvider provider) {
+  public static void removeRefreshed(ILootrContainerInstance provider) {
     SavedDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
-      if (provider.getInfoLevel() == null || (provider.getInfoLevel() != null && provider.getInfoLevel()
+      if (provider.getDataLevel() == null || (provider.getDataLevel() != null && provider.getDataLevel()
           .isClientSide())) {
         return;
       }
-      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot set the refresh value for {}.", provider.getInfoUUID());
+      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot set the refresh value for {}.", provider.getDataId());
       return;
     }
     TickingData newData = TickingData.getRefreshData();
     var server = LootrAPI.getServer();
-    newData.clearTicking(server, provider.getInfoUUID());
+    newData.clearTicking(server, provider.getDataId());
   }
 
   @ApiStatus.Internal
-  public static LootrContainerData getData(ILootrInfoProvider provider) {
+  public static LootrInventoryStore getData(ILootrContainerInstance provider) {
     SavedDataStorage manager = DataStorage.getDataStorage();
     if (manager == null) {
-      if (provider.getInfoLevel() == null || (provider.getInfoLevel() != null && provider.getInfoLevel()
+      if (provider.getDataLevel() == null || (provider.getDataLevel() != null && provider.getDataLevel()
           .isClientSide())) {
         return null;
       }
-      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot fetch data for {} at {} with ID {} and cannot continue.", provider.getInfoDimension(), provider.getInfoPos(), provider.getInfoUUID());
+      LootrAPI.LOG.error("DataStorage is null at this stage; Lootr cannot fetch data for {} at {} with ID {} and cannot continue.", provider.getDataDimension(), provider.getDataPos(), provider.getDataId());
       return null;
     }
-    LootrContainerData result = manager.computeIfAbsent(new SavedDataType<>(LootrAPI.rl(provider.getInfoKey()), LootrContainerData.fromInfo(provider), LootrContainerData.CODEC, null));
+    LootrInventoryStore result = manager.computeIfAbsent(new SavedDataType<>(provider.getDataIdentifier(), LootrInventoryStore.fromInfo(provider), LootrInventoryStore.CODEC, null));
     result.update(provider);
     return result;
   }
 
   @Nullable
-  public static ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler) {
-    LootrContainerData data = getData(provider);
+  public static ILootrInventory getInventory(ILootrContainerInstance provider, ServerPlayer player, ILootFiller filler) {
+    LootrInventoryStore data = getData(provider);
     if (data == null) {
       // Error messages are already generated by `getData`
       return null;
@@ -217,7 +209,7 @@ public class DataStorage {
   @ApiStatus.Internal
   // This is now safe!
   public static boolean clearInventories(UUID id) {
-    SavedDataStorage data = getDataStorage();
+/*    SavedDataStorage data = getDataStorage();
     if (data == null) {
       // Errors are already generated in `getDataStorage`
       return false;
@@ -234,7 +226,7 @@ public class DataStorage {
     int count = 0;
 
     for (String file : files) {
-      SavedData datum = LootrDummyData.INSTANCE; /*data.get(new SavedDataType<>(file, () -> null, (Codec<SavedData>) (Object) LootrSavedData.CODEC, null));*/
+      SavedData datum = LootrDummyData.INSTANCE; *//*data.get(new SavedDataType<>(file, () -> null, (Codec<SavedData>) (Object) LootrSavedData.CODEC, null));*//*
       if (datum == LootrDummyData.INSTANCE) {
         // Failed to load so clear it from the cache
         LootrAPI.LOG.error("Failed to load data for {}, removing from cache.", file);
@@ -259,7 +251,7 @@ public class DataStorage {
           if (chunkCache.hasChunk(chunkPos.x(), chunkPos.z()) && LoadedChunks.getLoadedChunks(lootrSavedData.getInfoDimension())
               .contains(chunkPos)) {
             // TODO: This should still be simplified
-            ILootrInfoProvider provider = null;
+            ILootrDataInstance provider = null;
             //noinspection deprecation
             if (lootrSavedData.getInfoType().isEntity()) {
               Entity entity = level.getEntity(lootrSavedData.getInfoUUID());
@@ -288,6 +280,7 @@ public class DataStorage {
       return true;
     }
 
+    return false;*/
     return false;
   }
 
@@ -318,7 +311,7 @@ public class DataStorage {
         ((AccessorMixinSavedDataStorage) data).getCache().remove(file);
         continue;
       }
-      if (!(datum instanceof LootrContainerData lootrSavedData)) {
+      if (!(datum instanceof LootrInventoryStore lootrSavedData)) {
         LootrAPI.LOG.error("Data for {} is not a LootrSavedData instance.", file);
         ((AccessorMixinSavedDataStorage) data).getCache().remove(file);
         continue;

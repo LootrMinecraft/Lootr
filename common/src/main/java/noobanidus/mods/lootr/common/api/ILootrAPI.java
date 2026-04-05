@@ -21,17 +21,17 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.storage.loot.LootTable;
-import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
-import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
-import noobanidus.mods.lootr.common.api.client.ClientTextureType;
+import noobanidus.mods.lootr.common.api.accessor.ILootrDataAccessor;
+import noobanidus.mods.lootr.common.api.accessor.ILootrItemFrameAccessor;
+import noobanidus.mods.lootr.common.api.config.client.ClientTextureType;
 import noobanidus.mods.lootr.common.api.config.SaveMode;
-import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
-import noobanidus.mods.lootr.common.api.data.ILootrContainerData;
-import noobanidus.mods.lootr.common.api.data.LootFiller;
-import noobanidus.mods.lootr.common.api.data.MenuBuilder;
+import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
+import noobanidus.mods.lootr.common.api.data.ILootrInventoryStore;
+import noobanidus.mods.lootr.common.api.filler.ILootFiller;
+import noobanidus.mods.lootr.common.api.interfaces.MenuBuilder;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
-import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
+import noobanidus.mods.lootr.common.api.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
 import noobanidus.mods.lootr.common.api.integration.PotDecorationsAdapter;
 import noobanidus.mods.lootr.common.api.processor.ILootrBlockEntityProcessor;
@@ -69,17 +69,17 @@ public interface ILootrAPI {
   boolean clearPlayerLoot(UUID id);
 
   @Nullable
-  default ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, @Nullable MenuBuilder builder) {
+  default ILootrInventory getInventory(ILootrContainerInstance provider, ServerPlayer player, @Nullable MenuBuilder builder) {
     return getInventory(provider, player, provider.getDefaultFiller(), builder);
   }
 
   // Get specified inventory using menubuilder
   @Nullable
-  ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler, @Nullable MenuBuilder builder);
+  ILootrInventory getInventory(ILootrContainerInstance provider, ServerPlayer player, ILootFiller filler, @Nullable MenuBuilder builder);
 
   // Get saved data for specific provider
   @Nullable
-  ILootrContainerData getData(ILootrInfoProvider provider);
+  ILootrInventoryStore getData(ILootrContainerInstance provider);
 
   // Calculate seed according to configuration
   long getLootSeed(long seed);
@@ -150,9 +150,9 @@ public interface ILootrAPI {
 
   Set<String> getModidDimensionBlacklist();
 
-  boolean isDecaying(ILootrInfoProvider provider);
+  boolean isDecaying(ILootrContainerInstance provider);
 
-  boolean isRefreshing(ILootrInfoProvider provider);
+  boolean isRefreshing(ILootrContainerInstance provider);
 
   Set<String> getModidDecayWhitelist();
 
@@ -224,32 +224,32 @@ public interface ILootrAPI {
 
   boolean performPiecewiseCheck();
 
-  int getRemainingDecayValue(ILootrInfoProvider provider);
+  int getRemainingDecayValue(ILootrContainerInstance provider);
 
-  boolean isDecayed(ILootrInfoProvider provider);
+  boolean isDecayed(ILootrContainerInstance provider);
 
-  void setDecaying(ILootrInfoProvider provider);
+  void setDecaying(ILootrContainerInstance provider);
 
-  int getRemainingRefreshValue(ILootrInfoProvider provider);
+  int getRemainingRefreshValue(ILootrContainerInstance provider);
 
-  boolean isRefreshed(ILootrInfoProvider provider);
+  boolean isRefreshed(ILootrContainerInstance provider);
 
-  void setRefreshing(ILootrInfoProvider provider);
+  void setRefreshing(ILootrContainerInstance provider);
 
-  void removeRefreshed(ILootrInfoProvider provider);
+  void removeRefreshed(ILootrContainerInstance provider);
 
   @Nullable
   BlockState replacementBlockState(BlockState original);
 
-  void handleProviderSneak(@Nullable ILootrInfoProvider provider, ServerPlayer player);
+  void handleProviderSneak(@Nullable ILootrContainerInstance provider, ServerPlayer player);
 
-  void handleProviderOpen(@Nullable ILootrInfoProvider provider, ServerPlayer player);
+  void handleProviderOpen(@Nullable ILootrContainerInstance provider, ServerPlayer player);
 
-  void handleProviderOpen(@Nullable ILootrInfoProvider provider, ServerPlayer player, MenuBuilder menuBuilder);
+  void handleProviderOpen(@Nullable ILootrContainerInstance provider, ServerPlayer player, MenuBuilder menuBuilder);
 
-  void handleProviderTick(@Nullable ILootrInfoProvider provider);
+  void handleProviderTick(@Nullable ILootrContainerInstance provider);
 
-  void handleProviderClientTick(@Nullable ILootrInfoProvider provider);
+  void handleProviderClientTick(@Nullable ILootrContainerInstance provider);
 
   @Nullable
   <T extends BlockEntity> ILootrBlockEntity resolveBlockEntity(T blockEntity);
@@ -273,10 +273,10 @@ public interface ILootrAPI {
   List<ILootrEntityProcessor.Post> getEntityPostProcessors();
 
   @Nullable
-  <T> ILootrDataAdapter<T> getAdapter(T type);
+  <T> ILootrDataAccessor<T> getAdapter(T type);
 
   @Nullable
-  <T> ILootrItemFrameAdapter<T> getItemFrameAdapter(T type);
+  <T> ILootrItemFrameAccessor<T> getItemFrameAdapter(T type);
 
   ILootrType getType(String type);
 

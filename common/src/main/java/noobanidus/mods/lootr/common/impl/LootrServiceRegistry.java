@@ -8,9 +8,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import noobanidus.mods.lootr.common.api.ILootrAPI;
-import noobanidus.mods.lootr.common.api.adapter.AdapterMap;
-import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
-import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
+import noobanidus.mods.lootr.common.api.accessor.AccessorMap;
+import noobanidus.mods.lootr.common.api.accessor.ILootrDataAccessor;
+import noobanidus.mods.lootr.common.api.accessor.ILootrItemFrameAccessor;
 import noobanidus.mods.lootr.common.api.command.ILootrCommandExtension;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
@@ -18,8 +18,8 @@ import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilterProvider;
 import noobanidus.mods.lootr.common.api.processor.ILootrBlockEntityProcessor;
 import noobanidus.mods.lootr.common.api.processor.ILootrEntityProcessor;
-import noobanidus.mods.lootr.common.api.replacement.BlockReplacementMap;
-import noobanidus.mods.lootr.common.api.replacement.ILootrBlockReplacementProvider;
+import noobanidus.mods.lootr.common.api.conversion.BlockConversionMap;
+import noobanidus.mods.lootr.common.api.conversion.ILootrBlockConversionProvider;
 import noobanidus.mods.lootr.common.api.type.ILootrType;
 import noobanidus.mods.lootr.common.api.wrapper.ILootrBlockEntityWrapper;
 import noobanidus.mods.lootr.common.api.wrapper.ILootrEntityWrapper;
@@ -40,9 +40,9 @@ public class LootrServiceRegistry {
   private final List<ILootrBlockEntityProcessor.Pre> blockEntityPreProcessors = new ObjectArrayList<>();
   private final List<ILootrEntityProcessor.Pre> entityPreProcessors = new ObjectArrayList<>();
   private final List<ILootrEntityProcessor.Post> entityPostProcessors = new ObjectArrayList<>();
-  private final AdapterMap<ILootrDataAdapter<?>> dataAdapterMap = new AdapterMap<>(AdapterMap.NONE_DATA_ADAPTER);
-  private final AdapterMap<ILootrItemFrameAdapter<?>> itemFrameAdapterMap = new AdapterMap<>(AdapterMap.NONE_ITEM_FRAME_ADAPTER);
-  private final BlockReplacementMap replacementMap = new BlockReplacementMap();
+  private final AccessorMap<ILootrDataAccessor<?>> dataAccessorMap = new AccessorMap<>(AccessorMap.NONE_DATA_ADAPTER);
+  private final AccessorMap<ILootrItemFrameAccessor<?>> itemFrameAccessorMap = new AccessorMap<>(AccessorMap.NONE_ITEM_FRAME_ADAPTER);
+  private final BlockConversionMap replacementMap = new BlockConversionMap();
   private final Map<String, ILootrType> typeMap = new Object2ObjectOpenHashMap<>();
   // Only used on Fabric
   private final List<ILootrCommandExtension> commandExtensions = new ObjectArrayList<>();
@@ -89,13 +89,13 @@ public class LootrServiceRegistry {
       entityPostProcessors.add(processor);
     }
 
-    ServiceLoader<ILootrDataAdapter> loader6 = ServiceLoader.load(ILootrDataAdapter.class, classLoader);
-    for (ILootrDataAdapter<?> adapter : loader6) {
-      dataAdapterMap.register(adapter);
+    ServiceLoader<ILootrDataAccessor> loader6 = ServiceLoader.load(ILootrDataAccessor.class, classLoader);
+    for (ILootrDataAccessor<?> adapter : loader6) {
+      dataAccessorMap.register(adapter);
     }
 
-    ServiceLoader<ILootrBlockReplacementProvider> loader9 = ServiceLoader.load(ILootrBlockReplacementProvider.class, classLoader);
-    for (ILootrBlockReplacementProvider provider : loader9) {
+    ServiceLoader<ILootrBlockConversionProvider> loader9 = ServiceLoader.load(ILootrBlockConversionProvider.class, classLoader);
+    for (ILootrBlockConversionProvider provider : loader9) {
       replacementMap.register(provider);
     }
 
@@ -118,9 +118,9 @@ public class LootrServiceRegistry {
 
     this.commands = commandsTemp.toString();
 
-    ServiceLoader<ILootrItemFrameAdapter> loader13 = ServiceLoader.load(ILootrItemFrameAdapter.class, classLoader);
-    for (ILootrItemFrameAdapter<?> adapter : loader13) {
-      itemFrameAdapterMap.register(adapter);
+    ServiceLoader<ILootrItemFrameAccessor> loader13 = ServiceLoader.load(ILootrItemFrameAccessor.class, classLoader);
+    for (ILootrItemFrameAccessor<?> adapter : loader13) {
+      itemFrameAccessorMap.register(adapter);
     }
   }
 
@@ -142,7 +142,7 @@ public class LootrServiceRegistry {
   }
 
   @Nullable
-  static <T extends BlockEntity> ILootrBlockEntity convertBlockEntity(T blockEntity) {
+  static <T extends BlockEntity> ILootrBlockEntity wrapBlockEntity(T blockEntity) {
     if (blockEntity == null) {
       return null;
     }
@@ -156,7 +156,7 @@ public class LootrServiceRegistry {
   }
 
   @Nullable
-  static <T extends Entity> ILootrEntity convertEntity(T entity) {
+  static <T extends Entity> ILootrEntity wrapEntity(T entity) {
     if (entity == null) {
       return null;
     }
@@ -187,22 +187,22 @@ public class LootrServiceRegistry {
     return getInstance().blockEntityPostProcessors;
   }
 
-  static BlockState getReplacementBlockState(BlockState block) {
+  static BlockState getConvertedBlockState(BlockState block) {
     return getInstance().replacementMap.getReplacement(block);
   }
 
-  public static void clearReplacements() {
+  public static void clearBlockConverters() {
     getInstance().replacementMap.clear();
   }
 
   @Nullable
-  static <T> ILootrDataAdapter<T> getAdapter(T type) {
-    return (ILootrDataAdapter<T>) getInstance().dataAdapterMap.getAdapter(type);
+  static <T> ILootrDataAccessor<T> getDataAccessor(T type) {
+    return (ILootrDataAccessor<T>) getInstance().dataAccessorMap.getAccessor(type);
   }
 
   @Nullable
-  static <T> ILootrItemFrameAdapter<T> getItemFrameAdapter(T type) {
-    return (ILootrItemFrameAdapter<T>) getInstance().itemFrameAdapterMap.getAdapter(type);
+  static <T> ILootrItemFrameAccessor<T> getItemFrameDataAccessor(T type) {
+    return (ILootrItemFrameAccessor<T>) getInstance().itemFrameAccessorMap.getAccessor(type);
   }
 
   @Nullable

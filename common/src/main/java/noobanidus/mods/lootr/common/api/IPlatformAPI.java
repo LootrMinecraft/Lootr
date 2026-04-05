@@ -6,8 +6,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.vehicle.minecart.AbstractMinecartContainer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
-import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
-import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
+import noobanidus.mods.lootr.common.api.accessor.ILootrDataAccessor;
+import noobanidus.mods.lootr.common.api.accessor.ILootrItemFrameAccessor;
 import noobanidus.mods.lootr.common.api.data.DataToCopy;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
@@ -35,7 +35,7 @@ public interface IPlatformAPI {
 
   void restoreSpecificData(DataToCopy data, BlockEntity newBlockEntity);
 
-  default void copyEntityData(ILootrDataAdapter<Entity> adapter, Entity entity1, ILootrEntity entity3) {
+  default void copyEntityData(ILootrDataAccessor<Entity> adapter, Entity entity1, ILootrEntity entity3) {
     Entity entity2 = entity3.asEntity();
     entity2.setXRot(entity1.getXRot());
     entity2.setYRot(entity1.getYRot());
@@ -48,7 +48,7 @@ public interface IPlatformAPI {
     }
   }
 
-  default void copyEntityData(ILootrItemFrameAdapter<Entity> adapter, Entity entity1, ILootrEntity entity3) {
+  default void copyEntityData(ILootrItemFrameAccessor<Entity> adapter, Entity entity1, ILootrEntity entity3) {
     Entity entity2 = entity3.asEntity();
     entity2.setXRot(entity1.getXRot());
     entity2.setYRot(entity1.getYRot());

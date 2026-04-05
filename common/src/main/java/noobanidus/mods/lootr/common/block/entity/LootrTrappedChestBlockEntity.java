@@ -29,7 +29,7 @@ public class LootrTrappedChestBlockEntity extends LootrChestBlockEntity {
   }
 
   @Override
-  public @NonNull ILootrType getInfoType () {
+  public @NonNull ILootrType getDataType() {
     return BuiltInLootrTypes.TRAPPED_CHEST;
   }
 

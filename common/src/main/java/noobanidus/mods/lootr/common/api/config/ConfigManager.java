@@ -9,7 +9,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
-import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
+import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
 
 import java.util.*;
 import java.util.function.Function;
@@ -185,40 +185,40 @@ public class ConfigManager {
     return getRefreshDimensions().contains(key);
   }
 
-  public static boolean isDecaying(ILootrInfoProvider tile) {
+  public static boolean isDecaying(ILootrContainerInstance tile) {
     if (LootrCommonConfig.Decay.decayAll) {
       return true;
     }
-    if (tile.getInfoLootTable() != null) {
-      if (getDecayingTables().contains(tile.getInfoLootTable())) {
+    if (tile.getDataLootTable() != null) {
+      if (getDecayingTables().contains(tile.getDataLootTable())) {
         return true;
       }
-      if (getDecayMods().contains(tile.getInfoLootTable().identifier().getNamespace())) {
+      if (getDecayMods().contains(tile.getDataLootTable().identifier().getNamespace())) {
         return true;
       }
     }
-    if (LootrAPI.isTaggedStructurePresent((ServerLevel) tile.getInfoLevel(), ChunkPos.containing(tile.getInfoPos()), LootrTags.Structure.DECAY_STRUCTURES, tile.getInfoPos())) {
+    if (LootrAPI.isTaggedStructurePresent((ServerLevel) tile.getDataLevel(), ChunkPos.containing(tile.getDataPos()), LootrTags.Structure.DECAY_STRUCTURES, tile.getDataPos())) {
       return true;
     }
-    return isDimensionDecaying(tile.getInfoDimension());
+    return isDimensionDecaying(tile.getDataDimension());
   }
 
-  public static boolean isRefreshing(ILootrInfoProvider tile) {
+  public static boolean isRefreshing(ILootrContainerInstance tile) {
     if (LootrCommonConfig.Refresh.refreshAll) {
       return true;
     }
-    if (tile.getInfoLootTable() != null) {
-      if (getRefreshingTables().contains(tile.getInfoLootTable())) {
+    if (tile.getDataLootTable() != null) {
+      if (getRefreshingTables().contains(tile.getDataLootTable())) {
         return true;
       }
-      if (getRefreshMods().contains(tile.getInfoLootTable().identifier().getNamespace())) {
+      if (getRefreshMods().contains(tile.getDataLootTable().identifier().getNamespace())) {
         return true;
       }
     }
-    if (LootrAPI.isTaggedStructurePresent((ServerLevel) tile.getInfoLevel(), ChunkPos.containing(tile.getInfoPos()), LootrTags.Structure.REFRESH_STRUCTURES, tile.getInfoPos())) {
+    if (LootrAPI.isTaggedStructurePresent((ServerLevel) tile.getDataLevel(), ChunkPos.containing(tile.getDataPos()), LootrTags.Structure.REFRESH_STRUCTURES, tile.getDataPos())) {
       return true;
     }
-    return isDimensionRefreshing(tile.getInfoDimension());
+    return isDimensionRefreshing(tile.getDataDimension());
   }
 
 
