@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.common.api;
+package noobanidus.mods.lootr.common.impl;
 
 public class LockMessageSuppression {
   private static boolean shouldSuppress = false;
