@@ -8,6 +8,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import noobanidus.mods.lootr.neoforge.Lootr;
 import noobanidus.mods.lootr.neoforge.network.ILootrNeoForgePacket;
 import noobanidus.mods.lootr.neoforge.network.client.ClientHandlers;
+import org.jspecify.annotations.NonNull;
 
 public record PacketOpenContainer(BlockPos position) implements ILootrNeoForgePacket {
   public static final CustomPacketPayload.Type<PacketOpenContainer> TYPE = new CustomPacketPayload.Type<>(Lootr.rl("open_container"));
@@ -19,7 +20,7 @@ public record PacketOpenContainer(BlockPos position) implements ILootrNeoForgePa
   }
 
   @Override
-  public Type<? extends CustomPacketPayload> type() {
+  public @NonNull Type<? extends CustomPacketPayload> type() {
     return TYPE;
   }
 }

@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.LootrRegistry;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
@@ -19,7 +20,7 @@ public class LootrBlockEntityTagsProvider extends IntrinsicHolderTagsProvider<Bl
   }
 
   @Override
-  protected void addTags(HolderLookup.Provider provider) {
+  protected void addTags(HolderLookup.@NonNull Provider provider) {
     tag(LootrTags.BlockEntity.LOOTR_OBJECT);
     tag(LootrTags.BlockEntity.TRAPPED).add(LootrRegistry.getTrappedChestBlockEntity());
     tag(LootrTags.BlockEntity.CUSTOM_INELIGIBLE);
@@ -31,7 +32,7 @@ public class LootrBlockEntityTagsProvider extends IntrinsicHolderTagsProvider<Bl
   }
 
   @Override
-  public String getName() {
+  public @NonNull String getName() {
     return "Lootr Block Entity Type Tags";
   }
 }

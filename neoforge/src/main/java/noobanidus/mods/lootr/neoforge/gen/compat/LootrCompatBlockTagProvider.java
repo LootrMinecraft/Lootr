@@ -8,6 +8,7 @@ import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -29,7 +30,7 @@ public class LootrCompatBlockTagProvider extends BlockTagsProvider {
   }
 
   @Override
-  protected void addTags(HolderLookup.Provider provider) {
+  protected void addTags(HolderLookup.@NonNull Provider provider) {
     if (!CHEST_BLOCK_IDS.isEmpty()) {
       var tag = tag(LootrTags.Blocks.CONVERT_CHESTS);
       for (String block : CHEST_BLOCK_IDS) {
@@ -57,7 +58,7 @@ public class LootrCompatBlockTagProvider extends BlockTagsProvider {
   }
 
   @Override
-  public String getName() {
+  public @NonNull String getName() {
     return COMPAT_MODID + " Compatibility Block Tags";
   }
 }

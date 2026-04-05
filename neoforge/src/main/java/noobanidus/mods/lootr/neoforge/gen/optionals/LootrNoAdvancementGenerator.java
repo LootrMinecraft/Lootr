@@ -14,19 +14,18 @@ import net.minecraft.data.advancements.AdvancementSubProvider;
 import net.minecraft.data.metadata.PackMetadataGenerator;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackType;
-import net.minecraft.server.packs.metadata.pack.PackFormat;
 import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import org.jspecify.annotations.NonNull;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
@@ -69,7 +68,7 @@ public class LootrNoAdvancementGenerator {
 
   public static class LootrAdvancementGenerator implements AdvancementSubProvider {
     @Override
-    public void generate(HolderLookup.Provider arg, Consumer<AdvancementHolder> consumer) {
+    public void generate(HolderLookup.@NonNull Provider arg, @NonNull Consumer<AdvancementHolder> consumer) {
       var impossible = CriteriaTriggers.IMPOSSIBLE.createCriterion(new ImpossibleTrigger.TriggerInstance());
 
       AdvancementHolder lootrRoot = Advancement.Builder.advancement().addCriterion("impossible", impossible)

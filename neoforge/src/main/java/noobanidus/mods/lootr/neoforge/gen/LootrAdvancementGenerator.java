@@ -16,12 +16,13 @@ import noobanidus.mods.lootr.common.advancement.ContainerTrigger;
 import noobanidus.mods.lootr.common.advancement.LootedStatTrigger;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrRegistry;
+import org.jspecify.annotations.NonNull;
 
 import java.util.function.Consumer;
 
 public class LootrAdvancementGenerator implements AdvancementSubProvider {
   @Override
-  public void generate(HolderLookup.Provider arg, Consumer<AdvancementHolder> consumer) {
+  public void generate(HolderLookup.@NonNull Provider arg, @NonNull Consumer<AdvancementHolder> consumer) {
     AdvancementHolder lootrRoot = Advancement.Builder.advancement()
         .display(Blocks.CHEST, Component.translatable("lootr.advancements.root.title"), Component.translatable("lootr.advancements.root.description"), Identifier.parse("minecraft:block/dark_oak_log"), AdvancementType.TASK, false, false, false)
         .addCriterion("always_true", PlayerTrigger.TriggerInstance.tick()).save(consumer, LootrAPI.rl("root"));

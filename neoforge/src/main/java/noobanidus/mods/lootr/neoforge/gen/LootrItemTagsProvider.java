@@ -7,6 +7,7 @@ import net.neoforged.neoforge.common.data.ItemTagsProvider;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.LootrRegistry;
+import org.jspecify.annotations.NonNull;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -16,7 +17,7 @@ public class LootrItemTagsProvider extends ItemTagsProvider {
   }
 
   @Override
-  protected void addTags(HolderLookup.Provider provider) {
+  protected void addTags(HolderLookup.@NonNull Provider provider) {
     tag(LootrTags.Items.BARRELS).add(LootrRegistry.getBarrelItem());
     tag(LootrTags.Items.CHESTS).add(LootrRegistry.getChestItem(), LootrRegistry.getTrappedChestItem(), LootrRegistry.getInventoryItem());
     tag(LootrTags.Items.TRAPPED_CHESTS).add(LootrRegistry.getTrappedChestItem());
@@ -30,7 +31,7 @@ public class LootrItemTagsProvider extends ItemTagsProvider {
   }
 
   @Override
-  public String getName() {
+  public @NonNull String getName() {
     return "Lootr Item Tags";
   }
 }

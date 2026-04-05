@@ -6,9 +6,9 @@ import net.minecraft.data.tags.EntityTypeTagsProvider;
 import net.minecraft.tags.TagEntry;
 import net.minecraft.world.entity.EntityType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.LootrConstants;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.neoforge.init.ModEntities;
+import org.jspecify.annotations.NonNull;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -18,7 +18,7 @@ public class LootrEntityTagsProvider extends EntityTypeTagsProvider {
   }
 
   @Override
-  protected void addTags(HolderLookup.Provider provider) {
+  protected void addTags(HolderLookup.@NonNull Provider provider) {
     tag(LootrTags.Entity.CONVERT_CARTS).add(EntityType.CHEST_MINECART);
     tag(LootrTags.Entity.CONVERT_ITEM_FRAMES).add(EntityType.ITEM_FRAME, EntityType.GLOW_ITEM_FRAME);
     //noinspection unchecked
@@ -32,7 +32,7 @@ public class LootrEntityTagsProvider extends EntityTypeTagsProvider {
   }
 
   @Override
-  public String getName() {
+  public @NonNull String getName() {
     return "Lootr Entity Type Tags";
   }
 }

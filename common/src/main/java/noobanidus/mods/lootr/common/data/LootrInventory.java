@@ -19,6 +19,7 @@ import noobanidus.mods.lootr.common.api.interfaces.container.IMenuBuilder;
 import noobanidus.mods.lootr.common.api.data.ILootrInventoryStore;
 import noobanidus.mods.lootr.common.api.interfaces.inventory.ILootrInventory;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 /**
  * This inventory contains the player's actual items and is served as the container
@@ -73,12 +74,12 @@ public class LootrInventory implements ILootrInventory {
   }
 
   @Override
-  public ItemStack getItem(int index) {
+  public @NonNull ItemStack getItem(int index) {
     return contents.get(index);
   }
 
   @Override
-  public ItemStack removeItem(int index, int count) {
+  public @NonNull ItemStack removeItem(int index, int count) {
     ItemStack itemstack = ContainerHelper.removeItem(this.contents, index, count);
     if (!itemstack.isEmpty()) {
       this.setChanged();
@@ -88,7 +89,7 @@ public class LootrInventory implements ILootrInventory {
   }
 
   @Override
-  public ItemStack removeItemNoUpdate(int index) {
+  public @NonNull ItemStack removeItemNoUpdate(int index) {
     ItemStack result = ContainerHelper.takeItem(contents, index);
     if (!result.isEmpty()) {
       this.setChanged();
@@ -98,7 +99,7 @@ public class LootrInventory implements ILootrInventory {
   }
 
   @Override
-  public void setItem(int index, ItemStack stack) {
+  public void setItem(int index, @NonNull ItemStack stack) {
     this.contents.set(index, stack);
     if (stack.getCount() > this.getMaxStackSize()) {
       stack.setCount(this.getMaxStackSize());
@@ -144,7 +145,7 @@ public class LootrInventory implements ILootrInventory {
   }
 
   @Override
-  public Component getDisplayName() {
+  public @NonNull Component getDisplayName() {
     Component component = getData().getDataDisplayName();
     if (component == null) {
       return Component.empty();
@@ -154,7 +155,7 @@ public class LootrInventory implements ILootrInventory {
 
   @Nullable
   @Override
-  public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
+  public AbstractContainerMenu createMenu(int id, @NonNull Inventory inventory, @NonNull Player player) {
     if (menuBuilder != null) {
       return menuBuilder.build(id, inventory, this, getContainerSize() / 9);
     }

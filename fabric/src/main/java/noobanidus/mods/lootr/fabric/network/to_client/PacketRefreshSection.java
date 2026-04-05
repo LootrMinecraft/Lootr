@@ -5,6 +5,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.interfaces.network.ILootrPacket;
+import org.jspecify.annotations.NonNull;
 
 public record PacketRefreshSection() implements ILootrPacket {
   public static final PacketRefreshSection INSTANCE = new PacketRefreshSection();
@@ -13,7 +14,7 @@ public record PacketRefreshSection() implements ILootrPacket {
   public static final StreamCodec<ByteBuf, PacketRefreshSection> STREAM_CODEC = StreamCodec.unit(INSTANCE);
 
   @Override
-  public Type<? extends CustomPacketPayload> type() {
+  public @NonNull Type<? extends CustomPacketPayload> type() {
     return TYPE;
   }
 }

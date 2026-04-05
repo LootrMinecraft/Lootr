@@ -21,6 +21,7 @@ import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.block.entity.LootrBarrelBlockEntity;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 public class LootrBarrelBlock extends BarrelBlock {
   public LootrBarrelBlock(Properties p_49046_) {
@@ -33,7 +34,7 @@ public class LootrBarrelBlock extends BarrelBlock {
   }
 
   @Override
-  public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult trace) {
+  public @NonNull InteractionResult useWithoutItem(@NonNull BlockState state, Level level, @NonNull BlockPos pos, @NonNull Player player, @NonNull BlockHitResult trace) {
     if (level.isClientSide() || player.isSpectator() || !(player instanceof ServerPlayer serverPlayer)) {
       return InteractionResult.CONSUME;
     }
@@ -47,13 +48,13 @@ public class LootrBarrelBlock extends BarrelBlock {
 
   @Nullable
   @Override
-  public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+  public BlockEntity newBlockEntity(@NonNull BlockPos pos, @NonNull BlockState state) {
     return new LootrBarrelBlockEntity(pos, state);
   }
 
   @Override
   @SuppressWarnings("deprecation")
-  public boolean triggerEvent(BlockState state, Level world, BlockPos pos, int id, int param) {
+  public boolean triggerEvent(@NonNull BlockState state, @NonNull Level world, @NonNull BlockPos pos, int id, int param) {
     super.triggerEvent(state, world, pos, id, param);
     BlockEntity blockEntity = world.getBlockEntity(pos);
     return blockEntity != null && blockEntity.triggerEvent(id, param);
@@ -61,12 +62,12 @@ public class LootrBarrelBlock extends BarrelBlock {
 
   @Override
   @Nullable
-  public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+  public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NonNull Level pLevel, @NonNull BlockState pState, @NonNull BlockEntityType<T> pBlockEntityType) {
     return ILootrBlockEntity::ticker;
   }
 
   @Override
-  public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
+  public void tick(@NonNull BlockState pState, ServerLevel pLevel, @NonNull BlockPos pPos, @NonNull RandomSource pRandom) {
     BlockEntity blockentity = pLevel.getBlockEntity(pPos);
     if (blockentity instanceof LootrBarrelBlockEntity barrel) {
       barrel.recheckOpen();
@@ -74,22 +75,22 @@ public class LootrBarrelBlock extends BarrelBlock {
   }
 
   @Override
-  public boolean hasAnalogOutputSignal(BlockState pState) {
+  public boolean hasAnalogOutputSignal(@NonNull BlockState pState) {
     return true;
   }
 
   @Override
-  public float getDestroyProgress(BlockState pBlockState, Player pPlayer, BlockGetter pLevel, BlockPos pPos) {
+  public float getDestroyProgress(@NonNull BlockState pBlockState, @NonNull Player pPlayer, @NonNull BlockGetter pLevel, @NonNull BlockPos pPos) {
     return LootrAPI.getDestroyProgress(pBlockState, pPlayer, pLevel, pPos, super.getDestroyProgress(pBlockState, pPlayer, pLevel, pPos));
   }
 
   @Override
-  public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos, Direction direction) {
+  public int getAnalogOutputSignal(@NonNull BlockState pBlockState, @NonNull Level pLevel, @NonNull BlockPos pPos, @NonNull Direction direction) {
     return LootrAPI.getAnalogOutputSignal(pBlockState, pLevel, pPos, 0, direction);
   }
 
   @Override
-  public void playerDestroy(Level level, Player player, BlockPos blockPos, BlockState blockState, @Nullable BlockEntity blockEntity, ItemStack itemStack) {
+  public void playerDestroy(@NonNull Level level, @NonNull Player player, @NonNull BlockPos blockPos, @NonNull BlockState blockState, @Nullable BlockEntity blockEntity, @NonNull ItemStack itemStack) {
     super.playerDestroy(level, player, blockPos, blockState, blockEntity, itemStack);
     LootrAPI.playerDestroyed(level, player, blockPos, blockEntity);
   }

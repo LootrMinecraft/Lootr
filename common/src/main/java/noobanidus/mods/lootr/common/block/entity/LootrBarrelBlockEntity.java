@@ -50,7 +50,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
 
   private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
     @Override
-    protected void onOpen(Level level, BlockPos pos, BlockState state) {
+    protected void onOpen(@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state) {
       if (!LootrBarrelBlockEntity.this.hasBeenOpened()) {
         LootrBarrelBlockEntity.this.simpleLootrInstance.setHasBeenOpened();
         LootrBarrelBlockEntity.this.markInstanceChanged();
@@ -60,13 +60,13 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     }
 
     @Override
-    protected void onClose(Level level, BlockPos pos, BlockState state) {
+    protected void onClose(@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state) {
       LootrBarrelBlockEntity.this.playSound(state, SoundEvents.BARREL_CLOSE);
       LootrBarrelBlockEntity.this.updateBlockState(state, false);
     }
 
     @Override
-    protected void openerCountChanged(Level level, BlockPos pos, BlockState state, int p_155069_, int p_155070_) {
+    protected void openerCountChanged(@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state, int p_155069_, int p_155070_) {
     }
 
     @Override
@@ -109,12 +109,12 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   }
 
   @Override
-  protected NonNullList<ItemStack> getItems() {
+  protected @NonNull NonNullList<ItemStack> getItems() {
     return this.simpleLootrInstance.getEmptyInventory();
   }
 
   @Override
-  protected void setItems(NonNullList<ItemStack> pItems) {
+  protected void setItems(@NonNull NonNullList<ItemStack> pItems) {
   }
 
   @Override
@@ -122,33 +122,33 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   }
 
   @Override
-  public void removeComponentsFromTag(ValueOutput output) {
+  public void removeComponentsFromTag(@NonNull ValueOutput output) {
     super.removeComponentsFromTag(output);
     output.discard("LootrId");
   }
 
   @SuppressWarnings("Duplicates")
   @Override
-  public void loadAdditional(ValueInput input) {
+  public void loadAdditional(@NonNull ValueInput input) {
     super.loadAdditional(input);
     this.tryLoadLootTable(input);
     this.simpleLootrInstance.loadAdditional(input);
   }
 
   @Override
-  protected void saveAdditional(ValueOutput output) {
+  protected void saveAdditional(@NonNull ValueOutput output) {
     super.saveAdditional(output);
     this.trySaveLootTable(output);
     this.simpleLootrInstance.saveAdditional(output, level != null && level.isClientSide());
   }
 
   @Override
-  protected Component getDefaultName() {
+  protected @NonNull Component getDefaultName() {
     return Component.translatable("container.barrel");
   }
 
   @Override
-  protected AbstractContainerMenu createMenu(int pContainerId, Inventory pInventory) {
+  protected @NonNull AbstractContainerMenu createMenu(int pContainerId, @NonNull Inventory pInventory) {
     return null;
   }
 
@@ -158,7 +158,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   }
 
   @Override
-  public void startOpen(ContainerUser user) {
+  public void startOpen(@NonNull ContainerUser user) {
     if (user instanceof ServerPlayer pPlayer) {
       if (!this.remove && !pPlayer.isSpectator()) {
         this.openersCounter.incrementOpeners(pPlayer, this.getLevel(), this.getBlockPos(), this.getBlockState(), user.getContainerInteractionRange());
@@ -167,7 +167,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   }
 
   @Override
-  public void stopOpen(ContainerUser user) {
+  public void stopOpen(@NonNull ContainerUser user) {
     if (user instanceof ServerPlayer pPlayer) {
       if (!this.remove && !pPlayer.isSpectator()) {
         this.openersCounter.decrementOpeners(pPlayer, this.getLevel(), this.getBlockPos(), this.getBlockState());
@@ -221,7 +221,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
 
   @Override
   @NotNull
-  public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
+  public CompoundTag getUpdateTag(HolderLookup.@NonNull Provider provider) {
     CompoundTag result = super.getUpdateTag(provider);
     result.merge(this.simpleLootrInstance.fillUpdateTag(provider, level != null && level.isClientSide(), this));
     return result;

@@ -31,6 +31,7 @@ import noobanidus.mods.lootr.neoforge.gen.builders.UnbakedBrushableModelBuilder;
 import noobanidus.mods.lootr.neoforge.gen.builders.UnbakedCustomModelBuilder;
 import noobanidus.mods.lootr.neoforge.init.ModBlocks;
 import noobanidus.mods.lootr.neoforge.init.ModItems;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -186,7 +187,7 @@ public class LootrModelProvider extends ModelProvider {
   }
 
   @Override
-  protected Stream<? extends Holder<Block>> getKnownBlocks() {
+  protected @NonNull Stream<? extends Holder<Block>> getKnownBlocks() {
     return Stream.of(ModBlocks.BARREL, ModBlocks.SUSPICIOUS_GRAVEL, ModBlocks.SUSPICIOUS_SAND);
   }
 }

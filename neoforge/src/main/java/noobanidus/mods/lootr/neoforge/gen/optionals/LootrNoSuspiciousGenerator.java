@@ -5,6 +5,7 @@ import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
+import org.jspecify.annotations.NonNull;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -15,13 +16,13 @@ public class LootrNoSuspiciousGenerator {
     }
 
     @Override
-    protected void addTags(HolderLookup.Provider provider) {
+    protected void addTags(HolderLookup.@NonNull Provider provider) {
       tag(LootrTags.Blocks.CONVERT_SANDS).replace();
       tag(LootrTags.Blocks.CONVERT_GRAVELS).replace();
     }
 
     @Override
-    public String getName() {
+    public @NonNull String getName() {
       return "(Optional) Remove Lootr Suspicious Block Tags";
     }
   }

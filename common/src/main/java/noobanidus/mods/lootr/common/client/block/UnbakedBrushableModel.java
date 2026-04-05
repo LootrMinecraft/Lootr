@@ -80,7 +80,7 @@ public abstract class UnbakedBrushableModel implements BlockStateModel.Unbaked {
   protected abstract Baker getBaker();
 
   @Override
-  public BlockStateModel bake(ModelBaker baker) {
+  public @NonNull BlockStateModel bake(@NonNull ModelBaker baker) {
     return getBaker().bake(
         new SingleVariant(SimpleModelWrapper.bake(baker, opened, state.asModelState())),
         new SingleVariant(SimpleModelWrapper.bake(baker, stage_0, state.asModelState())),

@@ -22,6 +22,7 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrRegistry;
 import noobanidus.mods.lootr.neoforge.init.ModBlocks;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 import java.util.Set;
@@ -57,7 +58,7 @@ public class LootrLootTableProvider {
     }
 
     @Override
-    protected Iterable<Block> getKnownBlocks() {
+    protected @NonNull Iterable<Block> getKnownBlocks() {
       return List.of(ModBlocks.CHEST.get(), ModBlocks.BARREL.get(), ModBlocks.INVENTORY.get(), ModBlocks.TRAPPED_CHEST.get(), ModBlocks.SHULKER_BOX.get(), ModBlocks.TROPHY.get());
     }
   }

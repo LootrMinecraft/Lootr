@@ -2,6 +2,7 @@ package noobanidus.mods.lootr.common.api.config.client;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.util.StringRepresentable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Locale;
 
@@ -10,7 +11,7 @@ public enum ConfigDisplayType implements StringRepresentable {
   VANILLA;
 
   @Override
-  public String getSerializedName() {
+  public @NonNull String getSerializedName() {
     return name().toLowerCase(Locale.ROOT);
   }
 

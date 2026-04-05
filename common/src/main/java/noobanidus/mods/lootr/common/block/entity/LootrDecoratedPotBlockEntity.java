@@ -65,7 +65,7 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   }
 
   @Override
-  protected void saveAdditional(ValueOutput output) {
+  protected void saveAdditional(@NonNull ValueOutput output) {
     super.saveAdditional(output);
     this.trySaveLootTable(output);
     output.store(NBTConstants.DECORATIONS, PotDecorationsAdapter.CODEC, getDecorations());
@@ -73,7 +73,7 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   }
 
   @Override
-  protected void loadAdditional(ValueInput input) {
+  protected void loadAdditional(@NonNull ValueInput input) {
     super.loadAdditional(input);
     this.decorations = input.read(NBTConstants.DECORATIONS, PotDecorationsAdapter.CODEC)
         .orElse(PotDecorationsAdapter.EMPTY);
@@ -87,7 +87,7 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   }
 
   @Override
-  public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
+  public @NonNull CompoundTag getUpdateTag(HolderLookup.@NonNull Provider provider) {
     CompoundTag compoundTag = super.getUpdateTag(provider);
     compoundTag.merge(this.saveCustomOnly(provider));
     compoundTag.merge(this.lootrInstance.fillUpdateTag(provider, level != null && level.isClientSide(), this));
@@ -207,7 +207,7 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   }
 
   @Override
-  protected void collectImplicitComponents(DataComponentMap.Builder builder) {
+  protected void collectImplicitComponents(DataComponentMap.@NonNull Builder builder) {
     super.collectImplicitComponents(builder);
     if (lootTable != null) {
       builder.set(DataComponents.CONTAINER_LOOT, new SeededContainerLoot(lootTable, lootTableSeed));
@@ -215,7 +215,7 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   }
 
   @Override
-  protected void applyImplicitComponents(DataComponentGetter dataComponentInput) {
+  protected void applyImplicitComponents(@NonNull DataComponentGetter dataComponentInput) {
     super.applyImplicitComponents(dataComponentInput);
     this.decorations = LootrAPI.getDecorationsAdapter(dataComponentInput);
     SeededContainerLoot loot = dataComponentInput.get(DataComponents.CONTAINER_LOOT);
@@ -226,7 +226,7 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   }
 
   @Override
-  public void removeComponentsFromTag(ValueOutput output) {
+  public void removeComponentsFromTag(@NonNull ValueOutput output) {
     super.removeComponentsFromTag(output);
     output.discard("LootTable");
     output.discard("LootTableSeed");
@@ -234,21 +234,21 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   }
 
   @Override
-  public ItemStack getTheItem() {
+  public @NonNull ItemStack getTheItem() {
     return ItemStack.EMPTY;
   }
 
   @Override
-  public ItemStack splitTheItem(int i) {
+  public @NonNull ItemStack splitTheItem(int i) {
     return ItemStack.EMPTY;
   }
 
   @Override
-  public void setTheItem(ItemStack itemStack) {
+  public void setTheItem(@NonNull ItemStack itemStack) {
   }
 
   @Override
-  public BlockEntity getContainerBlockEntity() {
+  public @NonNull BlockEntity getContainerBlockEntity() {
     return this;
   }
 

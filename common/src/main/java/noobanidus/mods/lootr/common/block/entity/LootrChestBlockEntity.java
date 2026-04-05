@@ -45,7 +45,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   private final ChestLidController chestLidController = new ChestLidController();
   private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
     @Override
-    protected void onOpen(Level level, BlockPos pos, BlockState state) {
+    protected void onOpen(@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state) {
       if (!LootrChestBlockEntity.this.hasBeenOpened()) {
         LootrChestBlockEntity.this.simpleLootrInstance.setHasBeenOpened();
         LootrChestBlockEntity.this.markInstanceChanged();
@@ -54,12 +54,12 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
     }
 
     @Override
-    protected void onClose(Level level, BlockPos pos, BlockState state) {
+    protected void onClose(@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state) {
       LootrChestBlockEntity.playSound(level, pos, state, SoundEvents.CHEST_CLOSE);
     }
 
     @Override
-    protected void openerCountChanged(Level level, BlockPos pos, BlockState state, int p_155364_, int p_155365_) {
+    protected void openerCountChanged(@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state, int p_155364_, int p_155365_) {
       LootrChestBlockEntity.this.signalOpenCount(level, pos, state, p_155364_, p_155365_);
     }
 
@@ -90,20 +90,20 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   }
 
   @Override
-  public void loadAdditional(ValueInput input) {
+  public void loadAdditional(@NonNull ValueInput input) {
     super.loadAdditional(input);
     this.tryLoadLootTable(input);
     this.simpleLootrInstance.loadAdditional(input);
   }
 
   @Override
-  public void removeComponentsFromTag(ValueOutput output) {
+  public void removeComponentsFromTag(@NonNull ValueOutput output) {
     super.removeComponentsFromTag(output);
     output.discard("LootrId");
   }
 
   @Override
-  protected void saveAdditional(ValueOutput output) {
+  protected void saveAdditional(@NonNull ValueOutput output) {
     super.saveAdditional(output);
     this.trySaveLootTable(output);
     this.simpleLootrInstance.saveAdditional(output, level != null && level.isClientSide());
@@ -120,7 +120,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   }
 
   @Override
-  public void startOpen(ContainerUser user) {
+  public void startOpen(@NonNull ContainerUser user) {
     if (user instanceof ServerPlayer pPlayer) {
       if (!this.remove && !pPlayer.isSpectator()) {
         this.openersCounter.incrementOpeners(pPlayer, this.getLevel(), this.getBlockPos(), this.getBlockState(), user.getContainerInteractionRange());
@@ -129,7 +129,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   }
 
   @Override
-  public void stopOpen(ContainerUser user) {
+  public void stopOpen(@NonNull ContainerUser user) {
     if (user instanceof ServerPlayer pPlayer) {
       if (!this.remove && !pPlayer.isSpectator()) {
         this.openersCounter.decrementOpeners(pPlayer, this.getLevel(), this.getBlockPos(), this.getBlockState());
@@ -151,7 +151,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
 
   @Override
   @NotNull
-  public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
+  public CompoundTag getUpdateTag(HolderLookup.@NonNull Provider provider) {
     CompoundTag result = super.getUpdateTag(provider);
     result.merge(this.simpleLootrInstance.fillUpdateTag(provider, level != null && level.isClientSide(), this));
     return result;
@@ -274,7 +274,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
     return LootrRegistry.getChestTrigger();
   }
 
-  public static int getOpenCount(BlockGetter pLevel, BlockPos pPos) {
+  public static int getOpenCount(BlockGetter pLevel, @NonNull BlockPos pPos) {
     BlockState blockstate = pLevel.getBlockState(pPos);
     if (blockstate.hasBlockEntity()) {
       BlockEntity blockentity = pLevel.getBlockEntity(pPos);

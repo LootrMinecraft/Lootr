@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.client.model.DynamicBlockStateModel;
 import net.neoforged.neoforge.client.model.block.CustomUnbakedBlockStateModel;
 import noobanidus.mods.lootr.neoforge.init.ModBlockProperties;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class UnbakedBrushableModel extends noobanidus.mods.lootr.common.client.b
   }
 
   @Override
-  public MapCodec<? extends CustomUnbakedBlockStateModel> codec() {
+  public @NonNull MapCodec<? extends CustomUnbakedBlockStateModel> codec() {
     return CODEC;
   }
 
@@ -41,7 +42,7 @@ public class UnbakedBrushableModel extends noobanidus.mods.lootr.common.client.b
     }
 
     @Override
-    public void collectParts(BlockAndTintGetter blockAndTintGetter, BlockPos blockPos, BlockState blockState, RandomSource randomSource, List<BlockStateModelPart> list) {
+    public void collectParts(@NonNull BlockAndTintGetter blockAndTintGetter, @NonNull BlockPos blockPos, @NonNull BlockState blockState, @NonNull RandomSource randomSource, @NonNull List<BlockStateModelPart> list) {
       if (isOpenFromBATG(blockAndTintGetter, blockPos, blockState, randomSource)) {
         opened.collectParts(blockAndTintGetter, blockPos, blockState, randomSource, list);
         return;
@@ -61,7 +62,7 @@ public class UnbakedBrushableModel extends noobanidus.mods.lootr.common.client.b
     }
 
     @Override
-    public Material.Baked particleMaterial() {
+    public Material.@NonNull Baked particleMaterial() {
       return stage_0.particleMaterial();
     }
 

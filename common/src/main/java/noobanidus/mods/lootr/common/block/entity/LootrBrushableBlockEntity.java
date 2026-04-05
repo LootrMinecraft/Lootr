@@ -264,7 +264,7 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
 
   @SuppressWarnings("deprecation")
   @Override
-  public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
+  public @NonNull CompoundTag getUpdateTag(HolderLookup.@NonNull Provider provider) {
     CompoundTag compoundTag = super.getUpdateTag(provider);
     compoundTag.storeNullable("hit_direction", Direction.LEGACY_ID_CODEC, this.hitDirection);
 
@@ -292,7 +292,7 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
   }
 
   @Override
-  protected void loadAdditional(ValueInput input) {
+  protected void loadAdditional(@NonNull ValueInput input) {
     super.loadAdditional(input);
     this.tryLoadLootTable(input);
 
@@ -311,7 +311,7 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
   }
 
   @Override
-  protected void saveAdditional(ValueOutput output) {
+  protected void saveAdditional(@NonNull ValueOutput output) {
     super.saveAdditional(output);
     this.trySaveLootTable(output);
     this.simpleLootrInstance.saveAdditional(output, this.level != null && this.level.isClientSide());
@@ -487,7 +487,7 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
   }
 
   @Override
-  public void removeComponentsFromTag(ValueOutput compoundTag) {
+  public void removeComponentsFromTag(@NonNull ValueOutput compoundTag) {
     super.removeComponentsFromTag(compoundTag);
     compoundTag.discard("LootTable");
     compoundTag.discard("LootTableSeed");
@@ -495,7 +495,7 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
   }
 
   @Override
-  protected void applyImplicitComponents(DataComponentGetter dataComponentInput) {
+  protected void applyImplicitComponents(@NonNull DataComponentGetter dataComponentInput) {
     super.applyImplicitComponents(dataComponentInput);
     SeededContainerLoot loot = dataComponentInput.get(DataComponents.CONTAINER_LOOT);
     if (loot != null && loot.lootTable() != null) {
@@ -505,7 +505,7 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
   }
 
   @Override
-  protected void collectImplicitComponents(DataComponentMap.Builder builder) {
+  protected void collectImplicitComponents(DataComponentMap.@NonNull Builder builder) {
     super.collectImplicitComponents(builder);
     if (lootTable != null) {
       builder.set(DataComponents.CONTAINER_LOOT, new SeededContainerLoot(lootTable, lootTableSeed));

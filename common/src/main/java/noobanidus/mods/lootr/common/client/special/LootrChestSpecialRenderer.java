@@ -13,6 +13,7 @@ import net.minecraft.client.resources.model.sprite.SpriteId;
 import net.minecraft.resources.Identifier;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.client.block.LootrChestBlockRenderer;
+import org.jspecify.annotations.NonNull;
 
 public class LootrChestSpecialRenderer extends ChestSpecialRenderer {
   public LootrChestSpecialRenderer(SpriteGetter materials, ChestModel chestModel, SpriteId material, float f) {
@@ -54,7 +55,7 @@ public class LootrChestSpecialRenderer extends ChestSpecialRenderer {
     }
 
     @Override
-    public MapCodec<? extends SpecialModelRenderer.Unbaked<Void>> type() {
+    public @NonNull MapCodec<? extends SpecialModelRenderer.Unbaked<Void>> type() {
       return MAP_CODEC;
     }
   }

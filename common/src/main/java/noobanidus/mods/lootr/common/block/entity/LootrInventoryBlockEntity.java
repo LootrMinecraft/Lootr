@@ -33,7 +33,7 @@ public class LootrInventoryBlockEntity extends LootrChestBlockEntity {
   }
 
   @Override
-  protected void signalOpenCount(Level level, BlockPos pos, BlockState state, int p_155868_, int p_155869_) {
+  protected void signalOpenCount(@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state, int p_155868_, int p_155869_) {
     super.signalOpenCount(level, pos, state, p_155868_, p_155869_);
     if (LootrAPI.isCustomTrapped() && p_155868_ != p_155869_) {
       Block block = state.getBlock();

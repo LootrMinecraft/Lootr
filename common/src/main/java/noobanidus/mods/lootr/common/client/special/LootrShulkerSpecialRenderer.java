@@ -15,6 +15,7 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.client.block.LootrShulkerBoxRenderer;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3fc;
+import org.jspecify.annotations.NonNull;
 
 import java.util.function.Consumer;
 
@@ -32,12 +33,12 @@ public class LootrShulkerSpecialRenderer implements NoDataSpecialModelRenderer {
   }
 
   @Override
-  public void getExtents(Consumer<Vector3fc> consumer) {
+  public void getExtents(@NonNull Consumer<Vector3fc> consumer) {
     this.renderer.getExtents(this.orientation, this.openness, consumer);
   }
 
   @Override
-  public void submit(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, int overlayCoords, boolean hasFoil, int outlineColor) {
+  public void submit(@NonNull PoseStack poseStack, @NonNull SubmitNodeCollector submitNodeCollector, int lightCoords, int overlayCoords, boolean hasFoil, int outlineColor) {
     this.renderer.submit(poseStack, submitNodeCollector, lightCoords, overlayCoords, this.orientation, this.openness, null, this.material, outlineColor);
   }
 
@@ -61,7 +62,7 @@ public class LootrShulkerSpecialRenderer implements NoDataSpecialModelRenderer {
 
     @Nullable
     @Override
-    public SpecialModelRenderer<Void> bake(BakingContext context) {
+    public SpecialModelRenderer<Void> bake(@NonNull BakingContext context) {
       LootrShulkerBoxRenderer model = new LootrShulkerBoxRenderer(context);
       SpriteId material;
       if (LootrAPI.isVanillaTextures()) {
@@ -73,7 +74,7 @@ public class LootrShulkerSpecialRenderer implements NoDataSpecialModelRenderer {
     }
 
     @Override
-    public MapCodec<? extends SpecialModelRenderer.Unbaked<Void>> type() {
+    public @NonNull MapCodec<? extends SpecialModelRenderer.Unbaked<Void>> type() {
       return MAP_CODEC;
     }
   }

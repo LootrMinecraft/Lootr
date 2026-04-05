@@ -16,6 +16,7 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 public class DefaultLootFiller implements ILootFiller {
   private static final DefaultLootFiller INSTANCE = new DefaultLootFiller();
@@ -31,7 +32,7 @@ public class DefaultLootFiller implements ILootFiller {
   }
 
   @Override
-  public void unpackLootTable(ILootrContainerInstance provider, @NotNull Player player, Container inventory) {
+  public void unpackLootTable(@NonNull ILootrContainerInstance provider, @NotNull Player player, Container inventory) {
     Level level = provider.getDataLevel();
     if (level == null || level.isClientSide() || level.getServer() == null) {
       LootrAPI.LOG.error("Unable to fill loot container as the level is null, client-side, or the server is null!");

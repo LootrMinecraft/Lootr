@@ -18,6 +18,7 @@ import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.block.entity.LootrBrushableBlockEntity;
 import noobanidus.mods.lootr.common.client.ClientHooks;
 import noobanidus.mods.lootr.common.client.state.LootrBrushableBlockRenderState;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 public class LootrBrushableBlockRenderer implements BlockEntityRenderer<LootrBrushableBlockEntity, LootrBrushableBlockRenderState> {
@@ -33,7 +34,7 @@ public class LootrBrushableBlockRenderer implements BlockEntityRenderer<LootrBru
   }
 
   @Override
-  public void extractRenderState(LootrBrushableBlockEntity blockEntity, LootrBrushableBlockRenderState renderState, float partialTick, Vec3 cameraPosition, ModelFeatureRenderer.@Nullable CrumblingOverlay breakProgress) {
+  public void extractRenderState(LootrBrushableBlockEntity blockEntity, LootrBrushableBlockRenderState renderState, float partialTick, @NonNull Vec3 cameraPosition, ModelFeatureRenderer.@Nullable CrumblingOverlay breakProgress) {
     BlockEntityRenderer.super.extractRenderState(blockEntity, renderState, partialTick, cameraPosition, breakProgress);
     renderState.hitDirection = blockEntity.getHitDirection();
     renderState.dustProgress = blockEntity.getBlockState().getValue(BlockStateProperties.DUSTED);
@@ -53,7 +54,7 @@ public class LootrBrushableBlockRenderer implements BlockEntityRenderer<LootrBru
   }
 
   @Override
-  public void submit(LootrBrushableBlockRenderState renderState, PoseStack poseStack, SubmitNodeCollector nodeCollector, CameraRenderState cameraRenderState) {
+  public void submit(LootrBrushableBlockRenderState renderState, @NonNull PoseStack poseStack, @NonNull SubmitNodeCollector nodeCollector, @NonNull CameraRenderState cameraRenderState) {
     if (renderState.dustProgress > 0 && renderState.hitDirection != null && !renderState.itemState.isEmpty() && renderState.thisPlayerBrushing) {
       poseStack.pushPose();
       poseStack.translate(0.0F, 0.5F, 0.0F);

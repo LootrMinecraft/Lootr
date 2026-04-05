@@ -33,6 +33,7 @@ import noobanidus.mods.lootr.common.client.ClientHooks;
 import noobanidus.mods.lootr.common.client.state.LootrDecoratedPotBlockRenderState;
 import noobanidus.mods.lootr.common.integration.sherdsapi.SherdsIntegration;
 import org.joml.Vector3fc;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.HashMap;
@@ -130,7 +131,7 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
   }
 
   @Override
-  public void extractRenderState(LootrDecoratedPotBlockEntity blockEntity, LootrDecoratedPotBlockRenderState renderState, float partialTick, Vec3 cameraPosition, ModelFeatureRenderer.@Nullable CrumblingOverlay breakProgress) {
+  public void extractRenderState(LootrDecoratedPotBlockEntity blockEntity, LootrDecoratedPotBlockRenderState renderState, float partialTick, @NonNull Vec3 cameraPosition, ModelFeatureRenderer.@Nullable CrumblingOverlay breakProgress) {
     BlockEntityRenderer.super.extractRenderState(blockEntity, renderState, partialTick, cameraPosition, breakProgress);
     renderState.decorations = null;
     renderState.potDecorations = blockEntity.getDecorations();
@@ -148,7 +149,7 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
   }
 
   @Override
-  public void submit(LootrDecoratedPotBlockRenderState renderState, PoseStack poseStack, SubmitNodeCollector nodeCollector, CameraRenderState cameraRenderState) {
+  public void submit(LootrDecoratedPotBlockRenderState renderState, PoseStack poseStack, @NonNull SubmitNodeCollector nodeCollector, @NonNull CameraRenderState cameraRenderState) {
     poseStack.pushPose();
     Direction direction = renderState.direction;
     poseStack.translate(0.5, 0.0, 0.5);

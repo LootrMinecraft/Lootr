@@ -9,6 +9,7 @@ import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.LootrRegistry;
+import org.jspecify.annotations.NonNull;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -18,7 +19,7 @@ public class LootrBlockTagProvider extends BlockTagsProvider {
   }
 
   @Override
-  protected void addTags(HolderLookup.Provider provider) {
+  protected void addTags(HolderLookup.@NonNull Provider provider) {
     tag(BlockTags.SAND).add(LootrRegistry.getSuspiciousSandBlock());
     tag(BlockTags.SHULKER_BOXES).add(LootrRegistry.getShulkerBlock());
     tag(BlockTags.MINEABLE_WITH_PICKAXE).add(LootrRegistry.getTrophyBlock());
@@ -60,7 +61,7 @@ public class LootrBlockTagProvider extends BlockTagsProvider {
   }
 
   @Override
-  public String getName() {
+  public @NonNull String getName() {
     return "Lootr Block Tags";
   }
 }

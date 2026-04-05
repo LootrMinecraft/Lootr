@@ -17,6 +17,7 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.client.block.LootrChestBlockRenderer;
 import noobanidus.mods.lootr.common.client.state.LootrChestCartRenderState;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
+import org.jspecify.annotations.NonNull;
 
 public class LootrChestCartRenderer<T extends LootrChestMinecartEntity> extends AbstractMinecartRenderer<T, LootrChestCartRenderState> {
   private final SpriteGetter materials;
@@ -29,7 +30,7 @@ public class LootrChestCartRenderer<T extends LootrChestMinecartEntity> extends 
   }
 
   @Override
-  protected void submitMinecartContents(LootrChestCartRenderState renderState, BlockModelRenderState blockModel, PoseStack poseStack, SubmitNodeCollector nodeCollector, int lightCoords) {
+  protected void submitMinecartContents(LootrChestCartRenderState renderState, @NonNull BlockModelRenderState blockModel, @NonNull PoseStack poseStack, @NonNull SubmitNodeCollector nodeCollector, int lightCoords) {
     super.submitMinecartContents(renderState, blockModel, poseStack, nodeCollector, lightCoords);
     poseStack.pushPose();
     poseStack.translate(0.5F, 0.5F, 0.5F);

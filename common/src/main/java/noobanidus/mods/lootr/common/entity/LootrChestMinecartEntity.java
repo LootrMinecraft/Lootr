@@ -67,7 +67,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
   @Override
-  public ItemStack getPickResult() {
+  public @NonNull ItemStack getPickResult() {
     return new ItemStack(Items.CHEST_MINECART);
   }
 
@@ -91,7 +91,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
   @Override
-  public boolean hurtServer(ServerLevel serverLevel, DamageSource damageSource, float f) {
+  public boolean hurtServer(@NonNull ServerLevel serverLevel, @NonNull DamageSource damageSource, float f) {
     if (isInvulnerableTo(damageSource)) {
       return false;
     }
@@ -157,7 +157,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
   @Override
-  public BlockState getDefaultDisplayBlockState() {
+  public @NonNull BlockState getDefaultDisplayBlockState() {
     if (cartNormal == null) {
       cartNormal = LootrRegistry.getChestBlock().defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
     }
@@ -170,12 +170,12 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
   @Override
-  public AbstractContainerMenu createMenu(int id, Inventory playerInventoryIn) {
+  public @NonNull AbstractContainerMenu createMenu(int id, @NonNull Inventory playerInventoryIn) {
     return ChestMenu.threeRows(id, playerInventoryIn, this);
   }
 
   @Override
-  public void remove(RemovalReason reason) {
+  public void remove(@NonNull RemovalReason reason) {
     this.setRemoved(reason);
     if (reason == Entity.RemovalReason.KILLED) {
       this.gameEvent(GameEvent.ENTITY_DIE);
@@ -184,7 +184,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
 
 
   @Override
-  public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
+  public @NonNull InteractionResult interact(@NonNull Player player, @NonNull InteractionHand hand, @NonNull Vec3 location) {
     if (level().isClientSide() || player.isSpectator() || !(player instanceof ServerPlayer serverPlayer)) {
       return InteractionResult.CONSUME;
     }
@@ -199,7 +199,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
 
 
   @Override
-  public void startOpen(ContainerUser user) {
+  public void startOpen(@NonNull ContainerUser user) {
     if (user instanceof ServerPlayer player) {
       if (!hasBeenOpened) {
         hasBeenOpened = true;
@@ -210,7 +210,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
   @Override
-  public void startSeenByPlayer(ServerPlayer pPlayer) {
+  public void startSeenByPlayer(@NonNull ServerPlayer pPlayer) {
     super.startSeenByPlayer(pPlayer);
     // It is possible that these packets will be fired
     // before the client has actually received the initial
@@ -342,7 +342,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
   @Override
-  protected Vec3 applyNaturalSlowdown(Vec3 incoming) {
+  protected @NonNull Vec3 applyNaturalSlowdown(@NonNull Vec3 incoming) {
     float f = 0.98F;
     if (this.isInWater()) {
       f *= 0.95F;
@@ -352,7 +352,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
   @Override
-  protected Item getDropItem() {
+  protected @NonNull Item getDropItem() {
     return Items.CHEST_MINECART;
   }
 

@@ -66,7 +66,7 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   }
 
   @Override
-  public void startSeenByPlayer(ServerPlayer pPlayer) {
+  public void startSeenByPlayer(@NonNull ServerPlayer pPlayer) {
     super.startSeenByPlayer(pPlayer);
     // It is possible that these packets will be fired
     // before the client has actually received the initial
@@ -96,7 +96,7 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   }
 
   @Override
-  public boolean hurtServer(ServerLevel serverLevel, DamageSource source, float amount) {
+  public boolean hurtServer(@NonNull ServerLevel serverLevel, @NonNull DamageSource source, float amount) {
     boolean skipMessage = false;
 
     if (amount > 0 && source.getEntity() instanceof ServerPlayer player) {
@@ -173,7 +173,7 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   }
 
   @Override
-  public void setItem(ItemStack stack, boolean updateNeighbours) {
+  public void setItem(@NonNull ItemStack stack, boolean updateNeighbours) {
   }
 
   private boolean actuallyDropItem(ServerPlayer player) {
@@ -206,7 +206,7 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   }
 
   @Override
-  public ItemStack getItem() {
+  public @NonNull ItemStack getItem() {
     return this.getEntityData().get(AccessorMixinItemFrame.lootr$getDataItem());
   }
 
@@ -222,12 +222,12 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
 
   private static final SlotAccess NULL = new SlotAccess() {
     @Override
-    public ItemStack get() {
+    public @NonNull ItemStack get() {
       return ItemStack.EMPTY;
     }
 
     @Override
-    public boolean set(ItemStack stack) {
+    public boolean set(@NonNull ItemStack stack) {
       return false;
     }
   };
@@ -238,13 +238,13 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   }
 
   @Override
-  public void addAdditionalSaveData(ValueOutput output) {
+  public void addAdditionalSaveData(@NonNull ValueOutput output) {
     super.addAdditionalSaveData(output);
     ContainerHelper.saveAllItems(output, this.inventory, true);
   }
 
   @Override
-  public void readAdditionalSaveData(ValueInput input) {
+  public void readAdditionalSaveData(@NonNull ValueInput input) {
     super.readAdditionalSaveData(input);
     ContainerHelper.loadAllItems(input, this.inventory);
     this.setItemInternal(this.inventory.getFirst());
@@ -275,7 +275,7 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   }
 
   @Override
-  public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
+  public @NonNull InteractionResult interact(@NonNull Player player, @NonNull InteractionHand hand, @NonNull Vec3 location) {
     if (!this.level().isClientSide()) {
       this.playSound(this.getRotateItemSound(), 1.0F, 1.0F);
       this.setRotation(this.getRotation() + 1);
@@ -293,12 +293,12 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   }
 
   @Override
-  public ItemStack getPickResult() {
+  public @NonNull ItemStack getPickResult() {
     return new ItemStack(Items.ITEM_FRAME);
   }
 
   @Override
-  protected ItemStack getFrameItemStack() {
+  protected @NonNull ItemStack getFrameItemStack() {
     return new ItemStack(Items.ITEM_FRAME);
   }
 

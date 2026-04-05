@@ -8,6 +8,7 @@ import net.minecraft.advancements.criterion.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
 import noobanidus.mods.lootr.common.api.interfaces.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.interfaces.advancement.ITrigger;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -19,7 +20,7 @@ public class ContainerTrigger extends SimpleCriterionTrigger<ContainerTrigger.Tr
   }
 
   @Override
-  public Codec<TriggerInstance> codec() {
+  public @NonNull Codec<TriggerInstance> codec() {
     return TriggerInstance.CODEC;
   }
 

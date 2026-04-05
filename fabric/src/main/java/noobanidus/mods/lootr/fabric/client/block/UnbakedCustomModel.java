@@ -6,7 +6,6 @@ import net.fabricmc.fabric.api.client.renderer.v1.mesh.QuadEmitter;
 import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.renderer.block.dispatch.Variant;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.BlockPos;
@@ -15,6 +14,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.function.Predicate;
@@ -32,7 +32,7 @@ public class UnbakedCustomModel extends noobanidus.mods.lootr.common.client.bloc
   }
 
   @Override
-  public MapCodec<? extends CustomUnbakedBlockStateModel> codec() {
+  public @NonNull MapCodec<? extends CustomUnbakedBlockStateModel> codec() {
     return CODEC;
   }
 
@@ -48,7 +48,7 @@ public class UnbakedCustomModel extends noobanidus.mods.lootr.common.client.bloc
     }
 
     @Override
-    public void emitQuads(QuadEmitter emitter, BlockAndTintGetter blockView, BlockPos pos, BlockState state, RandomSource random, Predicate<@Nullable Direction> cullTest) {
+    public void emitQuads(@NonNull QuadEmitter emitter, @NonNull BlockAndTintGetter blockView, @NonNull BlockPos pos, @NonNull BlockState state, @NonNull RandomSource random, @NonNull Predicate<@Nullable Direction> cullTest) {
       if (LootrAPI.isVanillaTextures()) {
         vanilla.emitQuads(emitter, blockView, pos, state, random, cullTest);
         return;
@@ -64,7 +64,7 @@ public class UnbakedCustomModel extends noobanidus.mods.lootr.common.client.bloc
     }
 
     @Override
-    public Material.Baked particleMaterial(BlockAndTintGetter blockView, BlockPos pos, BlockState state) {
+    public Material.@NonNull Baked particleMaterial(@NonNull BlockAndTintGetter blockView, @NonNull BlockPos pos, @NonNull BlockState state) {
       boolean visuallyOpen = isOpenFromBATG(blockView, pos, state, null);
 
       if (visuallyOpen) {
@@ -75,12 +75,12 @@ public class UnbakedCustomModel extends noobanidus.mods.lootr.common.client.bloc
     }
 
     @Override
-    public @Nullable Object createGeometryKey(BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource random) {
+    public @Nullable Object createGeometryKey(@NonNull BlockAndTintGetter level, @NonNull BlockPos pos, @NonNull BlockState state, @NonNull RandomSource random) {
       return internalCreateObjectKey(level, pos, state, random);
     }
 
     @Override
-    public Material.Baked particleMaterial() {
+    public Material.@NonNull Baked particleMaterial() {
       return opened.particleMaterial();
     }
 

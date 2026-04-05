@@ -7,6 +7,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import noobanidus.mods.lootr.neoforge.Lootr;
 import noobanidus.mods.lootr.neoforge.network.ILootrNeoForgePacket;
 import noobanidus.mods.lootr.neoforge.network.client.ClientHandlers;
+import org.jspecify.annotations.NonNull;
 
 public record PacketRefreshSection () implements ILootrNeoForgePacket {
   public static final PacketRefreshSection INSTANCE = new PacketRefreshSection();
@@ -20,7 +21,7 @@ public record PacketRefreshSection () implements ILootrNeoForgePacket {
   }
 
   @Override
-  public Type<? extends CustomPacketPayload> type() {
+  public @NonNull Type<? extends CustomPacketPayload> type() {
     return TYPE;
   }
 }

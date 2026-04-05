@@ -24,6 +24,7 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.client.ClientHooks;
 import noobanidus.mods.lootr.common.client.state.LootrItemFrameRenderState;
 import noobanidus.mods.lootr.common.entity.LootrItemFrame;
+import org.jspecify.annotations.NonNull;
 
 public class LootrItemFrameRenderer extends EntityRenderer<LootrItemFrame, LootrItemFrameRenderState> {
   private final ItemModelResolver itemModelResolver;
@@ -36,7 +37,7 @@ public class LootrItemFrameRenderer extends EntityRenderer<LootrItemFrame, Lootr
   }
 
   @Override
-  public void submit(LootrItemFrameRenderState state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState) {
+  public void submit(LootrItemFrameRenderState state, @NonNull PoseStack poseStack, @NonNull SubmitNodeCollector submitNodeCollector, @NonNull CameraRenderState cameraRenderState) {
     super.submit(state, poseStack, submitNodeCollector, cameraRenderState);
     poseStack.pushPose();
     Direction direction = state.direction;
@@ -79,7 +80,7 @@ public class LootrItemFrameRenderer extends EntityRenderer<LootrItemFrame, Lootr
   }
 
   @Override
-  public Vec3 getRenderOffset(LootrItemFrameRenderState renderState) {
+  public @NonNull Vec3 getRenderOffset(LootrItemFrameRenderState renderState) {
     return new Vec3(renderState.direction.getStepX() * 0.3F, -0.25, renderState.direction.getStepZ() * 0.3F);
   }
 

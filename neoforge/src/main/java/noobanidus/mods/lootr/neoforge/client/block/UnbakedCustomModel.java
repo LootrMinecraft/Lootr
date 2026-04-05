@@ -15,6 +15,7 @@ import net.neoforged.neoforge.client.model.DynamicBlockStateModel;
 import net.neoforged.neoforge.client.model.block.CustomUnbakedBlockStateModel;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.neoforge.init.ModBlockProperties;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public class UnbakedCustomModel extends noobanidus.mods.lootr.common.client.bloc
   }
 
   @Override
-  public MapCodec<? extends CustomUnbakedBlockStateModel> codec() {
+  public @NonNull MapCodec<? extends CustomUnbakedBlockStateModel> codec() {
     return CODEC;
   }
 
@@ -52,7 +53,7 @@ public class UnbakedCustomModel extends noobanidus.mods.lootr.common.client.bloc
     }
 
     @Override
-    public void collectParts(BlockAndTintGetter blockAndTintGetter, BlockPos blockPos, BlockState blockState, RandomSource randomSource, List<BlockStateModelPart> list) {
+    public void collectParts(@NonNull BlockAndTintGetter blockAndTintGetter, @NonNull BlockPos blockPos, @NonNull BlockState blockState, @NonNull RandomSource randomSource, @NonNull List<BlockStateModelPart> list) {
       if (LootrAPI.isVanillaTextures()) {
         vanilla.collectParts(blockAndTintGetter, blockPos, blockState, randomSource, list);
         return;
@@ -75,12 +76,12 @@ public class UnbakedCustomModel extends noobanidus.mods.lootr.common.client.bloc
     }
 
     @Override
-    public @Nullable Object createGeometryKey(BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource random) {
+    public @Nullable Object createGeometryKey(@NonNull BlockAndTintGetter level, @NonNull BlockPos pos, @NonNull BlockState state, @NonNull RandomSource random) {
       return internalCreateObjectKey(level, pos, state, random);
     }
 
     @Override
-    public Material.Baked particleMaterial() {
+    public Material.@NonNull Baked particleMaterial() {
       return opened.particleMaterial();
     }
 

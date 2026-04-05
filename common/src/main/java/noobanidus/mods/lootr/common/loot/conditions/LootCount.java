@@ -15,6 +15,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
+import org.jspecify.annotations.NonNull;
 
 import java.util.*;
 import java.util.function.BiPredicate;
@@ -53,12 +54,12 @@ public record LootCount(List<Operation> operations) implements LootItemCondition
     return false;
   }
 
-  public Set<ContextKey<?>> getReferencedContextParams() {
+  public @NonNull Set<ContextKey<?>> getReferencedContextParams() {
     return ImmutableSet.of(LootContextParams.ORIGIN);
   }
 
   @Override
-  public MapCodec<? extends LootItemCondition> codec() {
+  public @NonNull MapCodec<? extends LootItemCondition> codec() {
     return CODEC;
   }
 
@@ -91,7 +92,7 @@ public record LootCount(List<Operation> operations) implements LootItemCondition
     }
 
     @Override
-    public String getSerializedName() {
+    public @NonNull String getSerializedName() {
       return this.name().toLowerCase(Locale.ROOT);
     }
   }

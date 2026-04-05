@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jspecify.annotations.NonNull;
 
 public class TrophyBlock extends Block {
   private static final VoxelShape EAST_WEST = Block.box(1.5, 0, 4, 14.5, 14.5, 12);
@@ -27,14 +28,14 @@ public class TrophyBlock extends Block {
   }
 
   @Override
-  protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+  protected void createBlockStateDefinition(StateDefinition.@NonNull Builder<Block, BlockState> builder) {
     super.createBlockStateDefinition(builder);
     builder.add(HorizontalDirectionalBlock.FACING);
   }
 
   @Override
   @SuppressWarnings("deprecation")
-  public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+  public @NonNull VoxelShape getShape(BlockState state, @NonNull BlockGetter worldIn, @NonNull BlockPos pos, @NonNull CollisionContext context) {
     Direction facing = state.getValue(HorizontalDirectionalBlock.FACING);
     if (facing == Direction.EAST || facing == Direction.WEST) {
       return EAST_WEST;
@@ -44,12 +45,12 @@ public class TrophyBlock extends Block {
   }
 
   @Override
-  public BlockState rotate(BlockState p_60530_, Rotation p_60531_) {
+  public @NonNull BlockState rotate(BlockState p_60530_, Rotation p_60531_) {
     return p_60530_.setValue(HorizontalDirectionalBlock.FACING, p_60531_.rotate(p_60530_.getValue(HorizontalDirectionalBlock.FACING)));
   }
 
   @Override
-  public BlockState mirror(BlockState p_60528_, Mirror p_60529_) {
+  public @NonNull BlockState mirror(BlockState p_60528_, Mirror p_60529_) {
     return p_60528_.rotate(p_60529_.getRotation(p_60528_.getValue(HorizontalDirectionalBlock.FACING)));
   }
 }

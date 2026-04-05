@@ -25,6 +25,7 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.block.entity.LootrBrushableBlockEntity;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 public class LootrBrushableBlock extends BrushableBlock {
   public static final IntegerProperty DUSTED = BlockStateProperties.DUSTED;
@@ -39,23 +40,23 @@ public class LootrBrushableBlock extends BrushableBlock {
   }
 
   @Override
-  public RenderShape getRenderShape(BlockState blockState) {
+  public @NonNull RenderShape getRenderShape(@NonNull BlockState blockState) {
     return RenderShape.MODEL;
   }
 
   @Override
-  public void onPlace(BlockState blockState, Level level, BlockPos blockPos, BlockState blockState2, boolean bl) {
+  public void onPlace(@NonNull BlockState blockState, Level level, @NonNull BlockPos blockPos, @NonNull BlockState blockState2, boolean bl) {
     level.scheduleTick(blockPos, this, 2);
   }
 
   @Override
-  public BlockState updateShape(BlockState blockState, LevelReader levelAccessor, ScheduledTickAccess scheduledTickAccess, BlockPos blockPos, Direction direction, BlockPos blockPos2, BlockState blockState2, RandomSource random) {
+  public @NonNull BlockState updateShape(@NonNull BlockState blockState, @NonNull LevelReader levelAccessor, ScheduledTickAccess scheduledTickAccess, @NonNull BlockPos blockPos, @NonNull Direction direction, @NonNull BlockPos blockPos2, @NonNull BlockState blockState2, @NonNull RandomSource random) {
     scheduledTickAccess.scheduleTick(blockPos, this, 2);
     return super.updateShape(blockState, levelAccessor, scheduledTickAccess, blockPos, direction, blockPos2, blockState2, random);
   }
 
   @Override
-  public void tick(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, RandomSource randomSource) {
+  public void tick(@NonNull BlockState blockState, ServerLevel serverLevel, @NonNull BlockPos blockPos, @NonNull RandomSource randomSource) {
     BlockEntity var6 = serverLevel.getBlockEntity(blockPos);
     if (!(var6 instanceof LootrBrushableBlockEntity brushableBlockEntity)) {
       return;
@@ -73,18 +74,18 @@ public class LootrBrushableBlock extends BrushableBlock {
 
   @Nullable
   @Override
-  public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
+  public BlockEntity newBlockEntity(@NonNull BlockPos blockPos, @NonNull BlockState blockState) {
     return new LootrBrushableBlockEntity(blockPos, blockState);
   }
 
   @Override
   @Nullable
-  public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+  public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NonNull Level pLevel, @NonNull BlockState pState, @NonNull BlockEntityType<T> pBlockEntityType) {
     return ILootrBlockEntity::ticker;
   }
 
   @Override
-  protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
+  protected void affectNeighborsAfterRemoval(@NonNull BlockState state, @NonNull ServerLevel level, @NonNull BlockPos pos, boolean movedByPiston) {
     Containers.updateNeighboursAfterDestroy(state, level, pos);
   }
 }

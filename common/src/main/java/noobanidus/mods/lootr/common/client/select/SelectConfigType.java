@@ -10,6 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import noobanidus.mods.lootr.common.api.config.client.ConfigDisplayType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 public record SelectConfigType() implements SelectItemModelProperty<ConfigDisplayType> {
   public static final Type<SelectConfigType, ConfigDisplayType> TYPE = Type.create(
@@ -18,7 +19,7 @@ public record SelectConfigType() implements SelectItemModelProperty<ConfigDispla
   );
 
   @Override
-  public @Nullable ConfigDisplayType get(ItemStack p_387845_, @Nullable ClientLevel p_387945_, @Nullable LivingEntity p_388349_, int p_388630_, ItemDisplayContext p_388902_) {
+  public @Nullable ConfigDisplayType get(@NonNull ItemStack p_387845_, @Nullable ClientLevel p_387945_, @Nullable LivingEntity p_388349_, int p_388630_, @NonNull ItemDisplayContext p_388902_) {
     if (LootrAPI.isVanillaTextures()) {
       return ConfigDisplayType.VANILLA;
     }
@@ -26,12 +27,12 @@ public record SelectConfigType() implements SelectItemModelProperty<ConfigDispla
   }
 
   @Override
-  public Codec<ConfigDisplayType> valueCodec() {
+  public @NonNull Codec<ConfigDisplayType> valueCodec() {
     return ConfigDisplayType.CODEC;
   }
 
   @Override
-  public Type<? extends SelectItemModelProperty<ConfigDisplayType>, ConfigDisplayType> type() {
+  public @NonNull Type<? extends SelectItemModelProperty<ConfigDisplayType>, ConfigDisplayType> type() {
     return TYPE;
   }
 }

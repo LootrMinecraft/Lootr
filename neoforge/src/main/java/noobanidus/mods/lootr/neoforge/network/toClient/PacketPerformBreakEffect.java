@@ -9,13 +9,14 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.client.ClientHooks;
 import noobanidus.mods.lootr.neoforge.network.ILootrNeoForgePacket;
+import org.jspecify.annotations.NonNull;
 
 public record PacketPerformBreakEffect(int entityId, BlockPos pos) implements ILootrNeoForgePacket {
   public static final Type<PacketPerformBreakEffect> TYPE = new Type<>(LootrAPI.rl("perform_break_effect"));
   public static final StreamCodec<ByteBuf, PacketPerformBreakEffect> STREAM_CODEC = StreamCodec.composite(ByteBufCodecs.VAR_INT, PacketPerformBreakEffect::entityId, BlockPos.STREAM_CODEC, PacketPerformBreakEffect::pos, PacketPerformBreakEffect::new);
 
   @Override
-  public Type<? extends CustomPacketPayload> type() {
+  public @NonNull Type<? extends CustomPacketPayload> type() {
     return TYPE;
   }
 

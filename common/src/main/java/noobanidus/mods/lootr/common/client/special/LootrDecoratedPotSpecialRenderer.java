@@ -9,6 +9,7 @@ import noobanidus.mods.lootr.common.api.integration.decorated.PotDecorationsAdap
 import noobanidus.mods.lootr.common.client.block.LootrDecoratedPotRenderer;
 import noobanidus.mods.lootr.common.integration.sherdsapi.SherdsIntegration;
 import org.joml.Vector3fc;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
@@ -21,17 +22,17 @@ public class LootrDecoratedPotSpecialRenderer implements SpecialModelRenderer<Po
   }
 
   @Override
-  public @org.jspecify.annotations.Nullable PotDecorationsAdapter extractArgument(ItemStack stack) {
+  public @org.jspecify.annotations.Nullable PotDecorationsAdapter extractArgument(@NonNull ItemStack stack) {
     return SherdsIntegration.getAdapterFrom(stack);
   }
 
   @Override
-  public void submit(@Nullable PotDecorationsAdapter argument, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, int overlayCoords, boolean hasFoil, int outlineColor) {
+  public void submit(@Nullable PotDecorationsAdapter argument, @NonNull PoseStack poseStack, @NonNull SubmitNodeCollector submitNodeCollector, int lightCoords, int overlayCoords, boolean hasFoil, int outlineColor) {
     this.renderer.submit(poseStack, submitNodeCollector, lightCoords, overlayCoords, argument, hasFoil, outlineColor);
   }
 
   @Override
-  public void getExtents(Consumer<Vector3fc> p_470829_) {
+  public void getExtents(@NonNull Consumer<Vector3fc> p_470829_) {
     renderer.getExtents(p_470829_);
   }
 
@@ -40,12 +41,12 @@ public class LootrDecoratedPotSpecialRenderer implements SpecialModelRenderer<Po
     public static final MapCodec<Unbaked> MAP_CODEC = MapCodec.unit(INSTANCE);
 
     @Override
-    public SpecialModelRenderer<PotDecorationsAdapter> bake(BakingContext context) {
+    public SpecialModelRenderer<PotDecorationsAdapter> bake(@NonNull BakingContext context) {
       return new LootrDecoratedPotSpecialRenderer(new LootrDecoratedPotRenderer(context));
     }
 
     @Override
-    public MapCodec<? extends SpecialModelRenderer.Unbaked<PotDecorationsAdapter>> type() {
+    public @NonNull MapCodec<? extends SpecialModelRenderer.Unbaked<PotDecorationsAdapter>> type() {
       return MAP_CODEC;
     }
 

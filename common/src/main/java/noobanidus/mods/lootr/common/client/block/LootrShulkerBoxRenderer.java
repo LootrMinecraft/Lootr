@@ -25,6 +25,7 @@ import noobanidus.mods.lootr.common.block.entity.LootrShulkerBlockEntity;
 import noobanidus.mods.lootr.common.client.state.LootrShulkerBoxRenderState;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3fc;
+import org.jspecify.annotations.NonNull;
 
 import java.util.function.Consumer;
 
@@ -49,7 +50,7 @@ public class LootrShulkerBoxRenderer implements BlockEntityRenderer<LootrShulker
   }
 
   @Override
-  public void extractRenderState(LootrShulkerBlockEntity blockEntity, LootrShulkerBoxRenderState state, float partialTicks, Vec3 position, @Nullable ModelFeatureRenderer.CrumblingOverlay overlay) {
+  public void extractRenderState(LootrShulkerBlockEntity blockEntity, LootrShulkerBoxRenderState state, float partialTicks, @NonNull Vec3 position, @Nullable ModelFeatureRenderer.CrumblingOverlay overlay) {
     BlockEntityRenderer.super.extractRenderState(blockEntity, state, partialTicks, position, overlay);
     state.progress = blockEntity.getProgress(partialTicks);
     state.direction = blockEntity.getBlockState().getValueOrElse(ShulkerBoxBlock.FACING, Direction.UP);
@@ -76,7 +77,7 @@ public class LootrShulkerBoxRenderer implements BlockEntityRenderer<LootrShulker
   }
 
   @Override
-  public void submit(LootrShulkerBoxRenderState state, PoseStack pose, SubmitNodeCollector collector, CameraRenderState camera) {
+  public void submit(LootrShulkerBoxRenderState state, @NonNull PoseStack pose, @NonNull SubmitNodeCollector collector, @NonNull CameraRenderState camera) {
     SpriteId material = getSpriteId(state);
     this.submit(pose, collector, state.lightCoords, OverlayTexture.NO_OVERLAY, state.direction, state.progress, state.breakProgress, material, 0);
   }

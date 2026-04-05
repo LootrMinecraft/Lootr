@@ -31,6 +31,7 @@ import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.block.entity.LootrShulkerBlockEntity;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 public class LootrShulkerBlock extends ShulkerBoxBlock {
   public LootrShulkerBlock(Properties pProperties) {
@@ -54,7 +55,7 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
   }
 
   @Override
-  public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult trace) {
+  public @NonNull InteractionResult useWithoutItem(@NonNull BlockState state, Level level, @NonNull BlockPos pos, @NonNull Player player, @NonNull BlockHitResult trace) {
     if (level.isClientSide() || player.isSpectator() || !(player instanceof ServerPlayer serverPlayer)) {
       return InteractionResult.CONSUME;
     }
@@ -75,7 +76,7 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
   }
 
   @Override
-  public BlockState playerWillDestroy(Level pLevel, BlockPos pPos, BlockState pState, Player pPlayer) {
+  public @NonNull BlockState playerWillDestroy(@NonNull Level pLevel, @NonNull BlockPos pPos, @NonNull BlockState pState, @NonNull Player pPlayer) {
     this.spawnDestroyParticles(pLevel, pPlayer, pPos, pState);
     if (pState.is(BlockTags.GUARDED_BY_PIGLINS) && pLevel instanceof ServerLevel sLevel) {
       PiglinAi.angerNearbyPiglins(sLevel, pPlayer, false);
@@ -87,13 +88,13 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
   }
 
   @Override
-  public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
+  public @NonNull VoxelShape getShape(@NonNull BlockState pState, BlockGetter pLevel, @NonNull BlockPos pPos, @NonNull CollisionContext pContext) {
     BlockEntity blockentity = pLevel.getBlockEntity(pPos);
     return blockentity instanceof LootrShulkerBlockEntity ? Shapes.create(((LootrShulkerBlockEntity) blockentity).getBoundingBox(pState)) : Shapes.block();
   }
 
   @Override
-  public boolean hasAnalogOutputSignal(BlockState pState) {
+  public boolean hasAnalogOutputSignal(@NonNull BlockState pState) {
     return true;
   }
 
@@ -104,28 +105,28 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
   }
 
   @Override
-  public float getDestroyProgress(BlockState p_60466_, Player p_60467_, BlockGetter p_60468_, BlockPos p_60469_) {
+  public float getDestroyProgress(@NonNull BlockState p_60466_, @NonNull Player p_60467_, @NonNull BlockGetter p_60468_, @NonNull BlockPos p_60469_) {
     return LootrAPI.getDestroyProgress(p_60466_, p_60467_, p_60468_, p_60469_, super.getDestroyProgress(p_60466_, p_60467_, p_60468_, p_60469_));
   }
 
   @Override
-  public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos, Direction direction) {
+  public int getAnalogOutputSignal(@NonNull BlockState pBlockState, @NonNull Level pLevel, @NonNull BlockPos pPos, @NonNull Direction direction) {
     return LootrAPI.getAnalogOutputSignal(pBlockState, pLevel, pPos, 0, direction);
   }
 
   @Override
-  public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
+  public @NonNull BlockEntity newBlockEntity(@NonNull BlockPos pPos, @NonNull BlockState pState) {
     return new LootrShulkerBlockEntity(pPos, pState);
   }
 
   @Override
   @Nullable
-  public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+  public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NonNull Level pLevel, @NonNull BlockState pState, @NonNull BlockEntityType<T> pBlockEntityType) {
     return ILootrBlockEntity::ticker;
   }
 
   @Override
-  public void playerDestroy(Level level, Player player, BlockPos blockPos, BlockState blockState, @Nullable BlockEntity blockEntity, ItemStack itemStack) {
+  public void playerDestroy(@NonNull Level level, @NonNull Player player, @NonNull BlockPos blockPos, @NonNull BlockState blockState, @Nullable BlockEntity blockEntity, @NonNull ItemStack itemStack) {
     super.playerDestroy(level, player, blockPos, blockState, blockEntity, itemStack);
     LootrAPI.playerDestroyed(level, player, blockPos, blockEntity);
   }

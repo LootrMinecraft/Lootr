@@ -9,6 +9,7 @@ import net.minecraft.advancements.criterion.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
 import noobanidus.mods.lootr.common.api.interfaces.advancement.ILootedStatTrigger;
 import noobanidus.mods.lootr.common.api.LootrRegistry;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Optional;
 
@@ -19,7 +20,7 @@ public class LootedStatTrigger extends SimpleCriterionTrigger<LootedStatTrigger.
   }
 
   @Override
-  public Codec<LootedStatTrigger.TriggerInstance> codec() {
+  public @NonNull Codec<LootedStatTrigger.TriggerInstance> codec() {
     return TriggerInstance.CODEC;
   }
 

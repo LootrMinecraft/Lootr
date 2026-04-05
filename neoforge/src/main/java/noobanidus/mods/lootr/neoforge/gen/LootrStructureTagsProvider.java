@@ -7,6 +7,7 @@ import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
+import org.jspecify.annotations.NonNull;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -16,7 +17,7 @@ public class LootrStructureTagsProvider extends IntrinsicHolderTagsProvider<Stru
   }
 
   @Override
-  protected void addTags(HolderLookup.Provider provider) {
+  protected void addTags(HolderLookup.@NonNull Provider provider) {
     tag(LootrTags.Structure.STRUCTURE_BLACKLIST); //.add(BuiltinStructures.DESERT_PYRAMID);
     tag(LootrTags.Structure.STRUCTURE_WHITELIST); //.add(BuiltinStructures.DESERT_PYRAMID);
     tag(LootrTags.Structure.DECAY_STRUCTURES); //.add(BuiltinStructures.DESERT_PYRAMID);
@@ -24,7 +25,7 @@ public class LootrStructureTagsProvider extends IntrinsicHolderTagsProvider<Stru
   }
 
   @Override
-  public String getName() {
+  public @NonNull String getName() {
     return "Lootr Structure Tags";
   }
 }

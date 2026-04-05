@@ -33,6 +33,7 @@ import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.LootrRegistry;
 import noobanidus.mods.lootr.common.block.entity.LootrChestBlockEntity;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 public class LootrChestBlock extends ChestBlock {
   static final VoxelShape SHAPE = Block.column(14.0, 0.0, 14.0);
@@ -47,7 +48,7 @@ public class LootrChestBlock extends ChestBlock {
   }
 
   @Override
-  public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult trace) {
+  public @NonNull InteractionResult useWithoutItem(@NonNull BlockState state, Level level, @NonNull BlockPos pos, @NonNull Player player, @NonNull BlockHitResult trace) {
     if (level.isClientSide() || player.isSpectator() || !(player instanceof ServerPlayer serverPlayer)) {
       return InteractionResult.CONSUME;
     }
@@ -60,12 +61,12 @@ public class LootrChestBlock extends ChestBlock {
   }
 
   @Override
-  public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+  public @NonNull BlockEntity newBlockEntity(@NonNull BlockPos pos, @NonNull BlockState state) {
     return new LootrChestBlockEntity(pos, state);
   }
 
   @Override
-  protected BlockState updateShape(BlockState blockState, LevelReader levelReader, ScheduledTickAccess scheduledTickAccess, BlockPos blockPos, Direction direction, BlockPos blockPos2, BlockState blockState2, RandomSource randomSource) {
+  protected @NonNull BlockState updateShape(BlockState blockState, @NonNull LevelReader levelReader, @NonNull ScheduledTickAccess scheduledTickAccess, @NonNull BlockPos blockPos, @NonNull Direction direction, @NonNull BlockPos blockPos2, @NonNull BlockState blockState2, @NonNull RandomSource randomSource) {
     if (blockState.getValue(WATERLOGGED)) {
       scheduledTickAccess.scheduleTick(blockPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelReader));
     }
@@ -74,12 +75,12 @@ public class LootrChestBlock extends ChestBlock {
   }
 
   @Override
-  public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+  public @NonNull VoxelShape getShape(@NonNull BlockState state, @NonNull BlockGetter worldIn, @NonNull BlockPos pos, @NonNull CollisionContext context) {
     return SHAPE;
   }
 
   @Override
-  public BlockState getStateForPlacement(BlockPlaceContext context) {
+  public @NonNull BlockState getStateForPlacement(BlockPlaceContext context) {
     Direction direction = context.getHorizontalDirection().getOpposite();
     FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
     return this.defaultBlockState().setValue(FACING, direction).setValue(TYPE, ChestType.SINGLE)
@@ -87,39 +88,39 @@ public class LootrChestBlock extends ChestBlock {
   }
 
   @Override
-  public FluidState getFluidState(BlockState state) {
+  public @NonNull FluidState getFluidState(BlockState state) {
     return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
   }
 
   @Override
   @Nullable
-  public MenuProvider getMenuProvider(BlockState state, Level worldIn, BlockPos pos) {
+  public MenuProvider getMenuProvider(@NonNull BlockState state, @NonNull Level worldIn, @NonNull BlockPos pos) {
     return null;
   }
 
   @Override
-  public boolean hasAnalogOutputSignal(BlockState pState) {
+  public boolean hasAnalogOutputSignal(@NonNull BlockState pState) {
     return true;
   }
 
   @Override
-  public float getDestroyProgress(BlockState pState, Player pPlayer, BlockGetter pLevel, BlockPos pPos) {
+  public float getDestroyProgress(@NonNull BlockState pState, @NonNull Player pPlayer, @NonNull BlockGetter pLevel, @NonNull BlockPos pPos) {
     return LootrAPI.getDestroyProgress(pState, pPlayer, pLevel, pPos, super.getDestroyProgress(pState, pPlayer, pLevel, pPos));
   }
 
   @Override
-  public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos, Direction direction) {
+  public int getAnalogOutputSignal(@NonNull BlockState pBlockState, @NonNull Level pLevel, @NonNull BlockPos pPos, @NonNull Direction direction) {
     return LootrAPI.getAnalogOutputSignal(pBlockState, pLevel, pPos, 0, direction);
   }
 
   @Override
   @Nullable
-  public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+  public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NonNull Level pLevel, @NonNull BlockState pState, @NonNull BlockEntityType<T> pBlockEntityType) {
     return ILootrBlockEntity::ticker;
   }
 
   @Override
-  public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
+  public void tick(@NonNull BlockState pState, ServerLevel pLevel, @NonNull BlockPos pPos, @NonNull RandomSource pRandom) {
     BlockEntity blockentity = pLevel.getBlockEntity(pPos);
     if (blockentity instanceof LootrChestBlockEntity chest) {
       chest.recheckOpen();
@@ -127,7 +128,7 @@ public class LootrChestBlock extends ChestBlock {
   }
 
   @Override
-  public void playerDestroy(Level level, Player player, BlockPos blockPos, BlockState blockState, @Nullable BlockEntity blockEntity, ItemStack itemStack) {
+  public void playerDestroy(@NonNull Level level, @NonNull Player player, @NonNull BlockPos blockPos, @NonNull BlockState blockState, @Nullable BlockEntity blockEntity, @NonNull ItemStack itemStack) {
     super.playerDestroy(level, player, blockPos, blockState, blockEntity, itemStack);
     LootrAPI.playerDestroyed(level, player, blockPos, blockEntity);
   }

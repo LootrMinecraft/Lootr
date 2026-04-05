@@ -8,6 +8,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import noobanidus.mods.lootr.neoforge.Lootr;
 import noobanidus.mods.lootr.neoforge.network.ILootrNeoForgePacket;
 import noobanidus.mods.lootr.neoforge.network.client.ClientHandlers;
+import org.jspecify.annotations.NonNull;
 
 public record PacketCloseContainer(BlockPos position) implements ILootrNeoForgePacket {
   public static final CustomPacketPayload.Type<PacketCloseContainer> TYPE = new CustomPacketPayload.Type<>(Lootr.rl("close_container"));
@@ -20,7 +21,7 @@ public record PacketCloseContainer(BlockPos position) implements ILootrNeoForgeP
 
 
   @Override
-  public Type<? extends CustomPacketPayload> type() {
+  public @NonNull Type<? extends CustomPacketPayload> type() {
     return TYPE;
   }
 }

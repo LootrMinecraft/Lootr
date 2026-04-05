@@ -14,6 +14,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.function.Predicate;
@@ -26,7 +27,7 @@ public class UnbakedBrushableModel extends noobanidus.mods.lootr.common.client.b
   }
 
   @Override
-  public MapCodec<? extends CustomUnbakedBlockStateModel> codec() {
+  public @NonNull MapCodec<? extends CustomUnbakedBlockStateModel> codec() {
     return CODEC;
   }
 
@@ -46,7 +47,7 @@ public class UnbakedBrushableModel extends noobanidus.mods.lootr.common.client.b
     }
 
     @Override
-    public void emitQuads(QuadEmitter emitter, BlockAndTintGetter blockView, BlockPos pos, BlockState state, RandomSource random, Predicate<@Nullable Direction> cullTest) {
+    public void emitQuads(@NonNull QuadEmitter emitter, @NonNull BlockAndTintGetter blockView, @NonNull BlockPos pos, @NonNull BlockState state, @NonNull RandomSource random, @NonNull Predicate<@Nullable Direction> cullTest) {
       boolean visuallyOpen = isOpenFromBATG(blockView, pos, state, random);
       if (visuallyOpen) {
         opened.emitQuads(emitter, blockView, pos, state, random, cullTest);
@@ -61,12 +62,12 @@ public class UnbakedBrushableModel extends noobanidus.mods.lootr.common.client.b
     }
 
     @Override
-    public @Nullable Object createGeometryKey(BlockAndTintGetter blockView, BlockPos pos, BlockState state, RandomSource random) {
+    public @Nullable Object createGeometryKey(@NonNull BlockAndTintGetter blockView, @NonNull BlockPos pos, @NonNull BlockState state, @NonNull RandomSource random) {
       return internalCreateObjectKey(blockView, pos, state, random);
     }
 
     @Override
-    public Material.Baked particleMaterial(BlockAndTintGetter blockView, BlockPos pos, BlockState state) {
+    public Material.@NonNull Baked particleMaterial(@NonNull BlockAndTintGetter blockView, @NonNull BlockPos pos, @NonNull BlockState state) {
       if (isOpenFromBATG(blockView, pos, state, null)) {
         return opened.particleMaterial(blockView, pos, state);
       }
@@ -79,7 +80,7 @@ public class UnbakedBrushableModel extends noobanidus.mods.lootr.common.client.b
     }
 
     @Override
-    public Material.Baked particleMaterial() {
+    public Material.@NonNull Baked particleMaterial() {
       return stage_0.particleMaterial();
     }
 

@@ -7,12 +7,13 @@ import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
 import noobanidus.mods.lootr.common.block.entity.LootrBarrelBlockEntity;
 import noobanidus.mods.lootr.common.client.ClientHooks;
 import noobanidus.mods.lootr.neoforge.block.ModelDataConstants;
+import org.jspecify.annotations.NonNull;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(LootrBarrelBlockEntity.class)
 public abstract class MixinLootrBarrelBlockEntity implements IBlockEntityExtension {
   @Override
-  public ModelData getModelData() {
+  public @NonNull ModelData getModelData() {
     ILootrContainerInstance provider = (ILootrContainerInstance) this;
     Player player = ClientHooks.getPlayer();
     if (player == null || !provider.hasClientOpened(player.getUUID())) {

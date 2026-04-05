@@ -11,6 +11,7 @@ import noobanidus.mods.lootr.common.api.data.ILootrData;
 import noobanidus.mods.lootr.common.api.interfaces.container.IMenuBuilder;
 import noobanidus.mods.lootr.common.api.data.ILootrInventoryStore;
 import noobanidus.mods.lootr.common.data.LootrInventory;
+import org.jspecify.annotations.NonNull;
 
 /**
  * This interface represents an actual "inventory" specific to
@@ -28,7 +29,7 @@ public interface ILootrInventory extends Container, MenuProvider {
   void setInventoryStore(ILootrInventoryStore containerStore);
 
   @Override
-  default Component getDisplayName() {
+  default @NonNull Component getDisplayName() {
     Component name = getData().getDataDisplayName();
     if (name == null) {
       return Component.empty();

@@ -9,12 +9,13 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import noobanidus.mods.lootr.common.api.interfaces.advancement.IAdvancementTrigger;
 import noobanidus.mods.lootr.common.api.LootrRegistry;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Optional;
 
 public class AdvancementTrigger extends SimpleCriterionTrigger<AdvancementTrigger.TriggerInstance> implements IAdvancementTrigger {
   @Override
-  public Codec<AdvancementTrigger.TriggerInstance> codec() {
+  public @NonNull Codec<AdvancementTrigger.TriggerInstance> codec() {
     return TriggerInstance.CODEC;
   }
 

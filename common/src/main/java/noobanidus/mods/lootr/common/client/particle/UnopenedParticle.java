@@ -5,6 +5,7 @@ import net.minecraft.client.particle.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.RandomSource;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 public class UnopenedParticle extends SingleQuadParticle {
@@ -41,13 +42,13 @@ public class UnopenedParticle extends SingleQuadParticle {
   }
 
   @Override
-  protected Layer getLayer() {
+  protected @NonNull Layer getLayer() {
     return Layer.TRANSLUCENT;
   }
 
   public record Provider(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
     @Override
-    public @Nullable Particle createParticle(SimpleParticleType particleType, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, RandomSource random) {
+    public @Nullable Particle createParticle(SimpleParticleType particleType, @NonNull ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, @NonNull RandomSource random) {
       return new UnopenedParticle(level, x, y, z, xSpeed, ySpeed, zSpeed, spriteSet.get(random));
     }
   }

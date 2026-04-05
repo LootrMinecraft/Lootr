@@ -8,13 +8,14 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.neoforge.network.ILootrNeoForgePacket;
 import noobanidus.mods.lootr.neoforge.network.client.ClientHandlers;
+import org.jspecify.annotations.NonNull;
 
 public record PacketOpenCart(int entityId) implements ILootrNeoForgePacket {
   public static final CustomPacketPayload.Type<PacketOpenCart> TYPE = new CustomPacketPayload.Type<>(LootrAPI.rl("open_cart"));
   public static final StreamCodec<ByteBuf, PacketOpenCart> STREAM_CODEC = StreamCodec.composite(ByteBufCodecs.VAR_INT, PacketOpenCart::entityId, PacketOpenCart::new);
 
   @Override
-  public Type<? extends CustomPacketPayload> type() {
+  public @NonNull Type<? extends CustomPacketPayload> type() {
     return TYPE;
   }
 

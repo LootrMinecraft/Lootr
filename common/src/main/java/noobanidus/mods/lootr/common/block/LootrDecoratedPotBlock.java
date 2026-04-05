@@ -33,6 +33,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.block.entity.LootrDecoratedPotBlockEntity;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 public class LootrDecoratedPotBlock extends DecoratedPotBlock {
   private static final VoxelShape BOUNDING_BOX = Block.box(1.0, 0.0, 1.0, 15.0, 8.0, 15.0);
@@ -42,7 +43,7 @@ public class LootrDecoratedPotBlock extends DecoratedPotBlock {
   }
 
   @Override
-  protected void attack(BlockState blockState, Level level, BlockPos blockPos, Player player) {
+  protected void attack(@NonNull BlockState blockState, Level level, @NonNull BlockPos blockPos, @NonNull Player player) {
     BlockEntity var7 = level.getBlockEntity(blockPos);
     if (var7 instanceof LootrDecoratedPotBlockEntity decoratedPotBlockEntity) {
       decoratedPotBlockEntity.wobble(DecoratedPotBlockEntity.WobbleStyle.NEGATIVE);
@@ -55,7 +56,7 @@ public class LootrDecoratedPotBlock extends DecoratedPotBlock {
   }
 
   @Override
-  public BlockState playerWillDestroy(Level level, BlockPos blockPos, BlockState blockState, Player player) {
+  public @NonNull BlockState playerWillDestroy(@NonNull Level level, @NonNull BlockPos blockPos, @NonNull BlockState blockState, @NonNull Player player) {
     this.spawnDestroyParticles(level, player, blockPos, blockState);
     if (blockState.is(BlockTags.GUARDED_BY_PIGLINS) && level instanceof ServerLevel sLevel) {
       PiglinAi.angerNearbyPiglins(sLevel, player, false);
@@ -66,14 +67,14 @@ public class LootrDecoratedPotBlock extends DecoratedPotBlock {
   }
 
   @Override
-  protected InteractionResult useItemOn(
-      ItemStack itemStack, BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult
+  protected @NonNull InteractionResult useItemOn(
+      @NonNull ItemStack itemStack, @NonNull BlockState blockState, @NonNull Level level, @NonNull BlockPos blockPos, @NonNull Player player, @NonNull InteractionHand interactionHand, @NonNull BlockHitResult blockHitResult
   ) {
     return useWithoutItem(blockState, level, blockPos, player, blockHitResult);
   }
 
   @Override
-  protected InteractionResult useWithoutItem(BlockState blockState, Level level, BlockPos blockPos, Player player, BlockHitResult blockHitResult) {
+  protected @NonNull InteractionResult useWithoutItem(@NonNull BlockState blockState, Level level, @NonNull BlockPos blockPos, @NonNull Player player, @NonNull BlockHitResult blockHitResult) {
     BlockEntity var7 = level.getBlockEntity(blockPos);
     if (var7 instanceof LootrDecoratedPotBlockEntity decoratedPotBlockEntity) {
       level.playSound(null, blockPos, SoundEvents.DECORATED_POT_INSERT_FAIL, SoundSource.BLOCKS, 1.0F, 1.0F);
@@ -89,11 +90,11 @@ public class LootrDecoratedPotBlock extends DecoratedPotBlock {
   }
 
   @Override
-  protected void onProjectileHit(Level level, BlockState blockState, BlockHitResult blockHitResult, Projectile projectile) {
+  protected void onProjectileHit(@NonNull Level level, @NonNull BlockState blockState, @NonNull BlockHitResult blockHitResult, @NonNull Projectile projectile) {
   }
 
   @Override
-  protected ItemStack getCloneItemStack(LevelReader levelReader, BlockPos blockPos, BlockState blockState, boolean boolValue) {
+  protected @NonNull ItemStack getCloneItemStack(LevelReader levelReader, @NonNull BlockPos blockPos, @NonNull BlockState blockState, boolean boolValue) {
     // boolValue is "include data"
     BlockEntity var5 = levelReader.getBlockEntity(blockPos);
     return var5 instanceof LootrDecoratedPotBlockEntity decoratedPotBlockEntity
@@ -102,7 +103,7 @@ public class LootrDecoratedPotBlock extends DecoratedPotBlock {
   }
 
   @Override
-  protected VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
+  protected @NonNull VoxelShape getShape(@NonNull BlockState blockState, @NonNull BlockGetter blockGetter, @NonNull BlockPos blockPos, @NonNull CollisionContext collisionContext) {
     switch (getCollisionState(blockGetter, blockPos, collisionContext)) {
       case PLAYER_OPEN, ITEM_ENTITY -> {
         return BOUNDING_BOX;
@@ -116,7 +117,7 @@ public class LootrDecoratedPotBlock extends DecoratedPotBlock {
   }
 
   @Override
-  protected VoxelShape getCollisionShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
+  protected @NonNull VoxelShape getCollisionShape(@NonNull BlockState blockState, @NonNull BlockGetter blockGetter, @NonNull BlockPos blockPos, @NonNull CollisionContext collisionContext) {
     switch (getCollisionState(blockGetter, blockPos, collisionContext)) {
       case PLAYER_OPEN, ITEM_ENTITY -> {
         return BOUNDING_BOX;
@@ -174,23 +175,23 @@ public class LootrDecoratedPotBlock extends DecoratedPotBlock {
   }
 
   @Override
-  protected boolean hasAnalogOutputSignal(BlockState blockState) {
+  protected boolean hasAnalogOutputSignal(@NonNull BlockState blockState) {
     return false;
   }
 
   @Override
-  protected int getAnalogOutputSignal(BlockState blockState, Level level, BlockPos blockPos, Direction direction) {
+  protected int getAnalogOutputSignal(@NonNull BlockState blockState, @NonNull Level level, @NonNull BlockPos blockPos, @NonNull Direction direction) {
     return 0;
   }
 
   @Override
-  public @Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
+  public @Nullable BlockEntity newBlockEntity(@NonNull BlockPos blockPos, @NonNull BlockState blockState) {
     return new LootrDecoratedPotBlockEntity(blockPos, blockState);
   }
 
   @Override
   @Nullable
-  public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+  public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NonNull Level pLevel, @NonNull BlockState pState, @NonNull BlockEntityType<T> pBlockEntityType) {
     return ILootrBlockEntity::ticker;
   }
 }

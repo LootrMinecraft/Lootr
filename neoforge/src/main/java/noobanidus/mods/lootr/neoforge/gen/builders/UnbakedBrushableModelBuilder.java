@@ -5,6 +5,7 @@ import net.neoforged.neoforge.client.model.block.CustomUnbakedBlockStateModel;
 import net.neoforged.neoforge.client.model.generators.blockstate.CustomBlockStateModelBuilder;
 import net.neoforged.neoforge.client.model.generators.blockstate.UnbakedMutator;
 import noobanidus.mods.lootr.neoforge.client.block.UnbakedBrushableModel;
+import org.jspecify.annotations.NonNull;
 
 public class UnbakedBrushableModelBuilder extends CustomBlockStateModelBuilder {
   private final UnbakedBrushableModel model;
@@ -14,17 +15,17 @@ public class UnbakedBrushableModelBuilder extends CustomBlockStateModelBuilder {
   }
 
   @Override
-  public UnbakedBrushableModelBuilder with(VariantMutator variantMutator) {
+  public @NonNull UnbakedBrushableModelBuilder with(@NonNull VariantMutator variantMutator) {
     return this;
   }
 
   @Override
-  public UnbakedBrushableModelBuilder with(UnbakedMutator variantMutator) {
+  public @NonNull UnbakedBrushableModelBuilder with(UnbakedMutator variantMutator) {
     return new UnbakedBrushableModelBuilder(variantMutator.apply(model));
   }
 
   @Override
-  public CustomUnbakedBlockStateModel toUnbaked() {
+  public @NonNull CustomUnbakedBlockStateModel toUnbaked() {
     return model;
   }
 }
