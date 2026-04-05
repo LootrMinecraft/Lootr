@@ -7,7 +7,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import noobanidus.mods.lootr.common.api.ILootrAPI;
+import noobanidus.mods.lootr.common.api.interfaces.ILootrAPI;
 import noobanidus.mods.lootr.common.api.accessor.AccessorMap;
 import noobanidus.mods.lootr.common.api.accessor.ILootrDataAccessor;
 import noobanidus.mods.lootr.common.api.accessor.ILootrItemFrameAccessor;

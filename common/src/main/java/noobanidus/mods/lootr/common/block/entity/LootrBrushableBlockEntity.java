@@ -418,17 +418,17 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
 
   @Override
   public @NotNull UUID getDataId() {
-    return simpleLootrInstance.getInfoUUID();
+    return simpleLootrInstance.getId();
   }
 
   @Override
   public int getDataKey() {
-    return simpleLootrInstance.getInfoKey();
+    return simpleLootrInstance.getKey();
   }
 
   @Override
   public Identifier getDataIdentifier() {
-    return simpleLootrInstance.getInfoIdentifier();
+    return simpleLootrInstance.getIdentifier();
   }
 
   @Override

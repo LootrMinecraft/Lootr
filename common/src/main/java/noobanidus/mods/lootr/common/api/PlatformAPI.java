@@ -8,6 +8,7 @@ import noobanidus.mods.lootr.common.api.accessor.ILootrItemFrameAccessor;
 import noobanidus.mods.lootr.common.api.data.DataToCopy;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
+import noobanidus.mods.lootr.common.api.interfaces.IPlatformAPI;
 
 /**
  * This contains platform-specific (i.e., NeoForge/Fabric) methods.

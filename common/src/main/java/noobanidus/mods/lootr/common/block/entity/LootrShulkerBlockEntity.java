@@ -134,7 +134,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
 
   @Override
   public int getContainerSize() {
-    return this.simpleLootrInstance.getInfoContainerSize();
+    return this.simpleLootrInstance.getContainerSize();
   }
 
   @Override
@@ -253,17 +253,17 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   @Override
   @NotNull
   public UUID getDataId() {
-    return this.simpleLootrInstance.getInfoUUID();
+    return this.simpleLootrInstance.getId();
   }
 
   @Override
   public int getDataKey() {
-    return this.simpleLootrInstance.getInfoKey();
+    return this.simpleLootrInstance.getKey();
   }
 
   @Override
   public Identifier getDataIdentifier() {
-    return this.simpleLootrInstance.getInfoIdentifier();
+    return this.simpleLootrInstance.getIdentifier();
   }
 
   @Override

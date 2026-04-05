@@ -70,7 +70,7 @@ public class SimpleLootrInstance {
     this.clientOpened = opened;
   }
 
-  public @NotNull UUID getInfoUUID() {
+  public @NotNull UUID getId() {
     if (providesOwnUuid) {
       throw new IllegalStateException("This instance provides its own UUID but hasn't overriden `getInfoUUID`: " + this);
     }
@@ -82,16 +82,16 @@ public class SimpleLootrInstance {
     return this.infoId;
   }
 
-  public int getInfoKey() {
+  public int getKey() {
     if (!providesOwnUuid && this.infoId == null) {
-      getInfoUUID();
+      getId();
     }
     return cachedKey;
   }
 
-  public Identifier getInfoIdentifier () {
+  public Identifier getIdentifier() {
     if (cachedIdentifier == null) {
-      getInfoUUID();
+      getId();
     }
     return cachedIdentifier;
   }
@@ -100,7 +100,7 @@ public class SimpleLootrInstance {
     return hasBeenOpened;
   }
 
-  public int getInfoContainerSize() {
+  public int getContainerSize() {
     return items.size();
   }
 
@@ -114,13 +114,13 @@ public class SimpleLootrInstance {
     }
     this.hasBeenOpened = input.getBooleanOr(NBTConstants.HAS_BEEN_OPENED, false);
     if (this.infoId == null && !providesOwnUuid) {
-      getInfoUUID();
+      getId();
     }
     clientOpeners.clear();
     input.read(NBTConstants.OPENERS, UUIDUtil.CODEC_SET).map(clientOpeners::addAll);
     if (input.getBooleanOr(NBTConstants.IS_CUSTOM_INVENTORY, false)) {
       if (this.referenceInventory == null) {
-        this.referenceInventory = NonNullList.withSize(getInfoContainerSize(), ItemStack.EMPTY);
+        this.referenceInventory = NonNullList.withSize(getContainerSize(), ItemStack.EMPTY);
       }
       ContainerHelper.loadAllItems(input, this.referenceInventory);
     }
@@ -128,7 +128,7 @@ public class SimpleLootrInstance {
 
   public void saveAdditional(ValueOutput output, boolean isClientSide) {
     if (!LootrAPI.shouldDiscard() && !providesOwnUuid) {
-      output.store(NBTConstants.INSTANCE_ID, UUIDUtil.CODEC, getInfoUUID());
+      output.store(NBTConstants.INSTANCE_ID, UUIDUtil.CODEC, getId());
     }
     output.putBoolean(NBTConstants.HAS_BEEN_OPENED, this.hasBeenOpened);
     if (isClientSide) { // level != null && level.isClientSide()) { ?????? This logic seems inverted.

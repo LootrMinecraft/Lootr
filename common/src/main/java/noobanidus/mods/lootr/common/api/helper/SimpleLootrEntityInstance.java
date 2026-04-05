@@ -18,7 +18,7 @@ public class SimpleLootrEntityInstance extends SimpleLootrInstance{
   }
 
   @Override
-  public @NotNull UUID getInfoUUID() {
+  public @NotNull UUID getId() {
     return uuidSupplier.get();
   }
 }
