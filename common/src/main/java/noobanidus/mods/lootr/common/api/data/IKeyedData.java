@@ -22,7 +22,7 @@ public interface IKeyedData {
   }
 
   static Identifier generateInfoIdentifier (int key) {
-    String hex = String.format("%02x", key);
+    String hex = Integer.toHexString(key);
     return LootrAPI.rl(hex.charAt(0) + "/" + hex);
   }
 }
