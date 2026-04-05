@@ -7,7 +7,7 @@ import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.config.LootrClientConfig;
 import noobanidus.mods.lootr.common.api.config.LootrCommonConfig;
 import noobanidus.mods.lootr.common.api.config.LootrConfig;
-import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.common.api.LootrRegistry;
 import noobanidus.mods.lootr.fabric.event.LootrEventsInit;
 import noobanidus.mods.lootr.fabric.impl.LootrAPIImpl;
 import noobanidus.mods.lootr.fabric.impl.LootrRegistryImpl;

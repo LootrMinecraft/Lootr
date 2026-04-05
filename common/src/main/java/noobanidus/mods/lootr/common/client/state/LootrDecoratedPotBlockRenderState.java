@@ -1,7 +1,7 @@
 package noobanidus.mods.lootr.common.client.state;
 
 import net.minecraft.client.renderer.blockentity.state.DecoratedPotRenderState;
-import noobanidus.mods.lootr.common.api.integration.PotDecorationsAdapter;
+import noobanidus.mods.lootr.common.api.integration.decorated_pot.PotDecorationsAdapter;
 
 public class LootrDecoratedPotBlockRenderState extends DecoratedPotRenderState {
   public boolean visuallyOpen;

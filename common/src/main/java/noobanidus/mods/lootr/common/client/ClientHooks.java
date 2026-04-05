@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
-import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.common.api.LootrRegistry;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinBlock;
 import org.jetbrains.annotations.Nullable;
 

@@ -26,7 +26,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
-import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.common.api.LootrRegistry;
 import noobanidus.mods.lootr.common.block.entity.LootrChestBlockEntity;
 import noobanidus.mods.lootr.common.block.entity.LootrTrappedChestBlockEntity;
 import org.jetbrains.annotations.Nullable;

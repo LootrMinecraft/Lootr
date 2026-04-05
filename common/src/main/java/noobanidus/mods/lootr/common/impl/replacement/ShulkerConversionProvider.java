@@ -4,7 +4,7 @@ import com.google.auto.service.AutoService;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import noobanidus.mods.lootr.common.api.LootrTags;
-import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.common.api.LootrRegistry;
 import noobanidus.mods.lootr.common.api.conversion.ILootrBlockConversionProvider;
 
 @AutoService(ILootrBlockConversionProvider.class)

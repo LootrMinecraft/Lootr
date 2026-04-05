@@ -7,7 +7,7 @@ import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
-import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.common.api.LootrRegistry;
 
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;

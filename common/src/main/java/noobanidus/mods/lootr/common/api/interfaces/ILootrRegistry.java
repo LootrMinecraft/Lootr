@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.common.api.registry;
+package noobanidus.mods.lootr.common.api.interfaces;
 
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.stats.Stat;

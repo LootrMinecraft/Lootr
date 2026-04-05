@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.common.api.integration;
+package noobanidus.mods.lootr.common.api.integration.decorated_pot;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.network.RegistryFriendlyByteBuf;

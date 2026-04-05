@@ -27,7 +27,7 @@ import net.minecraft.world.level.block.entity.DecoratedPotPatterns;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrConstants;
-import noobanidus.mods.lootr.common.api.integration.PotDecorationsAdapter;
+import noobanidus.mods.lootr.common.api.integration.decorated_pot.PotDecorationsAdapter;
 import noobanidus.mods.lootr.common.block.entity.LootrDecoratedPotBlockEntity;
 import noobanidus.mods.lootr.common.client.ClientHooks;
 import noobanidus.mods.lootr.common.client.state.LootrDecoratedPotBlockRenderState;

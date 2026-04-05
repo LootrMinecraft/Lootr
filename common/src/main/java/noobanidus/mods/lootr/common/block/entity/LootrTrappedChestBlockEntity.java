@@ -10,7 +10,7 @@ import noobanidus.mods.lootr.common.api.type.BuiltInLootrTypes;
 import noobanidus.mods.lootr.common.api.wrapper.ILootrBlockEntityWrapper;
 import noobanidus.mods.lootr.common.api.type.ILootrType;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
-import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.common.api.LootrRegistry;
 import org.jspecify.annotations.NonNull;
 
 public class LootrTrappedChestBlockEntity extends LootrChestBlockEntity {

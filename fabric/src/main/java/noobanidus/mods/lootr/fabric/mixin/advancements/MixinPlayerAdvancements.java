@@ -2,7 +2,7 @@ package noobanidus.mods.lootr.fabric.mixin.advancements;
 
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.server.PlayerAdvancements;
-import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.common.api.LootrRegistry;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

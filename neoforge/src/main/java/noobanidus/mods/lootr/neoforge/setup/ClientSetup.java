@@ -11,7 +11,7 @@ import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.model.standalone.SimpleUnbakedStandaloneModel;
 import net.neoforged.neoforge.client.model.standalone.StandaloneModelKey;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.common.api.LootrRegistry;
 import noobanidus.mods.lootr.common.block.entity.*;
 import noobanidus.mods.lootr.common.client.block.LootrBrushableBlockRenderer;
 import noobanidus.mods.lootr.common.client.block.LootrChestBlockRenderer;

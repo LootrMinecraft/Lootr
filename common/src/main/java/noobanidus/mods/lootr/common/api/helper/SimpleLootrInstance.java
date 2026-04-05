@@ -37,7 +37,6 @@ public class SimpleLootrInstance {
   protected boolean hasBeenOpened = false;
   protected boolean providesOwnUuid = false;
 
-
   public SimpleLootrInstance(Supplier<Set<UUID>> visualOpenersSupplier, int size) {
     this.items = NonNullList.withSize(size, ItemStack.EMPTY);
     this.visualOpenersSupplier = visualOpenersSupplier;

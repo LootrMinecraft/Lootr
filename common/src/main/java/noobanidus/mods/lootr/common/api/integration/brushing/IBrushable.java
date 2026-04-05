@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.common.api.integration;
+package noobanidus.mods.lootr.common.api.integration.brushing;
 
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;

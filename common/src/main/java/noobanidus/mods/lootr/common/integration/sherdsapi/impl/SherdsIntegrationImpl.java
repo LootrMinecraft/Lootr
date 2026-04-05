@@ -7,7 +7,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import noobanidus.mods.lootr.common.api.LootrConstants;
-import noobanidus.mods.lootr.common.api.integration.PotDecorationsAdapter;
+import noobanidus.mods.lootr.common.api.integration.decorated_pot.PotDecorationsAdapter;
 import org.jetbrains.annotations.Nullable;
 
 public class SherdsIntegrationImpl {

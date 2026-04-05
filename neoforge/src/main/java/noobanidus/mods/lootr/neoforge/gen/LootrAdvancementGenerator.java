@@ -15,7 +15,7 @@ import noobanidus.mods.lootr.common.advancement.AdvancementTrigger;
 import noobanidus.mods.lootr.common.advancement.ContainerTrigger;
 import noobanidus.mods.lootr.common.advancement.LootedStatTrigger;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.common.api.LootrRegistry;
 
 import java.util.function.Consumer;
 

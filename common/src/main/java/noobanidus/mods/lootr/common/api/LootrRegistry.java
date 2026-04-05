@@ -1,6 +1,5 @@
-package noobanidus.mods.lootr.common.api.registry;
+package noobanidus.mods.lootr.common.api;
 
-import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.stats.Stat;
 import net.minecraft.world.entity.EntityType;
@@ -10,10 +9,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import noobanidus.mods.lootr.common.api.advancement.IAdvancementTrigger;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.advancement.ILootedStatTrigger;
+import noobanidus.mods.lootr.common.api.interfaces.ILootrRegistry;
 
 /**
  * Platform-independent way to access registered objects.

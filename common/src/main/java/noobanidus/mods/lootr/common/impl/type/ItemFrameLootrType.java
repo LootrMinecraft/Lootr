@@ -5,7 +5,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 import noobanidus.mods.lootr.common.api.type.BuiltInLootrTypes;
 import noobanidus.mods.lootr.common.api.type.ILootrType;
-import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.common.api.LootrRegistry;
 import org.jetbrains.annotations.Nullable;
 
 @AutoService(ILootrType.class)

@@ -5,7 +5,7 @@ import net.neoforged.neoforge.common.data.LanguageProvider;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.config.LootrConfigStrings;
-import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.common.api.LootrRegistry;
 
 public class LootrLangProvider extends LanguageProvider {
   public LootrLangProvider(PackOutput output) {

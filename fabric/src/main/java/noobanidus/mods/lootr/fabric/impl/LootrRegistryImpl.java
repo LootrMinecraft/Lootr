@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import noobanidus.mods.lootr.common.api.advancement.IAdvancementTrigger;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.advancement.ILootedStatTrigger;
-import noobanidus.mods.lootr.common.api.registry.ILootrRegistry;
+import noobanidus.mods.lootr.common.api.interfaces.ILootrRegistry;
 import noobanidus.mods.lootr.fabric.init.*;
 
 public class LootrRegistryImpl implements ILootrRegistry {

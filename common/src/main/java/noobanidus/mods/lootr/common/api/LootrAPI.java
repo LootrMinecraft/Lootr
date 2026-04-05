@@ -39,7 +39,7 @@ import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.api.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
-import noobanidus.mods.lootr.common.api.integration.PotDecorationsAdapter;
+import noobanidus.mods.lootr.common.api.integration.decorated_pot.PotDecorationsAdapter;
 import noobanidus.mods.lootr.common.api.processor.ILootrBlockEntityProcessor;
 import noobanidus.mods.lootr.common.api.processor.ILootrEntityProcessor;
 import noobanidus.mods.lootr.common.api.type.ILootrType;

@@ -58,7 +58,7 @@ import noobanidus.mods.lootr.common.api.LootrConstants;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.command.ILootrCommandExtension;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
-import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.common.api.LootrRegistry;
 import noobanidus.mods.lootr.common.block.LootrBarrelBlock;
 import noobanidus.mods.lootr.common.block.LootrChestBlock;
 import noobanidus.mods.lootr.common.block.LootrShulkerBlock;

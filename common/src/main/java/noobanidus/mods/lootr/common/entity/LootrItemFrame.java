@@ -36,7 +36,7 @@ import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.helper.SimpleLootrEntityInstance;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.api.inventory.ILootrInventory;
-import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.common.api.LootrRegistry;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinItemFrame;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
