@@ -12,7 +12,7 @@ import snownee.jade.api.WailaPlugin;
 public class LootrWailaPlugin implements IWailaPlugin {
   @Override
   public void registerClient(IWailaClientRegistration registration) {
-    registration.addRayTraceCallback((hitResult, accessor, originalAccessor) -> {
+    registration.addRayTraceCallback((_, accessor, _) -> {
       if (accessor instanceof BlockAccessor blockAccessor) {
         BlockState newState;
         if (blockAccessor.getBlockState().is(LootrTags.Blocks.SANDS)) {
