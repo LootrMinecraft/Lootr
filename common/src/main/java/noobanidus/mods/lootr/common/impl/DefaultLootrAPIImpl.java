@@ -193,7 +193,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
           instance.performDecay();
           return;
         } else if (LootrAPI.shouldStartDecayWhileTicking() && !store.isDecayed()) {
-          int decayValue = LootrAPI.getRemainingDecayValue(instance);
+          int decayValue = store.remainingDecayTime();
           if (decayValue == -1) {
             if (LootrAPI.shouldBeginDecaying(instance)) {
               store.beginDecay();
@@ -208,7 +208,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
           instance.performUpdate();
         }
         if (LootrAPI.shouldStartRefreshWhileTicking() && !store.isRefreshed()) {
-          int refreshValue = LootrAPI.getRemainingRefreshValue(instance);
+          int refreshValue = store.remainingRefreshTime();
           if (refreshValue == -1) {
             if (LootrAPI.shouldBeginRefreshing(instance)) {
               store.beginRefresh();
@@ -281,41 +281,6 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   @Override
   public final boolean shouldDiscard() {
     return LootrAPI.shouldDiscardIdAndOpeners;
-  }
-
-  @Override
-  public final int getRemainingDecayValue(ILootrContainerInstance instance) {
-    return DataStorage.getDecayValue(instance);
-  }
-
-  @Override
-  public final boolean isDecayed(ILootrContainerInstance instance) {
-    return DataStorage.isDecayed(instance);
-  }
-
-  @Override
-  public final void setDecaying(ILootrContainerInstance instance) {
-    DataStorage.setDecaying(instance);
-  }
-
-  @Override
-  public final int getRemainingRefreshValue(ILootrContainerInstance instance) {
-    return DataStorage.getRefreshValue(instance);
-  }
-
-  @Override
-  public final boolean isRefreshed(ILootrContainerInstance instance) {
-    return DataStorage.isRefreshed(instance);
-  }
-
-  @Override
-  public final void setRefreshing(ILootrContainerInstance instance) {
-    DataStorage.setRefreshing(instance);
-  }
-
-  @Override
-  public final void removeRefreshed(ILootrContainerInstance instance) {
-    DataStorage.removeRefreshed(instance);
   }
 
   @Override

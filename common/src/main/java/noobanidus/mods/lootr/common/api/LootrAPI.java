@@ -72,10 +72,6 @@ public final class LootrAPI {
   public static ILootrAPI INSTANCE = null;
   public static boolean shouldDiscardIdAndOpeners;
 
-  public static boolean isReady() {
-    return INSTANCE != null;
-  }
-
   public static Identifier rl(String path) {
     return Identifier.fromNamespaceAndPath(MODID, path);
   }
@@ -84,20 +80,12 @@ public final class LootrAPI {
     return Identifier.fromNamespaceAndPath(namespace, path);
   }
 
-  public static Identifier mc(String path) {
-    return Identifier.withDefaultNamespace(path);
-  }
-
   public static Set<UUID> getPlayerIds() {
     return INSTANCE.getPlayerIds();
   }
 
   public static MinecraftServer getServer() {
     return INSTANCE.getServer();
-  }
-
-  public static int getCurrentTicks() {
-    return INSTANCE.getCurrentTicks();
   }
 
   public static boolean isFakePlayer(Player player) {
@@ -385,34 +373,6 @@ public final class LootrAPI {
   @Nullable
   public static ILootrInventoryStore getData(ILootrContainerInstance instance) {
     return INSTANCE.getData(instance);
-  }
-
-  public static int getRemainingDecayValue(ILootrContainerInstance instance) {
-    return INSTANCE.getRemainingDecayValue(instance);
-  }
-
-  public static boolean isDecayed(ILootrContainerInstance instance) {
-    return INSTANCE.isDecayed(instance);
-  }
-
-  public static void setDecaying(ILootrContainerInstance instance) {
-    INSTANCE.setDecaying(instance);
-  }
-
-  public static int getRemainingRefreshValue(ILootrContainerInstance instance) {
-    return INSTANCE.getRemainingRefreshValue(instance);
-  }
-
-  public static boolean isRefreshed(ILootrContainerInstance instance) {
-    return INSTANCE.isRefreshed(instance);
-  }
-
-  public static void setRefreshing(ILootrContainerInstance instance) {
-    INSTANCE.setRefreshing(instance);
-  }
-
-  public static void removeRefreshed(ILootrContainerInstance instance) {
-    INSTANCE.removeRefreshed(instance);
   }
 
   public static void handleInstanceOpen(@Nullable ILootrContainerInstance instance, ServerPlayer player) {

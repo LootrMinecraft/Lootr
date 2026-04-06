@@ -55,10 +55,10 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrConstants;
-import noobanidus.mods.lootr.common.api.LootrTags;
-import noobanidus.mods.lootr.common.api.interfaces.command.ILootrCommandExtension;
-import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.LootrRegistry;
+import noobanidus.mods.lootr.common.api.LootrTags;
+import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
+import noobanidus.mods.lootr.common.api.interfaces.command.ILootrCommandExtension;
 import noobanidus.mods.lootr.common.block.LootrBarrelBlock;
 import noobanidus.mods.lootr.common.block.LootrChestBlock;
 import noobanidus.mods.lootr.common.block.LootrShulkerBlock;
@@ -363,9 +363,14 @@ public class CommandLootr {
       }
       ILootrBlockEntity ibe = LootrAPI.wrapBlockEntity(be);
       if (ibe != null) {
-        LootrAPI.setRefreshing(ibe);
-        c.getSource()
-            .sendSuccess(() -> Component.literal("Container with ID " + (ibe).getDataId() + " has been set to refresh with a delay of " + LootrAPI.getRefreshValue()), false);
+        var store = LootrAPI.getData(ibe);
+        if (store != null) {
+          store.beginRefresh();
+          c.getSource()
+              .sendSuccess(() -> Component.literal("Container with ID " + (ibe).getDataId() + " has been set to refresh with a delay of " + LootrAPI.getRefreshValue()), false);
+        } else {
+          c.getSource().sendSuccess(() -> Component.literal("Please stand on a valid Lootr container."), false);
+        }
       } else {
         c.getSource().sendSuccess(() -> Component.literal("Please stand on a valid Lootr container."), false);
       }
@@ -382,9 +387,14 @@ public class CommandLootr {
       }
       ILootrBlockEntity ibe = LootrAPI.wrapBlockEntity(be);
       if (ibe != null) {
-        LootrAPI.setDecaying(ibe);
-        c.getSource()
-            .sendSuccess(() -> Component.literal("Container with ID " + (ibe).getDataId() + " has been set to decay with a delay of " + LootrAPI.getDecayValue()), false);
+        var store = LootrAPI.getData(ibe);
+        if (store != null) {
+          store.beginDecay();
+          c.getSource()
+              .sendSuccess(() -> Component.literal("Container with ID " + (ibe).getDataId() + " has been set to decay with a delay of " + LootrAPI.getDecayValue()), false);
+        } else {
+          c.getSource().sendSuccess(() -> Component.literal("Please stand on a valid Lootr container."), false);
+        }
       } else {
         c.getSource().sendSuccess(() -> Component.literal("Please stand on a valid Lootr container."), false);
       }
