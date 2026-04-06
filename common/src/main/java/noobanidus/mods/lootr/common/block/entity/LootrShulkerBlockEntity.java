@@ -37,6 +37,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
+import noobanidus.mods.lootr.common.api.NBTConstants;
 import noobanidus.mods.lootr.common.api.interfaces.wrapper.ILootrBlockEntityWrapper;
 import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
 import noobanidus.mods.lootr.common.api.interfaces.advancement.IContainerTrigger;
@@ -213,7 +214,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   @Override
   public void removeComponentsFromTag(@NonNull ValueOutput output) {
     super.removeComponentsFromTag(output);
-    output.discard("LootrId");
+    output.discard(NBTConstants.INSTANCE_ID);
   }
 
   @Override

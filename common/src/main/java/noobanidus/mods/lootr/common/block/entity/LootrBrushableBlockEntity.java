@@ -265,6 +265,7 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
   @SuppressWarnings("deprecation")
   @Override
   public @NonNull CompoundTag getUpdateTag(HolderLookup.@NonNull Provider provider) {
+    // TODO: Turn these into constants
     CompoundTag compoundTag = super.getUpdateTag(provider);
     compoundTag.storeNullable("hit_direction", Direction.LEGACY_ID_CODEC, this.hitDirection);
 
@@ -296,6 +297,7 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
     super.loadAdditional(input);
     this.tryLoadLootTable(input);
 
+    // TODO:
     this.hitDirection = input.read("hit_direction", Direction.LEGACY_ID_CODEC).orElse(null);
 
     this.brushingPlayer = input.read("brushing_player", UUIDUtil.CODEC).orElse(null);

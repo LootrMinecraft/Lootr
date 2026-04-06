@@ -31,6 +31,7 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
+import noobanidus.mods.lootr.common.api.NBTConstants;
 import noobanidus.mods.lootr.common.api.interfaces.wrapper.ILootrBlockEntityWrapper;
 import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
 import noobanidus.mods.lootr.common.api.interfaces.advancement.IContainerTrigger;
@@ -124,7 +125,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   @Override
   public void removeComponentsFromTag(@NonNull ValueOutput output) {
     super.removeComponentsFromTag(output);
-    output.discard("LootrId");
+    output.discard(NBTConstants.INSTANCE_ID);
   }
 
   @SuppressWarnings("Duplicates")

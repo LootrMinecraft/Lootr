@@ -129,7 +129,7 @@ public class SimpleLootrInstance {
       output.store(NBTConstants.INSTANCE_ID, UUIDUtil.CODEC, getId());
     }
     output.putBoolean(NBTConstants.HAS_BEEN_OPENED, this.hasBeenOpened);
-    if (isClientSide) { // level != null && level.isClientSide()) { ?????? This logic seems inverted.
+    if (isClientSide) {
       if (!clientOpeners.isEmpty()) {
         output.store(NBTConstants.OPENERS, UUIDUtil.CODEC_SET, clientOpeners);
       }

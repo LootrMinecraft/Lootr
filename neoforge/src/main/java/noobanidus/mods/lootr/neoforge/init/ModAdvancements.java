@@ -13,6 +13,7 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 public class ModAdvancements {
   private static final DeferredRegister<CriterionTrigger<?>> REGISTER = DeferredRegister.create(BuiltInRegistries.TRIGGER_TYPES, LootrAPI.MODID);
 
+  // Constants
   public static final DeferredHolder<CriterionTrigger<?>, AdvancementTrigger> ADVANCEMENT = REGISTER.register("advancement", AdvancementTrigger::new);
   public static final DeferredHolder<CriterionTrigger<?>, ContainerTrigger> CHEST = REGISTER.register("chest_opened", ContainerTrigger::new);
   public static final DeferredHolder<CriterionTrigger<?>, ContainerTrigger> BARREL = REGISTER.register("barrel_opened", ContainerTrigger::new);
