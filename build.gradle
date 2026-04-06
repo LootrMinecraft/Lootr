@@ -115,21 +115,22 @@ subprojects {
         filteringCharset = "UTF-8"
 
         def expandProps = [
-                "version"              : project.version,
-                "mod_version"          : project.mod_version,
-                "maven_group_id"       : project.mod_group_id,
-                "mod_id"               : project.mod_id,
-                "mod_display_name"     : project.mod_name,
-                "mod_description"      : project.mod_description,
-                "sources_url"          : project.sources_url,
-                "issues_url"           : project.issues_url,
-                "license_url"          : project.license_url,
-                "homepage_url"         : project.homepage_url,
+                "version"                : project.version,
+                "mod_version"            : project.mod_version,
+                "maven_group_id"         : project.mod_group_id,
+                "mod_id"                 : project.mod_id,
+                "mod_display_name"       : project.mod_name,
+                "mod_description"        : project.mod_description,
+                "sources_url"            : project.sources_url,
+                "issues_url"             : project.issues_url,
+                "license_url"            : project.license_url,
+                "homepage_url"           : project.homepage_url,
 
-                "minecraft_version"    : project.minecraft_version,
-                "neoforge_version"     : project.neoforge_version,
-                "fabric_loader_version": project.fabric_loader_version,
-                "java_version"         : "${javaVersion}",
+                "minecraft_version"      : project.minecraft_version,
+                "neoforge_version"       : project.neoforge_version,
+                "neoforge_version_range" : project.neoforge_version_range,
+                "fabric_loader_version"  : project.fabric_loader_version,
+                "java_version"           : "${javaVersion}",
         ]
 
         filesMatching(['pack.mcmeta', '*.mod.json', 'META-INF/neoforge.mods.toml']) {
