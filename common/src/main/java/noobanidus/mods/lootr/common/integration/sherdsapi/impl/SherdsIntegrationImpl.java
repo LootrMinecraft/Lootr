@@ -20,7 +20,6 @@ public class SherdsIntegrationImpl {
   private static DataComponentType<Identifier> type2 = null;
   private static boolean checked2 = false;
 
-  @SuppressWarnings("unchecked")
   @Nullable
   private static DataComponentType<?> getSherdsDecorationsComponent() {
     if (!checked) {
