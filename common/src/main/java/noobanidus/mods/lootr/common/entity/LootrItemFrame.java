@@ -333,11 +333,6 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   }
 
   @Override
-  public int getDataKey() {
-    return instance.getKey();
-  }
-
-  @Override
   public Identifier getDataIdentifier() {
     return instance.getIdentifier();
   }

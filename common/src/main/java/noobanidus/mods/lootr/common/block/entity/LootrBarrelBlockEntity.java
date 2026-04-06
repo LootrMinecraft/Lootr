@@ -95,11 +95,6 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   }
 
   @Override
-  public int getDataKey() {
-    return this.simpleLootrInstance.getKey();
-  }
-
-  @Override
   public Identifier getDataIdentifier() {
     return this.simpleLootrInstance.getIdentifier();
   }

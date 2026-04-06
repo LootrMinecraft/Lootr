@@ -301,11 +301,6 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   }
 
   @Override
-  public int getDataKey() {
-    return lootrInstance.getKey();
-  }
-
-  @Override
   public Identifier getDataIdentifier() {
     return lootrInstance.getIdentifier();
   }

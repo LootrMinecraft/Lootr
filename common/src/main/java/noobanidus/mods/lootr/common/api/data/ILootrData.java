@@ -78,9 +78,6 @@ public interface ILootrData extends IKeyedData {
   UUID getDataId();
 
   @Override
-  int getDataKey();
-
-  @Override
   Identifier getDataIdentifier();
 
   // The container has been opened at some point in time and has at least one inventory contained (unless inventories have been cleared).
@@ -124,7 +121,6 @@ public interface ILootrData extends IKeyedData {
   Codec<ILootrData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
       ILootrType.CODEC.fieldOf("type").forGetter(ILootrData::getDataType),
       UUIDUtil.CODEC.fieldOf("uuid").forGetter(ILootrData::getDataId),
-      Codec.INT.fieldOf("key").forGetter(ILootrData::getDataKey),
       Identifier.CODEC.fieldOf("identifier").forGetter(ILootrData::getDataIdentifier),
       BlockPos.CODEC.fieldOf("position").forGetter(ILootrData::getDataPos),
       ComponentSerialization.CODEC.optionalFieldOf("name").forGetter(i -> Optional.ofNullable(i.getDataDisplayName())),

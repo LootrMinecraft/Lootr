@@ -289,15 +289,6 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   private boolean cacheChecked = false;
 
   @Override
-  public int getDataKey() {
-    if (!cacheChecked) {
-      cacheChecked = true;
-      this.cachedKey = IKeyedData.generateInfoIntKey(getDataId());
-    }
-    return cachedKey;
-  }
-
-  @Override
   public Identifier getDataIdentifier() {
     if (this.cachedIdentifier == null) {
       this.cachedIdentifier = IKeyedData.generateInfoIdentifier(getDataId());

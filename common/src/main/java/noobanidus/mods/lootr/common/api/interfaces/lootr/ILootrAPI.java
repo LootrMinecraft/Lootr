@@ -273,20 +273,6 @@ public interface ILootrAPI {
 
   boolean performPiecewiseCheck();
 
-  int getRemainingDecayValue(ILootrContainerInstance instance);
-
-  boolean isDecayed(ILootrContainerInstance instance);
-
-  void setDecaying(ILootrContainerInstance instance);
-
-  int getRemainingRefreshValue(ILootrContainerInstance instance);
-
-  boolean isRefreshed(ILootrContainerInstance instance);
-
-  void setRefreshing(ILootrContainerInstance instance);
-
-  void removeRefreshed(ILootrContainerInstance instance);
-
   @Nullable
   BlockState getConvertedBlockState(BlockState original);
 

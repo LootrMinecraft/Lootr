@@ -21,7 +21,6 @@ public record CustomLootrContainerInstance(
     Level level,
     ILootrType type,
     UUID id,
-    int key,
     Identifier identifier,
     BlockPos pos,
     int containerSize,
@@ -39,11 +38,6 @@ public record CustomLootrContainerInstance(
   @Override
   public @NotNull UUID getDataId() {
     return id();
-  }
-
-  @Override
-  public int getDataKey() {
-    return key();
   }
 
   @Override

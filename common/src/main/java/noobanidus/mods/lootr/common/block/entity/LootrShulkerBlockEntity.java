@@ -258,11 +258,6 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   @Override
-  public int getDataKey() {
-    return this.simpleLootrInstance.getKey();
-  }
-
-  @Override
   public Identifier getDataIdentifier() {
     return this.simpleLootrInstance.getIdentifier();
   }

@@ -191,11 +191,6 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   }
 
   @Override
-  public int getDataKey() {
-    return this.simpleLootrInstance.getKey();
-  }
-
-  @Override
   public Identifier getDataIdentifier() {
     return this.simpleLootrInstance.getIdentifier();
   }

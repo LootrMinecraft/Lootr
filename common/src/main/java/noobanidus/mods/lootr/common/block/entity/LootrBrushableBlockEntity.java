@@ -424,11 +424,6 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
   }
 
   @Override
-  public int getDataKey() {
-    return simpleLootrInstance.getKey();
-  }
-
-  @Override
   public Identifier getDataIdentifier() {
     return simpleLootrInstance.getIdentifier();
   }

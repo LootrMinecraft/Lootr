@@ -51,7 +51,8 @@ public interface ILootrContainerInstance extends ILootrData, IClientHasOpeners {
     } else if (blockEntity instanceof ILootrContainerInstance instance) {
       return instance;
     }
-    return new RandomizableContainerInstance(blockEntity, id, IKeyedData.generateInfoIntKey(id), IKeyedData.generateInfoIdentifier(id), null);
+    // >>> 'cos signedednessingthing
+    return new RandomizableContainerInstance(blockEntity, id, IKeyedData.generateInfoIdentifier(id), null);
   }
 
   static ILootrContainerInstance of(RandomizableContainerBlockEntity blockEntity, UUID id, NonNullList<ItemStack> customInventory) {
@@ -60,11 +61,13 @@ public interface ILootrContainerInstance extends ILootrData, IClientHasOpeners {
     } else if (blockEntity instanceof ILootrContainerInstance instance) {
       return instance;
     }
-    return new RandomizableContainerInstance(blockEntity, id, IKeyedData.generateInfoIntKey(id), IKeyedData.generateInfoIdentifier(id), customInventory);
+    // >>> 'cos signedednessingthing
+    return new RandomizableContainerInstance(blockEntity, id, IKeyedData.generateInfoIdentifier(id), customInventory);
   }
 
   static ILootrContainerInstance of(Level level, ILootrType type, UUID id, BlockPos pos, int containerSize, ResourceKey<LootTable> lootTable, long lootSeed, Component displayName, ResourceKey<Level> dimension, NonNullList<ItemStack> customInventory) {
-    return new CustomLootrContainerInstance(level, type, id, IKeyedData.generateInfoIntKey(id), IKeyedData.generateInfoIdentifier(id), pos, containerSize, lootTable, lootSeed, displayName, dimension, customInventory);
+    // >>> 'cos signedednessingthing
+    return new CustomLootrContainerInstance(level, type, id, IKeyedData.generateInfoIdentifier(id), pos, containerSize, lootTable, lootSeed, displayName, dimension, customInventory);
   }
 
   Level getDataLevel ();

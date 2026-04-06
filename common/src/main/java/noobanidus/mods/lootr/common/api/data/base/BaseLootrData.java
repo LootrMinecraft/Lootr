@@ -23,23 +23,22 @@ import java.util.UUID;
  * It is specifically used to store data in `LootrSavedData`.
  */
 public record BaseLootrData(ILootrType type, UUID uuid,
-                            int key, Identifier identifier, BlockPos pos, @Nullable Component name,
+                            Identifier identifier, BlockPos pos, @Nullable Component name,
                             ResourceKey<Level> dimension,
                             int containerSize, NonNullList<ItemStack> customInventory, ResourceKey<LootTable> table,
                             long seed) implements ILootrData {
   @SuppressWarnings({"OptionalUsedAsFieldOrParameterType"})
-  public BaseLootrData(ILootrType iLootrType, UUID uuid, int key, Identifier identifier, BlockPos pos, Optional<Component> component, ResourceKey<Level> levelResourceKey, Integer integer, Optional<NonNullList<ItemStack>> itemStacks, Optional<ResourceKey<LootTable>> lootTableResourceKey, Optional<Long> aLong) {
-    this(iLootrType, uuid, key, identifier, pos, component.orElse(null), levelResourceKey, integer, itemStacks.orElse(null), lootTableResourceKey.orElse(null), aLong.orElse(-1L));
+  public BaseLootrData(ILootrType iLootrType, UUID uuid, Identifier identifier, BlockPos pos, Optional<Component> component, ResourceKey<Level> levelResourceKey, Integer integer, Optional<NonNullList<ItemStack>> itemStacks, Optional<ResourceKey<LootTable>> lootTableResourceKey, Optional<Long> aLong) {
+    this(iLootrType, uuid, identifier, pos, component.orElse(null), levelResourceKey, integer, itemStacks.orElse(null), lootTableResourceKey.orElse(null), aLong.orElse(-1L));
   }
 
   public static BaseLootrData copy(ILootrData info) {
-    return new BaseLootrData(info.getDataType(), info.getDataId(), info.getDataKey(), info.getDataIdentifier(), info.getDataPos(), info.getDataDisplayName(), info.getDataDimension(), info.getDataContainerSize(), info.getDataReferenceInventory(), info.getDataLootTable(), info.getDataLootSeed());
+    return new BaseLootrData(info.getDataType(), info.getDataId(), info.getDataIdentifier(), info.getDataPos(), info.getDataDisplayName(), info.getDataDimension(), info.getDataContainerSize(), info.getDataReferenceInventory(), info.getDataLootTable(), info.getDataLootSeed());
   }
 
-  public BaseLootrData(ILootrType type, UUID uuid, int key, Identifier identifier, BlockPos pos, @Nullable Component name, ResourceKey<Level> dimension, int containerSize, NonNullList<ItemStack> customInventory, ResourceKey<LootTable> table, long seed) {
+  public BaseLootrData(ILootrType type, UUID uuid, Identifier identifier, BlockPos pos, @Nullable Component name, ResourceKey<Level> dimension, int containerSize, NonNullList<ItemStack> customInventory, ResourceKey<LootTable> table, long seed) {
     this.type = type;
     this.uuid = uuid;
-    this.key = key;
     this.identifier = identifier;
     this.pos = pos;
     this.name = name;
@@ -58,11 +57,6 @@ public record BaseLootrData(ILootrType type, UUID uuid,
   @Override
   public @NotNull UUID getDataId() {
     return uuid();
-  }
-
-  @Override
-  public int getDataKey() {
-    return key();
   }
 
   @Override

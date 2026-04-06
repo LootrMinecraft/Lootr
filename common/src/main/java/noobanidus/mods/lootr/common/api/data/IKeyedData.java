@@ -10,19 +10,13 @@ public interface IKeyedData {
 
   Identifier getDataIdentifier();
 
-  int getDataKey();
-
-  static int generateInfoIntKey (UUID id) {
-    // >>> 'cos signedednessingthing
-    return (int) (id.getMostSignificantBits() >>> 56);
+  static Identifier generateInfoIdentifier (IKeyedData data) {
+    return generateInfoIdentifier(data.getDataId());
   }
 
-  static Identifier generateInfoIdentifier (UUID id) {
-    return generateInfoIdentifier(generateInfoIntKey(id));
-  }
-
-  static Identifier generateInfoIdentifier (int key) {
-    String hex = Integer.toHexString(key);
+  static Identifier generateInfoIdentifier (UUID dataId) {
+    // >>> 'cos signedness
+    String hex = Integer.toHexString((int) (dataId.getMostSignificantBits() >>> 56));
     return LootrAPI.rl(hex.charAt(0) + "/" + hex);
   }
 }

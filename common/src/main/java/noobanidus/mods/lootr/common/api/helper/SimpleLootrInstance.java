@@ -31,7 +31,6 @@ public class SimpleLootrInstance {
 
   protected NonNullList<ItemStack> referenceInventory = null;
   protected UUID id = null;
-  protected int cachedKey;
   protected Identifier cachedIdentifier;
   protected boolean clientOpened = false;
   protected boolean hasBeenOpened = false;
@@ -74,22 +73,14 @@ public class SimpleLootrInstance {
     }
     if (this.id == null) {
       this.id = UUID.randomUUID();
-      this.cachedKey = IKeyedData.generateInfoIntKey(this.id);
-      this.cachedIdentifier = IKeyedData.generateInfoIdentifier(this.id);
     }
     return this.id;
-  }
-
-  public int getKey() {
-    if (!providesOwnUuid && this.id == null) {
-      getId();
-    }
-    return cachedKey;
   }
 
   public Identifier getIdentifier() {
     if (cachedIdentifier == null) {
       getId();
+      this.cachedIdentifier = IKeyedData.generateInfoIdentifier(this.id);
     }
     return cachedIdentifier;
   }

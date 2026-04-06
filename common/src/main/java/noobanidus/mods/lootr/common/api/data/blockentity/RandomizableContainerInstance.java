@@ -23,7 +23,7 @@ import java.util.UUID;
 // Currently used by:
 // - Bumblezone integration
 public record RandomizableContainerInstance(
-    @NotNull RandomizableContainerBlockEntity blockEntity, UUID id, int key, Identifier identifier,
+    @NotNull RandomizableContainerBlockEntity blockEntity, UUID id, Identifier identifier,
     NonNullList<ItemStack> customInventory) implements ILootrBlockEntity {
 
   @Override
@@ -34,11 +34,6 @@ public record RandomizableContainerInstance(
   @Override
   public @NotNull UUID getDataId() {
     return id();
-  }
-
-  @Override
-  public int getDataKey() {
-    return key();
   }
 
   @Override
