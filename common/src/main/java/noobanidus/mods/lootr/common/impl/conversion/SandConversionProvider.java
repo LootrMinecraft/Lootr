@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.common.impl.replacement;
+package noobanidus.mods.lootr.common.impl.conversion;
 
 import com.google.auto.service.AutoService;
 import net.minecraft.tags.TagKey;
@@ -8,14 +8,14 @@ import noobanidus.mods.lootr.common.api.LootrRegistry;
 import noobanidus.mods.lootr.common.api.conversion.ILootrBlockConversionProvider;
 
 @AutoService(ILootrBlockConversionProvider.class)
-public class PotConversionProvider implements ILootrBlockConversionProvider {
+public class SandConversionProvider implements ILootrBlockConversionProvider {
   @Override
   public TagKey<Block> getApplicableTag() {
-    return LootrTags.Blocks.CONVERT_POTS;
+    return LootrTags.Blocks.CONVERT_SANDS;
   }
 
   @Override
   public Block getBlock() {
-    return LootrRegistry.getDecoratedPotBlock();
+    return LootrRegistry.getSuspiciousSandBlock();
   }
 }

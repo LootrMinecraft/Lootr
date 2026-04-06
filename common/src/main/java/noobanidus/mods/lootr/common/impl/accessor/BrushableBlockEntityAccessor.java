@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.common.impl.adapter;
+package noobanidus.mods.lootr.common.impl.accessor;
 
 import com.google.auto.service.AutoService;
 import net.minecraft.resources.ResourceKey;

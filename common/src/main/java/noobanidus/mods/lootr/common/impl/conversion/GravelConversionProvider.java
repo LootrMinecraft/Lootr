@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.common.impl.replacement;
+package noobanidus.mods.lootr.common.impl.conversion;
 
 import com.google.auto.service.AutoService;
 import net.minecraft.tags.TagKey;
@@ -8,14 +8,14 @@ import noobanidus.mods.lootr.common.api.LootrRegistry;
 import noobanidus.mods.lootr.common.api.conversion.ILootrBlockConversionProvider;
 
 @AutoService(ILootrBlockConversionProvider.class)
-public class BarrelConversionProvider implements ILootrBlockConversionProvider {
+public class GravelConversionProvider implements ILootrBlockConversionProvider {
   @Override
   public TagKey<Block> getApplicableTag() {
-    return LootrTags.Blocks.CONVERT_BARRELS;
+    return LootrTags.Blocks.CONVERT_GRAVELS;
   }
 
   @Override
   public Block getBlock() {
-    return LootrRegistry.getBarrelBlock();
+    return LootrRegistry.getSuspiciousGravelBlock();
   }
 }

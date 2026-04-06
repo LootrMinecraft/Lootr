@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.common.impl.replacement;
+package noobanidus.mods.lootr.common.impl.conversion;
 
 import com.google.auto.service.AutoService;
 import net.minecraft.tags.TagKey;

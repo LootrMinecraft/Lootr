@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.common.impl.replacement;
+package noobanidus.mods.lootr.common.impl.conversion;
 
 import com.google.auto.service.AutoService;
 import net.minecraft.tags.TagKey;
@@ -8,19 +8,14 @@ import noobanidus.mods.lootr.common.api.LootrRegistry;
 import noobanidus.mods.lootr.common.api.conversion.ILootrBlockConversionProvider;
 
 @AutoService(ILootrBlockConversionProvider.class)
-public class TrappedChestConversionProvider implements ILootrBlockConversionProvider {
-  @Override
-  public int getPriority() {
-    return 10;
-  }
-
+public class PotConversionProvider implements ILootrBlockConversionProvider {
   @Override
   public TagKey<Block> getApplicableTag() {
-    return LootrTags.Blocks.CONVERT_TRAPPED_CHESTS;
+    return LootrTags.Blocks.CONVERT_POTS;
   }
 
   @Override
   public Block getBlock() {
-    return LootrRegistry.getTrappedChestBlock();
+    return LootrRegistry.getDecoratedPotBlock();
   }
 }
