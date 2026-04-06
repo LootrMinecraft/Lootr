@@ -61,4 +61,6 @@ public interface ILootrInventoryStore extends IHasOpeners, IMarkChanged {
   ILootrInventory getInventory(UUID id);
 
   ILootrInventory createInventory(ILootrContainerInstance instance, ServerPlayer player, ILootFiller filler);
+
+  void setSection (ILootrSection section);
 }

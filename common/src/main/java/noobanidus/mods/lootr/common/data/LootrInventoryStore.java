@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
 
+// TODO: Pull quite a bit of stuff up
 public class LootrInventoryStore implements ILootrInventoryStore {
   @SuppressWarnings("unchecked")
   public static final Codec<LootrInventoryStore> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -39,11 +40,13 @@ public class LootrInventoryStore implements ILootrInventoryStore {
   private final Set<UUID> openers = new ObjectLinkedOpenHashSet<>();
   private final Set<UUID> actualOpeners = new ObjectLinkedOpenHashSet<>();
 
-  protected LootrInventoryStore(ILootrData info) {
+  private ILootrSection section;
+
+  public LootrInventoryStore(ILootrData info) {
     this(info, false);
   }
 
-  protected LootrInventoryStore(ILootrData info, boolean noCopy) {
+  public LootrInventoryStore(ILootrData info, boolean noCopy) {
     if (noCopy) {
       this.info = info;
     } else {
@@ -62,10 +65,6 @@ public class LootrInventoryStore implements ILootrInventoryStore {
     this.actualOpeners.addAll(actualOpeners);
     this.decayTime = decayTime;
     this.refreshTime = refreshTime;
-  }
-
-  public static Supplier<LootrInventoryStore> fromInfo(ILootrData info) {
-    return () -> new LootrInventoryStore(info);
   }
 
   @Override
@@ -121,14 +120,16 @@ public class LootrInventoryStore implements ILootrInventoryStore {
 
   @Override
   public void markInstanceChanged() {
-    // TODO:
-    //setDirty();
+    // TODO?
   }
 
   @Override
   public void markSectionChanged() {
-    // TODO:
-    markInstanceChanged();
+    if (this.section != null) {
+      this.section.markSectionChanged();
+    } else {
+      LootrAPI.LOG.error("Attempted to mark section changed for inventory store without section {}", this.getData().getDataId());
+    }
   }
 
   @Override
@@ -158,6 +159,11 @@ public class LootrInventoryStore implements ILootrInventoryStore {
       provider.informPlayerCannotOpen(player);
       return null;
     }
+  }
+
+  @Override
+  public void setSection(ILootrSection section) {
+    this.section = section;
   }
 
   @Override
@@ -235,13 +241,6 @@ public class LootrInventoryStore implements ILootrInventoryStore {
     markInstanceChanged();
   }
 
-  // TODO: Is there disparity between the usage of "hasBeenOpened" in ILootrSavedData
-  // versus "hasBeenOpened" in ILootrInfoProvider? There's no synchronization between them.
-  // The main reason it exists in the provider is to prevent tick events from causing
-  // data to be created and then saved, which was apparently causing TPS lag for someone.
-  // It's also used to ignore specific saved data files when clearing via command.
-
-  // This is triggered in createInventory and reset in refresh.
   public boolean hasInventories() {
     return hasInventories;
   }
