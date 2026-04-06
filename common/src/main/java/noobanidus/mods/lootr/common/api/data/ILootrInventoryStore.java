@@ -16,6 +16,18 @@ public interface ILootrInventoryStore extends IHasOpeners, IMarkChanged {
 
   boolean isDecaying();
 
+  boolean isDecayed ();
+
+  boolean isRefreshed ();
+
+  void beginRefresh ();
+
+  void beginDecay ();
+
+  int remainingDecayTime ();
+
+  int remainingRefreshTime ();
+
   void update(ILootrData info);
 
   void performRefresh();

@@ -151,9 +151,9 @@ public interface ILootrAPI {
 
   Set<String> getModidDimensionBlacklist();
 
-  boolean isDecaying(ILootrContainerInstance instance);
+  boolean shouldBeginDecaying(ILootrContainerInstance instance);
 
-  boolean isRefreshing(ILootrContainerInstance instance);
+  boolean shouldBeginRefreshing(ILootrContainerInstance instance);
 
   Set<String> getModidDecayWhitelist();
 

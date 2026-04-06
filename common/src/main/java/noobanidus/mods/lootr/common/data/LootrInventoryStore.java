@@ -171,6 +171,54 @@ public class LootrInventoryStore implements ILootrInventoryStore {
   }
 
   @Override
+  public boolean isDecayed() {
+    if (decayTime == -1) {
+      return false;
+    }
+
+    return LootrAPI.getGameTime() >= decayTime;
+  }
+
+  @Override
+  public boolean isRefreshed () {
+    if (refreshTime == -1) {
+      return false;
+    }
+
+    return LootrAPI.getGameTime() >= refreshTime;
+  }
+
+  @Override
+  public void beginDecay() {
+    decayTime = LootrAPI.getGameTime() + LootrAPI.getDecayValue();
+    markInstanceChanged();
+  }
+
+  @Override
+  public void beginRefresh () {
+    refreshTime = LootrAPI.getGameTime() + LootrAPI.getRefreshValue();
+    markInstanceChanged();
+  }
+
+  @Override
+  public int remainingDecayTime() {
+    if (decayTime == -1) {
+      return -1;
+    }
+
+    return (int) (decayTime - LootrAPI.getGameTime());
+  }
+
+  @Override
+  public int remainingRefreshTime() {
+    if (refreshTime == -1) {
+      return -1;
+    }
+
+    return (int) (refreshTime - LootrAPI.getGameTime());
+  }
+
+  @Override
   public void update(ILootrData info) {
     BaseLootrData infoCopy = BaseLootrData.copy(info);
     if (!infoCopy.equals(this.info)) {
@@ -183,6 +231,7 @@ public class LootrInventoryStore implements ILootrInventoryStore {
   public void performRefresh() {
     inventories.clear();
     hasInventories = false;
+    refreshTime = -1;
     markInstanceChanged();
   }
 

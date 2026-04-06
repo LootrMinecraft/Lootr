@@ -209,10 +209,9 @@ public final class LootrAPI {
     return INSTANCE.getModidDimensionBlacklist();
   }
 
-  public static boolean isDecaying(ILootrContainerInstance instance) {
-    return INSTANCE.isDecaying(instance);
+  public static boolean shouldBeginDecaying(ILootrContainerInstance instance) {
+    return INSTANCE.shouldBeginDecaying(instance);
   }
-
 
   public static Set<String> getModidDecayWhitelist() {
     return INSTANCE.getModidDecayWhitelist();
@@ -238,8 +237,8 @@ public final class LootrAPI {
     return INSTANCE.getRefreshDimensions();
   }
 
-  public static boolean isRefreshing(ILootrContainerInstance instance) {
-    return INSTANCE.isRefreshing(instance);
+  public static boolean shouldBeginRefreshing(ILootrContainerInstance instance) {
+    return INSTANCE.shouldBeginRefreshing(instance);
   }
 
   public static boolean reportUnresolvedTables() {

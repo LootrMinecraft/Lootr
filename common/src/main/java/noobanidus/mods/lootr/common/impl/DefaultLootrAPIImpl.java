@@ -34,25 +34,25 @@ import net.minecraft.world.level.block.entity.PotDecorations;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.*;
 import net.minecraft.world.level.storage.loot.LootTable;
-import noobanidus.mods.lootr.common.api.config.*;
-import noobanidus.mods.lootr.common.api.interfaces.lootr.ILootrAPI;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrConstants;
-import noobanidus.mods.lootr.common.api.interfaces.accessor.ILootrDataAccessor;
-import noobanidus.mods.lootr.common.api.interfaces.accessor.ILootrItemFrameAccessor;
+import noobanidus.mods.lootr.common.api.LootrRegistry;
+import noobanidus.mods.lootr.common.api.config.*;
 import noobanidus.mods.lootr.common.api.config.client.ClientTextureType;
 import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
 import noobanidus.mods.lootr.common.api.data.ILootrInventoryStore;
-import noobanidus.mods.lootr.common.api.filler.ILootFiller;
-import noobanidus.mods.lootr.common.api.interfaces.container.IMenuBuilder;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
-import noobanidus.mods.lootr.common.api.interfaces.inventory.ILootrInventory;
-import noobanidus.mods.lootr.common.api.interfaces.filter.ILootrFilter;
+import noobanidus.mods.lootr.common.api.filler.ILootFiller;
 import noobanidus.mods.lootr.common.api.integration.decorated.PotDecorationsAdapter;
+import noobanidus.mods.lootr.common.api.interfaces.accessor.ILootrDataAccessor;
+import noobanidus.mods.lootr.common.api.interfaces.accessor.ILootrItemFrameAccessor;
+import noobanidus.mods.lootr.common.api.interfaces.container.IMenuBuilder;
+import noobanidus.mods.lootr.common.api.interfaces.filter.ILootrFilter;
+import noobanidus.mods.lootr.common.api.interfaces.inventory.ILootrInventory;
+import noobanidus.mods.lootr.common.api.interfaces.lootr.ILootrAPI;
 import noobanidus.mods.lootr.common.api.interfaces.processor.ILootrBlockEntityProcessor;
 import noobanidus.mods.lootr.common.api.interfaces.processor.ILootrEntityProcessor;
-import noobanidus.mods.lootr.common.api.LootrRegistry;
 import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
 import noobanidus.mods.lootr.common.client.ClientHooks;
 import noobanidus.mods.lootr.common.data.DataStorage;
@@ -96,48 +96,61 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
     if (!instance.canPlayerOpen(player)) {
       return;
     }
-    if (LootrAPI.isDecayed(instance) && instance.canDecay()) {
-      instance.performDecay();
-      player.sendOverlayMessage(Component.translatable("lootr.message.decayed")
-          .setStyle(LootrAPI.getDecayStyle()));
+
+    var store = LootrAPI.getData(instance);
+    if (store == null) {
       return;
-    } else {
-      if (instance.canDecay()) {
-        int decayValue = LootrAPI.getRemainingDecayValue(instance);
+    }
+
+    var style = LootrAPI.getDecayStyle();
+
+    if (instance.canDecay()) {
+      if (store.isDecayed()) {
+        instance.performDecay();
+        player.sendOverlayMessage(Component.translatable("lootr.message.decayed")
+            .setStyle(style));
+        return;
+      } else {
+        int decayValue = store.remainingDecayTime();
         if (decayValue > 0 && LootrAPI.shouldNotify(decayValue)) {
           player.sendOverlayMessage(Component.translatable("lootr.message.decay_in", decayValue / 20)
-              .setStyle(LootrAPI.getDecayStyle()));
+              .setStyle(style));
         } else if (decayValue == -1) {
-          if (LootrAPI.isDecaying(instance)) {
-            LootrAPI.setDecaying(instance);
+          if (LootrAPI.shouldBeginDecaying(instance)) {
+            store.beginDecay();
             player.sendOverlayMessage(Component.translatable("lootr.message.decay_start", LootrAPI.getDecayValue() / 20)
-                .setStyle(LootrAPI.getDecayStyle()));
+                .setStyle(style));
           }
         }
       }
     }
+
+    style = LootrAPI.getRefreshStyle();
+
     instance.performTrigger(player);
     boolean shouldUpdate = false;
-    if (LootrAPI.isRefreshed(instance) && instance.canRefresh()) {
-      instance.performRefresh();
-      instance.performClose();
-      player.sendOverlayMessage(Component.translatable("lootr.message.refreshed")
-          .setStyle(LootrAPI.getRefreshStyle()));
-      shouldUpdate = true;
-    }
     if (instance.canRefresh()) {
-      int refreshValue = LootrAPI.getRemainingRefreshValue(instance);
+      if (store.isRefreshed()) {
+        store.performRefresh();
+        instance.performClose();
+        player.sendOverlayMessage(Component.translatable("lootr.message.refreshed")
+            .setStyle(style));
+        shouldUpdate = true;
+      }
+      int refreshValue = store.remainingRefreshTime();
       if (refreshValue > 0 && LootrAPI.shouldNotify(refreshValue)) {
         player.sendOverlayMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20)
-            .setStyle(LootrAPI.getRefreshStyle()));
+            .setStyle(style));
       } else if (refreshValue == -1) {
-        if (LootrAPI.isRefreshing(instance)) {
-          LootrAPI.setRefreshing(instance);
+        if (LootrAPI.shouldBeginRefreshing(instance)) {
+          store.beginRefresh();
           player.sendOverlayMessage(Component.translatable("lootr.message.refresh_start", LootrAPI.getRefreshValue() / 20)
-              .setStyle(LootrAPI.getRefreshStyle()));
+              .setStyle(style));
         }
       }
     }
+
+
     MenuProvider menuProvider = LootrAPI.getInventory(instance, player, menuBuilder);
     if (menuProvider == null) {
       return;
@@ -169,27 +182,38 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
       return;
     }
 
-    if (LootrAPI.shouldPerformDecayWhileTicking() && LootrAPI.isDecayed(instance) && instance.hasBeenOpened() && instance.canDecay()) {
-      instance.performDecay();
+    var store = LootrAPI.getData(instance);
+    if (store == null) {
       return;
-    } else if (LootrAPI.shouldStartDecayWhileTicking() && !LootrAPI.isDecayed(instance) && instance.hasBeenOpened() && instance.canDecay()) {
-      int decayValue = LootrAPI.getRemainingDecayValue(instance);
-      if (decayValue == -1) {
-        if (LootrAPI.isDecaying(instance)) {
-          LootrAPI.setDecaying(instance);
+    }
+
+    if (instance.hasBeenOpened()) {
+      if (instance.canDecay()) {
+        if (LootrAPI.shouldPerformDecayWhileTicking() && store.isDecayed()) {
+          instance.performDecay();
+          return;
+        } else if (LootrAPI.shouldStartDecayWhileTicking() && !store.isDecayed()) {
+          int decayValue = LootrAPI.getRemainingDecayValue(instance);
+          if (decayValue == -1) {
+            if (LootrAPI.shouldBeginDecaying(instance)) {
+              store.beginDecay();
+            }
+          }
         }
       }
-    }
-    if (LootrAPI.shouldPerformRefreshWhileTicking() && LootrAPI.isRefreshed(instance) && instance.hasBeenOpened() && instance.canRefresh()) {
-      instance.performRefresh();
-      instance.performClose();
-      instance.performUpdate();
-    }
-    if (LootrAPI.shouldStartRefreshWhileTicking() && !LootrAPI.isRefreshed(instance) && instance.hasBeenOpened() && instance.canRefresh()) {
-      int refreshValue = LootrAPI.getRemainingRefreshValue(instance);
-      if (refreshValue == -1) {
-        if (LootrAPI.isRefreshing(instance)) {
-          LootrAPI.setRefreshing(instance);
+      if (instance.canRefresh()) {
+        if (LootrAPI.shouldPerformRefreshWhileTicking() && store.isRefreshed()) {
+          store.performRefresh();
+          instance.performClose();
+          instance.performUpdate();
+        }
+        if (LootrAPI.shouldStartRefreshWhileTicking() && !store.isRefreshed()) {
+          int refreshValue = LootrAPI.getRemainingRefreshValue(instance);
+          if (refreshValue == -1) {
+            if (LootrAPI.shouldBeginRefreshing(instance)) {
+              store.beginRefresh();
+            }
+          }
         }
       }
     }
@@ -625,12 +649,12 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  public boolean isDecaying(ILootrContainerInstance instance) {
+  public boolean shouldBeginDecaying(ILootrContainerInstance instance) {
     return LootrConfig.isDecaying(instance);
   }
 
   @Override
-  public boolean isRefreshing(ILootrContainerInstance instance) {
+  public boolean shouldBeginRefreshing(ILootrContainerInstance instance) {
     return LootrConfig.isRefreshing(instance);
   }
 
