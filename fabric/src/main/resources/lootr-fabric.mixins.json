@@ -6,8 +6,8 @@
   "mixins": [
     "accessor.AccessorMixinSimpleParticleType",
     "advancements.MixinPlayerAdvancements",
-    "self.MixinLootrBrushableBlockEntity",
     "self.MixinLootrBarrelBlockEntity",
+    "self.MixinLootrBrushableBlockEntity",
     "tags.MixinReloadableServerResources",
     "ticker.MixinPersistentEntitySectionManager"
   ],
@@ -15,6 +15,7 @@
     "defaultRequire": 1
   },
   "client": [
-    "client.MixinClientLevel"
+    "client.MixinClientLevel",
+    "client.MixinClientPacketListener"
   ]
 }
