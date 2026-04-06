@@ -140,16 +140,6 @@ public interface ILootrContainerInstance extends ILootrData, IClientHasOpeners {
   default void performDecay() {
   }
 
-  default void performRefresh() {
-    ILootrInventoryStore data = LootrAPI.getData(this);
-    if (data != null) {
-      data.performRefresh();
-      data.clearOpeners();
-      TickingData.getRefreshData().clearTicking(LootrAPI.getServer(), this.getDataId());
-      markInstanceChanged();
-    }
-  }
-
   default void performUpdate(ServerPlayer player) {
   }
 

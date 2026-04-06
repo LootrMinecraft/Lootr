@@ -120,7 +120,7 @@ public class LootrInventoryStore implements ILootrInventoryStore {
 
   @Override
   public void markInstanceChanged() {
-    // TODO?
+    markSectionChanged();
   }
 
   @Override
