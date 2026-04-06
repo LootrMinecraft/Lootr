@@ -24,11 +24,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.storage.loot.LootTable;
+import noobanidus.mods.lootr.common.api.config.BreakMode;
+import noobanidus.mods.lootr.common.api.config.ResistanceMode;
 import noobanidus.mods.lootr.common.api.interfaces.accessor.ILootrDataAccessor;
 import noobanidus.mods.lootr.common.api.interfaces.accessor.ILootrItemFrameAccessor;
-import noobanidus.mods.lootr.common.api.config.client.ClientTextureType;
 import noobanidus.mods.lootr.common.api.config.SaveMode;
 import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
 import noobanidus.mods.lootr.common.api.data.ILootrInventoryStore;
@@ -43,6 +45,7 @@ import noobanidus.mods.lootr.common.api.integration.decorated.PotDecorationsAdap
 import noobanidus.mods.lootr.common.api.interfaces.processor.ILootrBlockEntityProcessor;
 import noobanidus.mods.lootr.common.api.interfaces.processor.ILootrEntityProcessor;
 import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
@@ -68,6 +71,8 @@ public final class LootrAPI {
   public static final ResourceKey<LootTable> ITEM_FRAME_EMPTY = ResourceKey.create(Registries.LOOT_TABLE, LootrAPI.rl("entity/item_frame_empty"));
   public static final ResourceKey<LootTable> EMPTY_CHEST = ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath("c", "empty"));
   public static final List<Identifier> PROBLEMATIC_CHESTS = Arrays.asList(LootrAPI.rl("twilightforest", "structures/stronghold_boss"), LootrAPI.rl("atum", "chests/pharaoh"));
+
+  public static final BoundingBox DESERT_PYRAMID_ADDITIONAL = new BoundingBox(-5, -30, -5, 5, 4, 4);
 
   public static ILootrAPI INSTANCE = null;
   public static boolean shouldDiscardIdAndOpeners;
@@ -112,14 +117,6 @@ public final class LootrAPI {
     return INSTANCE.getExplosionResistance(block, defaultResistance);
   }
 
-  public static boolean isBlastResistant() {
-    return INSTANCE.isBlastResistant();
-  }
-
-  public static boolean isBlastImmune() {
-    return INSTANCE.isBlastImmune();
-  }
-
   public static float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos position, float defaultProgress) {
     return INSTANCE.getDestroyProgress(state, player, level, position, defaultProgress);
   }
@@ -132,20 +129,8 @@ public final class LootrAPI {
     return INSTANCE.shouldPowerComparators();
   }
 
-  public static ClientTextureType getTextureType() {
-    return INSTANCE.getTextureType();
-  }
-
-  public static boolean isNewTextures() {
-    return INSTANCE.isNewTextures();
-  }
-
   public static boolean isVanillaTextures() {
     return INSTANCE.isVanillaTextures();
-  }
-
-  public static boolean isDefaultTextures() {
-    return INSTANCE.isDefaultTextures();
   }
 
   public static boolean shouldNotify(int remaining) {
@@ -201,24 +186,28 @@ public final class LootrAPI {
     return INSTANCE.shouldBeginDecaying(instance);
   }
 
-  public static Set<String> getModidDecayWhitelist() {
-    return INSTANCE.getModidDecayWhitelist();
+  public static Set<String> getDecayModIds() {
+    return INSTANCE.getDecayModIds();
   }
 
-  public static Set<ResourceKey<LootTable>> getDecayWhitelist() {
-    return INSTANCE.getDecayWhitelist();
+  public static Set<ResourceKey<LootTable>> getDecayLootTables() {
+    return INSTANCE.getDecayLootTables();
+  }
+
+  public static boolean isDimensionDecaying (ResourceKey<Level> dimension) {
+    return INSTANCE.isDimensionDecaying(dimension);
   }
 
   public static Set<ResourceKey<Level>> getDecayDimensions() {
     return INSTANCE.getDecayDimensions();
   }
 
-  public static Set<String> getRefreshModids() {
-    return INSTANCE.getRefreshModids();
+  public static Set<String> getRefreshLootTableModIds() {
+    return INSTANCE.getRefreshLootTableModIds();
   }
 
-  public static Set<ResourceKey<LootTable>> getRefreshWhitelist() {
-    return INSTANCE.getRefreshWhitelist();
+  public static Set<ResourceKey<LootTable>> getRefreshLootTables() {
+    return INSTANCE.getRefreshLootTables();
   }
 
   public static Set<ResourceKey<Level>> getRefreshDimensions() {
@@ -314,11 +303,11 @@ public final class LootrAPI {
   }
 
   public static boolean isBreakDisabled() {
-    return INSTANCE.isBreakDisabled();
+    return INSTANCE.getBreakMode() == BreakMode.NEVER;
   }
 
   public static boolean isBreakEnabled() {
-    return INSTANCE.isBreakEnabled();
+    return INSTANCE.getBreakMode() == BreakMode.ALWAYS;
   }
 
   public static boolean isFakePlayerBreakEnabled() {
@@ -351,7 +340,7 @@ public final class LootrAPI {
 
   @Nullable
   public static BlockState replacementBlockState(BlockState original) {
-    return INSTANCE.replacementBlockState(original);
+    return INSTANCE.getConvertedBlockState(original);
   }
 
   @Nullable
@@ -523,5 +512,17 @@ public final class LootrAPI {
         player.closeContainer();
       }
     }
+  }
+
+  public static ResistanceMode getBlastResistanceMode() {
+    return INSTANCE.getBlastResistanceMode();
+  }
+
+  public static BreakMode getBreakMode () {
+    return INSTANCE.getBreakMode();
+  }
+
+  public static boolean isDimensionRefreshing(@NotNull ResourceKey<Level> dataDimension) {
+    return INSTANCE.isDimensionRefreshing(dataDimension);
   }
 }

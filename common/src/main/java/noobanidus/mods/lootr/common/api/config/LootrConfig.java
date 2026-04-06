@@ -11,6 +11,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
+import noobanidus.mods.lootr.common.api.interfaces.annotation.DefaultCandidate;
 
 import java.util.*;
 import java.util.function.Function;
@@ -45,6 +46,7 @@ public class LootrConfig {
   private static List<String> LAST_LOOT_MODIDS = null;
   private static List<String> LAST_PROBLEMATIC_LOOT_TABLES = null;
 
+  // TODO: This is never actually used
   public static void reset() {
     MODID_DIM_WHITELIST = null;
     MODID_DIM_BLACKLIST = null;
@@ -81,7 +83,7 @@ public class LootrConfig {
     return DIM_WHITELIST;
   }
 
-  public static Set<String> getDimensionModidWhitelist() {
+  public static Set<String> getDimensionModIdWhitelist() {
     if (MODID_DIM_WHITELIST == null || !LootrCommonConfig.Restrictions.modidDimensionWhitelist.equals(LAST_MODID_DIM_WHITELIST)) {
       LAST_MODID_DIM_WHITELIST = new ArrayList<>(LootrCommonConfig.Restrictions.modidDimensionWhitelist);
       MODID_DIM_WHITELIST = validateStringList(LootrCommonConfig.Restrictions.modidDimensionWhitelist, "modid_dimension_whitelist");
@@ -97,7 +99,7 @@ public class LootrConfig {
     return DIM_BLACKLIST;
   }
 
-  public static Set<String> getDimensionModidBlacklist() {
+  public static Set<String> getDimensionModIdBlacklist() {
     if (MODID_DIM_BLACKLIST == null || !LootrCommonConfig.Restrictions.modidDimensionBlacklist.equals(LAST_MODID_DIM_BLACKLIST)) {
       LAST_MODID_DIM_BLACKLIST = new ArrayList<>(LootrCommonConfig.Restrictions.modidDimensionBlacklist);
       MODID_DIM_BLACKLIST = validateStringList(LootrCommonConfig.Restrictions.modidDimensionBlacklist, "modid_dimension_blacklist");
@@ -121,7 +123,7 @@ public class LootrConfig {
     return REFRESH_DIMS;
   }
 
-  public static Set<ResourceKey<LootTable>> getLootBlacklist() {
+  public static Set<ResourceKey<LootTable>> getLootTableBlacklist() {
     if (LOOT_BLACKLIST == null || !LootrCommonConfig.Restrictions.lootTableBlacklist.equals(LAST_LOOT_BLACKLIST)) {
       LAST_LOOT_BLACKLIST = new ArrayList<>(LootrCommonConfig.Restrictions.lootTableBlacklist);
       LOOT_BLACKLIST = validateResourceKeyList(LootrCommonConfig.Restrictions.lootTableBlacklist, "loot_blacklist", o -> ResourceKey.create(Registries.LOOT_TABLE, o));
@@ -131,7 +133,7 @@ public class LootrConfig {
     return LOOT_BLACKLIST;
   }
 
-  public static Set<String> getLootModidsBlacklist() {
+  public static Set<String> getLootModIdsBlacklist() {
     if (LOOT_MODIDS == null || !LootrCommonConfig.Restrictions.lootTableModidBlacklist.equals(LAST_LOOT_MODIDS)) {
       LAST_LOOT_MODIDS = new ArrayList<>(LootrCommonConfig.Restrictions.lootTableModidBlacklist);
       LOOT_MODIDS = validateStringList(LootrCommonConfig.Restrictions.lootTableModidBlacklist, "loot_modid_blacklist");
@@ -139,12 +141,13 @@ public class LootrConfig {
     return LOOT_MODIDS;
   }
 
+  @DefaultCandidate
   public static boolean isBlacklisted(ResourceKey<LootTable> table) {
-    if (getLootBlacklist().contains(table)) {
+    if (LootrAPI.getLootTableBlacklist().contains(table)) {
       return true;
     }
 
-    return getLootModidsBlacklist().contains(table.identifier().getNamespace());
+    return LootrAPI.getLootModidBlacklist().contains(table.identifier().getNamespace());
   }
 
   public static Set<ResourceKey<LootTable>> getDecayingTables() {
@@ -171,7 +174,7 @@ public class LootrConfig {
     return REFRESH_TABLES;
   }
 
-  public static Set<String> getRefreshMods() {
+  public static Set<String> getRefreshLootTableModIds() {
     if (REFRESH_MODS == null || !LootrCommonConfig.Refresh.refreshLootTableModids.equals(LAST_REFRESH_MODS)) {
       LAST_REFRESH_MODS = new ArrayList<>(LootrCommonConfig.Refresh.refreshLootTableModids);
       REFRESH_MODS = validateStringList(LootrCommonConfig.Refresh.refreshLootTableModids, "refresh_modids");
@@ -179,74 +182,77 @@ public class LootrConfig {
     return REFRESH_MODS;
   }
 
+  // TODO: Move these to API
   public static boolean isDimensionBlocked(ResourceKey<Level> key) {
-    if (!getDimensionModidWhitelist().isEmpty() && !getDimensionModidWhitelist().contains(key.identifier()
-        .getNamespace()) || getDimensionModidBlacklist().contains(key.identifier().getNamespace())) {
+    if (!getDimensionModIdWhitelist().isEmpty() && !getDimensionModIdWhitelist().contains(key.identifier()
+        .getNamespace()) || getDimensionModIdBlacklist().contains(key.identifier().getNamespace())) {
       return true;
     }
 
     return (!getDimensionWhitelist().isEmpty() && !getDimensionWhitelist().contains(key)) || getDimensionBlacklist().contains(key);
   }
 
+  @DefaultCandidate
   public static boolean isDimensionDecaying(ResourceKey<Level> key) {
-    return getDecayDimensions().contains(key);
+    return LootrAPI.getDecayDimensions().contains(key);
   }
 
+  @DefaultCandidate
   public static boolean isDimensionRefreshing(ResourceKey<Level> key) {
-    return getRefreshDimensions().contains(key);
+    return LootrAPI.getRefreshDimensions().contains(key);
   }
 
+  @DefaultCandidate
   public static boolean isDecaying(ILootrContainerInstance tile) {
-    if (LootrCommonConfig.Decay.decayAll) {
+    if (LootrAPI.shouldDecayAll()) {
       return true;
     }
     if (tile.getDataLootTable() != null) {
-      if (getDecayingTables().contains(tile.getDataLootTable())) {
+      if (LootrAPI.getDecayLootTables().contains(tile.getDataLootTable())) {
         return true;
       }
-      if (getDecayMods().contains(tile.getDataLootTable().identifier().getNamespace())) {
+      if (LootrAPI.getDecayModIds().contains(tile.getDataLootTable().identifier().getNamespace())) {
         return true;
       }
     }
-    if (LootrAPI.isTaggedStructurePresent((ServerLevel) tile.getDataLevel(), ChunkPos.containing(tile.getDataPos()), LootrTags.Structure.DECAY_STRUCTURES, tile.getDataPos())) {
+    var dim = tile.getDataDimension();
+    var pos = tile.getDataPos();
+    if (LootrAPI.isTaggedStructurePresent((ServerLevel) tile.getDataLevel(), ChunkPos.containing(pos), LootrTags.Structure.DECAY_STRUCTURES, pos)) {
       return true;
     }
-    return isDimensionDecaying(tile.getDataDimension());
+
+    return LootrAPI.isDimensionDecaying(dim);
   }
 
+  @DefaultCandidate
   public static boolean isRefreshing(ILootrContainerInstance tile) {
-    if (LootrCommonConfig.Refresh.refreshAll) {
+    if (LootrAPI.shouldRefreshAll()) {
       return true;
     }
     if (tile.getDataLootTable() != null) {
-      if (getRefreshingTables().contains(tile.getDataLootTable())) {
+      if (LootrAPI.getRefreshLootTables().contains(tile.getDataLootTable())) {
         return true;
       }
-      if (getRefreshMods().contains(tile.getDataLootTable().identifier().getNamespace())) {
+      if (LootrAPI.getRefreshLootTableModIds().contains(tile.getDataLootTable().identifier().getNamespace())) {
         return true;
       }
     }
-    if (LootrAPI.isTaggedStructurePresent((ServerLevel) tile.getDataLevel(), ChunkPos.containing(tile.getDataPos()), LootrTags.Structure.REFRESH_STRUCTURES, tile.getDataPos())) {
+    var pos = tile.getDataPos();
+    if (LootrAPI.isTaggedStructurePresent((ServerLevel) tile.getDataLevel(), ChunkPos.containing(pos), LootrTags.Structure.REFRESH_STRUCTURES, pos)) {
       return true;
     }
-    return isDimensionRefreshing(tile.getDataDimension());
+    return LootrAPI.isDimensionRefreshing(tile.getDataDimension());
   }
 
+  @DefaultCandidate
   public static boolean shouldNotify(int remaining) {
-    int delay = LootrCommonConfig.Notifications.maximumNotificationDelay;
-    return !LootrCommonConfig.Notifications.disableNotifications && (delay == -1 || remaining <= delay);
-  }
-
-  public static boolean shouldPerformPiecewiseCheck() {
-    return LootrCommonConfig.Conversion.performPiecewiseCheck;
-  }
-
-  public static boolean isVanillaTextures() {
-    return LootrClientConfig.Textures.useVanillaTextures;
+    int delay = LootrAPI.getNotificationDelay();
+    return !LootrAPI.isNotificationsEnabled() && (delay == -1 || remaining <= delay);
   }
 
   public static Set<ResourceKey<LootTable>> getProblematicLootTables() {
     if (PROBLEMATIC_LOOT_TABLES == null || !LootrCommonConfig.Restrictions.problematicLootTables.equals(LAST_PROBLEMATIC_LOOT_TABLES)) {
+      LAST_PROBLEMATIC_LOOT_TABLES = new ArrayList<>(LootrCommonConfig.Restrictions.problematicLootTables);
       PROBLEMATIC_LOOT_TABLES = validateResourceKeyList(LootrCommonConfig.Restrictions.problematicLootTables, "problematic_loot_tables", o -> ResourceKey.create(Registries.LOOT_TABLE, o));
     }
     return PROBLEMATIC_LOOT_TABLES;

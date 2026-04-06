@@ -1,44 +1,24 @@
 package noobanidus.mods.lootr.common.impl;
 
-import net.minecraft.ChatFormatting;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.Containers;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.monster.piglin.PiglinAi;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.world.level.block.entity.PotDecorations;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.structure.*;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrConstants;
-import noobanidus.mods.lootr.common.api.LootrRegistry;
 import noobanidus.mods.lootr.common.api.config.*;
-import noobanidus.mods.lootr.common.api.config.client.ClientTextureType;
 import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
 import noobanidus.mods.lootr.common.api.data.ILootrInventoryStore;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
@@ -59,304 +39,11 @@ import noobanidus.mods.lootr.common.data.DataStorage;
 import noobanidus.mods.lootr.common.integration.sherdsapi.SherdsIntegration;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class DefaultLootrAPIImpl implements ILootrAPI {
-  @Override
-  public final void handleInstanceSneak(@Nullable ILootrContainerInstance instance, ServerPlayer player) {
-    if (instance == null) {
-      return;
-    }
-    if (!instance.canBeMarkedUnopened()) {
-      return;
-    }
-    if (instance.removeVisualOpener(player)) {
-      instance.performClose(player);
-      instance.performUpdate(player);
-    }
-  }
-
-  @Override
-  public final void handleInstanceOpen(@Nullable ILootrContainerInstance instance, ServerPlayer player, @Nullable IMenuBuilder menuBuilder) {
-    if (instance == null) {
-      return;
-    }
-    if (player.isSpectator()) {
-      player.openMenu(null);
-      return;
-    }
-    if (instance.getDataLevel() == null || instance.getDataLevel().isClientSide()) {
-      return;
-    }
-
-    if (!instance.canPlayerOpen(player)) {
-      return;
-    }
-
-    var store = LootrAPI.getData(instance);
-    if (store == null) {
-      return;
-    }
-
-    var style = LootrAPI.getDecayStyle();
-
-    if (instance.canDecay()) {
-      if (store.isDecayed()) {
-        instance.performDecay();
-        player.sendOverlayMessage(Component.translatable("lootr.message.decayed")
-            .setStyle(style));
-        return;
-      } else {
-        int decayValue = store.remainingDecayTime();
-        if (decayValue > 0 && LootrAPI.shouldNotify(decayValue)) {
-          player.sendOverlayMessage(Component.translatable("lootr.message.decay_in", decayValue / 20)
-              .setStyle(style));
-        } else if (decayValue == -1) {
-          if (LootrAPI.shouldBeginDecaying(instance)) {
-            store.beginDecay();
-            player.sendOverlayMessage(Component.translatable("lootr.message.decay_start", LootrAPI.getDecayValue() / 20)
-                .setStyle(style));
-          }
-        }
-      }
-    }
-
-    style = LootrAPI.getRefreshStyle();
-
-    instance.performTrigger(player);
-    boolean shouldUpdate = false;
-    if (instance.canRefresh()) {
-      if (store.isRefreshed()) {
-        store.performRefresh();
-        instance.performClose();
-        player.sendOverlayMessage(Component.translatable("lootr.message.refreshed")
-            .setStyle(style));
-        shouldUpdate = true;
-      }
-      int refreshValue = store.remainingRefreshTime();
-      if (refreshValue > 0 && LootrAPI.shouldNotify(refreshValue)) {
-        player.sendOverlayMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20)
-            .setStyle(style));
-      } else if (refreshValue == -1) {
-        if (LootrAPI.shouldBeginRefreshing(instance)) {
-          store.beginRefresh();
-          player.sendOverlayMessage(Component.translatable("lootr.message.refresh_start", LootrAPI.getRefreshValue() / 20)
-              .setStyle(style));
-        }
-      }
-    }
-
-
-    MenuProvider menuProvider = LootrAPI.getInventory(instance, player, menuBuilder);
-    if (menuProvider == null) {
-      return;
-    }
-    // This is pretty important, should be moved out of here
-    if (!instance.hasServerOpened(player)) {
-      player.awardStat(LootrRegistry.getLootedStat());
-      LootrRegistry.getStatTrigger().trigger(player);
-    }
-    if (instance.addOpener(player)) {
-      instance.performOpen(player);
-      shouldUpdate = true;
-    }
-
-    if (shouldUpdate) {
-      instance.performUpdate(player);
-    }
-    player.openMenu(menuProvider);
-    PiglinAi.angerNearbyPiglins(player.level(), player, true);
-  }
-
-  @Override
-  public final void handleInstanceTick(@Nullable ILootrContainerInstance instance) {
-    if (instance == null) {
-      return;
-    }
-
-    if (instance.getDataLevel() == null || instance.getDataLevel().isClientSide()) {
-      return;
-    }
-
-    var store = LootrAPI.getData(instance);
-    if (store == null) {
-      return;
-    }
-
-    if (instance.hasBeenOpened()) {
-      if (instance.canDecay()) {
-        if (LootrAPI.shouldPerformDecayWhileTicking() && store.isDecayed()) {
-          instance.performDecay();
-          return;
-        } else if (LootrAPI.shouldStartDecayWhileTicking() && !store.isDecayed()) {
-          int decayValue = store.remainingDecayTime();
-          if (decayValue == -1) {
-            if (LootrAPI.shouldBeginDecaying(instance)) {
-              store.beginDecay();
-            }
-          }
-        }
-      }
-      if (instance.canRefresh()) {
-        if (LootrAPI.shouldPerformRefreshWhileTicking() && store.isRefreshed()) {
-          store.performRefresh();
-          instance.performClose();
-          instance.performUpdate();
-        }
-        if (LootrAPI.shouldStartRefreshWhileTicking() && !store.isRefreshed()) {
-          int refreshValue = store.remainingRefreshTime();
-          if (refreshValue == -1) {
-            if (LootrAPI.shouldBeginRefreshing(instance)) {
-              store.beginRefresh();
-            }
-          }
-        }
-      }
-    }
-  }
-
-  @Override
-  public final void handleInstanceClientTick(@Nullable ILootrContainerInstance instance) {
-    if (instance == null) {
-      return;
-    }
-
-    if (instance.getDataLevel() == null || !instance.getDataLevel().isClientSide()) {
-      return;
-    }
-
-    if (LootrAPI.shouldDisplayUnopenedParticles()) {
-      var type = instance.getDataType();
-      if (type.displaysUnopenedParticle()) {
-        ClientHooks.performUnopenedParticles(instance);
-      }
-    }
-  }
-
-  @Override
-  public final Set<UUID> getPlayerIds() {
-    MinecraftServer server = getServer();
-    if (server == null) {
-      return Set.of();
-    }
-
-    Set<UUID> result = new HashSet<>();
-    for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-      if (isFakePlayer(player)) {
-        continue;
-      }
-      // It can be null for some fake players?
-      UUID thisUuid = player.getUUID();
-      //noinspection ConstantValue
-      if (thisUuid != null) {
-        result.add(thisUuid);
-      }
-    }
-    return result;
-  }
-
-  @Override
-  public final boolean clearPlayerLoot(UUID id) {
-    return DataStorage.clearInventories(id);
-  }
-
-  @Override
-  public final ILootrInventory getInventory(ILootrContainerInstance instance, ServerPlayer player, ILootFiller filler, @Nullable IMenuBuilder menuBuilder) {
-    ILootrInventory inventory = DataStorage.getInventory(instance, player, filler);
-    if (inventory != null && menuBuilder != null) {
-      inventory.setMenuBuilder(menuBuilder);
-    }
-    return inventory;
-  }
-
-  @Override
-  public final @Nullable ILootrInventoryStore getData(ILootrContainerInstance instance) {
-    return DataStorage.getData(instance);
-  }
-
-  @Override
-  public final boolean shouldDiscard() {
-    return LootrAPI.shouldDiscardIdAndOpeners;
-  }
-
-  @Override
-  @Nullable
-  public final <T extends BlockEntity> ILootrBlockEntity wrapBlockEntity(T blockEntity) {
-    return LootrServiceRegistry.wrapBlockEntity(blockEntity);
-  }
-
-  @Override
-  public final <T extends Entity> ILootrEntity wrapEntity(T entity) {
-    return LootrServiceRegistry.wrapEntity(entity);
-  }
-
-  private static final BoundingBox DESERT_PYRAMID_ADDITIONAL = new BoundingBox(-5, -30, -5, 5, 4, 4);
-
-  @Override
-  public boolean isTaggedStructurePresent(ServerLevel level, ChunkPos chunkPos, TagKey<Structure> tag, BlockPos pos) {
-    Registry<Structure> registry = level.registryAccess().lookupOrThrow(Registries.STRUCTURE);
-    List<StructureStart> starts = level.structureManager()
-        .startsForStructure(chunkPos, o -> registry.get(registry.getId(o)).map(b -> b.is(tag)).orElse(false));
-    for (StructureStart start : starts) {
-      BoundingBox extended = start.getBoundingBox().inflatedBy(8);
-      if (extended.isInside(pos)) {
-        return true;
-      }
-      if (start.getStructure().type().equals(StructureType.DESERT_PYRAMID)) {
-        // Compensate for the fact that desert pyramid pits aren't within the bounding box
-        BlockPos center = start.getBoundingBox().getCenter();
-        if (DESERT_PYRAMID_ADDITIONAL.moved(center.getX(), center.getY(), center.getZ()).isInside(pos)) {
-          return true;
-        }
-      }
-    }
-    if (LootrAPI.performPiecewiseCheck()) {
-      for (StructureStart start : starts) {
-        for (StructurePiece piece : start.getPieces()) {
-          if (piece.getBoundingBox().inflatedBy(8).isInside(pos)) {
-            return true;
-          }
-        }
-      }
-    }
-
-    return false;
-  }
-
-  @Override
-  public boolean isWorldBorderSafe(Level level, BlockPos pos) {
-    if (!shouldCheckWorldBorder()) {
-      return true;
-    }
-    return level.getWorldBorder().isWithinBounds(pos);
-  }
-
-  @Override
-  public boolean isWorldBorderSafe(Level level, ChunkPos pos) {
-    if (!shouldCheckWorldBorder()) {
-      return true;
-    }
-    return level.getWorldBorder().isWithinBounds(pos);
-  }
-
-  @Override
-  public void playerDestroyed(Level level, Player player, BlockPos pos, @Nullable BlockEntity blockEntity) {
-    if (!shouldDropPlayerLoot() || (level.isClientSide() || blockEntity == null)) {
-      return;
-    }
-
-    if (LootrAPI.wrapBlockEntity(blockEntity) instanceof ILootrContainerInstance instance && player instanceof ServerPlayer serverPlayer && instance.canDropContentsWhenBroken()) {
-      ILootrInventory inventory = getInventory(instance, serverPlayer, instance.getDefaultFiller(), null);
-      if (inventory != null) {
-        Containers.dropContents(level, pos, inventory);
-      }
-    }
-  }
-
   @Override
   public void refreshSections() {
     MinecraftServer server = getServer();
@@ -372,7 +59,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
 
   @Override
   @Nullable
-  public BlockState replacementBlockState(BlockState original) {
+  public BlockState getConvertedBlockState(BlockState original) {
     return LootrServiceRegistry.getConvertedBlockState(original);
   }
 
@@ -482,46 +169,18 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  public long getLootSeed(long seed) {
-    if (LootrCommonConfig.Conversion.randomiseSeed || seed == -1 || seed == 0) {
-      return ThreadLocalRandom.current().nextLong();
-    }
-    return seed;
+  public boolean shouldRandomizeLootSeed() {
+    return LootrCommonConfig.Conversion.randomiseSeed;
   }
 
   @Override
-  public float getExplosionResistance(Block block, float defaultResistance) {
-    return switch (LootrCommonConfig.Breaking.blastResistance) {
-      case NONE -> defaultResistance;
-      case IMMUNE -> Float.MAX_VALUE;
-      case RESISTANT -> 16.0f;
-    };
+  public ResistanceMode getBlastResistanceMode() {
+    return LootrCommonConfig.Breaking.blastResistance;
   }
 
   @Override
-  public boolean isBlastResistant() {
-    return LootrCommonConfig.Breaking.blastResistance == ResistanceMode.RESISTANT;
-  }
-
-  @Override
-  public boolean isBlastImmune() {
-    return LootrCommonConfig.Breaking.blastResistance == ResistanceMode.IMMUNE;
-  }
-
-  @Override
-  public float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos position, float defaultProgress) {
-    if (LootrCommonConfig.Breaking.breakMode == BreakMode.NEVER) {
-      return 0f;
-    }
-    return defaultProgress;
-  }
-
-  @Override
-  public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos, int defaultSignal, Direction direction) {
-    if (shouldPowerComparators()) {
-      return 1;
-    }
-    return defaultSignal;
+  public BreakMode getBreakMode() {
+    return LootrCommonConfig.Breaking.breakMode;
   }
 
   @Override
@@ -550,12 +209,8 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  public ClientTextureType getTextureType() {
-    if (LootrConfig.isVanillaTextures()) {
-      return ClientTextureType.VANILLA;
-    } else {
-      return ClientTextureType.NEW;
-    }
+  public boolean isVanillaTextures() {
+    return LootrClientConfig.Textures.useVanillaTextures;
   }
 
   @Override
@@ -595,22 +250,22 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
 
   @Override
   public Set<ResourceKey<LootTable>> getLootTableBlacklist() {
-    return LootrConfig.getLootBlacklist();
+    return LootrConfig.getLootTableBlacklist();
   }
 
   @Override
   public Set<String> getLootModidBlacklist() {
-    return LootrConfig.getLootModidsBlacklist();
+    return LootrConfig.getLootModIdsBlacklist();
   }
 
   @Override
   public Set<String> getModidDimensionWhitelist() {
-    return LootrConfig.getDimensionModidWhitelist();
+    return LootrConfig.getDimensionModIdWhitelist();
   }
 
   @Override
   public Set<String> getModidDimensionBlacklist() {
-    return LootrConfig.getDimensionModidBlacklist();
+    return LootrConfig.getDimensionModIdBlacklist();
   }
 
   @Override
@@ -624,12 +279,12 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  public Set<String> getModidDecayWhitelist() {
+  public Set<String> getDecayModIds() {
     return LootrConfig.getDecayMods();
   }
 
   @Override
-  public Set<ResourceKey<LootTable>> getDecayWhitelist() {
+  public Set<ResourceKey<LootTable>> getDecayLootTables() {
     return LootrConfig.getDecayingTables();
   }
 
@@ -639,12 +294,12 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  public Set<String> getRefreshModids() {
-    return LootrConfig.getRefreshMods();
+  public Set<String> getRefreshLootTableModIds() {
+    return LootrConfig.getRefreshLootTableModIds();
   }
 
   @Override
-  public Set<ResourceKey<LootTable>> getRefreshWhitelist() {
+  public Set<ResourceKey<LootTable>> getRefreshLootTables() {
     return LootrConfig.getRefreshingTables();
   }
 
@@ -703,43 +358,6 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
     return LootrCommonConfig.Refresh.refreshAll;
   }
 
-  @Override
-  public Style getInvalidStyle() {
-    return isMessageStylesEnabled() ? Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED))
-        .withBold(true) : Style.EMPTY;
-  }
-
-  @Override
-  public Style getDecayStyle() {
-    return isMessageStylesEnabled() ? Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED))
-        .withBold(true) : Style.EMPTY;
-  }
-
-  @Override
-  public Style getRefreshStyle() {
-    return isMessageStylesEnabled() ? Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE))
-        .withBold(true) : Style.EMPTY;
-  }
-
-  @Override
-  public Style getChatStyle() {
-    return isMessageStylesEnabled() ? Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA)) : Style.EMPTY;
-  }
-
-  @Override
-  public boolean canDestroyOrBreak(Player player) {
-    return (isFakePlayer(player) && isFakePlayerBreakEnabled()) || LootrCommonConfig.Breaking.breakMode == BreakMode.ALWAYS;
-  }
-
-  @Override
-  public boolean isBreakDisabled() {
-    return LootrCommonConfig.Breaking.breakMode == BreakMode.NEVER;
-  }
-
-  @Override
-  public boolean isBreakEnabled() {
-    return LootrCommonConfig.Breaking.breakMode == BreakMode.ALWAYS;
-  }
 
   @Override
   public boolean isFakePlayerBreakEnabled() {
@@ -783,7 +401,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
 
   @Override
   public boolean performPiecewiseCheck() {
-    return LootrConfig.shouldPerformPiecewiseCheck();
+    return LootrCommonConfig.Conversion.performPiecewiseCheck;
   }
 
   @Override
@@ -807,10 +425,37 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  public Component getInvalidTableComponent(ResourceKey<LootTable> lootTable) {
-    return Component.translatable("lootr.message.invalid_table", lootTable.identifier()
-            .getNamespace(), lootTable.toString())
-        .setStyle(isMessageStylesEnabled() ? Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED))
-            .withBold(true) : Style.EMPTY);
+  public final boolean clearPlayerLoot(UUID id) {
+    return DataStorage.clearInventories(id);
+  }
+
+  @Override
+  public final ILootrInventory getInventory(ILootrContainerInstance instance, ServerPlayer player, ILootFiller filler, @Nullable IMenuBuilder menuBuilder) {
+    ILootrInventory inventory = DataStorage.getInventory(instance, player, filler);
+    if (inventory != null && menuBuilder != null) {
+      inventory.setMenuBuilder(menuBuilder);
+    }
+    return inventory;
+  }
+
+  @Override
+  public final @Nullable ILootrInventoryStore getData(ILootrContainerInstance instance) {
+    return DataStorage.getData(instance);
+  }
+
+  @Override
+  public final boolean shouldDiscard() {
+    return LootrAPI.shouldDiscardIdAndOpeners;
+  }
+
+  @Override
+  @Nullable
+  public final <T extends BlockEntity> ILootrBlockEntity wrapBlockEntity(T blockEntity) {
+    return LootrServiceRegistry.wrapBlockEntity(blockEntity);
+  }
+
+  @Override
+  public final <T extends Entity> ILootrEntity wrapEntity(T entity) {
+    return LootrServiceRegistry.wrapEntity(entity);
   }
 }
