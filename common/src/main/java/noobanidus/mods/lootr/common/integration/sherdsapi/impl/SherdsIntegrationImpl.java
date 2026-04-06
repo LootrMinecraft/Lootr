@@ -28,8 +28,7 @@ public class SherdsIntegrationImpl {
       if (comp.isEmpty()) {
         return null;
       }
-      var comp2 = comp.get();
-      type = (DataComponentType<?>) comp2;
+      type = comp.get().value();
     }
     return type;
   }
@@ -43,7 +42,7 @@ public class SherdsIntegrationImpl {
       if (comp.isEmpty()) {
         return null;
       }
-      var comp2 = comp.get();
+      var comp2 = comp.get().value();
       type2 = (DataComponentType<Identifier>) comp2;
     }
 
