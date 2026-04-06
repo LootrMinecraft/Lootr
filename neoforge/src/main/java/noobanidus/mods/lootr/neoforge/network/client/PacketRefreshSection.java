@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.neoforge.network.toClient;
+package noobanidus.mods.lootr.neoforge.network.client;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -6,7 +6,6 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import noobanidus.mods.lootr.neoforge.Lootr;
 import noobanidus.mods.lootr.neoforge.network.ILootrNeoForgePacket;
-import noobanidus.mods.lootr.neoforge.network.client.ClientHandlers;
 import org.jspecify.annotations.NonNull;
 
 public record PacketRefreshSection () implements ILootrNeoForgePacket {

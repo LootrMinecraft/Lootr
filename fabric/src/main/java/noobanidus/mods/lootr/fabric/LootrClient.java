@@ -40,14 +40,6 @@ public class LootrClient implements ClientModInitializer {
   public void onInitializeClient() {
     LootrClientNetworkingInit.register();
 
-
-/*    ChunkSectionLayerMap.putBlock(ModBlocks.CHEST, ChunkSectionLayer.CUTOUT);
-    ChunkSectionLayerMap.putBlock(ModBlocks.TRAPPED_CHEST, ChunkSectionLayer.CUTOUT);
-    ChunkSectionLayerMap.putBlock(ModBlocks.INVENTORY, ChunkSectionLayer.CUTOUT);
-    ChunkSectionLayerMap.putBlock(ModBlocks.SHULKER_BOX, ChunkSectionLayer.CUTOUT);
-    ChunkSectionLayerMap.putBlock(ModBlocks.BARREL, ChunkSectionLayer.CUTOUT);
-    ChunkSectionLayerMap.putBlock(ModBlocks.TROPHY, ChunkSectionLayer.CUTOUT);*/
-
     BlockEntityRenderers.register(ModBlockEntities.CHEST, LootrChestBlockRenderer::new);
     BlockEntityRenderers.register(ModBlockEntities.TRAPPED_CHEST, LootrChestBlockRenderer::new);
     BlockEntityRenderers.register(ModBlockEntities.INVENTORY, LootrChestBlockRenderer::new);

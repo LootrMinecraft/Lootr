@@ -12,16 +12,8 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 @EventBusSubscriber(modid = LootrAPI.MODID)
 public class HandleResourcePacks {
   @SubscribeEvent
-  public static void onResourcePacks (AddPackFindersEvent event) {
-    if (event.getPackType() == PackType.CLIENT_RESOURCES) {
-      event.addPackFinders(
-          LootrAPI.rl("resourcepacks/old_textures"),
-          PackType.CLIENT_RESOURCES,
-          Component.literal("Lootr - Old Textures"),
-          PackSource.BUILT_IN,
-          false,
-          Pack.Position.BOTTOM);
-    } else if (event.getPackType() == PackType.SERVER_DATA) {
+  public static void onResourcePacks(AddPackFindersEvent event) {
+    if (event.getPackType() == PackType.SERVER_DATA) {
       event.addPackFinders(
           LootrAPI.rl("datapacks/lootr_no_advancements"),
           PackType.SERVER_DATA,

@@ -8,7 +8,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.neoforge.network.toClient.*;
+import noobanidus.mods.lootr.neoforge.network.client.*;
 
 /* Shamelessly crib from Mekanism until it works
  * Original source: https://github.com/mekanism/Mekanism/blob/1.21.x/src/main/java/mekanism/common/network/BasePacketHandler.java

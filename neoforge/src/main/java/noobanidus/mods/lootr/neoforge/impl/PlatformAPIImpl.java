@@ -13,7 +13,7 @@ import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.impl.DefaultPlatformAPIImpl;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinBaseContainerBlockEntity;
-import noobanidus.mods.lootr.neoforge.network.toClient.*;
+import noobanidus.mods.lootr.neoforge.network.client.*;
 
 @SuppressWarnings("deprecation")
 public class PlatformAPIImpl extends DefaultPlatformAPIImpl implements IPlatformAPI {

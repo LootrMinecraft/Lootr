@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.neoforge.network.toClient;
+package noobanidus.mods.lootr.neoforge.network.client;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;

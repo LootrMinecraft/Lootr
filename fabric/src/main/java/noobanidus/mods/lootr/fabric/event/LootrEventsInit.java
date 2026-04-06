@@ -47,7 +47,6 @@ public class LootrEventsInit {
 
     ModContainer container = FabricLoader.getInstance().getModContainer(LootrAPI.MODID).orElseThrow();
 
-/*    registerPack(container, "old_textures", Component.literal("Lootr - Old Textures"));*/
     registerPack(container, "lootr_no_advancements", Component.literal("Disable Lootr Advancements"));
     registerPack(container, "lootr_no_suspicious_blocks", Component.literal("Disable Lootr Converting Suspicious Blocks"));
   }
