@@ -42,7 +42,7 @@ public class LootrRegistryImpl implements ILootrRegistry {
   }
 
   @Override
-  public Block getShulkerBlock() {
+  public Block getShulkerBoxBlock() {
     return ModBlocks.SHULKER_BOX.get();
   }
 
@@ -117,7 +117,7 @@ public class LootrRegistryImpl implements ILootrRegistry {
   }
 
   @Override
-  public Item getShulkerItem() {
+  public Item getShulkerBoxItem() {
     return ModItems.SHULKER.get();
   }
 

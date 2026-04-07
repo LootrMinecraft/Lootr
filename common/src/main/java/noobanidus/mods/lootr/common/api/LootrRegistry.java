@@ -44,8 +44,8 @@ public final class LootrRegistry {
     return INSTANCE.getTrophyBlock();
   }
 
-  public static Block getShulkerBlock() {
-    return INSTANCE.getShulkerBlock();
+  public static Block getShulkerBoxBlock() {
+    return INSTANCE.getShulkerBoxBlock();
   }
 
   public static Block getDecoratedPotBlock() {
@@ -72,8 +72,8 @@ public final class LootrRegistry {
     return INSTANCE.getTrophyItem();
   }
 
-  public static Item getShulkerItem() {
-    return INSTANCE.getShulkerItem();
+  public static Item getShulkerBoxItem() {
+    return INSTANCE.getShulkerBoxItem();
   }
 
   public static Item getDecoratedPotItem() {

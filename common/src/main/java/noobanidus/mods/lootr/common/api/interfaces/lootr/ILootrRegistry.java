@@ -27,10 +27,10 @@ public interface ILootrRegistry {
   Block getTrophyBlock();
 
   default Block getShulker() {
-    return getShulkerBlock();
+    return getShulkerBoxBlock();
   }
 
-  Block getShulkerBlock();
+  Block getShulkerBoxBlock();
 
   Block getSuspiciousSandBlock();
 
@@ -48,7 +48,7 @@ public interface ILootrRegistry {
 
   Item getTrophyItem();
 
-  Item getShulkerItem();
+  Item getShulkerBoxItem();
 
   Item getSuspiciousSandItem();
 

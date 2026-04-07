@@ -21,7 +21,7 @@ public class LootrBlockTagProvider extends BlockTagsProvider {
   @Override
   protected void addTags(HolderLookup.@NonNull Provider provider) {
     tag(BlockTags.SAND).add(LootrRegistry.getSuspiciousSandBlock());
-    tag(BlockTags.SHULKER_BOXES).add(LootrRegistry.getShulkerBlock());
+    tag(BlockTags.SHULKER_BOXES).add(LootrRegistry.getShulkerBoxBlock());
     tag(BlockTags.MINEABLE_WITH_PICKAXE).add(LootrRegistry.getTrophyBlock());
     tag(BlockTags.MINEABLE_WITH_AXE).add(LootrRegistry.getChestBlock(), LootrRegistry.getTrappedChestBlock(), LootrRegistry.getBarrelBlock(), LootrRegistry.getInventoryBlock());
     tag(BlockTags.GUARDED_BY_PIGLINS).add(LootrRegistry.getChestBlock(), LootrRegistry.getTrappedChestBlock(), LootrRegistry.getBarrelBlock(), LootrRegistry.getInventoryBlock());
@@ -33,7 +33,7 @@ public class LootrBlockTagProvider extends BlockTagsProvider {
     tag(LootrTags.Blocks.BARRELS).add(LootrRegistry.getBarrelBlock());
     tag(LootrTags.Blocks.CHESTS).add(LootrRegistry.getChestBlock(), LootrRegistry.getInventoryBlock());
     tag(LootrTags.Blocks.TRAPPED_CHESTS).add(LootrRegistry.getTrappedChestBlock());
-    tag(LootrTags.Blocks.SHULKERS).add(LootrRegistry.getShulkerBlock());
+    tag(LootrTags.Blocks.SHULKERS).add(LootrRegistry.getShulkerBoxBlock());
     tag(LootrTags.Blocks.SANDS).add(LootrRegistry.getSuspiciousSandBlock());
     tag(LootrTags.Blocks.GRAVELS).add(LootrRegistry.getSuspiciousGravelBlock());
     tag(LootrTags.Blocks.POTS).add(LootrRegistry.getDecoratedPotBlock());

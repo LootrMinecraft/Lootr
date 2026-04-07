@@ -16,6 +16,6 @@ public class ShulkerConversionProvider implements ILootrBlockConversionProvider 
 
   @Override
   public Block getBlock() {
-    return LootrRegistry.getShulkerBlock();
+    return LootrRegistry.getShulkerBoxBlock();
   }
 }

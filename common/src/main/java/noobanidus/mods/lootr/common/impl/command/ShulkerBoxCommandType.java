@@ -6,14 +6,14 @@ import noobanidus.mods.lootr.common.api.interfaces.command.ILootrCommandExtensio
 import noobanidus.mods.lootr.common.api.LootrRegistry;
 
 @AutoService(ILootrCommandExtension.class)
-public class ShulkerCommandType implements ILootrCommandExtension{
+public class ShulkerBoxCommandType implements ILootrCommandExtension{
   @Override
   public Block getBlock() {
-    return LootrRegistry.getShulkerBlock();
+    return LootrRegistry.getShulkerBoxBlock();
   }
 
   @Override
   public String getId() {
-    return "shulker";
+    return "shulker_box";
   }
 }

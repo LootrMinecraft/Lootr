@@ -42,7 +42,7 @@ public class LootrAdvancementGenerator implements AdvancementSubProvider {
         .save(consumer, LootrAPI.rl("1chest"));
     // 1shulker
     AdvancementHolder one_shulker = Advancement.Builder.advancement().parent(lootrRoot)
-        .display(LootrRegistry.getShulkerBlock(), Component.translatable("lootr.advancements.1shulker.title"), Component.translatable("lootr.advancements.1shulker.description"), null, AdvancementType.TASK, true, true, false)
+        .display(LootrRegistry.getShulkerBoxBlock(), Component.translatable("lootr.advancements.1shulker.title"), Component.translatable("lootr.advancements.1shulker.description"), null, AdvancementType.TASK, true, true, false)
         .addCriterion("opened_shulker", ContainerTrigger.looted(LootrRegistry.getShulkerTrigger()))
         .save(consumer, LootrAPI.rl("1shulker"));
     // all gravels
