@@ -1,7 +1,6 @@
 package noobanidus.mods.lootr.common.entity;
 
 import com.google.auto.service.AutoService;
-import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -34,7 +33,6 @@ import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.helper.SimpleLootrEntityInstance;
 import noobanidus.mods.lootr.common.api.interfaces.advancement.IContainerTrigger;
-import noobanidus.mods.lootr.common.api.data.IKeyedData;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.api.LootrRegistry;
 import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
@@ -251,12 +249,12 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   // TODO:
   @Override
   public @Nullable NonNullList<ItemStack> getDataReferenceInventory() {
-    return instance.getReferenceInventory();
+    return instance.getCustomInventory();
   }
 
   @Override
   public boolean isDataReferenceInventory() {
-    return isDataReferenceInventoryInternal(instance.isReferenceInventory());
+    return isDataReferenceInventoryInternal(instance.isCustomInventory());
   }
 
   @Override

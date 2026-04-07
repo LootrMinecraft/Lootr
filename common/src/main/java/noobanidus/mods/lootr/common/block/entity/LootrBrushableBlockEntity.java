@@ -462,12 +462,12 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
 
   @Override
   public @Nullable NonNullList<ItemStack> getDataReferenceInventory() {
-    return simpleLootrInstance.getReferenceInventory();
+    return simpleLootrInstance.getCustomInventory();
   }
 
   @Override
   public boolean isDataReferenceInventory() {
-    return isDataReferenceInventoryInternal(simpleLootrInstance.isReferenceInventory());
+    return isDataReferenceInventoryInternal(simpleLootrInstance.isCustomInventory());
   }
 
   @Override

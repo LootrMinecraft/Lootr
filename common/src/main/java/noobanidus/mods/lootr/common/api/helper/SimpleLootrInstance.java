@@ -9,6 +9,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.ItemStackWithSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.TagValueOutput;
@@ -29,7 +30,7 @@ public class SimpleLootrInstance {
   protected final Supplier<Set<UUID>> visualOpenersSupplier;
   protected final Set<UUID> clientOpeners = new ObjectOpenHashSet<>();
 
-  protected NonNullList<ItemStack> referenceInventory = null;
+  protected NonNullList<ItemStack> customInventory = null;
   protected UUID id = null;
   protected Identifier cachedIdentifier;
   protected boolean clientOpened = false;
@@ -46,13 +47,21 @@ public class SimpleLootrInstance {
     return items;
   }
 
-  public void setReferenceInventory(@Nullable NonNullList<ItemStack> items) {
-    this.referenceInventory = items;
+  public void setCustomInventory(@Nullable NonNullList<ItemStack> customInventory) {
+    if (customInventory == null) {
+      this.customInventory = null;
+    } else {
+      NonNullList<ItemStack> copy = NonNullList.withSize(customInventory.size(), ItemStack.EMPTY);
+      for (int i = 0; i < customInventory.size(); i++) {
+        copy.set(i, customInventory.get(i).copy());
+      }
+      this.customInventory = copy;
+    }
   }
 
   @Nullable
-  public NonNullList<ItemStack> getReferenceInventory() {
-    return this.referenceInventory;
+  public NonNullList<ItemStack> getCustomInventory() {
+    return this.customInventory;
   }
 
   public Set<UUID> getClientOpeners() {
@@ -109,11 +118,12 @@ public class SimpleLootrInstance {
     }
     clientOpeners.clear();
     input.read(NBTConstants.OPENERS, UUIDUtil.CODEC_SET).map(clientOpeners::addAll);
+
     if (input.getBooleanOr(NBTConstants.IS_CUSTOM_INVENTORY, false)) {
-      if (this.referenceInventory == null) {
-        this.referenceInventory = NonNullList.withSize(getContainerSize(), ItemStack.EMPTY);
+      if (this.customInventory == null) {
+        this.customInventory = NonNullList.withSize(getContainerSize(), ItemStack.EMPTY);
       }
-      ContainerHelper.loadAllItems(input, this.referenceInventory);
+      loadAllItems(input, this.customInventory, NBTConstants.CUSTOM_INVENTORY);
     }
   }
 
@@ -127,9 +137,9 @@ public class SimpleLootrInstance {
         output.store(NBTConstants.OPENERS, UUIDUtil.CODEC_SET, clientOpeners);
       }
     }
-    if (this.referenceInventory != null) {
+    if (this.customInventory != null) {
       output.putBoolean(NBTConstants.IS_CUSTOM_INVENTORY, true);
-      ContainerHelper.saveAllItems(output, this.referenceInventory);
+      saveAllItems(output, this.customInventory, NBTConstants.CUSTOM_INVENTORY);
     } else {
       output.putBoolean(NBTConstants.IS_CUSTOM_INVENTORY, false);
     }
@@ -152,7 +162,26 @@ public class SimpleLootrInstance {
     }
   }
 
-  public boolean isReferenceInventory() {
-    return referenceInventory != null && !referenceInventory.isEmpty();
+  public boolean isCustomInventory() {
+    return customInventory != null && !customInventory.isEmpty();
+  }
+
+  public static void saveAllItems(ValueOutput output, NonNullList<ItemStack> itemStacks, String key) {
+    ValueOutput.TypedOutputList<ItemStackWithSlot> itemsOutput = output.list(key, ItemStackWithSlot.CODEC);
+
+    for (int i = 0; i < itemStacks.size(); i++) {
+      ItemStack itemStack = itemStacks.get(i);
+      if (!itemStack.isEmpty()) {
+        itemsOutput.add(new ItemStackWithSlot(i, itemStack));
+      }
+    }
+  }
+
+  public static void loadAllItems(ValueInput input, NonNullList<ItemStack> itemStacks, String key) {
+    for (ItemStackWithSlot item : input.listOrEmpty(key, ItemStackWithSlot.CODEC)) {
+      if (item.isValidInContainer(itemStacks.size())) {
+        itemStacks.set(item.slot(), item.stack());
+      }
+    }
   }
 }
