@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.common.api.interfaces.accessor;
 
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.Clearable;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,9 +24,16 @@ public non-sealed interface ILootrDataAccessor<T> extends ILootrAccessor<T> {
 
   long getLootSeed(T entity);
 
-  void setLootTable(T entity, ResourceKey<LootTable> table, long seed);
+  void setLootTable(T entity, @Nullable ResourceKey<LootTable> table, long seed);
 
   default boolean hasCopyableComponentsViaItem(T entity) {
     return false;
+  }
+
+  default void clear (T entity) {
+    if (entity instanceof Clearable clearable) {
+      clearable.clearContent();
+    }
+    setLootTable(entity, null, 0);
   }
 }
