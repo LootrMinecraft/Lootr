@@ -288,11 +288,6 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   }
 
   @Override
-  public int getAnalogOutput() {
-    return 0;
-  }
-
-  @Override
   public @NonNull ItemStack getPickResult() {
     return new ItemStack(Items.ITEM_FRAME);
   }
