@@ -9,7 +9,7 @@ plugins {
 def javaVersion = 25
 
 allprojects {
-    version = "${rootProject.minecraft_version}-${rootProject.mod_version}"
+    version = "${rootProject.mod_version}"
     group = rootProject.mod_group_id
 
     repositories {
@@ -101,7 +101,7 @@ subprojects {
     project.version = rootProject.version
 
     base {
-        archivesName.set("${rootProject.mod_id}-${name}")
+        archivesName.set("${rootProject.mod_id}-${name}-${rootProject.minecraft_version}")
     }
 
     dependencies {
