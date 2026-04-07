@@ -236,7 +236,10 @@ public class LootrInventoryStore implements ILootrInventoryStore {
 
   @Override
   public void performRefresh() {
-    openers.clear();
+    var openers2 = getVisualOpeners();
+    if (openers2 != null) {
+      openers2.clear();
+    }
     inventories.clear();
     hasInventories = false;
     refreshTime = -1;
