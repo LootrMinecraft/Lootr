@@ -148,17 +148,6 @@ public class LootrModelProvider extends ModelProvider {
         )
     );
     itemModels.itemModelOutput.accept(
-        ModItems.INVENTORY.get(),
-        new SpecialModelWrapper.Unbaked(
-            Identifier.withDefaultNamespace("item/chest"),
-            Optional.empty(),
-            new LootrChestSpecialRenderer.Unbaked(
-                LootrAPI.rl("entity/chest/normal"),
-                Identifier.withDefaultNamespace("entity/chest/normal")
-            )
-        )
-    );
-    itemModels.itemModelOutput.accept(
         ModItems.SHULKER.get(),
         new SpecialModelWrapper.Unbaked(
             Identifier.withDefaultNamespace("item/shulker_box"),

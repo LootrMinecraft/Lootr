@@ -22,7 +22,7 @@ public class MixinStructureTemplate {
   private static void lootr$AddEntitiesToWorldInject(ServerLevelAccessor level, Entity entity, Operation<Void> original) {
     if (LootrAPI.shouldConvertStructureItemFrames() && entity.is(LootrTags.Entity.CONVERT_ITEM_FRAMES) && !entity.entityTags()
         .contains(LootrConstants.CAN_CONVERT_TAG) /* CAN_CONVERT_TAG is handled elsewhere */) {
-      ILootrItemFrameAccessor<Entity> adapter = LootrAPI.getItemFrameAdapter(entity);
+      ILootrItemFrameAccessor<Entity> adapter = LootrAPI.getItemFrameAccessor(entity);
       if (adapter != null && !adapter.isFixed(entity) && !adapter.isInvisible(entity)) {
         ItemStack contained = adapter.getItem(entity);
         if (!contained.isEmpty() && !contained.is(LootrTags.Items.ITEM_FRAME_CONVERT_BLACKLIST)) {

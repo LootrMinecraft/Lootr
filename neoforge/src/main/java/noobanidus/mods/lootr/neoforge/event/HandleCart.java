@@ -31,7 +31,7 @@ public class HandleCart {
     Entity entity = event.getEntity();
     if (LootrAPI.shouldConvertStructureItemFrames() && entity.is(LootrTags.Entity.CONVERT_ITEM_FRAMES) && entity.entityTags()
         .contains(LootrConstants.CAN_CONVERT_TAG) /* Item frames without CAN_CONVERT_TAG handled elsewhere */) {
-      ILootrItemFrameAccessor<Entity> adapter = LootrAPI.getItemFrameAdapter(entity);
+      ILootrItemFrameAccessor<Entity> adapter = LootrAPI.getItemFrameAccessor(entity);
       if (adapter == null) {
         LootrAPI.LOG.error("No item frame adapter found for entity '{}' even though it is tagged for conversion.", entity);
         return;
@@ -50,7 +50,7 @@ public class HandleCart {
         }
       }
     } else if (entity.is(LootrTags.Entity.CONVERT_ENTITIES) && !entity.is(LootrTags.Entity.CONVERT_BLACKLIST)) {
-      ILootrDataAccessor<Entity> adapter = LootrAPI.getAdapter(entity);
+      ILootrDataAccessor<Entity> adapter = LootrAPI.getAccessor(entity);
       if (adapter == null) {
         LootrAPI.LOG.error("No adapter found for entity '{}' even though it is tagged for conversion.", entity);
         return;

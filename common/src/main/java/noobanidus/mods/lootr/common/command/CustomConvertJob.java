@@ -3,27 +3,20 @@ package noobanidus.mods.lootr.common.command;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.TicketType;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
-import noobanidus.mods.lootr.common.api.LootrTags;
-import noobanidus.mods.lootr.common.api.LootrRegistry;
-import noobanidus.mods.lootr.common.block.entity.LootrInventoryBlockEntity;
-import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinBaseContainerBlockEntity;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 
 // Blame ChatGPT for this travesty, although it's not so bad.
 public final class CustomConvertJob {
@@ -108,6 +101,7 @@ public final class CustomConvertJob {
       return 0;
     }
     level.getChunkSource().addTicketWithRadius(TicketType.FORCED, pos, 0);
+    Consumer<String> reporter = msg -> src.sendSuccess(() -> Component.literal(msg), true);
     try {
       var chunk = level.getChunk(pos.x(), pos.z());
 
@@ -119,23 +113,7 @@ public final class CustomConvertJob {
           continue;
         }
 
-        if (LootrTags.BlockEntity.isTagged(be, LootrTags.BlockEntity.CUSTOM_INELIGIBLE)) {
-          continue;
-        }
-
-        if (!be.getBlockState().is(LootrTags.Blocks.CUSTOM_ELIGIBLE)) {
-          continue;
-        }
-
-        if (!(be instanceof BaseContainerBlockEntity container)) {
-          continue;
-        }
-
-        if (container.isEmpty()) {
-          continue;
-        }
-
-        changed += convertAt(level, bePos, be, src);
+        changed += convertAt(bePos, level, reporter, src.registryAccess());
       }
 
       return changed;
@@ -144,21 +122,11 @@ public final class CustomConvertJob {
     }
   }
 
-  private static int convertAt(ServerLevel level, BlockPos pos, BlockEntity blockEntity, CommandSourceStack src) {
-    BlockState state = blockEntity.getBlockState();
-    NonNullList<ItemStack> reference = ((AccessorMixinBaseContainerBlockEntity) blockEntity).invokeGetItems();
-    BlockState newState = CommandLootr.updateBlockState(state, LootrRegistry.getInventoryBlock().defaultBlockState());
-    NonNullList<ItemStack> custom = CommandLootr.copyItemList(reference);
-    level.removeBlockEntity(pos);
-    level.setBlockAndUpdate(pos, newState);
-    BlockEntity te = level.getBlockEntity(pos);
-    if (!(te instanceof LootrInventoryBlockEntity inventory)) {
-      src.sendFailure(Component.literal("Unable to convert chest at '" + pos + "', BlockState is not a Lootr Inventory block."));
-      return 0;
-    } else {
-      inventory.setCustomInventory(custom);
-      inventory.setChanged();
+  private static int convertAt(BlockPos pos, ServerLevel level, Consumer<String> reporter, HolderLookup.Provider registries) {
+    if (CommandLootr.convertToCustom(pos, level, reporter, registries)) {
       return 1;
     }
+
+    return 0;
   }
 }

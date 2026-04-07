@@ -22,8 +22,6 @@ public interface ILootrRegistry {
 
   Block getTrappedChestBlock();
 
-  Block getInventoryBlock();
-
   Block getTrophyBlock();
 
   Block getShulkerBoxBlock();

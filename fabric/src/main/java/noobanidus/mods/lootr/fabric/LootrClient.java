@@ -42,7 +42,6 @@ public class LootrClient implements ClientModInitializer {
 
     BlockEntityRenderers.register(ModBlockEntities.CHEST, LootrChestBlockRenderer::new);
     BlockEntityRenderers.register(ModBlockEntities.TRAPPED_CHEST, LootrChestBlockRenderer::new);
-    BlockEntityRenderers.register(ModBlockEntities.INVENTORY, LootrChestBlockRenderer::new);
     BlockEntityRenderers.register(ModBlockEntities.SHULKER_BOX, LootrShulkerBoxRenderer::new);
     BlockEntityRenderers.register(ModBlockEntities.BRUSHABLE_BLOCK, LootrBrushableBlockRenderer::new);
     BlockEntityRenderers.register(ModBlockEntities.DECORATED_POT, LootrDecoratedPotRenderer::new);

@@ -51,15 +51,17 @@ public class LootrLootTableProvider {
     protected void generate() {
       this.add(ModBlocks.CHEST.get(), lootrBlockDrop(Blocks.CHEST));
       this.add(ModBlocks.BARREL.get(), lootrBlockDrop(Blocks.BARREL));
-      this.add(ModBlocks.INVENTORY.get(), lootrBlockDrop(Blocks.CHEST));
       this.add(ModBlocks.TRAPPED_CHEST.get(), lootrBlockDrop(Blocks.TRAPPED_CHEST));
       this.add(ModBlocks.SHULKER_BOX.get(), lootrBlockDrop(Blocks.SHULKER_BOX));
+      this.add(ModBlocks.DECORATED_POT.get(), LootTable.lootTable());
+      this.add(ModBlocks.SUSPICIOUS_SAND.get(), lootrBlockDrop(Blocks.SAND));
+      this.add(ModBlocks.SUSPICIOUS_GRAVEL.get(), lootrBlockDrop(Blocks.GRAVEL));
       this.dropSelf(ModBlocks.TROPHY.get());
     }
 
     @Override
     protected @NonNull Iterable<Block> getKnownBlocks() {
-      return List.of(ModBlocks.CHEST.get(), ModBlocks.BARREL.get(), ModBlocks.INVENTORY.get(), ModBlocks.TRAPPED_CHEST.get(), ModBlocks.SHULKER_BOX.get(), ModBlocks.TROPHY.get());
+      return List.of(ModBlocks.CHEST.get(), ModBlocks.BARREL.get(), ModBlocks.TRAPPED_CHEST.get(), ModBlocks.SHULKER_BOX.get(), ModBlocks.TROPHY.get(), ModBlocks.SUSPICIOUS_GRAVEL.get(), ModBlocks.SUSPICIOUS_SAND.get(), ModBlocks.DECORATED_POT.get());
     }
   }
 

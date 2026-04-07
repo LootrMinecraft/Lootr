@@ -461,13 +461,13 @@ public final class LootrAPI {
   }
 
   @Nullable
-  public static <T> ILootrDataAccessor<T> getAdapter(T type) {
-    return INSTANCE.getAdapter(type);
+  public static <T> ILootrDataAccessor<T> getAccessor(T type) {
+    return INSTANCE.getAccessor(type);
   }
 
   @Nullable
-  public static <T> ILootrItemFrameAccessor<T> getItemFrameAdapter (T type) {
-    return INSTANCE.getItemFrameAdapter(type);
+  public static <T> ILootrItemFrameAccessor<T> getItemFrameAccessor(T type) {
+    return INSTANCE.getItemFrameAccessor(type);
   }
 
   @Nullable

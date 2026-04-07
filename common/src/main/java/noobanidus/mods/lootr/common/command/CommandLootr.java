@@ -40,9 +40,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
-import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
@@ -55,9 +53,8 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrConstants;
-import noobanidus.mods.lootr.common.api.LootrRegistry;
-import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
+import noobanidus.mods.lootr.common.api.interfaces.accessor.ILootrDataAccessor;
 import noobanidus.mods.lootr.common.api.interfaces.command.ILootrCommandExtension;
 import noobanidus.mods.lootr.common.block.LootrBarrelBlock;
 import noobanidus.mods.lootr.common.block.LootrChestBlock;
@@ -69,14 +66,15 @@ import noobanidus.mods.lootr.common.data.LootrInventoryStore;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.common.impl.IChunkMapGetChunks;
 import noobanidus.mods.lootr.common.impl.LootrServiceRegistry;
-import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinBaseContainerBlockEntity;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinMinecraftServer;
+import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FilenameFilter;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -208,40 +206,6 @@ public class CommandLootr {
       createBlock(c.getSource(), null, ResourceKey.create(Registries.LOOT_TABLE, IdentifierArgument.getId(c, "table")));
       return 1;
     })));
-    builder.then(Commands.literal("custom-chest").executes(c -> {
-      BlockPos pos = BlockPos.containing(c.getSource().getPosition());
-      Level level = c.getSource().getLevel();
-      BlockState state = level.getBlockState(pos);
-      if (!state.is(LootrTags.Blocks.CUSTOM_ELIGIBLE)) {
-        pos = pos.below();
-        state = level.getBlockState(pos);
-      }
-      if (!state.is(LootrTags.Blocks.CUSTOM_ELIGIBLE)) {
-        c.getSource().sendSuccess(() -> Component.literal("Please stand on the container you wish to convert."), false);
-      } else {
-        BlockEntity blockEntity = level.getBlockEntity(pos);
-        if (!(blockEntity instanceof BaseContainerBlockEntity container)) {
-          c.getSource()
-              .sendSuccess(() -> Component.literal("Please stand on the container you wish to convert."), false);
-          return 0;
-        }
-        NonNullList<ItemStack> reference = ((AccessorMixinBaseContainerBlockEntity) blockEntity).invokeGetItems();
-        BlockState newState = updateBlockState(state, LootrRegistry.getInventoryBlock().defaultBlockState());
-        NonNullList<ItemStack> custom = copyItemList(reference);
-        level.removeBlockEntity(pos);
-        level.setBlockAndUpdate(pos, newState);
-        BlockEntity te = level.getBlockEntity(pos);
-        if (!(te instanceof LootrInventoryBlockEntity inventory)) {
-          c.getSource()
-              .sendSuccess(() -> Component.literal("Unable to convert chest, BlockState is not a Lootr Inventory block."), false);
-        } else {
-          inventory.setCustomInventory(custom);
-          inventory.setChanged();
-
-        }
-      }
-      return 1;
-    }));
     builder.then(Commands.literal("open_as").executes(c -> {
       c.getSource().sendSuccess(() -> Component.literal("Must provide player name."), true);
       return 1;
@@ -429,7 +393,22 @@ public class CommandLootr {
           CustomConvertJob.start(c.getSource().getServer(), levelKey, getAllChunkPositions(levelKey), c.getSource());
           return 1;
         })));
-    builder.then(Commands.literal("custom-area").then(Commands.argument("from", BlockPosArgument.blockPos())
+
+
+    builder.then(Commands.literal("custom-chest")
+        .then(Commands.argument("target", BlockPosArgument.blockPos()).executes(c -> {
+              BlockPos pos = BlockPosArgument.getLoadedBlockPos(c, "target");
+              ServerLevel level = c.getSource().getLevel();
+              Consumer<String> consumer = message -> c.getSource().sendSuccess(() -> Component.literal(message), true);
+              if (convertToCustom(pos, level, consumer, c.getSource().registryAccess())) {
+                return 1;
+              }
+
+              return 0;
+            }
+        )));
+
+    builder.then(Commands.literal("custom-area-old").then(Commands.argument("from", BlockPosArgument.blockPos())
         .then(Commands.argument("to", BlockPosArgument.blockPos()).executes(context -> {
           BoundingBox bounds = BoundingBox.fromCorners(BlockPosArgument.getLoadedBlockPos(context, "from"), BlockPosArgument.getLoadedBlockPos(context, "to"));
           ChunkPos start = ChunkPos.containing(new BlockPos(bounds.minX(), bounds.minY(), bounds.minZ()));
@@ -441,6 +420,8 @@ public class CommandLootr {
             }
           }
           ServerLevel level = context.getSource().getLevel();
+          Consumer<String> consumer = message -> context.getSource()
+              .sendSuccess(() -> Component.literal(message), true);
           for (ChunkPos chunkPos : positions) {
             LevelChunk chunk = level.getChunk(chunkPos.x(), chunkPos.z());
             List<BlockPos> convertableBlocks = new ArrayList<>();
@@ -454,33 +435,7 @@ public class CommandLootr {
               continue;
             }
             for (BlockPos pos : convertableBlocks) {
-              BlockEntity blockEntity = chunk.getBlockEntity(pos, LevelChunk.EntityCreationType.IMMEDIATE);
-              if (!(blockEntity instanceof BaseContainerBlockEntity)) {
-                continue;
-              }
-              if (blockEntity instanceof RandomizableContainerBlockEntity lootContainer) {
-                if (lootContainer.getLootTable() != null) {
-                  continue;
-                }
-              }
-              BlockState state = blockEntity.getBlockState();
-              //noinspection DataFlowIssue
-              if (!state.is(LootrTags.Blocks.CUSTOM_ELIGIBLE) && !blockEntity.getType().builtInRegistryHolder()
-                  .is(LootrTags.BlockEntity.CUSTOM_INELIGIBLE)) {
-                NonNullList<ItemStack> reference = ((AccessorMixinBaseContainerBlockEntity) blockEntity).invokeGetItems();
-                BlockState newState = updateBlockState(state, LootrRegistry.getInventoryBlock().defaultBlockState());
-                NonNullList<ItemStack> custom = copyItemList(reference);
-                level.removeBlockEntity(pos);
-                level.setBlockAndUpdate(pos, newState);
-                BlockEntity te = level.getBlockEntity(pos);
-                if (!(te instanceof LootrInventoryBlockEntity inventory)) {
-                  context.getSource()
-                      .sendFailure(Component.literal("Unable to convert chest at '" + pos + "', BlockState is not a Lootr Inventory block."));
-                } else {
-                  inventory.setCustomInventory(custom);
-                  inventory.setChanged();
-                }
-              }
+              convertToCustom(pos, level, consumer, context.getSource().registryAccess());
             }
           }
 
@@ -623,6 +578,66 @@ public class CommandLootr {
       newState = newState.setValue(BlockStateProperties.WATERLOGGED, oldState.getValue(BlockStateProperties.WATERLOGGED));
     }
     return newState;
+  }
+
+  public static boolean convertToCustom(BlockPos pos, ServerLevel level, Consumer<String> c, HolderLookup.Provider provider) {
+    BlockEntity blockEntity = level.getBlockEntity(pos);
+    if (LootrAPI.wrapBlockEntity(blockEntity) instanceof ILootrBlockEntity) {
+      c.accept("The block at " + pos + " is already a Lootr container.");
+      return false;
+    } else if (blockEntity == null) {
+      c.accept("The block at " + pos + " doesn't have a block entity.");
+      return false;
+    }
+
+    ILootrDataAccessor<BlockEntity> adapter = LootrAPI.getAccessor(blockEntity);
+    if (adapter != null) {
+      ResourceKey<LootTable> table = adapter.getLootTable(blockEntity);
+      if (table != null) {
+        c.accept("The block at " + pos + " has a loot table.");
+        return false;
+      }
+
+      // Guaranteed copy
+      NonNullList<ItemStack> custom = adapter.getInventoryCopy(blockEntity);
+      if (custom == null) {
+        c.accept("Could not obtain inventory of block at " + pos + ".");
+        return false;
+      }
+
+      if (custom.isEmpty()) {
+        c.accept("The block at " + pos + " has an empty inventory, cannot convert.");
+        return false;
+      }
+
+      BlockState state = level.getBlockState(pos);
+      BlockState newState = LootrAPI.replacementBlockState(state);
+
+      if (newState == null) {
+        c.accept("The block at " + pos + " has no eligible replacement block state.");
+        return false;
+      }
+
+      // Prevents dropping custom contents on the ground
+      adapter.clear(blockEntity);
+
+      level.setBlock(pos, newState, 3);
+
+      BlockEntity newBlockEntity = level.getBlockEntity(pos);
+      if (LootrAPI.wrapBlockEntity(newBlockEntity) instanceof ILootrBlockEntity newInventory) {
+        try {
+          newInventory.setDataReferenceInventory(custom);
+          newInventory.markInstanceChanged();
+        } catch (NotImplementedException exception) {
+          c.accept("The block at " + pos + " was converted, but the inventory could not be transferred.");
+          return false;
+        }
+      } else {
+        c.accept("The block at " + pos + " did not successfully convert.");
+        return false;
+      }
+    }
+    return true;
   }
 }
 

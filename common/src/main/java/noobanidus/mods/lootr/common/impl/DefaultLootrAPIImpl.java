@@ -90,13 +90,13 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
 
   @Nullable
   @Override
-  public <T> ILootrDataAccessor<T> getAdapter(T type) {
+  public <T> ILootrDataAccessor<T> getAccessor(T type) {
     return LootrServiceRegistry.getDataAccessor(type);
   }
 
   @Nullable
   @Override
-  public <T> ILootrItemFrameAccessor<T> getItemFrameAdapter(T type) {
+  public <T> ILootrItemFrameAccessor<T> getItemFrameAccessor(T type) {
     return LootrServiceRegistry.getItemFrameDataAccessor(type);
   }
 

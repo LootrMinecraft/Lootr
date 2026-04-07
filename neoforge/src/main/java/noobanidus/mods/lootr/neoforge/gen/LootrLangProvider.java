@@ -34,7 +34,6 @@ public class LootrLangProvider extends LanguageProvider {
     add(LootrRegistry.getTrappedChestBlock(), "Loot Chest");
     add(LootrRegistry.getBarrelBlock(), "Loot Barrel");
     add(LootrRegistry.getShulkerBoxBlock(), "Loot Shulker");
-    add(LootrRegistry.getInventoryBlock(), "Loot Chest");
     add(LootrRegistry.getMinecart(), "Minecart with Loot Chest");
     add(LootrRegistry.getTrophyBlock(), "Centennial Trophy");
     add(LootrRegistry.getSuspiciousGravelBlock(), "Gravel");

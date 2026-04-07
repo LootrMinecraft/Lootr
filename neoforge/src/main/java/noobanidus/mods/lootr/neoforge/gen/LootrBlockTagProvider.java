@@ -23,15 +23,15 @@ public class LootrBlockTagProvider extends BlockTagsProvider {
     tag(BlockTags.SAND).add(LootrRegistry.getSuspiciousSandBlock());
     tag(BlockTags.SHULKER_BOXES).add(LootrRegistry.getShulkerBoxBlock());
     tag(BlockTags.MINEABLE_WITH_PICKAXE).add(LootrRegistry.getTrophyBlock());
-    tag(BlockTags.MINEABLE_WITH_AXE).add(LootrRegistry.getChestBlock(), LootrRegistry.getTrappedChestBlock(), LootrRegistry.getBarrelBlock(), LootrRegistry.getInventoryBlock());
-    tag(BlockTags.GUARDED_BY_PIGLINS).add(LootrRegistry.getChestBlock(), LootrRegistry.getTrappedChestBlock(), LootrRegistry.getBarrelBlock(), LootrRegistry.getInventoryBlock());
-    tag(Tags.Blocks.CHESTS_WOODEN).add(LootrRegistry.getChestBlock(), LootrRegistry.getInventoryBlock());
+    tag(BlockTags.MINEABLE_WITH_AXE).add(LootrRegistry.getChestBlock(), LootrRegistry.getTrappedChestBlock(), LootrRegistry.getBarrelBlock());
+    tag(BlockTags.GUARDED_BY_PIGLINS).add(LootrRegistry.getChestBlock(), LootrRegistry.getTrappedChestBlock(), LootrRegistry.getBarrelBlock());
+    tag(Tags.Blocks.CHESTS_WOODEN).add(LootrRegistry.getChestBlock());
     tag(Tags.Blocks.CHESTS_TRAPPED).add(LootrRegistry.getTrappedChestBlock());
     tag(Tags.Blocks.BARRELS).add(LootrRegistry.getBarrelBlock());
     tag(LootrTags.Blocks.NON_BLOCKING); //.add(Blocks.SPAWNER);
 
     tag(LootrTags.Blocks.BARRELS).add(LootrRegistry.getBarrelBlock());
-    tag(LootrTags.Blocks.CHESTS).add(LootrRegistry.getChestBlock(), LootrRegistry.getInventoryBlock());
+    tag(LootrTags.Blocks.CHESTS).add(LootrRegistry.getChestBlock());
     tag(LootrTags.Blocks.TRAPPED_CHESTS).add(LootrRegistry.getTrappedChestBlock());
     tag(LootrTags.Blocks.SHULKERS).add(LootrRegistry.getShulkerBoxBlock());
     tag(LootrTags.Blocks.SANDS).add(LootrRegistry.getSuspiciousSandBlock());

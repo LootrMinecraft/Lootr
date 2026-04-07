@@ -19,7 +19,7 @@ public class LootrItemTagsProvider extends ItemTagsProvider {
   @Override
   protected void addTags(HolderLookup.@NonNull Provider provider) {
     tag(LootrTags.Items.BARRELS).add(LootrRegistry.getBarrelItem());
-    tag(LootrTags.Items.CHESTS).add(LootrRegistry.getChestItem(), LootrRegistry.getTrappedChestItem(), LootrRegistry.getInventoryItem());
+    tag(LootrTags.Items.CHESTS).add(LootrRegistry.getChestItem(), LootrRegistry.getTrappedChestItem());
     tag(LootrTags.Items.TRAPPED_CHESTS).add(LootrRegistry.getTrappedChestItem());
     tag(LootrTags.Items.SHULKERS).add(LootrRegistry.getShulkerBoxItem());
     tag(LootrTags.Items.SANDS).add(LootrRegistry.getSuspiciousSandItem());

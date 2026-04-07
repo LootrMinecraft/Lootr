@@ -88,7 +88,7 @@ public final class BlockEntityTicker {
     if (entity instanceof ILootrBlockEntity || LootrAPI.wrapBlockEntity(entity) instanceof ILootrBlockEntity) {
       return false;
     }
-    ILootrDataAccessor<BlockEntity> adapter = LootrAPI.getAdapter(entity);
+    ILootrDataAccessor<BlockEntity> adapter = LootrAPI.getAccessor(entity);
     // IMPORTANT: Do *not* check the loot table here as this is called before nbt is loaded, etc
     return adapter != null;
   }
@@ -136,7 +136,7 @@ public final class BlockEntityTicker {
       return false;
     }
 
-    ILootrDataAccessor<BlockEntity> adapter = LootrAPI.getAdapter(entity);
+    ILootrDataAccessor<BlockEntity> adapter = LootrAPI.getAccessor(entity);
     if (adapter == null) {
       return false;
     }
@@ -233,7 +233,7 @@ public final class BlockEntityTicker {
         continue;
       }
 
-      ILootrDataAccessor<BlockEntity> adapter = LootrAPI.getAdapter(blockEntity);
+      ILootrDataAccessor<BlockEntity> adapter = LootrAPI.getAccessor(blockEntity);
       // I'm not sure how we could've reached this stage.
       if (adapter == null) {
         continue;

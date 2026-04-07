@@ -509,10 +509,10 @@ public interface ILootrAPI {
   List<ILootrEntityProcessor.Post> getEntityPostProcessors();
 
   @Nullable
-  <T> ILootrDataAccessor<T> getAdapter(T type);
+  <T> ILootrDataAccessor<T> getAccessor(T type);
 
   @Nullable
-  <T> ILootrItemFrameAccessor<T> getItemFrameAdapter(T type);
+  <T> ILootrItemFrameAccessor<T> getItemFrameAccessor(T type);
 
   ILootrType getType(String type);
 

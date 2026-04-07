@@ -20,8 +20,6 @@ public class ModItems {
       .useBlockDescriptionPrefix()));
   public static final DeferredHolder<Item, BlockItem> BARREL = REGISTER.register(LootrConstants.BARREL.getPath(), () -> new BlockItem(LootrRegistry.getBarrelBlock(), new BlockItem.Properties().setId(LootrConstants.BARREL_ITEM_RESOURCE_KEY)
       .useBlockDescriptionPrefix()));
-  public static final DeferredHolder<Item, BlockItem> INVENTORY = REGISTER.register(LootrConstants.INVENTORY.getPath(), () -> new BlockItem(LootrRegistry.getInventoryBlock(), new BlockItem.Properties().setId(LootrConstants.INVENTORY_ITEM_RESOURCE_KEY)
-      .useBlockDescriptionPrefix()));
   public static final DeferredHolder<Item, BlockItem> SHULKER = REGISTER.register(LootrConstants.SHULKER_BOX.getPath(), () -> new BlockItem(LootrRegistry.getShulkerBoxBlock(), new BlockItem.Properties().setId(LootrConstants.SHULKER_BOX_ITEM_RESOURCE_KEY)
       .useBlockDescriptionPrefix()));
   public static final DeferredHolder<Item, BlockItem> SUSPICIOUS_SAND = REGISTER.register(LootrConstants.SUSPICIOUS_SAND.getPath(), () -> new BlockItem(LootrRegistry.getSuspiciousSandBlock(), new BlockItem.Properties().setId(LootrConstants.SUSPICIOUS_SAND_ITEM_RESOURCE_KEY)

@@ -16,8 +16,6 @@ public class ModItems {
       .useBlockDescriptionPrefix());
   public static final BlockItem SHULKER_BOX = new BlockItem(ModBlocks.SHULKER_BOX, new Item.Properties().setId(LootrConstants.SHULKER_BOX_ITEM_RESOURCE_KEY)
       .useBlockDescriptionPrefix());
-  public static final BlockItem INVENTORY = new BlockItem(ModBlocks.INVENTORY, new Item.Properties().setId(LootrConstants.INVENTORY_ITEM_RESOURCE_KEY)
-      .useBlockDescriptionPrefix());
 
   public static final BlockItem SUSPICIOUS_SAND = new BlockItem(ModBlocks.SUSPICIOUS_SAND, new Item.Properties().setId(LootrConstants.SUSPICIOUS_SAND_ITEM_RESOURCE_KEY)
       .useBlockDescriptionPrefix());
@@ -35,7 +33,6 @@ public class ModItems {
     Registry.register(BuiltInRegistries.ITEM, LootrConstants.BARREL, BARREL);
     Registry.register(BuiltInRegistries.ITEM, LootrConstants.TRAPPED_CHEST, TRAPPED_CHEST);
     Registry.register(BuiltInRegistries.ITEM, LootrConstants.SHULKER_BOX, SHULKER_BOX);
-    Registry.register(BuiltInRegistries.ITEM, LootrConstants.INVENTORY, INVENTORY);
     Registry.register(BuiltInRegistries.ITEM, LootrConstants.SUSPICIOUS_SAND, SUSPICIOUS_SAND);
     Registry.register(BuiltInRegistries.ITEM, LootrConstants.SUSPICIOUS_GRAVEL, SUSPICIOUS_GRAVEL);
     Registry.register(BuiltInRegistries.ITEM, LootrConstants.DECORATED_POT, DECORATED_POT);

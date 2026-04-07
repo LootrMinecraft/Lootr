@@ -32,11 +32,6 @@ public class LootrRegistryImpl implements ILootrRegistry {
   }
 
   @Override
-  public Block getInventoryBlock() {
-    return ModBlocks.INVENTORY;
-  }
-
-  @Override
   public Block getTrophyBlock() {
     return ModBlocks.TROPHY;
   }
@@ -77,11 +72,6 @@ public class LootrRegistryImpl implements ILootrRegistry {
   }
 
   @Override
-  public BlockEntityType<? extends ChestBlockEntity> getInventoryBlockEntity() {
-    return ModBlockEntities.INVENTORY;
-  }
-
-  @Override
   public BlockEntityType<?> getShulkerBoxBlockEntity() {
     return ModBlockEntities.SHULKER_BOX;
   }
@@ -104,11 +94,6 @@ public class LootrRegistryImpl implements ILootrRegistry {
   @Override
   public Item getTrappedChestItem() {
     return ModItems.TRAPPED_CHEST;
-  }
-
-  @Override
-  public Item getInventoryItem() {
-    return ModItems.INVENTORY;
   }
 
   @Override
