@@ -247,8 +247,7 @@ public interface ILootrAPI {
   default Component getInvalidTableComponent(ResourceKey<LootTable> lootTable) {
     return Component.translatable("lootr.message.invalid_table", lootTable.identifier()
             .getNamespace(), lootTable.toString())
-        .setStyle(LootrAPI.isMessageStylesEnabled() ? Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED))
-            .withBold(true) : Style.EMPTY);
+        .setStyle(LootrAPI.isMessageStylesEnabled() ? LootrAPI.getInvalidStyle() : Style.EMPTY);
   }
 
   default boolean canDestroyOrBreak(Player player) {
