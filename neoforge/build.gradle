@@ -57,12 +57,9 @@ publishMods {
         changelogText += utils.getExecOutput(['git', 'log', "--pretty=tformat:- %s [(%h)](${gitRepo}/commit/%h)", '' + gitPrevCommit + '..' + gitCommit])
     }
 
-    // Limit the changelog to 500 characters
-    changelogText = changelogText.take(500)
-
     if (project.hasProperty('curseforge_id_neoforge')) {
         curseforge('curseforgeNeoForge') {
-            type = STABLE
+            type = BETA
 
             projectSlug = "lootr"
             displayName = "lootr-neoforge-${rootProject.minecraft_version}-${rootProject.mod_version}"
@@ -76,7 +73,7 @@ publishMods {
 
     if (project.hasProperty('modrinth_id_fabric')) {
         modrinth('modrinthNeoForge') {
-            type = STABLE
+            type = BETA
             displayName = "lootr-neoforge-${rootProject.minecraft_version}-${rootProject.mod_version}"
             accessToken = project.findProperty("modrinth_auth")
             projectId = project.findProperty('modrinth_id_neoforge')

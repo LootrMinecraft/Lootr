@@ -67,19 +67,15 @@ publishMods {
         changelogText += utils.getExecOutput(['git', 'log', "--pretty=tformat:- %s [(%h)](${gitRepo}/commit/%h)", '' + gitPrevCommit + '..' + gitCommit])
     }
 
-    // Limit the changelog to 500 characters
-    changelogText = changelogText.take(500)
-
     def uploadDependencies = [
-            "fabric-api": true,
-            "cloth-config": true
+            "fabric-api": true
     ]
 
     if (project.hasProperty('curseforge_id_fabric')) {
         curseforge('curseforgeFabric') {
 
             projectSlug = "lootr-fabric"
-            type = STABLE
+            type = BETA
             displayName = "lootr-fabric-${rootProject.minecraft_version}-${rootProject.mod_version}"
             accessToken = project.findProperty("curse_auth")
             projectId = project.findProperty('curseforge_id_fabric')
@@ -99,7 +95,7 @@ publishMods {
 
     if (project.hasProperty('modrinth_id_fabric')) {
         modrinth('modrinthFabric') {
-            type = STABLE
+            type = BETA
             displayName = "lootr-fabric-${rootProject.minecraft_version}-${rootProject.mod_version}"
             accessToken = project.findProperty("modrinth_auth")
             projectId = project.findProperty('modrinth_id_fabric')
