@@ -23,7 +23,7 @@ public class HandleBreak {
 
     BlockEntity block = event.getLevel().getBlockEntity(event.getPos());
     if (LootrAPI.wrapBlockEntity(block) instanceof ILootrBlockEntity lbe) {
-      if (!lbe.hasLootTable()) {
+      if (!lbe.hasLootTable() && !lbe.isDataReferenceInventory()) {
         return;
       }
       if (LootrAPI.canDestroyOrBreak(player)) {

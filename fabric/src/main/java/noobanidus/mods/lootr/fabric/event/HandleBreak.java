@@ -23,7 +23,7 @@ public class HandleBreak {
     }
 
     if (LootrAPI.wrapBlockEntity(blockEntity) instanceof ILootrBlockEntity lbe) {
-      if (!lbe.hasLootTable()) {
+      if (!lbe.hasLootTable() && !lbe.isDataReferenceInventory()) {
         return true;
       }
     }
