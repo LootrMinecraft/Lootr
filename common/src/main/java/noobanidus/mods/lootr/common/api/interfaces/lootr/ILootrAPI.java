@@ -416,6 +416,7 @@ public interface ILootrAPI {
           store.performRefresh();
           instance.performClose();
           instance.performUpdate();
+          instance.markInstanceChanged();
         }
         if (LootrAPI.shouldStartRefreshWhileTicking() && !store.isRefreshed()) {
           int refreshValue = store.remainingRefreshTime();

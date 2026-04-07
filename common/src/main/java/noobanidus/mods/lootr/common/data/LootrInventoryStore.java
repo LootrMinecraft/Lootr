@@ -3,6 +3,7 @@ package noobanidus.mods.lootr.common.data;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.server.level.ServerPlayer;
 import noobanidus.mods.lootr.common.api.LootrAPI;
@@ -37,8 +38,8 @@ public class LootrInventoryStore implements ILootrInventoryStore {
   private boolean hasInventories;
   private ILootrData info;
   private final Map<UUID, LootrInventory> inventories = new HashMap<>();
-  private final Set<UUID> openers = new ObjectLinkedOpenHashSet<>();
-  private final Set<UUID> actualOpeners = new ObjectLinkedOpenHashSet<>();
+  private final Set<UUID> openers = new ObjectOpenHashSet<>();
+  private final Set<UUID> actualOpeners = new ObjectOpenHashSet<>();
 
   private ILootrSection section;
 
@@ -235,6 +236,7 @@ public class LootrInventoryStore implements ILootrInventoryStore {
 
   @Override
   public void performRefresh() {
+    openers.clear();
     inventories.clear();
     hasInventories = false;
     refreshTime = -1;
