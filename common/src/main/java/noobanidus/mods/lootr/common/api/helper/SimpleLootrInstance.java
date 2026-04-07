@@ -79,8 +79,7 @@ public class SimpleLootrInstance {
 
   public Identifier getIdentifier() {
     if (cachedIdentifier == null) {
-      getId();
-      this.cachedIdentifier = IKeyedData.generateInfoIdentifier(this.id);
+      this.cachedIdentifier = IKeyedData.generateInfoIdentifier(getId());
     }
     return cachedIdentifier;
   }
@@ -104,6 +103,9 @@ public class SimpleLootrInstance {
     this.hasBeenOpened = input.getBooleanOr(NBTConstants.HAS_BEEN_OPENED, false);
     if (this.id == null && !providesOwnUuid) {
       getId();
+    }
+    if (this.cachedIdentifier == null) {
+      getIdentifier();
     }
     clientOpeners.clear();
     input.read(NBTConstants.OPENERS, UUIDUtil.CODEC_SET).map(clientOpeners::addAll);
