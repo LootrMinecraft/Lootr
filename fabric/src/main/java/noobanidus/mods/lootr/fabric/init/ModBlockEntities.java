@@ -24,7 +24,7 @@ public class ModBlockEntities {
       .build();
   public static final BlockEntityType<LootrTrappedChestBlockEntity> TRAPPED_CHEST = FabricBlockEntityTypeBuilder.create(LootrTrappedChestBlockEntity::new, ModBlocks.TRAPPED_CHEST)
       .build();
-  public static final BlockEntityType<LootrShulkerBlockEntity> SHULKER_BOX = FabricBlockEntityTypeBuilder.create(LootrShulkerBlockEntity::new, ModBlocks.SHULKER_BOX)
+  public static final BlockEntityType<LootrShulkerBoxBlockEntity> SHULKER_BOX = FabricBlockEntityTypeBuilder.create(LootrShulkerBoxBlockEntity::new, ModBlocks.SHULKER_BOX)
       .build();
   public static final BlockEntityType<LootrInventoryBlockEntity> INVENTORY = FabricBlockEntityTypeBuilder.create(LootrInventoryBlockEntity::new, ModBlocks.INVENTORY)
       .build();

@@ -29,17 +29,17 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
-import noobanidus.mods.lootr.common.block.entity.LootrShulkerBlockEntity;
+import noobanidus.mods.lootr.common.block.entity.LootrShulkerBoxBlockEntity;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
-public class LootrShulkerBlock extends ShulkerBoxBlock {
-  public LootrShulkerBlock(Properties pProperties) {
+public class LootrShulkerBoxBlock extends ShulkerBoxBlock {
+  public LootrShulkerBoxBlock(Properties pProperties) {
     super(DyeColor.YELLOW, pProperties);
     this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.UP));
   }
 
-  private static boolean canOpen(BlockState pState, Level pLevel, BlockPos pPos, LootrShulkerBlockEntity pBlockEntity) {
+  private static boolean canOpen(BlockState pState, Level pLevel, BlockPos pPos, LootrShulkerBoxBlockEntity pBlockEntity) {
     if (pBlockEntity.getAnimationStatus() != ShulkerBoxBlockEntity.AnimationStatus.CLOSED) {
       return true;
     } else {
@@ -60,7 +60,7 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
       return InteractionResult.CONSUME;
     }
     BlockEntity blockEntity = level.getBlockEntity(pos);
-    if (!(blockEntity instanceof LootrShulkerBlockEntity shulkerboxblockentity)) {
+    if (!(blockEntity instanceof LootrShulkerBoxBlockEntity shulkerboxblockentity)) {
       return InteractionResult.PASS;
     }
     if (!canOpen(state, level, pos, shulkerboxblockentity)) {
@@ -90,7 +90,7 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
   @Override
   public @NonNull VoxelShape getShape(@NonNull BlockState pState, BlockGetter pLevel, @NonNull BlockPos pPos, @NonNull CollisionContext pContext) {
     BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-    return blockentity instanceof LootrShulkerBlockEntity ? Shapes.create(((LootrShulkerBlockEntity) blockentity).getBoundingBox(pState)) : Shapes.block();
+    return blockentity instanceof LootrShulkerBoxBlockEntity ? Shapes.create(((LootrShulkerBoxBlockEntity) blockentity).getBoundingBox(pState)) : Shapes.block();
   }
 
   @Override
@@ -116,7 +116,7 @@ public class LootrShulkerBlock extends ShulkerBoxBlock {
 
   @Override
   public @NonNull BlockEntity newBlockEntity(@NonNull BlockPos pPos, @NonNull BlockState pState) {
-    return new LootrShulkerBlockEntity(pPos, pState);
+    return new LootrShulkerBoxBlockEntity(pPos, pState);
   }
 
   @Override

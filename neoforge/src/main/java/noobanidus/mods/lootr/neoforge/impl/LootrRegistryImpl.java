@@ -82,7 +82,7 @@ public class LootrRegistryImpl implements ILootrRegistry {
   }
 
   @Override
-  public BlockEntityType<?> getShulkerBlockEntity() {
+  public BlockEntityType<?> getShulkerBoxBlockEntity() {
     return ModBlockEntities.SHULKER_BOX.get();
   }
 

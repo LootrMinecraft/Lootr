@@ -36,10 +36,6 @@ public final class LootrRegistry {
     return INSTANCE.getTrappedChestBlock();
   }
 
-  public static Block getInventoryBlock() {
-    return INSTANCE.getInventoryBlock();
-  }
-
   public static Block getTrophyBlock() {
     return INSTANCE.getTrophyBlock();
   }
@@ -62,10 +58,6 @@ public final class LootrRegistry {
 
   public static Item getTrappedChestItem() {
     return INSTANCE.getTrappedChestItem();
-  }
-
-  public static Item getInventoryItem() {
-    return INSTANCE.getInventoryItem();
   }
 
   public static Item getTrophyItem() {
@@ -100,12 +92,8 @@ public final class LootrRegistry {
     return INSTANCE.getTrappedChestBlockEntity();
   }
 
-  public static BlockEntityType<? extends ChestBlockEntity> getInventoryBlockEntity() {
-    return INSTANCE.getInventoryBlockEntity();
-  }
-
-  public static BlockEntityType<?> getShulkerBlockEntity() {
-    return INSTANCE.getShulkerBlockEntity();
+  public static BlockEntityType<?> getShulkerBoxBlockEntity() {
+    return INSTANCE.getShulkerBoxBlockEntity();
   }
 
   public static BlockEntityType<?> getDecoratedPotBlockEntity() {

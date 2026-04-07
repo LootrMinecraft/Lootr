@@ -252,7 +252,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
 
   @Override
   public boolean isDataReferenceInventory() {
-    return this.simpleLootrInstance.isReferenceInventory();
+    return isDataReferenceInventoryInternal(simpleLootrInstance.isReferenceInventory());
   }
 
   @Override

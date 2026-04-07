@@ -21,7 +21,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.block.entity.LootrShulkerBlockEntity;
+import noobanidus.mods.lootr.common.block.entity.LootrShulkerBoxBlockEntity;
 import noobanidus.mods.lootr.common.client.state.LootrShulkerBoxRenderState;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3fc;
@@ -29,7 +29,7 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.function.Consumer;
 
-public class LootrShulkerBoxRenderer implements BlockEntityRenderer<LootrShulkerBlockEntity, LootrShulkerBoxRenderState> {
+public class LootrShulkerBoxRenderer implements BlockEntityRenderer<LootrShulkerBoxBlockEntity, LootrShulkerBoxRenderState> {
   public static final SpriteId MATERIAL = new SpriteId(Sheets.SHULKER_SHEET, LootrAPI.rl("entity/shulker_box/normal"));
   public static final SpriteId MATERIAL2 = new SpriteId(Sheets.SHULKER_SHEET, LootrAPI.rl("entity/shulker_box/normal_opened"));
 
@@ -50,7 +50,7 @@ public class LootrShulkerBoxRenderer implements BlockEntityRenderer<LootrShulker
   }
 
   @Override
-  public void extractRenderState(LootrShulkerBlockEntity blockEntity, LootrShulkerBoxRenderState state, float partialTicks, @NonNull Vec3 position, @Nullable ModelFeatureRenderer.CrumblingOverlay overlay) {
+  public void extractRenderState(LootrShulkerBoxBlockEntity blockEntity, LootrShulkerBoxRenderState state, float partialTicks, @NonNull Vec3 position, @Nullable ModelFeatureRenderer.CrumblingOverlay overlay) {
     BlockEntityRenderer.super.extractRenderState(blockEntity, state, partialTicks, position, overlay);
     state.progress = blockEntity.getProgress(partialTicks);
     state.direction = blockEntity.getBlockState().getValueOrElse(ShulkerBoxBlock.FACING, Direction.UP);

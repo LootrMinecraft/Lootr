@@ -61,9 +61,8 @@ import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.interfaces.command.ILootrCommandExtension;
 import noobanidus.mods.lootr.common.block.LootrBarrelBlock;
 import noobanidus.mods.lootr.common.block.LootrChestBlock;
-import noobanidus.mods.lootr.common.block.LootrShulkerBlock;
+import noobanidus.mods.lootr.common.block.LootrShulkerBoxBlock;
 import noobanidus.mods.lootr.common.block.entity.BlockEntityTicker;
-import noobanidus.mods.lootr.common.block.entity.LootrInventoryBlockEntity;
 import noobanidus.mods.lootr.common.data.DataStorage;
 import noobanidus.mods.lootr.common.data.LootrInventory;
 import noobanidus.mods.lootr.common.data.LootrInventoryStore;
@@ -133,8 +132,8 @@ public class CommandLootr {
         } else if (placementState.hasProperty(LootrChestBlock.FACING)) {
           prop = LootrChestBlock.FACING;
           dir = e.getDirection().getOpposite();
-        } else if (placementState.hasProperty(LootrShulkerBlock.FACING)) {
-          prop = LootrShulkerBlock.FACING;
+        } else if (placementState.hasProperty(LootrShulkerBoxBlock.FACING)) {
+          prop = LootrShulkerBoxBlock.FACING;
         }
         if (prop != null) {
           placementState = placementState.setValue(prop, dir);

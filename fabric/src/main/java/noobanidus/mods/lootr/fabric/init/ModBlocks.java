@@ -14,7 +14,7 @@ public class ModBlocks {
   public static final LootrTrappedChestBlock TRAPPED_CHEST = new LootrTrappedChestBlock(LootrConstants.TRAPPED_CHEST_PROPERTIES);
   public static final LootrInventoryBlock INVENTORY = new LootrInventoryBlock(LootrConstants.INVENTORY_PROPERTIES);
   public static final Block TROPHY = new TrophyBlock(LootrConstants.TROPHY_PROPERTIES);
-  public static final LootrShulkerBlock SHULKER_BOX = new LootrShulkerBlock(LootrConstants.SHULKER_BOX_PROPERTIES);
+  public static final LootrShulkerBoxBlock SHULKER_BOX = new LootrShulkerBoxBlock(LootrConstants.SHULKER_BOX_PROPERTIES);
 
   public static final LootrBrushableBlock SUSPICIOUS_SAND = new LootrBrushableBlock(Blocks.SAND, ((BrushableBlock) Blocks.SUSPICIOUS_SAND).getBrushSound(), ((BrushableBlock) Blocks.SUSPICIOUS_GRAVEL).getBrushCompletedSound(), LootrConstants.SUSPICIOUS_SAND_PROPERTIES);
   public static final LootrBrushableBlock SUSPICIOUS_GRAVEL = new LootrBrushableBlock(Blocks.GRAVEL, ((BrushableBlock) Blocks.SUSPICIOUS_GRAVEL).getBrushSound(), ((BrushableBlock) Blocks.SUSPICIOUS_GRAVEL).getBrushCompletedSound(), LootrConstants.SUSPICIOUS_GRAVEL_PROPERTIES);

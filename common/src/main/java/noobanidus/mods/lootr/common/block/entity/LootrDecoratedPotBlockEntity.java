@@ -342,7 +342,7 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
 
   @Override
   public boolean isDataReferenceInventory() {
-    return this.lootrInstance.isReferenceInventory();
+    return isDataReferenceInventoryInternal(lootrInstance.isReferenceInventory());
   }
 
   @Override

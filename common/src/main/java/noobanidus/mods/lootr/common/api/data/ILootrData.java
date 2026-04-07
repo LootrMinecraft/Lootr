@@ -15,6 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
+import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.base.BaseLootrData;
 import noobanidus.mods.lootr.common.api.filler.ILootFiller;
 import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
@@ -104,6 +105,13 @@ public interface ILootrData extends IKeyedData {
   }
 
   default void informPlayerCannotOpen(ServerPlayer player) {
+  }
+
+  default boolean isDataReferenceInventoryInternal (boolean isReferenceInventory) {
+    if (isReferenceInventory && getDataLootTable() != null) {
+      LootrAPI.LOG.error("Lootr container {} at {} in {} has both a loot table and a custom inventory. This is not supported and may cause issues.", this, getDataPos(), getDataDimension());
+    }
+    return isReferenceInventory;
   }
 
   boolean isDataReferenceInventory();

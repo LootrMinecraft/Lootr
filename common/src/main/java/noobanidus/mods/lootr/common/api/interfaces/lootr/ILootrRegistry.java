@@ -26,10 +26,6 @@ public interface ILootrRegistry {
 
   Block getTrophyBlock();
 
-  default Block getShulker() {
-    return getShulkerBoxBlock();
-  }
-
   Block getShulkerBoxBlock();
 
   Block getSuspiciousSandBlock();
@@ -43,8 +39,6 @@ public interface ILootrRegistry {
   Item getChestItem();
 
   Item getTrappedChestItem();
-
-  Item getInventoryItem();
 
   Item getTrophyItem();
 
@@ -68,9 +62,7 @@ public interface ILootrRegistry {
 
   BlockEntityType<? extends ChestBlockEntity> getTrappedChestBlockEntity();
 
-  BlockEntityType<? extends ChestBlockEntity> getInventoryBlockEntity();
-
-  BlockEntityType<?> getShulkerBlockEntity();
+  BlockEntityType<?> getShulkerBoxBlockEntity();
 
   BlockEntityType<?> getDecoratedPotBlockEntity();
 

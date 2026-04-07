@@ -256,7 +256,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
 
   @Override
   public boolean isDataReferenceInventory() {
-    return instance.isReferenceInventory();
+    return isDataReferenceInventoryInternal(instance.isReferenceInventory());
   }
 
   @Override

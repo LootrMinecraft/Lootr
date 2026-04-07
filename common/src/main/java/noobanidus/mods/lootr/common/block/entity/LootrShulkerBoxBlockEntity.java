@@ -52,7 +52,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity implements ILootrBlockEntity {
+public class LootrShulkerBoxBlockEntity extends RandomizableContainerBlockEntity implements ILootrBlockEntity {
   protected final SimpleLootrInstance simpleLootrInstance = new SimpleLootrInstance(this::getVisualOpeners, 27);
 
   private int openCount;
@@ -60,8 +60,8 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   private float progress;
   private float progressOld;
 
-  public LootrShulkerBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
-    super(LootrRegistry.getShulkerBlockEntity(), pWorldPosition, pBlockState);
+  public LootrShulkerBoxBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
+    super(LootrRegistry.getShulkerBoxBlockEntity(), pWorldPosition, pBlockState);
   }
 
   @Override
@@ -343,7 +343,7 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
 
   @Override
   public boolean isDataReferenceInventory() {
-    return simpleLootrInstance.isReferenceInventory();
+    return isDataReferenceInventoryInternal(simpleLootrInstance.isReferenceInventory());
   }
 
   @Override
@@ -372,15 +372,15 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   @AutoService(ILootrBlockEntityWrapper.class)
-  public static class DefaultBlockEntityWrapper implements ILootrBlockEntityWrapper<LootrShulkerBlockEntity> {
+  public static class DefaultBlockEntityWrapper implements ILootrBlockEntityWrapper<LootrShulkerBoxBlockEntity> {
     @Override
-    public ILootrBlockEntity apply(LootrShulkerBlockEntity blockEntity) {
+    public ILootrBlockEntity apply(LootrShulkerBoxBlockEntity blockEntity) {
       return blockEntity;
     }
 
     @Override
     public BlockEntityType<?> getBlockEntityType() {
-      return LootrRegistry.getShulkerBlockEntity();
+      return LootrRegistry.getShulkerBoxBlockEntity();
     }
   }
 }

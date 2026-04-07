@@ -30,14 +30,15 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
-import noobanidus.mods.lootr.common.api.*;
-import noobanidus.mods.lootr.common.api.interfaces.advancement.IContainerTrigger;
-import noobanidus.mods.lootr.common.api.helper.SimpleLootrInstance;
-import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
-import noobanidus.mods.lootr.common.api.interfaces.inventory.ILootrInventory;
-import noobanidus.mods.lootr.common.api.integration.brushing.IBrushable;
-import noobanidus.mods.lootr.common.api.LootrRegistry;
 import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
+import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.LootrRegistry;
+import noobanidus.mods.lootr.common.api.LootrTags;
+import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
+import noobanidus.mods.lootr.common.api.helper.SimpleLootrInstance;
+import noobanidus.mods.lootr.common.api.integration.brushing.IBrushable;
+import noobanidus.mods.lootr.common.api.interfaces.advancement.IContainerTrigger;
+import noobanidus.mods.lootr.common.api.interfaces.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
 import noobanidus.mods.lootr.common.api.interfaces.wrapper.ILootrBlockEntityWrapper;
 import noobanidus.mods.lootr.common.integration.digsite_workshop.IModdedBrushItem;
@@ -189,7 +190,8 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
         double g = (double) blockPos.getX() + 0.5 * e + f;
         double h = (double) blockPos.getY() + 0.5 + (double) (EntityType.ITEM.getHeight() / 2.0F);
         double i = (double) blockPos.getZ() + 0.5 * e + f;
-        ItemEntity itemEntity = new ItemEntity(this.level, g, h, i, theItem.split(this.level.getRandom().nextInt(21) + 10));
+        ItemEntity itemEntity = new ItemEntity(this.level, g, h, i, theItem.split(this.level.getRandom()
+            .nextInt(21) + 10));
         itemEntity.setDeltaMovement(Vec3.ZERO);
         this.level.addFreshEntity(itemEntity);
         this.item = ItemStack.EMPTY;
@@ -465,7 +467,7 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
 
   @Override
   public boolean isDataReferenceInventory() {
-    return simpleLootrInstance.isReferenceInventory();
+    return isDataReferenceInventoryInternal(simpleLootrInstance.isReferenceInventory());
   }
 
   @Override

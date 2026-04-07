@@ -266,7 +266,7 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
 
   @Override
   public boolean isDataReferenceInventory() {
-    return simpleLootrInstance.isReferenceInventory();
+    return isDataReferenceInventoryInternal(simpleLootrInstance.isReferenceInventory());
   }
 
   @Override
