@@ -20,6 +20,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.SeededContainerLoot;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
@@ -122,6 +123,12 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
 
     if (shouldUpdate) {
       this.performUpdate(player);
+    }
+
+    if (LootrAPI.isCustomTrapped() && isDataReferenceInventory()) {
+      Block block = this.getBlockState().getBlock();
+      level.updateNeighborsAt(this.getBlockPos(), block);
+      level.updateNeighborsAt(this.getBlockPos().below(), block);
     }
 
     if (result.isEmpty()) {

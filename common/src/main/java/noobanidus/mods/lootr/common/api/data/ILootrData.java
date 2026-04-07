@@ -19,6 +19,7 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.base.BaseLootrData;
 import noobanidus.mods.lootr.common.api.filler.ILootFiller;
 import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
+import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -99,6 +100,10 @@ public interface ILootrData extends IKeyedData {
 
   @Nullable
   NonNullList<ItemStack> getDataReferenceInventory();
+
+  default void setDataReferenceInventory(@Nullable NonNullList<ItemStack> referenceInventory) {
+    throw new NotImplementedException("setDataReferenceInventory is not implemented for " + this);
+  }
 
   default boolean canPlayerOpen(ServerPlayer player) {
     return true;

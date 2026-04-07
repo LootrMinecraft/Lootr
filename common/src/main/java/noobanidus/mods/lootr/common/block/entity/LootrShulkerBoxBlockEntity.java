@@ -23,6 +23,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -37,13 +38,14 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
-import noobanidus.mods.lootr.common.api.NBTConstants;
-import noobanidus.mods.lootr.common.api.interfaces.wrapper.ILootrBlockEntityWrapper;
-import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
-import noobanidus.mods.lootr.common.api.interfaces.advancement.IContainerTrigger;
-import noobanidus.mods.lootr.common.api.helper.SimpleLootrInstance;
-import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
+import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrRegistry;
+import noobanidus.mods.lootr.common.api.NBTConstants;
+import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
+import noobanidus.mods.lootr.common.api.helper.SimpleLootrInstance;
+import noobanidus.mods.lootr.common.api.interfaces.advancement.IContainerTrigger;
+import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
+import noobanidus.mods.lootr.common.api.interfaces.wrapper.ILootrBlockEntityWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
@@ -174,7 +176,13 @@ public class LootrShulkerBoxBlockEntity extends RandomizableContainerBlockEntity
         this.level.blockEvent(this.worldPosition, this.getBlockState().getBlock(), 1, this.openCount);
         if (this.openCount == 1) {
           this.level.gameEvent(pPlayer, GameEvent.CONTAINER_OPEN, this.worldPosition);
-          this.level.playSound(null, this.worldPosition, SoundEvents.SHULKER_BOX_OPEN, SoundSource.BLOCKS, 0.5F, this.level.getRandom().nextFloat() * 0.1F + 0.9F);
+          this.level.playSound(null, this.worldPosition, SoundEvents.SHULKER_BOX_OPEN, SoundSource.BLOCKS, 0.5F, this.level.getRandom()
+              .nextFloat() * 0.1F + 0.9F);
+        }
+        if (!level.isClientSide() && LootrAPI.isCustomTrapped() && isDataReferenceInventory()) {
+          Block block = this.getBlockState().getBlock();
+          level.updateNeighborsAt(this.getBlockPos(), block);
+          level.updateNeighborsAt(this.getBlockPos().below(), block);
         }
       }
     }
@@ -188,7 +196,8 @@ public class LootrShulkerBoxBlockEntity extends RandomizableContainerBlockEntity
         this.level.blockEvent(this.worldPosition, this.getBlockState().getBlock(), 1, this.openCount);
         if (this.openCount <= 0) {
           this.level.gameEvent(pPlayer, GameEvent.CONTAINER_CLOSE, this.worldPosition);
-          this.level.playSound(null, this.worldPosition, SoundEvents.SHULKER_BOX_CLOSE, SoundSource.BLOCKS, 0.5F, this.level.getRandom().nextFloat() * 0.1F + 0.9F);
+          this.level.playSound(null, this.worldPosition, SoundEvents.SHULKER_BOX_CLOSE, SoundSource.BLOCKS, 0.5F, this.level.getRandom()
+              .nextFloat() * 0.1F + 0.9F);
         }
       }
     }

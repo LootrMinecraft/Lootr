@@ -19,12 +19,14 @@ import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
+import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.NBTConstants;
 import noobanidus.mods.lootr.common.api.interfaces.wrapper.ILootrBlockEntityWrapper;
 import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
@@ -62,6 +64,11 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
     @Override
     protected void openerCountChanged(@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state, int p_155364_, int p_155365_) {
       LootrChestBlockEntity.this.signalOpenCount(level, pos, state, p_155364_, p_155365_);
+      if (LootrAPI.isCustomTrapped() && isDataReferenceInventory()) {
+        Block block = state.getBlock();
+        level.updateNeighborsAt(pos, block);
+        level.updateNeighborsAt(pos.below(), block);
+      }
     }
 
     @Override

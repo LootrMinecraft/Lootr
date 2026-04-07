@@ -22,6 +22,7 @@ import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BarrelBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
@@ -31,6 +32,7 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
+import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.NBTConstants;
 import noobanidus.mods.lootr.common.api.interfaces.wrapper.ILootrBlockEntityWrapper;
 import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
@@ -39,6 +41,7 @@ import noobanidus.mods.lootr.common.api.helper.SimpleLootrInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.interfaces.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.LootrRegistry;
+import noobanidus.mods.lootr.common.block.LootrBarrelBlock;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
@@ -58,6 +61,11 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
       }
       LootrBarrelBlockEntity.this.playSound(state, SoundEvents.BARREL_OPEN);
       LootrBarrelBlockEntity.this.updateBlockState(state, true);
+      if (LootrAPI.isCustomTrapped() && LootrBarrelBlockEntity.this.isDataReferenceInventory()) {
+        Block block = state.getBlock();
+        level.updateNeighborsAt(pos, block);
+        level.updateNeighborsAt(pos.below(), block);
+      }
     }
 
     @Override

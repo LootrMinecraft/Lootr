@@ -22,6 +22,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.SeededContainerLoot;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -174,6 +175,11 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
 
       if (shouldUpdate) {
         this.performUpdate((ServerPlayer) player);
+      }
+      if (LootrAPI.isCustomTrapped() && isDataReferenceInventory()) {
+        Block block = this.getBlockState().getBlock();
+        level.updateNeighborsAt(this.getBlockPos(), block);
+        level.updateNeighborsAt(this.getBlockPos().below(), block);
       }
     }
   }
