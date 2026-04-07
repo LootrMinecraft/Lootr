@@ -9,17 +9,17 @@ public final class LootrConfigStrings {
   // -------------------------------------------------------------------------
   // Client config
   // -------------------------------------------------------------------------
-  public static final String CLIENT_TITLE = "Client Options";
+  public static final String CLIENT_TITLE = "Client";
   public static final String CLIENT_DESC = "Configuration options for individual clients";
 
   // Particles
-  public static final String PARTICLES_TITLE = "Particle Options";
+  public static final String PARTICLES_TITLE = "Particle";
   public static final String PARTICLES_DESC = "Configuration options for the display of particles and other effects";
   public static final String UNOPENED_PARTICLES = "Display Particles from Unopened Containers";
   public static final String UNOPENED_PARTICLES_DESC = "In addition to a visual difference, containers that are not marked as 'opened' by the current player generate particles. [default: true]";
 
   // Textures
-  public static final String TEXTURES_TITLE = "Texture Options";
+  public static final String TEXTURES_TITLE = "Texture";
   public static final String TEXTURES_DESC = "Configuration options for the textures of containers";
   public static final String VANILLA_TEXTURES = "Vanilla Textures";
   public static final String VANILLA_TEXTURES_DESC = "When true, replaces the Lootr-specific textures with Vanilla ones where possible. [default: false]";
@@ -27,7 +27,7 @@ public final class LootrConfigStrings {
   // -------------------------------------------------------------------------
   // Common config — top level
   // -------------------------------------------------------------------------
-  public static final String COMMON_TITLE = "Server Options";
+  public static final String COMMON_TITLE = "Server";
   public static final String COMMON_DESC = "Configuration options for server-specific or single-player worlds.";
 
   // Conversion
@@ -85,7 +85,7 @@ public final class LootrConfigStrings {
   public static final String SHOULD_DROP_PLAYER_LOOT_DESC = "If true, when a container is broken by a player, the contents of that player's inventory (if not generated, it will be generated) for the container will also be dropped on the ground. [default: false]";
 
   // Redstone
-  public static final String REDSTONE_TITLE = "Redstone Options";
+  public static final String REDSTONE_TITLE = "Redstone";
   public static final String REDSTONE_DESC = "Options related to redstone power and comparators.";
   public static final String POWER_COMPARATORS = "Power Comparators";
   public static final String POWER_COMPARATORS_DESC = "If true, comparators will emit a redstone signal. [default: true]";
@@ -93,7 +93,7 @@ public final class LootrConfigStrings {
   public static final String CUSTOM_TRAPPED_DESC = "If true, containers that are 'custom' will emit a redstone signal when opened, as if they were a trapped chest. [default: false]";
 
   // Notifications
-  public static final String NOTIFICATIONS_TITLE = "Notification Options";
+  public static final String NOTIFICATIONS_TITLE = "Notification";
   public static final String NOTIFICATIONS_DESC = "Configuration options related to notifications that are sent to players.";
   public static final String REPORT_UNRESOLVED_TABLES = "Report Unresolved Loot Tables to Players";
   public static final String REPORT_UNRESOLVED_TABLES_DESC = "If true, when opening a container with an unresolved loot tables (loot tables that resolve to empty), a message will be sent to the player opening to indicate the issue. [default: true]";
@@ -105,13 +105,13 @@ public final class LootrConfigStrings {
   public static final String DISABLE_MESSAGE_STYLES_DESC = "If true, the style and formatting of messages related to ticking (such as decay or refresh) will be removed. [default: false]";
 
   // Interaction
-  public static final String INTERACTION_TITLE = "Interaction Options";
+  public static final String INTERACTION_TITLE = "Interaction";
   public static final String INTERACTION_DESC = "Configuration options related to interacting with containers.";
   public static final String BYPASS_SPAWN_PROTECTION = "Bypass Spawn Protection";
   public static final String BYPASS_SPAWN_PROTECTION_DESC = "If true, Lootr containers that are within the spawn protection area of a world will still be interactable if the player interacting with it does not have permission. [default: true]";
 
   // Decay
-  public static final String DECAY_TITLE = "Decay Options";
+  public static final String DECAY_TITLE = "Decay";
   public static final String DECAY_DESC = "Configuration options related to the decay of containers. [By default, no decay occurs.]";
   public static final String DECAY_VALUE = "Decay Duration value";
   public static final String DECAY_VALUE_DESC = "The length of time in ticks (20 per second) that it takes for a container marked to decay to actually decay. [default: 5 * 60 * 20 (5 minutes)]";
@@ -131,7 +131,7 @@ public final class LootrConfigStrings {
   public static final String DECAY_ALL_DESC = "If true, all containers will decay after being opened. [default: false]";
 
   // Refresh
-  public static final String REFRESH_TITLE = "Refresh Options";
+  public static final String REFRESH_TITLE = "Refresh";
   public static final String REFRESH_DESC = "Configuration options related to the refreshing of containers. [By default, no refreshing occurs.]";
   public static final String REFRESH_VALUE = "Refresh Duration Value";
   public static final String REFRESH_VALUE_DESC = "The length of time in ticks (20 per second) that it takes for a container marked to refresh to actually refresh. [default: 5 * 60 * 20 (5 minutes)]";

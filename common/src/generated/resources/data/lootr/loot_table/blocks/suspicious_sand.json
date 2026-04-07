@@ -20,11 +20,11 @@
               "source": "block_entity"
             }
           ],
-          "name": "minecraft:chest"
+          "name": "minecraft:sand"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "lootr:blocks/inventory"
+  "random_sequence": "lootr:blocks/suspicious_sand"
 }
