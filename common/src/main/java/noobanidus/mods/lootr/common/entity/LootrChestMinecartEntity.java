@@ -32,6 +32,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.helper.SimpleLootrEntityInstance;
 import noobanidus.mods.lootr.common.api.interfaces.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.data.IKeyedData;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
@@ -48,14 +49,7 @@ import java.util.UUID;
 
 public class LootrChestMinecartEntity extends AbstractMinecartContainer implements ILootrEntity {
   private static BlockState cartNormal = null;
-  // This can actually just be a null
-  private final Set<UUID> clientOpeners = new ObjectLinkedOpenHashSet<>();
-  // TODO: This isn't synchronized properly
-  private boolean hasBeenOpened = false;
-  // This is only ever set via packet
-  private boolean opened = false;
-  private int cachedKey;
-  private Identifier cachedIdentifier;
+  private final SimpleLootrEntityInstance instance = new SimpleLootrEntityInstance(this, this::getVisualOpeners, 27);
 
   public LootrChestMinecartEntity(EntityType<LootrChestMinecartEntity> type, Level world) {
     super(type, world);
@@ -77,17 +71,17 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
 
   @Override
   public @Nullable Set<UUID> getClientOpeners() {
-    return clientOpeners;
+    return instance.getClientOpeners();
   }
 
   @Override
   public boolean isClientOpened() {
-    return opened;
+    return instance.isClientOpened();
   }
 
   @Override
   public void setClientOpened(boolean opened) {
-    this.opened = opened;
+    this.instance.setClientOpened(opened);
   }
 
   @Override
@@ -201,8 +195,8 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   @Override
   public void startOpen(@NonNull ContainerUser user) {
     if (user instanceof ServerPlayer player) {
-      if (!hasBeenOpened) {
-        hasBeenOpened = true;
+      if (!instance.hasBeenOpened()) {
+        instance.setHasBeenOpened();
         markInstanceChanged();
       }
       performOpen(player);
@@ -257,12 +251,12 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   // TODO:
   @Override
   public @Nullable NonNullList<ItemStack> getDataReferenceInventory() {
-    return null;
+    return instance.getReferenceInventory();
   }
 
   @Override
   public boolean isDataReferenceInventory() {
-    return false;
+    return instance.isReferenceInventory();
   }
 
   @Override
@@ -286,19 +280,14 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     return getUUID();
   }
 
-  private boolean cacheChecked = false;
-
   @Override
   public Identifier getDataIdentifier() {
-    if (this.cachedIdentifier == null) {
-      this.cachedIdentifier = IKeyedData.generateInfoIdentifier(getDataId());
-    }
-    return cachedIdentifier;
+    return instance.getIdentifier();
   }
 
   @Override
   public boolean hasBeenOpened() {
-    return hasBeenOpened;
+    return instance.hasBeenOpened();
   }
 
   @Override
