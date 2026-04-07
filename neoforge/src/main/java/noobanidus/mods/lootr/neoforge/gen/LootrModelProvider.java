@@ -19,7 +19,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.client.model.generators.blockstate.UnbakedMutator;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.config.client.ConfigDisplayType;
+import noobanidus.mods.lootr.common.api.config.ConfigDisplayType;
 import noobanidus.mods.lootr.common.block.LootrBarrelBlock;
 import noobanidus.mods.lootr.common.client.select.SelectConfigType;
 import noobanidus.mods.lootr.common.client.special.LootrChestSpecialRenderer;

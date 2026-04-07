@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.common.api.config.client;
+package noobanidus.mods.lootr.common.api.config;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.util.StringRepresentable;
