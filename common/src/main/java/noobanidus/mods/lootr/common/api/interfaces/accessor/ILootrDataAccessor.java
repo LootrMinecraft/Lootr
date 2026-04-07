@@ -1,7 +1,9 @@
 package noobanidus.mods.lootr.common.api.interfaces.accessor;
 
+import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.Clearable;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,5 +37,10 @@ public non-sealed interface ILootrDataAccessor<T> extends ILootrAccessor<T> {
       clearable.clearContent();
     }
     setLootTable(entity, null, 0);
+  }
+
+  @Nullable
+  default NonNullList<ItemStack> getInventoryCopy (T entity) {
+    return null;
   }
 }

@@ -1,7 +1,9 @@
 package noobanidus.mods.lootr.common.impl.accessor;
 
 import com.google.auto.service.AutoService;
+import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.LootrAPI;
@@ -34,5 +36,16 @@ public class DecoratedPotBlockEntityAccessor implements ILootrDataAccessor<Decor
   @Override
   public boolean hasCopyableComponentsViaItem(DecoratedPotBlockEntity entity) {
     return LootrAPI.getDecorationsAdapter(entity) != PotDecorationsAdapter.EMPTY;
+  }
+
+  @Override
+  public @Nullable NonNullList<ItemStack> getInventoryCopy(DecoratedPotBlockEntity entity) {
+    if (getLootTable(entity) == null) {
+      NonNullList<ItemStack> result = NonNullList.withSize(1, ItemStack.EMPTY);
+      result.set(0, entity.getTheItem());
+      return result;
+    }
+
+    return null;
   }
 }
