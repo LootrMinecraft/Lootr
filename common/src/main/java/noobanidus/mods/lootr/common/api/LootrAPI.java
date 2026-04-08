@@ -45,6 +45,7 @@ import noobanidus.mods.lootr.common.api.integration.decorated.PotDecorationsAdap
 import noobanidus.mods.lootr.common.api.interfaces.processor.ILootrBlockEntityProcessor;
 import noobanidus.mods.lootr.common.api.interfaces.processor.ILootrEntityProcessor;
 import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
+import org.apache.commons.lang3.stream.IntStreams;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -69,8 +70,11 @@ public final class LootrAPI {
   public static final ResourceKey<LootTable> ELYTRA_CHEST = ResourceKey.create(Registries.LOOT_TABLE, LootrAPI.rl("chests/elytra"));
   public static final ResourceKey<LootTable> TROPHY_REWARD = ResourceKey.create(Registries.LOOT_TABLE, LootrAPI.rl("reward/trophy"));
   public static final ResourceKey<LootTable> ITEM_FRAME_EMPTY = ResourceKey.create(Registries.LOOT_TABLE, LootrAPI.rl("entity/item_frame_empty"));
-  public static final ResourceKey<LootTable> EMPTY_CHEST = ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath("c", "empty"));
   public static final List<Identifier> PROBLEMATIC_CHESTS = Arrays.asList(LootrAPI.rl("twilightforest", "structures/stronghold_boss"), LootrAPI.rl("atum", "chests/pharaoh"));
+  public static final List<Identifier> ALL_LOOTR_FILES = IntStreams.rangeClosed(256).boxed().map(o -> {
+    var str = Integer.toHexString(o);
+    return LootrAPI.rl(str.charAt(0) + "/" + str);
+  }).toList();
 
   public static final BoundingBox DESERT_PYRAMID_ADDITIONAL = new BoundingBox(-5, -30, -5, 5, 4, 4);
 

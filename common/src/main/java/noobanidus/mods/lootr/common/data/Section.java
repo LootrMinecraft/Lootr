@@ -48,6 +48,10 @@ public class Section extends SavedData implements ILootrSection {
     return store;
   }
 
+  public Iterable<LootrInventoryStore> getStores() {
+    return data.values();
+  }
+
   @Override
   public void markSectionChanged() {
     setDirty(true);
