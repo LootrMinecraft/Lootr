@@ -27,7 +27,7 @@ public class UnbakedCustomModel extends noobanidus.mods.lootr.common.client.bloc
     super(opened, unopened, vanilla, state, open);
   }
 
-  public UnbakedCustomModel withState (Variant.SimpleModelState modelState) {
+  public UnbakedCustomModel withState(Variant.SimpleModelState modelState) {
     return new UnbakedCustomModel(this.opened, this.unopened, this.vanilla, modelState, open);
   }
 
@@ -59,10 +59,11 @@ public class UnbakedCustomModel extends noobanidus.mods.lootr.common.client.bloc
         return;
       }
 
+      // TODO: #797 -- is this related? We're never actually checking the state in any of
+      //  the `collectParts` or `emitQuads` calls that I can tell which wouldn't automatically
+      //  handle air.
       if (blockState.isAir()) {
-        if (!LootrAPI.isVanillaTextures()) {
-          unopened.collectParts(blockAndTintGetter, blockPos, blockState, randomSource, list);
-        }
+        unopened.collectParts(blockAndTintGetter, blockPos, blockState, randomSource, list);
         return;
       }
 

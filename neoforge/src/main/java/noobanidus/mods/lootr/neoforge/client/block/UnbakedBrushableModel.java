@@ -47,7 +47,7 @@ public class UnbakedBrushableModel extends noobanidus.mods.lootr.common.client.b
         opened.collectParts(blockAndTintGetter, blockPos, blockState, randomSource, list);
         return;
       }
-      int stage = blockState.getValue(BlockStateProperties.DUSTED);
+      int stage = blockState.isAir() ? 0 : blockState.getValue(BlockStateProperties.DUSTED);
       switch (stage) {
         case 1 -> stage_1.collectParts(blockAndTintGetter, blockPos, blockState, randomSource, list);
         case 2 -> stage_2.collectParts(blockAndTintGetter, blockPos, blockState, randomSource, list);

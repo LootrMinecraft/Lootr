@@ -52,11 +52,15 @@ public class UnbakedBrushableModel extends noobanidus.mods.lootr.common.client.b
       if (visuallyOpen) {
         opened.emitQuads(emitter, blockView, pos, state, random, cullTest);
       } else {
-        switch (state.getValue(BlockStateProperties.DUSTED)) {
-          case 1 -> stage_1.emitQuads(emitter, blockView, pos, state, random, cullTest);
-          case 2 -> stage_2.emitQuads(emitter, blockView, pos, state, random, cullTest);
-          case 3 -> stage_3.emitQuads(emitter, blockView, pos, state, random, cullTest);
-          default -> stage_0.emitQuads(emitter, blockView, pos, state, random, cullTest);
+        if (state.isAir()) {
+          stage_0.emitQuads(emitter, blockView, pos, state, random, cullTest);
+        } else {
+          switch (state.getValue(BlockStateProperties.DUSTED)) {
+            case 1 -> stage_1.emitQuads(emitter, blockView, pos, state, random, cullTest);
+            case 2 -> stage_2.emitQuads(emitter, blockView, pos, state, random, cullTest);
+            case 3 -> stage_3.emitQuads(emitter, blockView, pos, state, random, cullTest);
+            default -> stage_0.emitQuads(emitter, blockView, pos, state, random, cullTest);
+          }
         }
       }
     }
