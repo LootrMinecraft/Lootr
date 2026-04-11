@@ -45,7 +45,6 @@ import java.util.UUID;
 public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlockEntity {
   protected final SimpleLootrInstance simpleLootrInstance = new SimpleLootrInstance(this::getVisualOpeners, 27);
 
-  private final ChestLidController chestLidController = new ChestLidController();
   private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
     @Override
     protected void onOpen(@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state) {
