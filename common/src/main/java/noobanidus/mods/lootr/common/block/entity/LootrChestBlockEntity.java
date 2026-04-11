@@ -152,11 +152,6 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   }
 
   @Override
-  public float getOpenNess(float pPartialTicks) {
-    return this.chestLidController.getOpenness(pPartialTicks);
-  }
-
-  @Override
   @NotNull
   public CompoundTag getUpdateTag(HolderLookup.@NonNull Provider provider) {
     CompoundTag result = super.getUpdateTag(provider);
