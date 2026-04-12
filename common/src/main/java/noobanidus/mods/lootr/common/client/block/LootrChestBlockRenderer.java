@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.ChestRenderer;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
@@ -82,22 +83,19 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootrBlo
     renderState.facing = blockstate.getValue(ChestBlock.FACING);
   }
 
-  // TODO: REWRITE
   @Override
   public void submit(LootrChestBlockRenderState renderState, PoseStack poseStack, SubmitNodeCollector nodeCollector, CameraRenderState cameraRenderState) {
     poseStack.pushPose();
-    poseStack.translate(0.5F, 0.5F, 0.5F);
-    //poseStack.mulPose(Axis.YP.rotationDegrees(-renderState.angle));
-    poseStack.translate(-0.5F, -0.5F, -0.5F);
-    float f = renderState.open;
-    f = 1.0F - f;
-    f = 1.0F - f * f * f;
+    poseStack.mulPose(ChestRenderer.modelTransformation(renderState.facing));
+    float open = renderState.open;
+    open = 1.0f - open;
+    open = 1.0f - open * open * open;
     SpriteId material = getMaterial(renderState);
     RenderType rendertype = material.renderType(this.singleModel::renderType);
     TextureAtlasSprite textureatlassprite = this.materials.get(material);
     nodeCollector.submitModel(
         this.singleModel,
-        f,
+        open,
         poseStack,
         rendertype,
         renderState.lightCoords,
