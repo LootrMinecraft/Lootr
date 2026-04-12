@@ -42,9 +42,8 @@ public interface IPlatformAPI {
     entity2.setYHeadRot(entity1.getYHeadRot());
     ResourceKey<LootTable> lootTable = adapter.getLootTable(entity1);
     long seed = adapter.getLootSeed(entity1);
-    if (lootTable != null && entity2 instanceof AbstractMinecartContainer entity4) {
-      // TODO: Shim this into ILootrEntity
-      entity4.setLootTable(lootTable, seed);
+    if (lootTable != null) {
+      entity3.setLootTableInternal(lootTable, seed);
     }
   }
 

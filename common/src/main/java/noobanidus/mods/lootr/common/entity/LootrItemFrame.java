@@ -394,6 +394,10 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   }
 
   @Override
+  public void setLootTableInternal(ResourceKey<LootTable> lootTable, long seed) {
+  }
+
+  @Override
   public double getParticleYOffset() {
     return 0.4f;
   }

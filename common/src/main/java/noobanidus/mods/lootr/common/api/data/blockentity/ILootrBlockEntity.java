@@ -91,12 +91,11 @@ public interface ILootrBlockEntity extends ILootrContainerInstance {
     if (level == null || level.isClientSide()) {
       return;
     }
-    // TODO: Put this somewhere else
+    // TODO: Put this somewhere else, this is duplicated
     BlockState stateAt = level.getBlockState(getDataPos());
     boolean replaceWhenDecayed = LootrAPI.shouldReplaceWhenDecayed();
     level.destroyBlock(getDataPos(), !replaceWhenDecayed);
     if (replaceWhenDecayed) {
-      //noinspection deprecation
       Block replacementBlock = getDataType().getReplacementBlock();
       if (replacementBlock != null) {
         BlockState replacementState = replacementBlock.defaultBlockState();

@@ -1,14 +1,19 @@
 package noobanidus.mods.lootr.common.api.data.entity;
 
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.RandomizableContainer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
+import org.apache.commons.lang3.NotImplementedException;
+import org.jetbrains.annotations.ApiStatus;
 
 public interface ILootrEntity extends ILootrContainerInstance {
   default Entity asEntity () {
@@ -68,4 +73,6 @@ public interface ILootrEntity extends ILootrContainerInstance {
   default Vec3 getParticleCenter() {
     return asEntity().position().subtract(0.5, 0, 0.5);
   }
+
+  void setLootTableInternal (ResourceKey<LootTable> lootTable, long seed);
 }
