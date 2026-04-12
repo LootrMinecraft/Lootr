@@ -80,6 +80,6 @@ public class ClientSetup {
 
   @SubscribeEvent
   public static void registerSelect (RegisterSelectItemModelPropertyEvent event) {
-    event.register(LootrAPI.rl("config_type"), SelectConfigType.TYPE);
+    event.register(SelectConfigType.IDENTIFIER, SelectConfigType.TYPE);
   }
 }

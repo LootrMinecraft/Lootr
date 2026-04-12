@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.item.properties.select.SelectItemModelProperty;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
@@ -17,9 +18,10 @@ public record SelectConfigType() implements SelectItemModelProperty<ConfigDispla
       MapCodec.unit(new SelectConfigType()),
       ConfigDisplayType.CODEC
   );
+  public static final Identifier IDENTIFIER = LootrAPI.rl("config_type");
 
   @Override
-  public @Nullable ConfigDisplayType get(@NonNull ItemStack p_387845_, @Nullable ClientLevel p_387945_, @Nullable LivingEntity p_388349_, int p_388630_, @NonNull ItemDisplayContext p_388902_) {
+  public @NonNull ConfigDisplayType get(@NonNull ItemStack p_387845_, @Nullable ClientLevel p_387945_, @Nullable LivingEntity p_388349_, int p_388630_, @NonNull ItemDisplayContext p_388902_) {
     if (LootrAPI.isVanillaTextures()) {
       return ConfigDisplayType.VANILLA;
     }

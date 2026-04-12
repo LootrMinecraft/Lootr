@@ -61,6 +61,6 @@ public class LootrClient implements ClientModInitializer {
     ParticleProviderRegistry.getInstance().register(ModParticles.UNOPENED_PARTCLE, UnopenedParticle.Provider::new);
     ParticleProviderRegistry.getInstance().register(ModParticles.REFRESH_PARTICLE, RefreshParticle.Provider::new);
 
-    SelectItemModelProperties.ID_MAPPER.put(LootrAPI.rl("config_type"), SelectConfigType.TYPE);
+    SelectItemModelProperties.ID_MAPPER.put(SelectConfigType.IDENTIFIER, SelectConfigType.TYPE);
   }
 }
