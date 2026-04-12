@@ -48,12 +48,12 @@ public interface ILootrEntity extends ILootrContainerInstance {
     boolean replaceWhenDecayed = LootrAPI.shouldReplaceWhenDecayed();
     Entity entity = asEntity();
     if (replaceWhenDecayed) {
-      //noinspection deprecation
       EntityType<?> type = getDataType().getReplacementEntity();
       if (type != null) {
         Entity newCart = type.create(level, EntitySpawnReason.COMMAND);
         if (newCart != null) {
-          // TODO: Does anything else need to be copied over?
+          // TODO: Write some kind of platform-based copy
+          //  ideally we also need to include the custom NBT from neoforge
           newCart.setPos(entity.position());
           newCart.setXRot(entity.getXRot());
           newCart.setYRot(entity.getYRot());

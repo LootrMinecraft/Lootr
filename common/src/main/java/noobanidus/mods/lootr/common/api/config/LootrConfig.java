@@ -46,7 +46,7 @@ public class LootrConfig {
   private static List<String> LAST_LOOT_MODIDS = null;
   private static List<String> LAST_PROBLEMATIC_LOOT_TABLES = null;
 
-  // TODO: This is never actually used
+  // TODO: This is fine but it should be split into client/etc observables
   public static void reset() {
     MODID_DIM_WHITELIST = null;
     MODID_DIM_BLACKLIST = null;
@@ -141,15 +141,6 @@ public class LootrConfig {
     return LOOT_MODIDS;
   }
 
-  @DefaultCandidate
-  public static boolean isBlacklisted(ResourceKey<LootTable> table) {
-    if (LootrAPI.getLootTableBlacklist().contains(table)) {
-      return true;
-    }
-
-    return LootrAPI.getLootModidBlacklist().contains(table.identifier().getNamespace());
-  }
-
   public static Set<ResourceKey<LootTable>> getDecayingTables() {
     if (DECAY_TABLES == null || !LootrCommonConfig.Decay.decayLootTables.equals(LAST_DECAY_TABLES)) {
       LAST_DECAY_TABLES = new ArrayList<>(LootrCommonConfig.Decay.decayLootTables);
@@ -180,74 +171,6 @@ public class LootrConfig {
       REFRESH_MODS = validateStringList(LootrCommonConfig.Refresh.refreshLootTableModids, "refresh_modids");
     }
     return REFRESH_MODS;
-  }
-
-  // TODO: Move these to API
-  public static boolean isDimensionBlocked(ResourceKey<Level> key) {
-    if (!getDimensionModIdWhitelist().isEmpty() && !getDimensionModIdWhitelist().contains(key.identifier()
-        .getNamespace()) || getDimensionModIdBlacklist().contains(key.identifier().getNamespace())) {
-      return true;
-    }
-
-    return (!getDimensionWhitelist().isEmpty() && !getDimensionWhitelist().contains(key)) || getDimensionBlacklist().contains(key);
-  }
-
-  @DefaultCandidate
-  public static boolean isDimensionDecaying(ResourceKey<Level> key) {
-    return LootrAPI.getDecayDimensions().contains(key);
-  }
-
-  @DefaultCandidate
-  public static boolean isDimensionRefreshing(ResourceKey<Level> key) {
-    return LootrAPI.getRefreshDimensions().contains(key);
-  }
-
-  @DefaultCandidate
-  public static boolean isDecaying(ILootrContainerInstance tile) {
-    if (LootrAPI.shouldDecayAll()) {
-      return true;
-    }
-    if (tile.getDataLootTable() != null) {
-      if (LootrAPI.getDecayLootTables().contains(tile.getDataLootTable())) {
-        return true;
-      }
-      if (LootrAPI.getDecayModIds().contains(tile.getDataLootTable().identifier().getNamespace())) {
-        return true;
-      }
-    }
-    var dim = tile.getDataDimension();
-    var pos = tile.getDataPos();
-    if (LootrAPI.isTaggedStructurePresent((ServerLevel) tile.getDataLevel(), ChunkPos.containing(pos), LootrTags.Structure.DECAY_STRUCTURES, pos)) {
-      return true;
-    }
-
-    return LootrAPI.isDimensionDecaying(dim);
-  }
-
-  @DefaultCandidate
-  public static boolean isRefreshing(ILootrContainerInstance tile) {
-    if (LootrAPI.shouldRefreshAll()) {
-      return true;
-    }
-    if (tile.getDataLootTable() != null) {
-      if (LootrAPI.getRefreshLootTables().contains(tile.getDataLootTable())) {
-        return true;
-      }
-      if (LootrAPI.getRefreshLootTableModIds().contains(tile.getDataLootTable().identifier().getNamespace())) {
-        return true;
-      }
-    }
-    var pos = tile.getDataPos();
-    if (LootrAPI.isTaggedStructurePresent((ServerLevel) tile.getDataLevel(), ChunkPos.containing(pos), LootrTags.Structure.REFRESH_STRUCTURES, pos)) {
-      return true;
-    }
-    return LootrAPI.isDimensionRefreshing(tile.getDataDimension());
-  }
-
-  @DefaultCandidate
-  public static boolean shouldNotify(int remaining) {
-    int delay = LootrAPI.getNotificationDelay();
-    return !LootrAPI.isNotificationsEnabled() && (delay == -1 || remaining <= delay);
   }
 
   public static Set<ResourceKey<LootTable>> getProblematicLootTables() {

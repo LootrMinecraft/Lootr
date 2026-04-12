@@ -7,9 +7,11 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
@@ -18,6 +20,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrConstants;
+import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.config.*;
 import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
 import noobanidus.mods.lootr.common.api.data.ILootrInventoryStore;
@@ -27,6 +30,7 @@ import noobanidus.mods.lootr.common.api.filler.ILootFiller;
 import noobanidus.mods.lootr.common.api.integration.decorated.PotDecorationsAdapter;
 import noobanidus.mods.lootr.common.api.interfaces.accessor.ILootrDataAccessor;
 import noobanidus.mods.lootr.common.api.interfaces.accessor.ILootrItemFrameAccessor;
+import noobanidus.mods.lootr.common.api.interfaces.annotation.DefaultCandidate;
 import noobanidus.mods.lootr.common.api.interfaces.container.IMenuBuilder;
 import noobanidus.mods.lootr.common.api.interfaces.filter.ILootrFilter;
 import noobanidus.mods.lootr.common.api.interfaces.inventory.ILootrInventory;
@@ -189,8 +193,10 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
+  @DefaultCandidate
   public boolean shouldNotify(int remaining) {
-    return LootrConfig.shouldNotify(remaining);
+    int delay = LootrAPI.getNotificationDelay();
+    return !LootrAPI.isNotificationsEnabled() && (delay == -1 || remaining <= delay);
   }
 
   @Override
@@ -219,23 +225,39 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
+  @DefaultCandidate
   public boolean isLootTableBlacklisted(ResourceKey<LootTable> table) {
-    return LootrConfig.isBlacklisted(table);
+    if (LootrAPI.getLootTableBlacklist().contains(table)) {
+      return true;
+    }
+
+    return LootrAPI.getLootModidBlacklist().contains(table.identifier().getNamespace());
   }
 
   @Override
+  @DefaultCandidate
   public boolean isDimensionBlocked(ResourceKey<Level> dimension) {
-    return LootrConfig.isDimensionBlocked(dimension);
+    var whitelist = LootrAPI.getModidDimensionWhitelist();
+    if (!whitelist.isEmpty() && !whitelist.contains(dimension.identifier()
+        .getNamespace()) || LootrAPI.getModidDimensionBlacklist().contains(dimension.identifier().getNamespace())) {
+      return true;
+    }
+
+    var whitelist2 = LootrAPI.getDimensionWhitelist();
+
+    return (!whitelist2.isEmpty() && !whitelist2.contains(dimension)) || LootrAPI.getDimensionBlacklist().contains(dimension);
   }
 
+  @DefaultCandidate
   @Override
   public boolean isDimensionDecaying(ResourceKey<Level> dimension) {
-    return LootrConfig.isDimensionDecaying(dimension);
+    return LootrAPI.getDecayDimensions().contains(dimension);
   }
 
   @Override
+  @DefaultCandidate
   public boolean isDimensionRefreshing(ResourceKey<Level> dimension) {
-    return LootrConfig.isDimensionRefreshing(dimension);
+    return LootrAPI.getRefreshDimensions().contains(dimension);
   }
 
   @Override
@@ -270,12 +292,44 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
 
   @Override
   public boolean shouldBeginDecaying(ILootrContainerInstance instance) {
-    return LootrConfig.isDecaying(instance);
+    if (LootrAPI.shouldDecayAll()) {
+      return true;
+    }
+    if (instance.getDataLootTable() != null) {
+      if (LootrAPI.getDecayLootTables().contains(instance.getDataLootTable())) {
+        return true;
+      }
+      if (LootrAPI.getDecayModIds().contains(instance.getDataLootTable().identifier().getNamespace())) {
+        return true;
+      }
+    }
+    var dim = instance.getDataDimension();
+    var pos = instance.getDataPos();
+    if (LootrAPI.isTaggedStructurePresent((ServerLevel) instance.getDataLevel(), ChunkPos.containing(pos), LootrTags.Structure.DECAY_STRUCTURES, pos)) {
+      return true;
+    }
+
+    return LootrAPI.isDimensionDecaying(dim);
   }
 
   @Override
   public boolean shouldBeginRefreshing(ILootrContainerInstance instance) {
-    return LootrConfig.isRefreshing(instance);
+    if (LootrAPI.shouldRefreshAll()) {
+      return true;
+    }
+    if (instance.getDataLootTable() != null) {
+      if (LootrAPI.getRefreshLootTables().contains(instance.getDataLootTable())) {
+        return true;
+      }
+      if (LootrAPI.getRefreshLootTableModIds().contains(instance.getDataLootTable().identifier().getNamespace())) {
+        return true;
+      }
+    }
+    var pos = instance.getDataPos();
+    if (LootrAPI.isTaggedStructurePresent((ServerLevel) instance.getDataLevel(), ChunkPos.containing(pos), LootrTags.Structure.REFRESH_STRUCTURES, pos)) {
+      return true;
+    }
+    return LootrAPI.isDimensionRefreshing(instance.getDataDimension());
   }
 
   @Override
