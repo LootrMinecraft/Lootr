@@ -50,8 +50,9 @@ public class LootrClient implements ClientModInitializer {
     SpecialModelRenderers.ID_MAPPER.put(LootrAPI.rl("shulker_box"), LootrShulkerSpecialRenderer.Unbaked.MAP_CODEC);
     SpecialModelRenderers.ID_MAPPER.put(LootrAPI.rl("decorated_pot"), LootrDecoratedPotSpecialRenderer.Unbaked.MAP_CODEC);
 
-    CustomUnbakedBlockStateModel.register(LootrAPI.rl("custom"), UnbakedCustomModel.CODEC);
-    CustomUnbakedBlockStateModel.register(LootrAPI.rl("brushable"), UnbakedBrushableModel.CODEC);
+    // TODO: Check these
+    CustomUnbakedBlockStateModel.register(UnbakedCustomModel.IDENTIFIER, UnbakedCustomModel.CODEC);
+    CustomUnbakedBlockStateModel.register(UnbakedBrushableModel.IDENTIFIER, UnbakedBrushableModel.CODEC);
 
     EntityRenderers.register(ModEntities.MINECART_WITH_CHEST, (context) -> new LootrChestCartRenderer<>(context, ModelLayers.CHEST_MINECART));
     EntityRenderers.register(ModEntities.ITEM_FRAME, LootrItemFrameRenderer::new);

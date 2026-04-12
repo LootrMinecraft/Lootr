@@ -20,6 +20,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.function.Predicate;
 
 public class UnbakedCustomModel extends noobanidus.mods.lootr.common.client.block.UnbakedCustomModel implements CustomUnbakedBlockStateModel {
+  public static final Identifier IDENTIFIER = LootrAPI.rl("custom");
   public static final MapCodec<UnbakedCustomModel> CODEC = getCodec(UnbakedCustomModel::new);
 
   public UnbakedCustomModel(Identifier opened, Identifier unopened, Identifier vanilla, Variant.SimpleModelState state, boolean open) {
