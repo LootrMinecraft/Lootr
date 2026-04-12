@@ -52,7 +52,7 @@ public class MixinPersistentEntitySectionManager {
           newItemFrame.lootrSetItem(contained);
           PlatformAPI.copyEntityData(adapter, entity, newItemFrame);
 
-          // TODO: Processing
+          // TODO: Processing specifically for ItemFrames
 
           cir.setReturnValue(false);
           cir.cancel();

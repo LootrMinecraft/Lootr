@@ -7,4 +7,7 @@ public final class NBTConstants {
   public static final String IS_CUSTOM_INVENTORY = "LootrIsCustomInventory";
   public static final String CUSTOM_INVENTORY = "LootrCustomInventory";
   public static final String DECORATIONS = "LootrDecorations";
+  public static final String HIT_DIRECTION = "LootrHitDirection";
+  public static final String BRUSHING_PLAYER = "LootrBrushingPlayer";
+  public static final String ITEM = "LootrItem";
 }

@@ -21,6 +21,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 
 public class UnbakedCustomModel extends noobanidus.mods.lootr.common.client.block.UnbakedCustomModel implements CustomUnbakedBlockStateModel {
+  public static final Identifier IDENTIFIER = LootrAPI.rl("custom");
   public static final MapCodec<UnbakedCustomModel> CODEC = getCodec(UnbakedCustomModel::new);
 
   public UnbakedCustomModel(Identifier opened, Identifier unopened, Identifier vanilla, Variant.SimpleModelState state, boolean open) {
@@ -59,9 +60,6 @@ public class UnbakedCustomModel extends noobanidus.mods.lootr.common.client.bloc
         return;
       }
 
-      // TODO: #797 -- is this related? We're never actually checking the state in any of
-      //  the `collectParts` or `emitQuads` calls that I can tell which wouldn't automatically
-      //  handle air.
       if (blockState.isAir()) {
         unopened.collectParts(blockAndTintGetter, blockPos, blockState, randomSource, list);
         return;

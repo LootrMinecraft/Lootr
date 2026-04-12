@@ -108,7 +108,7 @@ public class LootrShulkerBoxRenderer implements BlockEntityRenderer<LootrShulker
     private final ModelPart lid;
 
     public ShulkerBoxModel(ModelPart root) {
-      // TODO: ???
+      // TODO: I'm not sure what the 'todo' is supposed to be here.
       super(root, RenderTypes::entityCutout);
       this.lid = root.getChild("lid");
     }

@@ -31,7 +31,6 @@ public interface MixinRandomizableContainer {
     original.call(instance, l);
     if (instance.getLevel() != null && !instance.getLevel()
         .isClientSide() && instance instanceof BlockEntity blockEntity && !(instance instanceof ILootrBlockEntity) && !(LootrAPI.wrapBlockEntity(blockEntity) instanceof ILootrBlockEntity)) {
-      // The likelihood of the container *not* being converted is extremely low at this point, so it should be safe to close the container. TODO: Maybe not?
       LootrAPI.closeContainers(blockEntity);
       BlockEntityTicker.addEntity(blockEntity, blockEntity.getLevel(), ChunkPos.containing(blockEntity.getBlockPos()));
     }

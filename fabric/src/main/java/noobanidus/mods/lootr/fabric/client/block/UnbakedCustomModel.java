@@ -54,7 +54,6 @@ public class UnbakedCustomModel extends noobanidus.mods.lootr.common.client.bloc
         return;
       }
 
-      // TODO: #797 -- is this related?
       if (state.isAir()) {
         unopened.emitQuads(emitter, blockView, pos, state, random, cullTest);
         return;

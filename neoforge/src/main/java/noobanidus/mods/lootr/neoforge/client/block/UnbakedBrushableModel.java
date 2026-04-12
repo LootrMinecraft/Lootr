@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.client.model.DynamicBlockStateModel;
 import net.neoforged.neoforge.client.model.block.CustomUnbakedBlockStateModel;
+import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.neoforge.init.ModBlockProperties;
 import org.jspecify.annotations.NonNull;
 
@@ -21,6 +22,7 @@ import java.util.List;
 
 public class UnbakedBrushableModel extends noobanidus.mods.lootr.common.client.block.UnbakedBrushableModel implements CustomUnbakedBlockStateModel {
   public static final MapCodec<UnbakedBrushableModel> CODEC = getCodec(UnbakedBrushableModel::new);
+  public static final Identifier IDENTIFIER = LootrAPI.rl("brushable");
 
   public UnbakedBrushableModel(Identifier opened, Identifier stage_0, Identifier stage_1, Identifier stage_2, Identifier stage_3, Variant.SimpleModelState state) {
     super(opened, stage_0, stage_1, stage_2, stage_3, state);

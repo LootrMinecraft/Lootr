@@ -51,9 +51,8 @@ public class ClientSetup {
 
   @SubscribeEvent
   public static void modelRegister(RegisterBlockStateModels event) {
-    // TODO: These should be constantified
-    event.registerModel(LootrAPI.rl("custom"), UnbakedCustomModel.CODEC);
-    event.registerModel(LootrAPI.rl("brushable"), UnbakedBrushableModel.CODEC);
+    event.registerModel( UnbakedCustomModel.IDENTIFIER, UnbakedCustomModel.CODEC);
+    event.registerModel(UnbakedBrushableModel.IDENTIFIER, UnbakedBrushableModel.CODEC);
   }
 
   @SuppressWarnings("unchecked")

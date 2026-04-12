@@ -153,7 +153,6 @@ public class LootrInventoryStore implements ILootrInventoryStore {
       }
       inventories.put(player.getUUID(), result);
       hasInventories = true;
-      // TODO:
       markInstanceChanged();
       return result;
     } else {

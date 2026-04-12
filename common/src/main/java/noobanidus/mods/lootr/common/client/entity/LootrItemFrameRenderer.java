@@ -119,8 +119,6 @@ public class LootrItemFrameRenderer extends EntityRenderer<LootrItemFrame, Lootr
     boolean vanilla = LootrAPI.isVanillaTextures();
 
     if (!state.isInvisible) {
-      // TODO: The frame state is here
-      // this controls vanilla vs lootr vs lootr opened
       BlockState fakeState;
       if (vanilla) {
         fakeState = BlockStateDefinitions.getItemFrameFakeState(state.isGlowFrame, false);

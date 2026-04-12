@@ -31,10 +31,7 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
-import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
-import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.LootrRegistry;
-import noobanidus.mods.lootr.common.api.LootrTags;
+import noobanidus.mods.lootr.common.api.*;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.helper.SimpleLootrInstance;
 import noobanidus.mods.lootr.common.api.integration.brushing.IBrushable;
@@ -273,22 +270,20 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
   @SuppressWarnings("deprecation")
   @Override
   public @NonNull CompoundTag getUpdateTag(HolderLookup.@NonNull Provider provider) {
-    // TODO: Turn these into constants
     CompoundTag compoundTag = super.getUpdateTag(provider);
-    compoundTag.storeNullable("hit_direction", Direction.LEGACY_ID_CODEC, this.hitDirection);
+    compoundTag.storeNullable(NBTConstants.HIT_DIRECTION, Direction.LEGACY_ID_CODEC, this.hitDirection);
 
     Player player = this.getBrushingPlayer();
     if (player != null) {
-      compoundTag.store("brushing_player", UUIDUtil.CODEC, player.getUUID());
+      compoundTag.store(NBTConstants.BRUSHING_PLAYER, UUIDUtil.CODEC, player.getUUID());
       if (this.item.isEmpty()) {
         this.item = getItem(player);
       }
       if (!this.item.isEmpty()) {
         RegistryOps<Tag> registryops = provider.createSerializationContext(NbtOps.INSTANCE);
-        compoundTag.store("item", ItemStack.CODEC, registryops, this.item);
+        compoundTag.store(NBTConstants.ITEM, ItemStack.CODEC, registryops, this.item);
       }
     }
-
 
     compoundTag.merge(this.simpleLootrInstance.fillUpdateTag(provider, level != null && level.isClientSide(), this));
 
@@ -305,15 +300,13 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
     super.loadAdditional(input);
     this.tryLoadLootTable(input);
 
-    // TODO:
-    this.hitDirection = input.read("hit_direction", Direction.LEGACY_ID_CODEC).orElse(null);
-
-    this.brushingPlayer = input.read("brushing_player", UUIDUtil.CODEC).orElse(null);
+    this.hitDirection = input.read(NBTConstants.HIT_DIRECTION, Direction.LEGACY_ID_CODEC).orElse(null);
+    this.brushingPlayer = input.read(NBTConstants.BRUSHING_PLAYER, UUIDUtil.CODEC).orElse(null);
     this.brushingPlayerEntity = null;
 
     // This should only be on the client.
     if (this.brushingPlayer != null) {
-      this.item = input.read("item", ItemStack.CODEC).orElse(ItemStack.EMPTY);
+      this.item = input.read(NBTConstants.ITEM, ItemStack.CODEC).orElse(ItemStack.EMPTY);
     } else {
       this.item = ItemStack.EMPTY;
     }
