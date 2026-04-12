@@ -49,7 +49,6 @@ public class LootrDecoratedPotBlock extends DecoratedPotBlock {
     if (var7 instanceof LootrDecoratedPotBlockEntity decoratedPotBlockEntity) {
       decoratedPotBlockEntity.wobble(DecoratedPotBlockEntity.WobbleStyle.NEGATIVE);
       level.gameEvent(player, GameEvent.BLOCK_CHANGE, blockPos);
-      // TODO: Only do this for the breaking player
       if (!level.isClientSide()) {
         decoratedPotBlockEntity.dropContent((ServerPlayer) player);
       }
