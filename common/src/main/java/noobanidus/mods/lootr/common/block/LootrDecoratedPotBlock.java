@@ -56,6 +56,11 @@ public class LootrDecoratedPotBlock extends DecoratedPotBlock {
   }
 
   @Override
+  public float getExplosionResistance() {
+    return LootrAPI.getExplosionResistance(this, super.getExplosionResistance());
+  }
+
+  @Override
   public @NonNull BlockState playerWillDestroy(@NonNull Level level, @NonNull BlockPos blockPos, @NonNull BlockState blockState, @NonNull Player player) {
     this.spawnDestroyParticles(level, player, blockPos, blockState);
     if (blockState.is(BlockTags.GUARDED_BY_PIGLINS) && level instanceof ServerLevel sLevel) {
