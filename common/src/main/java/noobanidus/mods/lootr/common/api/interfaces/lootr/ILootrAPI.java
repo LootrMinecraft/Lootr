@@ -483,6 +483,7 @@ public interface ILootrAPI {
     return false;
   }
 
+  // TODO: This should be moved to the BlockEntity `preRemoveSideEffects`
   default void playerDestroyed(Level level, Player player, BlockPos pos, @Nullable BlockEntity blockEntity) {
     if (!LootrAPI.shouldDropPlayerLoot() || (level.isClientSide() || blockEntity == null)) {
       return;
