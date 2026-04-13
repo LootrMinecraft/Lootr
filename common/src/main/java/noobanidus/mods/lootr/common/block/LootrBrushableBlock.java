@@ -32,6 +32,11 @@ public class LootrBrushableBlock extends BrushableBlock {
   }
 
   @Override
+  public float getExplosionResistance() {
+    return LootrAPI.getExplosionResistance(this, super.getExplosionResistance());
+  }
+
+  @Override
   protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
     builder.add(DUSTED);
   }

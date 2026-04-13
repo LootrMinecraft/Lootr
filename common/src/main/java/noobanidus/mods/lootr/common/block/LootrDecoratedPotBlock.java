@@ -46,6 +46,11 @@ public class LootrDecoratedPotBlock extends DecoratedPotBlock {
   }
 
   @Override
+  public float getExplosionResistance() {
+    return LootrAPI.getExplosionResistance(this, super.getExplosionResistance());
+  }
+
+  @Override
   protected void attack(BlockState blockState, Level level, BlockPos blockPos, Player player) {
     BlockEntity var7 = level.getBlockEntity(blockPos);
     if (var7 instanceof LootrDecoratedPotBlockEntity decoratedPotBlockEntity) {
