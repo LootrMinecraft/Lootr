@@ -1,4 +1,4 @@
-// 1.21.1	2025-12-18T18:39:31.5995803	Lootr Block Tags
+// 1.21.1	2026-03-22T10:48:01.8782977	Lootr Block Tags
 3921f6b6ce3ffc2c7c96ad7c75bbfa8aa6eaee70 data/c/tags/block/barrels.json
 7dc9f1e4a2bf28c54c45c4290627e5282c0685df data/c/tags/block/chests/trapped.json
 bb14a1e34ddbf18921eeb539ef187bc37b2204fa data/c/tags/block/chests/wooden.json
@@ -25,6 +25,7 @@ dc58f334989d3619f69af6641ae7f69e9fe9fc34 data/lootr/tags/block/shulkers.json
 7dc9f1e4a2bf28c54c45c4290627e5282c0685df data/lootr/tags/block/trapped_chests.json
 659e0fd871d3fa5014d4e533e72bc77c5c2b902c data/minecraft/tags/block/guarded_by_piglins.json
 659e0fd871d3fa5014d4e533e72bc77c5c2b902c data/minecraft/tags/block/mineable/axe.json
-0e4a7e9d3f8913d4d595b1e9791c982ea0562eb7 data/minecraft/tags/block/mineable/pickaxe.json
+0ad2d2ab4ee9842e00deb9a28c6839531d674a43 data/minecraft/tags/block/mineable/pickaxe.json
+012db6451f140d46599f000868a882fcc5ed3df3 data/minecraft/tags/block/mineable/shovel.json
 8e95bbeb950c8586fb981d1d56e2c4bc7cf6d73b data/minecraft/tags/block/sand.json
 dc58f334989d3619f69af6641ae7f69e9fe9fc34 data/minecraft/tags/block/shulker_boxes.json

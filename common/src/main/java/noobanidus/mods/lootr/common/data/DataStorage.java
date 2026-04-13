@@ -232,6 +232,8 @@ public class DataStorage {
 
     Path dataPath = server.getWorldPath(new LevelResource("data")).resolve("lootr");
 
+
+
     Set<String> files = new HashSet<>();
     for (String cache : ((AccessorMixinDimensionDataStorage) data).getCache().keySet()) {
       if (cache.startsWith("lootr/")) {
