@@ -30,6 +30,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.block.entity.LootrDecoratedPotBlockEntity;
 import org.jetbrains.annotations.Nullable;
@@ -192,5 +193,10 @@ public class LootrDecoratedPotBlock extends DecoratedPotBlock {
   @Nullable
   public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
     return ILootrBlockEntity::ticker;
+  }
+
+  @Override
+  public float getExplosionResistance() {
+    return LootrAPI.getExplosionResistance(this, super.getExplosionResistance());
   }
 }

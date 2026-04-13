@@ -87,4 +87,9 @@ public class LootrBrushableBlock extends BrushableBlock {
   protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
     Containers.updateNeighboursAfterDestroy(state, level, pos);
   }
+
+  @Override
+  public float getExplosionResistance() {
+    return LootrAPI.getExplosionResistance(this, super.getExplosionResistance());
+  }
 }
