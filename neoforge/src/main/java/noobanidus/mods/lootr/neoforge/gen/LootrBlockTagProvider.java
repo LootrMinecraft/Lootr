@@ -21,8 +21,9 @@ public class LootrBlockTagProvider extends BlockTagsProvider {
   protected void addTags(HolderLookup.Provider provider) {
     tag(BlockTags.SAND).add(LootrRegistry.getSuspiciousSandBlock());
     tag(BlockTags.SHULKER_BOXES).add(LootrRegistry.getShulkerBlock());
-    tag(BlockTags.MINEABLE_WITH_PICKAXE).add(LootrRegistry.getTrophyBlock());
+    tag(BlockTags.MINEABLE_WITH_PICKAXE).add(LootrRegistry.getTrophyBlock(), LootrRegistry.getDecoratedPotBlock());
     tag(BlockTags.MINEABLE_WITH_AXE).add(LootrRegistry.getChestBlock(), LootrRegistry.getTrappedChestBlock(), LootrRegistry.getBarrelBlock(), LootrRegistry.getInventoryBlock());
+    tag(BlockTags.MINEABLE_WITH_SHOVEL).add(LootrRegistry.getSuspiciousGravelBlock(), LootrRegistry.getSuspiciousSandBlock());
     tag(BlockTags.GUARDED_BY_PIGLINS).add(LootrRegistry.getChestBlock(), LootrRegistry.getTrappedChestBlock(), LootrRegistry.getBarrelBlock(), LootrRegistry.getInventoryBlock());
     tag(Tags.Blocks.CHESTS_WOODEN).add(LootrRegistry.getChestBlock(), LootrRegistry.getInventoryBlock());
     tag(Tags.Blocks.CHESTS_TRAPPED).add(LootrRegistry.getTrappedChestBlock());
