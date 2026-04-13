@@ -59,7 +59,7 @@ publishMods {
 
     if (project.hasProperty('curseforge_id_neoforge')) {
         curseforge('curseforgeNeoForge') {
-            type = BETA
+            type = STABLE
 
             projectSlug = "lootr"
             displayName = "lootr-neoforge-${rootProject.minecraft_version}-${rootProject.mod_version}"
@@ -67,18 +67,22 @@ publishMods {
             projectId = project.findProperty('curseforge_id_neoforge')
             announcementTitle = "Lootr ${rootProject.minecraft_version}-${rootProject.mod_version} for NeoForge on CurseForge"
             minecraftVersions.add(project.minecraft_version)
+            minecraftVersions.add("26.1.1")
+            minecraftVersions.add("26.1.2")
             changelog = changelogText
         }
     }
 
     if (project.hasProperty('modrinth_id_fabric')) {
         modrinth('modrinthNeoForge') {
-            type = BETA
+            type = STABLE
             displayName = "lootr-neoforge-${rootProject.minecraft_version}-${rootProject.mod_version}"
             accessToken = project.findProperty("modrinth_auth")
             projectId = project.findProperty('modrinth_id_neoforge')
             announcementTitle = "Lootr ${rootProject.minecraft_version}-${rootProject.mod_version} for NeoForge on Modrinth"
             minecraftVersions.add(project.minecraft_version)
+            minecraftVersions.add("26.1.1")
+            minecraftVersions.add("26.1.2")
             changelog = changelogText
         }
     }
