@@ -38,6 +38,7 @@ import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
 import noobanidus.mods.lootr.common.api.ILootrBlockEntityConverter;
 import noobanidus.mods.lootr.common.api.ILootrType;
+import noobanidus.mods.lootr.common.api.ILootrWorldlyContainer;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.SimpleLootrInstance;
@@ -50,7 +51,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity implements ILootrBlockEntity {
+public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity implements ILootrBlockEntity, ILootrWorldlyContainer {
   protected final SimpleLootrInstance simpleLootrInstance = new SimpleLootrInstance(this::getVisualOpeners, 27);
 
   private int openCount;

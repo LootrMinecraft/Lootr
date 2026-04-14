@@ -74,6 +74,8 @@ public class LootrTags {
 
     public static TagKey<EntityType<?>> CONTAINERS = tag("containers");
 
+    public static TagKey<EntityType<?>> ENTITY_SELECTOR_SKIP = tag("entity_selector_skip");
+
     static TagKey<EntityType<?>> tag(String name) {
       return TagKey.create(Registries.ENTITY_TYPE, LootrAPI.rl(name));
     }

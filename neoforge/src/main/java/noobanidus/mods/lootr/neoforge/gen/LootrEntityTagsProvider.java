@@ -30,6 +30,9 @@ public class LootrEntityTagsProvider extends EntityTypeTagsProvider {
 
     //noinspection unchecked
     tag(LootrTags.Entity.CONTAINERS).addTags(LootrTags.Entity.MINECARTS, LootrTags.Entity.ITEM_FRAMES);
+
+    //noinspection unchecked
+    tag(LootrTags.Entity.ENTITY_SELECTOR_SKIP).addTags(LootrTags.Entity.MINECARTS, LootrTags.Entity.ITEM_FRAMES);
   }
 
   @Override
