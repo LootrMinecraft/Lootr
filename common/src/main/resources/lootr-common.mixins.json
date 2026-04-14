@@ -21,6 +21,7 @@
     "lock.MixinBaseContainerBlockEntity",
     "poi.MixinPoiType",
     "poi.MixinPoiTypes",
+    "redstone.MixinAbstractContainerMenu",
     "spawn.MixinServerGamePacketListenerImpl",
     "structure_saving.MixinStructureTemplate",
     "ticker.MixinBrushableBlockEntity",
