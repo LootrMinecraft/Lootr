@@ -28,6 +28,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.*;
+import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
 import noobanidus.mods.lootr.common.api.data.SimpleLootrEntityInstance;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
@@ -413,6 +414,11 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
         return new double[]{-0.1, -0.05};
       }
     }
+  }
+
+  @Override
+  public @Nullable IContainerTrigger getTrigger() {
+    return LootrRegistry.getItemFrameTrigger();
   }
 
   @AutoService(ILootrEntityConverter.class)
