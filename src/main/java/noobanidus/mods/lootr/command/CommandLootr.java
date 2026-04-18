@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.command;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
@@ -10,6 +11,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.commands.arguments.DimensionArgument;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
@@ -21,11 +23,14 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentUtils;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -35,7 +40,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.chunk.storage.RegionFile;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.storage.LevelStorageSource;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.server.ServerLifecycleHooks;
@@ -50,10 +57,14 @@ import noobanidus.mods.lootr.data.DataStorage;
 import noobanidus.mods.lootr.data.SpecialChestInventory;
 import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.init.ModBlocks;
+import noobanidus.mods.lootr.mixins.AccessorMixinMinecraftServer;
 import noobanidus.mods.lootr.util.ChestUtil;
 
 import javax.annotation.Nullable;
+import java.io.File;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class CommandLootr {
@@ -427,6 +438,7 @@ public class CommandLootr {
           }
           ServerLevel level = context.getSource().getLevel();
           for (ChunkPos chunkPos : positions) {
+            context.getSource().sendSystemMessage(Component.literal("Working on chunk " + chunkPos.x + ", " + chunkPos.z));
             LevelChunk chunk = level.getChunk(chunkPos.x, chunkPos.z);
             List<BlockPos> convertableBlocks = new ArrayList<>();
             for (BlockPos pos : chunk.getBlockEntitiesPos()) {
@@ -447,7 +459,11 @@ public class CommandLootr {
                 if (lootContainer.lootTable != null) {
                   continue;
                 }
+                if (lootContainer.isEmpty()) {
+                  continue;
+                }
               }
+              context.getSource().sendSystemMessage(Component.literal("Converting block at " + pos));
               BlockState state = blockEntity.getBlockState();
               NonNullList<ItemStack> reference;
               if (blockEntity instanceof BarrelBlockEntity barrelBlock) {
@@ -472,8 +488,68 @@ public class CommandLootr {
             }
           }
 
+          context.getSource().sendSuccess(() -> Component.literal("Conversion complete."), false);
+
           return 1;
         }))));
+    builder.then(Commands.literal("convert_map")
+        .then(Commands.argument("dimension", DimensionArgument.dimension()).executes(context -> {
+          ServerLevel level = DimensionArgument.getDimension(context, "dimension");
+          MinecraftServer server = level.getServer();
+          List<ChunkPos> positions = getAllChunkPos(level);
+          int count = 0;
+          for (ChunkPos chunkPos : positions) {
+            if (count > 100) {
+              context.getSource().sendSystemMessage(Component.literal("Saving everything!"));
+              server.saveEverything(true, true, true);
+              count = 0;
+            }
+
+            context.getSource().sendSystemMessage(Component.literal("Working on chunk " + chunkPos.x + ", " + chunkPos.z));
+            LevelChunk chunk = level.getChunk(chunkPos.x, chunkPos.z);
+            for (BlockPos pos : chunk.getBlockEntitiesPos()) {
+              BlockEntity blockEntity = chunk.getBlockEntity(pos, LevelChunk.EntityCreationType.IMMEDIATE);
+              if (!(blockEntity instanceof BaseContainerBlockEntity) || blockEntity instanceof ILootBlockEntity) {
+                continue;
+              }
+              if (blockEntity instanceof RandomizableContainerBlockEntity lootContainer) {
+                if (lootContainer.lootTable != null) {
+                  continue;
+                }
+                if (lootContainer.isEmpty()) {
+                  continue;
+                }
+              }
+              context.getSource().sendSystemMessage(Component.literal("Converting block at " + pos));
+              count++;
+              BlockState state = blockEntity.getBlockState();
+              NonNullList<ItemStack> reference;
+              if (blockEntity instanceof BarrelBlockEntity barrelBlock) {
+                reference = barrelBlock.items;
+              } else if (blockEntity instanceof ChestBlockEntity chestBlock) {
+                reference = chestBlock.items;
+              } else {
+                continue;
+              }
+              BlockState newState = updateBlockState(state, ModBlocks.INVENTORY.get().defaultBlockState());
+              NonNullList<ItemStack> custom = copyItemList(reference);
+              level.removeBlockEntity(pos);
+              level.setBlockAndUpdate(pos, newState);
+              BlockEntity te = level.getBlockEntity(pos);
+              if (!(te instanceof LootrInventoryBlockEntity inventory)) {
+                context.getSource()
+                    .sendSuccess(() -> Component.literal("Unable to convert chest, BlockState is not a Lootr Inventory block."), false);
+              } else {
+                inventory.setCustomInventory(custom);
+                inventory.setChanged();
+              }
+            }
+          }
+
+          context.getSource().sendSuccess(() -> Component.literal("Conversion complete."), false);
+
+          return 1;
+        })));
     return builder;
   }
 
@@ -488,6 +564,48 @@ public class CommandLootr {
       newState = newState.setValue(BlockStateProperties.WATERLOGGED, oldState.getValue(BlockStateProperties.WATERLOGGED));
     }
     return newState;
+  }
+
+  private static final Pattern REGEX = Pattern.compile("^r\\.(-?[0-9]+)\\.(-?[0-9]+)\\.mca$");
+
+  private static List<ChunkPos> getAllChunkPos(ServerLevel level) {
+    MinecraftServer server = level.getServer();
+    return getAllChunkPos(((AccessorMixinMinecraftServer) server).Lootr$getStorageSource(), level.dimension());
+  }
+
+  private static List<ChunkPos> getAllChunkPos(LevelStorageSource.LevelStorageAccess levelStorage, ResourceKey<Level> dimension) {
+    File file1 = levelStorage.getDimensionPath(dimension).toFile();
+    File file2 = new File(file1, "region");
+    File[] afile = file2.listFiles((p_18822_, p_18823_) -> {
+      return p_18823_.endsWith(".mca");
+    });
+    if (afile == null) {
+      return ImmutableList.of();
+    } else {
+      List<ChunkPos> list = Lists.newArrayList();
+
+      for (File file3 : afile) {
+        Matcher matcher = REGEX.matcher(file3.getName());
+        if (matcher.matches()) {
+          int i = Integer.parseInt(matcher.group(1)) << 5;
+          int j = Integer.parseInt(matcher.group(2)) << 5;
+
+          try (RegionFile regionfile = new RegionFile(file3.toPath(), file2.toPath(), true)) {
+            for (int k = 0; k < 32; ++k) {
+              for (int l = 0; l < 32; ++l) {
+                ChunkPos chunkpos = new ChunkPos(k + i, l + j);
+                if (regionfile.doesChunkExist(chunkpos)) {
+                  list.add(chunkpos);
+                }
+              }
+            }
+          } catch (Throwable throwable) {
+          }
+        }
+      }
+
+      return list;
+    }
   }
 }
 
