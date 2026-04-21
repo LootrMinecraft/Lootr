@@ -38,8 +38,8 @@ dependencies {
     compileOnly "maven.modrinth:jade:${project.jade_version}+fabric"
     runtimeOnly "maven.modrinth:jade:${project.jade_version}+fabric"
 
-    compileOnly "dev.thomasglasser.sherdsapi:sherdsapi-fabric-${minecraft_version}:${sherdsapi_version}"
-    runtimeOnly "dev.thomasglasser.sherdsapi:sherdsapi-fabric-${minecraft_version}:${sherdsapi_version}"
+    compileOnly "dev.thomasglasser.sherdsapi:sherdsapi-fabric-${sherds_minecraft_version}:${sherdsapi_version}"
+    runtimeOnly "dev.thomasglasser.sherdsapi:sherdsapi-fabric-${sherds_minecraft_version}:${sherdsapi_version}"
 
     implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:${rootProject.mixin_extras_version}"))
     implementation("io.github.llamalad7:mixinextras-fabric:${rootProject.mixin_extras_version}")
