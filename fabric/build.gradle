@@ -81,8 +81,6 @@ publishMods {
             projectId = project.findProperty('curseforge_id_fabric')
             announcementTitle = "Lootr ${rootProject.minecraft_version}-${rootProject.mod_version} for Fabric on CurseForge"
             minecraftVersions.add(project.minecraft_version)
-            minecraftVersions.add("26.1.1")
-            minecraftVersions.add("26.1.2")
             changelog = changelogText
 
             uploadDependencies.each { dep, required ->
@@ -103,8 +101,6 @@ publishMods {
             projectId = project.findProperty('modrinth_id_fabric')
             announcementTitle = "Lootr ${rootProject.minecraft_version}-${rootProject.mod_version} for Fabric on Modrinth"
             minecraftVersions.add(project.minecraft_version)
-            minecraftVersions.add("26.1.1")
-            minecraftVersions.add("26.1.2")
             changelog = changelogText
 
             dependencies {
