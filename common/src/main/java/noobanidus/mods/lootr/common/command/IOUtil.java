@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.IntConsumer;
 
 public class IOUtil {
   private static CompletableFuture<Void> deleteFileTasks = CompletableFuture.completedFuture(null);
@@ -27,7 +28,7 @@ public class IOUtil {
     return dataRoot.resolve(fileName + ".dat");
   }
 
-  public static void cullSavedDataAsync (MinecraftServer server, Set<String> savedDataFiles) {
+  public static void cullSavedDataAsync (MinecraftServer server, Set<String> savedDataFiles, IntConsumer whenCompleted) {
     if (savedDataFiles.isEmpty()) {
       LootrAPI.LOG.info("No saved data files to cull.");
       return;
@@ -44,6 +45,7 @@ public class IOUtil {
     }
     withIOWorker(() -> {
       LootrAPI.LOG.info("Culled {} saved data files.", savedDataFiles.size());
+      whenCompleted.accept(savedDataFiles.size());
     });
   }
 }

@@ -23,7 +23,7 @@ public class MixinServerChunkCache {
       return;
     }
 
-    Path lootrDirectory = ((AccessorMixinDimensionDataStorage) cache.getDataStorage()).getDataFolder().resolve("lootr");
+    Path lootrDirectory = ((AccessorMixinDimensionDataStorage) cache.getDataStorage()).lootr$getDataFolder().resolve("lootr");
     Path tickingDirectory = lootrDirectory.resolve("ticking");
     Path refreshDirectory = tickingDirectory.resolve("refresh");
     Path decayedDirectory = tickingDirectory.resolve("decay");

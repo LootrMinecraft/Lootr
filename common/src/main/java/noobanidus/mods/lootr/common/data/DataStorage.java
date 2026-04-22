@@ -1,9 +1,6 @@
 package noobanidus.mods.lootr.common.data;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtIo;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
@@ -31,6 +28,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.function.IntConsumer;
 import java.util.stream.Stream;
 
 @SuppressWarnings({"unused", "DataFlowIssue"})
@@ -239,7 +237,8 @@ public class DataStorage {
     Path dataPath = server.getWorldPath(new LevelResource("data")).resolve("lootr");
 
     Set<String> files = new HashSet<>();
-    for (String cache : ((AccessorMixinDimensionDataStorage) data).getCache().keySet()) {
+    for (SavedDataType<?> type : ((AccessorMixinDimensionDataStorage) data).lootr$getCache().keySet()) {
+      String cache = type.id();
       if (cache.startsWith("lootr/")) {
         if (cache.startsWith("lootr/Lootr-") || cache.startsWith("lootr/lootr-")) {
           continue;
@@ -289,12 +288,12 @@ public class DataStorage {
       if (datum == LootrDummyData.INSTANCE) {
         // Failed to load so clear it from the cache
         LootrAPI.LOG.error("Failed to load data for {}, removing from cache.", file);
-        ((AccessorMixinDimensionDataStorage) data).getCache().remove(file);
+        ((AccessorMixinDimensionDataStorage) data).lootr$getCache().remove(file);
         continue;
       }
       if (!(datum instanceof LootrSavedData lootrSavedData)) {
         LootrAPI.LOG.error("Data for {} is not a LootrSavedData instance.", file);
-        ((AccessorMixinDimensionDataStorage) data).getCache().remove(file);
+        ((AccessorMixinDimensionDataStorage) data).lootr$getCache().remove(file);
         continue;
       }
       if (!lootrSavedData.hasBeenOpened()) {
@@ -344,7 +343,7 @@ public class DataStorage {
 
   @ApiStatus.Internal
   // This is now safe!
-  public static int cullInventories() {
+  public static int cullInventories(IntConsumer whenCompleted) {
     DimensionDataStorage data = getDataStorage();
     if (data == null) {
       // Errors are already generated in `getDataStorage`
@@ -366,22 +365,22 @@ public class DataStorage {
       if (datum == LootrDummyData.INSTANCE) {
         // Failed to load so clear it from the cache
         LootrAPI.LOG.error("Failed to load data for {}, removing from cache.", file);
-        ((AccessorMixinDimensionDataStorage) data).getCache().remove(file);
+        ((AccessorMixinDimensionDataStorage) data).lootr$getCache().remove(file);
         continue;
-      }
+        }
       if (!(datum instanceof LootrSavedData lootrSavedData)) {
         LootrAPI.LOG.error("Data for {} is not a LootrSavedData instance.", file);
-        ((AccessorMixinDimensionDataStorage) data).getCache().remove(file);
+        ((AccessorMixinDimensionDataStorage) data).lootr$getCache().remove(file);
         continue;
       }
       if (lootrSavedData.canBeCulled()) {
         filesToDelete.add(file);
-        ((AccessorMixinDimensionDataStorage) data).getCache().remove(file);
+        ((AccessorMixinDimensionDataStorage) data).lootr$getCache().remove(file);
       }
     }
 
     if (!filesToDelete.isEmpty()) {
-      IOUtil.cullSavedDataAsync(server, filesToDelete);
+      IOUtil.cullSavedDataAsync(server, filesToDelete, whenCompleted);
       LootrAPI.LOG.info("Culling {} inventories.", filesToDelete.size());
     }
 

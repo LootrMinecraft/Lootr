@@ -493,7 +493,9 @@ public class CommandLootr {
         })));
     builder.then(Commands.literal("cull").executes(c -> {
       c.getSource()
-          .sendSuccess(() -> Component.literal("Going to asynchronously cull " + DataStorage.cullInventories() + " inventories."), true);
+          .sendSuccess(() -> Component.literal("Going to asynchronously cull " + DataStorage.cullInventories((count) ->
+            c.getSource().sendSuccess(() -> Component.literal("Successfully culled " + count + " inventories!"), true)
+          ) + " inventories."), true);
       return 1;
     }));
     builder.then(Commands.literal("force_chunk")
