@@ -16,10 +16,11 @@ import java.util.Map;
 
 @Mixin(BlockStateDefinitions.class)
 public class MixinBlockStateDefinitions {
-  @WrapOperation(method="definitionLocationToBlockStateMapper", at=@At(value="NEW", target="java/util/HashMap"))
-  private static HashMap<Identifier, StateDefinition<Block, BlockState>> lootr$injectItemFrameModels(Map<Identifier, StateDefinition<Block, BlockState>>m, Operation<HashMap<Identifier, StateDefinition<Block, BlockState>>> original) {
-    var map = new HashMap<>(m);
+  @WrapOperation(method="<clinit>", at=@At(value="INVOKE", target="Ljava/util/Map;of(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Ljava/util/Map;"))
+  private static Map<Object, Object> lootr$injectItemFrameModels(Object k1, Object v1, Object k2, Object v2, Operation<Map<Object, Object>> original) {
+    Map<Object, Object> result = original.call(k1, v1, k2, v2);
+    Map<Object, Object> map = new HashMap<>(result);
     map.putAll(LootrBlockStateDefinitions.getStaticDefinitions());
-    return original.call(map);
+    return map;
   }
 }
