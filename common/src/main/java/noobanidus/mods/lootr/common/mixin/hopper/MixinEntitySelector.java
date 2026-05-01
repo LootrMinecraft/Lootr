@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(EntitySelector.class)
 public class MixinEntitySelector {
   // I'm not sure if this is really necessary
-  @WrapOperation(method = "lambda$static$2", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;isAlive()Z"))
+  @WrapOperation(method = {"lambda$static$2", "method_5914"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;isAlive()Z"))
   private static boolean lootr$checkContainerEntitySelector(Entity instance, Operation<Boolean> original) {
     if (instance.getType().is(LootrTags.Entity.CONVERT_ITEM_FRAMES)) {
       return false;
