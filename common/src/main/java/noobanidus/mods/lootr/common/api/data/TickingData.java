@@ -8,6 +8,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.saveddata.SavedData;
 
+import java.io.File;
 import java.util.UUID;
 
 @Deprecated
@@ -90,6 +91,15 @@ public class TickingData extends SavedData {
     }
     pCompound.put("result", decayList);
     return pCompound;
+  }
+
+  @Override
+  public void save(File file, HolderLookup.Provider registries) {
+    if (isDirty()) {
+      //noinspection ResultOfMethodCallIgnored
+      file.getParentFile().mkdirs();
+    }
+    super.save(file, registries);
   }
 
   public Object2IntMap<UUID> getTickMap() {
