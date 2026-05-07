@@ -12,8 +12,8 @@
   "lootr.message.refreshed": "The contents of the container are refreshed at your touch!",
   "lootr.message.refresh_in": "This container will refresh its contents in %s seconds.",
   "lootr.message.refresh_start": "The container will refresh with new contents in %s seconds!",
-  "lootr.message.invalid_table": "Error with mod [%s]! The loot table for this container [%s] could not be found and loot was not generated. Please check your `latest.log` for loading errors.",
-  "lootr.message.invalid_block": "The container that you have tried to open is invalid as it has not generated its identifier.",
+  "lootr.message.invalid_table": "Hiba a(z) [%s] moddal! A(z) [%s] tároló zsákmánytáblája nem található, ezért a zsákmány nem generálódott. Kérjük, ellenőrizd a `latest.log` fájlt a betöltési hibák miatt.",
+  "lootr.message.invalid_block": "A megnyitni kívánt tároló érvénytelen, mivel még nem generálta az azonosítóját.",
   "block.lootr.lootr_chest": "Loot Chest",
   "block.lootr.lootr_trapped_chest": "Loot Chest",
   "block.lootr.lootr_barrel": "Loot Barrel",
@@ -47,7 +47,7 @@
   "lootr.advancements.root.title": "Belongs in a Museum",
   "lootr.advancements.root.description": "Bring instanced, per-player Loot into your world.",
   "lootr.advancements.1337loot.title": "/\\/\\4$73R 10073R",
-  "lootr.advancements.1337loot.description": "Open a total of 1337 containers! Wow!",
+  "lootr.advancements.1337loot.description": "Összesen 1337 tárolót nyitottak ki! Hűha!",
   "itemGroup.lootr": "Lootr",
-  "item.lootr.crown": "Crown of the Master Looter"
+  "item.lootr.crown": "A Mesterzsákmányoló koronája"
 }
