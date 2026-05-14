@@ -20,8 +20,8 @@ import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DiodeBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -164,6 +164,7 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
 
     if (!this.isRemoved() && !this.level().isClientSide) {
       this.kill();
+      this.dropItem(source.getEntity());
       this.markHurt();
     }
 
@@ -172,6 +173,9 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
 
   @Override
   public void dropItem(@Nullable Entity entity) {
+    if (this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+      this.spawnAtLocation(this.getFrameItemStack());
+    }
   }
 
   @Override
@@ -272,7 +276,6 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
     }
   }
 
-  // TODO:
   @Override
   public ItemStack getPickResult() {
     return new ItemStack(Items.ITEM_FRAME);
