@@ -97,12 +97,6 @@ public class LootrCommonConfig {
     @Comment(value = LootrConfigStrings.LOOT_TABLE_MODID_BLACKLIST_DESC, translation = "lootr.configuration.loot_table_modid_blacklist.desc")
     @ConfigOption.Regex(value = "^" + Identifier.ALLOWED_NAMESPACE_CHARACTERS + "+$")
     public static final List<String> lootTableModidBlacklist = new ArrayList<>();
-
-    @ConfigEntry(id = "problematic_loot_tables", translation = "lootr.configuration.problematic_loot_tables")
-    @Comment(value = LootrConfigStrings.PROBLEMATIC_LOOT_TABLES_DESC, translation = "lootr.configuration.problematic_loot_tables.desc")
-    @ConfigOption.Regex(value = IDENTIFIER_REGEX)
-    public static final List<String> problematicLootTables = LootrAPI.PROBLEMATIC_CHESTS.stream()
-        .map(Identifier::toString).collect(Collectors.toCollection(ArrayList::new));
   }
 
   @Category("Breaking")

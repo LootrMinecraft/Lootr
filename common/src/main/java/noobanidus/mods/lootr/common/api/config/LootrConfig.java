@@ -127,8 +127,6 @@ public class LootrConfig {
     if (LOOT_BLACKLIST == null || !LootrCommonConfig.Restrictions.lootTableBlacklist.equals(LAST_LOOT_BLACKLIST)) {
       LAST_LOOT_BLACKLIST = new ArrayList<>(LootrCommonConfig.Restrictions.lootTableBlacklist);
       LOOT_BLACKLIST = validateResourceKeyList(LootrCommonConfig.Restrictions.lootTableBlacklist, "loot_blacklist", o -> ResourceKey.create(Registries.LOOT_TABLE, o));
-      // Fixes for #79 and #74
-      LOOT_BLACKLIST.addAll(getProblematicLootTables());
     }
     return LOOT_BLACKLIST;
   }
@@ -173,14 +171,6 @@ public class LootrConfig {
     return REFRESH_MODS;
   }
 
-  public static Set<ResourceKey<LootTable>> getProblematicLootTables() {
-    if (PROBLEMATIC_LOOT_TABLES == null || !LootrCommonConfig.Restrictions.problematicLootTables.equals(LAST_PROBLEMATIC_LOOT_TABLES)) {
-      LAST_PROBLEMATIC_LOOT_TABLES = new ArrayList<>(LootrCommonConfig.Restrictions.problematicLootTables);
-      PROBLEMATIC_LOOT_TABLES = validateResourceKeyList(LootrCommonConfig.Restrictions.problematicLootTables, "problematic_loot_tables", o -> ResourceKey.create(Registries.LOOT_TABLE, o));
-    }
-    return PROBLEMATIC_LOOT_TABLES;
-  }
-
   protected static Set<String> validateStringList(String[] incomingList, String listKey) {
     return validateStringList(List.of(incomingList), listKey);
   }
@@ -213,14 +203,14 @@ public class LootrConfig {
     Set<ResourceKey<T>> validatedList = new HashSet<>();
     for (String entry : incomingList) {
       if (entry == null || entry.isEmpty()) {
-        LootrAPI.LOG.error("Error found when validating a configuration list for '{}'. One of the entries is null or empty and cannot be converted to a Identifier.", listKey, new RuntimeException());
+        LootrAPI.LOG.error("Error found when validating a configuration list for '{}'. One of the entries is null or empty and cannot be converted to a Identifier.", listKey);
         continue;
       }
       Identifier location;
       try {
         location = Identifier.parse(entry);
       } catch (Exception e) {
-        LootrAPI.LOG.error("Error found when validating a configuration list for '{}'. The value found in the list, '{}', is not a valid Identifier.", listKey, entry, e);
+        LootrAPI.LOG.error("Error found when validating a configuration list for '{}'. The value found in the list, '{}', is not a valid Identifier.", listKey, entry);
         continue;
       }
 

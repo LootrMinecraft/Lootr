@@ -50,10 +50,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * This is the standard access to the platform-specific implementations of ILootrAPI.
@@ -70,7 +67,7 @@ public final class LootrAPI {
   public static final ResourceKey<LootTable> ELYTRA_CHEST = ResourceKey.create(Registries.LOOT_TABLE, LootrAPI.rl("chests/elytra"));
   public static final ResourceKey<LootTable> TROPHY_REWARD = ResourceKey.create(Registries.LOOT_TABLE, LootrAPI.rl("reward/trophy"));
   public static final ResourceKey<LootTable> ITEM_FRAME_EMPTY = ResourceKey.create(Registries.LOOT_TABLE, LootrAPI.rl("entity/item_frame_empty"));
-  public static final List<Identifier> PROBLEMATIC_CHESTS = Arrays.asList(LootrAPI.rl("twilightforest", "structures/stronghold_boss"), LootrAPI.rl("atum", "chests/pharaoh"));
+  public static final List<String> PROBLEMATIC_CHESTS = new ArrayList<>(List.of("twilightforest:structures/stronghold_boss", "atum:chests/pharaoh"));
   public static final List<Identifier> ALL_LOOTR_FILES = IntStreams.rangeClosed(256).boxed().map(o -> {
     var str = Integer.toHexString(o);
     return LootrAPI.rl(str.charAt(0) + "/" + str);
