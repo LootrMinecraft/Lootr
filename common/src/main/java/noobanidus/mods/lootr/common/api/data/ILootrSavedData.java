@@ -60,6 +60,8 @@ public interface ILootrSavedData extends IRedirect<ILootrInfo>, ILootrInfo, IOpe
 
   ILootrInventory createInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler);
 
+  ILootrInventory createInventory (ILootrInfoProvider provider, UUID playerId, LootFiller filler);
+
   @Override
   @Deprecated
   @Nullable

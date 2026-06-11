@@ -87,6 +87,10 @@ public class LootrAPI {
     return INSTANCE.getPlayerIds();
   }
 
+  public static ServerPlayer getPlayer (UUID player) {
+    return INSTANCE.getPlayer(player);
+  }
+
   public static MinecraftServer getServer() {
     return INSTANCE.getServer();
   }

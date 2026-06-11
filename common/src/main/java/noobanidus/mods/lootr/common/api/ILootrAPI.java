@@ -44,6 +44,12 @@ public interface ILootrAPI {
   // Platform-independent implementations
   Set<UUID> getPlayerIds();
 
+  @Nullable
+  default ServerPlayer getPlayer (UUID playerId) {
+    MinecraftServer server = getServer();
+    return server.getPlayerList().getPlayer(playerId);
+  }
+
   MinecraftServer getServer();
 
   default int getCurrentTicks() {

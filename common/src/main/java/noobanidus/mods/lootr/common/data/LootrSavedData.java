@@ -7,12 +7,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.saveddata.SavedData;
-import noobanidus.mods.lootr.common.api.ILootrType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.*;
 import org.jetbrains.annotations.Nullable;
@@ -84,7 +82,6 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
   }
 
 
-
   @Override
   public ILootrInfo getRedirect() {
     return info;
@@ -122,7 +119,7 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
     return result;
   }
 
-  private void removeOpener (UUID uuid) {
+  private void removeOpener(UUID uuid) {
     Set<UUID> visualOpeners = getVisualOpeners();
     if (visualOpeners != null) {
       if (visualOpeners.remove(uuid)) {
@@ -171,6 +168,16 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
       provider.informPlayerCannotOpen(player);
       return null;
     }
+  }
+
+  @Override
+  public LootrInventory createInventory(ILootrInfoProvider provider, UUID playerId, LootFiller filler) {
+    LootrInventory result = new LootrInventory(this, provider.buildInitialInventory());
+    filler.unpackLootTable(provider, LootrAPI.getPlayer(playerId), result);
+    inventories.put(playerId, result);
+    hasBeenOpened = true;
+    setDirty();
+    return result;
   }
 
   @Override
@@ -229,7 +236,7 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
     return hasBeenOpened;
   }
 
-  public boolean canBeCulled () {
+  public boolean canBeCulled() {
     if (!inventories.isEmpty()) {
       return false;
     }
