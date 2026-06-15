@@ -15,6 +15,7 @@ import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinBlock;
+import noobanidus.mods.lootr.common.particle.ParticleColorOption;
 import org.jetbrains.annotations.Nullable;
 
 public class ClientHooks {
@@ -93,17 +94,8 @@ public class ClientHooks {
           double xOff = bounded(random, provider.getParticleXBounds());
           double zOff = bounded(random, provider.getParticleZBounds());
           Vec3 pos = provider.getParticleCenter();
-/*          level.addParticle(
-              LootrRegistry.getUnopenedParticleType(),
-              pos.x,
-              pos.y + provider.getParticleYOffset(),
-              pos.z,
-              0,
-              random.nextDouble() * 0.02,
-              0
-          );*/
           level.addParticle(
-              LootrRegistry.getUnopenedParticleType(),
+              new ParticleColorOption(LootrRegistry.getUnopenedParticleType(), provider.getParticleColor(), provider.getParticleColor(), false),
               pos.x + xOff,
               pos.y + provider.getParticleYOffset() + random.nextDouble() * 0.02,
               pos.z + zOff,

@@ -3,9 +3,10 @@ package noobanidus.mods.lootr.common.client.particle;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
+import noobanidus.mods.lootr.common.particle.ParticleColorOption;
 
 public class UnopenedParticle extends TextureSheetParticle {
-  public UnopenedParticle(ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+  public UnopenedParticle(ClientLevel level, ParticleColorOption type, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
     super(level, x, y, z, xSpeed, ySpeed, zSpeed);
     this.lifetime = 30;
     this.alpha = 0.8f;
@@ -42,10 +43,10 @@ public class UnopenedParticle extends TextureSheetParticle {
     return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
   }
 
-  public record Provider(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
+  public record Provider(SpriteSet spriteSet) implements ParticleProvider<ParticleColorOption> {
     @Override
-    public Particle createParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
-      var particle = new UnopenedParticle(level, x, y, z, xSpeed, ySpeed, zSpeed);
+    public Particle createParticle(ParticleColorOption type, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+      var particle = new UnopenedParticle(level, type, x, y, z, xSpeed, ySpeed, zSpeed);
       particle.pickSprite(spriteSet);
       return particle;
     }

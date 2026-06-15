@@ -14,6 +14,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import noobanidus.mods.lootr.common.api.advancement.IAdvancementTrigger;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.advancement.ILootedStatTrigger;
+import noobanidus.mods.lootr.common.particle.ParticleColorOption;
 
 /**
  * Platform-independent way to access registered objects.
@@ -185,7 +186,7 @@ public class LootrRegistry {
     return INSTANCE.getSuspiciousSandItem();
   }
 
-  public static SimpleParticleType getUnopenedParticleType () {
+  public static ParticleType<ParticleColorOption> getUnopenedParticleType () {
     return INSTANCE.getUnopenedParticleType ();
   }
 }

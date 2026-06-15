@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.neoforge.impl;
 
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.stats.Stat;
 import net.minecraft.world.entity.EntityType;
@@ -14,6 +15,7 @@ import noobanidus.mods.lootr.common.api.advancement.IAdvancementTrigger;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.advancement.ILootedStatTrigger;
 import noobanidus.mods.lootr.common.api.registry.ILootrRegistry;
+import noobanidus.mods.lootr.common.particle.ParticleColorOption;
 import noobanidus.mods.lootr.neoforge.init.*;
 
 public class LootrRegistryImpl implements ILootrRegistry {
@@ -221,7 +223,7 @@ public class LootrRegistryImpl implements ILootrRegistry {
   }
 
   @Override
-  public SimpleParticleType getUnopenedParticleType() {
+  public ParticleType<ParticleColorOption> getUnopenedParticleType() {
     return ModParticles.UNOPENED_PARTICLE.get();
   }
 }

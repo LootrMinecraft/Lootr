@@ -87,7 +87,7 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
   // but not so much as for ILootrEntity implementations as those
   // do not actually track openers; there's no reason why they
   // couldn't though...
-  default int getPhysicalOpenerCount () {
+  default int getPhysicalOpenerCount() {
     return -1;
   }
 
@@ -109,7 +109,7 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
     return null;
   }
 
-  default boolean hasLootAvailable (ServerPlayer player) {
+  default boolean hasLootAvailable(ServerPlayer player) {
     ILootrInventory inventory = LootrAPI.getInventory(this, player);
     if (inventory == null) {
       return false;
@@ -177,20 +177,24 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
     }
   }
 
-  default Vec3 getParticleCenter () {
+  default Vec3 getParticleCenter() {
     BlockPos pos = getInfoPos();
     return new Vec3(pos.getX(), pos.getY(), pos.getZ());
   }
 
-  default double getParticleYOffset () {
+  default double getParticleYOffset() {
     return 0.95;
   }
 
   default double[] getParticleXBounds() {
-    return new double[] {0.25, 0.75};
+    return new double[]{0.25, 0.75};
   }
 
   default double[] getParticleZBounds() {
-    return new double[] {0.25, 0.75};
+    return new double[]{0.25, 0.75};
+  }
+
+  default int getParticleColor() {
+    return 0xfad64a;
   }
 }
