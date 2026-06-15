@@ -17,7 +17,7 @@ public class UnopenedParticle extends TextureSheetParticle {
     this.quadSize = 0.12f;
     this.friction = 1f;
 
-    int c1 = 0xfad64a;
+    int c1 = type.color1();
     this.rCol = ((c1 >> 16) & 0xFF) / 255.0f;
     this.gCol = ((c1 >> 8) & 0xFF) / 255.0f;
     this.bCol = ((c1) & 0xFF) / 255.0f;
