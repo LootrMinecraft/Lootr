@@ -348,6 +348,10 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
     return this.item;
   }
 
+  public boolean isBrushingPlayer (PlayerContext context) {
+    return context.hasPlayer() && isBrushingPlayer(context.player());
+  }
+
   public boolean isBrushingPlayer(Player player) {
     Player brushingPlayer = getBrushingPlayer();
     return brushingPlayer != null && brushingPlayer == player;

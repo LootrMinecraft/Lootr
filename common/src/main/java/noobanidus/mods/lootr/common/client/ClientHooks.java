@@ -11,15 +11,23 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import noobanidus.mods.lootr.common.api.PlayerContext;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinBlock;
 import noobanidus.mods.lootr.common.particle.ParticleColorOption;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class ClientHooks {
+  @NotNull
+  public static PlayerContext getPlayerContext () {
+    return new PlayerContext(getPlayer());
+  }
+
   @Nullable
+  @Deprecated
   public static Player getPlayer() {
     Minecraft mc = Minecraft.getInstance();
     //noinspection ConstantValue
@@ -43,7 +51,7 @@ public class ClientHooks {
     }
   }
 
-  public static void performBreakEffect(int entityId, BlockPos pos) {
+  public static void performPotBreakEffect(int entityId, BlockPos pos) {
     Minecraft mc = Minecraft.getInstance();
     if (mc.level == null || mc.player == null) {
       return;
@@ -85,17 +93,18 @@ public class ClientHooks {
   }
 
   public static void performUnopenedParticles(ILootrInfoProvider provider) {
-    Player player = getPlayer();
-    if (player != null) {
+    PlayerContext context = getPlayerContext();
+    if (context.hasPlayer()) {
       Level level = Minecraft.getInstance().level;
-      if (level != null && !provider.hasClientOpened(player)) {
+      if (level != null && !provider.hasClientOpened(context)) {
         RandomSource random = Minecraft.getInstance().level.getRandom();
         if (random.nextInt(3) == 0) {
           double xOff = bounded(random, provider.getParticleXBounds());
           double zOff = bounded(random, provider.getParticleZBounds());
           Vec3 pos = provider.getParticleCenter();
+          int color = provider.getParticleColor(context);
           level.addParticle(
-              new ParticleColorOption(LootrRegistry.getUnopenedParticleType(), provider.getParticleColor(), provider.getParticleColor(), false),
+              new ParticleColorOption(LootrRegistry.getUnopenedParticleType(), color, color, false),
               pos.x + xOff,
               pos.y + provider.getParticleYOffset() + random.nextDouble() * 0.02,
               pos.z + zOff,

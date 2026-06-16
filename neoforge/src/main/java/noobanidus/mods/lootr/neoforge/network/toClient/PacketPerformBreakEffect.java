@@ -21,6 +21,6 @@ public record PacketPerformBreakEffect(int entityId, BlockPos pos) implements IL
 
   @Override
   public void handle(IPayloadContext context) {
-    ClientHooks.performBreakEffect(entityId, pos);
+    ClientHooks.performPotBreakEffect(entityId, pos);
   }
 }

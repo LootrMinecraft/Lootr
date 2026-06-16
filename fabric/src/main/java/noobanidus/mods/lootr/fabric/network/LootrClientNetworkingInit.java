@@ -75,7 +75,7 @@ public class LootrClientNetworkingInit {
       int entityId = payload.entityId();
       BlockPos pos = payload.pos();
       context.client().execute(() -> {
-        ClientHooks.performBreakEffect(entityId, pos);
+        ClientHooks.performPotBreakEffect(entityId, pos);
       });
     }));
   }

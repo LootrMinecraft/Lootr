@@ -63,6 +63,7 @@ public class LootrAPI {
   @Deprecated
   public static final TicketType<Unit> LOOTR_ENTITY_TICK_TICKET = TicketType.create("lootr_entity_tick_ticket", (unit1, unit2) -> 0, 300);
   public static final List<ResourceLocation> PROBLEMATIC_CHESTS = Arrays.asList(LootrAPI.rl("twilightforest", "structures/stronghold_boss"), LootrAPI.rl("atum", "chests/pharaoh"));
+  public static final int DEFAULT_PARTICLE_COLOR = 0xfad64a;
 
   public static ILootrAPI INSTANCE = null;
   public static boolean shouldDiscardIdAndOpeners;

@@ -15,6 +15,7 @@ import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.IClientOpeners;
 import noobanidus.mods.lootr.common.api.ILootrType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.PlayerContext;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.data.blockentity.RandomizableContainerBlockEntityLootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.entity.AbstractMinecartContainerLootrInfoProvider;
@@ -177,6 +178,10 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
     }
   }
 
+  default boolean shouldDisplayParticles (PlayerContext context) {
+    return !this.hasClientOpened(context);
+  }
+
   default Vec3 getParticleCenter() {
     BlockPos pos = getInfoPos();
     return new Vec3(pos.getX(), pos.getY(), pos.getZ());
@@ -195,6 +200,10 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
   }
 
   default int getParticleColor() {
-    return 0xfad64a;
+    return LootrAPI.DEFAULT_PARTICLE_COLOR;
+  }
+
+  default int getParticleColor (PlayerContext context) {
+    return getParticleColor();
   }
 }

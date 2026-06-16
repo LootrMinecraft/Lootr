@@ -15,6 +15,7 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
+import noobanidus.mods.lootr.common.api.PlayerContext;
 import noobanidus.mods.lootr.common.block.entity.LootrBrushableBlockEntity;
 import noobanidus.mods.lootr.common.client.ClientHooks;
 
@@ -27,8 +28,8 @@ public class LootrBrushableBlockRenderer implements BlockEntityRenderer<LootrBru
 
   public void render(LootrBrushableBlockEntity arg, float f, PoseStack arg2, MultiBufferSource arg3, int k, int l) {
     if (arg.getLevel() != null) {
-      Player player = ClientHooks.getPlayer();
-      if (player == null) {
+      PlayerContext player = ClientHooks.getPlayerContext();
+      if (!player.hasPlayer()) {
         return;
       }
       if (arg.hasClientOpened(player)) {
@@ -86,18 +87,5 @@ public class LootrBrushableBlockRenderer implements BlockEntityRenderer<LootrBru
     }
 
     return afloat;
-  }
-
-  // Where did this come from?
-  public AABB getRenderBoundingBox(LootrBrushableBlockEntity blockEntity) {
-    BlockPos pos = blockEntity.getBlockPos();
-    return new AABB(
-        (double) pos.getX() - 0.25,
-        (double) pos.getY() - 0.25,
-        (double) pos.getZ() - 0.25,
-        (double) pos.getX() + 1.25,
-        (double) pos.getY() + 1.25,
-        (double) pos.getZ() + 1.25
-    );
   }
 }

@@ -30,6 +30,18 @@ public interface IClientOpeners extends IOpeners {
     return result;
   }
 
+  default boolean hasClientOpened (PlayerContext context) {
+    if (isClientOpened()) {
+      return true;
+    }
+
+    if (!context.hasPlayer()) {
+      return false;
+    }
+    assert context.player() != null;
+    return hasClientOpened(context.player());
+  }
+
   default boolean hasClientOpened (Player player) {
     return hasClientOpened(player.getUUID());
   }
