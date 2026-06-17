@@ -3,13 +3,15 @@ package noobanidus.mods.lootr.common.client.particle;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.RandomSource;
+import noobanidus.mods.lootr.common.api.particle.ParticleColorOption;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 public class UnopenedParticle extends SingleQuadParticle {
-  public UnopenedParticle(ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, TextureAtlasSprite sprite) {
+  public UnopenedParticle(ClientLevel level, ParticleColorOption type, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, TextureAtlasSprite sprite) {
     super(level, x, y, z, xSpeed, ySpeed, zSpeed, sprite);
     this.lifetime = 30;
     this.alpha = 0.8f;
@@ -20,7 +22,7 @@ public class UnopenedParticle extends SingleQuadParticle {
     this.quadSize = 0.12f;
     this.friction = 1f;
 
-    int c1 = 0xfad64a;
+    int c1 = type.color1();
     this.rCol = ((c1 >> 16) & 0xFF) / 255.0f;
     this.gCol = ((c1 >> 8) & 0xFF) / 255.0f;
     this.bCol = ((c1) & 0xFF) / 255.0f;
@@ -46,10 +48,10 @@ public class UnopenedParticle extends SingleQuadParticle {
     return Layer.TRANSLUCENT;
   }
 
-  public record Provider(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
+  public record Provider(SpriteSet spriteSet) implements ParticleProvider<ParticleColorOption> {
     @Override
-    public @Nullable Particle createParticle(SimpleParticleType particleType, @NonNull ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, @NonNull RandomSource random) {
-      return new UnopenedParticle(level, x, y, z, xSpeed, ySpeed, zSpeed, spriteSet.get(random));
+    public @Nullable Particle createParticle(ParticleColorOption particleType, @NonNull ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, @NonNull RandomSource random) {
+      return new UnopenedParticle(level, particleType, x, y, z, xSpeed, ySpeed, zSpeed, spriteSet.get(random));
     }
   }
 }

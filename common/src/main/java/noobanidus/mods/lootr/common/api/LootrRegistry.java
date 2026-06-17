@@ -1,6 +1,6 @@
 package noobanidus.mods.lootr.common.api;
 
-import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.stats.Stat;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.decoration.ItemFrame;
@@ -13,6 +13,7 @@ import noobanidus.mods.lootr.common.api.interfaces.advancement.IAdvancementTrigg
 import noobanidus.mods.lootr.common.api.interfaces.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.interfaces.advancement.ILootedStatTrigger;
 import noobanidus.mods.lootr.common.api.interfaces.lootr.ILootrRegistry;
+import noobanidus.mods.lootr.common.api.particle.ParticleColorOption;
 
 /**
  * Platform-independent way to access registered objects.
@@ -168,7 +169,7 @@ public final class LootrRegistry {
     return INSTANCE.getSuspiciousSandItem();
   }
 
-  public static SimpleParticleType getUnopenedParticleType () {
+  public static ParticleType<ParticleColorOption> getUnopenedParticleType () {
     return INSTANCE.getUnopenedParticleType ();
   }
 }

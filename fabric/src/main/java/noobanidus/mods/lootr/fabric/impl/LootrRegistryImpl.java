@@ -1,6 +1,6 @@
 package noobanidus.mods.lootr.fabric.impl;
 
-import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.stats.Stat;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.decoration.ItemFrame;
@@ -13,6 +13,7 @@ import noobanidus.mods.lootr.common.api.interfaces.advancement.IAdvancementTrigg
 import noobanidus.mods.lootr.common.api.interfaces.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.interfaces.advancement.ILootedStatTrigger;
 import noobanidus.mods.lootr.common.api.interfaces.lootr.ILootrRegistry;
+import noobanidus.mods.lootr.common.api.particle.ParticleColorOption;
 import noobanidus.mods.lootr.fabric.init.*;
 
 public class LootrRegistryImpl implements ILootrRegistry {
@@ -200,7 +201,7 @@ public class LootrRegistryImpl implements ILootrRegistry {
   }
 
   @Override
-  public SimpleParticleType getUnopenedParticleType() {
-    return ModParticles.UNOPENED_PARTCLE;
+  public ParticleType<ParticleColorOption> getUnopenedParticleType() {
+    return ModParticles.UNOPENED_PARTICLE;
   }
 }

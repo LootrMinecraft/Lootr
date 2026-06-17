@@ -190,4 +190,16 @@ public interface ILootrContainerInstance extends ILootrData, IClientHasOpeners {
   default int getParticleColor2 (PlayerContext context) {
     return getParticleColor2();
   }
+
+  default boolean shouldDisplayParticles (PlayerContext context) {
+    if (isClientOpened()) {
+      return false;
+    }
+
+    if (!context.hasPlayer()) {
+      return false;
+    }
+
+    return hasClientOpened(context.player());
+  }
 }
