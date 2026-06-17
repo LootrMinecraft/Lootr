@@ -2,22 +2,23 @@ package noobanidus.mods.lootr.common.data;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.server.level.ServerPlayer;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.data.*;
+import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
+import noobanidus.mods.lootr.common.api.data.ILootrData;
+import noobanidus.mods.lootr.common.api.data.ILootrInventoryStore;
+import noobanidus.mods.lootr.common.api.data.ILootrSection;
 import noobanidus.mods.lootr.common.api.data.base.BaseLootrData;
-import noobanidus.mods.lootr.common.api.interfaces.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.filler.ILootFiller;
+import noobanidus.mods.lootr.common.api.interfaces.inventory.ILootrInventory;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.function.Supplier;
 
 // TODO: Pull quite a bit of stuff up
 public class LootrInventoryStore implements ILootrInventoryStore {
@@ -25,7 +26,8 @@ public class LootrInventoryStore implements ILootrInventoryStore {
   public static final Codec<LootrInventoryStore> CODEC = RecordCodecBuilder.create(instance -> instance.group(
       Codec.BOOL.fieldOf("hasInventories").forGetter(LootrInventoryStore::hasInventories),
       ILootrData.CODEC.fieldOf("info").forGetter(data -> data.info),
-      Codec.unboundedMap(Codec.STRING.xmap(UUID::fromString, UUID::toString), (Codec<LootrInventory>)(Object) ILootrInventory.CODEC).fieldOf("inventories").forGetter(data -> data.inventories),
+      Codec.unboundedMap(Codec.STRING.xmap(UUID::fromString, UUID::toString), (Codec<LootrInventory>) (Object) ILootrInventory.CODEC)
+          .fieldOf("inventories").forGetter(data -> data.inventories),
       UUIDUtil.CODEC_LINKED_SET.fieldOf("openers").forGetter(data -> data.openers),
       UUIDUtil.CODEC_LINKED_SET.fieldOf("actualOpeners").forGetter(data -> data.actualOpeners),
       Codec.LONG.fieldOf("decayTime").forGetter(data -> data.decayTime),
@@ -105,7 +107,7 @@ public class LootrInventoryStore implements ILootrInventoryStore {
     return result;
   }
 
-  private void removeOpener (UUID uuid) {
+  private void removeOpener(UUID uuid) {
     Set<UUID> visualOpeners = getVisualOpeners();
     if (visualOpeners != null) {
       if (visualOpeners.remove(uuid)) {
@@ -129,7 +131,8 @@ public class LootrInventoryStore implements ILootrInventoryStore {
     if (this.section != null) {
       this.section.markSectionChanged();
     } else {
-      LootrAPI.LOG.error("Attempted to mark section changed for inventory store without section {}", this.getData().getDataId());
+      LootrAPI.LOG.error("Attempted to mark section changed for inventory store without section {}", this.getData()
+          .getDataId());
     }
   }
 
@@ -162,6 +165,26 @@ public class LootrInventoryStore implements ILootrInventoryStore {
   }
 
   @Override
+  public LootrInventory createInventoryRaw(ILootrContainerInstance provider, UUID playerId, ILootFiller filler) {
+    var player = LootrAPI.getPlayer(playerId);
+
+    if (player == null && !filler.supportsNullPlayers()) {
+      LootrAPI.LOG.error("Loot Filler '{}' for provider '{}' does not support null players.", filler, provider);
+      return null;
+    }
+
+    LootrInventory result = new LootrInventory(provider.buildInitialInventory());
+    result.setLootrSavedData(this);
+    if (!LootrAPI.isFakePlayer(player) || player == null) {
+      filler.unpackLootTable(provider, player, result);
+    }
+    inventories.put(playerId, result);
+    hasInventories = true;
+    markInstanceChanged();
+    return result;
+  }
+
+  @Override
   public void setSection(ILootrSection section) {
     this.section = section;
   }
@@ -186,7 +209,7 @@ public class LootrInventoryStore implements ILootrInventoryStore {
   }
 
   @Override
-  public boolean isRefreshed () {
+  public boolean isRefreshed() {
     if (refreshTime == -1) {
       return false;
     }
@@ -201,7 +224,7 @@ public class LootrInventoryStore implements ILootrInventoryStore {
   }
 
   @Override
-  public void beginRefresh () {
+  public void beginRefresh() {
     refreshTime = LootrAPI.getGameTime() + LootrAPI.getRefreshValue();
     markInstanceChanged();
   }
@@ -249,7 +272,7 @@ public class LootrInventoryStore implements ILootrInventoryStore {
     return hasInventories;
   }
 
-  public boolean canBeCulled () {
+  public boolean canBeCulled() {
     if (!inventories.isEmpty()) {
       return false;
     }

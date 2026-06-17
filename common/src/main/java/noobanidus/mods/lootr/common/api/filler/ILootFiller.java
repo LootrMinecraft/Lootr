@@ -23,10 +23,14 @@ public interface ILootFiller {
    *                  <p>
    *                  Example implementations can be found in `LootrChestblockEntity::unpackLootTable`.
    */
-  void unpackLootTable(@NotNull ILootrContainerInstance provider, @NotNull Player player, Container inventory);
+  void unpackLootTable(@NotNull ILootrContainerInstance provider, Player player, Container inventory);
 
   default void fill (ILootrContainerInstance provider, Player player, ResourceKey<LootTable> lootTableKey, LootTable lootTable, Container container, LootParams parameters, long seed) {
     DefaultLootFiller.performFill(provider, player, lootTableKey, lootTable, container, parameters, seed);
+  }
+
+  default boolean supportsNullPlayers () {
+    return false;
   }
 
   record LootFillerState (ILootrContainerInstance provider, Player player, ResourceKey<LootTable> lootTableKey, LootTable lootTable, Container container, LootParams parameters, long seed) {

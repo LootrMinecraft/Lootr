@@ -90,6 +90,11 @@ public final class LootrAPI {
     return INSTANCE.getPlayerIds();
   }
 
+  @Nullable
+  public static Player getPlayer (UUID id) {
+    return INSTANCE.getPlayer(id);
+  }
+
   public static MinecraftServer getServer() {
     return INSTANCE.getServer();
   }

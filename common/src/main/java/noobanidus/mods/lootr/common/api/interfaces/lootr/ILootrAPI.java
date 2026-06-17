@@ -80,6 +80,16 @@ public interface ILootrAPI {
     return result;
   }
 
+  @Nullable
+  default Player getPlayer (UUID id) {
+    MinecraftServer server = getServer();
+    if (server == null) {
+      return null;
+    }
+
+    return server.getPlayerList().getPlayer(id);
+  }
+
   MinecraftServer getServer();
 
   boolean isFakePlayer(Player player);
