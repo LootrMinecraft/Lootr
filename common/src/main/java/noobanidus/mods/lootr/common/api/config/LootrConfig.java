@@ -4,14 +4,9 @@ import com.teamresourceful.resourcefulconfig.api.loader.Configurator;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.LootrTags;
-import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
-import noobanidus.mods.lootr.common.api.interfaces.annotation.DefaultCandidate;
 
 import java.util.*;
 import java.util.function.Function;
@@ -30,7 +25,6 @@ public class LootrConfig {
   private static Set<ResourceKey<Level>> REFRESH_DIMS = null;
   private static Set<ResourceKey<LootTable>> LOOT_BLACKLIST = null;
   private static Set<String> LOOT_MODIDS = null;
-  private static Set<ResourceKey<LootTable>> PROBLEMATIC_LOOT_TABLES = null;
 
   private static List<String> LAST_DECAY_DIMS = null;
   private static List<String> LAST_REFRESH_DIMS = null;
@@ -44,7 +38,6 @@ public class LootrConfig {
   private static List<String> LAST_MODID_DIM_BLACKLIST = null;
   private static List<String> LAST_LOOT_BLACKLIST = null;
   private static List<String> LAST_LOOT_MODIDS = null;
-  private static List<String> LAST_PROBLEMATIC_LOOT_TABLES = null;
 
   // TODO: This is fine but it should be split into client/etc observables
   public static void reset() {
@@ -60,14 +53,13 @@ public class LootrConfig {
     REFRESH_DIMS = null;
     REFRESH_MODS = null;
     REFRESH_TABLES = null;
-    PROBLEMATIC_LOOT_TABLES = null;
     LootrAPI.refreshSections();
     LootrAPI.refreshServices();
   }
 
   private static Configurator configurator;
 
-  public static Configurator getConfigurator () {
+  public static Configurator getConfigurator() {
     if (configurator == null) {
       configurator = new Configurator(LootrAPI.MODID);
     }
@@ -126,6 +118,9 @@ public class LootrConfig {
   public static Set<ResourceKey<LootTable>> getLootTableBlacklist() {
     if (LOOT_BLACKLIST == null || !LootrCommonConfig.Restrictions.lootTableBlacklist.equals(LAST_LOOT_BLACKLIST)) {
       LAST_LOOT_BLACKLIST = new ArrayList<>(LootrCommonConfig.Restrictions.lootTableBlacklist);
+      if (LootrCommonConfig.Restrictions.useProblematicLootTables) {
+        LAST_LOOT_BLACKLIST.addAll(LootrAPI.PROBLEMATIC_CHESTS);
+      }
       LOOT_BLACKLIST = validateResourceKeyList(LootrCommonConfig.Restrictions.lootTableBlacklist, "loot_blacklist", o -> ResourceKey.create(Registries.LOOT_TABLE, o));
     }
     return LOOT_BLACKLIST;
@@ -217,7 +212,7 @@ public class LootrConfig {
       try {
         validatedList.add(builder.apply(location));
       } catch (Exception e) {
-        LootrAPI.LOG.error("Error found when validating a configuration list for '{}'. The value found in the list, '{}', is not valid to create a ResourceKey.", listKey, entry, e);
+        LootrAPI.LOG.error("Error found when validating a configuration list for '{}'. The value found in the list, '{}', is not valid to create a ResourceKey.", listKey, entry);
       }
     }
     return validatedList;

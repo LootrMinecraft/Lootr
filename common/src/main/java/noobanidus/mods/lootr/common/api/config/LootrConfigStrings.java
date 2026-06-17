@@ -65,8 +65,8 @@ public final class LootrConfigStrings {
   public static final String LOOT_TABLE_BLACKLIST_DESC = "List of loot tables that, if matching that of a container, will prevent that container from being converted into a Lootr container.";
   public static final String LOOT_TABLE_MODID_BLACKLIST = "Loot Table Mod Id Blacklist";
   public static final String LOOT_TABLE_MODID_BLACKLIST_DESC = "List of loot table paths that, if matching that of a container, will prevent that container from being converted into a Lootr container. [For example, the loot table `minecraft:chests/simple_dungeon` has the 'path' `minecraft`.]";
-  public static final String PROBLEMATIC_LOOT_TABLES = "Problematic Loot Tables";
-  public static final String PROBLEMATIC_LOOT_TABLES_DESC = "List of 'problematic' loot tables which are automatically added to the Loot Table Blacklist. This shouldn't be edited by users.";
+  public static final String USE_PROBLEMATIC_LOOT_TABLES = "Use Problematic Loot Tables";
+  public static final String USE_PROBLEMATIC_LOOT_TABLES_DESC = "Use the default list of 'problematic' loot tables when constructing the Loot Table Blacklist. [default: true]";
 
   // Breaking
   public static final String BREAKING_TITLE = "Breaking";

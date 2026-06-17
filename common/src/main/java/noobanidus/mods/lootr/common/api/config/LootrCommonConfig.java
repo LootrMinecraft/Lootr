@@ -1,16 +1,10 @@
 package noobanidus.mods.lootr.common.api.config;
 
 import com.teamresourceful.resourcefulconfig.api.annotations.*;
-import com.teamresourceful.resourcefulconfig.api.types.entries.Observable;
-import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.resources.Identifier;
-import noobanidus.mods.lootr.common.api.LootrAPI;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
 
 @Config(value = "lootr-common",
     categories = {
@@ -97,6 +91,10 @@ public class LootrCommonConfig {
     @Comment(value = LootrConfigStrings.LOOT_TABLE_MODID_BLACKLIST_DESC, translation = "lootr.configuration.loot_table_modid_blacklist.desc")
     @ConfigOption.Regex(value = "^" + Identifier.ALLOWED_NAMESPACE_CHARACTERS + "+$")
     public static final List<String> lootTableModidBlacklist = new ArrayList<>();
+
+    @ConfigEntry(id = "use_problematic_loot_tables", translation = "lootr.configuration.use_problematic_loot_tables")
+    @Comment(value = LootrConfigStrings.USE_PROBLEMATIC_LOOT_TABLES, translation = "lootr.configuration.use_problematic_loot_tables.desc")
+    public static boolean useProblematicLootTables = true;
   }
 
   @Category("Breaking")

@@ -130,8 +130,8 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.configuration.loot_table_blacklist.desc", LootrConfigStrings.LOOT_TABLE_BLACKLIST_DESC);
     add("lootr.configuration.loot_table_modid_blacklist", LootrConfigStrings.LOOT_TABLE_MODID_BLACKLIST);
     add("lootr.configuration.loot_table_modid_blacklist.desc", LootrConfigStrings.LOOT_TABLE_MODID_BLACKLIST_DESC);
-    add("lootr.configuration.problematic_loot_tables", LootrConfigStrings.PROBLEMATIC_LOOT_TABLES);
-    add("lootr.configuration.problematic_loot_tables.desc", LootrConfigStrings.PROBLEMATIC_LOOT_TABLES_DESC);
+    add("lootr.configuration.use_problematic_loot_tables", LootrConfigStrings.USE_PROBLEMATIC_LOOT_TABLES);
+    add("lootr.configuration.use_problematic_loot_tables.desc", LootrConfigStrings.USE_PROBLEMATIC_LOOT_TABLES_DESC);
 
     add("lootr.configuration.breaking", LootrConfigStrings.BREAKING_TITLE);
     add("lootr.configuration.breaking.desc", LootrConfigStrings.BREAKING_DESC);
