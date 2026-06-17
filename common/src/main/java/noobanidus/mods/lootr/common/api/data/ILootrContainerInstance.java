@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
+import noobanidus.mods.lootr.common.api.PlayerContext;
 import noobanidus.mods.lootr.common.api.data.base.CustomLootrContainerInstance;
 import noobanidus.mods.lootr.common.api.interfaces.IClientHasOpeners;
 import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
@@ -172,5 +173,21 @@ public interface ILootrContainerInstance extends ILootrData, IClientHasOpeners {
 
   default double[] getParticleZBounds() {
     return new double[] {0.25, 0.75};
+  }
+
+  default int getParticleColor1 () {
+    return LootrAPI.DEFAULT_PARTICLE_COLOR;
+  }
+
+  default int getParticleColor1 (PlayerContext context) {
+    return getParticleColor1();
+  }
+
+  default int getParticleColor2 () {
+    return getParticleColor1();
+  }
+
+  default int getParticleColor2 (PlayerContext context) {
+    return getParticleColor2();
   }
 }

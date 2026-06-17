@@ -74,6 +74,7 @@ public final class LootrAPI {
   }).toList();
 
   public static final BoundingBox DESERT_PYRAMID_ADDITIONAL = new BoundingBox(-5, -30, -5, 5, 4, 4);
+  public static final int DEFAULT_PARTICLE_COLOR = 0xfad64a;
 
   public static ILootrAPI INSTANCE = null;
   public static boolean shouldDiscardIdAndOpeners;
