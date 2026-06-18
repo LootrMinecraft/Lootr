@@ -1,12 +1,12 @@
-package noobanidus.mods.lootr.common.impl.command;
+package noobanidus.mods.lootr.common.impl.command.block;
 
 import com.google.auto.service.AutoService;
 import net.minecraft.world.level.block.Block;
-import noobanidus.mods.lootr.common.api.interfaces.command.ILootrCommandExtension;
+import noobanidus.mods.lootr.common.api.interfaces.command.ILootrCommandBlockExtension;
 import noobanidus.mods.lootr.common.api.LootrRegistry;
 
-@AutoService(ILootrCommandExtension.class)
-public class ChestCommandType implements ILootrCommandExtension {
+@AutoService(ILootrCommandBlockExtension.class)
+public class ChestCommandType implements ILootrCommandBlockExtension {
   @Override
   public Block getBlock() {
     return LootrRegistry.getChestBlock();

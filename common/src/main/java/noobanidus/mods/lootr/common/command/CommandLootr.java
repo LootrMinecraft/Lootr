@@ -55,7 +55,8 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrConstants;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.interfaces.accessor.ILootrDataAccessor;
-import noobanidus.mods.lootr.common.api.interfaces.command.ILootrCommandExtension;
+import noobanidus.mods.lootr.common.api.interfaces.command.ILootrCommandBlockExtension;
+import noobanidus.mods.lootr.common.api.interfaces.command.ILootrCommandEntityExtension;
 import noobanidus.mods.lootr.common.block.LootrBarrelBlock;
 import noobanidus.mods.lootr.common.block.LootrChestBlock;
 import noobanidus.mods.lootr.common.block.LootrShulkerBoxBlock;
@@ -68,6 +69,7 @@ import noobanidus.mods.lootr.common.impl.IChunkMapGetChunks;
 import noobanidus.mods.lootr.common.impl.LootrServiceRegistry;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinMinecraftServer;
 import org.apache.commons.lang3.NotImplementedException;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -98,7 +100,7 @@ public class CommandLootr {
     return tableNames;
   }
 
-  public static void createBlock(CommandSourceStack c, @Nullable Block block, @Nullable ResourceKey<LootTable> incomingTable) {
+  public static void createBlock(CommandSourceStack c, @NotNull Block block, @Nullable ResourceKey<LootTable> incomingTable) {
     Level world = c.getLevel();
     Vec3 incomingPos = c.getPosition();
     BlockPos pos = new BlockPos((int) incomingPos.x(), (int) incomingPos.y, (int) incomingPos.z());
@@ -108,51 +110,54 @@ public class CommandLootr {
     } else {
       table = incomingTable;
     }
-    if (block == null) {
-      LootrChestMinecartEntity cart = new LootrChestMinecartEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
-      Entity e = c.getEntity();
-      if (e != null) {
-        cart.setYRot(e.getYRot());
+    BlockState placementState = block.defaultBlockState();
+    Entity e = c.getEntity();
+    if (e != null) {
+      // TODO: Migrate this to ILootrCommandBlockExtension processor
+      EnumProperty<Direction> prop = null;
+      Direction dir = Direction.orderedByNearest(e)[0].getOpposite();
+      if (placementState.hasProperty(LootrBarrelBlock.FACING)) {
+        prop = LootrBarrelBlock.FACING;
+      } else if (placementState.hasProperty(LootrChestBlock.FACING)) {
+        prop = LootrChestBlock.FACING;
+        dir = e.getDirection().getOpposite();
+      } else if (placementState.hasProperty(LootrShulkerBoxBlock.FACING)) {
+        prop = LootrShulkerBoxBlock.FACING;
       }
-      cart.setLootTable(table, world.getRandom().nextLong());
-      world.addFreshEntity(cart);
-      c.sendSuccess(() -> Component.translatable("lootr.commands.summon", ComponentUtils.wrapInSquareBrackets(Component.translatable("lootr.commands.blockpos", pos.getX(), pos.getY(), pos.getZ())
-          .setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.GREEN))
-              .withBold(true))), table.toString()), false);
-    } else {
-      BlockState placementState = block.defaultBlockState();
-      Entity e = c.getEntity();
-      if (e != null) {
-        EnumProperty<Direction> prop = null;
-        Direction dir = Direction.orderedByNearest(e)[0].getOpposite();
-        if (placementState.hasProperty(LootrBarrelBlock.FACING)) {
-          prop = LootrBarrelBlock.FACING;
-        } else if (placementState.hasProperty(LootrChestBlock.FACING)) {
-          prop = LootrChestBlock.FACING;
-          dir = e.getDirection().getOpposite();
-        } else if (placementState.hasProperty(LootrShulkerBoxBlock.FACING)) {
-          prop = LootrShulkerBoxBlock.FACING;
-        }
-        if (prop != null) {
-          placementState = placementState.setValue(prop, dir);
-        }
+      if (prop != null) {
+        placementState = placementState.setValue(prop, dir);
       }
-      world.setBlock(pos, placementState, 2);
-      if (LootrAPI.wrapBlockEntity(world.getBlockEntity(pos)) instanceof ILootrBlockEntity randomizableBe) {
-        randomizableBe.setLootTableInternal(table, world.getRandom().nextLong());
-      }
-      c.sendSuccess(() -> Component.translatable("lootr.commands.create", Component.translatable(block.getDescriptionId()), ComponentUtils.wrapInSquareBrackets(Component.translatable("lootr.commands.blockpos", pos.getX(), pos.getY(), pos.getZ())
-          .setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.GREEN))
-              .withBold(true))), table.toString()), false);
     }
+    world.setBlock(pos, placementState, 2);
+    // TODO: This also needs to migrate to an ILootrCommandBlockExtension processor
+    if (LootrAPI.wrapBlockEntity(world.getBlockEntity(pos)) instanceof ILootrBlockEntity randomizableBe) {
+      randomizableBe.setLootTableInternal(table, world.getRandom().nextLong());
+    }
+    c.sendSuccess(() -> Component.translatable("lootr.commands.create", Component.translatable(block.getDescriptionId()), ComponentUtils.wrapInSquareBrackets(Component.translatable("lootr.commands.blockpos", pos.getX(), pos.getY(), pos.getZ())
+        .setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.GREEN))
+            .withBold(true))), table.toString()), false);
   }
 
-  static NonNullList<ItemStack> copyItemList(NonNullList<ItemStack> reference) {
-    NonNullList<ItemStack> contents = NonNullList.withSize(reference.size(), ItemStack.EMPTY);
-    for (int i = 0; i < reference.size(); i++) {
-      contents.set(i, reference.get(i).copy());
+  public static void createEntity(CommandSourceStack c, ILootrCommandEntityExtension extension, @Nullable ResourceKey<LootTable> incomingTable) {
+    Level world = c.getLevel();
+    Vec3 incomingPos = c.getPosition();
+    BlockPos pos = new BlockPos((int) incomingPos.x(), (int) incomingPos.y, (int) incomingPos.z());
+    ResourceKey<LootTable> table;
+    if (incomingTable == null) {
+      table = getTables(c.getServer()).get(world.getRandom().nextInt(getTables(c.getServer()).size()));
+    } else {
+      table = incomingTable;
     }
-    return contents;
+    LootrChestMinecartEntity cart = new LootrChestMinecartEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+    Entity e = c.getEntity();
+    if (e != null) {
+      cart.setYRot(e.getYRot());
+    }
+    cart.setLootTable(table, world.getRandom().nextLong());
+    world.addFreshEntity(cart);
+    c.sendSuccess(() -> Component.translatable("lootr.commands.summon", ComponentUtils.wrapInSquareBrackets(Component.translatable("lootr.commands.blockpos", pos.getX(), pos.getY(), pos.getZ())
+        .setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.GREEN))
+            .withBold(true))), table.toString()), false);
   }
 
   public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
@@ -172,7 +177,7 @@ public class CommandLootr {
       return 1;
     });
 
-    for (ILootrCommandExtension extension : LootrServiceRegistry.getCommandExtensions()) {
+    for (ILootrCommandBlockExtension extension : LootrServiceRegistry.getCommandBlockExtensions()) {
       builder.then(Commands.literal(extension.getId()).executes(c -> {
         createBlock(c.getSource(), extension.getBlock(), null);
         return 1;

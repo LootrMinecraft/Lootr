@@ -1,8 +1,5 @@
 package noobanidus.mods.lootr.common.api.interfaces.command;
 
-import net.minecraft.world.level.block.Block;
-
 public interface ILootrCommandExtension {
-  Block getBlock();
-  String getId();
+  String getId ();
 }
