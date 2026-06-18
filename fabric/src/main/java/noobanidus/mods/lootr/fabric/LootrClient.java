@@ -59,7 +59,7 @@ public class LootrClient implements ClientModInitializer {
 
     ModelLayerRegistry.registerModelLayer(LootrDecoratedPotRenderer.OPEN_POT_LAYER, LootrDecoratedPotRenderer::createBodyLayer);
 
-    ParticleProviderRegistry.getInstance().register(ModParticles.UNOPENED_PARTCLE, UnopenedParticle.Provider::new);
+    ParticleProviderRegistry.getInstance().register(ModParticles.UNOPENED_PARTICLE, UnopenedParticle.Provider::new);
     ParticleProviderRegistry.getInstance().register(ModParticles.REFRESH_PARTICLE, RefreshParticle.Provider::new);
 
     SelectItemModelProperties.ID_MAPPER.put(SelectConfigType.IDENTIFIER, SelectConfigType.TYPE);
