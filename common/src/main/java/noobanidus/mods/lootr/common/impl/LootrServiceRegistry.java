@@ -7,6 +7,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import noobanidus.mods.lootr.common.api.interfaces.command.ILootrCommandEntityExtension;
 import noobanidus.mods.lootr.common.api.interfaces.lootr.ILootrAPI;
 import noobanidus.mods.lootr.common.api.AccessorMap;
 import noobanidus.mods.lootr.common.api.interfaces.accessor.ILootrDataAccessor;
@@ -46,6 +47,7 @@ public class LootrServiceRegistry {
   private final Map<String, ILootrType> typeMap = new Object2ObjectOpenHashMap<>();
   // Only used on Fabric
   private final List<ILootrCommandBlockExtension> commandBlockExtensions = new ObjectArrayList<>();
+  private final List<ILootrCommandEntityExtension<?>> commandEntityExtensions = new ObjectArrayList<>();
 
   private final String commands;
 
@@ -112,6 +114,13 @@ public class LootrServiceRegistry {
     ServiceLoader<ILootrCommandBlockExtension> loader12 = ServiceLoader.load(ILootrCommandBlockExtension.class, classLoader);
     for (ILootrCommandBlockExtension extension : loader12) {
       commandBlockExtensions.add(extension);
+      commandsTemp.add(extension.getId());
+      commandsTemp.add(extension.getId() + " <loot-table>");
+    }
+
+    ServiceLoader<ILootrCommandEntityExtension> loader14 = ServiceLoader.load(ILootrCommandEntityExtension.class, classLoader);
+    for (ILootrCommandEntityExtension<?> extension : loader14) {
+      commandEntityExtensions.add(extension);
       commandsTemp.add(extension.getId());
       commandsTemp.add(extension.getId() + " <loot-table>");
     }
@@ -213,6 +222,11 @@ public class LootrServiceRegistry {
   @ApiStatus.Internal
   public static List<ILootrCommandBlockExtension> getCommandBlockExtensions() {
     return getInstance().commandBlockExtensions;
+  }
+
+  @ApiStatus.Internal
+  public static List<ILootrCommandEntityExtension<?>> getCommandEntityExtensions () {
+    return getInstance().commandEntityExtensions;
   }
 
   @ApiStatus.Internal

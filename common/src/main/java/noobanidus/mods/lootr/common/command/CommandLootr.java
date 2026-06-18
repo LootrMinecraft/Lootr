@@ -8,15 +8,18 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.DimensionArgument;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.commands.arguments.IdentifierArgument;
+import net.minecraft.commands.arguments.ResourceArgument;
+import net.minecraft.commands.arguments.ResourceKeyArgument;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.commands.arguments.coordinates.Vec3Argument;
+import net.minecraft.commands.synchronization.SuggestionProviders;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -26,13 +29,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentUtils;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.permissions.Permissions;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -77,6 +80,7 @@ import java.io.FilenameFilter;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -84,20 +88,31 @@ import java.util.stream.Stream;
 @SuppressWarnings("resource")
 public class CommandLootr {
   private static List<ResourceKey<LootTable>> tables = null;
-  private static List<String> tableNames = null;
 
-  private static List<ResourceKey<LootTable>> getTables(MinecraftServer server) {
+  private static final List<String> LOOT_TABLE_INCLUDES = List.of("archaeology/", "chests/", "gameplay/fishing", "pots/");
+
+  private static List<ResourceKey<LootTable>> getTables() {
     if (tables == null) {
+      MinecraftServer server = LootrAPI.getServer();
+      Predicate<ResourceKey<LootTable>> predicate = (o) -> {
+        var path = o.identifier().getPath();
+        for (String start : LOOT_TABLE_INCLUDES) {
+          if (path.startsWith(start)) {
+            return true;
+          }
+        }
+
+        return false;
+      };
       tables = server.reloadableRegistries().lookup().lookup(Registries.LOOT_TABLE).map(HolderLookup::listElementIds)
-          .orElse(Stream.of()).toList();
-      tableNames = tables.stream().map(o -> o.identifier().toString()).toList();
+          .orElse(Stream.of()).filter(predicate).toList();
     }
     return tables;
   }
 
-  private static List<String> getTableNames(MinecraftServer server) {
-    getTables(server);
-    return tableNames;
+  private static ResourceKey<LootTable> getRandomTable(RandomSource random) {
+    var tables = getTables();
+    return tables.get(random.nextInt(tables.size()));
   }
 
   public static void createBlock(CommandSourceStack c, @NotNull Block block, @Nullable ResourceKey<LootTable> incomingTable) {
@@ -106,7 +121,7 @@ public class CommandLootr {
     BlockPos pos = new BlockPos((int) incomingPos.x(), (int) incomingPos.y, (int) incomingPos.z());
     ResourceKey<LootTable> table;
     if (incomingTable == null) {
-      table = getTables(c.getServer()).get(world.getRandom().nextInt(getTables(c.getServer()).size()));
+      table = getRandomTable(world.getRandom());
     } else {
       table = incomingTable;
     }
@@ -138,24 +153,22 @@ public class CommandLootr {
             .withBold(true))), table.toString()), false);
   }
 
-  public static void createEntity(CommandSourceStack c, ILootrCommandEntityExtension extension, @Nullable ResourceKey<LootTable> incomingTable) {
+  public static void createEntity(CommandSourceStack c, ILootrCommandEntityExtension<?> extension, @Nullable ResourceKey<LootTable> incomingTable) {
     Level world = c.getLevel();
     Vec3 incomingPos = c.getPosition();
     BlockPos pos = new BlockPos((int) incomingPos.x(), (int) incomingPos.y, (int) incomingPos.z());
     ResourceKey<LootTable> table;
     if (incomingTable == null) {
-      table = getTables(c.getServer()).get(world.getRandom().nextInt(getTables(c.getServer()).size()));
+      table = getRandomTable(world.getRandom());
     } else {
       table = incomingTable;
     }
-    LootrChestMinecartEntity cart = new LootrChestMinecartEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+
+    Entity cart = extension.createEntity(world, pos);
     Entity e = c.getEntity();
-    if (e != null) {
-      cart.setYRot(e.getYRot());
-    }
-    cart.setLootTable(table, world.getRandom().nextLong());
+    extension.process(cart, e, table, world.getRandom().nextLong());
     world.addFreshEntity(cart);
-    c.sendSuccess(() -> Component.translatable("lootr.commands.summon", ComponentUtils.wrapInSquareBrackets(Component.translatable("lootr.commands.blockpos", pos.getX(), pos.getY(), pos.getZ())
+    c.sendSuccess(() -> Component.translatable("lootr.commands.summon", cart.getName(), ComponentUtils.wrapInSquareBrackets(Component.translatable("lootr.commands.blockpos", pos.getX(), pos.getY(), pos.getZ())
         .setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.GREEN))
             .withBold(true))), table.toString()), false);
   }
@@ -165,9 +178,12 @@ public class CommandLootr {
         .requires(p -> p.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))));
   }
 
-  private static RequiredArgumentBuilder<CommandSourceStack, Identifier> suggestTables() {
-    return Commands.argument("table", IdentifierArgument.id())
-        .suggests((c, build) -> SharedSuggestionProvider.suggest(getTableNames(c.getSource().getServer()), build));
+  private static final SuggestionProvider<CommandSourceStack> LOOT_TABLES = SuggestionProviders.register(LootrAPI.rl("loot_tables"), (context, builder) -> SharedSuggestionProvider.suggestResource(
+      getTables().stream().map(ResourceKey::identifier),
+      builder));
+
+  private static RequiredArgumentBuilder<CommandSourceStack, ResourceKey<LootTable>> suggestTables() {
+    return Commands.argument("table", ResourceKeyArgument.key(Registries.LOOT_TABLE)).suggests(LOOT_TABLES);
   }
 
   public static LiteralArgumentBuilder<CommandSourceStack> builder(LiteralArgumentBuilder<CommandSourceStack> builder) {
@@ -182,7 +198,18 @@ public class CommandLootr {
         createBlock(c.getSource(), extension.getBlock(), null);
         return 1;
       }).then(suggestTables().executes(c -> {
-        createBlock(c.getSource(), extension.getBlock(), ResourceKey.create(Registries.LOOT_TABLE, IdentifierArgument.getId(c, "table")));
+        createBlock(c.getSource(), extension.getBlock(), ResourceArgument.getResource(c, "table", Registries.LOOT_TABLE)
+            .key());
+        return 1;
+      })));
+    }
+
+    for (ILootrCommandEntityExtension<?> extension : LootrServiceRegistry.getCommandEntityExtensions()) {
+      builder.then(Commands.literal(extension.getId()).executes(c -> {
+        createEntity(c.getSource(), extension, null);
+        return 1;
+      }).then(suggestTables().executes(c -> {
+        createEntity(c.getSource(), extension, ResourceArgument.getResource(c, "table", Registries.LOOT_TABLE).key());
         return 1;
       })));
     }
@@ -194,7 +221,7 @@ public class CommandLootr {
       String playerName = StringArgumentType.getString(c, "profile");
       Optional<NameAndId> opt_profile = c.getSource().getServer().services().profileRepository()
           .findProfileByName(playerName);
-      if (!opt_profile.isPresent()) {
+      if (opt_profile.isEmpty()) {
         c.getSource()
             .sendFailure(Component.literal("Invalid player name: " + playerName + ", profile not found in the cache."));
         return 0;
@@ -204,13 +231,6 @@ public class CommandLootr {
           .sendSuccess(() -> Component.literal(LootrAPI.clearPlayerLoot(profile.id()) ? "Cleared stored inventories for " + playerName : "No stored inventories for " + playerName + " to clear"), true);
       return 1;
     })));
-    builder.then(Commands.literal("cart").executes(c -> {
-      createBlock(c.getSource(), null, null);
-      return 1;
-    }).then(suggestTables().executes(c -> {
-      createBlock(c.getSource(), null, ResourceKey.create(Registries.LOOT_TABLE, IdentifierArgument.getId(c, "table")));
-      return 1;
-    })));
     builder.then(Commands.literal("open_as").executes(c -> {
       c.getSource().sendSuccess(() -> Component.literal("Must provide player name."), true);
       return 1;
@@ -218,7 +238,7 @@ public class CommandLootr {
       String playerName = StringArgumentType.getString(c, "profile");
       Optional<NameAndId> opt_profile = c.getSource().getServer().services().profileRepository()
           .findProfileByName(playerName);
-      if (!opt_profile.isPresent()) {
+      if (opt_profile.isEmpty()) {
         c.getSource()
             .sendFailure(Component.literal("Invalid player name: " + playerName + ", profile not found in the cache."));
         return 0;
