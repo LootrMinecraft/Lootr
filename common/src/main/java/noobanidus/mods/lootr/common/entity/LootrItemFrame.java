@@ -14,6 +14,7 @@ import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.decoration.ItemFrame;
@@ -24,19 +25,20 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DiodeBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
-import noobanidus.mods.lootr.common.api.interfaces.wrapper.ILootrEntityWrapper;
-import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.interfaces.advancement.IContainerTrigger;
-import noobanidus.mods.lootr.common.api.helper.SimpleLootrEntityInstance;
-import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
-import noobanidus.mods.lootr.common.api.interfaces.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.LootrRegistry;
+import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
+import noobanidus.mods.lootr.common.api.helper.SimpleLootrEntityInstance;
+import noobanidus.mods.lootr.common.api.interfaces.advancement.IContainerTrigger;
+import noobanidus.mods.lootr.common.api.interfaces.inventory.ILootrInventory;
+import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
+import noobanidus.mods.lootr.common.api.interfaces.wrapper.ILootrEntityWrapper;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinItemFrame;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -99,13 +101,20 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   public boolean hurtServer(@NonNull ServerLevel serverLevel, @NonNull DamageSource source, float amount) {
     boolean skipMessage = false;
 
-    if (amount > 0 && source.getEntity() instanceof ServerPlayer player) {
+    // TODO: This could be an issue in the future as this is called with "simulation" amounts of 0.0
+    ServerPlayer player = null;
+    if (source.getEntity() instanceof ServerPlayer player1) {
+      player = player1;
+    } else if (source.getDirectEntity() instanceof ServerPlayer player2) {
+      player = player2;
+    }
+    if (player != null) {
       if (this.actuallyDropItem(player)) {
         skipMessage = true;
       }
     }
 
-    if (amount > 0 && !skipMessage) {
+    if (!skipMessage) {
       maybeMessagePlayer(source);
     }
 
@@ -115,6 +124,7 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
 
     if (!this.isRemoved() && !this.level().isClientSide()) {
       this.kill((ServerLevel) this.level());
+      this.dropItem((ServerLevel) this.level(), source.getEntity());
       this.markHurt();
     }
 
@@ -262,6 +272,13 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
 
     ((AccessorMixinItemFrame) this).lootr$onItemChanged(stack);
     this.getEntityData().set(AccessorMixinItemFrame.lootr$getDataItem(), stack);
+  }
+
+  @Override
+  public void dropItem(ServerLevel level, @org.jspecify.annotations.Nullable Entity causedBy) {
+    if (level.getGameRules().get(GameRules.ENTITY_DROPS)) {
+      this.spawnAtLocation(level, this.getFrameItemStack());
+    }
   }
 
   @Override
