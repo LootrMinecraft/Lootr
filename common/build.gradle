@@ -29,8 +29,8 @@ dependencies {
     implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:${rootProject.mixin_extras_version}"))
 
     // Compat
-    compileOnly "dev.thomasglasser.sherdsapi:sherdsapi-common-${sherds_minecraft_version}:${sherdsapi_version}"
-    compileOnly("maven.modrinth:jade:${rootProject.jade_version}+neoforge")
+    //compileOnly "dev.thomasglasser.sherdsapi:sherdsapi-common-${sherds_minecraft_version}:${sherdsapi_version}"
+    //compileOnly("maven.modrinth:jade:${rootProject.jade_version}+neoforge")
 }
 
 neoForge {
