@@ -53,7 +53,7 @@ public class LootrModelProvider extends ModelProvider {
     blockModels.blockStateOutput.accept(MultiVariantGenerator.dispatch(ModBlocks.BARREL.get(), baseVariant)
         .withUnbaked(PropertyDispatch.modifyUnbaked(LootrBarrelBlock.FACING, LootrBarrelBlock.OPEN)
             .generate((facing, open) -> {
-              Quadrant rotX = facing == Direction.UP ? Quadrant.R180 : Quadrant.R90;
+              Quadrant rotX = facing == Direction.UP ? Quadrant.R0 : (facing == Direction.DOWN ? Quadrant.R180 : Quadrant.R90);
               Quadrant rotY = facing.getAxis() != Direction.Axis.Y ? Quadrant.values()[(int) facing.toYRot() / 90] : Quadrant.R0;
 
               return UnbakedMutator.builder()

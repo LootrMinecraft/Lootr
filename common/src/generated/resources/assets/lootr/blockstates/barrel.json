@@ -5,7 +5,7 @@
       "open": false,
       "opened": "lootr:block/opened_barrel",
       "state": {
-        "x": 90
+        "x": 180
       },
       "unopened": "lootr:block/barrel_unopened",
       "vanilla": "minecraft:block/barrel"
@@ -15,7 +15,7 @@
       "open": true,
       "opened": "lootr:block/opened_barrel_open",
       "state": {
-        "x": 90
+        "x": 180
       },
       "unopened": "lootr:block/barrel_unopened_open",
       "vanilla": "minecraft:block/barrel_open"
@@ -88,9 +88,7 @@
       "type": "lootr:custom",
       "open": false,
       "opened": "lootr:block/opened_barrel",
-      "state": {
-        "x": 180
-      },
+      "state": {},
       "unopened": "lootr:block/barrel_unopened",
       "vanilla": "minecraft:block/barrel"
     },
@@ -98,9 +96,7 @@
       "type": "lootr:custom",
       "open": true,
       "opened": "lootr:block/opened_barrel_open",
-      "state": {
-        "x": 180
-      },
+      "state": {},
       "unopened": "lootr:block/barrel_unopened_open",
       "vanilla": "minecraft:block/barrel_open"
     },
