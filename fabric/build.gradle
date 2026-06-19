@@ -35,8 +35,8 @@ dependencies {
     implementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
     implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
-    compileOnly "maven.modrinth:jade:${project.jade_version}+fabric"
-    runtimeOnly "maven.modrinth:jade:${project.jade_version}+fabric"
+    compileOnly "maven.modrinth:jade:${project.jade_fabric_version}+fabric"
+    runtimeOnly "maven.modrinth:jade:${project.jade_fabric_version}+fabric"
 
     //compileOnly "dev.thomasglasser.sherdsapi:sherdsapi-fabric-${sherds_minecraft_version}:${sherdsapi_version}"
     //runtimeOnly "dev.thomasglasser.sherdsapi:sherdsapi-fabric-${sherds_minecraft_version}:${sherdsapi_version}"
