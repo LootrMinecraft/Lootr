@@ -27,6 +27,14 @@ public class LootrEntityTagsProvider extends EntityTypeTagsProvider {
     tag(LootrTags.Entity.MINECARTS).add(TagEntry.optionalTag(ModEntities.MINECART_WITH_CHEST.getId()));
     tag(LootrTags.Entity.ITEM_FRAMES).add(ModEntities.ITEM_FRAME.get());
 
+    tag(LootrTags.Entity.PREVENT_BREAK_MINECARTS).addTag(LootrTags.Entity.MINECARTS);
+    tag(LootrTags.Entity.PREVENT_BREAK_ITEM_FRAMES).addTag(LootrTags.Entity.ITEM_FRAMES);
+    // noinspection unchecked
+    tag(LootrTags.Entity.PREVENT_BREAK).addTags(LootrTags.Entity.PREVENT_BREAK_ITEM_FRAMES, LootrTags.Entity.PREVENT_BREAK_MINECARTS);
+    tag(LootrTags.Entity.ITEM_FRAMES).add(ModEntities.ITEM_FRAME.get());
+
+    tag(LootrTags.Entity.ENABLE_BREAK);
+
     //noinspection unchecked
     tag(LootrTags.Entity.CONTAINERS).addTags(LootrTags.Entity.MINECARTS, LootrTags.Entity.ITEM_FRAMES);
   }

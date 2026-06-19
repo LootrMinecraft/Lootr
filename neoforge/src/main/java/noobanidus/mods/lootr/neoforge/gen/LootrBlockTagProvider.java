@@ -38,6 +38,21 @@ public class LootrBlockTagProvider extends BlockTagsProvider {
     tag(LootrTags.Blocks.SANDS).add(LootrRegistry.getSuspiciousSandBlock());
     tag(LootrTags.Blocks.GRAVELS).add(LootrRegistry.getSuspiciousGravelBlock());
     tag(LootrTags.Blocks.POTS).add(LootrRegistry.getDecoratedPotBlock());
+
+    tag(LootrTags.Blocks.PREVENT_BREAK_BARRELS).addTag(LootrTags.Blocks.BARRELS);
+    tag(LootrTags.Blocks.PREVENT_BREAK_CHESTS).addTag(LootrTags.Blocks.CHESTS);
+    tag(LootrTags.Blocks.PREVENT_BREAK_TRAPPED_CHESTS).addTag(LootrTags.Blocks.TRAPPED_CHESTS);
+    tag(LootrTags.Blocks.PREVENT_BREAK_SHULKERS).addTag(LootrTags.Blocks.SHULKERS);
+    tag(LootrTags.Blocks.PREVENT_BREAK_SANDS).addTag(LootrTags.Blocks.SANDS);
+    tag(LootrTags.Blocks.PREVENT_BREAK_GRAVELS).addTag(LootrTags.Blocks.GRAVELS);
+    tag(LootrTags.Blocks.PREVENT_BREAK_POTS).addTag(LootrTags.Blocks.POTS);
+
+    tag(LootrTags.Blocks.ENABLE_BREAK);
+
+
+    //noinspection unchecked
+    tag(LootrTags.Blocks.PREVENT_BREAK).addTags(LootrTags.Blocks.PREVENT_BREAK_BARRELS, LootrTags.Blocks.PREVENT_BREAK_CHESTS, LootrTags.Blocks.PREVENT_BREAK_TRAPPED_CHESTS, LootrTags.Blocks.PREVENT_BREAK_SHULKERS, LootrTags.Blocks.PREVENT_BREAK_SANDS, LootrTags.Blocks.PREVENT_BREAK_GRAVELS, LootrTags.Blocks.PREVENT_BREAK_POTS);
+
     //noinspection unchecked
     tag(LootrTags.Blocks.CONTAINERS).addTags(LootrTags.Blocks.BARRELS, LootrTags.Blocks.CHESTS, LootrTags.Blocks.TRAPPED_CHESTS, LootrTags.Blocks.SHULKERS, LootrTags.Blocks.SANDS, LootrTags.Blocks.GRAVELS, LootrTags.Blocks.POTS);
 

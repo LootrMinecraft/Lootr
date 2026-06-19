@@ -1,0 +1,11 @@
+{
+  "values": [
+    "#lootr:prevent_break/barrels",
+    "#lootr:prevent_break/chests",
+    "#lootr:prevent_break/trapped_chests",
+    "#lootr:prevent_break/shulkers",
+    "#lootr:prevent_break/sands",
+    "#lootr:prevent_break/gravels",
+    "#lootr:prevent_break/pots"
+  ]
+}

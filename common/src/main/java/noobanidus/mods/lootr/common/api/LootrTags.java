@@ -19,6 +19,16 @@ public final class LootrTags {
     public static final TagKey<Block> CONVERT_BLOCK = tag("convert/blocks");
     public static final TagKey<Block> CONVERT_BLACKLIST = tag("convert/blacklist");
 
+    public static final TagKey<Block> PREVENT_BREAK = tag("prevent_break");
+    public static final TagKey<Block> PREVENT_BREAK_CHESTS = tag("prevent_break/chests");
+    public static final TagKey<Block> PREVENT_BREAK_TRAPPED_CHESTS = tag("prevent_break/trapped_chests");
+    public static final TagKey<Block> PREVENT_BREAK_SHULKERS = tag("prevent_break/shulkers");
+    public static final TagKey<Block> PREVENT_BREAK_BARRELS = tag("prevent_break/barrels");
+    public static final TagKey<Block> PREVENT_BREAK_GRAVELS = tag("prevent_break/gravels");
+    public static final TagKey<Block> PREVENT_BREAK_SANDS = tag("prevent_break/sands");
+    public static final TagKey<Block> PREVENT_BREAK_POTS = tag("prevent_break/pots");
+    public static final TagKey<Block> ENABLE_BREAK = tag("enable_break");
+
     public static final TagKey<Block> CHESTS = tag("chests");
     public static final TagKey<Block> TRAPPED_CHESTS = tag("trapped_chests");
     public static final TagKey<Block> SHULKERS = tag("shulkers");
@@ -68,6 +78,11 @@ public final class LootrTags {
     public static TagKey<EntityType<?>> CONVERT_ITEM_FRAMES = tag("convert/item_frames");
     public static TagKey<EntityType<?>> CONVERT_ENTITIES = tag("convert/entities");
     public static TagKey<EntityType<?>> CONVERT_BLACKLIST = tag("blacklist");
+
+    public static final TagKey<EntityType<?>> PREVENT_BREAK = tag("prevent_break");
+    public static final TagKey<EntityType<?>> PREVENT_BREAK_MINECARTS = tag("prevent_break/minecarts");
+    public static final TagKey<EntityType<?>> PREVENT_BREAK_ITEM_FRAMES = tag("prevent_break/item_frames");
+    public static final TagKey<EntityType<?>> ENABLE_BREAK = tag("enable_break");
 
     public static TagKey<EntityType<?>> MINECARTS = tag("minecarts");
     public static TagKey<EntityType<?>> ITEM_FRAMES = tag("item_frames");
