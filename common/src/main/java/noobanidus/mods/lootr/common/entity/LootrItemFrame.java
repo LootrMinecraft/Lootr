@@ -33,6 +33,7 @@ import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrRegistry;
+import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.api.helper.SimpleLootrEntityInstance;
 import noobanidus.mods.lootr.common.api.interfaces.advancement.IContainerTrigger;
@@ -135,6 +136,10 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
     // This is called multiple times so it can't be relied upon for messaging
     if (this.isInvulnerable() && source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
       return true;
+    }
+
+    if (!this.is(LootrTags.Entity.PREVENT_BREAK) || this.is(LootrTags.Entity.ENABLE_BREAK)) {
+      return false;
     }
 
     if (source.getEntity() instanceof Player player) {

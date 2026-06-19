@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class HandleBreak {
   public static boolean beforeBlockBreak(Level world, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity) {
-    if (world.isClientSide() || !state.is(LootrTags.Blocks.CONTAINERS)) {
+    if (world.isClientSide() || !state.is(LootrTags.Blocks.PREVENT_BREAK) || state.is(LootrTags.Blocks.ENABLE_BREAK)) {
       return true;
     }
 

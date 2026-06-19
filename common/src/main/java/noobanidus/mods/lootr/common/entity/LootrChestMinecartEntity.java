@@ -31,6 +31,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.helper.SimpleLootrEntityInstance;
 import noobanidus.mods.lootr.common.api.interfaces.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
@@ -95,6 +96,10 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   public boolean isInvulnerableTo(DamageSource source) {
     if (this.isInvulnerable() && source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
       return true;
+    }
+
+    if (!this.is(LootrTags.Entity.PREVENT_BREAK) || this.is(LootrTags.Entity.ENABLE_BREAK)) {
+      return false;
     }
 
     if (source.getEntity() instanceof Player player) {

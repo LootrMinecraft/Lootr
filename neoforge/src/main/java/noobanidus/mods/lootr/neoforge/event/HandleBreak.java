@@ -18,7 +18,7 @@ public class HandleBreak {
 
   @SubscribeEvent
   public static void onBlockBreak(BreakBlockEvent event) {
-    if (!(event.getState().is(LootrTags.Blocks.CONTAINERS))) {
+    if (!event.getState().is(LootrTags.Blocks.PREVENT_BREAK) || event.getState().is(LootrTags.Blocks.ENABLE_BREAK)) {
       return;
     }
 
