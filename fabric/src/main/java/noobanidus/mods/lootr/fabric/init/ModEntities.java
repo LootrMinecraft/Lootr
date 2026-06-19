@@ -13,11 +13,11 @@ public class ModEntities {
   public static EntityType<LootrItemFrame> ITEM_FRAME;
 
   public static void registerEntities() {
-    MINECART_WITH_CHEST = Registry.register(BuiltInRegistries.ENTITY_TYPE, LootrConstants.MINECART_WITH_CHEST, EntityType.Builder.of((EntityType.EntityFactory<LootrChestMinecartEntity>) LootrChestMinecartEntity::new, MobCategory.MISC).sized(0.9f, 1.4f).clientTrackingRange(8).build(LootrConstants.MINECART_WITH_CHEST_ENTITY));
-    ITEM_FRAME = Registry.register(BuiltInRegistries.ENTITY_TYPE, LootrConstants.ITEM_FRAME, EntityType.Builder.<LootrItemFrame>of(LootrItemFrame::new, MobCategory.MISC)
+    MINECART_WITH_CHEST = Registry.register(BuiltInRegistries.ENTITY_TYPE, LootrConstants.Identifiers.MINECART_WITH_CHEST, EntityType.Builder.of((EntityType.EntityFactory<LootrChestMinecartEntity>) LootrChestMinecartEntity::new, MobCategory.MISC).sized(0.9f, 1.4f).clientTrackingRange(8).build(LootrConstants.LootrEntityIds.MINECART_WITH_CHEST_ENTITY));
+    ITEM_FRAME = Registry.register(BuiltInRegistries.ENTITY_TYPE, LootrConstants.Identifiers.ITEM_FRAME, EntityType.Builder.<LootrItemFrame>of(LootrItemFrame::new, MobCategory.MISC)
         .sized(0.5F, 0.5F)
         .eyeHeight(0.0F)
         .clientTrackingRange(10)
-        .updateInterval(Integer.MAX_VALUE).build(LootrConstants.ITEM_FRAME_ENTITY));
+        .updateInterval(Integer.MAX_VALUE).build(LootrConstants.LootrEntityIds.ITEM_FRAME_ENTITY));
   }
 }

@@ -15,6 +15,7 @@ import net.minecraft.client.resources.model.BlockStateDefinitions;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
@@ -90,8 +91,9 @@ public class LootrItemFrameRenderer extends EntityRenderer<LootrItemFrame, Lootr
 
   @Override
   protected boolean shouldShowName(LootrItemFrame entity, double distanceToCameraSq) {
-    return Minecraft.renderNames() && this.entityRenderDispatcher.crosshairPickEntity == entity && entity.getItem()
-        .getCustomName() != null;
+    return !Minecraft.getInstance().gui.hud.isHidden()
+        && this.entityRenderDispatcher.crosshairPickEntity == entity
+        && entity.getItem().getCustomName() != null;
   }
 
   @Override
@@ -111,7 +113,7 @@ public class LootrItemFrameRenderer extends EntityRenderer<LootrItemFrame, Lootr
     ItemStack itemStack = entity.getItem();
     this.itemModelResolver.updateForNonLiving(state.item, itemStack, ItemDisplayContext.FIXED, entity);
     state.rotation = entity.getRotation();
-    state.isGlowFrame = entity.is(EntityType.GLOW_ITEM_FRAME);
+    state.isGlowFrame = entity.is(EntityTypes.GLOW_ITEM_FRAME);
     state.mapId = null;
 
     Player player = ClientHooks.getPlayer();

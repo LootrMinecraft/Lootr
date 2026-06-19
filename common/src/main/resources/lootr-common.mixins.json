@@ -30,6 +30,7 @@
     "ticker.MixinStructureTemplate"
   ],
   "client": [
+    "accessor.AccessorMixinDecoratedPotRenderer",
     "client.MixinBlockStateDefinitions"
   ],
   "injectors": {

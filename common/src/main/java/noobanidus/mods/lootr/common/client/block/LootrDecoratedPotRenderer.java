@@ -23,7 +23,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
-import net.minecraft.world.level.block.entity.DecoratedPotPatterns;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrConstants;
@@ -32,12 +31,14 @@ import noobanidus.mods.lootr.common.block.entity.LootrDecoratedPotBlockEntity;
 import noobanidus.mods.lootr.common.client.ClientHooks;
 import noobanidus.mods.lootr.common.client.state.LootrDecoratedPotBlockRenderState;
 import noobanidus.mods.lootr.common.integration.sherdsapi.SherdsIntegration;
+import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinDecoratedPotRenderer;
 import org.joml.Vector3fc;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecoratedPotBlockEntity, LootrDecoratedPotBlockRenderState> {
@@ -45,7 +46,7 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
   private static final SpriteId DECORATED_POT = new SpriteId(DECORATED_POT_SHEET, LootrAPI.rl("entity/pot/normal"));
   private static final SpriteId DECORATED_POT_OPENED = new SpriteId(DECORATED_POT_SHEET, LootrAPI.rl("entity/pot/normal_opened"));
 
-  public static final ModelLayerLocation OPEN_POT_LAYER = new ModelLayerLocation(LootrConstants.DECORATED_POT, "main");
+  public static final ModelLayerLocation OPEN_POT_LAYER = new ModelLayerLocation(LootrConstants.Identifiers.DECORATED_POT, "main");
 
   private final SpriteGetter materials;
 
@@ -115,10 +116,7 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
       if (customSide != null) {
         return cachedSpriteIds.computeIfAbsent(customSide, rl -> new SpriteId(DECORATED_POT_SHEET, rl.withPrefix("entity/decorated_pot/")));
       } else {
-        SpriteId material = Sheets.getDecoratedPotSprite(DecoratedPotPatterns.getPatternFromItem(item.getItem()));
-        if (material != null) {
-          return material;
-        }
+        return AccessorMixinDecoratedPotRenderer.lootr$getSideSprite(Optional.of(item.getItem()));
       }
     }
 
@@ -184,13 +182,13 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
     if (visuallyOpen) {
       poseStack.scale(1.0f, -1.0f, -1.0f);
       RenderType renderType = DECORATED_POT_OPENED.renderType(RenderTypes::entitySolid);
-      nodeCollector.submitModelPart(this.open, poseStack, renderType, packedLight, packedOverlay, textureatlassprite2, false, false, -1, null, outlineColor);
-      nodeCollector.submitModelPart(this.sherds, poseStack, renderType, packedLight, packedOverlay, textureatlassprite2, false, false, -1, null, outlineColor);
+      nodeCollector.submitModelPart(this.open, poseStack, renderType, packedLight, packedOverlay, textureatlassprite2, -1, null, outlineColor);
+      nodeCollector.submitModelPart(this.sherds, poseStack, renderType, packedLight, packedOverlay, textureatlassprite2, -1, null, outlineColor);
     } else {
       RenderType rendertype = DECORATED_POT.renderType(RenderTypes::entitySolid);
-      nodeCollector.submitModelPart(this.neck, poseStack, rendertype, packedLight, packedOverlay, textureatlassprite, false, false, -1, null, outlineColor);
-      nodeCollector.submitModelPart(this.top, poseStack, rendertype, packedLight, packedOverlay, textureatlassprite, false, false, -1, null, outlineColor);
-      nodeCollector.submitModelPart(this.bottom, poseStack, rendertype, packedLight, packedOverlay, textureatlassprite, false, false, -1, null, outlineColor);
+      nodeCollector.submitModelPart(this.neck, poseStack, rendertype, packedLight, packedOverlay, textureatlassprite, -1, null, outlineColor);
+      nodeCollector.submitModelPart(this.top, poseStack, rendertype, packedLight, packedOverlay, textureatlassprite, -1, null, outlineColor);
+      nodeCollector.submitModelPart(this.bottom, poseStack, rendertype, packedLight, packedOverlay, textureatlassprite, -1, null, outlineColor);
       SpriteId material = getSideSpriteId(decorations.front());
       nodeCollector.submitModelPart(
           this.frontSide,
@@ -199,8 +197,6 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
           packedLight,
           packedOverlay,
           this.materials.get(material),
-          false,
-          false,
           -1,
           null,
           outlineColor
@@ -213,8 +209,6 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
           packedLight,
           packedOverlay,
           this.materials.get(material1),
-          false,
-          false,
           -1,
           null,
           outlineColor
@@ -227,8 +221,6 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
           packedLight,
           packedOverlay,
           this.materials.get(material2),
-          false,
-          false,
           -1,
           null,
           outlineColor
@@ -241,8 +233,6 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
           packedLight,
           packedOverlay,
           this.materials.get(material3),
-          false,
-          false,
           -1,
           null,
           outlineColor

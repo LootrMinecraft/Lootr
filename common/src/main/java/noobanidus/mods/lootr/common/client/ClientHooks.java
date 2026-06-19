@@ -37,7 +37,7 @@ public class ClientHooks {
   public static void clearCache(BlockPos position) {
     final SectionPos pos = SectionPos.of(position);
     Minecraft.getInstance().submit(() -> {
-      Minecraft.getInstance().levelRenderer.setSectionDirty(pos.x(), pos.y(), pos.z());
+      Minecraft.getInstance().levelExtractor.setSectionDirty(pos.x(), pos.y(), pos.z());
     });
   }
 

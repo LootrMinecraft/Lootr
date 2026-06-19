@@ -3,7 +3,7 @@ package noobanidus.mods.lootr.neoforge.gen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
+import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
@@ -11,9 +11,9 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.concurrent.CompletableFuture;
 
-public class LootrStructureTagsProvider extends IntrinsicHolderTagsProvider<Structure> {
+public class LootrStructureTagsProvider extends TagsProvider<Structure> {
   public LootrStructureTagsProvider(PackOutput arg, CompletableFuture<HolderLookup.Provider> completableFuture) {
-    super(arg, Registries.STRUCTURE, completableFuture, (Structure arg2) -> null, LootrAPI.MODID);
+    super(arg, Registries.STRUCTURE, completableFuture, LootrAPI.MODID);
   }
 
   @Override

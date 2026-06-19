@@ -9,12 +9,12 @@ import noobanidus.mods.lootr.common.block.entity.*;
 
 public class ModBlockEntities {
   public static void registerBlockEntities() {
-    Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrConstants.CHEST, CHEST);
-    Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrConstants.TRAPPED_CHEST, TRAPPED_CHEST);
-    Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrConstants.SHULKER_BOX, SHULKER_BOX);
-    Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrConstants.BARREL, BARREL);
-    Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrConstants.BRUSHABLE_BLOCK, BRUSHABLE_BLOCK);
-    Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrConstants.DECORATED_POT, DECORATED_POT);
+    Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrConstants.Identifiers.CHEST, CHEST);
+    Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrConstants.Identifiers.TRAPPED_CHEST, TRAPPED_CHEST);
+    Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrConstants.Identifiers.SHULKER_BOX, SHULKER_BOX);
+    Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrConstants.Identifiers.BARREL, BARREL);
+    Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrConstants.Identifiers.BRUSHABLE_BLOCK, BRUSHABLE_BLOCK);
+    Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrConstants.Identifiers.DECORATED_POT, DECORATED_POT);
   }
 
   public static final BlockEntityType<LootrChestBlockEntity> CHEST = FabricBlockEntityTypeBuilder.create(LootrChestBlockEntity::new, ModBlocks.CHEST)

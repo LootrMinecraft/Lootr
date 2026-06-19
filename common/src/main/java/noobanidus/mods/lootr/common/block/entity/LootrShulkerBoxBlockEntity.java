@@ -118,7 +118,7 @@ public class LootrShulkerBoxBlockEntity extends RandomizableContainerBlockEntity
   private void moveCollidedEntities(Level pLevel, BlockPos pPos, BlockState pState) {
     if (pState.getBlock() instanceof ShulkerBoxBlock) {
       Direction direction = pState.getValue(ShulkerBoxBlock.FACING);
-      AABB aabb = Shulker.getProgressDeltaAabb(1.0F, direction, this.progressOld, this.progress, pPos.getBottomCenter());
+      AABB aabb = Shulker.getProgressDeltaAabb(1.0F, direction, this.progressOld, this.progress, Vec3.atBottomCenterOf(pPos));
       List<Entity> list = pLevel.getEntities(null, aabb);
       for (Entity entity : list) {
         if (entity.getPistonPushReaction() != PushReaction.IGNORE) {

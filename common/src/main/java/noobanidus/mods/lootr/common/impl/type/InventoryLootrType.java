@@ -9,6 +9,7 @@ import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
 import org.jetbrains.annotations.Nullable;
 
 @AutoService(ILootrType.class)
+@Deprecated
 public class InventoryLootrType implements ILootrType {
   @Override
   public String getName() {

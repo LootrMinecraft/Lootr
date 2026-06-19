@@ -1,6 +1,6 @@
 package noobanidus.mods.lootr.common.api.interfaces.advancement;
 
-import net.minecraft.advancements.CriterionTrigger;
+import net.minecraft.advancements.triggers.CriterionTrigger;
 import org.apache.commons.lang3.NotImplementedException;
 
 public interface ITrigger {

@@ -16,6 +16,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -185,13 +186,13 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
     if (this.level != null && this.level.getServer() != null) {
       ItemStack theItem = this.popItem(player);
       if (!theItem.isEmpty()) {
-        double d = EntityType.ITEM.getWidth();
+        double d = EntityTypes.ITEM.getWidth();
         double e = 1.0 - d;
         double f = d / 2.0;
         Direction direction = Objects.requireNonNullElse(this.hitDirection, Direction.UP);
         BlockPos blockPos = this.worldPosition.relative(direction, 1);
         double g = (double) blockPos.getX() + 0.5 * e + f;
-        double h = (double) blockPos.getY() + 0.5 + (double) (EntityType.ITEM.getHeight() / 2.0F);
+        double h = (double) blockPos.getY() + 0.5 + (double) (EntityTypes.ITEM.getHeight() / 2.0F);
         double i = (double) blockPos.getZ() + 0.5 * e + f;
         ItemEntity itemEntity = new ItemEntity(this.level, g, h, i, theItem.split(this.level.getRandom()
             .nextInt(21) + 10));
@@ -514,7 +515,7 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
     if (LootrAPI.canBrushablesSelfSupport()) {
       return;
     }
-    FallingBlockEntity fallingBlockEntity = new FallingBlockEntity(EntityType.FALLING_BLOCK, level);
+    FallingBlockEntity fallingBlockEntity = new FallingBlockEntity(EntityTypes.FALLING_BLOCK, level);
     double d = (double) blockPos.getX() + 0.5;
     double e = blockPos.getY();
     double f = (double) blockPos.getZ() + 0.5;

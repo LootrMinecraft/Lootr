@@ -14,13 +14,13 @@ import noobanidus.mods.lootr.common.entity.LootrItemFrame;
 public class ModEntities {
   private static final DeferredRegister<EntityType<?>> REGISTER = DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, LootrAPI.MODID);
 
-  public static final DeferredHolder<EntityType<?>, EntityType<LootrChestMinecartEntity>> MINECART_WITH_CHEST = REGISTER.register(LootrConstants.MINECART_WITH_CHEST.getPath(), () -> EntityType.Builder.<LootrChestMinecartEntity>of(LootrChestMinecartEntity::new, MobCategory.MISC).sized(0.98F, 0.7F).clientTrackingRange(8).build(LootrConstants.MINECART_WITH_CHEST_ENTITY));
+  public static final DeferredHolder<EntityType<?>, EntityType<LootrChestMinecartEntity>> MINECART_WITH_CHEST = REGISTER.register(LootrConstants.Identifiers.MINECART_WITH_CHEST.getPath(), () -> EntityType.Builder.<LootrChestMinecartEntity>of(LootrChestMinecartEntity::new, MobCategory.MISC).sized(0.98F, 0.7F).clientTrackingRange(8).build(LootrConstants.LootrEntityIds.MINECART_WITH_CHEST_ENTITY));
 
-  public static final DeferredHolder<EntityType<?>, EntityType<LootrItemFrame>> ITEM_FRAME = REGISTER.register(LootrConstants.ITEM_FRAME.getPath(), () -> EntityType.Builder.<LootrItemFrame>of(LootrItemFrame::new, MobCategory.MISC)
+  public static final DeferredHolder<EntityType<?>, EntityType<LootrItemFrame>> ITEM_FRAME = REGISTER.register(LootrConstants.Identifiers.ITEM_FRAME.getPath(), () -> EntityType.Builder.<LootrItemFrame>of(LootrItemFrame::new, MobCategory.MISC)
       .sized(0.5F, 0.5F)
       .eyeHeight(0.0F)
       .clientTrackingRange(10)
-      .updateInterval(Integer.MAX_VALUE).build(LootrConstants.ITEM_FRAME_ENTITY));
+      .updateInterval(Integer.MAX_VALUE).build(LootrConstants.LootrEntityIds.ITEM_FRAME_ENTITY));
 
   public static void register(IEventBus bus) {
     REGISTER.register(bus);

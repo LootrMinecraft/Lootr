@@ -2,6 +2,7 @@ package noobanidus.mods.lootr.common.impl.type;
 
 import com.google.auto.service.AutoService;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.level.block.Block;
 import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
 import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
@@ -21,7 +22,7 @@ public class MinecartLootrType implements ILootrType {
 
   @Override
   public @Nullable EntityType<?> getReplacementEntity() {
-    return EntityType.CHEST_MINECART;
+    return EntityTypes.CHEST_MINECART;
   }
 
   @Override

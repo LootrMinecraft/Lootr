@@ -3,32 +3,32 @@ package noobanidus.mods.lootr.neoforge.gen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
+import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.BlockEntityTypeIds;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.LootrConstants;
 import noobanidus.mods.lootr.common.api.LootrTags;
-import noobanidus.mods.lootr.common.api.LootrRegistry;
 import org.jspecify.annotations.NonNull;
 
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
-public class LootrBlockEntityTagsProvider extends IntrinsicHolderTagsProvider<BlockEntityType<?>> {
+@SuppressWarnings("unchecked")
+public class LootrBlockEntityTagsProvider extends TagsProvider<BlockEntityType<?>> {
   public LootrBlockEntityTagsProvider(PackOutput arg, CompletableFuture<HolderLookup.Provider> completableFuture) {
-    super(arg, Registries.BLOCK_ENTITY_TYPE, completableFuture, (BlockEntityType<?> arg2) -> Objects.requireNonNull(arg2.builtInRegistryHolder())
-        .key(), LootrAPI.MODID);
+    super(arg, Registries.BLOCK_ENTITY_TYPE, completableFuture, LootrAPI.MODID);
   }
 
   @Override
   protected void addTags(HolderLookup.@NonNull Provider provider) {
     tag(LootrTags.BlockEntity.LOOTR_OBJECT);
-    tag(LootrTags.BlockEntity.TRAPPED).add(LootrRegistry.getTrappedChestBlockEntity());
+    tag(LootrTags.BlockEntity.TRAPPED).add(LootrConstants.LootrBlockEntityIds.TRAPPED_CHEST);
     tag(LootrTags.BlockEntity.CUSTOM_INELIGIBLE);
     tag(LootrTags.BlockEntity.CONVERT_BLACKLIST)
         // We just blacklist everything 'cos
-        .add(BlockEntityType.BANNER, BlockEntityType.BEACON, BlockEntityType.BED, BlockEntityType.BEEHIVE, BlockEntityType.BELL, BlockEntityType.BLAST_FURNACE, BlockEntityType.BREWING_STAND, BlockEntityType.CALIBRATED_SCULK_SENSOR, BlockEntityType.CAMPFIRE, BlockEntityType.CHISELED_BOOKSHELF, BlockEntityType.COMMAND_BLOCK, BlockEntityType.COMPARATOR, BlockEntityType.CONDUIT, BlockEntityType.CRAFTER, BlockEntityType.DAYLIGHT_DETECTOR, BlockEntityType.DISPENSER, BlockEntityType.DROPPER, BlockEntityType.ENCHANTING_TABLE, BlockEntityType.ENDER_CHEST, BlockEntityType.FURNACE, BlockEntityType.HANGING_SIGN, BlockEntityType.HOPPER, BlockEntityType.JIGSAW, BlockEntityType.JUKEBOX, BlockEntityType.LECTERN, BlockEntityType.PISTON, BlockEntityType.SCULK_CATALYST, BlockEntityType.SCULK_SENSOR, BlockEntityType.SCULK_SHRIEKER, BlockEntityType.SIGN, BlockEntityType.SKULL, BlockEntityType.SMOKER, BlockEntityType.MOB_SPAWNER, BlockEntityType.STRUCTURE_BLOCK, BlockEntityType.END_GATEWAY, BlockEntityType.END_PORTAL, BlockEntityType.TRIAL_SPAWNER, BlockEntityType.VAULT)
+        .add(BlockEntityTypeIds.BANNER, BlockEntityTypeIds.BEACON, BlockEntityTypeIds.BEEHIVE, BlockEntityTypeIds.BELL, BlockEntityTypeIds.BLAST_FURNACE, BlockEntityTypeIds.BREWING_STAND, BlockEntityTypeIds.CALIBRATED_SCULK_SENSOR, BlockEntityTypeIds.CAMPFIRE, BlockEntityTypeIds.CHISELED_BOOKSHELF, BlockEntityTypeIds.COMMAND_BLOCK, BlockEntityTypeIds.COMPARATOR, BlockEntityTypeIds.CONDUIT, BlockEntityTypeIds.CRAFTER, BlockEntityTypeIds.DAYLIGHT_DETECTOR, BlockEntityTypeIds.DISPENSER, BlockEntityTypeIds.DROPPER, BlockEntityTypeIds.ENCHANTING_TABLE, BlockEntityTypeIds.ENDER_CHEST, BlockEntityTypeIds.FURNACE, BlockEntityTypeIds.HANGING_SIGN, BlockEntityTypeIds.HOPPER, BlockEntityTypeIds.JIGSAW, BlockEntityTypeIds.JUKEBOX, BlockEntityTypeIds.LECTERN, BlockEntityTypeIds.PISTON, BlockEntityTypeIds.SCULK_CATALYST, BlockEntityTypeIds.SCULK_SENSOR, BlockEntityTypeIds.SCULK_SHRIEKER, BlockEntityTypeIds.SIGN, BlockEntityTypeIds.SKULL, BlockEntityTypeIds.SMOKER, BlockEntityTypeIds.MOB_SPAWNER, BlockEntityTypeIds.STRUCTURE_BLOCK, BlockEntityTypeIds.END_GATEWAY, BlockEntityTypeIds.END_PORTAL, BlockEntityTypeIds.TRIAL_SPAWNER, BlockEntityTypeIds.VAULT)
         // We also blacklist our own stuff from being converted again. This may cut down on instanceof checks.
-        .add(LootrRegistry.getBrushableBlockEntity(), LootrRegistry.getBarrelBlockEntity(), LootrRegistry.getChestBlockEntity(), LootrRegistry.getTrappedChestBlockEntity(), LootrRegistry.getShulkerBoxBlockEntity(), LootrRegistry.getDecoratedPotBlockEntity());
+        .add(LootrConstants.LootrBlockEntityIds.BARREL, LootrConstants.LootrBlockEntityIds.BRUSHABLE_BLOCK, LootrConstants.LootrBlockEntityIds.CHEST, LootrConstants.LootrBlockEntityIds.DECORATED_POT, LootrConstants.LootrBlockEntityIds.SHULKER_BOX, LootrConstants.LootrBlockEntityIds.TRAPPED_CHEST);
   }
 
   @Override

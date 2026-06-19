@@ -1,6 +1,5 @@
 package noobanidus.mods.lootr.fabric.init;
 
-import com.teamresourceful.resourcefulconfig.api.annotations.ConfigOption;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -14,7 +13,7 @@ public class ModParticles {
   public static final SimpleParticleType REFRESH_PARTICLE = AccessorMixinSimpleParticleType.lootr$invokeConstructor(true);
 
   public static void register() {
-    Registry.register(BuiltInRegistries.PARTICLE_TYPE, LootrConstants.UNOPENED_PARTICLE, UNOPENED_PARTICLE);
-    Registry.register(BuiltInRegistries.PARTICLE_TYPE, LootrConstants.REFRESH_PARTICLE, REFRESH_PARTICLE);
+    Registry.register(BuiltInRegistries.PARTICLE_TYPE, LootrConstants.Identifiers.UNOPENED_PARTICLE, UNOPENED_PARTICLE);
+    Registry.register(BuiltInRegistries.PARTICLE_TYPE, LootrConstants.Identifiers.REFRESH_PARTICLE, REFRESH_PARTICLE);
   }
 }

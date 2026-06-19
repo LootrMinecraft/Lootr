@@ -14,22 +14,22 @@ import noobanidus.mods.lootr.common.api.LootrRegistry;
 public class ModItems {
   private static final DeferredRegister<Item> REGISTER = DeferredRegister.create(BuiltInRegistries.ITEM, LootrAPI.MODID);
 
-  public static final DeferredHolder<Item, BlockItem> CHEST = REGISTER.register(LootrConstants.CHEST.getPath(), () -> new BlockItem(LootrRegistry.getChestBlock(), new BlockItem.Properties().setId(LootrConstants.CHEST_ITEM_RESOURCE_KEY)
+  public static final DeferredHolder<Item, BlockItem> CHEST = REGISTER.register(LootrConstants.Identifiers.CHEST.getPath(), () -> new BlockItem(LootrRegistry.getChestBlock(), new BlockItem.Properties().setId(LootrConstants.LootrItemIds.CHEST)
       .useBlockDescriptionPrefix()));
-  public static final DeferredHolder<Item, BlockItem> TRAPPED_CHEST = REGISTER.register(LootrConstants.TRAPPED_CHEST.getPath(), () -> new BlockItem(LootrRegistry.getTrappedChestBlock(), new BlockItem.Properties().setId(LootrConstants.TRAPPED_CHEST_ITEM_RESOURCE_KEY)
+  public static final DeferredHolder<Item, BlockItem> TRAPPED_CHEST = REGISTER.register(LootrConstants.Identifiers.TRAPPED_CHEST.getPath(), () -> new BlockItem(LootrRegistry.getTrappedChestBlock(), new BlockItem.Properties().setId(LootrConstants.LootrItemIds.TRAPPED_CHEST)
       .useBlockDescriptionPrefix()));
-  public static final DeferredHolder<Item, BlockItem> BARREL = REGISTER.register(LootrConstants.BARREL.getPath(), () -> new BlockItem(LootrRegistry.getBarrelBlock(), new BlockItem.Properties().setId(LootrConstants.BARREL_ITEM_RESOURCE_KEY)
+  public static final DeferredHolder<Item, BlockItem> BARREL = REGISTER.register(LootrConstants.Identifiers.BARREL.getPath(), () -> new BlockItem(LootrRegistry.getBarrelBlock(), new BlockItem.Properties().setId(LootrConstants.LootrItemIds.BARREL)
       .useBlockDescriptionPrefix()));
-  public static final DeferredHolder<Item, BlockItem> SHULKER = REGISTER.register(LootrConstants.SHULKER_BOX.getPath(), () -> new BlockItem(LootrRegistry.getShulkerBoxBlock(), new BlockItem.Properties().setId(LootrConstants.SHULKER_BOX_ITEM_RESOURCE_KEY)
+  public static final DeferredHolder<Item, BlockItem> SHULKER = REGISTER.register(LootrConstants.Identifiers.SHULKER_BOX.getPath(), () -> new BlockItem(LootrRegistry.getShulkerBoxBlock(), new BlockItem.Properties().setId(LootrConstants.LootrItemIds.SHULKER_BOX)
       .useBlockDescriptionPrefix()));
-  public static final DeferredHolder<Item, BlockItem> SUSPICIOUS_SAND = REGISTER.register(LootrConstants.SUSPICIOUS_SAND.getPath(), () -> new BlockItem(LootrRegistry.getSuspiciousSandBlock(), new BlockItem.Properties().setId(LootrConstants.SUSPICIOUS_SAND_ITEM_RESOURCE_KEY)
+  public static final DeferredHolder<Item, BlockItem> SUSPICIOUS_SAND = REGISTER.register(LootrConstants.Identifiers.SUSPICIOUS_SAND.getPath(), () -> new BlockItem(LootrRegistry.getSuspiciousSandBlock(), new BlockItem.Properties().setId(LootrConstants.LootrItemIds.SUSPICIOUS_SAND)
       .useBlockDescriptionPrefix()));
-  public static final DeferredHolder<Item, BlockItem> SUSPICIOUS_GRAVEL = REGISTER.register(LootrConstants.SUSPICIOUS_GRAVEL.getPath(), () -> new BlockItem(LootrRegistry.getSuspiciousGravelBlock(), new BlockItem.Properties().setId(LootrConstants.SUSPICIOUS_GRAVEL_ITEM_RESOURCE_KEY)
+  public static final DeferredHolder<Item, BlockItem> SUSPICIOUS_GRAVEL = REGISTER.register(LootrConstants.Identifiers.SUSPICIOUS_GRAVEL.getPath(), () -> new BlockItem(LootrRegistry.getSuspiciousGravelBlock(), new BlockItem.Properties().setId(LootrConstants.LootrItemIds.SUSPICIOUS_GRAVEL)
       .useBlockDescriptionPrefix()));
-  public static final DeferredHolder<Item, BlockItem> DECORATED_POT = REGISTER.register(LootrConstants.DECORATED_POT.getPath(), () -> new BlockItem(LootrRegistry.getDecoratedPotBlock(), new BlockItem.Properties().setId(LootrConstants.DECORATED_POT_ITEM_RESOURCE_KEY)
+  public static final DeferredHolder<Item, BlockItem> DECORATED_POT = REGISTER.register(LootrConstants.Identifiers.DECORATED_POT.getPath(), () -> new BlockItem(LootrRegistry.getDecoratedPotBlock(), new BlockItem.Properties().setId(LootrConstants.LootrItemIds.DECORATED_POT)
       .useBlockDescriptionPrefix()));
-  public static final DeferredHolder<Item, BlockItem> TROPHY = REGISTER.register(LootrConstants.TROPHY.getPath(), () -> new BlockItem(LootrRegistry.getTrophyBlock(), new Item.Properties().rarity(Rarity.EPIC)
-      .setId(LootrConstants.TROPHY_ITEM_RESOURCE_KEY).useBlockDescriptionPrefix()));
+  public static final DeferredHolder<Item, BlockItem> TROPHY = REGISTER.register(LootrConstants.Identifiers.TROPHY.getPath(), () -> new BlockItem(LootrRegistry.getTrophyBlock(), new Item.Properties().rarity(Rarity.EPIC)
+      .setId(LootrConstants.LootrItemIds.TROPHY).useBlockDescriptionPrefix()));
 
   public static void register(IEventBus bus) {
     REGISTER.register(bus);

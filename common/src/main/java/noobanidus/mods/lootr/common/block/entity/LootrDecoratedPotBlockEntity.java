@@ -16,6 +16,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.RandomizableContainer;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.SeededContainerLoot;
@@ -148,13 +149,13 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
     if (this.level != null && this.level.getServer() != null) {
       ItemStack theItem = this.popItem(player);
       if (theItem != null) {
-        double d = EntityType.ITEM.getWidth();
+        double d = EntityTypes.ITEM.getWidth();
         double e = 1.0 - d;
         double f = d / 2.0;
         Direction direction = Direction.UP;
         BlockPos blockPos = this.worldPosition.relative(direction, 1);
         double g = (double) blockPos.getX() + 0.5 * e + f;
-        double h = (double) blockPos.getY() + 0.5 + (double) (EntityType.ITEM.getHeight() / 2.0F);
+        double h = (double) blockPos.getY() + 0.5 + (double) (EntityTypes.ITEM.getHeight() / 2.0F);
         double i = (double) blockPos.getZ() + 0.5 * e + f;
         ItemEntity itemEntity = new ItemEntity(this.level, g, h, i, theItem.split(this.level.getRandom().nextInt(21) + 10));
         itemEntity.setDeltaMovement(Vec3.ZERO);
