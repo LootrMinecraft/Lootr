@@ -1,8 +1,5 @@
 {
   "values": [
-    {
-      "id": "#lootr:chest_minecart",
-      "required": false
-    }
+    "lootr:chest_minecart"
   ]
 }

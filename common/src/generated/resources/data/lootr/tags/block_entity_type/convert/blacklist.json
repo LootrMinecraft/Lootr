@@ -2,7 +2,6 @@
   "values": [
     "minecraft:banner",
     "minecraft:beacon",
-    "minecraft:bed",
     "minecraft:beehive",
     "minecraft:bell",
     "minecraft:blast_furnace",
@@ -38,11 +37,11 @@
     "minecraft:end_portal",
     "minecraft:trial_spawner",
     "minecraft:vault",
-    "lootr:brushable_block",
     "lootr:barrel",
+    "lootr:brushable_block",
     "lootr:chest",
-    "lootr:trapped_chest",
+    "lootr:decorated_pot",
     "lootr:shulker_box",
-    "lootr:decorated_pot"
+    "lootr:trapped_chest"
   ]
 }
