@@ -200,6 +200,6 @@ public interface ILootrContainerInstance extends ILootrData, IClientHasOpeners {
       return false;
     }
 
-    return hasClientOpened(context.player());
+    return !hasClientOpened(context.player());
   }
 }
