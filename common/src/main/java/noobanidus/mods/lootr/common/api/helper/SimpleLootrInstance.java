@@ -47,7 +47,12 @@ public class SimpleLootrInstance {
     return items;
   }
 
+  @Deprecated
   public void setCustomInventory(@Nullable NonNullList<ItemStack> customInventory) {
+    setReferenceInventory(customInventory);
+  }
+
+  public void setReferenceInventory (@Nullable NonNullList<ItemStack> customInventory) {
     if (customInventory == null) {
       this.customInventory = null;
     } else {

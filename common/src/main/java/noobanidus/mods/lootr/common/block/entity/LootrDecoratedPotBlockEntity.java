@@ -349,6 +349,11 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   }
 
   @Override
+  public void setDataReferenceInventory(@Nullable NonNullList<ItemStack> referenceInventory) {
+    lootrInstance.setReferenceInventory(referenceInventory);
+  }
+
+  @Override
   public boolean isDataReferenceInventory() {
     return isDataReferenceInventoryInternal(lootrInstance.isCustomInventory());
   }

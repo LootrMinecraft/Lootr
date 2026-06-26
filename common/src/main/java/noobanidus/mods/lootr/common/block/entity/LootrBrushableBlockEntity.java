@@ -466,6 +466,11 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
   }
 
   @Override
+  public void setDataReferenceInventory(@Nullable NonNullList<ItemStack> referenceInventory) {
+    simpleLootrInstance.setReferenceInventory(referenceInventory);
+  }
+
+  @Override
   public boolean isDataReferenceInventory() {
     return isDataReferenceInventoryInternal(simpleLootrInstance.isCustomInventory());
   }
