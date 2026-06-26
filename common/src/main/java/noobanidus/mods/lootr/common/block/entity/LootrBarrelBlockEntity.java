@@ -273,6 +273,11 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   }
 
   @Override
+  public void setDataReferenceInventory(@Nullable NonNullList<ItemStack> referenceInventory) {
+    simpleLootrInstance.setReferenceInventory(referenceInventory);
+  }
+
+  @Override
   public boolean isDataReferenceInventory() {
     return isDataReferenceInventoryInternal(simpleLootrInstance.isCustomInventory());
   }
