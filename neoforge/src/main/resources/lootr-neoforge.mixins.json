@@ -3,6 +3,7 @@
   "package": "noobanidus.mods.lootr.neoforge.mixin",
   "compatibilityLevel": "JAVA_25",
   "mixins": [
+    "hopper.MixinHopperBlockEntity",
     "self.MixinLootrBarrelBlockEntity",
     "self.MixinLootrBrushableBlockEntity"
   ],

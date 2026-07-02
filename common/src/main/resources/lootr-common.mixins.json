@@ -19,6 +19,8 @@
     "elytra.MixinEndCityPieces$EndCityPiece",
     "falling.MixinFallingBlockEntity",
     "filter.MixinLootTable",
+    "hopper.MixinAbstractContainerMenu",
+    "hopper.MixinHopperBlockEntity",
     "lock.MixinBaseContainerBlockEntity",
     "poi.MixinPoiType",
     "poi.MixinPoiTypes",
