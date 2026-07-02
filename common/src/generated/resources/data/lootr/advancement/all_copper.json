@@ -1,0 +1,57 @@
+{
+  "parent": "lootr:copper_chest",
+  "criteria": {
+    "copper_chest": {
+      "conditions": {
+        "advancement": "lootr:copper_chest"
+      },
+      "trigger": "lootr:advancement"
+    },
+    "exposed_chest": {
+      "conditions": {
+        "advancement": "lootr:exposed_copper_chest"
+      },
+      "trigger": "lootr:advancement"
+    },
+    "oxidized_chest": {
+      "conditions": {
+        "advancement": "lootr:oxidized_copper_chest"
+      },
+      "trigger": "lootr:advancement"
+    },
+    "weathered_chest": {
+      "conditions": {
+        "advancement": "lootr:weathered_copper_chest"
+      },
+      "trigger": "lootr:advancement"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "lootr.advancements.all_copper.description"
+    },
+    "frame": "challenge",
+    "hidden": true,
+    "icon": {
+      "id": "minecraft:lightning_rod"
+    },
+    "title": {
+      "translate": "lootr.advancements.all_copper.title"
+    }
+  },
+  "requirements": [
+    [
+      "copper_chest"
+    ],
+    [
+      "weathered_chest"
+    ],
+    [
+      "exposed_chest"
+    ],
+    [
+      "oxidized_chest"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

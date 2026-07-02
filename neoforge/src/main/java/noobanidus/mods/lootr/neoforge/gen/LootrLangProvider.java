@@ -89,6 +89,8 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.advancements.weathered_copper_chest.description", "Open your first Lootr weathered copper chest!");
     add("lootr.advancements.oxidized_copper_chest.title", "Green with envy");
     add("lootr.advancements.oxidized_copper_chest.description", "Open your first Lootr oxidized copper chest!");
+    add("lootr.advancements.trapped_chest.title", "Surprise!");
+    add("lootr.advancements.trapped_chest.description", "Open your first Lootr trapped chest!");
 
     add("itemGroup.lootr", "Lootr");
     add("itemGroup.lootr.lootr", "Lootr");

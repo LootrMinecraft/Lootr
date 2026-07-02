@@ -283,7 +283,14 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
 
   @Override
   public @Nullable IContainerTrigger getTrigger() {
-    return LootrRegistry.getChestTrigger();
+    return switch (LootrChestType.fromState(getBlockState())) {
+      case NORMAL -> LootrRegistry.getChestTrigger();
+      case COPPER -> LootrRegistry.getCopperChestTrigger();
+      case OXIDIZED -> LootrRegistry.getOxidizedCopperChestTrigger();
+      case WEATHERED -> LootrRegistry.getWeatheredCopperChestTrigger();
+      case TRAPPED -> LootrRegistry.getTrappedChestTrigger();
+      case EXPOSED -> LootrRegistry.getExposedCopperChestTrigger();
+    };
   }
 
   public static int getOpenCount(BlockGetter pLevel, @NonNull BlockPos pPos) {

@@ -1,0 +1,25 @@
+{
+  "parent": "lootr:root",
+  "criteria": {
+    "weathered_copper_opened": {
+      "trigger": "lootr:weatherd_copper_chest"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "lootr.advancements.weathered_copper_chest.description"
+    },
+    "icon": {
+      "id": "lootr:weathered_copper_chest"
+    },
+    "title": {
+      "translate": "lootr.advancements.weathered_copper_chest.title"
+    }
+  },
+  "requirements": [
+    [
+      "weathered_copper_opened"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
