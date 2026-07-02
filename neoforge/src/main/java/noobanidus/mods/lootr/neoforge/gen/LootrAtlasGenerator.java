@@ -20,13 +20,13 @@ public class LootrAtlasGenerator extends SpriteSourceProvider {
 
   @Override
   protected void gather() {
-    this.atlas(AtlasIds.CHESTS).addSource(new SingleFile(LootrChestBlockRenderer.MATERIAL.texture(), Optional.empty()));
+    this.atlas(AtlasIds.CHESTS).addSource(new SingleFile(LootrChestBlockRenderer.NORMAL.texture(), Optional.empty()));
     this.atlas(AtlasIds.CHESTS)
-        .addSource(new SingleFile(LootrChestBlockRenderer.MATERIAL2.texture(), Optional.empty()));
+        .addSource(new SingleFile(LootrChestBlockRenderer.NORMAL_OPENED.texture(), Optional.empty()));
     this.atlas(AtlasIds.CHESTS)
-        .addSource(new SingleFile(LootrChestBlockRenderer.MATERIAL3.texture(), Optional.empty()));
+        .addSource(new SingleFile(LootrChestBlockRenderer.TRAPPED.texture(), Optional.empty()));
     this.atlas(AtlasIds.CHESTS)
-        .addSource(new SingleFile(LootrChestBlockRenderer.MATERIAL4.texture(), Optional.empty()));
+        .addSource(new SingleFile(LootrChestBlockRenderer.TRAPPED_OPENED.texture(), Optional.empty()));
     this.atlas(AtlasIds.SHULKER_BOXES)
         .addSource(new SingleFile(LootrShulkerBoxRenderer.MATERIAL.texture(), Optional.empty()));
     this.atlas(AtlasIds.SHULKER_BOXES)

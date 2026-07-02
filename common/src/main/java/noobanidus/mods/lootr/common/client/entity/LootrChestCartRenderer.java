@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.sprite.SpriteGetter;
 import net.minecraft.client.resources.model.sprite.SpriteId;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.LootrChestType;
 import noobanidus.mods.lootr.common.client.block.LootrChestBlockRenderer;
 import noobanidus.mods.lootr.common.client.state.LootrChestCartRenderState;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
@@ -38,7 +39,7 @@ public class LootrChestCartRenderer<T extends LootrChestMinecartEntity> extends 
     float f = 0;
     f = 1.0F - f;
     f = 1.0F - f * f * f;
-    SpriteId material = LootrChestBlockRenderer.getMaterial(false, renderState.open);
+    SpriteId material = LootrChestBlockRenderer.getMaterial(LootrChestType.NORMAL, renderState.open);
     RenderType rendertype = material.renderType(this.chestModel::renderType);
     TextureAtlasSprite textureatlassprite = this.materials.get(material);
     nodeCollector.submitModel(

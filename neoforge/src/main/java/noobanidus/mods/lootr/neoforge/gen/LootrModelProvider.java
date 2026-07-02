@@ -148,6 +148,50 @@ public class LootrModelProvider extends ModelProvider {
         )
     );
     itemModels.itemModelOutput.accept(
+        ModItems.COPPER_CHEST.get(),
+        new SpecialModelWrapper.Unbaked(
+            Identifier.withDefaultNamespace("item/copper_chest"),
+            Optional.empty(),
+            new LootrChestSpecialRenderer.Unbaked(
+                LootrAPI.rl("entity/chest/copper"),
+                Identifier.withDefaultNamespace("entity/chest/copper")
+            )
+        )
+    );
+    itemModels.itemModelOutput.accept(
+        ModItems.EXPOSED_COPPER_CHEST.get(),
+        new SpecialModelWrapper.Unbaked(
+            Identifier.withDefaultNamespace("item/exposed_copper_chest"),
+            Optional.empty(),
+            new LootrChestSpecialRenderer.Unbaked(
+                LootrAPI.rl("entity/chest/copper_exposed"),
+                Identifier.withDefaultNamespace("entity/chest/copper_exposed")
+            )
+        )
+    );
+    itemModels.itemModelOutput.accept(
+        ModItems.WEATHERED_COPPER_CHEST.get(),
+        new SpecialModelWrapper.Unbaked(
+            Identifier.withDefaultNamespace("item/weathered_copper_chest"),
+            Optional.empty(),
+            new LootrChestSpecialRenderer.Unbaked(
+                LootrAPI.rl("entity/chest/copper_weathered"),
+                Identifier.withDefaultNamespace("entity/chest/copper_weathered")
+            )
+        )
+    );
+    itemModels.itemModelOutput.accept(
+        ModItems.OXIDIZED_COPPER_CHEST.get(),
+        new SpecialModelWrapper.Unbaked(
+            Identifier.withDefaultNamespace("item/oxidized_copper_chest"),
+            Optional.empty(),
+            new LootrChestSpecialRenderer.Unbaked(
+                LootrAPI.rl("entity/chest/copper_oxidized"),
+                Identifier.withDefaultNamespace("entity/chest/copper_oxidized")
+            )
+        )
+    );
+    itemModels.itemModelOutput.accept(
         ModItems.SHULKER.get(),
         new SpecialModelWrapper.Unbaked(
             Identifier.withDefaultNamespace("item/shulker_box"),

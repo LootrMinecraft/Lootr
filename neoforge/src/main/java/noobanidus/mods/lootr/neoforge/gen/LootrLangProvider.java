@@ -40,6 +40,10 @@ public class LootrLangProvider extends LanguageProvider {
     add(LootrRegistry.getSuspiciousSandBlock(), "Sand");
     add(LootrRegistry.getDecoratedPotBlock(), "Decorated Loot Pot");
     add(LootrRegistry.getItemFrame(), "Item Frame with Loot");
+    add(LootrRegistry.getCopperChestBlock(), "Copper Loot Chest");
+    add(LootrRegistry.getWeatheredCopperChestBlock(), "Weathered Copper Loot Chest");
+    add(LootrRegistry.getOxidizedCopperChestBlock(), "Oxidized Copper Loot Chest");
+    add(LootrRegistry.getExposedCopperChestBlock(), "Exposed Copper Loot chest");
 
     add("stat.lootr.looted_stat", "Containers and entities looted");
 
@@ -75,11 +79,20 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.advancements.a_pot.description", "Loot your first Lootr decorated pot!");
     add("lootr.advancements.archaeologist.title", "That Was 90% Gravity");
     add("lootr.advancements.archaeologist.description", "Loot all of Lootr's archaeological blocks!");
+    add("lootr.advancements.all_copper.title", "Wax On, Wax Off");
+    add("lootr.advancements.all_copper.description", "Loot each of Lootr's copper chests!");
+    add("lootr.advancements.copper_chest.title", "Copernican Revolution");
+    add("lootr.advancements.copper_chest.description", "Open your first Lootr copper chest!");
+    add("lootr.advancements.exposed_copper_chest.title", "Just add oxygen");
+    add("lootr.advancements.exposed_copper_chest.description", "Open your first Lootr exposed copper chest!");
+    add("lootr.advancements.weathered_copper_chest.title", "Weather the storm");
+    add("lootr.advancements.weathered_copper_chest.description", "Open your first Lootr weathered copper chest!");
+    add("lootr.advancements.oxidized_copper_chest.title", "Green with envy");
+    add("lootr.advancements.oxidized_copper_chest.description", "Open your first Lootr oxidized copper chest!");
 
     add("itemGroup.lootr", "Lootr");
     add("itemGroup.lootr.lootr", "Lootr");
     add("text.autoconfig.lootr.title", "Lootr");
-
 
     add("lootr.config.client.title", LootrConfigStrings.CLIENT_TITLE);
     add("lootr.config.client.desc", LootrConfigStrings.CLIENT_DESC);
@@ -210,6 +223,10 @@ public class LootrLangProvider extends LanguageProvider {
     // Tags
     add(LootrTags.Blocks.CONVERT_BARRELS, "Blocks that Convert to Lootr Barrels");
     add(LootrTags.Blocks.CONVERT_CHESTS, "Blocks that Convert to Lootr Chests");
+    add(LootrTags.Blocks.CONVERT_COPPER_CHESTS, "Blocks that Convert to Lootr Copper Chests");
+    add(LootrTags.Blocks.CONVERT_WEATHERED_COPPER_CHESTS, "Blocks that Convert to Lootr Weathered Copper Chests");
+    add(LootrTags.Blocks.CONVERT_EXPOSED_COPPER_CHESTS, "Blocks that Convert to Lootr Exposed Copper Chests");
+    add(LootrTags.Blocks.CONVERT_OXIDIZED_COPPER_CHESTS, "Blocks that Convert to Lootr Oxidized Copper Chests");
     add(LootrTags.Blocks.CONVERT_SHULKERS, "Blocks that Convert to Lootr Shulkers");
     add(LootrTags.Blocks.CONVERT_TRAPPED_CHESTS, "Blocks that Convert to Trapped Lootr Chests");
     add(LootrTags.Blocks.CONVERT_POTS, "Blocks that Convert to Lootr Pots");
@@ -231,6 +248,10 @@ public class LootrLangProvider extends LanguageProvider {
     add(LootrTags.Blocks.INTERACT_WHITELIST_BLOCKS, "Blocks That Bypass Spawn Protection Interaction Disabling");
     add(LootrTags.Items.CONTAINERS, "Lootr Containers");
     add(LootrTags.Items.CHESTS, "Lootr Chests");
+    add(LootrTags.Items.COPPER_CHESTS, "Lootr Copper Chests");
+    add(LootrTags.Items.EXPOSED_COPPER_CHESTS, "Lootr Exposed Copper Chests");
+    add(LootrTags.Items.OXIDIZED_COPPER_CHESTS, "Lootr Oxidized Copper Chests");
+    add(LootrTags.Items.WEATHERED_COPPER_CHESTS, "Lootr Weathered Copper Chests");
     add(LootrTags.Items.BARRELS, "Lootr Barrels");
     add(LootrTags.Items.SHULKERS, "Lootr Shulkers");
     add(LootrTags.Items.TRAPPED_CHESTS, "Trapped Lootr Chests");

@@ -2,6 +2,10 @@
   "values": [
     "lootr:chest",
     "lootr:trapped_chest",
-    "lootr:barrel"
+    "lootr:barrel",
+    "lootr:copper_chest",
+    "lootr:exposed_copper_chest",
+    "lootr:weathered_copper_chest",
+    "lootr:oxidized_copper_chest"
   ]
 }

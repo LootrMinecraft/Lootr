@@ -17,7 +17,7 @@ public class ModBlockEntities {
     REGISTER.register(bus);
   }
 
-  public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LootrChestBlockEntity>> CHEST = REGISTER.register(LootrConstants.CHEST.getPath(), () -> new BlockEntityType<>(LootrChestBlockEntity::new, LootrRegistry.getChestBlock()));
+  public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LootrChestBlockEntity>> CHEST = REGISTER.register(LootrConstants.CHEST.getPath(), () -> new BlockEntityType<>(LootrChestBlockEntity::new, LootrRegistry.getChestBlock(), LootrRegistry.getCopperChestBlock(), LootrRegistry.getWeatheredCopperChestBlock(), LootrRegistry.getExposedCopperChestBlock(), LootrRegistry.getOxidizedCopperChestBlock()));
   public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LootrTrappedChestBlockEntity>> TRAPPED_CHEST = REGISTER.register(LootrConstants.TRAPPED_CHEST.getPath(), () -> new BlockEntityType<>(LootrTrappedChestBlockEntity::new, LootrRegistry.getTrappedChestBlock()));
   public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LootrBarrelBlockEntity>> BARREL = REGISTER.register(LootrConstants.BARREL.getPath(), () -> new BlockEntityType<>(LootrBarrelBlockEntity::new, LootrRegistry.getBarrelBlock()));
   public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LootrShulkerBoxBlockEntity>> SHULKER_BOX = REGISTER.register(LootrConstants.SHULKER_BOX.getPath(), () -> new BlockEntityType<>(LootrShulkerBoxBlockEntity::new, LootrRegistry.getShulkerBoxBlock()));

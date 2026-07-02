@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.LootrTags;
+import noobanidus.mods.lootr.common.api.LootrChestType;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.block.entity.LootrChestBlockEntity;
 import noobanidus.mods.lootr.common.client.state.LootrChestBlockRenderState;
@@ -31,10 +31,18 @@ import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("NullableProblems")
 public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootrBlockEntity> implements BlockEntityRenderer<T, LootrChestBlockRenderState> {
-  public static final SpriteId MATERIAL = new SpriteId(Sheets.CHEST_SHEET, LootrAPI.rl("entity/chest/normal"));
-  public static final SpriteId MATERIAL2 = new SpriteId(Sheets.CHEST_SHEET, LootrAPI.rl("entity/chest/normal_opened"));
-  public static final SpriteId MATERIAL3 = new SpriteId(Sheets.CHEST_SHEET, LootrAPI.rl("entity/chest/trapped"));
-  public static final SpriteId MATERIAL4 = new SpriteId(Sheets.CHEST_SHEET, LootrAPI.rl("entity/chest/trapped_opened"));
+  public static final SpriteId NORMAL = new SpriteId(Sheets.CHEST_SHEET, LootrAPI.rl("entity/chest/normal"));
+  public static final SpriteId NORMAL_OPENED = new SpriteId(Sheets.CHEST_SHEET, LootrAPI.rl("entity/chest/normal_opened"));
+  public static final SpriteId TRAPPED = new SpriteId(Sheets.CHEST_SHEET, LootrAPI.rl("entity/chest/trapped"));
+  public static final SpriteId TRAPPED_OPENED = new SpriteId(Sheets.CHEST_SHEET, LootrAPI.rl("entity/chest/trapped_opened"));
+  public static final SpriteId COPPER = new SpriteId(Sheets.CHEST_SHEET, LootrAPI.rl("entity/chest/copper"));
+  public static final SpriteId COPPER_OPENED = new SpriteId(Sheets.CHEST_SHEET, LootrAPI.rl("entity/chest/copper_opened"));
+  public static final SpriteId COPPER_EXPOSED = new SpriteId(Sheets.CHEST_SHEET, LootrAPI.rl("entity/chest/copper_exposed"));
+  public static final SpriteId COPPER_EXPOSED_OPENED = new SpriteId(Sheets.CHEST_SHEET, LootrAPI.rl("entity/chest/copper_exposed_opened"));
+  public static final SpriteId COPPER_OXIDIZED = new SpriteId(Sheets.CHEST_SHEET, LootrAPI.rl("entity/chest/copper_oxidized"));
+  public static final SpriteId COPPER_OXIDIZED_OPENED = new SpriteId(Sheets.CHEST_SHEET, LootrAPI.rl("entity/chest/copper_oxidized_opened"));
+  public static final SpriteId COPPER_WEATHERED = new SpriteId(Sheets.CHEST_SHEET, LootrAPI.rl("entity/chest/copper_weathered"));
+  public static final SpriteId COPPER_WEATHERED_OPENED = new SpriteId(Sheets.CHEST_SHEET, LootrAPI.rl("entity/chest/copper_weathered_opened"));
 
   private final ChestModel singleModel;
   private final SpriteGetter materials;
@@ -44,23 +52,41 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootrBlo
     this.singleModel = new ChestModel(context.bakeLayer(ModelLayers.CHEST));
   }
 
-  public static SpriteId getMaterial(boolean isTrapped, boolean isOpened) {
+  public static SpriteId getMaterial(LootrChestType type, boolean isOpened) {
     if (LootrAPI.isVanillaTextures()) {
-      if (isTrapped) {
-        return Sheets.CHEST_TRAPPED.single();
-      } else {
-        return Sheets.CHEST_REGULAR.single();
-      }
+      return switch (type) {
+        case NORMAL -> Sheets.CHEST_REGULAR.single();
+        case COPPER -> Sheets.CHEST_COPPER_UNAFFECTED.single();
+        case WEATHERED -> Sheets.CHEST_COPPER_WEATHERED.single();
+        case EXPOSED -> Sheets.CHEST_COPPER_EXPOSED.single();
+        case OXIDIZED -> Sheets.CHEST_COPPER_OXIDIZED.single();
+        case TRAPPED -> Sheets.CHEST_TRAPPED.single();
+      };
     }
+
     if (isOpened) {
-      return isTrapped ? MATERIAL4 : MATERIAL2;
+      return switch (type) {
+        case NORMAL -> NORMAL_OPENED;
+        case COPPER -> COPPER_OPENED;
+        case WEATHERED -> COPPER_WEATHERED_OPENED;
+        case EXPOSED -> COPPER_EXPOSED_OPENED;
+        case OXIDIZED -> COPPER_OXIDIZED_OPENED;
+        case TRAPPED -> TRAPPED_OPENED;
+      };
     } else {
-      return isTrapped ? MATERIAL3 : MATERIAL;
+      return switch (type) {
+        case NORMAL -> NORMAL;
+        case COPPER -> COPPER;
+        case WEATHERED -> COPPER_WEATHERED;
+        case EXPOSED -> COPPER_EXPOSED;
+        case OXIDIZED -> COPPER_OXIDIZED;
+        case TRAPPED -> TRAPPED;
+      };
     }
   }
 
   protected SpriteId getMaterial(LootrChestBlockRenderState state) {
-    return getMaterial(state.trapped, state.visuallyOpen);
+    return getMaterial(state.chestType, state.visuallyOpen);
   }
 
   @Override
@@ -76,7 +102,7 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootrBlo
         .setValue(ChestBlock.FACING, Direction.SOUTH);
     renderState.type = blockstate.hasProperty(ChestBlock.TYPE) ? blockstate.getValue(ChestBlock.TYPE) : ChestType.SINGLE;
     renderState.open = blockEntity.getOpenNess(partialTick);
-    renderState.trapped = blockEntity.getBlockState().is(LootrTags.Blocks.TRAPPED_CHESTS);
+    renderState.chestType = LootrChestType.fromState(blockEntity.getBlockState());
     renderState.vanilla = LootrAPI.isVanillaTextures();
     renderState.classic = false;
     renderState.visuallyOpen = Minecraft.getInstance().player != null && blockEntity.hasClientOpened(Minecraft.getInstance().player.getUUID());

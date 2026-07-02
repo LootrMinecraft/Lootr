@@ -20,20 +20,19 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootTable;
-import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
-import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.NBTConstants;
+import noobanidus.mods.lootr.common.api.*;
 import noobanidus.mods.lootr.common.api.interfaces.wrapper.ILootrBlockEntityWrapper;
 import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
 import noobanidus.mods.lootr.common.api.interfaces.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.helper.SimpleLootrInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
-import noobanidus.mods.lootr.common.api.LootrRegistry;
 import noobanidus.mods.lootr.common.data.LootrInventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -52,12 +51,16 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
         LootrChestBlockEntity.this.simpleLootrInstance.setHasBeenOpened();
         LootrChestBlockEntity.this.markInstanceChanged();
       }
-      LootrChestBlockEntity.playSound(level, pos, state, SoundEvents.CHEST_OPEN);
+      if (state.getBlock() instanceof ChestBlock chestBlock) {
+        LootrChestBlockEntity.playSound(level, pos, state, chestBlock.getOpenChestSound());
+      }
     }
 
     @Override
     protected void onClose(@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state) {
-      LootrChestBlockEntity.playSound(level, pos, state, SoundEvents.CHEST_CLOSE);
+      if (state.getBlock() instanceof ChestBlock chestBlock) {
+        LootrChestBlockEntity.playSound(level, pos, state, chestBlock.getCloseChestSound());
+      }
     }
 
     @Override
@@ -176,7 +179,14 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
 
   @Override
   public @NonNull ILootrType getDataType() {
-    return BuiltInLootrTypes.CHEST;
+    return switch (LootrChestType.fromState(getBlockState())) {
+      case NORMAL -> BuiltInLootrTypes.CHEST;
+      case COPPER -> BuiltInLootrTypes.COPPER_CHEST;
+      case OXIDIZED -> BuiltInLootrTypes.OXIDIZED_COPPER_CHEST;
+      case WEATHERED -> BuiltInLootrTypes.WEATHERED_COPPER_CHEST;
+      case TRAPPED -> BuiltInLootrTypes.TRAPPED_CHEST;
+      case EXPOSED -> BuiltInLootrTypes.EXPOSED_COPPER_CHEST;
+    };
   }
 
   @Override

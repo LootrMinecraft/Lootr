@@ -4,6 +4,10 @@ import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
 
 public final class BuiltInLootrTypes {
   public static final String TYPE_CHEST = LootrConstants.CHEST.toString();
+  public static final String TYPE_COPPER_CHEST = LootrConstants.COPPER_CHEST.toString();
+  public static final String TYPE_WEATHERED_COPPER_CHEST = LootrConstants.WEATHERED_COPPER_CHEST.toString();
+  public static final String TYPE_OXIDIZED_COPPER_CHEST = LootrConstants.OXIDIZED_COPPER_CHEST.toString();
+  public static final String TYPE_EXPOSED_COPPER_CHEST = LootrConstants.EXPOSED_COPPER_CHEST.toString();
   public static final String TYPE_TRAPPED_CHEST = LootrConstants.TRAPPED_CHEST.toString();
   public static final String TYPE_BARREL = LootrConstants.BARREL.toString();
   public static final String TYPE_SHULKER_BOX = LootrConstants.SHULKER_BOX.toString();
@@ -16,6 +20,10 @@ public final class BuiltInLootrTypes {
   public static final String TYPE_SIMPLE = LootrConstants.SIMPLE.toString();
 
   public static ILootrType CHEST;
+  public static ILootrType COPPER_CHEST;
+  public static ILootrType WEATHERED_COPPER_CHEST;
+  public static ILootrType EXPOSED_COPPER_CHEST;
+  public static ILootrType OXIDIZED_COPPER_CHEST;
   public static ILootrType TRAPPED_CHEST;
   public static ILootrType BARREL;
   public static ILootrType SHULKER_BOX;

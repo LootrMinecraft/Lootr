@@ -43,7 +43,43 @@ public class TagChecker {
         standardError();
       }
     }, () -> {
-      LootrAPI.LOG.error("[Lootr Tag Error] Block tag `lootr:convert/chests` is missing. Barrels will not be converted to Lootr chests.");
+      LootrAPI.LOG.error("[Lootr Tag Error] Block tag `lootr:convert/chests` is missing. Chests will not be converted to Lootr chests.");
+      standardError();
+    });
+    BuiltInRegistries.BLOCK.get(LootrTags.Blocks.CONVERT_COPPER_CHESTS).ifPresentOrElse(tag -> {
+      if (tag.size() == 0) {
+        LootrAPI.LOG.error("[Lootr Tag Error] Block tag `lootr:convert/copper_chests` is empty. Chests will not be converted to Lootr chests. If this is intentional, you can disregard this message.");
+        standardError();
+      }
+    }, () -> {
+      LootrAPI.LOG.error("[Lootr Tag Error] Block tag `lootr:convert/copper_chests` is missing. Copper chests will not be converted to Lootr copper chests.");
+      standardError();
+    });
+    BuiltInRegistries.BLOCK.get(LootrTags.Blocks.CONVERT_OXIDIZED_COPPER_CHESTS).ifPresentOrElse(tag -> {
+      if (tag.size() == 0) {
+        LootrAPI.LOG.error("[Lootr Tag Error] Block tag `lootr:convert/oxidized_copper_chests` is empty. Oxidized copper chests will not be converted to Lootr oxidized copper chests. If this is intentional, you can disregard this message.");
+        standardError();
+      }
+    }, () -> {
+      LootrAPI.LOG.error("[Lootr Tag Error] Block tag `lootr:convert/oxidized_copper_chests` is missing. Oxidized copper chests will not be converted to Lootr oxidized copper chests.");
+      standardError();
+    });
+    BuiltInRegistries.BLOCK.get(LootrTags.Blocks.CONVERT_WEATHERED_COPPER_CHESTS).ifPresentOrElse(tag -> {
+      if (tag.size() == 0) {
+        LootrAPI.LOG.error("[Lootr Tag Error] Block tag `lootr:convert/weathered_copper_chests` is empty. Weathered copper chests will not be converted to Lootr weathered copper chests. If this is intentional, you can disregard this message.");
+        standardError();
+      }
+    }, () -> {
+      LootrAPI.LOG.error("[Lootr Tag Error] Block tag `lootr:convert/weathered_copper_chests` is missing. Weathered copper chests will not be converted to Lootr weathered copper chests.");
+      standardError();
+    });
+    BuiltInRegistries.BLOCK.get(LootrTags.Blocks.CONVERT_EXPOSED_COPPER_CHESTS).ifPresentOrElse(tag -> {
+      if (tag.size() == 0) {
+        LootrAPI.LOG.error("[Lootr Tag Error] Block tag `lootr:convert/exposed_copper_chests` is empty. Exposed copper chests will not be converted to Lootr exposed copper chests. If this is intentional, you can disregard this message.");
+        standardError();
+      }
+    }, () -> {
+      LootrAPI.LOG.error("[Lootr Tag Error] Block tag `lootr:convert/exposed_copper_chests` is missing. Exposed copper chests will not be converted to Lootr exposed copper chests.");
       standardError();
     });
     BuiltInRegistries.BLOCK.get(LootrTags.Blocks.CONVERT_SHULKERS).ifPresentOrElse(tag -> {

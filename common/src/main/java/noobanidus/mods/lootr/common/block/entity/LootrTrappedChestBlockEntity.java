@@ -28,11 +28,6 @@ public class LootrTrappedChestBlockEntity extends LootrChestBlockEntity {
     }
   }
 
-  @Override
-  public @NonNull ILootrType getDataType() {
-    return BuiltInLootrTypes.TRAPPED_CHEST;
-  }
-
   @AutoService(ILootrBlockEntityWrapper.class)
   public static class DefaultBlockEntityWrapper implements ILootrBlockEntityWrapper<LootrTrappedChestBlockEntity> {
     @Override

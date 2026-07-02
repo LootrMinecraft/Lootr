@@ -35,11 +35,11 @@ public class LootrChestSpecialRenderer extends ChestSpecialRenderer {
     }
 
     public static Unbaked chest() {
-      return new Unbaked(LootrChestBlockRenderer.MATERIAL.texture(), Sheets.CHEST_REGULAR.single().texture());
+      return new Unbaked(LootrChestBlockRenderer.NORMAL.texture(), Sheets.CHEST_REGULAR.single().texture());
     }
 
     public static Unbaked trappedChest() {
-      return new Unbaked(LootrChestBlockRenderer.MATERIAL3.texture(), Sheets.CHEST_TRAPPED.single().texture());
+      return new Unbaked(LootrChestBlockRenderer.TRAPPED.texture(), Sheets.CHEST_TRAPPED.single().texture());
     }
 
     @Override

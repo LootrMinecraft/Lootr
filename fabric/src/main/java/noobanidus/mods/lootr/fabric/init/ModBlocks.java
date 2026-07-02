@@ -10,6 +10,10 @@ import noobanidus.mods.lootr.common.block.*;
 
 public class ModBlocks {
   public static final LootrChestBlock CHEST = new LootrChestBlock(LootrConstants.CHEST_PROPERTIES);
+  public static final LootrCopperChestBlock COPPER_CHEST = new LootrCopperChestBlock(LootrCopperChestBlock.COPPER, LootrConstants.COPPER_CHEST_PROPERTIES);
+  public static final LootrCopperChestBlock EXPOSED_COPPER_CHEST = new LootrCopperChestBlock(LootrCopperChestBlock.EXPOSED, LootrConstants.EXPOSED_COPPER_CHEST_PROPERTIES);
+  public static final LootrCopperChestBlock WEATHERED_COPPER_CHEST = new LootrCopperChestBlock(LootrCopperChestBlock.WEATHERED, LootrConstants.WEATHERED_COPPER_CHEST_PROPERTIES);
+  public static final LootrCopperChestBlock OXIDIZED_COPPER_CHEST = new LootrCopperChestBlock(LootrCopperChestBlock.OXIDIZED, LootrConstants.OXIDIZED_COPPER_CHEST_PROPERTIES);
   public static final LootrBarrelBlock BARREL = new LootrBarrelBlock(LootrConstants.BARREL_PROPERTIES);
   public static final LootrTrappedChestBlock TRAPPED_CHEST = new LootrTrappedChestBlock(LootrConstants.TRAPPED_CHEST_PROPERTIES);
   public static final Block TROPHY = new TrophyBlock(LootrConstants.TROPHY_PROPERTIES);

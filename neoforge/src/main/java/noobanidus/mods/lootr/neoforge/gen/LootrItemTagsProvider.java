@@ -25,8 +25,12 @@ public class LootrItemTagsProvider extends ItemTagsProvider {
     tag(LootrTags.Items.SANDS).add(LootrRegistry.getSuspiciousSandItem());
     tag(LootrTags.Items.GRAVELS).add(LootrRegistry.getSuspiciousGravelItem());
     tag(LootrTags.Items.POTS).add(LootrRegistry.getDecoratedPotItem());
+    tag(LootrTags.Items.COPPER_CHESTS).add(LootrRegistry.getCopperChestItem());
+    tag(LootrTags.Items.WEATHERED_COPPER_CHESTS).add(LootrRegistry.getWeatheredCopperChestItem());
+    tag(LootrTags.Items.EXPOSED_COPPER_CHESTS).add(LootrRegistry.getExposedCopperChestItem());
+    tag(LootrTags.Items.OXIDIZED_COPPER_CHESTS).add(LootrRegistry.getOxidizedCopperChestItem());
     //noinspection unchecked
-    tag(LootrTags.Items.CONTAINERS).addTags(LootrTags.Items.BARRELS, LootrTags.Items.CHESTS, LootrTags.Items.TRAPPED_CHESTS, LootrTags.Items.SHULKERS, LootrTags.Items.SANDS, LootrTags.Items.GRAVELS, LootrTags.Items.POTS);
+    tag(LootrTags.Items.CONTAINERS).addTags(LootrTags.Items.BARRELS, LootrTags.Items.CHESTS, LootrTags.Items.TRAPPED_CHESTS, LootrTags.Items.SHULKERS, LootrTags.Items.SANDS, LootrTags.Items.GRAVELS, LootrTags.Items.POTS, LootrTags.Items.OXIDIZED_COPPER_CHESTS, LootrTags.Items.EXPOSED_COPPER_CHESTS, LootrTags.Items.WEATHERED_COPPER_CHESTS, LootrTags.Items.COPPER_CHESTS);
     tag(LootrTags.Items.ITEM_FRAME_CONVERT_BLACKLIST).add(Items.FILLED_MAP, Items.MAP);
   }
 

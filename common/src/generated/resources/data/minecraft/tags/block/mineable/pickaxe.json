@@ -1,6 +1,10 @@
 {
   "values": [
     "lootr:trophy",
-    "lootr:decorated_pot"
+    "lootr:decorated_pot",
+    "lootr:copper_chest",
+    "lootr:weathered_copper_chest",
+    "lootr:exposed_copper_chest",
+    "lootr:oxidized_copper_chest"
   ]
 }

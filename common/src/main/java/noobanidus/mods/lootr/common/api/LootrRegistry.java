@@ -49,6 +49,22 @@ public final class LootrRegistry {
     return INSTANCE.getDecoratedPotBlock();
   }
 
+  public static Block getCopperChestBlock () {
+    return INSTANCE.getCopperChestBlock();
+  }
+
+  public static Block getExposedCopperChestBlock () {
+    return INSTANCE.getExposedCopperChestBlock();
+  }
+
+  public static Block getOxidizedCopperChestBlock () {
+    return INSTANCE.getOxidizedCopperChestBlock();
+  }
+
+  public static Block getWeatheredCopperChestBlock () {
+    return INSTANCE.getWeatheredCopperChestBlock();
+  }
+
   public static Item getBarrelItem() {
     return INSTANCE.getBarrelItem();
   }
@@ -71,6 +87,22 @@ public final class LootrRegistry {
 
   public static Item getDecoratedPotItem() {
     return INSTANCE.getDecoratedPotItem();
+  }
+
+  public static Item getCopperChestItem () {
+    return INSTANCE.getCopperChestItem();
+  }
+
+  public static Item getExposedCopperChestItem () {
+    return INSTANCE.getExposedCopperChestItem();
+  }
+
+  public static Item getOxidizedCopperChestItem () {
+    return INSTANCE.getOxidizedCopperChestItem();
+  }
+
+  public static Item getWeatheredCopperChestItem () {
+    return INSTANCE.getWeatheredCopperChestItem();
   }
 
   public static EntityType<?> getMinecart() {
