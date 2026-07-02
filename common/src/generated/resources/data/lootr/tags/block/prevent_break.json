@@ -6,6 +6,10 @@
     "#lootr:prevent_break/shulkers",
     "#lootr:prevent_break/sands",
     "#lootr:prevent_break/gravels",
-    "#lootr:prevent_break/pots"
+    "#lootr:prevent_break/pots",
+    "#lootr:prevent_break/copper_chests",
+    "#lootr:prevent_break/exposed_copper_chests",
+    "#lootr:prevent_break/oxidized_copper_chests",
+    "#lootr:prevent_break/weathered_copper_chests"
   ]
 }

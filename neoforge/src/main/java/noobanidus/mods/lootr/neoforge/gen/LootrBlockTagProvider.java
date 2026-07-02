@@ -51,12 +51,16 @@ public class LootrBlockTagProvider extends BlockTagsProvider {
     tag(LootrTags.Blocks.PREVENT_BREAK_SANDS).addTag(LootrTags.Blocks.SANDS);
     tag(LootrTags.Blocks.PREVENT_BREAK_GRAVELS).addTag(LootrTags.Blocks.GRAVELS);
     tag(LootrTags.Blocks.PREVENT_BREAK_POTS).addTag(LootrTags.Blocks.POTS);
+    tag(LootrTags.Blocks.PREVENT_BREAK_COPPER_CHESTS).addTag(LootrTags.Blocks.COPPER_CHESTS);
+    tag(LootrTags.Blocks.PREVENT_BREAK_EXPOSED_COPPER_CHESTS).addTag(LootrTags.Blocks.EXPOSED_COPPER_CHESTS);
+    tag(LootrTags.Blocks.PREVENT_BREAK_WEATHERED_COPPER_CHESTS).addTag(LootrTags.Blocks.WEATHERED_COPPER_CHESTS);
+    tag(LootrTags.Blocks.PREVENT_BREAK_OXIDIZED_COPPER_CHESTS).addTag(LootrTags.Blocks.OXIDIZED_COPPER_CHESTS);
 
     tag(LootrTags.Blocks.ENABLE_BREAK);
 
 
     //noinspection unchecked
-    tag(LootrTags.Blocks.PREVENT_BREAK).addTags(LootrTags.Blocks.PREVENT_BREAK_BARRELS, LootrTags.Blocks.PREVENT_BREAK_CHESTS, LootrTags.Blocks.PREVENT_BREAK_TRAPPED_CHESTS, LootrTags.Blocks.PREVENT_BREAK_SHULKERS, LootrTags.Blocks.PREVENT_BREAK_SANDS, LootrTags.Blocks.PREVENT_BREAK_GRAVELS, LootrTags.Blocks.PREVENT_BREAK_POTS);
+    tag(LootrTags.Blocks.PREVENT_BREAK).addTags(LootrTags.Blocks.PREVENT_BREAK_BARRELS, LootrTags.Blocks.PREVENT_BREAK_CHESTS, LootrTags.Blocks.PREVENT_BREAK_TRAPPED_CHESTS, LootrTags.Blocks.PREVENT_BREAK_SHULKERS, LootrTags.Blocks.PREVENT_BREAK_SANDS, LootrTags.Blocks.PREVENT_BREAK_GRAVELS, LootrTags.Blocks.PREVENT_BREAK_POTS, LootrTags.Blocks.PREVENT_BREAK_COPPER_CHESTS, LootrTags.Blocks.PREVENT_BREAK_EXPOSED_COPPER_CHESTS, LootrTags.Blocks.PREVENT_BREAK_OXIDIZED_COPPER_CHESTS, LootrTags.Blocks.PREVENT_BREAK_WEATHERED_COPPER_CHESTS);
 
     //noinspection unchecked
     tag(LootrTags.Blocks.CONTAINERS).addTags(LootrTags.Blocks.BARRELS, LootrTags.Blocks.CHESTS, LootrTags.Blocks.TRAPPED_CHESTS, LootrTags.Blocks.SHULKERS, LootrTags.Blocks.SANDS, LootrTags.Blocks.GRAVELS, LootrTags.Blocks.POTS, LootrTags.Blocks.COPPER_CHESTS, LootrTags.Blocks.WEATHERED_COPPER_CHESTS, LootrTags.Blocks.OXIDIZED_COPPER_CHESTS, LootrTags.Blocks.EXPOSED_COPPER_CHESTS);
