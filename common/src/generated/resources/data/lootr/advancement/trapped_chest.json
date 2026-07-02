@@ -1,5 +1,5 @@
 {
-  "parent": "lootr:root",
+  "parent": "lootr:1chest",
   "criteria": {
     "trapped_opened": {
       "trigger": "lootr:trapped_chest"
