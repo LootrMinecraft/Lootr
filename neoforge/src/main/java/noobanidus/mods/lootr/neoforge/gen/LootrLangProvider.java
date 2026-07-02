@@ -43,7 +43,7 @@ public class LootrLangProvider extends LanguageProvider {
     add(LootrRegistry.getCopperChestBlock(), "Copper Loot Chest");
     add(LootrRegistry.getWeatheredCopperChestBlock(), "Weathered Copper Loot Chest");
     add(LootrRegistry.getOxidizedCopperChestBlock(), "Oxidized Copper Loot Chest");
-    add(LootrRegistry.getExposedCopperChestBlock(), "Exposed Copper Loot chest");
+    add(LootrRegistry.getExposedCopperChestBlock(), "Exposed Copper Loot Chest");
 
     add("stat.lootr.looted_stat", "Containers and entities looted");
 

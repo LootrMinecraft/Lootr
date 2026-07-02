@@ -107,4 +107,14 @@ public interface ILootrRegistry {
   Item getOxidizedCopperChestItem();
 
   Item getWeatheredCopperChestItem();
+
+  IContainerTrigger getCopperChestTrigger();
+
+  IContainerTrigger getExposedCopperChestTrigger();
+
+  IContainerTrigger getWeatheredCopperChestTrigger();
+
+  IContainerTrigger getOxidizedCopperChestTrigger();
+
+  IContainerTrigger getTrappedChestTrigger();
 }

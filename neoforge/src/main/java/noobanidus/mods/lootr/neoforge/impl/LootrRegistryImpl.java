@@ -244,4 +244,29 @@ public class LootrRegistryImpl implements ILootrRegistry {
   public Item getWeatheredCopperChestItem() {
     return ModItems.WEATHERED_COPPER_CHEST.get();
   }
+
+  @Override
+  public IContainerTrigger getCopperChestTrigger() {
+    return ModAdvancements.COPPER_CHEST.get();
+  }
+
+  @Override
+  public IContainerTrigger getExposedCopperChestTrigger() {
+    return ModAdvancements.EXPOSED_COPPER_CHEST.get();
+  }
+
+  @Override
+  public IContainerTrigger getWeatheredCopperChestTrigger() {
+    return ModAdvancements.WEATHERED_COPPER_CHEST.get();
+  }
+
+  @Override
+  public IContainerTrigger getOxidizedCopperChestTrigger() {
+    return ModAdvancements.OXIDIZED_COPPER_CHEST.get();
+  }
+
+  @Override
+  public IContainerTrigger getTrappedChestTrigger() {
+    return ModAdvancements.TRAPPED_CHEST.get();
+  }
 }

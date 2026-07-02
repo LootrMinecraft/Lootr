@@ -141,6 +141,26 @@ public final class LootrRegistry {
     return INSTANCE.getChestTrigger();
   }
 
+  public static IContainerTrigger getCopperChestTrigger () {
+    return INSTANCE.getCopperChestTrigger();
+  }
+
+  public static IContainerTrigger getExposedCopperChestTrigger () {
+    return INSTANCE.getExposedCopperChestTrigger();
+  }
+
+  public static IContainerTrigger getWeatheredCopperChestTrigger () {
+    return INSTANCE.getWeatheredCopperChestTrigger();
+  }
+
+  public static IContainerTrigger getOxidizedCopperChestTrigger () {
+    return INSTANCE.getOxidizedCopperChestTrigger();
+  }
+
+  public static IContainerTrigger getTrappedChestTrigger () {
+    return INSTANCE.getTrappedChestTrigger();
+  }
+
   public static IContainerTrigger getBarrelTrigger() {
     return INSTANCE.getBarrelTrigger();
   }
