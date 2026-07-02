@@ -1,0 +1,25 @@
+{
+  "parent": "lootr:root",
+  "criteria": {
+    "oxidized_copper_opened": {
+      "trigger": "lootr:oxidized_copper_chest"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "lootr.advancements.oxidized_copper_chest.description"
+    },
+    "icon": {
+      "id": "lootr:oxidized_copper_chest"
+    },
+    "title": {
+      "translate": "lootr.advancements.oxidized_copper_chest.title"
+    }
+  },
+  "requirements": [
+    [
+      "oxidized_copper_opened"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

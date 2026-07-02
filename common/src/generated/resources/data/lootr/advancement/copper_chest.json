@@ -1,0 +1,25 @@
+{
+  "parent": "lootr:root",
+  "criteria": {
+    "copper_opened": {
+      "trigger": "lootr:copper_chest"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "lootr.advancements.copper_chest.description"
+    },
+    "icon": {
+      "id": "lootr:copper_chest"
+    },
+    "title": {
+      "translate": "lootr.advancements.copper_chest.title"
+    }
+  },
+  "requirements": [
+    [
+      "copper_opened"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

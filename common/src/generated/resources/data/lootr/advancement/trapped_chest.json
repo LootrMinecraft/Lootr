@@ -1,0 +1,26 @@
+{
+  "parent": "lootr:root",
+  "criteria": {
+    "trapped_opened": {
+      "trigger": "lootr:trapped_chest"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "lootr.advancements.trapped_chest.description"
+    },
+    "hidden": true,
+    "icon": {
+      "id": "minecraft:tnt"
+    },
+    "title": {
+      "translate": "lootr.advancements.trapped_chest.title"
+    }
+  },
+  "requirements": [
+    [
+      "trapped_opened"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
