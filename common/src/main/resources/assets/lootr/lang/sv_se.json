@@ -51,6 +51,8 @@
   "lootr.advancements.root.title": "Lootr",
   "lootr.advancements.social.description": "Open one of every Lootr container type!",
   "lootr.advancements.social.title": "Socialiserad skatt",
+  "lootr.advancements.trapped_chest.description": "Open your first Lootr trapped chest!",
+  "lootr.advancements.trapped_chest.title": "Surprise!",
   "lootr.advancements.weathered_copper_chest.description": "Open your first Lootr weathered copper chest!",
   "lootr.advancements.weathered_copper_chest.title": "Weather the storm",
   "lootr.commands.blockpos": "%s,%s,%s",

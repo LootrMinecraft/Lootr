@@ -51,6 +51,8 @@
   "lootr.advancements.root.title": "Lootr",
   "lootr.advancements.social.description": "모든 종류의 전리품 컨테이너를 한번씩 열어보세요!",
   "lootr.advancements.social.title": "사교적인 전리품",
+  "lootr.advancements.trapped_chest.description": "Open your first Lootr trapped chest!",
+  "lootr.advancements.trapped_chest.title": "Surprise!",
   "lootr.advancements.weathered_copper_chest.description": "Open your first Lootr weathered copper chest!",
   "lootr.advancements.weathered_copper_chest.title": "Weather the storm",
   "lootr.commands.blockpos": "%s,%s,%s",
