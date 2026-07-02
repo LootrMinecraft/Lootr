@@ -1,5 +1,5 @@
 {
-  "parent": "lootr:root",
+  "parent": "lootr:weathered_copper_chest",
   "criteria": {
     "oxidized_copper_opened": {
       "trigger": "lootr:oxidized_copper_chest"

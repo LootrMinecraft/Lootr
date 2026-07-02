@@ -87,27 +87,27 @@ public class LootrAdvancementGenerator implements AdvancementSubProvider {
         .addCriterion("opened_chest", AdvancementTrigger.completed(one_chest.id()))
         .addCriterion("opened_barrel", AdvancementTrigger.completed(one_barrel.id()))
         .addCriterion("opened_cart", AdvancementTrigger.completed(one_cart.id()))./*addCriterion("opened_shulker", AdvancementTrigger.completed(one_shulker.id())).*/save(consumer, LootrAPI.rl("social"));
-    var copper_chest = Advancement.Builder.advancement().parent(lootrRoot)
+    var copper_chest = Advancement.Builder.advancement().parent(one_chest)
         .display(LootrRegistry.getCopperChestItem(), Component.translatable("lootr.advancements.copper_chest.title"), Component.translatable("lootr.advancements.copper_chest.description"), null, AdvancementType.TASK, true, true, false)
         .addCriterion("copper_opened", ContainerTrigger.looted(LootrRegistry.getCopperChestTrigger()))
         .save(consumer, LootrAPI.rl("copper_chest"));
-    var exposed_chest = Advancement.Builder.advancement().parent(lootrRoot)
+    var exposed_chest = Advancement.Builder.advancement().parent(copper_chest)
         .display(LootrRegistry.getExposedCopperChestItem(), Component.translatable("lootr.advancements.exposed_copper_chest.title"), Component.translatable("lootr.advancements.exposed_copper_chest.description"), null, AdvancementType.TASK, true, true, false)
         .addCriterion("exposed_copper_opened", ContainerTrigger.looted(LootrRegistry.getExposedCopperChestTrigger()))
         .save(consumer, LootrAPI.rl("exposed_copper_chest"));
-    var weathered_chest = Advancement.Builder.advancement().parent(lootrRoot)
+    var weathered_chest = Advancement.Builder.advancement().parent(exposed_chest)
         .display(LootrRegistry.getWeatheredCopperChestItem(), Component.translatable("lootr.advancements.weathered_copper_chest.title"), Component.translatable("lootr.advancements.weathered_copper_chest.description"), null, AdvancementType.TASK, true, true, false)
         .addCriterion("weathered_copper_opened", ContainerTrigger.looted(LootrRegistry.getWeatheredCopperChestTrigger()))
         .save(consumer, LootrAPI.rl("weathered_copper_chest"));
-    var oxidized_chest = Advancement.Builder.advancement().parent(lootrRoot)
+    var oxidized_chest = Advancement.Builder.advancement().parent(weathered_chest)
         .display(LootrRegistry.getOxidizedCopperChestItem(), Component.translatable("lootr.advancements.oxidized_copper_chest.title"), Component.translatable("lootr.advancements.oxidized_copper_chest.description"), null, AdvancementType.TASK, true, true, false)
         .addCriterion("oxidized_copper_opened", ContainerTrigger.looted(LootrRegistry.getOxidizedCopperChestTrigger()))
         .save(consumer, LootrAPI.rl("oxidized_copper_chest"));
-    var trapped_chest = Advancement.Builder.advancement().parent(lootrRoot)
+    var trapped_chest = Advancement.Builder.advancement().parent(one_chest)
         .display(Items.TNT, Component.translatable("lootr.advancements.trapped_chest.title"), Component.translatable("lootr.advancements.trapped_chest.description"), null, AdvancementType.TASK, true, true, true)
         .addCriterion("trapped_opened", ContainerTrigger.looted(LootrRegistry.getTrappedChestTrigger()))
         .save(consumer, LootrAPI.rl("trapped_chest"));
-    Advancement.Builder.advancement().parent(copper_chest)
+    Advancement.Builder.advancement().parent(oxidized_chest)
         .display(Items.LIGHTNING_ROD, Component.translatable("lootr.advancements.all_copper.title"), Component.translatable("lootr.advancements.all_copper.description"), null, AdvancementType.CHALLENGE, true, true, true)
         .addCriterion("copper_chest", AdvancementTrigger.completed(copper_chest.id()))
         .addCriterion("weathered_chest", AdvancementTrigger.completed(weathered_chest.id()))

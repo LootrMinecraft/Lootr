@@ -1,5 +1,5 @@
 {
-  "parent": "lootr:copper_chest",
+  "parent": "lootr:oxidized_copper_chest",
   "criteria": {
     "copper_chest": {
       "conditions": {

@@ -1,5 +1,5 @@
 {
-  "parent": "lootr:root",
+  "parent": "lootr:1chest",
   "criteria": {
     "copper_opened": {
       "trigger": "lootr:copper_chest"
