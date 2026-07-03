@@ -108,7 +108,7 @@ public class LootrAdvancementGenerator implements AdvancementSubProvider {
         .addCriterion("trapped_opened", ContainerTrigger.looted(LootrRegistry.getTrappedChestTrigger()))
         .save(consumer, LootrAPI.rl("trapped_chest"));
     Advancement.Builder.advancement().parent(oxidized_chest)
-        .display(Items.LIGHTNING_ROD, Component.translatable("lootr.advancements.all_copper.title"), Component.translatable("lootr.advancements.all_copper.description"), null, AdvancementType.CHALLENGE, true, true, true)
+        .display(Items.LIGHTNING_ROD.waxed().unaffected(), Component.translatable("lootr.advancements.all_copper.title"), Component.translatable("lootr.advancements.all_copper.description"), null, AdvancementType.CHALLENGE, true, true, true)
         .addCriterion("copper_chest", AdvancementTrigger.completed(copper_chest.id()))
         .addCriterion("weathered_chest", AdvancementTrigger.completed(weathered_chest.id()))
         .addCriterion("exposed_chest", AdvancementTrigger.completed(exposed_chest.id()))

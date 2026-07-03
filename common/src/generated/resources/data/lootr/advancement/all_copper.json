@@ -33,7 +33,7 @@
     "frame": "challenge",
     "hidden": true,
     "icon": {
-      "id": "minecraft:lightning_rod"
+      "id": "minecraft:waxed_lightning_rod"
     },
     "title": {
       "translate": "lootr.advancements.all_copper.title"
