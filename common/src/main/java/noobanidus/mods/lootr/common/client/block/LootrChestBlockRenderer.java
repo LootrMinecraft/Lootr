@@ -56,10 +56,10 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootrBlo
     if (LootrAPI.isVanillaTextures()) {
       return switch (type) {
         case NORMAL -> Sheets.CHEST_REGULAR.single();
-        case COPPER -> Sheets.CHEST_COPPER_UNAFFECTED.single();
-        case WEATHERED -> Sheets.CHEST_COPPER_WEATHERED.single();
-        case EXPOSED -> Sheets.CHEST_COPPER_EXPOSED.single();
-        case OXIDIZED -> Sheets.CHEST_COPPER_OXIDIZED.single();
+        case COPPER -> Sheets.CHEST_COPPER.unaffected().single();
+        case WEATHERED -> Sheets.CHEST_COPPER.weathered().single();
+        case EXPOSED -> Sheets.CHEST_COPPER.exposed().single();
+        case OXIDIZED -> Sheets.CHEST_COPPER.oxidized().single();
         case TRAPPED -> Sheets.CHEST_TRAPPED.single();
       };
     }

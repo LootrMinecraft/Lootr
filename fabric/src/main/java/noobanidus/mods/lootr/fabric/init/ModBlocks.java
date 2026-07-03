@@ -12,10 +12,10 @@ public class ModBlocks {
   public static final LootrChestBlock CHEST = new LootrChestBlock(LootrConstants.BlockProperties.CHEST);
   public static final LootrBarrelBlock BARREL = new LootrBarrelBlock(LootrConstants.BlockProperties.BARREL);
   public static final LootrTrappedChestBlock TRAPPED_CHEST = new LootrTrappedChestBlock(LootrConstants.BlockProperties.TRAPPED_CHEST);
-  public static final LootrCopperChestBlock COPPER_CHEST = new LootrCopperChestBlock(LootrCopperChestBlock.COPPER, LootrConstants.COPPER_CHEST_PROPERTIES);
-  public static final LootrCopperChestBlock EXPOSED_COPPER_CHEST = new LootrCopperChestBlock(LootrCopperChestBlock.EXPOSED, LootrConstants.EXPOSED_COPPER_CHEST_PROPERTIES);
-  public static final LootrCopperChestBlock WEATHERED_COPPER_CHEST = new LootrCopperChestBlock(LootrCopperChestBlock.WEATHERED, LootrConstants.WEATHERED_COPPER_CHEST_PROPERTIES);
-  public static final LootrCopperChestBlock OXIDIZED_COPPER_CHEST = new LootrCopperChestBlock(LootrCopperChestBlock.OXIDIZED, LootrConstants.OXIDIZED_COPPER_CHEST_PROPERTIES);
+  public static final LootrCopperChestBlock COPPER_CHEST = new LootrCopperChestBlock(LootrCopperChestBlock.COPPER, LootrConstants.BlockProperties.COPPER_CHEST);
+  public static final LootrCopperChestBlock EXPOSED_COPPER_CHEST = new LootrCopperChestBlock(LootrCopperChestBlock.EXPOSED, LootrConstants.BlockProperties.EXPOSED_COPPER_CHEST);
+  public static final LootrCopperChestBlock WEATHERED_COPPER_CHEST = new LootrCopperChestBlock(LootrCopperChestBlock.WEATHERED, LootrConstants.BlockProperties.WEATHERED_COPPER_CHEST);
+  public static final LootrCopperChestBlock OXIDIZED_COPPER_CHEST = new LootrCopperChestBlock(LootrCopperChestBlock.OXIDIZED, LootrConstants.BlockProperties.OXIDIZED_COPPER_CHEST);
   public static final Block TROPHY = new TrophyBlock(LootrConstants.BlockProperties.TROPHY);
   public static final LootrShulkerBoxBlock SHULKER_BOX = new LootrShulkerBoxBlock(LootrConstants.BlockProperties.SHULKER_BOX);
 

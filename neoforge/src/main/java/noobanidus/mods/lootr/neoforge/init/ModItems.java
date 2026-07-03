@@ -16,13 +16,13 @@ public class ModItems {
 
   public static final DeferredHolder<Item, BlockItem> CHEST = REGISTER.register(LootrConstants.Identifiers.CHEST.getPath(), () -> new BlockItem(LootrRegistry.getChestBlock(), new BlockItem.Properties().setId(LootrConstants.LootrItemIds.CHEST)
       .useBlockDescriptionPrefix()));
-  public static final DeferredHolder<Item, BlockItem> COPPER_CHEST = REGISTER.register(LootrConstants.COPPER_CHEST.getPath(), () -> new BlockItem(LootrRegistry.getCopperChestBlock(), new BlockItem.Properties().setId(LootrConstants.COPPER_CHEST_ITEM_RESOURCE_KEY)
+  public static final DeferredHolder<Item, BlockItem> COPPER_CHEST = REGISTER.register(LootrConstants.Identifiers.COPPER_CHEST.getPath(), () -> new BlockItem(LootrRegistry.getCopperChestBlock(), new BlockItem.Properties().setId(LootrConstants.LootrItemIds.COPPER_CHEST)
       .useBlockDescriptionPrefix()));
-  public static final DeferredHolder<Item, BlockItem> WEATHERED_COPPER_CHEST = REGISTER.register(LootrConstants.WEATHERED_COPPER_CHEST.getPath(), () -> new BlockItem(LootrRegistry.getCopperChestBlock(), new BlockItem.Properties().setId(LootrConstants.WEATHERED_COPPER_CHEST_ITEM_RESOURCE_KEY)
+  public static final DeferredHolder<Item, BlockItem> WEATHERED_COPPER_CHEST = REGISTER.register(LootrConstants.Identifiers.WEATHERED_COPPER_CHEST.getPath(), () -> new BlockItem(LootrRegistry.getCopperChestBlock(), new BlockItem.Properties().setId(LootrConstants.LootrItemIds.WEATHERED_COPPER_CHEST)
       .useBlockDescriptionPrefix()));
-  public static final DeferredHolder<Item, BlockItem> OXIDIZED_COPPER_CHEST = REGISTER.register(LootrConstants.OXIDIZED_COPPER_CHEST.getPath(), () -> new BlockItem(LootrRegistry.getCopperChestBlock(), new BlockItem.Properties().setId(LootrConstants.OXIDIZED_COPPER_CHEST_ITEM_RESOURCE_KEY)
+  public static final DeferredHolder<Item, BlockItem> OXIDIZED_COPPER_CHEST = REGISTER.register(LootrConstants.Identifiers.OXIDIZED_COPPER_CHEST.getPath(), () -> new BlockItem(LootrRegistry.getCopperChestBlock(), new BlockItem.Properties().setId(LootrConstants.LootrItemIds.OXIDIZED_COPPER_CHEST)
       .useBlockDescriptionPrefix()));
-  public static final DeferredHolder<Item, BlockItem> EXPOSED_COPPER_CHEST = REGISTER.register(LootrConstants.EXPOSED_COPPER_CHEST.getPath(), () -> new BlockItem(LootrRegistry.getCopperChestBlock(), new BlockItem.Properties().setId(LootrConstants.EXPOSED_COPPER_CHEST_ITEM_RESOURCE_KEY)
+  public static final DeferredHolder<Item, BlockItem> EXPOSED_COPPER_CHEST = REGISTER.register(LootrConstants.Identifiers.EXPOSED_COPPER_CHEST.getPath(), () -> new BlockItem(LootrRegistry.getCopperChestBlock(), new BlockItem.Properties().setId(LootrConstants.LootrItemIds.EXPOSED_COPPER_CHEST)
       .useBlockDescriptionPrefix()));
   public static final DeferredHolder<Item, BlockItem> TRAPPED_CHEST = REGISTER.register(LootrConstants.Identifiers.TRAPPED_CHEST.getPath(), () -> new BlockItem(LootrRegistry.getTrappedChestBlock(), new BlockItem.Properties().setId(LootrConstants.LootrItemIds.TRAPPED_CHEST)
       .useBlockDescriptionPrefix()));

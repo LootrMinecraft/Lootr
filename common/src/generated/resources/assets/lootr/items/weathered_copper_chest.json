@@ -1,0 +1,12 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "minecraft:item/weathered_copper_chest",
+    "model": {
+      "type": "lootr:chest",
+      "openness": 0.0,
+      "texture": "lootr:entity/chest/copper_weathered",
+      "vanilla_texture": "minecraft:entity/chest/copper_weathered"
+    }
+  }
+}

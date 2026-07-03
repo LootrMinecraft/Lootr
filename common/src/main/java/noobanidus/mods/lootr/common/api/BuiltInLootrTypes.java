@@ -5,10 +5,10 @@ import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
 public final class BuiltInLootrTypes {
   public static final String TYPE_CHEST = LootrConstants.Identifiers.CHEST.toString();
   public static final String TYPE_TRAPPED_CHEST = LootrConstants.Identifiers.TRAPPED_CHEST.toString();
-  public static final String TYPE_COPPER_CHEST = LootrConstants.COPPER_CHEST.toString();
-  public static final String TYPE_WEATHERED_COPPER_CHEST = LootrConstants.WEATHERED_COPPER_CHEST.toString();
-  public static final String TYPE_OXIDIZED_COPPER_CHEST = LootrConstants.OXIDIZED_COPPER_CHEST.toString();
-  public static final String TYPE_EXPOSED_COPPER_CHEST = LootrConstants.EXPOSED_COPPER_CHEST.toString();
+  public static final String TYPE_COPPER_CHEST = LootrConstants.Identifiers.COPPER_CHEST.toString();
+  public static final String TYPE_WEATHERED_COPPER_CHEST = LootrConstants.Identifiers.WEATHERED_COPPER_CHEST.toString();
+  public static final String TYPE_OXIDIZED_COPPER_CHEST = LootrConstants.Identifiers.OXIDIZED_COPPER_CHEST.toString();
+  public static final String TYPE_EXPOSED_COPPER_CHEST = LootrConstants.Identifiers.EXPOSED_COPPER_CHEST.toString();
   public static final String TYPE_BARREL = LootrConstants.Identifiers.BARREL.toString();
   public static final String TYPE_SHULKER_BOX = LootrConstants.Identifiers.SHULKER_BOX.toString();
   @Deprecated

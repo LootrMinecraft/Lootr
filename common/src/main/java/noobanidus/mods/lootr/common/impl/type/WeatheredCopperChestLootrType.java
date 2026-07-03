@@ -17,7 +17,7 @@ public class WeatheredCopperChestLootrType implements ILootrType {
 
   @Override
   public @Nullable Block getReplacementBlock() {
-    return Blocks.WAXED_WEATHERED_COPPER_CHEST;
+    return Blocks.COPPER_CHEST.waxed().weathered();
   }
 
   @Override

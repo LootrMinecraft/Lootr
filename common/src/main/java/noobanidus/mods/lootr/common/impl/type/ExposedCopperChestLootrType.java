@@ -17,7 +17,7 @@ public class ExposedCopperChestLootrType implements ILootrType {
 
   @Override
   public @Nullable Block getReplacementBlock() {
-    return Blocks.WAXED_EXPOSED_COPPER_CHEST;
+    return Blocks.COPPER_CHAIN.waxed().exposed();
   }
 
   @Override

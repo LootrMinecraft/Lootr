@@ -10,13 +10,13 @@ import noobanidus.mods.lootr.common.api.LootrConstants;
 public class ModItems {
   public static final BlockItem CHEST = new BlockItem(ModBlocks.CHEST, new Item.Properties().setId(LootrConstants.LootrItemIds.CHEST)
       .useBlockDescriptionPrefix());
-  public static final BlockItem COPPER_CHEST = new BlockItem(ModBlocks.COPPER_CHEST, new Item.Properties().setId(LootrConstants.COPPER_CHEST_ITEM_RESOURCE_KEY)
+  public static final BlockItem COPPER_CHEST = new BlockItem(ModBlocks.COPPER_CHEST, new Item.Properties().setId(LootrConstants.LootrItemIds.COPPER_CHEST)
       .useBlockDescriptionPrefix());
-  public static final BlockItem WEATHERED_COPPER_CHEST = new BlockItem(ModBlocks.WEATHERED_COPPER_CHEST, new Item.Properties().setId(LootrConstants.WEATHERED_COPPER_CHEST_ITEM_RESOURCE_KEY)
+  public static final BlockItem WEATHERED_COPPER_CHEST = new BlockItem(ModBlocks.WEATHERED_COPPER_CHEST, new Item.Properties().setId(LootrConstants.LootrItemIds.WEATHERED_COPPER_CHEST)
       .useBlockDescriptionPrefix());
-  public static final BlockItem EXPOSED_COPPER_CHEST = new BlockItem(ModBlocks.EXPOSED_COPPER_CHEST, new Item.Properties().setId(LootrConstants.EXPOSED_COPPER_CHEST_ITEM_RESOURCE_KEY)
+  public static final BlockItem EXPOSED_COPPER_CHEST = new BlockItem(ModBlocks.EXPOSED_COPPER_CHEST, new Item.Properties().setId(LootrConstants.LootrItemIds.EXPOSED_COPPER_CHEST)
       .useBlockDescriptionPrefix());
-  public static final BlockItem OXIDIZED_COPPER_CHEST = new BlockItem(ModBlocks.OXIDIZED_COPPER_CHEST, new Item.Properties().setId(LootrConstants.OXIDIZED_COPPER_CHEST_ITEM_RESOURCE_KEY)
+  public static final BlockItem OXIDIZED_COPPER_CHEST = new BlockItem(ModBlocks.OXIDIZED_COPPER_CHEST, new Item.Properties().setId(LootrConstants.LootrItemIds.OXIDIZED_COPPER_CHEST)
       .useBlockDescriptionPrefix());
   public static final BlockItem BARREL = new BlockItem(ModBlocks.BARREL, new Item.Properties().setId(LootrConstants.LootrItemIds.BARREL)
       .useBlockDescriptionPrefix());

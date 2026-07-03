@@ -1,6 +1,5 @@
 package noobanidus.mods.lootr.common.api;
 
-import net.minecraft.commands.arguments.ResourceKeyArgument;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -27,10 +26,6 @@ public final class LootrConstants {
   public static final Identifier SHERDSAPI_POT_DECORATIONS = Identifier.fromNamespaceAndPath("sherdsapi", "stack_pot_decorations");
   public static final Identifier SHERDSAPI_SHERD_PATTERN = Identifier.fromNamespaceAndPath("sherdsapi", "sherd_pattern");
 
-  public static final Identifier COPPER_CHEST = LootrAPI.rl("copper_chest");
-  public static final Identifier EXPOSED_COPPER_CHEST = LootrAPI.rl("exposed_copper_chest");
-  public static final Identifier WEATHERED_COPPER_CHEST = LootrAPI.rl("weathered_copper_chest");
-  public static final Identifier OXIDIZED_COPPER_CHEST = LootrAPI.rl("oxidized_copper_chest");
   public static class Identifiers {
     public static final Identifier CHEST = LootrAPI.rl("chest");
     public static final Identifier TRAPPED_CHEST = LootrAPI.rl("trapped_chest");
@@ -49,6 +44,10 @@ public final class LootrConstants {
     public static final Identifier SIMPLE = LootrAPI.rl("simple");
     // Tags for entities
     public static final Identifier CAN_CONVERT = LootrAPI.rl("lootr_can_convert_item_frame");
+    public static final Identifier COPPER_CHEST = LootrAPI.rl("copper_chest");
+    public static final Identifier EXPOSED_COPPER_CHEST = LootrAPI.rl("exposed_copper_chest");
+    public static final Identifier WEATHERED_COPPER_CHEST = LootrAPI.rl("weathered_copper_chest");
+    public static final Identifier OXIDIZED_COPPER_CHEST = LootrAPI.rl("oxidized_copper_chest");
   }
 
   public static class LootrBlockEntityIds {
@@ -71,10 +70,6 @@ public final class LootrConstants {
   public static final String REGION_DIRECTORY = "region";
   public static final String MCA_FILE_EXTENSION = ".mca";
 
-  public static final ResourceKey<Block> COPPER_CHEST_RESOURCE_KEY = ResourceKey.create(Registries.BLOCK, COPPER_CHEST);
-  public static final ResourceKey<Block> EXPOSED_COPPER_CHEST_RESOURCE_KEY = ResourceKey.create(Registries.BLOCK, EXPOSED_COPPER_CHEST);
-  public static final ResourceKey<Block> OXIDIZED_COPPER_CHEST_RESOURCE_KEY = ResourceKey.create(Registries.BLOCK, OXIDIZED_COPPER_CHEST);
-  public static final ResourceKey<Block> WEATHERED_COPPER_CHEST_RESOURCE_KEY = ResourceKey.create(Registries.BLOCK, WEATHERED_COPPER_CHEST);
   public static class LootrBlockIds {
     public static final ResourceKey<Block> CHEST = ResourceKey.create(Registries.BLOCK, Identifiers.CHEST);
     public static final ResourceKey<Block> TRAPPED_CHEST = ResourceKey.create(Registries.BLOCK, Identifiers.TRAPPED_CHEST);
@@ -84,12 +79,12 @@ public final class LootrConstants {
     public static final ResourceKey<Block> SUSPICIOUS_GRAVEL = ResourceKey.create(Registries.BLOCK, Identifiers.SUSPICIOUS_GRAVEL);
     public static final ResourceKey<Block> DECORATED_POT = ResourceKey.create(Registries.BLOCK, Identifiers.DECORATED_POT);
     public static final ResourceKey<Block> TROPHY = ResourceKey.create(Registries.BLOCK, Identifiers.TROPHY);
+    public static final ResourceKey<Block> COPPER_CHEST = ResourceKey.create(Registries.BLOCK, Identifiers.COPPER_CHEST);
+    public static final ResourceKey<Block> EXPOSED_COPPER_CHEST = ResourceKey.create(Registries.BLOCK, Identifiers.EXPOSED_COPPER_CHEST);
+    public static final ResourceKey<Block> OXIDIZED_COPPER_CHEST = ResourceKey.create(Registries.BLOCK, Identifiers.OXIDIZED_COPPER_CHEST);
+    public static final ResourceKey<Block> WEATHERED_COPPER_CHEST = ResourceKey.create(Registries.BLOCK, Identifiers.WEATHERED_COPPER_CHEST);
   }
 
-  public static final ResourceKey<Item> COPPER_CHEST_ITEM_RESOURCE_KEY = ResourceKey.create(Registries.ITEM, COPPER_CHEST);
-  public static final ResourceKey<Item> WEATHERED_COPPER_CHEST_ITEM_RESOURCE_KEY = ResourceKey.create(Registries.ITEM, WEATHERED_COPPER_CHEST);
-  public static final ResourceKey<Item> OXIDIZED_COPPER_CHEST_ITEM_RESOURCE_KEY = ResourceKey.create(Registries.ITEM, OXIDIZED_COPPER_CHEST);
-  public static final ResourceKey<Item> EXPOSED_COPPER_CHEST_ITEM_RESOURCE_KEY = ResourceKey.create(Registries.ITEM, EXPOSED_COPPER_CHEST);
   public static class LootrItemIds {
     public static final ResourceKey<Item> CHEST = ResourceKey.create(Registries.ITEM, Identifiers.CHEST);
     public static final ResourceKey<Item> TRAPPED_CHEST = ResourceKey.create(Registries.ITEM, Identifiers.TRAPPED_CHEST);
@@ -99,12 +94,12 @@ public final class LootrConstants {
     public static final ResourceKey<Item> SUSPICIOUS_GRAVEL = ResourceKey.create(Registries.ITEM, Identifiers.SUSPICIOUS_GRAVEL);
     public static final ResourceKey<Item> DECORATED_POT = ResourceKey.create(Registries.ITEM, Identifiers.DECORATED_POT);
     public static final ResourceKey<Item> TROPHY = ResourceKey.create(Registries.ITEM, Identifiers.TROPHY);
+    public static final ResourceKey<Item> COPPER_CHEST = ResourceKey.create(Registries.ITEM, Identifiers.COPPER_CHEST);
+    public static final ResourceKey<Item> WEATHERED_COPPER_CHEST = ResourceKey.create(Registries.ITEM, Identifiers.WEATHERED_COPPER_CHEST);
+    public static final ResourceKey<Item> OXIDIZED_COPPER_CHEST = ResourceKey.create(Registries.ITEM, Identifiers.OXIDIZED_COPPER_CHEST);
+    public static final ResourceKey<Item> EXPOSED_COPPER_CHEST = ResourceKey.create(Registries.ITEM, Identifiers.EXPOSED_COPPER_CHEST);
   }
 
-  public static final BlockBehaviour.Properties COPPER_CHEST_PROPERTIES = BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_CHEST).strength(2.5f).setId(COPPER_CHEST_RESOURCE_KEY);
-  public static final BlockBehaviour.Properties WEATHERED_COPPER_CHEST_PROPERTIES = BlockBehaviour.Properties.ofFullCopy(Blocks.WEATHERED_COPPER_CHEST).strength(2.5f).setId(WEATHERED_COPPER_CHEST_RESOURCE_KEY);
-  public static final BlockBehaviour.Properties EXPOSED_COPPER_CHEST_PROPERTIES = BlockBehaviour.Properties.ofFullCopy(Blocks.EXPOSED_COPPER_CHEST).strength(2.5f).setId(EXPOSED_COPPER_CHEST_RESOURCE_KEY);
-  public static final BlockBehaviour.Properties OXIDIZED_COPPER_CHEST_PROPERTIES = BlockBehaviour.Properties.ofFullCopy(Blocks.OXIDIZED_COPPER_CHEST).strength(2.5f).setId(OXIDIZED_COPPER_CHEST_RESOURCE_KEY);
   public static class BlockProperties {
     public static final BlockBehaviour.Properties CHEST = BlockBehaviour.Properties.ofFullCopy(Blocks.CHEST)
         .strength(2.5f).setId(LootrBlockIds.CHEST);
@@ -123,6 +118,14 @@ public final class LootrConstants {
         .strength(2.5f).setId(LootrBlockIds.SUSPICIOUS_GRAVEL);
     public static final BlockBehaviour.Properties DECORATED_POT = BlockBehaviour.Properties.ofFullCopy(Blocks.DECORATED_POT)
         .strength(1.5f).sound(SoundType.DECORATED_POT).setId(LootrBlockIds.DECORATED_POT);
+    public static final BlockBehaviour.Properties COPPER_CHEST = BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_CHEST.waxed()
+        .unaffected()).strength(2.5f).setId(LootrBlockIds.COPPER_CHEST);
+    public static final BlockBehaviour.Properties WEATHERED_COPPER_CHEST = BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_CHEST.waxed()
+        .weathered()).strength(2.5f).setId(LootrBlockIds.WEATHERED_COPPER_CHEST);
+    public static final BlockBehaviour.Properties EXPOSED_COPPER_CHEST = BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_CHEST.waxed()
+        .exposed()).strength(2.5f).setId(LootrBlockIds.EXPOSED_COPPER_CHEST);
+    public static final BlockBehaviour.Properties OXIDIZED_COPPER_CHEST = BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_CHEST.waxed()
+        .oxidized()).strength(2.5f).setId(LootrBlockIds.OXIDIZED_COPPER_CHEST);
   }
 
 }
