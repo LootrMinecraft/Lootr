@@ -57,21 +57,20 @@ public class LootrShulkerBoxBlock extends ShulkerBoxBlock {
 
   @Override
   public @NonNull InteractionResult useWithoutItem(@NonNull BlockState state, Level level, @NonNull BlockPos pos, @NonNull Player player, @NonNull BlockHitResult trace) {
-    if (level.isClientSide() || player.isSpectator() || !(player instanceof ServerPlayer serverPlayer)) {
-      return InteractionResult.CONSUME;
-    }
-    BlockEntity blockEntity = level.getBlockEntity(pos);
-    if (!(blockEntity instanceof LootrShulkerBoxBlockEntity shulkerboxblockentity)) {
-      return InteractionResult.PASS;
-    }
-    if (!canOpen(state, level, pos, shulkerboxblockentity)) {
-      return InteractionResult.PASS;
-    }
-    if (serverPlayer.isShiftKeyDown()) {
-      LootrAPI.handleInstanceSneak(ILootrContainerInstance.of(pos, level), serverPlayer);
-    } else {
-      LootrAPI.handleInstanceOpen(ILootrContainerInstance.of(pos, level), serverPlayer);
-      player.awardStat(Stats.OPEN_SHULKER_BOX);
+    if (!level.isClientSide() && !player.isSpectator() && player instanceof ServerPlayer serverPlayer) {
+      BlockEntity blockEntity = level.getBlockEntity(pos);
+      if (!(blockEntity instanceof LootrShulkerBoxBlockEntity shulkerboxblockentity)) {
+        return InteractionResult.PASS;
+      }
+      if (!canOpen(state, level, pos, shulkerboxblockentity)) {
+        return InteractionResult.PASS;
+      }
+      if (serverPlayer.isShiftKeyDown()) {
+        LootrAPI.handleInstanceSneak(ILootrContainerInstance.of(pos, level), serverPlayer);
+      } else {
+        LootrAPI.handleInstanceOpen(ILootrContainerInstance.of(pos, level), serverPlayer);
+        player.awardStat(Stats.OPEN_SHULKER_BOX);
+      }
     }
     return InteractionResult.SUCCESS;
   }

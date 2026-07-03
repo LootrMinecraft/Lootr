@@ -35,13 +35,12 @@ public class LootrBarrelBlock extends BarrelBlock {
 
   @Override
   public @NonNull InteractionResult useWithoutItem(@NonNull BlockState state, Level level, @NonNull BlockPos pos, @NonNull Player player, @NonNull BlockHitResult trace) {
-    if (level.isClientSide() || player.isSpectator() || !(player instanceof ServerPlayer serverPlayer)) {
-      return InteractionResult.CONSUME;
-    }
-    if (serverPlayer.isShiftKeyDown()) {
-      LootrAPI.handleInstanceSneak(ILootrContainerInstance.of(pos, level), serverPlayer);
-    } else {
-      LootrAPI.handleInstanceOpen(ILootrContainerInstance.of(pos, level), serverPlayer);
+    if (!level.isClientSide() && !player.isSpectator() && player instanceof ServerPlayer serverPlayer) {
+      if (serverPlayer.isShiftKeyDown()) {
+        LootrAPI.handleInstanceSneak(ILootrContainerInstance.of(pos, level), serverPlayer);
+      } else {
+        LootrAPI.handleInstanceOpen(ILootrContainerInstance.of(pos, level), serverPlayer);
+      }
     }
     return InteractionResult.SUCCESS;
   }
