@@ -181,6 +181,7 @@
   "lootr.message.decay_in": "This container will decay completely in %s seconds.",
   "lootr.message.decay_start": "The container begins to crumble at your touch! It will decay completely in %s seconds.",
   "lootr.message.decayed": "The decaying container crumbles at your touch!",
+  "lootr.message.emergency_conversion": "The container you just opened has been converted into a Lootr container!",
   "lootr.message.invalid_table": "Hiba a(z) [%s] moddal, nem a Lootr-ral! A(z) [%s] tároló zsákmánytáblája nem létezik, vagy nem sikerült betölteni. Kérjük, ezt a mod készítőjének jelezd, ne a Lootr-nak.",
   "lootr.message.refresh_in": "This container will refresh its contents in %s seconds.",
   "lootr.message.refresh_start": "The container will refresh with new contents in %s seconds!",

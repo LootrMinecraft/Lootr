@@ -181,6 +181,7 @@
   "lootr.message.decay_in": "Bu konteyner %s saniye içinde tamamen yok olacaktır.",
   "lootr.message.decay_start": "Konteyner dokunduğunuzda parçalanmaya başlıyor! %s saniye içinde tamamen yok olacak.",
   "lootr.message.decayed": "Yok olan konteyner dokunduğunuzda parçalanıyor!",
+  "lootr.message.emergency_conversion": "The container you just opened has been converted into a Lootr container!",
   "lootr.message.invalid_table": "Error with mod [%s], not Lootr! The loot table for this container [%s] does not exist or could not be loaded. Please report this to the mod author, not to Lootr.",
   "lootr.message.refresh_in": "Bu konteyner içeriğini %s saniye içinde yenileyecektir.",
   "lootr.message.refresh_start": "Konteyner %s saniye içinde yeni içeriklerle yenilenecek!",

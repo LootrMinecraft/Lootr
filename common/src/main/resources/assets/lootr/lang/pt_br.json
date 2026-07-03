@@ -181,6 +181,7 @@
   "lootr.message.decay_in": "Este contêiner se desintegrará completamente em %s segundos.",
   "lootr.message.decay_start": "O contêiner começa a desmoronar ao seu toque! Ele se desintegrará completamente em %s segundos.",
   "lootr.message.decayed": "O contêiner em decomposição se desmancha ao seu toque!",
+  "lootr.message.emergency_conversion": "The container you just opened has been converted into a Lootr container!",
   "lootr.message.invalid_table": "Erro com o mod [%s], não Lootr! A tabela de loot para este contêiner [%s] não existe ou não pôde ser carregada. Por favor, reporte isso ao autor do mod, não ao Lootr.",
   "lootr.message.refresh_in": "Este contêiner renovará seu conteúdo em %s segundos.",
   "lootr.message.refresh_start": "O contêiner será renovado com novos conteúdos em %s segundos!",
