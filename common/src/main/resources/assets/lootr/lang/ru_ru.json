@@ -181,6 +181,7 @@
   "lootr.message.decay_in": "Этот контейнер полностью разложится через %s секунд.",
   "lootr.message.decay_start": "Контейнер начинает рассыпаться от вашего прикосновения. Он полностью разложится через %s секунд.",
   "lootr.message.decayed": "Разлагающийся контейнер рассыпается от вашего прикосновения.",
+  "lootr.message.emergency_conversion": "The container you just opened has been converted into a Lootr container!",
   "lootr.message.invalid_table": "Ошибка в моде [%s], а не в Lootr. Таблица добычи для этого контейнера [%s] не существует или не может быть загружена. Пожалуйста, сообщите об этом автору мода, а не в Lootr.",
   "lootr.message.refresh_in": "Этот контейнер обновит своё содержимое через %s секунд.",
   "lootr.message.refresh_start": "Контейнер обновится с новым содержимым через %s секунд.",
