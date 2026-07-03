@@ -1,6 +1,5 @@
 package noobanidus.mods.lootr.common.integration.sherdsapi.impl;
 
-import dev.thomasglasser.sherdsapi.impl.SherdsApi;
 import dev.thomasglasser.sherdsapi.impl.StackPotDecorations;
 import dev.thomasglasser.sherdsapi.impl.StackPotDecorationsHolder;
 import net.minecraft.core.component.DataComponentGetter;
