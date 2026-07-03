@@ -517,6 +517,7 @@ public final class LootrAPI {
     for (ContainerUser user : container.getEntitiesWithContainerOpen()) {
       if (user instanceof ServerPlayer player) {
         player.closeContainer();
+        player.sendOverlayMessage(Component.translatable("lootr.message.emergency_conversion"));
       }
     }
   }
