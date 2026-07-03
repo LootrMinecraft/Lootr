@@ -181,6 +181,7 @@
   "lootr.message.decay_in": "这个容器将在%s秒内完全衰败。",
   "lootr.message.decay_start": "容器在你的接触后开始碎裂！它将在%s秒内完全衰败。",
   "lootr.message.decayed": "衰败的容器在你的接触后碎了！",
+  "lootr.message.emergency_conversion": "The container you just opened has been converted into a Lootr container!",
   "lootr.message.invalid_table": "Error with mod [%s], not Lootr! The loot table for this container [%s] does not exist or could not be loaded. Please report this to the mod author, not to Lootr.",
   "lootr.message.refresh_in": "这个容器将在%s秒内刷新里面的物品。",
   "lootr.message.refresh_start": "容器将在%s秒后用新的物品进行刷新！",
