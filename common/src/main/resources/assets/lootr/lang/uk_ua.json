@@ -175,6 +175,7 @@
   "lootr.configuration.use_problematic_loot_tables.desc": "Use the default list of 'problematic' loot tables when constructing the Loot Table Blacklist. [default: true]",
   "lootr.message.cannot_break": "Lootr blocks and entities cannot be broken or destroyed.",
   "lootr.message.cannot_break_sneak": "While in creative mode, you must sneak to break or destroy Lootr blocks and entities.",
+  "lootr.message.cannot_insert": "Items cannot be inserted into Item Frames with Loot.",
   "lootr.message.cart_should_sneak": "Destroying this entity will prevent others from obtaining loot! Only destroy if really needed.",
   "lootr.message.cart_should_sneak2": "To destroy this entity anyway, sneak while attacking.",
   "lootr.message.decay_in": "Контейнер повністю зникне через %s с.",

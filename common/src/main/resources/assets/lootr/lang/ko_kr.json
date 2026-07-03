@@ -175,6 +175,7 @@
   "lootr.configuration.use_problematic_loot_tables.desc": "Use the default list of 'problematic' loot tables when constructing the Loot Table Blacklist. [default: true]",
   "lootr.message.cannot_break": "Lootr 블록 및 개체는 부수거나 파괴할 수 없습니다.",
   "lootr.message.cannot_break_sneak": "크리에이티브 모드에서는 Lootr 블록 및 개체를 웅크려야 부술 수 있습니다.",
+  "lootr.message.cannot_insert": "Items cannot be inserted into Item Frames with Loot.",
   "lootr.message.cart_should_sneak": "Destroying this entity will prevent others from obtaining loot! Only destroy if really needed.",
   "lootr.message.cart_should_sneak2": "To destroy this entity anyway, sneak while attacking.",
   "lootr.message.decay_in": "이 컨테이너는 %s초 후에 완전히 부식되어 사라집니다.",
