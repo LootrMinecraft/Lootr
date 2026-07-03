@@ -51,6 +51,10 @@ public class LootrLootTableProvider {
     protected void generate() {
       this.add(ModBlocks.CHEST.get(), lootrBlockDrop(Blocks.CHEST));
       this.add(ModBlocks.BARREL.get(), lootrBlockDrop(Blocks.BARREL));
+      this.add(ModBlocks.COPPER_CHEST.get(), lootrBlockDrop(Blocks.WAXED_COPPER_CHEST));
+      this.add(ModBlocks.WEATHERED_COPPER_CHEST.get(), lootrBlockDrop(Blocks.WAXED_WEATHERED_COPPER_CHEST));
+      this.add(ModBlocks.OXIDIZED_COPPER_CHEST.get(), lootrBlockDrop(Blocks.WAXED_OXIDIZED_COPPER_CHEST));
+      this.add(ModBlocks.EXPOSED_COPPER_CHEST.get(), lootrBlockDrop(Blocks.WAXED_EXPOSED_COPPER_CHEST));
       this.add(ModBlocks.TRAPPED_CHEST.get(), lootrBlockDrop(Blocks.TRAPPED_CHEST));
       this.add(ModBlocks.SHULKER_BOX.get(), lootrBlockDrop(Blocks.SHULKER_BOX));
       this.add(ModBlocks.DECORATED_POT.get(), LootTable.lootTable());
@@ -61,7 +65,7 @@ public class LootrLootTableProvider {
 
     @Override
     protected @NonNull Iterable<Block> getKnownBlocks() {
-      return List.of(ModBlocks.CHEST.get(), ModBlocks.BARREL.get(), ModBlocks.TRAPPED_CHEST.get(), ModBlocks.SHULKER_BOX.get(), ModBlocks.TROPHY.get(), ModBlocks.SUSPICIOUS_GRAVEL.get(), ModBlocks.SUSPICIOUS_SAND.get(), ModBlocks.DECORATED_POT.get());
+      return List.of(ModBlocks.CHEST.get(), ModBlocks.BARREL.get(), ModBlocks.TRAPPED_CHEST.get(), ModBlocks.SHULKER_BOX.get(), ModBlocks.TROPHY.get(), ModBlocks.SUSPICIOUS_GRAVEL.get(), ModBlocks.SUSPICIOUS_SAND.get(), ModBlocks.DECORATED_POT.get(), ModBlocks.EXPOSED_COPPER_CHEST.get(), ModBlocks.COPPER_CHEST.get(), ModBlocks.WEATHERED_COPPER_CHEST.get(), ModBlocks.OXIDIZED_COPPER_CHEST.get());
     }
   }
 

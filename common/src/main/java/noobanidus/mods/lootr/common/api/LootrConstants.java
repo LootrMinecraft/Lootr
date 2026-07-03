@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.common.api;
 
+import net.minecraft.commands.arguments.ResourceKeyArgument;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -26,6 +27,10 @@ public final class LootrConstants {
   public static final Identifier SHERDSAPI_POT_DECORATIONS = Identifier.fromNamespaceAndPath("sherdsapi", "stack_pot_decorations");
   public static final Identifier SHERDSAPI_SHERD_PATTERN = Identifier.fromNamespaceAndPath("sherdsapi", "sherd_pattern");
 
+  public static final Identifier COPPER_CHEST = LootrAPI.rl("copper_chest");
+  public static final Identifier EXPOSED_COPPER_CHEST = LootrAPI.rl("exposed_copper_chest");
+  public static final Identifier WEATHERED_COPPER_CHEST = LootrAPI.rl("weathered_copper_chest");
+  public static final Identifier OXIDIZED_COPPER_CHEST = LootrAPI.rl("oxidized_copper_chest");
   public static class Identifiers {
     public static final Identifier CHEST = LootrAPI.rl("chest");
     public static final Identifier TRAPPED_CHEST = LootrAPI.rl("trapped_chest");
@@ -66,6 +71,10 @@ public final class LootrConstants {
   public static final String REGION_DIRECTORY = "region";
   public static final String MCA_FILE_EXTENSION = ".mca";
 
+  public static final ResourceKey<Block> COPPER_CHEST_RESOURCE_KEY = ResourceKey.create(Registries.BLOCK, COPPER_CHEST);
+  public static final ResourceKey<Block> EXPOSED_COPPER_CHEST_RESOURCE_KEY = ResourceKey.create(Registries.BLOCK, EXPOSED_COPPER_CHEST);
+  public static final ResourceKey<Block> OXIDIZED_COPPER_CHEST_RESOURCE_KEY = ResourceKey.create(Registries.BLOCK, OXIDIZED_COPPER_CHEST);
+  public static final ResourceKey<Block> WEATHERED_COPPER_CHEST_RESOURCE_KEY = ResourceKey.create(Registries.BLOCK, WEATHERED_COPPER_CHEST);
   public static class LootrBlockIds {
     public static final ResourceKey<Block> CHEST = ResourceKey.create(Registries.BLOCK, Identifiers.CHEST);
     public static final ResourceKey<Block> TRAPPED_CHEST = ResourceKey.create(Registries.BLOCK, Identifiers.TRAPPED_CHEST);
@@ -77,6 +86,10 @@ public final class LootrConstants {
     public static final ResourceKey<Block> TROPHY = ResourceKey.create(Registries.BLOCK, Identifiers.TROPHY);
   }
 
+  public static final ResourceKey<Item> COPPER_CHEST_ITEM_RESOURCE_KEY = ResourceKey.create(Registries.ITEM, COPPER_CHEST);
+  public static final ResourceKey<Item> WEATHERED_COPPER_CHEST_ITEM_RESOURCE_KEY = ResourceKey.create(Registries.ITEM, WEATHERED_COPPER_CHEST);
+  public static final ResourceKey<Item> OXIDIZED_COPPER_CHEST_ITEM_RESOURCE_KEY = ResourceKey.create(Registries.ITEM, OXIDIZED_COPPER_CHEST);
+  public static final ResourceKey<Item> EXPOSED_COPPER_CHEST_ITEM_RESOURCE_KEY = ResourceKey.create(Registries.ITEM, EXPOSED_COPPER_CHEST);
   public static class LootrItemIds {
     public static final ResourceKey<Item> CHEST = ResourceKey.create(Registries.ITEM, Identifiers.CHEST);
     public static final ResourceKey<Item> TRAPPED_CHEST = ResourceKey.create(Registries.ITEM, Identifiers.TRAPPED_CHEST);
@@ -88,6 +101,10 @@ public final class LootrConstants {
     public static final ResourceKey<Item> TROPHY = ResourceKey.create(Registries.ITEM, Identifiers.TROPHY);
   }
 
+  public static final BlockBehaviour.Properties COPPER_CHEST_PROPERTIES = BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_CHEST).strength(2.5f).setId(COPPER_CHEST_RESOURCE_KEY);
+  public static final BlockBehaviour.Properties WEATHERED_COPPER_CHEST_PROPERTIES = BlockBehaviour.Properties.ofFullCopy(Blocks.WEATHERED_COPPER_CHEST).strength(2.5f).setId(WEATHERED_COPPER_CHEST_RESOURCE_KEY);
+  public static final BlockBehaviour.Properties EXPOSED_COPPER_CHEST_PROPERTIES = BlockBehaviour.Properties.ofFullCopy(Blocks.EXPOSED_COPPER_CHEST).strength(2.5f).setId(EXPOSED_COPPER_CHEST_RESOURCE_KEY);
+  public static final BlockBehaviour.Properties OXIDIZED_COPPER_CHEST_PROPERTIES = BlockBehaviour.Properties.ofFullCopy(Blocks.OXIDIZED_COPPER_CHEST).strength(2.5f).setId(OXIDIZED_COPPER_CHEST_RESOURCE_KEY);
   public static class BlockProperties {
     public static final BlockBehaviour.Properties CHEST = BlockBehaviour.Properties.ofFullCopy(Blocks.CHEST)
         .strength(2.5f).setId(LootrBlockIds.CHEST);

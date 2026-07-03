@@ -204,4 +204,44 @@ public class LootrRegistryImpl implements ILootrRegistry {
   public ParticleType<ParticleColorOption> getUnopenedParticleType() {
     return ModParticles.UNOPENED_PARTICLE;
   }
+
+  @Override
+  public Block getExposedCopperChestBlock() {
+    return ModBlocks.EXPOSED_COPPER_CHEST;
+  }
+
+  @Override
+  public Block getCopperChestBlock() {
+    return ModBlocks.COPPER_CHEST;
+  }
+
+  @Override
+  public Block getOxidizedCopperChestBlock() {
+    return ModBlocks.OXIDIZED_COPPER_CHEST;
+  }
+
+  @Override
+  public Block getWeatheredCopperChestBlock() {
+    return ModBlocks.WEATHERED_COPPER_CHEST;
+  }
+
+  @Override
+  public Item getCopperChestItem() {
+    return ModItems.COPPER_CHEST;
+  }
+
+  @Override
+  public Item getExposedCopperChestItem() {
+    return ModItems.EXPOSED_COPPER_CHEST;
+  }
+
+  @Override
+  public Item getOxidizedCopperChestItem() {
+    return ModItems.OXIDIZED_COPPER_CHEST;
+  }
+
+  @Override
+  public Item getWeatheredCopperChestItem() {
+    return ModItems.WEATHERED_COPPER_CHEST;
+  }
 }

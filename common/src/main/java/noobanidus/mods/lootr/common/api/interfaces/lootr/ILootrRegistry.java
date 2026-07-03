@@ -91,4 +91,20 @@ public interface ILootrRegistry {
   IContainerTrigger getItemFrameTrigger();
 
   ParticleType<ParticleColorOption> getUnopenedParticleType();
+
+  Block getExposedCopperChestBlock();
+
+  Block getCopperChestBlock();
+
+  Block getOxidizedCopperChestBlock();
+
+  Block getWeatheredCopperChestBlock();
+
+  Item getCopperChestItem();
+
+  Item getExposedCopperChestItem();
+
+  Item getOxidizedCopperChestItem();
+
+  Item getWeatheredCopperChestItem();
 }
