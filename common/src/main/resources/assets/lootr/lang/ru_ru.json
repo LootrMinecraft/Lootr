@@ -175,6 +175,7 @@
   "lootr.configuration.use_problematic_loot_tables.desc": "Использовать список «проблемных» таблиц добычи по умолчанию при создании чёрного списка таблиц добычи. [По умолчанию: true]",
   "lootr.message.cannot_break": "Блоки или сущности с добычей не могут быть разрушены или уничтожены.",
   "lootr.message.cannot_break_sneak": "В творческом режиме вам нужно присесть, чтобы разрушить или уничтожить блоки и сущности с добычей.",
+  "lootr.message.cannot_insert": "Items cannot be inserted into Item Frames with Loot.",
   "lootr.message.cart_should_sneak": "Уничтожение этого объекта не позволит другим получить из него добычу. Уничтожайте только, если вам это действительно нужно.",
   "lootr.message.cart_should_sneak2": "Чтобы всё равно уничтожить эту сущность, атакуйте крадучись.",
   "lootr.message.decay_in": "Этот контейнер полностью разложится через %s секунд.",
