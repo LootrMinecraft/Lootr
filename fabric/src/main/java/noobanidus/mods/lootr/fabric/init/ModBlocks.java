@@ -33,5 +33,9 @@ public class ModBlocks {
     Registry.register(BuiltInRegistries.BLOCK, LootrConstants.Identifiers.SUSPICIOUS_GRAVEL, SUSPICIOUS_GRAVEL);
     Registry.register(BuiltInRegistries.BLOCK, LootrConstants.Identifiers.DECORATED_POT, DECORATED_POT);
     Registry.register(BuiltInRegistries.BLOCK, LootrConstants.Identifiers.TROPHY, TROPHY);
+    Registry.register(BuiltInRegistries.BLOCK, LootrConstants.Identifiers.COPPER_CHEST, COPPER_CHEST);
+    Registry.register(BuiltInRegistries.BLOCK, LootrConstants.Identifiers.EXPOSED_COPPER_CHEST, EXPOSED_COPPER_CHEST);
+    Registry.register(BuiltInRegistries.BLOCK, LootrConstants.Identifiers.WEATHERED_COPPER_CHEST, WEATHERED_COPPER_CHEST);
+    Registry.register(BuiltInRegistries.BLOCK, LootrConstants.Identifiers.OXIDIZED_COPPER_CHEST, OXIDIZED_COPPER_CHEST);
   }
 }
