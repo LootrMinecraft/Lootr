@@ -40,6 +40,7 @@ import noobanidus.mods.lootr.common.api.interfaces.processor.ILootrEntityProcess
 import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
 import noobanidus.mods.lootr.common.client.ClientHooks;
 import noobanidus.mods.lootr.common.data.DataStorage;
+import noobanidus.mods.lootr.common.integration.create.CreateIntegration;
 import noobanidus.mods.lootr.common.integration.sherdsapi.SherdsIntegration;
 import org.jetbrains.annotations.Nullable;
 
@@ -389,7 +390,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
 
   @Override
   public boolean shouldConvertStructureItemFrames() {
-    return LootrCommonConfig.Conversion.convertStructureItemFrames;
+    return LootrCommonConfig.Conversion.convertStructureItemFrames && !CreateIntegration.SKIP_ITEM_FRAMES;
   }
 
   @Override
