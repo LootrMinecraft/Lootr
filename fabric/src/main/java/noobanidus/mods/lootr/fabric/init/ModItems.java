@@ -45,5 +45,9 @@ public class ModItems {
     Registry.register(BuiltInRegistries.ITEM, LootrConstants.Identifiers.SUSPICIOUS_GRAVEL, SUSPICIOUS_GRAVEL);
     Registry.register(BuiltInRegistries.ITEM, LootrConstants.Identifiers.DECORATED_POT, DECORATED_POT);
     Registry.register(BuiltInRegistries.ITEM, LootrConstants.Identifiers.TROPHY, TROPHY);
+    Registry.register(BuiltInRegistries.ITEM, LootrConstants.Identifiers.COPPER_CHEST, COPPER_CHEST);
+    Registry.register(BuiltInRegistries.ITEM, LootrConstants.Identifiers.EXPOSED_COPPER_CHEST, EXPOSED_COPPER_CHEST);
+    Registry.register(BuiltInRegistries.ITEM, LootrConstants.Identifiers.OXIDIZED_COPPER_CHEST, OXIDIZED_COPPER_CHEST);
+    Registry.register(BuiltInRegistries.ITEM, LootrConstants.Identifiers.WEATHERED_COPPER_CHEST, WEATHERED_COPPER_CHEST);
   }
 }
