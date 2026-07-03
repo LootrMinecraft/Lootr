@@ -24,6 +24,11 @@ public class ModAdvancements {
   public static final DeferredHolder<CriterionTrigger<?>, ContainerTrigger> SAND = REGISTER.register("sand_brushed", ContainerTrigger::new);
   public static final DeferredHolder<CriterionTrigger<?>, ContainerTrigger> POT = REGISTER.register("pot_opened", ContainerTrigger::new);
   public static final DeferredHolder<CriterionTrigger<?>, ContainerTrigger> ITEM_FRAME = REGISTER.register("item_frame_looted", ContainerTrigger::new);
+  public static final DeferredHolder<CriterionTrigger<?>, ContainerTrigger> COPPER_CHEST = REGISTER.register("copper_chest", ContainerTrigger::new);
+  public static final DeferredHolder<CriterionTrigger<?>, ContainerTrigger> EXPOSED_COPPER_CHEST = REGISTER.register("exposed_copper_chest", ContainerTrigger::new);
+  public static final DeferredHolder<CriterionTrigger<?>, ContainerTrigger> WEATHERED_COPPER_CHEST = REGISTER.register("weatherd_copper_chest", ContainerTrigger::new);
+  public static final DeferredHolder<CriterionTrigger<?>, ContainerTrigger> OXIDIZED_COPPER_CHEST = REGISTER.register("oxidized_copper_chest", ContainerTrigger::new);
+  public static final DeferredHolder<CriterionTrigger<?>, ContainerTrigger> TRAPPED_CHEST = REGISTER.register("trapped_chest", ContainerTrigger::new);
 
   public static void register(IEventBus bus) {
     REGISTER.register(bus);

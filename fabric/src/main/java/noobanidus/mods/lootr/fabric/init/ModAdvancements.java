@@ -2,6 +2,7 @@ package noobanidus.mods.lootr.fabric.init;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import noobanidus.mods.lootr.common.advancement.AdvancementTrigger;
 import noobanidus.mods.lootr.common.advancement.ContainerTrigger;
@@ -19,7 +20,17 @@ public class ModAdvancements {
   public static final Identifier SAND_LOCATION = LootrAPI.rl("sand_brushed");
   public static final Identifier POT_OPENED = LootrAPI.rl("pot_opened");
   public static final Identifier ITEM_FRAME_LOCATION = LootrAPI.rl("item_frame_looted");
+  public static final Identifier TRAPPED_CHEST_LOCATION = LootrAPI.rl("trapped_chest");
+  public static final Identifier COPPER_CHEST_LOCATION = LootrAPI.rl("copper_chest");
+  public static final Identifier EXPOSED_COPPER_CHEST_LOCATION = LootrAPI.rl("exposed_copper_chest");
+  public static final Identifier WEATHERED_COPPER_CHEST_LOCATION = LootrAPI.rl("weathered_copper_chest");
+  public static final Identifier OXIDIZED_COPPER_CHEST_LOCATION = LootrAPI.rl("oxidized_copper_chest");
   public static ContainerTrigger CHEST = null;
+  public static ContainerTrigger TRAPPED_CHEST = null;
+  public static ContainerTrigger COPPER_CHEST = null;
+  public static ContainerTrigger EXPOSED_COPPER_CHEST = null;
+  public static ContainerTrigger WEATHERED_COPPER_CHEST = null;
+  public static ContainerTrigger OXIDIZED_COPPER_CHEST = null;
   public static ContainerTrigger BARREL = null;
   public static ContainerTrigger CART = null;
   public static ContainerTrigger SHULKER = null;
@@ -41,5 +52,10 @@ public class ModAdvancements {
     SAND = Registry.register(BuiltInRegistries.TRIGGER_TYPES, SAND_LOCATION, new ContainerTrigger());
     POT = Registry.register(BuiltInRegistries.TRIGGER_TYPES, POT_OPENED, new ContainerTrigger());
     ITEM_FRAME = Registry.register(BuiltInRegistries.TRIGGER_TYPES, ITEM_FRAME_LOCATION, new ContainerTrigger());
+    TRAPPED_CHEST = Registry.register(BuiltInRegistries.TRIGGER_TYPES, TRAPPED_CHEST_LOCATION, new ContainerTrigger());
+    COPPER_CHEST = Registry.register(BuiltInRegistries.TRIGGER_TYPES, COPPER_CHEST_LOCATION, new ContainerTrigger());
+    EXPOSED_COPPER_CHEST = Registry.register(BuiltInRegistries.TRIGGER_TYPES, EXPOSED_COPPER_CHEST_LOCATION, new ContainerTrigger());
+    WEATHERED_COPPER_CHEST = Registry.register(BuiltInRegistries.TRIGGER_TYPES, WEATHERED_COPPER_CHEST_LOCATION, new ContainerTrigger());
+    OXIDIZED_COPPER_CHEST = Registry.register(BuiltInRegistries.TRIGGER_TYPES, OXIDIZED_COPPER_CHEST_LOCATION, new ContainerTrigger());
   }
 }
