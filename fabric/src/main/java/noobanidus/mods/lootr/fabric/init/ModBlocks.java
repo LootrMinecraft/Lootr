@@ -2,6 +2,7 @@ package noobanidus.mods.lootr.fabric.init;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BrushableBlock;
@@ -33,5 +34,9 @@ public class ModBlocks {
     Registry.register(BuiltInRegistries.BLOCK, LootrConstants.SUSPICIOUS_GRAVEL, SUSPICIOUS_GRAVEL);
     Registry.register(BuiltInRegistries.BLOCK, LootrConstants.DECORATED_POT, DECORATED_POT);
     Registry.register(BuiltInRegistries.BLOCK, LootrConstants.TROPHY, TROPHY);
+    Registry.register(BuiltInRegistries.BLOCK, LootrConstants.COPPER_CHEST, COPPER_CHEST);
+    Registry.register(BuiltInRegistries.BLOCK, LootrConstants.EXPOSED_COPPER_CHEST, EXPOSED_COPPER_CHEST);
+    Registry.register(BuiltInRegistries.BLOCK, LootrConstants.OXIDIZED_COPPER_CHEST, OXIDIZED_COPPER_CHEST);
+    Registry.register(BuiltInRegistries.BLOCK, LootrConstants.WEATHERED_COPPER_CHEST, WEATHERED_COPPER_CHEST);
   }
 }
