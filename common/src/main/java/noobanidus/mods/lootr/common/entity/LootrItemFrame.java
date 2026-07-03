@@ -299,9 +299,13 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   @Override
   public @NonNull InteractionResult interact(@NonNull Player player, @NonNull InteractionHand hand, @NonNull Vec3 location) {
     if (!this.level().isClientSide()) {
-      this.playSound(this.getRotateItemSound(), 1.0F, 1.0F);
-      this.setRotation(this.getRotation() + 1);
-      this.gameEvent(GameEvent.BLOCK_CHANGE, player);
+      if (!player.getItemInHand(hand).isEmpty()) {
+        player.sendOverlayMessage(Component.translatable("lootr.message.cannot_insert"));
+      } else {
+        this.playSound(this.getRotateItemSound(), 1.0F, 1.0F);
+        this.setRotation(this.getRotation() + 1);
+        this.gameEvent(GameEvent.BLOCK_CHANGE, player);
+      }
 
       return InteractionResult.CONSUME;
     } else {
