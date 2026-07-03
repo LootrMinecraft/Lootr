@@ -181,6 +181,7 @@
   "lootr.message.decay_in": "이 컨테이너는 %s초 후에 완전히 부식되어 사라집니다.",
   "lootr.message.decay_start": "이 저장 용기가 당신의 손길에 바스라지기 시작했습니다! %s초 후에 완전히 부식되어 사라집니다.",
   "lootr.message.decayed": "부식되고 있는 컨테이너를 만지면 바스라집니다!",
+  "lootr.message.emergency_conversion": "The container you just opened has been converted into a Lootr container!",
   "lootr.message.invalid_table": "Error with mod [%s], not Lootr! The loot table for this container [%s] does not exist or could not be loaded. Please report this to the mod author, not to Lootr.",
   "lootr.message.refresh_in": "이 저장 용기는 %s초 후에 새로고침 됩니다.",
   "lootr.message.refresh_start": "이 저장 용기는 %s초 후에 새로운 내용물로 새로고침 됩니다!",
