@@ -29,6 +29,7 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.message.refresh_in", "This container will refresh its contents in %s seconds.");
     add("lootr.message.refresh_start", "The container will refresh with new contents in %s seconds!");
     add("lootr.message.invalid_table", "Error with mod [%s], not Lootr! The loot table for this container [%s] does not exist or could not be loaded. Please report this to the mod author, not to Lootr.");
+    add("lootr.message.cannot_insert", "Items cannot be inserted into Item Frames with Loot.");
 
     add(LootrRegistry.getChestBlock(), "Loot Chest");
     add(LootrRegistry.getTrappedChestBlock(), "Loot Chest");
