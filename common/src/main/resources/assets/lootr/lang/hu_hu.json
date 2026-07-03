@@ -175,6 +175,7 @@
   "lootr.configuration.use_problematic_loot_tables.desc": "Use the default list of 'problematic' loot tables when constructing the Loot Table Blacklist. [default: true]",
   "lootr.message.cannot_break": "Lootr blocks and entities cannot be broken or destroyed.",
   "lootr.message.cannot_break_sneak": "Kreatív módban lopakodva kell megközelítened a Lootr-blokkokat és -entitásokat, hogy azokat kiüthesd vagy megsemmisíthesd.",
+  "lootr.message.cannot_insert": "Items cannot be inserted into Item Frames with Loot.",
   "lootr.message.cart_should_sneak": "Destroying this entity will prevent others from obtaining loot! Only destroy if really needed.",
   "lootr.message.cart_should_sneak2": "Ha mindenképp el akarod pusztítani ezt az entitást, támadás közben lopakodj.",
   "lootr.message.decay_in": "This container will decay completely in %s seconds.",
