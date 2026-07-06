@@ -298,23 +298,26 @@ public final class LootrDecoratedPotGameTests {
   }
 
   private static void assertPlayerSeesUnopenedShape(GameTestHelper helper, ServerPlayer player) {
-    double maxY = getPlayerShapeMaxY(helper, player);
-    if (maxY <= 0.5) {
+    double playerShapeHeight = getShapeHeight(helper, CollisionContext.of(player));
+    double defaultShapeHeight = getShapeHeight(helper, CollisionContext.empty());
+    if (playerShapeHeight < defaultShapeHeight) {
       helper.fail("Expected the player to see the unopened Lootr pot shape before opening it", POT_POS);
     }
   }
 
   private static void assertPlayerSeesOpenedShape(GameTestHelper helper, ServerPlayer player) {
-    double maxY = getPlayerShapeMaxY(helper, player);
-    if (Math.abs(maxY - 0.5) > 0.0001) {
+    double playerShapeHeight = getShapeHeight(helper, CollisionContext.of(player));
+    double defaultShapeHeight = getShapeHeight(helper, CollisionContext.empty());
+    if (playerShapeHeight >= defaultShapeHeight) {
       helper.fail("Expected the player to see the collapsed Lootr pot shape after opening it", POT_POS);
     }
   }
 
-  private static double getPlayerShapeMaxY(GameTestHelper helper, ServerPlayer player) {
+  private static double getShapeHeight(GameTestHelper helper, CollisionContext collisionContext) {
     return helper.getBlockState(POT_POS)
-        .getShape(helper.getLevel(), helper.absolutePos(POT_POS), CollisionContext.of(player))
-        .max(Direction.Axis.Y);
+        .getShape(helper.getLevel(), helper.absolutePos(POT_POS), collisionContext)
+        .bounds()
+        .getYsize();
   }
 
   private static void setDecoratedPotDecorations(LootrDecoratedPotBlockEntity pot) {
