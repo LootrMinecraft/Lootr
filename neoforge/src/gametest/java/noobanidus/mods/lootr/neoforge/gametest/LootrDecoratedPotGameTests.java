@@ -73,16 +73,19 @@ public final class LootrDecoratedPotGameTests {
     ServerPlayer firstPlayer = createConnectedPlayer(helper, "lootr-player-1");
     ServerPlayer secondPlayer = createConnectedPlayer(helper, "lootr-player-2");
 
+    // An empty loot-table entry is still a successful open, so the player should be marked opened even though no loot item spawns.
     if (!pot.dropContent(firstPlayer)) {
       helper.fail("Expected first player empty pot loot result to still count as dropped content");
     }
     assertPlayerOpened(helper, pot, firstPlayer, "first player empty pot loot result");
     assertPlayerInventoryEmpty(helper, pot, firstPlayer, "first player empty pot loot result");
 
+    // Opening the same pot again as the same player should do nothing because each player only gets one result per pot.
     if (pot.dropContent(firstPlayer)) {
       helper.fail("Expected first player to only receive empty pot loot once");
     }
 
+    // Lootr pots are per-player, so a second player should still get their own successful empty result.
     if (!pot.dropContent(secondPlayer)) {
       helper.fail("Expected second player empty pot loot result to still count as dropped content");
     }
@@ -101,6 +104,7 @@ public final class LootrDecoratedPotGameTests {
     ServerPlayer firstPlayer = createConnectedPlayer(helper, "lootr-player-1");
     ServerPlayer secondPlayer = createConnectedPlayer(helper, "lootr-player-2");
 
+    // The first player should receive their own generated loot and have that per-player inventory consumed.
     if (!pot.dropContent(firstPlayer)) {
       helper.fail("Expected first player non-empty pot loot result to drop content");
     }
@@ -108,11 +112,13 @@ public final class LootrDecoratedPotGameTests {
     assertPlayerInventoryEmpty(helper, pot, firstPlayer, "first player non-empty pot loot result");
     helper.assertItemEntityCountIs(Items.DIAMOND, POT_POS.above(), ITEM_CHECK_RADIUS, 1);
 
+    // Reopening as the same player must not duplicate the generated item.
     if (pot.dropContent(firstPlayer)) {
       helper.fail("Expected first player to only receive non-empty pot loot once");
     }
     helper.assertItemEntityCountIs(Items.DIAMOND, POT_POS.above(), ITEM_CHECK_RADIUS, 1);
 
+    // A second player gets a separate generated item, proving the pot remains per-player.
     if (!pot.dropContent(secondPlayer)) {
       helper.fail("Expected second player non-empty pot loot result to drop content");
     }
@@ -131,10 +137,13 @@ public final class LootrDecoratedPotGameTests {
     setDecoratedPotDecorations(pot);
 
     ServerPlayer player = createConnectedPlayer(helper, "lootr-player-1");
+    // Before opening, the player should still collide with and see the full pot shape.
     assertPlayerSeesUnopenedShape(helper, player);
 
+    // Right-clicking with an item should loot the pot, not insert that held item into the vanilla pot slot.
     interactWithPot(helper, player, new ItemStack(Items.EMERALD));
 
+    // The interaction should mark the player opened, collapse the visible shape, spawn loot and sherds, and leave the held item untouched.
     assertPlayerOpened(helper, pot, player, "right-clicked pot loot result");
     assertPlayerInventoryEmpty(helper, pot, player, "right-clicked pot loot result");
     assertPlayerSeesOpenedShape(helper, player);
@@ -157,6 +166,7 @@ public final class LootrDecoratedPotGameTests {
     setDecoratedPotDecorations(pot);
 
     ServerPlayer player = createConnectedPlayer(helper, "lootr-player-1");
+    // A normal hit should loot the pot and spawn the sherds, but it should not break the block.
     hitPot(helper, player);
 
     assertPlayerOpened(helper, pot, player, "hit pot loot result");
@@ -165,6 +175,7 @@ public final class LootrDecoratedPotGameTests {
     assertDecorationDrops(helper);
     helper.assertBlockPresent(LootrRegistry.getDecoratedPotBlock(), POT_POS);
 
+    // Hitting the already-opened collapsed pot again should not duplicate loot or destroy the block.
     hitPot(helper, player);
     assertPlayerOpened(helper, pot, player, "opened pot hit result");
     assertPlayerInventoryEmpty(helper, pot, player, "opened pot hit result");
@@ -180,6 +191,7 @@ public final class LootrDecoratedPotGameTests {
     helper.setBlock(POT_POS, LootrRegistry.getDecoratedPotBlock());
     LootrDecoratedPotBlockEntity pot = helper.getBlockEntity(POT_POS);
 
+    // Pots opt out of the timed refresh and decay systems used by other Lootr containers.
     if (pot.canRefresh()) {
       helper.fail("Expected Lootr pots to opt out of refresh support", POT_POS);
     }
@@ -199,6 +211,7 @@ public final class LootrDecoratedPotGameTests {
     ServerPlayer firstPlayer = createConnectedPlayer(helper, "lootr-player-1");
     ServerPlayer secondPlayer = createConnectedPlayer(helper, "lootr-player-2");
 
+    // One player can open an empty pot before another player interacts with it, preserving per-player access.
     if (!pot.dropContent(firstPlayer)) {
       helper.fail("Expected first player empty pot loot result to still count as dropped content before breaking");
     }
@@ -206,6 +219,7 @@ public final class LootrDecoratedPotGameTests {
     assertPlayerInventoryEmpty(helper, pot, firstPlayer, "first player empty pot loot result before breaking");
 
     setDecoratedPotDecorations(pot);
+    // A normal hit by the second player opens their empty result and drops sherds, but the pot remains in the world.
     hitPot(helper, secondPlayer);
     assertPlayerOpened(helper, pot, secondPlayer, "second player empty pot hit result before breaking");
     assertPlayerInventoryEmpty(helper, pot, secondPlayer, "second player empty pot hit result before breaking");
@@ -213,9 +227,11 @@ public final class LootrDecoratedPotGameTests {
     assertDecorationDrops(helper);
     helper.assertBlockPresent(LootrRegistry.getDecoratedPotBlock(), POT_POS);
 
+    // Hitting the already-opened collapsed pot still must not destroy it.
     hitPot(helper, secondPlayer);
     helper.assertBlockPresent(LootrRegistry.getDecoratedPotBlock(), POT_POS);
 
+    // The break event should reject a non-sneaking break, then allow a sneaking break to remove the opened pot.
     assertPotBreakCanceled(helper, secondPlayer);
     shiftBreakPot(helper, secondPlayer);
     helper.assertBlockNotPresent(LootrRegistry.getDecoratedPotBlock(), POT_POS);
@@ -232,6 +248,7 @@ public final class LootrDecoratedPotGameTests {
     ServerPlayer firstPlayer = createConnectedPlayer(helper, "lootr-player-1");
     ServerPlayer secondPlayer = createConnectedPlayer(helper, "lootr-player-2");
 
+    // The first player gets their own generated item before the second player tries to break the pot.
     if (!pot.dropContent(firstPlayer)) {
       helper.fail("Expected first player non-empty pot loot result to drop content before breaking");
     }
@@ -240,6 +257,7 @@ public final class LootrDecoratedPotGameTests {
     helper.assertItemEntityCountIs(Items.DIAMOND, POT_POS.above(), ITEM_CHECK_RADIUS, 1);
 
     setDecoratedPotDecorations(pot);
+    // A normal hit by the second player opens their own loot and drops sherds, but still leaves the pot block present.
     hitPot(helper, secondPlayer);
     assertPlayerOpened(helper, pot, secondPlayer, "second player non-empty pot hit result before breaking");
     assertPlayerInventoryEmpty(helper, pot, secondPlayer, "second player non-empty pot hit result before breaking");
@@ -247,11 +265,13 @@ public final class LootrDecoratedPotGameTests {
     assertDecorationDrops(helper);
     helper.assertBlockPresent(LootrRegistry.getDecoratedPotBlock(), POT_POS);
 
+    // Hitting the opened pot again should neither duplicate the diamond nor break the block.
     hitPot(helper, secondPlayer);
     helper.assertItemEntityCountIs(Items.DIAMOND, POT_POS.above(), ITEM_CHECK_RADIUS, 2);
     assertDecorationDrops(helper);
     helper.assertBlockPresent(LootrRegistry.getDecoratedPotBlock(), POT_POS);
 
+    // The break event should reject a non-sneaking break, then allow a sneaking break to remove the opened pot.
     assertPotBreakCanceled(helper, secondPlayer);
     shiftBreakPot(helper, secondPlayer);
     helper.assertBlockNotPresent(LootrRegistry.getDecoratedPotBlock(), POT_POS);
