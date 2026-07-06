@@ -29,9 +29,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.ticks.ContainerSingleItem;
 import noobanidus.mods.lootr.common.api.*;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
-import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
-import noobanidus.mods.lootr.common.api.data.SimpleLootrEntityInstance;
 import noobanidus.mods.lootr.common.api.data.SimpleLootrInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
@@ -96,36 +94,51 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
     }
 
     ItemStack result = inventory.getItem(0);
-    if (result.isEmpty()) {
+    boolean hasItem = !result.isEmpty();
+    if (hasItem) {
+      inventory.setItem(0, ItemStack.EMPTY);
+      inventory.setChanged();
+    }
+
+    // Loot tables may legitimately roll `minecraft:empty`, so record the open separately from the item stack.
+    boolean opened = this.markOpened(player, hasItem);
+    if (!hasItem && !opened) {
       return null;
     }
 
-    inventory.setItem(0, ItemStack.EMPTY);
-    inventory.setChanged();
+    return result;
+  }
 
+  private boolean markOpened(ServerPlayer player, boolean inventoryChanged) {
     this.performTrigger(player);
+    boolean opened = false;
     boolean shouldUpdate = false;
     if (!this.hasServerOpened(player)) {
       player.awardStat(LootrRegistry.getLootedStat());
       LootrRegistry.getStatTrigger().trigger(player);
+      opened = true;
     }
     if (this.addOpener(player)) {
       this.performOpen(player);
       shouldUpdate = true;
+      opened = true;
     }
-    this.lootrInstance.setHasBeenOpened();
+    if (!this.lootrInstance.hasBeenOpened()) {
+      this.lootrInstance.setHasBeenOpened();
+      shouldUpdate = true;
+    }
 
     if (shouldUpdate) {
       this.performUpdate(player);
     }
 
-    if (LootrAPI.isCustomTrapped() && isInfoReferenceInventory()) {
+    if ((opened || shouldUpdate || inventoryChanged) && LootrAPI.isCustomTrapped() && isInfoReferenceInventory()) {
       Block block = this.getBlockState().getBlock();
       level.updateNeighborsAt(getBlockPos(), block);
       level.updateNeighborsAt(getBlockPos().below(), block);
     }
 
-    return result;
+    return opened;
   }
 
   @Override
@@ -146,9 +159,11 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
         double g = (double) blockPos.getX() + 0.5 * e + f;
         double h = (double) blockPos.getY() + 0.5 + (double) (EntityType.ITEM.getHeight() / 2.0F);
         double i = (double) blockPos.getZ() + 0.5 * e + f;
-        ItemEntity itemEntity = new ItemEntity(this.level, g, h, i, theItem.split(this.level.random.nextInt(21) + 10));
-        itemEntity.setDeltaMovement(Vec3.ZERO);
-        this.level.addFreshEntity(itemEntity);
+        if (!theItem.isEmpty()) {
+          ItemEntity itemEntity = new ItemEntity(this.level, g, h, i, theItem.split(this.level.random.nextInt(21) + 10));
+          itemEntity.setDeltaMovement(Vec3.ZERO);
+          this.level.addFreshEntity(itemEntity);
+        }
 
         for (ItemStack item : getDecorations().ordered()) {
           ItemStack sherdStack = item.copy();
