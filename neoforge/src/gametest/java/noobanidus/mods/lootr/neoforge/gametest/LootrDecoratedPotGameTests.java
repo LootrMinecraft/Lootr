@@ -18,11 +18,17 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.CommonListenerCookie;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.PotDecorations;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import noobanidus.mods.lootr.common.api.IPlatformAPI;
 import noobanidus.mods.lootr.common.api.LootrAPI;
@@ -118,6 +124,73 @@ public final class LootrDecoratedPotGameTests {
   }
 
   @GameTest(templateNamespace = LootrAPI.MODID, batch = BATCH, template = "empty")
+  public static void playerCanInteractWithFilledPot(GameTestHelper helper) {
+    helper.setBlock(POT_POS, LootrRegistry.getDecoratedPotBlock());
+    LootrDecoratedPotBlockEntity pot = helper.getBlockEntity(POT_POS);
+    pot.setLootTable(NON_EMPTY_POT_LOOT_TABLE);
+    setDecoratedPotDecorations(pot);
+
+    ServerPlayer player = createConnectedPlayer(helper, "lootr-player-1");
+    assertPlayerSeesUnopenedShape(helper, player);
+
+    interactWithPot(helper, player, new ItemStack(Items.EMERALD));
+
+    assertPlayerOpened(helper, pot, player, "right-clicked pot loot result");
+    assertPlayerInventoryEmpty(helper, pot, player, "right-clicked pot loot result");
+    assertPlayerSeesOpenedShape(helper, player);
+    helper.assertItemEntityCountIs(Items.DIAMOND, POT_POS.above(), ITEM_CHECK_RADIUS, 1);
+    assertDecorationDrops(helper);
+    assertHeldItem(helper, player, Items.EMERALD, 1);
+    if (!pot.getTheItem().isEmpty()) {
+      helper.fail("Expected interacting with a Lootr pot to avoid inserting the held item", POT_POS);
+    }
+    helper.assertBlockPresent(LootrRegistry.getDecoratedPotBlock(), POT_POS);
+
+    helper.succeed();
+  }
+
+  @GameTest(templateNamespace = LootrAPI.MODID, batch = BATCH, template = "empty")
+  public static void playerCanHitFilledPot(GameTestHelper helper) {
+    helper.setBlock(POT_POS, LootrRegistry.getDecoratedPotBlock());
+    LootrDecoratedPotBlockEntity pot = helper.getBlockEntity(POT_POS);
+    pot.setLootTable(NON_EMPTY_POT_LOOT_TABLE);
+    setDecoratedPotDecorations(pot);
+
+    ServerPlayer player = createConnectedPlayer(helper, "lootr-player-1");
+    hitPot(helper, player);
+
+    assertPlayerOpened(helper, pot, player, "hit pot loot result");
+    assertPlayerInventoryEmpty(helper, pot, player, "hit pot loot result");
+    helper.assertItemEntityCountIs(Items.DIAMOND, POT_POS.above(), ITEM_CHECK_RADIUS, 1);
+    assertDecorationDrops(helper);
+    helper.assertBlockPresent(LootrRegistry.getDecoratedPotBlock(), POT_POS);
+
+    hitPot(helper, player);
+    assertPlayerOpened(helper, pot, player, "opened pot hit result");
+    assertPlayerInventoryEmpty(helper, pot, player, "opened pot hit result");
+    helper.assertItemEntityCountIs(Items.DIAMOND, POT_POS.above(), ITEM_CHECK_RADIUS, 1);
+    assertDecorationDrops(helper);
+    helper.assertBlockPresent(LootrRegistry.getDecoratedPotBlock(), POT_POS);
+
+    helper.succeed();
+  }
+
+  @GameTest(templateNamespace = LootrAPI.MODID, batch = BATCH, template = "empty")
+  public static void potDoesNotSupportRefreshOrDecay(GameTestHelper helper) {
+    helper.setBlock(POT_POS, LootrRegistry.getDecoratedPotBlock());
+    LootrDecoratedPotBlockEntity pot = helper.getBlockEntity(POT_POS);
+
+    if (pot.canRefresh()) {
+      helper.fail("Expected Lootr pots to opt out of refresh support", POT_POS);
+    }
+    if (pot.canDecay()) {
+      helper.fail("Expected Lootr pots to opt out of decay support", POT_POS);
+    }
+
+    helper.succeed();
+  }
+
+  @GameTest(templateNamespace = LootrAPI.MODID, batch = BATCH, template = "empty")
   public static void playerCanBreakEmptyPot(GameTestHelper helper) {
     helper.setBlock(POT_POS, LootrRegistry.getDecoratedPotBlock());
     LootrDecoratedPotBlockEntity pot = helper.getBlockEntity(POT_POS);
@@ -133,11 +206,18 @@ public final class LootrDecoratedPotGameTests {
     assertPlayerInventoryEmpty(helper, pot, firstPlayer, "first player empty pot loot result before breaking");
 
     setDecoratedPotDecorations(pot);
-    breakPot(helper, secondPlayer);
-    assertPlayerOpened(helper, pot, secondPlayer, "second player empty pot break result");
-    assertPlayerInventoryEmpty(helper, pot, secondPlayer, "second player empty pot break result");
+    hitPot(helper, secondPlayer);
+    assertPlayerOpened(helper, pot, secondPlayer, "second player empty pot hit result before breaking");
+    assertPlayerInventoryEmpty(helper, pot, secondPlayer, "second player empty pot hit result before breaking");
     helper.assertItemEntityNotPresent(Items.DIAMOND, POT_POS.above(), ITEM_CHECK_RADIUS);
     assertDecorationDrops(helper);
+    helper.assertBlockPresent(LootrRegistry.getDecoratedPotBlock(), POT_POS);
+
+    hitPot(helper, secondPlayer);
+    helper.assertBlockPresent(LootrRegistry.getDecoratedPotBlock(), POT_POS);
+
+    assertPotBreakCanceled(helper, secondPlayer);
+    shiftBreakPot(helper, secondPlayer);
     helper.assertBlockNotPresent(LootrRegistry.getDecoratedPotBlock(), POT_POS);
 
     helper.succeed();
@@ -160,11 +240,20 @@ public final class LootrDecoratedPotGameTests {
     helper.assertItemEntityCountIs(Items.DIAMOND, POT_POS.above(), ITEM_CHECK_RADIUS, 1);
 
     setDecoratedPotDecorations(pot);
-    breakPot(helper, secondPlayer);
-    assertPlayerOpened(helper, pot, secondPlayer, "second player non-empty pot break result");
-    assertPlayerInventoryEmpty(helper, pot, secondPlayer, "second player non-empty pot break result");
+    hitPot(helper, secondPlayer);
+    assertPlayerOpened(helper, pot, secondPlayer, "second player non-empty pot hit result before breaking");
+    assertPlayerInventoryEmpty(helper, pot, secondPlayer, "second player non-empty pot hit result before breaking");
     helper.assertItemEntityCountIs(Items.DIAMOND, POT_POS.above(), ITEM_CHECK_RADIUS, 2);
     assertDecorationDrops(helper);
+    helper.assertBlockPresent(LootrRegistry.getDecoratedPotBlock(), POT_POS);
+
+    hitPot(helper, secondPlayer);
+    helper.assertItemEntityCountIs(Items.DIAMOND, POT_POS.above(), ITEM_CHECK_RADIUS, 2);
+    assertDecorationDrops(helper);
+    helper.assertBlockPresent(LootrRegistry.getDecoratedPotBlock(), POT_POS);
+
+    assertPotBreakCanceled(helper, secondPlayer);
+    shiftBreakPot(helper, secondPlayer);
     helper.assertBlockNotPresent(LootrRegistry.getDecoratedPotBlock(), POT_POS);
 
     helper.succeed();
@@ -188,6 +277,26 @@ public final class LootrDecoratedPotGameTests {
     }
   }
 
+  private static void assertPlayerSeesUnopenedShape(GameTestHelper helper, ServerPlayer player) {
+    double maxY = getPlayerShapeMaxY(helper, player);
+    if (maxY <= 0.5) {
+      helper.fail("Expected the player to see the unopened Lootr pot shape before opening it", POT_POS);
+    }
+  }
+
+  private static void assertPlayerSeesOpenedShape(GameTestHelper helper, ServerPlayer player) {
+    double maxY = getPlayerShapeMaxY(helper, player);
+    if (Math.abs(maxY - 0.5) > 0.0001) {
+      helper.fail("Expected the player to see the collapsed Lootr pot shape after opening it", POT_POS);
+    }
+  }
+
+  private static double getPlayerShapeMaxY(GameTestHelper helper, ServerPlayer player) {
+    return helper.getBlockState(POT_POS)
+        .getShape(helper.getLevel(), helper.absolutePos(POT_POS), CollisionContext.of(player))
+        .max(Direction.Axis.Y);
+  }
+
   private static void setDecoratedPotDecorations(LootrDecoratedPotBlockEntity pot) {
     ItemStack potStack = LootrRegistry.getDecoratedPotItem().getDefaultInstance();
     potStack.set(DataComponents.POT_DECORATIONS, new PotDecorations(
@@ -206,22 +315,68 @@ public final class LootrDecoratedPotGameTests {
     helper.assertItemEntityCountIs(Items.BLADE_POTTERY_SHERD, POT_POS.above(), ITEM_CHECK_RADIUS, 1);
   }
 
-  private static void breakPot(GameTestHelper helper, ServerPlayer player) {
+  private static void assertHeldItem(GameTestHelper helper, ServerPlayer player, net.minecraft.world.item.Item item, int count) {
+    ItemStack heldItem = player.getItemInHand(InteractionHand.MAIN_HAND);
+    if (!heldItem.is(item) || heldItem.getCount() != count) {
+      helper.fail("Expected the player's held item to be unchanged after interacting with the Lootr pot", player);
+    }
+  }
+
+  private static void interactWithPot(GameTestHelper helper, ServerPlayer player, ItemStack heldItem) {
+    player.setItemInHand(InteractionHand.MAIN_HAND, heldItem);
+    BlockHitResult hit = blockHitResult(helper);
+    InteractionResult result = player.gameMode.useItemOn(player, helper.getLevel(), player.getItemInHand(InteractionHand.MAIN_HAND), InteractionHand.MAIN_HAND, hit);
+    if (!result.consumesAction()) {
+      helper.fail("Expected interacting with the Lootr pot to consume the interaction", POT_POS);
+    }
+  }
+
+  private static void hitPot(GameTestHelper helper, ServerPlayer player) {
     BlockPos absolutePotPos = helper.absolutePos(POT_POS);
     Vec3 center = Vec3.atCenterOf(absolutePotPos);
     player.moveTo(center.x, center.y, center.z, 0.0F, 0.0F);
-    boolean originalInstabuild = player.getAbilities().instabuild;
+    player.gameMode.handleBlockBreakAction(absolutePotPos, ServerboundPlayerActionPacket.Action.START_DESTROY_BLOCK, Direction.UP, helper.getLevel().getMaxBuildHeight(), 0);
+  }
 
+  private static BlockHitResult blockHitResult(GameTestHelper helper) {
+    BlockPos absolutePotPos = helper.absolutePos(POT_POS);
+    return new BlockHitResult(Vec3.atCenterOf(absolutePotPos), Direction.UP, absolutePotPos, false);
+  }
+
+  private static void assertPotBreakCanceled(GameTestHelper helper, ServerPlayer player) {
+    player.setShiftKeyDown(false);
+    if (tryDestroyPot(helper, player)) {
+      helper.fail("Expected a non-sneaking player to be unable to destroy an opened Lootr pot", POT_POS);
+    }
+    helper.assertBlockPresent(LootrRegistry.getDecoratedPotBlock(), POT_POS);
+  }
+
+  private static void shiftBreakPot(GameTestHelper helper, ServerPlayer player) {
+    player.setShiftKeyDown(true);
     try {
-      player.getAbilities().instabuild = false;
-      player.gameMode.handleBlockBreakAction(absolutePotPos, ServerboundPlayerActionPacket.Action.START_DESTROY_BLOCK, Direction.UP, helper.getLevel().getMaxBuildHeight(), 0);
-
-      if (!helper.getLevel().destroyBlock(absolutePotPos, false, player)) {
-        helper.fail("Expected the Lootr pot break to destroy the block", POT_POS);
+      hitPot(helper, player);
+      if (!tryDestroyPot(helper, player)) {
+        helper.fail("Expected a sneaking player to be able to destroy an opened Lootr pot", POT_POS);
       }
     } finally {
-      player.getAbilities().instabuild = originalInstabuild;
+      player.setShiftKeyDown(false);
     }
+  }
+
+  private static boolean tryDestroyPot(GameTestHelper helper, ServerPlayer player) {
+    BlockPos absolutePotPos = helper.absolutePos(POT_POS);
+    BlockState blockState = helper.getBlockState(POT_POS);
+    if (CommonHooks.fireBlockBreak(
+        helper.getLevel(),
+        player.gameMode.getGameModeForPlayer(),
+        player,
+        absolutePotPos,
+        blockState
+    ).isCanceled()) {
+      return false;
+    }
+
+    return helper.getLevel().destroyBlock(absolutePotPos, false, player);
   }
 
   private static ServerPlayer createConnectedPlayer(GameTestHelper helper, String name) {
@@ -235,13 +390,14 @@ public final class LootrDecoratedPotGameTests {
 
       @Override
       public boolean isCreative() {
-        return true;
+        return false;
       }
     };
     Connection connection = new Connection(PacketFlow.SERVERBOUND);
     new EmbeddedChannel(connection);
     new ServerGamePacketListenerImpl(helper.getLevel().getServer(), connection, player, cookie);
     player.getAbilities().mayBuild = true;
+    player.getAbilities().instabuild = false;
     return player;
   }
 
