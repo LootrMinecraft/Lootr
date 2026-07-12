@@ -32,6 +32,7 @@ public interface MixinRandomizableContainer {
     if (instance.getLevel() != null && !instance.getLevel()
         .isClientSide() && instance instanceof BlockEntity blockEntity && !(instance instanceof ILootrBlockEntity) && !(LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity)) {
       BlockEntityTicker.addEntity(blockEntity, blockEntity.getLevel(), new ChunkPos(blockEntity.getBlockPos()));
+      LootrAPI.closeContainers(blockEntity);
     }
   }
 
@@ -41,6 +42,7 @@ public interface MixinRandomizableContainer {
     if (table != null && instance.getLevel() != null && !instance.getLevel()
         .isClientSide() && instance instanceof BlockEntity blockEntity && !(instance instanceof ILootrBlockEntity) && !(LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity)) {
       BlockEntityTicker.addEntity(blockEntity, blockEntity.getLevel(), new ChunkPos(blockEntity.getBlockPos()));
+      LootrAPI.closeContainers(blockEntity);
     }
   }
 
@@ -50,6 +52,7 @@ public interface MixinRandomizableContainer {
     if (this instanceof BlockEntity blockEntity) {
       if (BlockEntityTicker.isValidEntityFull(blockEntity)) {
         BlockEntityTicker.addEntity(blockEntity, blockEntity.getLevel(), new ChunkPos(blockEntity.getBlockPos()));
+        LootrAPI.closeContainers(blockEntity);
         ci.cancel();
       }
     }

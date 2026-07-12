@@ -12,8 +12,11 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.TicketType;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Unit;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ChestMenu;
+import net.minecraft.world.inventory.ShulkerBoxMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ChunkPos;
@@ -21,8 +24,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.phys.AABB;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
 import noobanidus.mods.lootr.common.api.client.ClientTextureType;
@@ -36,6 +41,7 @@ import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
 import noobanidus.mods.lootr.common.api.processor.ILootrBlockEntityProcessor;
 import noobanidus.mods.lootr.common.api.processor.ILootrEntityProcessor;
+import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinShulkerBoxMenu;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
@@ -88,7 +94,7 @@ public class LootrAPI {
     return INSTANCE.getPlayerIds();
   }
 
-  public static ServerPlayer getPlayer (UUID player) {
+  public static ServerPlayer getPlayer(UUID player) {
     return INSTANCE.getPlayer(player);
   }
 
@@ -475,7 +481,7 @@ public class LootrAPI {
     INSTANCE.handleProviderTick(provider);
   }
 
-  public static void handleProviderClientTick (@Nullable ILootrInfoProvider provider) {
+  public static void handleProviderClientTick(@Nullable ILootrInfoProvider provider) {
     INSTANCE.handleProviderClientTick(provider);
   }
 
@@ -564,7 +570,7 @@ public class LootrAPI {
   }
 
   @Nullable
-  public static <T>ILootrItemFrameAdapter<T> getItemFrameAdapter (T type) {
+  public static <T> ILootrItemFrameAdapter<T> getItemFrameAdapter(T type) {
     return INSTANCE.getItemFrameAdapter(type);
   }
 
@@ -588,15 +594,44 @@ public class LootrAPI {
     return INSTANCE.getDecorationsAdapter(container);
   }
 
-  public static SaveMode getFileSaveMode () {
+  public static SaveMode getFileSaveMode() {
     return INSTANCE.getFileSaveMode();
   }
 
-  public static boolean shouldDisplayUnopenedParticles () {
+  public static boolean shouldDisplayUnopenedParticles() {
     return INSTANCE.shouldDisplayUnopenedParticles();
   }
 
-  public static long getGameTime () {
+  public static long getGameTime() {
     return INSTANCE.getGameTime();
+  }
+
+  public static void closeContainers(BlockEntity blockEntity) {
+    Level level = blockEntity.getLevel();
+
+    if (level == null || !(blockEntity instanceof Container container) || level.isClientSide()) {
+      return;
+    }
+
+    AABB aabb = new AABB(blockEntity.getBlockPos()).inflate(8.5);
+    List<Player> players = level.getEntities(EntityTypeTest.forClass(Player.class), aabb, (a) -> true);
+
+    for (Player player : players) {
+      if (!player.hasContainerOpen() || !(player instanceof ServerPlayer sPlayer)) {
+        continue;
+      }
+
+      if (player.containerMenu instanceof ChestMenu chestMenu) {
+        if (chestMenu.getContainer().equals(container)) {
+          sPlayer.closeContainer();
+          sPlayer.displayClientMessage(Component.translatable("lootr.message.emergency_conversion"), true);
+        }
+      } else if (player.containerMenu instanceof ShulkerBoxMenu shulkerMenu) {
+        if (((AccessorMixinShulkerBoxMenu) shulkerMenu).lootr$getShulkerMenuContainer().equals(container)) {
+          sPlayer.closeContainer();
+          sPlayer.displayClientMessage(Component.translatable("lootr.message.emergency_conversion"), true);
+        }
+      }
+    }
   }
 }
