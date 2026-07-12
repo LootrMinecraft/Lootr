@@ -29,9 +29,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.ticks.ContainerSingleItem;
 import noobanidus.mods.lootr.common.api.*;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
-import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
-import noobanidus.mods.lootr.common.api.data.SimpleLootrEntityInstance;
 import noobanidus.mods.lootr.common.api.data.SimpleLootrInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
@@ -88,34 +86,55 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
     return compoundTag;
   }
 
+  /**
+   * Runs the complete server-side Lootr pot open transaction.
+   *
+   * <p>This method checks the player's existing open state before mutating it, so an empty
+   * generated stack can be treated as a successful {@code minecraft:empty} roll while a repeat
+   * open with no item remains a no-op.
+   *
+   * @return {@code null} when no per-player inventory is available, or when the player has
+   *     already opened this pot and has no item left to take. Returns {@link ItemStack#EMPTY}
+   *     when the open succeeded but the loot table rolled {@code minecraft:empty}, or a
+   *     non-empty stack taken from the player's per-player Lootr inventory.
+   */
   @Nullable
-  public ItemStack popItem(ServerPlayer player) {
-    ILootrInventory inventory = LootrAPI.getInventory(this, player);
-    if (inventory == null) {
+  private ItemStack openAndTakeItem(ServerPlayer player) {
+    ILootrInventory playerInventory = LootrAPI.getInventory(this, player);
+    if (playerInventory == null) {
       return null;
     }
 
-    ItemStack result = inventory.getItem(0);
-    if (result.isEmpty()) {
+    ItemStack itemToTake = playerInventory.getItem(0);
+    boolean hasItemToTake = !itemToTake.isEmpty();
+    boolean isFirstServerOpen = !this.hasServerOpened(player);
+    boolean isFirstVisualOpen = !this.hasVisualOpened(player);
+    if (!hasItemToTake && !isFirstServerOpen && !isFirstVisualOpen) {
       return null;
     }
 
-    inventory.setItem(0, ItemStack.EMPTY);
-    inventory.setChanged();
+    if (hasItemToTake) {
+      playerInventory.setItem(0, ItemStack.EMPTY);
+      playerInventory.setChanged();
+    }
 
-    this.performTrigger(player);
-    boolean shouldUpdate = false;
-    if (!this.hasServerOpened(player)) {
+    if (isFirstServerOpen) {
+      this.performTrigger(player);
       player.awardStat(LootrRegistry.getLootedStat());
       LootrRegistry.getStatTrigger().trigger(player);
     }
-    if (this.addOpener(player)) {
-      this.performOpen(player);
-      shouldUpdate = true;
-    }
-    this.lootrInstance.setHasBeenOpened();
 
-    if (shouldUpdate) {
+    boolean openersChanged = this.addOpener(player);
+    if (openersChanged) {
+      this.performOpen(player);
+    }
+
+    boolean isFirstGlobalOpen = !this.lootrInstance.hasBeenOpened();
+    if (isFirstGlobalOpen) {
+      this.lootrInstance.setHasBeenOpened();
+    }
+
+    if (openersChanged || isFirstGlobalOpen) {
       this.performUpdate(player);
     }
 
@@ -125,7 +144,7 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
       level.updateNeighborsAt(getBlockPos().below(), block);
     }
 
-    return result;
+    return itemToTake;
   }
 
   @Override
@@ -135,34 +154,44 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   }
 
   public boolean dropContent(ServerPlayer player) {
-    if (this.level != null && this.level.getServer() != null) {
-      ItemStack theItem = this.popItem(player);
-      if (theItem != null) {
-        double d = EntityType.ITEM.getWidth();
-        double e = 1.0 - d;
-        double f = d / 2.0;
-        Direction direction = Direction.UP;
-        BlockPos blockPos = this.worldPosition.relative(direction, 1);
-        double g = (double) blockPos.getX() + 0.5 * e + f;
-        double h = (double) blockPos.getY() + 0.5 + (double) (EntityType.ITEM.getHeight() / 2.0F);
-        double i = (double) blockPos.getZ() + 0.5 * e + f;
-        ItemEntity itemEntity = new ItemEntity(this.level, g, h, i, theItem.split(this.level.random.nextInt(21) + 10));
-        itemEntity.setDeltaMovement(Vec3.ZERO);
-        this.level.addFreshEntity(itemEntity);
-
-        for (ItemStack item : getDecorations().ordered()) {
-          ItemStack sherdStack = item.copy();
-          ItemEntity sherdEntity = new ItemEntity(this.level, g, h, i, sherdStack);
-          sherdEntity.setDeltaMovement(Vec3.ZERO);
-          this.level.addFreshEntity(sherdEntity);
-        }
-
-        PlatformAPI.performPotBreak(this, (ServerPlayer) player);
-        return true;
-      }
+    if (this.level == null || this.level.getServer() == null) {
+      return false;
     }
 
-    return false;
+    ItemStack takenItem = this.openAndTakeItem(player);
+    if (takenItem == null) {
+      return false;
+    }
+
+    this.spawnPotContents(takenItem);
+    PlatformAPI.performPotBreak(this, player);
+    return true;
+  }
+
+  /**
+   * Spawns the item taken from the player's per-player Lootr inventory and this pot's decoration sherds.
+   *
+   * <p>The taken item may be empty for a valid {@code minecraft:empty} roll; decoration sherds
+   * still spawn so an empty Lootr pot still emits its non-loot pot contents.
+   */
+  private void spawnPotContents(ItemStack takenItem) {
+    BlockPos spawnBlockPos = this.worldPosition.relative(Direction.UP, 1);
+    double spawnX = (double) spawnBlockPos.getX() + 0.5;
+    double spawnY = (double) spawnBlockPos.getY() + 0.5 + (double) (EntityType.ITEM.getHeight() / 2.0F);
+    double spawnZ = (double) spawnBlockPos.getZ() + 0.5;
+    if (!takenItem.isEmpty()) {
+      this.spawnItemEntity(takenItem.split(this.level.random.nextInt(21) + 10), spawnX, spawnY, spawnZ);
+    }
+
+    for (ItemStack decorationItem : getDecorations().ordered()) {
+      this.spawnItemEntity(decorationItem.copy(), spawnX, spawnY, spawnZ);
+    }
+  }
+
+  private void spawnItemEntity(ItemStack itemStack, double x, double y, double z) {
+    ItemEntity itemEntity = new ItemEntity(this.level, x, y, z, itemStack);
+    itemEntity.setDeltaMovement(Vec3.ZERO);
+    this.level.addFreshEntity(itemEntity);
   }
 
   public Direction getDirection() {

@@ -36,6 +36,15 @@ dependencies {
     }
 }
 
+sourceSets {
+    gameTest {
+        java.srcDirs = ['src/gametest/java']
+        resources.srcDirs = ['src/gametest/resources']
+        compileClasspath += sourceSets.main.output + configurations.compileClasspath
+        runtimeClasspath += output + sourceSets.main.runtimeClasspath
+    }
+}
+
 publishMods {
     file = tasks.jar.archiveFile
     modLoaders.add("neoforge")
@@ -109,6 +118,7 @@ neoForge {
     }
 
     validateAccessTransformers.set(true)
+    addModdingDependenciesTo(sourceSets.gameTest)
 
     mods {
         // define mod <-> source bindings
@@ -118,6 +128,9 @@ neoForge {
         "${mod_id}" {
             sourceSet(sourceSets.main)
             sourceSet(project.project(":common").sourceSets.main)
+        }
+        "${mod_id}_gametest" {
+            sourceSet(sourceSets.gameTest)
         }
     }
 
@@ -150,6 +163,13 @@ neoForge {
 
         server {
             server()
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        gameTestServer {
+            type = "gameTestServer"
+            sourceSet = sourceSets.gameTest
+            loadedMods.add(mods."${mod_id}_gametest")
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
 
