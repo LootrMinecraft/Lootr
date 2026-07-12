@@ -19,6 +19,7 @@
     "elytra.MixinEndCityPieces$EndCityPiece",
     "falling.MixinFallingBlockEntity",
     "filter.MixinLootTable",
+    "hopper.MixinAbstractContainerMenu",
     "hopper.MixinEntitySelector",
     "hopper.MixinHopperBlockEntity",
     "lock.MixinBaseContainerBlockEntity",
