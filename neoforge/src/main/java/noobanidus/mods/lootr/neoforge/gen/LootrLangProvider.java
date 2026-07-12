@@ -37,6 +37,7 @@ public class LootrLangProvider extends LanguageProvider {
 
 
     add("lootr.message.emergency_conversion", "The container you just opened has been converted into a Lootr container!");
+    add("lootr.message.cannot_insert", "Items cannot be inserted into Item Frames with Loot.");
 
     add(LootrRegistry.getChestBlock(), "Loot Chest");
     add(LootrRegistry.getTrappedChestBlock(), "Loot Chest");
