@@ -77,6 +77,8 @@ publishMods {
             projectSlug = "lootr-fabric"
             type = STABLE
             displayName = "lootr-fabric-${rootProject.minecraft_version}-${rootProject.mod_version}"
+            client = true
+            server = true
             accessToken = project.findProperty("curse_auth")
             projectId = project.findProperty('curseforge_id_fabric')
             announcementTitle = "Lootr ${rootProject.minecraft_version}-${rootProject.mod_version} for Fabric on CurseForge"
