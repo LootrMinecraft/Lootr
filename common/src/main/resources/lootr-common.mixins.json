@@ -21,7 +21,7 @@
     "filter.MixinLootTable",
     "hopper.MixinAbstractContainerMenu",
     "hopper.MixinHopperBlockEntity",
-    "integration.create.MixinSchematicItem",
+    "integration.create.MixinSchematicPrinter",
     "lock.MixinBaseContainerBlockEntity",
     "poi.MixinPoiType",
     "poi.MixinPoiTypes",
