@@ -12,6 +12,7 @@ import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.interfaces.accessor.ILootrItemFrameAccessor;
 import noobanidus.mods.lootr.common.entity.LootrItemFrame;
+import noobanidus.mods.lootr.common.integration.create.CreateIntegration;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -20,10 +21,7 @@ public class MixinStructureTemplate {
   @SuppressWarnings("UnresolvedMixinReference")
   @WrapOperation(method = {"lambda$placeEntities$0", "lambda$addEntitiesToWorld$0"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/ServerLevelAccessor;addFreshEntityWithPassengers(Lnet/minecraft/world/entity/Entity;)V"))
   private static void lootr$AddEntitiesToWorldInject(ServerLevelAccessor level, Entity entity, Operation<Void> original) {
-    if (LootrAPI.isDisabled()) {
-      return;
-    }
-    if (LootrAPI.shouldConvertStructureItemFrames() && entity.is(LootrTags.Entity.CONVERT_ITEM_FRAMES) && !entity.entityTags()
+    if (!LootrAPI.isDisabled() && !CreateIntegration.SKIP_ITEM_FRAMES && LootrAPI.shouldConvertStructureItemFrames() && entity.is(LootrTags.Entity.CONVERT_ITEM_FRAMES) && !entity.entityTags()
         .contains(LootrConstants.CAN_CONVERT_TAG) /* CAN_CONVERT_TAG is handled elsewhere */) {
       ILootrItemFrameAccessor<Entity> adapter = LootrAPI.getItemFrameAccessor(entity);
       if (adapter != null && !adapter.isFixed(entity) && !adapter.isInvisible(entity)) {
