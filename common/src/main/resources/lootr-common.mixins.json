@@ -22,7 +22,7 @@
     "hopper.MixinAbstractContainerMenu",
     "hopper.MixinEntitySelector",
     "hopper.MixinHopperBlockEntity",
-    "integration.create.MixinSchematicItem",
+    "integration.create.MixinSchematicPrinter",
     "lock.MixinBaseContainerBlockEntity",
     "poi.MixinPoiType",
     "poi.MixinPoiTypes",
