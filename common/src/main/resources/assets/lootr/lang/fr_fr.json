@@ -40,6 +40,8 @@
   "lootr.advancements.root.title": "Lootr",
   "lootr.advancements.social.description": "Open one of every Lootr container type!",
   "lootr.advancements.social.title": "Le Butin Sociale",
+  "lootr.advancements.trapped_chest.description": "Open your first Lootr trapped chest!",
+  "lootr.advancements.trapped_chest.title": "Surprise!",
   "lootr.commands.blockpos": "%s,%s,%s",
   "lootr.commands.create": "Un %s Lootr a été créé à %s en utilisant la table de butin %s.",
   "lootr.commands.summon": "Un wagonnet Lootr a été invoqué à %s en utilisant la table de butin %s.",
