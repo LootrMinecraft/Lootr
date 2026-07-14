@@ -274,7 +274,7 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   @Override
   protected void signalOpenCount(Level level, BlockPos pos, BlockState state, int p_155868_, int p_155869_) {
     super.signalOpenCount(level, pos, state, p_155868_, p_155869_);
-    if (LootrAPI.isCustomTrapped() && p_155868_ != p_155869_ && isInfoReferenceInventory()) {
+    if (state.is(LootrTags.Blocks.TRAPPED_CHESTS) || (LootrAPI.isCustomTrapped() && p_155868_ != p_155869_ && isInfoReferenceInventory())) {
       Block block = state.getBlock();
       level.updateNeighborsAt(pos, block);
       level.updateNeighborsAt(pos.below(), block);

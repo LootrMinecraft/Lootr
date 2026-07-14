@@ -158,6 +158,10 @@ public class LootrRegistry {
     return INSTANCE.getItemFrameTrigger();
   }
 
+  public static IContainerTrigger getTrappedTrigger () {
+    return INSTANCE.getTrappedTrigger();
+  }
+
   public static Stat<?> getLootedStat() {
     return INSTANCE.getLootedStat();
   }

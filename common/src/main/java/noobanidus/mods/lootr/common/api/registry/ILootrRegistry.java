@@ -101,4 +101,6 @@ public interface ILootrRegistry {
   IContainerTrigger getItemFrameTrigger();
 
   ParticleType<ParticleColorOption> getUnopenedParticleType ();
+
+  IContainerTrigger getTrappedTrigger();
 }

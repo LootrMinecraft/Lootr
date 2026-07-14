@@ -226,4 +226,9 @@ public class LootrRegistryImpl implements ILootrRegistry {
   public ParticleType<ParticleColorOption> getUnopenedParticleType() {
     return ModParticles.UNOPENED_PARTICLE.get();
   }
+
+  @Override
+  public IContainerTrigger getTrappedTrigger() {
+    return ModAdvancements.TRAPPED_CHEST.get();
+  }
 }

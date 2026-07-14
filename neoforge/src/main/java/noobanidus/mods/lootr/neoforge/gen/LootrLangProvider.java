@@ -39,6 +39,8 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.message.emergency_conversion", "The container you just opened has been converted into a Lootr container!");
     add("lootr.message.cannot_insert", "Items cannot be inserted into Item Frames with Loot.");
 
+
+
     add(LootrRegistry.getChestBlock(), "Loot Chest");
     add(LootrRegistry.getTrappedChestBlock(), "Loot Chest");
     add(LootrRegistry.getBarrelBlock(), "Loot Barrel");
@@ -85,6 +87,8 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.advancements.a_pot.description", "Loot your first Lootr decorated pot!");
     add("lootr.advancements.archaeologist.title", "That Was 90% Gravity");
     add("lootr.advancements.archaeologist.description", "Loot all of Lootr's archaeological blocks!");
+    add("lootr.advancements.trapped_chest.title", "Surprise!");
+    add("lootr.advancements.trapped_chest.description", "Open your first Lootr trapped chest!");
 
     add("itemGroup.lootr", "Lootr");
     // Should be fixed hopefully
