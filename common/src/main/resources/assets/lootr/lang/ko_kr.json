@@ -40,6 +40,8 @@
   "lootr.advancements.root.title": "Lootr",
   "lootr.advancements.social.description": "모든 종류의 전리품 컨테이너를 한번씩 열어보세요!",
   "lootr.advancements.social.title": "사교적인 전리품",
+  "lootr.advancements.trapped_chest.description": "Open your first Lootr trapped chest!",
+  "lootr.advancements.trapped_chest.title": "Surprise!",
   "lootr.commands.blockpos": "%s,%s,%s",
   "lootr.commands.create": "%s를 %s에 전리품 테이블 %s를 사용하여 생성하였습니다.",
   "lootr.commands.summon": "전리품 상자가 든 광산 수레를 %s에 전리품 테이블 %s를 사용하여 생성하였습니다.",
