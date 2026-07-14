@@ -40,6 +40,8 @@
   "lootr.advancements.root.title": "Добытчик",
   "lootr.advancements.social.description": "Откройте по одному из всех существующих видов контейнеров с добычей",
   "lootr.advancements.social.title": "Общественная добыча",
+  "lootr.advancements.trapped_chest.description": "Откройте первый сундук-ловушку с добычей",
+  "lootr.advancements.trapped_chest.title": "Сюрприз!",
   "lootr.commands.blockpos": "%s,%s,%s",
   "lootr.commands.create": "Создано: %s в %s, используя таблицу добычи %s.",
   "lootr.commands.summon": "Создана вагонетка с сундуком с добычей в %s, используя таблицу добычи %s.",

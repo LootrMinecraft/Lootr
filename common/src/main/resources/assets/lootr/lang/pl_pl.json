@@ -40,6 +40,8 @@
   "lootr.advancements.root.title": "Lootr",
   "lootr.advancements.social.description": "Open one of every Lootr container type!",
   "lootr.advancements.social.title": "Łupy społeczności",
+  "lootr.advancements.trapped_chest.description": "Open your first Lootr trapped chest!",
+  "lootr.advancements.trapped_chest.title": "Surprise!",
   "lootr.commands.blockpos": "%s,%s,%s",
   "lootr.commands.create": "Utworzono Lootr %s w %s za pomocą tabeli łupów %s.",
   "lootr.commands.summon": "Przywołano wagonik z łupami w %s za pomocą tabeli łupów %s.",

@@ -40,6 +40,8 @@
   "lootr.advancements.root.title": "Lootr",
   "lootr.advancements.social.description": "打开过每一种 Lootr 容器！",
   "lootr.advancements.social.title": "战利品社会化",
+  "lootr.advancements.trapped_chest.description": "Open your first Lootr trapped chest!",
+  "lootr.advancements.trapped_chest.title": "Surprise!",
   "lootr.commands.blockpos": "%s，%s，%s",
   "lootr.commands.create": "已使用战利品表 %3$s 于 %2$s 处创建出了 Lootr 的%1$s。",
   "lootr.commands.summon": "已使用战利品表 %2$s 于 %1$s 处生成出了 Lootr 矿车。",
