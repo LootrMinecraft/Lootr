@@ -40,6 +40,8 @@
   "lootr.advancements.root.title": "Lootr",
   "lootr.advancements.social.description": "Open one of every Lootr container type!",
   "lootr.advancements.social.title": "社交戰利品",
+  "lootr.advancements.trapped_chest.description": "Open your first Lootr trapped chest!",
+  "lootr.advancements.trapped_chest.title": "Surprise!",
   "lootr.commands.blockpos": "%s,%s,%s",
   "lootr.commands.create": "在 %s 使用戰利品表 %s 建立了一個 Lootr %s。",
   "lootr.commands.summon": "在 %s 使用戰利品表 %s 召喚了一輛 Lootr 礦車。",
