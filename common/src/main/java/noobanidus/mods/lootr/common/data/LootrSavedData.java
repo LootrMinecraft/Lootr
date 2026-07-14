@@ -264,7 +264,17 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
   public void save(File pFile, HolderLookup.Provider provider) {
     if (isDirty()) {
       pFile.getParentFile().mkdirs();
+      CompoundTag compoundTag = new CompoundTag();
+      compoundTag.put("data", this.save(new CompoundTag(), provider));
+      compoundTag.putInt("DataVersion", net.minecraft.SharedConstants.getCurrentVersion().getDataVersion().getVersion());
+      setDirty(false);
+      noobanidus.mods.lootr.common.command.IOUtil.withIOWorker(() -> {
+        try {
+          net.minecraft.nbt.NbtIo.writeCompressed(compoundTag, pFile.toPath());
+        } catch (java.io.IOException e) {
+          LootrAPI.LOG.error("Failed to save Lootr data asynchronously to {}", pFile, e);
+        }
+      });
     }
-    super.save(pFile, provider);
   }
 }
