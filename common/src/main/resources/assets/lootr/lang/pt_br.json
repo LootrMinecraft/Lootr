@@ -40,6 +40,8 @@
   "lootr.advancements.root.title": "Lootr",
   "lootr.advancements.social.description": "Abra um de cada tipo de container Lootr!",
   "lootr.advancements.social.title": "Loot socializado",
+  "lootr.advancements.trapped_chest.description": "Open your first Lootr trapped chest!",
+  "lootr.advancements.trapped_chest.title": "Surprise!",
   "lootr.commands.blockpos": "%s,%s,%s",
   "lootr.commands.create": "Criou um Lootr %s em %s usando a tabela de loot %s.",
   "lootr.commands.summon": "Invocou um carrinho de Lootr em %s usando a tabela de loot %s.",
