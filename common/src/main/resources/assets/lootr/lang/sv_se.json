@@ -40,6 +40,8 @@
   "lootr.advancements.root.title": "Lootr",
   "lootr.advancements.social.description": "Open one of every Lootr container type!",
   "lootr.advancements.social.title": "Socialiserad skatt",
+  "lootr.advancements.trapped_chest.description": "Open your first Lootr trapped chest!",
+  "lootr.advancements.trapped_chest.title": "Surprise!",
   "lootr.commands.blockpos": "%s,%s,%s",
   "lootr.commands.create": "Skapade en %s vid %s med skattabellen %s.",
   "lootr.commands.summon": "Skapade en gruvvagn vid %s med skattabellen %s.",
