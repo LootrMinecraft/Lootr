@@ -40,6 +40,8 @@
   "lootr.advancements.root.title": "Lootr",
   "lootr.advancements.social.description": "Nyiss ki mindenféle Lootr-tárolóból egyet!",
   "lootr.advancements.social.title": "Közös kaland, külön zsákmány",
+  "lootr.advancements.trapped_chest.description": "Open your first Lootr trapped chest!",
+  "lootr.advancements.trapped_chest.title": "Surprise!",
   "lootr.commands.blockpos": "%s,%s,%s",
   "lootr.commands.create": "Created a Lootr %s at %s using the loot table %s.",
   "lootr.commands.summon": "Summoned a Lootr Cart at %s using the loot table %s.",
