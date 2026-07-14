@@ -78,9 +78,6 @@ publishMods {
         changelogText += utils.getExecOutput(['git', 'log', "--pretty=tformat:- %s [(%h)](${gitRepo}/commit/%h)", '' + gitPrevCommit + '..' + gitCommit])
     }
 
-    // Limit the changelog to 500 characters
-    changelogText = changelogText.take(500)
-
     def uploadDependencies = [
             "fabric-api": true,
             "cloth-config": true
@@ -97,6 +94,8 @@ publishMods {
             announcementTitle = "Lootr ${rootProject.minecraft_version}-${rootProject.mod_version} for Fabric on CurseForge"
             minecraftVersions.add(project.minecraft_version)
             changelog = changelogText
+            client = true
+            server = true
 
             uploadDependencies.each { dep, required ->
                 if (required) {
