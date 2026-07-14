@@ -40,6 +40,8 @@
   "lootr.advancements.root.title": "Lootr",
   "lootr.advancements.social.description": "Open one of every Lootr container type!",
   "lootr.advancements.social.title": "Soshal Luut",
+  "lootr.advancements.trapped_chest.description": "Open your first Lootr trapped chest!",
+  "lootr.advancements.trapped_chest.title": "Surprise!",
   "lootr.commands.blockpos": "%s,%s,%s",
   "lootr.commands.create": "Maed a majik bokz %s @ %s uzin da luut ting %s.",
   "lootr.commands.summon": "Maed a majik minecat @ %s uzin da luut ting %s.",
