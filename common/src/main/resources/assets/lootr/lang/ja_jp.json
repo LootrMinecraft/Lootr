@@ -40,6 +40,8 @@
   "lootr.advancements.root.title": "Lootr",
   "lootr.advancements.social.description": "Lootrのコンテナを1個開く！",
   "lootr.advancements.social.title": "宝箱の多様性",
+  "lootr.advancements.trapped_chest.description": "Open your first Lootr trapped chest!",
+  "lootr.advancements.trapped_chest.title": "Surprise!",
   "lootr.commands.blockpos": "%s,%s,%s",
   "lootr.commands.create": "ルートテーブル%3$sを使用して、%2$sにLootrの%1$sを作成しました",
   "lootr.commands.summon": "ルートテーブル%2$sを使用して、%1$sにLootrのトロッコを召喚しました",
