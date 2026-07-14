@@ -5,8 +5,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.EnchantmentTags;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
@@ -16,7 +14,6 @@ import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -33,7 +30,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.PlatformAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.block.entity.LootrDecoratedPotBlockEntity;
 import org.jetbrains.annotations.Nullable;
@@ -56,7 +52,6 @@ public class LootrDecoratedPotBlock extends DecoratedPotBlock {
     if (var7 instanceof LootrDecoratedPotBlockEntity decoratedPotBlockEntity) {
       decoratedPotBlockEntity.wobble(DecoratedPotBlockEntity.WobbleStyle.NEGATIVE);
       level.gameEvent(player, GameEvent.BLOCK_CHANGE, blockPos);
-      // TODO: Only do this for the breaking player
       if (!level.isClientSide()) {
         decoratedPotBlockEntity.dropContent((ServerPlayer) player);
       }
@@ -65,13 +60,13 @@ public class LootrDecoratedPotBlock extends DecoratedPotBlock {
 
   @Override
   public BlockState playerWillDestroy(Level level, BlockPos blockPos, BlockState blockState, Player player) {
-		this.spawnDestroyParticles(level, player, blockPos, blockState);
-		if (blockState.is(BlockTags.GUARDED_BY_PIGLINS)) {
-			PiglinAi.angerNearbyPiglins(player, false);
-		}
+    this.spawnDestroyParticles(level, player, blockPos, blockState);
+    if (blockState.is(BlockTags.GUARDED_BY_PIGLINS)) {
+      PiglinAi.angerNearbyPiglins(player, false);
+    }
 
-		level.gameEvent(GameEvent.BLOCK_DESTROY, blockPos, GameEvent.Context.of(player, blockState));
-		return blockState;
+    level.gameEvent(GameEvent.BLOCK_DESTROY, blockPos, GameEvent.Context.of(player, blockState));
+    return blockState;
   }
 
   @Override
@@ -99,6 +94,17 @@ public class LootrDecoratedPotBlock extends DecoratedPotBlock {
 
   @Override
   protected void onProjectileHit(Level level, BlockState blockState, BlockHitResult blockHitResult, Projectile projectile) {
+    if (level.isClientSide()) {
+      return;
+    }
+
+    if (projectile.getOwner() instanceof ServerPlayer player) {
+      var blockPos = blockHitResult.getBlockPos();
+
+      if (level.getBlockEntity(blockPos) instanceof LootrDecoratedPotBlockEntity decoratedPotBlockEntity) {
+        decoratedPotBlockEntity.dropContent(player);
+      }
+    }
   }
 
   @Override
@@ -137,8 +143,8 @@ public class LootrDecoratedPotBlock extends DecoratedPotBlock {
     return super.getShape(blockState, blockGetter, blockPos, collisionContext);
   }
 
-  private CollisionState getCollisionState (BlockGetter getter, BlockPos pos, CollisionContext context) {
-    if (!(getter.getBlockEntity(pos) instanceof LootrDecoratedPotBlockEntity potBlockEntity))  {
+  private CollisionState getCollisionState(BlockGetter getter, BlockPos pos, CollisionContext context) {
+    if (!(getter.getBlockEntity(pos) instanceof LootrDecoratedPotBlockEntity potBlockEntity)) {
       return CollisionState.OTHER;
     }
 
