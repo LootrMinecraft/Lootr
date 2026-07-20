@@ -95,7 +95,18 @@ public class LootrDecoratedPotBlock extends DecoratedPotBlock {
   }
 
   @Override
-  protected void onProjectileHit(@NonNull Level level, @NonNull BlockState blockState, @NonNull BlockHitResult blockHitResult, @NonNull Projectile projectile) {
+  protected void onProjectileHit(Level level, BlockState blockState, BlockHitResult blockHitResult, Projectile projectile) {
+    if (level.isClientSide()) {
+      return;
+    }
+
+    if (projectile.getOwner() instanceof ServerPlayer player) {
+      var blockPos = blockHitResult.getBlockPos();
+
+      if (level.getBlockEntity(blockPos) instanceof LootrDecoratedPotBlockEntity decoratedPotBlockEntity) {
+        decoratedPotBlockEntity.dropContent(player);
+      }
+    }
   }
 
   @Override
