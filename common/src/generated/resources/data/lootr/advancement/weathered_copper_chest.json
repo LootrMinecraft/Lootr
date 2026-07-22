@@ -2,7 +2,7 @@
   "parent": "lootr:exposed_copper_chest",
   "criteria": {
     "weathered_copper_opened": {
-      "trigger": "lootr:weatherd_copper_chest"
+      "trigger": "lootr:weathered_copper_chest"
     }
   },
   "display": {
