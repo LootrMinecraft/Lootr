@@ -30,6 +30,10 @@ public class ModAdvancements {
   public static final DeferredHolder<CriterionTrigger<?>, ContainerTrigger> OXIDIZED_COPPER_CHEST = REGISTER.register("oxidized_copper_chest", ContainerTrigger::new);
   public static final DeferredHolder<CriterionTrigger<?>, ContainerTrigger> TRAPPED_CHEST = REGISTER.register("trapped_chest", ContainerTrigger::new);
 
+  static {
+    REGISTER.addAlias(LootrAPI.rl("weatherd_copper_chest"), LootrAPI.rl("weathered_copper_chest"));
+  }
+
   public static void register(IEventBus bus) {
     REGISTER.register(bus);
   }
