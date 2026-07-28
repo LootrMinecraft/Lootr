@@ -32,8 +32,10 @@ public class MixinHopperBlockEntity {
   @WrapMethod(method = "getEntityContainer")
   private static Container lootr$preventHopperEntityInteraction(Level level, double x, double y, double z, Operation<Container> original) {
     var result = original.call(level, x, y, z);
-    Entity entity = (Entity) result;
-    if (entity == null || entity.getType().is(LootrTags.Entity.CONTAINERS)) {
+    if (!(result instanceof Entity entity)) {
+      return result;
+    }
+    if (entity.getType().is(LootrTags.Entity.CONTAINERS)) {
       return null;
     }
     if (LootrAPI.resolveEntity(entity) instanceof ILootrEntity) {

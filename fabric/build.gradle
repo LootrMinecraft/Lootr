@@ -56,6 +56,11 @@ dependencies {
 
     implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:${rootProject.mixin_extras_version}"))
     implementation("io.github.llamalad7:mixinextras-fabric:${rootProject.mixin_extras_version}")
+
+    testImplementation platform("org.junit:junit-bom:5.11.4")
+    testImplementation "org.junit.jupiter:junit-jupiter"
+    testImplementation "org.mockito:mockito-core:5.14.2"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher"
 }
 
 publishMods {
@@ -188,6 +193,10 @@ loom {
 
 tasks.named("compileJava", JavaCompile) {
     source(project.project(":common").sourceSets.main.allJava)
+}
+
+tasks.named("test", Test) {
+    useJUnitPlatform()
 }
 
 tasks.named("javadoc", Javadoc).configure {
