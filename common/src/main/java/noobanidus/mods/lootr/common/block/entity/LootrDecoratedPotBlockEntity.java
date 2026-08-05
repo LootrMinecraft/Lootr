@@ -94,9 +94,9 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
    * open with no item remains a no-op.
    *
    * @return {@code null} when no per-player inventory is available, or when the player has
-   *     already opened this pot and has no item left to take. Returns {@link ItemStack#EMPTY}
-   *     when the open succeeded but the loot table rolled {@code minecraft:empty}, or a
-   *     non-empty stack taken from the player's per-player Lootr inventory.
+   * already opened this pot and has no item left to take. Returns {@link ItemStack#EMPTY}
+   * when the open succeeded but the loot table rolled {@code minecraft:empty}, or a
+   * non-empty stack taken from the player's per-player Lootr inventory.
    */
   @Nullable
   private ItemStack openAndTakeItem(ServerPlayer player) {
@@ -420,19 +420,9 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
     return new double[]{0.4, 0.6};
   }
 
-  private int randomOffset = -1;
-
   @Override
   public int getRandomOffset() {
-    if (randomOffset == -1) {
-      var level = getLevel();
-      if (level != null) {
-        randomOffset = level.random.nextInt(20);
-      } else {
-        randomOffset = 1;
-      }
-    }
-    return 0;
+    return lootrInstance.getRandomOffset();
   }
 
   @AutoService(ILootrBlockEntityConverter.class)

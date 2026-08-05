@@ -15,8 +15,10 @@ import noobanidus.mods.lootr.common.api.NBTConstants;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Supplier;
 
 public class SimpleLootrInstance {
@@ -28,6 +30,7 @@ public class SimpleLootrInstance {
   protected String cachedId;
   protected boolean clientOpened = false;
   protected boolean savingToItem = false;
+  protected int randomOffset = -1;
 
   protected boolean providesOwnUuid = false;
 
@@ -179,5 +182,12 @@ public class SimpleLootrInstance {
     } else {
       LootrAPI.LOG.error("Tried to fillUpdateTag on the client side for SimpleLootrInstance: {}", this);
     }
+  }
+
+  public int getRandomOffset() {
+    if (randomOffset == -1) {
+      randomOffset = ThreadLocalRandom.current().nextInt(20);
+    }
+    return randomOffset;
   }
 }

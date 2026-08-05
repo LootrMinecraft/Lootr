@@ -40,6 +40,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   private final NonNullList<ItemStack> inventory = NonNullList.withSize(1, ItemStack.EMPTY);
@@ -435,14 +436,9 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   @Override
   public int getRandomOffset() {
     if (randomOffset == -1) {
-      var level = level();
-      if (level != null) {
-        randomOffset = level.random.nextInt(20);
-      } else {
-        randomOffset = 1;
-      }
+      randomOffset = ThreadLocalRandom.current().nextInt(20);
     }
-    return 0;
+    return randomOffset;
   }
 
   @Override

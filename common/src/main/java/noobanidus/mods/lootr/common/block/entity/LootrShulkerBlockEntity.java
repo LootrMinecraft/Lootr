@@ -375,19 +375,9 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
     return 1.1;
   }
 
-  private int randomOffset = -1;
-
   @Override
   public int getRandomOffset() {
-    if (randomOffset == -1) {
-      var level = getLevel();
-      if (level != null) {
-        randomOffset = level.random.nextInt(20);
-      } else {
-        randomOffset = 1;
-      }
-    }
-    return 0;
+    return simpleLootrInstance.getRandomOffset();
   }
 
   private static void doNeighborUpdates(Level pLevel, BlockPos pPos, BlockState pState) {

@@ -87,19 +87,9 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
     }
   }
 
-  private int randomOffset = -1;
-
   @Override
   public int getRandomOffset() {
-    if (randomOffset == -1) {
-      var level = getLevel();
-      if (level != null) {
-        randomOffset = level.random.nextInt(20);
-      } else {
-        randomOffset = 1;
-      }
-    }
-    return 0;
+    return simpleLootrInstance.getRandomOffset();
   }
 
   @Override
@@ -363,7 +353,7 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
     return this.item;
   }
 
-  public boolean isBrushingPlayer (PlayerContext context) {
+  public boolean isBrushingPlayer(PlayerContext context) {
     return context.hasPlayer() && isBrushingPlayer(context.player());
   }
 
