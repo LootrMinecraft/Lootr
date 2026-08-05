@@ -606,6 +606,8 @@ public class LootrAPI {
     return INSTANCE.getGameTime();
   }
 
+  private static Container closingContainer = null;
+
   public static void closeContainers(BlockEntity blockEntity) {
     Level level = blockEntity.getLevel();
 
@@ -613,8 +615,14 @@ public class LootrAPI {
       return;
     }
 
+    if (container.equals(closingContainer)) {
+      return;
+    }
+
     AABB aabb = new AABB(blockEntity.getBlockPos()).inflate(8.5);
     List<Player> players = level.getEntities(EntityTypeTest.forClass(Player.class), aabb, (a) -> true);
+
+    closingContainer = container;
 
     for (Player player : players) {
       if (!player.hasContainerOpen() || !(player instanceof ServerPlayer sPlayer)) {
@@ -633,5 +641,7 @@ public class LootrAPI {
         }
       }
     }
+
+    closingContainer = null;
   }
 }
