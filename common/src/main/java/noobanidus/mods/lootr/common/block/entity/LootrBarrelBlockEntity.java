@@ -283,6 +283,11 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   }
 
   @Override
+  public void setHasBeenOpened(boolean value) {
+    simpleLootrInstance.setHasBeenOpened(value);
+  }
+
+  @Override
   public String getInfoKey() {
     return this.simpleLootrInstance.getInfoKey();
   }

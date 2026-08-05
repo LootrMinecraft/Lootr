@@ -371,6 +371,11 @@ public class LootrShulkerBlockEntity extends RandomizableContainerBlockEntity im
   }
 
   @Override
+  public void setHasBeenOpened(boolean value) {
+    simpleLootrInstance.setHasBeenOpened(value);
+  }
+
+  @Override
   public double getParticleYOffset() {
     return 1.1;
   }

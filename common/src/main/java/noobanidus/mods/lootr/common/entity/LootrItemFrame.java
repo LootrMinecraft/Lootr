@@ -446,6 +446,11 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
     return LootrRegistry.getItemFrameTrigger();
   }
 
+  @Override
+  public void setHasBeenOpened(boolean value) {
+    instance.setHasBeenOpened(value);
+  }
+
   @AutoService(ILootrEntityConverter.class)
   public static class DefaultConverter implements ILootrEntityConverter<LootrItemFrame> {
     @Override

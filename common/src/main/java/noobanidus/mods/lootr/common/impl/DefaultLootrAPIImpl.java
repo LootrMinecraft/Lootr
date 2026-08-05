@@ -19,7 +19,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.world.level.block.entity.PotDecorations;
@@ -37,7 +36,6 @@ import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
 import noobanidus.mods.lootr.common.api.processor.ILootrBlockEntityProcessor;
 import noobanidus.mods.lootr.common.api.processor.ILootrEntityProcessor;
-import noobanidus.mods.lootr.common.api.LootrConstants;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.client.ClientHooks;
 import noobanidus.mods.lootr.common.data.DataStorage;
@@ -158,13 +156,13 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
       return;
     }
 
-    // TODO: Refactor this to avoid loading the data save unnecessarily
     if (LootrAPI.getCurrentTicks() % (LootrAPI.getTickDelay() + provider.getRandomOffset()) == 0) {
-      if (LootrAPI.isAnythingDecaying()) {
-        if (LootrAPI.shouldPerformDecayWhileTicking() && LootrAPI.isDecayed(provider) && provider.hasBeenOpened() && provider.canDecay()) {
+      if (LootrAPI.isAnythingDecaying() && provider.canDecay() && provider.hasBeenOpened() && (LootrAPI.shouldPerformDecayWhileTicking() || LootrAPI.shouldStartDecayWhileTicking())) {
+        boolean isDecayed = LootrAPI.isDecayed(provider);
+        if (LootrAPI.shouldPerformDecayWhileTicking() && isDecayed) {
           provider.performDecay();
           return;
-        } else if (LootrAPI.shouldStartDecayWhileTicking() && !LootrAPI.isDecayed(provider) && provider.hasBeenOpened() && provider.canDecay()) {
+        } else if (LootrAPI.shouldStartDecayWhileTicking() && !isDecayed) {
           int decayValue = LootrAPI.getRemainingDecayValue(provider);
           if (decayValue == -1) {
             if (LootrAPI.isDecaying(provider)) {
@@ -174,16 +172,18 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
         }
       }
       if (LootrAPI.isAnythingRefreshing()) {
-        if (LootrAPI.shouldPerformRefreshWhileTicking() && LootrAPI.isRefreshed(provider) && provider.hasBeenOpened() && provider.canRefresh()) {
-          provider.performRefresh();
-          provider.performClose();
-          provider.performUpdate();
-        }
-        if (LootrAPI.shouldStartRefreshWhileTicking() && !LootrAPI.isRefreshed(provider) && provider.hasBeenOpened() && provider.canRefresh()) {
-          int refreshValue = LootrAPI.getRemainingRefreshValue(provider);
-          if (refreshValue == -1) {
-            if (LootrAPI.isRefreshing(provider)) {
-              LootrAPI.setRefreshing(provider);
+        if (provider.canRefresh() && provider.hasBeenOpened() && (LootrAPI.shouldPerformRefreshWhileTicking() || LootrAPI.shouldStartRefreshWhileTicking())) {
+          var isRefreshed = LootrAPI.isRefreshed(provider);
+          if (LootrAPI.shouldPerformRefreshWhileTicking() && isRefreshed) {
+            provider.performRefresh();
+            provider.performClose();
+            provider.performUpdate();
+          } else if (LootrAPI.shouldStartRefreshWhileTicking() && !isRefreshed) {
+            int refreshValue = LootrAPI.getRemainingRefreshValue(provider);
+            if (refreshValue == -1) {
+              if (LootrAPI.isRefreshing(provider)) {
+                LootrAPI.setRefreshing(provider);
+              }
             }
           }
         }
@@ -243,7 +243,8 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  public final ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler, @Nullable MenuBuilder menuBuilder) {
+  public final ILootrInventory getInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller
+      filler, @Nullable MenuBuilder menuBuilder) {
     ILootrInventory inventory = DataStorage.getInventory(provider, player, filler);
     if (inventory != null && menuBuilder != null) {
       inventory.setMenuBuilder(menuBuilder);
@@ -327,7 +328,8 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   private static final BoundingBox DESERT_PYRAMID_ADDITIONAL = new BoundingBox(-5, -30, -5, 5, 4, 4);
 
   @Override
-  public boolean isTaggedStructurePresent(ServerLevel level, ChunkPos chunkPos, TagKey<Structure> tag, BlockPos pos) {
+  public boolean isTaggedStructurePresent(ServerLevel level, ChunkPos chunkPos, TagKey<Structure> tag, BlockPos
+      pos) {
     Registry<Structure> registry = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
     List<StructureStart> starts = level.structureManager()
         .startsForStructure(chunkPos, o -> registry.getHolder(registry.getId(o)).map(b -> b.is(tag)).orElse(false));
@@ -536,7 +538,8 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
       return false;
     }
 
-    var tag = server.registryAccess().registryOrThrow(Registries.STRUCTURE).getTag(LootrTags.Structure.REFRESH_STRUCTURES);
+    var tag = server.registryAccess().registryOrThrow(Registries.STRUCTURE)
+        .getTag(LootrTags.Structure.REFRESH_STRUCTURES);
     return tag.isPresent();
   }
 
@@ -563,7 +566,8 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
       return false;
     }
 
-    var tag = server.registryAccess().registryOrThrow(Registries.STRUCTURE).getTag(LootrTags.Structure.DECAY_STRUCTURES);
+    var tag = server.registryAccess().registryOrThrow(Registries.STRUCTURE)
+        .getTag(LootrTags.Structure.DECAY_STRUCTURES);
     return tag.isPresent();
   }
 }

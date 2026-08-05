@@ -109,6 +109,10 @@ public class SimpleLootrInstance {
     this.hasBeenOpened = true;
   }
 
+  public void setHasBeenOpened (boolean value) {
+    this.hasBeenOpened = false;
+  }
+
   public boolean isSavingToItem() {
     return savingToItem;
   }

@@ -88,6 +88,11 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
   }
 
   @Override
+  public void setHasBeenOpened(boolean value) {
+    simpleLootrInstance.setHasBeenOpened(value);
+  }
+
+  @Override
   public int getRandomOffset() {
     return simpleLootrInstance.getRandomOffset();
   }

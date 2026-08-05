@@ -153,6 +153,11 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
     PlatformAPI.performPotBreak(this, player);
   }
 
+  @Override
+  public void setHasBeenOpened(boolean value) {
+    lootrInstance.setHasBeenOpened(value);
+  }
+
   public boolean dropContent(ServerPlayer player) {
     if (this.level == null || this.level.getServer() == null) {
       return false;

@@ -272,6 +272,11 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   }
 
   @Override
+  public void setHasBeenOpened(boolean value) {
+    simpleLootrInstance.setHasBeenOpened(value);
+  }
+
+  @Override
   public int getRandomOffset() {
     return simpleLootrInstance.getRandomOffset();
   }

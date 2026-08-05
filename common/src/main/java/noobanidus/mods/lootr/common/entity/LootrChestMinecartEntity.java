@@ -337,6 +337,11 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
   @Override
+  public void setHasBeenOpened(boolean value) {
+    hasBeenOpened = value;
+  }
+
+  @Override
   protected void applyNaturalSlowdown() {
     float f = 0.98F;
     if (this.isInWater()) {

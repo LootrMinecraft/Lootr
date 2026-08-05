@@ -154,12 +154,17 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
   default void performDecay() {
   }
 
+  default void setHasBeenOpened (boolean value) {
+
+  }
+
   default void performRefresh() {
     ILootrSavedData data = LootrAPI.getData(this);
     if (data != null) {
       data.refresh();
       data.clearOpeners();
       NewTickingData.getRefreshData().clearTicking(LootrAPI.getServer(), this.getInfoUUID());
+      setHasBeenOpened(false);
       markChanged();
     }
   }
