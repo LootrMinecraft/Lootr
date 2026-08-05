@@ -144,6 +144,10 @@ public interface ILootrAPI {
 
   boolean isDimensionBlocked(ResourceKey<Level> dimension);
 
+  boolean isAnythingDecaying ();
+
+  boolean isAnythingRefreshing();
+
   boolean isDimensionDecaying(ResourceKey<Level> dimension);
 
   boolean isDimensionRefreshing(ResourceKey<Level> dimension);

@@ -282,17 +282,20 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
 
   @Override
   public Style getInvalidStyle() {
-    return !isMessageStylesEnabled() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true);
+    return !isMessageStylesEnabled() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED))
+        .withBold(true);
   }
 
   @Override
   public Style getDecayStyle() {
-    return !isMessageStylesEnabled() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true);
+    return !isMessageStylesEnabled() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED))
+        .withBold(true);
   }
 
   @Override
   public Style getRefreshStyle() {
-    return !isMessageStylesEnabled() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true);
+    return !isMessageStylesEnabled() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE))
+        .withBold(true);
   }
 
   @Override

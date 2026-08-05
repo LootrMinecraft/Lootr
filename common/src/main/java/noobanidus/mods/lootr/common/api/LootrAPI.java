@@ -222,6 +222,13 @@ public class LootrAPI {
     return INSTANCE.isDecaying(provider);
   }
 
+  public static boolean isAnythingDecaying () {
+    return INSTANCE.isAnythingDecaying();
+  }
+
+  public static boolean isAnythingRefreshing () {
+    return INSTANCE.isAnythingRefreshing();
+  }
 
   public static Set<String> getModidDecayWhitelist() {
     return INSTANCE.getModidDecayWhitelist();

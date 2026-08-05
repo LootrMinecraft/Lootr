@@ -506,4 +506,58 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
 
     return null;
   }
+
+  @Override
+  public boolean isAnythingRefreshing() {
+    if (shouldRefreshAll()) {
+      return true;
+    }
+
+    if (!getRefreshDimensions().isEmpty()) {
+      return true;
+    }
+
+    if (!getRefreshWhitelist().isEmpty()) {
+      return true;
+    }
+
+    if (!getRefreshModids().isEmpty()) {
+      return true;
+    }
+
+    MinecraftServer server = getServer();
+    if (server == null) {
+      return false;
+    }
+
+    var tag = server.registryAccess().registryOrThrow(Registries.STRUCTURE).getTag(LootrTags.Structure.REFRESH_STRUCTURES);
+    return tag.isPresent();
+  }
+
+  @Override
+  public boolean isAnythingDecaying() {
+    if (shouldDecayAll()) {
+      return true;
+    }
+
+    if (!getDecayDimensions().isEmpty()) {
+      return true;
+    }
+
+    if (!getDecayWhitelist().isEmpty()) {
+      return true;
+    }
+
+    if (!getModidDecayWhitelist().isEmpty()) {
+      return true;
+    }
+
+    MinecraftServer server = getServer();
+    if (server == null) {
+      return false;
+    }
+
+    var tag = server.registryAccess().registryOrThrow(Registries.STRUCTURE).getTag(LootrTags.Structure.DECAY_STRUCTURES);
+    return tag.isPresent();
+  }
 }
