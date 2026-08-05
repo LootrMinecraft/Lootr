@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.common.api.data;
 
+import com.google.common.base.Suppliers;
 import com.google.common.collect.Sets;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.core.HolderLookup;
@@ -38,7 +39,7 @@ public class SimpleLootrInstance {
 
   public SimpleLootrInstance(Supplier<Set<UUID>> visualOpenersSupplier, int size) {
     this.emptyItemList = NonNullList.withSize(size, ItemStack.EMPTY);
-    this.visualOpenersSupplier = visualOpenersSupplier;
+    this.visualOpenersSupplier = Suppliers.memoize(visualOpenersSupplier::get);
   }
 
   @Deprecated
