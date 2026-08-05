@@ -279,6 +279,7 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
     public boolean skip_logging_no_loot_table_at_generation = true;
     @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
     public SaveMode save_mode = SaveMode.SMART;
+    public int tickDelay = 20;
   }
 
   public static class Breaking {

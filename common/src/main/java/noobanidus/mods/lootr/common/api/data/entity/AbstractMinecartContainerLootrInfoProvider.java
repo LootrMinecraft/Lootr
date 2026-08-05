@@ -129,4 +129,9 @@ public record AbstractMinecartContainerLootrInfoProvider(
   public void setClientOpened(boolean opened) {
 
   }
+
+  @Override
+  public int getRandomOffset() {
+    return 0;
+  }
 }

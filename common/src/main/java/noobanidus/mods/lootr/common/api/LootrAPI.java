@@ -385,6 +385,10 @@ public class LootrAPI {
     return INSTANCE.shouldStartRefreshWhileTicking();
   }
 
+  public static int getTickDelay () {
+    return INSTANCE.getTickDelay();
+  }
+
   public static boolean performPiecewiseCheck() {
     return INSTANCE.performPiecewiseCheck();
   }

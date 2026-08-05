@@ -430,6 +430,21 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
     }
   }
 
+  private int randomOffset = -1;
+
+  @Override
+  public int getRandomOffset() {
+    if (randomOffset == -1) {
+      var level = level();
+      if (level != null) {
+        randomOffset = level.random.nextInt(20);
+      } else {
+        randomOffset = 1;
+      }
+    }
+    return 0;
+  }
+
   @Override
   public @Nullable IContainerTrigger getTrigger() {
     return LootrRegistry.getItemFrameTrigger();

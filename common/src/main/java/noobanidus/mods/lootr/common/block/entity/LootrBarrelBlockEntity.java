@@ -297,6 +297,21 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     return 1.1;
   }
 
+  private int randomOffset = -1;
+
+  @Override
+  public int getRandomOffset() {
+    if (randomOffset == -1) {
+      var level = getLevel();
+      if (level != null) {
+        randomOffset = level.random.nextInt(20);
+      } else {
+        randomOffset = 1;
+      }
+    }
+    return 0;
+  }
+
   @AutoService(ILootrBlockEntityConverter.class)
   public static class DefaultBlockEntityConverter implements ILootrBlockEntityConverter<LootrBarrelBlockEntity> {
     @Override

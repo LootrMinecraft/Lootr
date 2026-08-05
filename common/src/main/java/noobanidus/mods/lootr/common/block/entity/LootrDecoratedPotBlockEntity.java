@@ -420,6 +420,21 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
     return new double[]{0.4, 0.6};
   }
 
+  private int randomOffset = -1;
+
+  @Override
+  public int getRandomOffset() {
+    if (randomOffset == -1) {
+      var level = getLevel();
+      if (level != null) {
+        randomOffset = level.random.nextInt(20);
+      } else {
+        randomOffset = 1;
+      }
+    }
+    return 0;
+  }
+
   @AutoService(ILootrBlockEntityConverter.class)
   public static class DefaultBlockEntityConverter implements ILootrBlockEntityConverter<LootrDecoratedPotBlockEntity> {
     @Override

@@ -206,4 +206,8 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
   default int getParticleColor (PlayerContext context) {
     return getParticleColor();
   }
+
+  default int getRandomOffset () {
+    return 0;
+  }
 }

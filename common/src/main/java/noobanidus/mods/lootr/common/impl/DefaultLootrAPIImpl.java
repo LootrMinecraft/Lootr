@@ -159,27 +159,33 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
     }
 
     // TODO: Refactor this to avoid loading the data save unnecessarily
-    if (LootrAPI.shouldPerformDecayWhileTicking() && LootrAPI.isDecayed(provider) && provider.hasBeenOpened() && provider.canDecay()) {
-      provider.performDecay();
-      return;
-    } else if (LootrAPI.shouldStartDecayWhileTicking() && !LootrAPI.isDecayed(provider) && provider.hasBeenOpened() && provider.canDecay()) {
-      int decayValue = LootrAPI.getRemainingDecayValue(provider);
-      if (decayValue == -1) {
-        if (LootrAPI.isDecaying(provider)) {
-          LootrAPI.setDecaying(provider);
+    if (LootrAPI.getCurrentTicks() % (LootrAPI.getTickDelay() + provider.getRandomOffset()) == 0) {
+      if (LootrAPI.isAnythingDecaying()) {
+        if (LootrAPI.shouldPerformDecayWhileTicking() && LootrAPI.isDecayed(provider) && provider.hasBeenOpened() && provider.canDecay()) {
+          provider.performDecay();
+          return;
+        } else if (LootrAPI.shouldStartDecayWhileTicking() && !LootrAPI.isDecayed(provider) && provider.hasBeenOpened() && provider.canDecay()) {
+          int decayValue = LootrAPI.getRemainingDecayValue(provider);
+          if (decayValue == -1) {
+            if (LootrAPI.isDecaying(provider)) {
+              LootrAPI.setDecaying(provider);
+            }
+          }
         }
       }
-    }
-    if (LootrAPI.shouldPerformRefreshWhileTicking() && LootrAPI.isRefreshed(provider) && provider.hasBeenOpened() && provider.canRefresh()) {
-      provider.performRefresh();
-      provider.performClose();
-      provider.performUpdate();
-    }
-    if (LootrAPI.shouldStartRefreshWhileTicking() && !LootrAPI.isRefreshed(provider) && provider.hasBeenOpened() && provider.canRefresh()) {
-      int refreshValue = LootrAPI.getRemainingRefreshValue(provider);
-      if (refreshValue == -1) {
-        if (LootrAPI.isRefreshing(provider)) {
-          LootrAPI.setRefreshing(provider);
+      if (LootrAPI.isAnythingRefreshing()) {
+        if (LootrAPI.shouldPerformRefreshWhileTicking() && LootrAPI.isRefreshed(provider) && provider.hasBeenOpened() && provider.canRefresh()) {
+          provider.performRefresh();
+          provider.performClose();
+          provider.performUpdate();
+        }
+        if (LootrAPI.shouldStartRefreshWhileTicking() && !LootrAPI.isRefreshed(provider) && provider.hasBeenOpened() && provider.canRefresh()) {
+          int refreshValue = LootrAPI.getRemainingRefreshValue(provider);
+          if (refreshValue == -1) {
+            if (LootrAPI.isRefreshing(provider)) {
+              LootrAPI.setRefreshing(provider);
+            }
+          }
         }
       }
     }

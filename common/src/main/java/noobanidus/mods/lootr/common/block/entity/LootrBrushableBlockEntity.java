@@ -87,6 +87,21 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
     }
   }
 
+  private int randomOffset = -1;
+
+  @Override
+  public int getRandomOffset() {
+    if (randomOffset == -1) {
+      var level = getLevel();
+      if (level != null) {
+        randomOffset = level.random.nextInt(20);
+      } else {
+        randomOffset = 1;
+      }
+    }
+    return 0;
+  }
+
   @Override
   public boolean IBrushable$brush(long l, Player player, Direction direction) {
     // This code mimics `FasterBrushingMixin` from Digsite Workshop.

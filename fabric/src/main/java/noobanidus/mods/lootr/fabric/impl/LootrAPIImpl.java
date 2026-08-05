@@ -389,6 +389,11 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   }
 
   @Override
+  public int getTickDelay() {
+    return ConfigManager.get().conversion.tickDelay;
+  }
+
+  @Override
   public Component getInvalidTableComponent(ResourceKey<LootTable> lootTable) {
     return Component.translatable("lootr.message.invalid_table", lootTable.location()
             .getNamespace(), lootTable.toString())

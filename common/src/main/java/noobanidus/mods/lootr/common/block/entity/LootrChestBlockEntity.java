@@ -271,6 +271,21 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
     return LootrRegistry.getChestTrigger();
   }
 
+  private int randomOffset = -1;
+
+  @Override
+  public int getRandomOffset() {
+    if (randomOffset == -1) {
+      var level = getLevel();
+      if (level != null) {
+        randomOffset = level.random.nextInt(20);
+      } else {
+        randomOffset = 1;
+      }
+    }
+    return 0;
+  }
+
   @Override
   protected void signalOpenCount(Level level, BlockPos pos, BlockState state, int p_155868_, int p_155869_) {
     super.signalOpenCount(level, pos, state, p_155868_, p_155869_);

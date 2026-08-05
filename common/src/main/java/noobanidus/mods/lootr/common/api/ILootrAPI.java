@@ -343,6 +343,8 @@ public interface ILootrAPI {
 
     return server.getWorldData().overworldData().getGameTime();
   }
+
+  int getTickDelay();
 }
 
 
