@@ -31,7 +31,15 @@ public class MixinHopperBlockEntity {
 
   @WrapMethod(method = "getEntityContainer")
   private static Container lootr$preventHopperEntityInteraction(Level level, double x, double y, double z, Operation<Container> original) {
-    var result = original.call(level, x, y, z);
+    Container result;
+    try {
+      result = original.call(level, x, y, z);
+    } catch (ClassCastException castException) {
+      LootrAPI.LOG.error("Non-Lootr Error: Another mod has caused the original `getEntityContainer` method of the `HopperBlockEntity` to fail with a ClassCastException.");
+      LootrAPI.LOG.error("Although the crash has occurred in Lootr's code, this error is NOT caused by Lootr, but by another mod either altering `HopperBlockEntity::getEntityContainer` or `EntitySelector.CONTAINER_ENTITY_SELECTOR`, causing the list of entities returned to contain an entity or entities that are not also a `Container`. Lootr has prevented the error from causing block ticking to crash, but there may be further issues.");
+      LootrAPI.LOG.error("This is the original exception:", castException);
+      return null;
+    }
     if (!(result instanceof Entity entity)) {
       return result;
     }
