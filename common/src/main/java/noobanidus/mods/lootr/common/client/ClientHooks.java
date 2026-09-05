@@ -124,12 +124,12 @@ public class ClientHooks {
 
     Player player = mc.player;
 
-    Vec3 vec31 = provider.getInfoVec();
-    if (!testFrustumContainsPoint(vec31)) {
+    if (!testFrustumContainsPoint(provider.getParticleCenter())) {
       return false;
     }
 
     Vec3 vec3 = player.getEyePosition();
+    Vec3 vec31 = provider.getInfoVec();
 
     if (vec31.distanceTo(vec3) > 128) {
       return false;
