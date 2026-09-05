@@ -15,6 +15,7 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import noobanidus.mods.lootr.common.advancement.AdvancementTrigger;
 import noobanidus.mods.lootr.common.advancement.ContainerTrigger;
 import noobanidus.mods.lootr.common.advancement.LootedStatTrigger;
+import noobanidus.mods.lootr.common.advancement.TrapdoorTrigger;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 
@@ -24,7 +25,7 @@ public class LootrAdvancementGenerator implements AdvancementProvider.Advancemen
   @Override
   public void generate(HolderLookup.Provider arg, Consumer<AdvancementHolder> consumer, ExistingFileHelper existingFileHelper) {
     AdvancementHolder lootrRoot = Advancement.Builder.advancement()
-        .display(Blocks.CHEST, Component.translatable("lootr.advancements.root.title"), Component.translatable("lootr.advancements.root.description"), ResourceLocation.parse("minecraft:textures/block/dark_oak_log.png"), AdvancementType.TASK, false, false, false)
+        .display(Blocks.CHEST, Component.translatable("lootr.advancements.root.title"), Component.translatable("lootr.advancements.root.description"), ResourceLocation.parse("lootr:textures/block/gold_planks.png"), AdvancementType.TASK, false, false, false)
         .addCriterion("always_true", PlayerTrigger.TriggerInstance.tick())
         .save(consumer, LootrAPI.rl("root"), existingFileHelper);
     AdvancementHolder one_barrel = Advancement.Builder.advancement().parent(lootrRoot)
@@ -97,5 +98,6 @@ public class LootrAdvancementGenerator implements AdvancementProvider.Advancemen
         .display(Items.TNT, Component.translatable("lootr.advancements.trapped_chest.title"), Component.translatable("lootr.advancements.trapped_chest.description"), null, AdvancementType.TASK, true, true, true)
         .addCriterion("trapped_opened", ContainerTrigger.looted(LootrRegistry.getTrappedTrigger()))
         .save(consumer, LootrAPI.rl("trapped_chest"), existingFileHelper);
+    var escape_hatch = Advancement.Builder.advancement().parent(lootrRoot).display(Items.IRON_TRAPDOOR, Component.translatable("lootr.advancements.emergency_escape_hatch.title"), Component.translatable("lootr.advancements.emergency_escape_hatch.description"), null, AdvancementType.CHALLENGE, true, true, true).addCriterion("trapdoor_triggered", TrapdoorTrigger.trapdoor(LootrRegistry.getTrapdoorTrigger())).save(consumer, LootrAPI.rl("emergency_escape_hatch"), existingFileHelper);
   }
 }

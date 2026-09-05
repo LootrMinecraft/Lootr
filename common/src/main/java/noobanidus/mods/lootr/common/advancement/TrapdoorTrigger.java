@@ -4,15 +4,14 @@ import com.mojang.serialization.Codec;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
-import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
+import noobanidus.mods.lootr.common.api.advancement.ITrapdoorTrigger;
 import noobanidus.mods.lootr.common.api.advancement.ITrigger;
 
 import java.util.Optional;
-import java.util.UUID;
 
-public class ContainerTrigger extends SimpleCriterionTrigger<AlwaysTriggerInstance> implements IContainerTrigger {
+public class TrapdoorTrigger extends SimpleCriterionTrigger<AlwaysTriggerInstance> implements ITrapdoorTrigger {
   @Override
-  public void trigger(ServerPlayer player, UUID condition) {
+  public void trigger(ServerPlayer player) {
     this.trigger(player, AlwaysTriggerInstance::test);
   }
 
@@ -21,8 +20,8 @@ public class ContainerTrigger extends SimpleCriterionTrigger<AlwaysTriggerInstan
     return AlwaysTriggerInstance.CODEC;
   }
 
-  public static Criterion<AlwaysTriggerInstance> looted(ITrigger trigger) {
-    return ((ContainerTrigger) trigger.getTrigger()).createCriterion(new
+  public static Criterion<AlwaysTriggerInstance> trapdoor(ITrigger trigger) {
+    return ((TrapdoorTrigger) trigger.getTrigger()).createCriterion(new
         AlwaysTriggerInstance(Optional.empty()));
   }
 }

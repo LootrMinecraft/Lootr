@@ -14,6 +14,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import noobanidus.mods.lootr.common.api.advancement.IAdvancementTrigger;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.advancement.ILootedStatTrigger;
+import noobanidus.mods.lootr.common.api.advancement.ITrapdoorTrigger;
 import noobanidus.mods.lootr.common.particle.ParticleColorOption;
 
 /**
@@ -192,5 +193,9 @@ public class LootrRegistry {
 
   public static ParticleType<ParticleColorOption> getUnopenedParticleType () {
     return INSTANCE.getUnopenedParticleType ();
+  }
+
+  public static ITrapdoorTrigger getTrapdoorTrigger () {
+    return INSTANCE.getTrapdoorTrigger();
   }
 }

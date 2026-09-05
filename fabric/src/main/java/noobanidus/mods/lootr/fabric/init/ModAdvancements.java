@@ -6,6 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 import noobanidus.mods.lootr.common.advancement.AdvancementTrigger;
 import noobanidus.mods.lootr.common.advancement.ContainerTrigger;
 import noobanidus.mods.lootr.common.advancement.LootedStatTrigger;
+import noobanidus.mods.lootr.common.advancement.TrapdoorTrigger;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 
 public class ModAdvancements {
@@ -20,6 +21,7 @@ public class ModAdvancements {
   public static final ResourceLocation POT_OPENED = LootrAPI.rl("pot_opened");
   public static final ResourceLocation ITEM_FRAME_LOCATION = LootrAPI.rl("item_frame_looted");
   public static final ResourceLocation TRAPPED_CHEST_LOCATION = LootrAPI.rl("trapped_chest");
+  public static final ResourceLocation EMERGENCY_ESCAPE_HATCH_LOCATION = LootrAPI.rl("emergency_escape_hatch");
   public static ContainerTrigger CHEST = null;
   public static ContainerTrigger BARREL = null;
   public static ContainerTrigger CART = null;
@@ -31,6 +33,7 @@ public class ModAdvancements {
   public static AdvancementTrigger ADVANCEMENT = null;
   public static ContainerTrigger ITEM_FRAME = null;
   public static ContainerTrigger TRAPPED_CHEST = null;
+  public static TrapdoorTrigger ESCAPE_HATCH = null;
 
   public static void registerAdvancements() {
     ADVANCEMENT = Registry.register(BuiltInRegistries.TRIGGER_TYPES, ADVANCEMENT_LOCATION, new AdvancementTrigger());
@@ -44,5 +47,6 @@ public class ModAdvancements {
     POT = Registry.register(BuiltInRegistries.TRIGGER_TYPES, POT_OPENED, new ContainerTrigger());
     ITEM_FRAME = Registry.register(BuiltInRegistries.TRIGGER_TYPES, ITEM_FRAME_LOCATION, new ContainerTrigger());
     TRAPPED_CHEST = Registry.register(BuiltInRegistries.TRIGGER_TYPES, TRAPPED_CHEST_LOCATION, new ContainerTrigger());
+    ESCAPE_HATCH = Registry.register(BuiltInRegistries.TRIGGER_TYPES, EMERGENCY_ESCAPE_HATCH_LOCATION, new TrapdoorTrigger());
   }
 }

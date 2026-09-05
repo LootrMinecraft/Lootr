@@ -1,0 +1,28 @@
+{
+  "parent": "lootr:root",
+  "criteria": {
+    "trapdoor_triggered": {
+      "trigger": "lootr:emergency_escape_hatch"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "lootr.advancements.emergency_escape_hatch.description"
+    },
+    "frame": "challenge",
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "minecraft:iron_trapdoor"
+    },
+    "title": {
+      "translate": "lootr.advancements.emergency_escape_hatch.title"
+    }
+  },
+  "requirements": [
+    [
+      "trapdoor_triggered"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

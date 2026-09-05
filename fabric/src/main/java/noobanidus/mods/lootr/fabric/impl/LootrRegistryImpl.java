@@ -14,6 +14,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import noobanidus.mods.lootr.common.api.advancement.IAdvancementTrigger;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.advancement.ILootedStatTrigger;
+import noobanidus.mods.lootr.common.api.advancement.ITrapdoorTrigger;
 import noobanidus.mods.lootr.common.api.registry.ILootrRegistry;
 import noobanidus.mods.lootr.common.particle.ParticleColorOption;
 import noobanidus.mods.lootr.fabric.init.*;
@@ -230,5 +231,10 @@ public class LootrRegistryImpl implements ILootrRegistry {
   @Override
   public IContainerTrigger getTrappedTrigger() {
     return ModAdvancements.TRAPPED_CHEST;
+  }
+
+  @Override
+  public ITrapdoorTrigger getTrapdoorTrigger() {
+    return ModAdvancements.ESCAPE_HATCH;
   }
 }

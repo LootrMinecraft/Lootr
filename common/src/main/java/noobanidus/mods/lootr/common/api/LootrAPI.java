@@ -41,6 +41,7 @@ import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
 import noobanidus.mods.lootr.common.api.processor.ILootrBlockEntityProcessor;
 import noobanidus.mods.lootr.common.api.processor.ILootrEntityProcessor;
+import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinShulkerBoxMenu;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -644,11 +645,13 @@ public class LootrAPI {
         if (chestMenu.getContainer().equals(container)) {
           sPlayer.closeContainer();
           sPlayer.displayClientMessage(Component.translatable("lootr.message.emergency_conversion"), true);
+          LootrRegistry.getTrapdoorTrigger().trigger(sPlayer);
         }
       } else if (player.containerMenu instanceof ShulkerBoxMenu shulkerMenu) {
         if (((AccessorMixinShulkerBoxMenu) shulkerMenu).lootr$getShulkerMenuContainer().equals(container)) {
           sPlayer.closeContainer();
           sPlayer.displayClientMessage(Component.translatable("lootr.message.emergency_conversion"), true);
+          LootrRegistry.getTrapdoorTrigger().trigger(sPlayer);
         }
       }
     }

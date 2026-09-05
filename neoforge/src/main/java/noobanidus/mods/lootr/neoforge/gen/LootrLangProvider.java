@@ -89,6 +89,8 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.advancements.archaeologist.description", "Loot all of Lootr's archaeological blocks!");
     add("lootr.advancements.trapped_chest.title", "Surprise!");
     add("lootr.advancements.trapped_chest.description", "Open your first Lootr trapped chest!");
+    add("lootr.advancements.emergency_escape_hatch.title", "Emergency Escape Hatch!");
+    add("lootr.advancements.emergency_escape_hatch.description", "Trigger Lootr's emergency conversion contingency on an eligible chest!");
 
     add("itemGroup.lootr", "Lootr");
     // Should be fixed hopefully
