@@ -30,7 +30,8 @@ public class LootrBlockTagProvider extends BlockTagsProvider {
     tag(Tags.Blocks.CHESTS_TRAPPED).add(LootrRegistry.getTrappedChestBlock());
     tag(Tags.Blocks.CHESTS).add(LootrRegistry.getCopperChestBlock(), LootrRegistry.getWeatheredCopperChestBlock(), LootrRegistry.getExposedCopperChestBlock(), LootrRegistry.getOxidizedCopperChestBlock());
     tag(Tags.Blocks.BARRELS).add(LootrRegistry.getBarrelBlock());
-    tag(LootrTags.Blocks.NON_BLOCKING); //.add(Blocks.SPAWNER);
+    //noinspection unchecked
+    tag(LootrTags.Blocks.NON_BLOCKING).addTags(LootrTags.Blocks.SANDS, LootrTags.Blocks.GRAVELS); //.add(Blocks.SPAWNER);
 
     tag(LootrTags.Blocks.BARRELS).add(LootrRegistry.getBarrelBlock());
     tag(LootrTags.Blocks.CHESTS).add(LootrRegistry.getChestBlock());
