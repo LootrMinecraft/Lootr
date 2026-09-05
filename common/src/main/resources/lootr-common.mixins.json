@@ -35,6 +35,8 @@
     "ticker.MixinStructureTemplate"
   ],
   "client": [
+    "accessor.AccessorMixinLevelRenderer",
+    "particle_spawning.MixinFrustum$TestPoint"
   ],
   "injectors": {
     "defaultRequire": 1
