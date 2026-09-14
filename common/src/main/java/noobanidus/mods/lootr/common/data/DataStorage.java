@@ -22,9 +22,9 @@ import noobanidus.mods.lootr.common.chunk.LoadedChunks;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 @SuppressWarnings({"unused", "DataFlowIssue"})
 public final class DataStorage {
@@ -62,7 +62,7 @@ public final class DataStorage {
     return section.getStore(instance);
   }
 
-  private static final Map<Identifier, SavedDataType<Section>> SECTION_SAVED_DATA = new HashMap<>();
+  private static final Map<Identifier, SavedDataType<Section>> SECTION_SAVED_DATA = new ConcurrentHashMap<>();
 
   public static SavedDataType<Section> getSectionSavedData(Identifier id) {
     return SECTION_SAVED_DATA.computeIfAbsent(id, i -> new SavedDataType<>(i, () -> new Section(i), Section.CODEC.apply(i), null));
