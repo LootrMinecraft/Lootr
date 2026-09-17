@@ -191,6 +191,14 @@ public interface ILootrContainerInstance extends ILootrData, IClientHasOpeners {
     return getParticleColor2();
   }
 
+  default int getParticleColor() {
+    return LootrAPI.DEFAULT_PARTICLE_COLOR;
+  }
+
+  default int getParticleColor (PlayerContext context) {
+    return getParticleColor();
+  }
+
   default boolean shouldDisplayParticles (PlayerContext context) {
     if (isClientOpened()) {
       return false;
