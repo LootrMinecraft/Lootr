@@ -8,6 +8,7 @@ import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ProblemReporter;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.ItemStackWithSlot;
 import net.minecraft.world.item.ItemStack;
@@ -36,6 +37,8 @@ public class SimpleLootrInstance {
   protected boolean clientOpened = false;
   protected boolean hasBeenOpened = false;
   protected boolean providesOwnUuid = false;
+
+  protected int randomOffset = -1;
 
   public SimpleLootrInstance(Supplier<Set<UUID>> visualOpenersSupplier, int size) {
     this.items = NonNullList.withSize(size, ItemStack.EMPTY);
@@ -110,6 +113,10 @@ public class SimpleLootrInstance {
     this.hasBeenOpened = true;
   }
 
+  public void setHasBeenOpened (boolean value) {
+    this.hasBeenOpened = value;
+  }
+
   public void loadAdditional(ValueInput input) {
     if (!providesOwnUuid) {
       this.id = input.read(NBTConstants.INSTANCE_ID, UUIDUtil.CODEC).orElse(null);
@@ -169,6 +176,15 @@ public class SimpleLootrInstance {
 
   public boolean isCustomInventory() {
     return customInventory != null && !customInventory.isEmpty();
+  }
+
+  private static final RandomSource random = RandomSource.createThreadLocalInstance();
+
+  public int getRandomOffset () {
+    if (randomOffset == -1) {
+      this.randomOffset = random.nextInt(20);
+    }
+    return this.randomOffset;
   }
 
   public static void saveAllItems(ValueOutput output, NonNullList<ItemStack> itemStacks, String key) {

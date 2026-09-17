@@ -36,6 +36,7 @@ import noobanidus.mods.lootr.common.api.LootrRegistry;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.api.helper.SimpleLootrEntityInstance;
+import noobanidus.mods.lootr.common.api.helper.SimpleLootrInstance;
 import noobanidus.mods.lootr.common.api.interfaces.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.interfaces.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
@@ -228,6 +229,11 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   @Override
   public @Nullable IContainerTrigger getTrigger() {
     return LootrRegistry.getItemFrameTrigger();
+  }
+
+  @Override
+  public @Nullable SimpleLootrInstance getInstance() {
+    return instance;
   }
 
   @Override
@@ -452,6 +458,11 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
         return new double[]{-0.1, -0.05};
       }
     }
+  }
+
+  @Override
+  public int getRandomOffset() {
+    return instance.getRandomOffset();
   }
 
   @AutoService(ILootrEntityWrapper.class)

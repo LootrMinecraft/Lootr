@@ -302,6 +302,16 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     return 1.1;
   }
 
+  @Override
+  public int getRandomOffset() {
+    return simpleLootrInstance.getRandomOffset();
+  }
+
+  @Override
+  public @Nullable SimpleLootrInstance getInstance() {
+    return simpleLootrInstance;
+  }
+
   @AutoService(ILootrBlockEntityWrapper.class)
   public static class DefaultBlockEntityWrapper implements ILootrBlockEntityWrapper<LootrBarrelBlockEntity> {
     @Override

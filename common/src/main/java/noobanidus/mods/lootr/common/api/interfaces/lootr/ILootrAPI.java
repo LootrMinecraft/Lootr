@@ -81,7 +81,7 @@ public interface ILootrAPI {
   }
 
   @Nullable
-  default Player getPlayer (UUID id) {
+  default Player getPlayer(UUID id) {
     MinecraftServer server = getServer();
     if (server == null) {
       return null;
@@ -121,7 +121,7 @@ public interface ILootrAPI {
     return seed;
   }
 
-  boolean shouldRandomizeLootSeed ();
+  boolean shouldRandomizeLootSeed();
 
   // Determine if saving block entity data in a structure
   boolean shouldDiscard();
@@ -353,6 +353,7 @@ public interface ILootrAPI {
     if (instance.canRefresh()) {
       if (store.isRefreshed()) {
         store.performRefresh();
+        instance.setHasBeenOpened(false);
         instance.performClose();
         player.sendOverlayMessage(Component.translatable("lootr.message.refreshed")
             .setStyle(style));
@@ -407,8 +408,8 @@ public interface ILootrAPI {
       return;
     }
 
-    if (instance.hasBeenOpened()) {
-      if (instance.canDecay()) {
+    if (LootrAPI.getCurrentTicks() % (LootrAPI.getTickDelay() + instance.getRandomOffset()) == 0) {
+      if (LootrAPI.isAnythingDecaying() && instance.canDecay() && instance.hasBeenOpened() && (LootrAPI.shouldPerformDecayWhileTicking() || LootrAPI.shouldStartDecayWhileTicking())) {
         if (LootrAPI.shouldPerformDecayWhileTicking() && store.isDecayed()) {
           instance.performDecay();
           return;
@@ -421,14 +422,13 @@ public interface ILootrAPI {
           }
         }
       }
-      if (instance.canRefresh()) {
+      if (LootrAPI.isAnythingRefreshing() && instance.canRefresh() && instance.hasBeenOpened() && (LootrAPI.shouldPerformRefreshWhileTicking() || LootrAPI.shouldStartRefreshWhileTicking())) {
         if (LootrAPI.shouldPerformRefreshWhileTicking() && store.isRefreshed()) {
           store.performRefresh();
+          instance.setHasBeenOpened(false);
           instance.performClose();
           instance.performUpdate();
-          instance.markInstanceChanged();
-        }
-        if (LootrAPI.shouldStartRefreshWhileTicking() && !store.isRefreshed()) {
+        } else if (LootrAPI.shouldStartRefreshWhileTicking() && !store.isRefreshed()) {
           int refreshValue = store.remainingRefreshTime();
           if (refreshValue == -1) {
             if (LootrAPI.shouldBeginRefreshing(instance)) {
@@ -556,6 +556,20 @@ public interface ILootrAPI {
   ResistanceMode getBlastResistanceMode();
 
   BreakMode getBreakMode();
+
+  boolean isAnythingDecaying();
+
+  boolean isAnythingRefreshing();
+
+  int getTickDelay();
+
+  default int getCurrentTicks() {
+    MinecraftServer server = getServer();
+    if (server == null) {
+      return -1;
+    }
+    return server.getTickCount();
+  }
 }
 
 

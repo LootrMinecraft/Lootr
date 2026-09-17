@@ -115,6 +115,11 @@ public record RandomizableContainerInstance(
   }
 
   @Override
+  public int getRandomOffset() {
+    return 0;
+  }
+
+  @Override
   public @Nullable Set<UUID> getClientOpeners() {
     return null;
   }

@@ -91,6 +91,11 @@ public record CustomLootrContainerInstance(
   }
 
   @Override
+  public int getRandomOffset() {
+    return 0;
+  }
+
+  @Override
   public @Nullable NonNullList<ItemStack> getDataReferenceInventory() {
     return customInventory();
   }

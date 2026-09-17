@@ -87,6 +87,10 @@ public final class LootrAPI {
     return Identifier.fromNamespaceAndPath(namespace, path);
   }
 
+  public static int getCurrentTicks() {
+    return INSTANCE.getCurrentTicks();
+  }
+
   public static Set<UUID> getPlayerIds() {
     return INSTANCE.getPlayerIds();
   }
@@ -194,6 +198,18 @@ public final class LootrAPI {
   }
 
   public static Set<String> getDecayModIds() {
+    return INSTANCE.getDecayModIds();
+  }
+
+  public static boolean isAnythingDecaying () {
+    return INSTANCE.isAnythingDecaying();
+  }
+
+  public static boolean isAnythingRefreshing () {
+    return INSTANCE.isAnythingRefreshing();
+  }
+
+  public static Set<String> getModidDecayWhitelist() {
     return INSTANCE.getDecayModIds();
   }
 
@@ -532,5 +548,9 @@ public final class LootrAPI {
 
   public static boolean isDimensionRefreshing(@NotNull ResourceKey<Level> dataDimension) {
     return INSTANCE.isDimensionRefreshing(dataDimension);
+  }
+
+  public static int getTickDelay () {
+    return INSTANCE.getTickDelay();
   }
 }

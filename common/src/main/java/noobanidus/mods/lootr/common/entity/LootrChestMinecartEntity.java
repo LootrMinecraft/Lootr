@@ -33,6 +33,7 @@ import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.helper.SimpleLootrEntityInstance;
+import noobanidus.mods.lootr.common.api.helper.SimpleLootrInstance;
 import noobanidus.mods.lootr.common.api.interfaces.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.api.LootrRegistry;
@@ -324,6 +325,11 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   }
 
   @Override
+  public @Nullable SimpleLootrInstance getInstance() {
+    return instance;
+  }
+
+  @Override
   protected @NonNull Vec3 applyNaturalSlowdown(@NonNull Vec3 incoming) {
     float f = 0.98F;
     if (this.isInWater()) {
@@ -341,6 +347,12 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   @Override
   public void setLootTableInternal(ResourceKey<LootTable> lootTable, long seed) {
     setLootTable(lootTable, seed);
+  }
+
+
+  @Override
+  public int getRandomOffset() {
+    return instance.getRandomOffset();
   }
 
   @AutoService(ILootrEntityWrapper.class)
