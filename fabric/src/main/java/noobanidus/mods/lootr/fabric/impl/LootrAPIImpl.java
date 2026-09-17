@@ -1,9 +1,11 @@
 package noobanidus.mods.lootr.fabric.impl;
 
 import net.fabricmc.fabric.api.entity.FakePlayer;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.impl.DefaultLootrAPIImpl;
 import noobanidus.mods.lootr.fabric.event.LootrEventsInit;
 

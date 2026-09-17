@@ -94,6 +94,11 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
   }
 
   @Override
+  public @Nullable SimpleLootrInstance getInstance() {
+    return simpleLootrInstance;
+  }
+
+  @Override
   public void defaultTick(Level level, BlockPos pos, BlockState state) {
     ILootrBlockEntity.super.defaultTick(level, pos, state);
     chestLidController.tickLid();
@@ -311,6 +316,11 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
     double d2 = (double) pPos.getZ() + 0.5D;
 
     pLevel.playSound(null, d0, d1, d2, pSound, SoundSource.BLOCKS, 0.5F, pLevel.getRandom().nextFloat() * 0.1F + 0.9F);
+  }
+
+  @Override
+  public int getRandomOffset() {
+    return simpleLootrInstance.getRandomOffset();
   }
 
   @AutoService(ILootrBlockEntityWrapper.class)

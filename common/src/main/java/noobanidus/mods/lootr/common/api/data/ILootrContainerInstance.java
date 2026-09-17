@@ -13,6 +13,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.PlayerContext;
 import noobanidus.mods.lootr.common.api.data.base.CustomLootrContainerInstance;
+import noobanidus.mods.lootr.common.api.helper.SimpleLootrInstance;
 import noobanidus.mods.lootr.common.api.interfaces.IClientHasOpeners;
 import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
 import noobanidus.mods.lootr.common.api.LootrAPI;
@@ -128,6 +129,11 @@ public interface ILootrContainerInstance extends ILootrData, IClientHasOpeners {
     }
   }
 
+  @Nullable
+  default SimpleLootrInstance getInstance() {
+    return null;
+  }
+
   default void performOpen(ServerPlayer player) {
   }
 
@@ -148,6 +154,13 @@ public interface ILootrContainerInstance extends ILootrData, IClientHasOpeners {
   }
 
   default void performUpdate() {
+  }
+
+  default void setHasBeenOpened (boolean value) {
+    var instance = getInstance();
+    if (instance != null) {
+      instance.setHasBeenOpened(value);
+    }
   }
 
   @Override
@@ -210,4 +223,6 @@ public interface ILootrContainerInstance extends ILootrData, IClientHasOpeners {
 
     return !hasClientOpened(context.player());
   }
+
+  int getRandomOffset ();
 }

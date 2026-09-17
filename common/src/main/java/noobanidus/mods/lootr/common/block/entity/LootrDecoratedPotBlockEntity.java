@@ -157,6 +157,11 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   }
 
   @Override
+  public @Nullable SimpleLootrInstance getInstance() {
+    return lootrInstance;
+  }
+
+  @Override
   public void performOpen(ServerPlayer player) {
     ILootrBlockEntity.super.performOpen(player);
     PlatformAPI.performPotBreak(this, player);
@@ -418,6 +423,12 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   @Override
   public double[] getParticleZBounds() {
     return new double[]{0.4, 0.6};
+  }
+
+
+  @Override
+  public int getRandomOffset() {
+    return lootrInstance.getRandomOffset();
   }
 
   @AutoService(ILootrBlockEntityWrapper.class)

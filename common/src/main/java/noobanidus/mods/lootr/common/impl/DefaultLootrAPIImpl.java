@@ -5,6 +5,7 @@ import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -246,7 +247,8 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
 
     var whitelist2 = LootrAPI.getDimensionWhitelist();
 
-    return (!whitelist2.isEmpty() && !whitelist2.contains(dimension)) || LootrAPI.getDimensionBlacklist().contains(dimension);
+    return (!whitelist2.isEmpty() && !whitelist2.contains(dimension)) || LootrAPI.getDimensionBlacklist()
+        .contains(dimension);
   }
 
   @DefaultCandidate
@@ -512,5 +514,62 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   @Override
   public final <T extends Entity> ILootrEntity wrapEntity(T entity) {
     return LootrServiceRegistry.wrapEntity(entity);
+  }
+
+
+  @Override
+  public boolean isAnythingRefreshing() {
+    if (shouldRefreshAll()) {
+      return true;
+    }
+
+    if (!getRefreshDimensions().isEmpty()) {
+      return true;
+    }
+
+    if (!getRefreshLootTables().isEmpty()) {
+      return true;
+    }
+
+    if (!getRefreshLootTableModIds().isEmpty()) {
+      return true;
+    }
+
+    MinecraftServer server = getServer();
+    if (server == null) {
+      return false;
+    }
+
+    var tag = server.registryAccess().lookupOrThrow(Registries.STRUCTURE)
+        .get(LootrTags.Structure.REFRESH_STRUCTURES);
+    return tag.isPresent();
+  }
+
+  @Override
+  public boolean isAnythingDecaying() {
+    if (shouldDecayAll()) {
+      return true;
+    }
+
+    if (!getDecayDimensions().isEmpty()) {
+      return true;
+    }
+
+    if (!getDecayLootTables().isEmpty()) {
+      return true;
+    }
+
+    if (!getDecayModIds().isEmpty()) {
+      return true;
+    }
+
+    MinecraftServer server = getServer();
+    if (server == null) {
+      return false;
+    }
+
+    var tag = server.registryAccess().lookupOrThrow(Registries.STRUCTURE)
+        .get(LootrTags.Structure.DECAY_STRUCTURES);
+    return tag.isPresent();
   }
 }

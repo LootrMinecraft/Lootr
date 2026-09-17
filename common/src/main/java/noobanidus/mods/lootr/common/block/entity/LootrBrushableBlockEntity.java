@@ -244,6 +244,11 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
   }
 
   @Override
+  public @Nullable SimpleLootrInstance getInstance() {
+    return simpleLootrInstance;
+  }
+
+  @Override
   public void setLootTableInternal(ResourceKey<LootTable> lootTable, long seed) {
     this.lootTable = lootTable;
     this.lootTableSeed = seed;
@@ -537,6 +542,11 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
     level.addFreshEntity(fallingBlockEntity);
   }
 
+
+  @Override
+  public int getRandomOffset() {
+    return simpleLootrInstance.getRandomOffset();
+  }
 
   @AutoService(ILootrBlockEntityWrapper.class)
   public static class DefaultBlockEntityWrapper implements ILootrBlockEntityWrapper<LootrBrushableBlockEntity> {

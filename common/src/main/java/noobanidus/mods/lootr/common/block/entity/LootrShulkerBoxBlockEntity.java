@@ -67,6 +67,11 @@ public class LootrShulkerBoxBlockEntity extends RandomizableContainerBlockEntity
   }
 
   @Override
+  public @Nullable SimpleLootrInstance getInstance() {
+    return simpleLootrInstance;
+  }
+
+  @Override
   public void defaultTick(Level level, BlockPos pos, BlockState state) {
     ILootrBlockEntity.super.defaultTick(level, pos, state);
     this.updateAnimation(level, pos, state);
@@ -383,6 +388,11 @@ public class LootrShulkerBoxBlockEntity extends RandomizableContainerBlockEntity
   private static void doNeighborUpdates(Level pLevel, BlockPos pPos, BlockState pState) {
     pState.updateNeighbourShapes(pLevel, pPos, 3);
     pLevel.updateNeighborsAt(pPos, pState.getBlock());
+  }
+
+  @Override
+  public int getRandomOffset() {
+    return simpleLootrInstance.getRandomOffset();
   }
 
   @AutoService(ILootrBlockEntityWrapper.class)
