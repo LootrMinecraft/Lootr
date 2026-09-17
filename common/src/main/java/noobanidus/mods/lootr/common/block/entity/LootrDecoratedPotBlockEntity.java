@@ -187,7 +187,7 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
   private void spawnPotContents(ItemStack takenItem) {
     BlockPos spawnBlockPos = this.worldPosition.relative(Direction.UP, 1);
     double spawnX = (double) spawnBlockPos.getX() + 0.5;
-    double spawnY = (double) spawnBlockPos.getY() + 0.5 + (double) (EntityType.ITEM.getHeight() / 2.0F);
+    double spawnY = (double) spawnBlockPos.getY() + 0.5 + (double) (EntityTypes.ITEM.getHeight() / 2.0F);
     double spawnZ = (double) spawnBlockPos.getZ() + 0.5;
     if (!takenItem.isEmpty()) {
       this.spawnItemEntity(takenItem.split(this.level.getRandom().nextInt(21) + 10), spawnX, spawnY, spawnZ);
