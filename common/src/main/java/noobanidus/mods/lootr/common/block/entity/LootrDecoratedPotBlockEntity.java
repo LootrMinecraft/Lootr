@@ -32,10 +32,9 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.ticks.ContainerSingleItem;
 import noobanidus.mods.lootr.common.api.*;
-import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
-import noobanidus.mods.lootr.common.api.data.LootrBlockType;
-import noobanidus.mods.lootr.common.api.data.SimpleLootrInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
+import noobanidus.mods.lootr.common.api.helper.SimpleLootrInstance;
+import noobanidus.mods.lootr.common.api.interfaces.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.interfaces.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.integration.decorated.PotDecorationsAdapter;
 import noobanidus.mods.lootr.common.api.LootrRegistry;
@@ -190,7 +189,7 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
     double spawnY = (double) spawnBlockPos.getY() + 0.5 + (double) (EntityType.ITEM.getHeight() / 2.0F);
     double spawnZ = (double) spawnBlockPos.getZ() + 0.5;
     if (!takenItem.isEmpty()) {
-      this.spawnItemEntity(takenItem.split(this.level.random.nextInt(21) + 10), spawnX, spawnY, spawnZ);
+      this.spawnItemEntity(takenItem.split(this.level.getRandom().nextInt(21) + 10), spawnX, spawnY, spawnZ);
     }
 
     for (ItemStack decorationItem : getDecorations().ordered()) {
