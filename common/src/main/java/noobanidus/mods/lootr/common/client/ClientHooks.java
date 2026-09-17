@@ -99,7 +99,7 @@ public class ClientHooks {
 
   private static Frustum getFrustum () {
     Minecraft mc= Minecraft.getInstance();
-    Camera camera =  mc.gameRenderer.getMainCamera();
+    Camera camera =  mc.gameRenderer.mainCamera();
     Frustum frustum1 = camera.getCapturedFrustum();
     if (frustum1 != null) {
       return frustum1;

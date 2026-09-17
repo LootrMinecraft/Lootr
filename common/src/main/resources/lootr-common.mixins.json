@@ -34,7 +34,7 @@
   ],
   "client": [
     "client.MixinBlockStateDefinitions",
-    "particle_spawning.MixinFrustum$TestPoint"
+    "particle_spawning.MixinFrustum$TestPoint",
     "accessor.AccessorMixinDecoratedPotRenderer",
     "client.MixinBlockStateDefinitions"
   ],
