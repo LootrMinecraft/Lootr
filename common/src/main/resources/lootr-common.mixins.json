@@ -33,7 +33,8 @@
     "ticker.MixinStructureTemplate"
   ],
   "client": [
-    "client.MixinBlockStateDefinitions"
+    "client.MixinBlockStateDefinitions",
+    "particle_spawning.MixinFrustum$TestPoint"
   ],
   "injectors": {
     "defaultRequire": 1
