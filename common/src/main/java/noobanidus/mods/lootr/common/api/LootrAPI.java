@@ -509,10 +509,18 @@ public final class LootrAPI {
     return INSTANCE.getGameTime();
   }
 
+  private static Container closingContainer;
+
   public static void closeContainers (BlockEntity blockEntity) {
     if (!(blockEntity instanceof Container container)) {
       return;
     }
+
+    if (container.equals(closingContainer)) {
+      return;
+    }
+
+    closingContainer = container;
 
     for (ContainerUser user : container.getEntitiesWithContainerOpen()) {
       if (user instanceof ServerPlayer player) {
@@ -520,6 +528,8 @@ public final class LootrAPI {
         player.sendOverlayMessage(Component.translatable("lootr.message.emergency_conversion"));
       }
     }
+
+    closingContainer = null;
   }
 
   public static ResistanceMode getBlastResistanceMode() {
