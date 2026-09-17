@@ -1,9 +1,11 @@
 package noobanidus.mods.lootr.common.api.data.entity;
 
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
@@ -73,4 +75,6 @@ public interface ILootrEntity extends ILootrInfoProvider {
   default Vec3 getParticleCenter() {
     return asEntity().position().subtract(0.5, 0, 0.5);
   }
+
+  void setLootTableInternal (ResourceKey<LootTable> lootTable, long seed);
 }

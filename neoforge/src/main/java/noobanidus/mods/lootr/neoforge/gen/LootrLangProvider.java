@@ -56,7 +56,7 @@ public class LootrLangProvider extends LanguageProvider {
     add("stat.lootr.looted_stat", "Containers and entities looted");
 
     add("lootr.commands.create", "Created a Lootr %s at %s using the loot table %s.");
-    add("lootr.commands.summon", "Summoned a Lootr Cart at %s using the loot table %s.");
+    add("lootr.commands.summon", "Summoned a Lootr %s at %s using the loot table %s.");
     add("lootr.commands.blockpos", "%s,%s,%s");
 
     add("lootr.advancements.100loot.title", "Centennial");

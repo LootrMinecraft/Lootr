@@ -7,39 +7,40 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.DimensionArgument;
 import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.commands.arguments.ResourceKeyArgument;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.commands.arguments.coordinates.Vec3Argument;
+import net.minecraft.commands.synchronization.SuggestionProviders;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentUtils;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.GameProfileCache;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -58,7 +59,8 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrConstants;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
-import noobanidus.mods.lootr.common.api.command.ILootrCommandExtension;
+import noobanidus.mods.lootr.common.api.command.ILootrCommandBlockExtension;
+import noobanidus.mods.lootr.common.api.command.ILootrCommandEntityExtension;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.block.LootrBarrelBlock;
@@ -69,12 +71,12 @@ import noobanidus.mods.lootr.common.block.entity.LootrInventoryBlockEntity;
 import noobanidus.mods.lootr.common.data.DataStorage;
 import noobanidus.mods.lootr.common.data.LootrInventory;
 import noobanidus.mods.lootr.common.data.LootrSavedData;
-import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
 import noobanidus.mods.lootr.common.impl.LootrServiceRegistry;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinBaseContainerBlockEntity;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinChunkMap;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinMinecraftServer;
 import org.apache.commons.lang3.NotImplementedException;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -82,6 +84,7 @@ import java.io.FilenameFilter;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -89,13 +92,25 @@ import java.util.stream.Stream;
 @SuppressWarnings("resource")
 public class CommandLootr {
   private static List<ResourceKey<LootTable>> tables = null;
-  private static List<String> tableNames = null;
 
-  private static List<ResourceKey<LootTable>> getTables(MinecraftServer server) {
+  private static final List<String> LOOT_TABLE_INCLUDES = List.of("archaeology/", "chests/", "gameplay/fishing", "pots/");
+
+  private static List<ResourceKey<LootTable>> getTables() {
     if (tables == null) {
-      tables = server.reloadableRegistries().get().lookup(Registries.LOOT_TABLE).map(HolderLookup::listElementIds)
-          .orElse(Stream.of()).toList();
-      tableNames = tables.stream().map(o -> o.location().toString()).toList();
+      MinecraftServer server = LootrAPI.getServer();
+      Predicate<ResourceKey<LootTable>> predicate = (o) -> {
+        var path = o.location().getPath();
+        for (String start : LOOT_TABLE_INCLUDES) {
+          if (path.startsWith(start)) {
+            return true;
+          }
+        }
+
+        return false;
+      };
+      tables = server.reloadableRegistries().lookup().lookup(Registries.LOOT_TABLE)
+          .map(o -> (HolderLookup<LootTable>) o).map(HolderLookup::listElementIds)
+          .orElse(Stream.of()).filter(predicate).toList();
     }
     return tables;
   }
@@ -115,58 +130,66 @@ public class CommandLootr {
     return Lists.newArrayList(cache.profilesByName.keySet());
   }
 
-  private static List<String> getTableNames(MinecraftServer server) {
-    getTables(server);
-    return tableNames;
+  private static ResourceKey<LootTable> getRandomTable(RandomSource random) {
+    var tables = getTables();
+    return tables.get(random.nextInt(tables.size()));
   }
 
-  public static void createBlock(CommandSourceStack c, @Nullable Block block, @Nullable ResourceKey<LootTable> incomingTable) {
+  public static void createEntity(CommandSourceStack c, ILootrCommandEntityExtension<?> extension, @Nullable ResourceKey<LootTable> incomingTable) {
+    Level world = c.getLevel();
+    Vec3 incomingPos = c.getPosition();
+    BlockPos pos = new BlockPos((int) incomingPos.x(), (int) incomingPos.y, (int) incomingPos.z());
+    ResourceKey<LootTable> table;
+    if (incomingTable == null) {
+      table = getRandomTable(world.getRandom());
+    } else {
+      table = incomingTable;
+    }
+
+    Entity cart = extension.createEntity(world, pos);
+    Entity e = c.getEntity();
+    extension.process(cart, e, table, world.getRandom().nextLong());
+    world.addFreshEntity(cart);
+    c.sendSuccess(() -> Component.translatable("lootr.commands.summon", cart.getName(), ComponentUtils.wrapInSquareBrackets(Component.translatable("lootr.commands.blockpos", pos.getX(), pos.getY(), pos.getZ())
+        .setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.GREEN))
+            .withBold(true))), table.toString()), false);
+  }
+
+  public static void createBlock(CommandSourceStack c, @NotNull Block block, @Nullable ResourceKey<LootTable> incomingTable) {
     Level world = c.getLevel();
     Vec3 incomingPos = c.getPosition();
     BlockPos pos = new BlockPos((int) incomingPos.x, (int) incomingPos.y, (int) incomingPos.z);
     ResourceKey<LootTable> table;
     if (incomingTable == null) {
-      table = getTables(c.getServer()).get(world.getRandom().nextInt(getTables(c.getServer()).size()));
+      table = getRandomTable(world.getRandom());
     } else {
       table = incomingTable;
     }
-    if (block == null) {
-      LootrChestMinecartEntity cart = new LootrChestMinecartEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
-      Entity e = c.getEntity();
-      if (e != null) {
-        cart.setYRot(e.getYRot());
+    BlockState placementState = block.defaultBlockState();
+    Entity e = c.getEntity();
+    if (e != null) {
+      EnumProperty<Direction> prop = null;
+      Direction dir = Direction.orderedByNearest(e)[0].getOpposite();
+      if (placementState.hasProperty(LootrBarrelBlock.FACING)) {
+        prop = LootrBarrelBlock.FACING;
+      } else if (placementState.hasProperty(LootrChestBlock.FACING)) {
+        prop = LootrChestBlock.FACING;
+        dir = e.getDirection().getOpposite();
+      } else if (placementState.hasProperty(LootrShulkerBlock.FACING)) {
+        prop = LootrShulkerBlock.FACING;
       }
-      cart.setLootTable(table, world.getRandom().nextLong());
-      world.addFreshEntity(cart);
-      c.sendSuccess(() -> Component.translatable("lootr.commands.summon", ComponentUtils.wrapInSquareBrackets(Component.translatable("lootr.commands.blockpos", pos.getX(), pos.getY(), pos.getZ())
-          .setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.GREEN))
-              .withBold(true))), table.toString()), false);
-    } else {
-      BlockState placementState = block.defaultBlockState();
-      Entity e = c.getEntity();
-      if (e != null) {
-        EnumProperty<Direction> prop = null;
-        Direction dir = Direction.orderedByNearest(e)[0].getOpposite();
-        if (placementState.hasProperty(LootrBarrelBlock.FACING)) {
-          prop = LootrBarrelBlock.FACING;
-        } else if (placementState.hasProperty(LootrChestBlock.FACING)) {
-          prop = LootrChestBlock.FACING;
-          dir = e.getDirection().getOpposite();
-        } else if (placementState.hasProperty(LootrShulkerBlock.FACING)) {
-          prop = LootrShulkerBlock.FACING;
-        }
-        if (prop != null) {
-          placementState = placementState.setValue(prop, dir);
-        }
+      if (prop != null) {
+        placementState = placementState.setValue(prop, dir);
       }
-      world.setBlock(pos, placementState, 2);
-      if (LootrAPI.resolveBlockEntity(world.getBlockEntity(pos)) instanceof ILootrBlockEntity randomizableBe) {
-        randomizableBe.setLootTableInternal(table, world.getRandom().nextLong());
-      }
-      c.sendSuccess(() -> Component.translatable("lootr.commands.create", Component.translatable(block.getDescriptionId()), ComponentUtils.wrapInSquareBrackets(Component.translatable("lootr.commands.blockpos", pos.getX(), pos.getY(), pos.getZ())
-          .setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.GREEN))
-              .withBold(true))), table.toString()), false);
     }
+    world.setBlock(pos, placementState, 2);
+    if (LootrAPI.resolveBlockEntity(world.getBlockEntity(pos)) instanceof ILootrBlockEntity randomizableBe) {
+      randomizableBe.setLootTableInternal(table, world.getRandom().nextLong());
+    }
+    c.sendSuccess(() -> Component.translatable("lootr.commands.create", Component.translatable(block.getDescriptionId()), ComponentUtils.wrapInSquareBrackets(Component.translatable("lootr.commands.blockpos", pos.getX(), pos.getY(), pos.getZ())
+        .setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.GREEN))
+            .withBold(true))), table.toString()), false);
+
   }
 
   static NonNullList<ItemStack> copyItemList(NonNullList<ItemStack> reference) {
@@ -181,9 +204,12 @@ public class CommandLootr {
     dispatcher.register(builder(Commands.literal("lootr").requires(p -> p.hasPermission(2))));
   }
 
-  private static RequiredArgumentBuilder<CommandSourceStack, ResourceLocation> suggestTables() {
-    return Commands.argument("table", ResourceLocationArgument.id())
-        .suggests((c, build) -> SharedSuggestionProvider.suggest(getTableNames(c.getSource().getServer()), build));
+  private static final SuggestionProvider<CommandSourceStack> LOOT_TABLES = SuggestionProviders.register(LootrAPI.rl("loot_tables"), (context, builder) -> SharedSuggestionProvider.suggestResource(
+      getTables().stream().map(ResourceKey::location),
+      builder));
+
+  private static RequiredArgumentBuilder<CommandSourceStack, ResourceKey<LootTable>> suggestTables() {
+    return Commands.argument("table", ResourceKeyArgument.key(Registries.LOOT_TABLE)).suggests(LOOT_TABLES);
   }
 
   private static RequiredArgumentBuilder<CommandSourceStack, String> suggestProfiles() {
@@ -198,12 +224,32 @@ public class CommandLootr {
       return 1;
     });
 
-    for (ILootrCommandExtension extension : LootrServiceRegistry.getCommandExtensions()) {
+    for (ILootrCommandBlockExtension extension : LootrServiceRegistry.getCommandBlockExtensions()) {
       builder.then(Commands.literal(extension.getId()).executes(c -> {
         createBlock(c.getSource(), extension.getBlock(), null);
         return 1;
       }).then(suggestTables().executes(c -> {
-        createBlock(c.getSource(), extension.getBlock(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
+        ResourceKey<?> table = c.getArgument("table", ResourceKey.class);
+        if (!table.isFor(Registries.LOOT_TABLE)) {
+          throw new IllegalStateException("table '" + table + "' is not a ResourceKey<LootTable>!");
+        }
+        //noinspection unchecked
+        createBlock(c.getSource(), extension.getBlock(), (ResourceKey<LootTable>) table);
+        return 1;
+      })));
+    }
+
+    for (ILootrCommandEntityExtension<?> extension : LootrServiceRegistry.getCommandEntityExtensions()) {
+      builder.then(Commands.literal(extension.getId()).executes(c -> {
+        createEntity(c.getSource(), extension, null);
+        return 1;
+      }).then(suggestTables().executes(c -> {
+        ResourceKey<?> table = c.getArgument("table", ResourceKey.class);
+        if (!table.isFor(Registries.LOOT_TABLE)) {
+          throw new IllegalStateException("table '" + table + "' is not a ResourceKey<LootTable>!");
+        }
+        //noinspection unchecked
+        createEntity(c.getSource(), extension, (ResourceKey<LootTable>) table);
         return 1;
       })));
     }
@@ -225,14 +271,6 @@ public class CommandLootr {
           .sendSuccess(() -> Component.literal(LootrAPI.clearPlayerLoot(profile.getId()) ? "Cleared stored inventories for " + playerName : "No stored inventories for " + playerName + " to clear"), true);
       return 1;
     })));
-    builder.then(Commands.literal("cart").executes(c -> {
-      createBlock(c.getSource(), null, null);
-      return 1;
-    }).then(suggestTables().executes(c -> {
-      createBlock(c.getSource(), null, ResourceKey.create(Registries.LOOT_TABLE, ResourceLocationArgument.getId(c, "table")));
-      return 1;
-    })));
-
 
     builder.then(Commands.literal("custom-chest-old").executes(c -> {
       BlockPos pos = BlockPos.containing(c.getSource().getPosition());

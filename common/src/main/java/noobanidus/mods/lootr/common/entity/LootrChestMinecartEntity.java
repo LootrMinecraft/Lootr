@@ -356,6 +356,11 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
     return Items.CHEST_MINECART;
   }
 
+  @Override
+  public void setLootTableInternal(ResourceKey<LootTable> lootTable, long seed) {
+    setLootTable(lootTable, seed);
+  }
+
   @AutoService(ILootrEntityConverter.class)
   public static class DefaultConverter implements ILootrEntityConverter<LootrChestMinecartEntity> {
     @Override

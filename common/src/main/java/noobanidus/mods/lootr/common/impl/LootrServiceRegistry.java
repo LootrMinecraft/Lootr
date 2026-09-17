@@ -15,6 +15,8 @@ import noobanidus.mods.lootr.common.api.adapter.AdapterMap;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
 import noobanidus.mods.lootr.common.api.client.ILootrFabricModelProvider;
+import noobanidus.mods.lootr.common.api.command.ILootrCommandBlockExtension;
+import noobanidus.mods.lootr.common.api.command.ILootrCommandEntityExtension;
 import noobanidus.mods.lootr.common.api.command.ILootrCommandExtension;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
@@ -47,7 +49,8 @@ public class LootrServiceRegistry {
   private final Map<String, ILootrType> typeMap = new Object2ObjectOpenHashMap<>();
   // Only used on Fabric
   private final List<ILootrFabricModelProvider> fabricModelProviders = new ObjectArrayList<>();
-  private final List<ILootrCommandExtension> commandExtensions = new ObjectArrayList<>();
+  private final List<ILootrCommandBlockExtension> commandBlockExtensions = new ObjectArrayList<>();
+  private final List<ILootrCommandEntityExtension<?>> commandEntityExtensions = new ObjectArrayList<>();
 
   private final String commands;
 
@@ -116,9 +119,16 @@ public class LootrServiceRegistry {
 
     StringJoiner commandsTemp = new StringJoiner(" | ");
 
-    ServiceLoader<ILootrCommandExtension> loader12 = ServiceLoader.load(ILootrCommandExtension.class, classLoader);
-    for (ILootrCommandExtension extension : loader12) {
-      commandExtensions.add(extension);
+    ServiceLoader<ILootrCommandBlockExtension> loader12 = ServiceLoader.load(ILootrCommandBlockExtension.class, classLoader);
+    for (ILootrCommandBlockExtension extension : loader12) {
+      commandBlockExtensions.add(extension);
+      commandsTemp.add(extension.getId());
+      commandsTemp.add(extension.getId() + " <loot-table>");
+    }
+
+    ServiceLoader<ILootrCommandEntityExtension> loader14 = ServiceLoader.load(ILootrCommandEntityExtension.class, classLoader);
+    for (ILootrCommandEntityExtension<?> extension : loader14) {
+      commandEntityExtensions.add(extension);
       commandsTemp.add(extension.getId());
       commandsTemp.add(extension.getId() + " <loot-table>");
     }
@@ -224,8 +234,13 @@ public class LootrServiceRegistry {
   }
 
   @ApiStatus.Internal
-  public static List<ILootrCommandExtension> getCommandExtensions() {
-    return getInstance().commandExtensions;
+  public static List<ILootrCommandBlockExtension> getCommandBlockExtensions() {
+    return getInstance().commandBlockExtensions;
+  }
+
+  @ApiStatus.Internal
+  public static List<ILootrCommandEntityExtension<?>> getCommandEntityExtensions () {
+    return getInstance().commandEntityExtensions;
   }
 
   @ApiStatus.Internal

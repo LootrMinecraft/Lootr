@@ -134,4 +134,8 @@ public record AbstractMinecartContainerLootrInfoProvider(
   public int getRandomOffset() {
     return 0;
   }
+
+  @Override
+  public void setLootTableInternal(ResourceKey<LootTable> lootTable, long seed) {
+  }
 }
