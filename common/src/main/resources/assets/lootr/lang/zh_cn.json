@@ -46,7 +46,7 @@
   "lootr.advancements.trapped_chest.title": "惊喜！",
   "lootr.commands.blockpos": "%s，%s，%s",
   "lootr.commands.create": "已使用战利品表 %3$s 于 %2$s 处创建出了 Lootr 的%1$s。",
-  "lootr.commands.summon": "已使用战利品表 %2$s 于 %1$s 处生成出了 Lootr 矿车。",
+  "lootr.commands.summon": "已使用战利品表%3$s于%2$s处召唤出了Lootr的%1$s。",
   "lootr.commands.usage": "/lootr cart | cart <战利品表> | %s | custom-chest | custom-area <x> <y> <z> <x> <y> <z> | refresh | decay | open_as <玩家> | open_as_uuid <uuid> | id | openers | clear <玩家> | cclear <实体匹配器>",
   "lootr.configuration.blast_immune": "爆炸免疫",
   "lootr.configuration.blast_resistant": "爆炸抗性",
