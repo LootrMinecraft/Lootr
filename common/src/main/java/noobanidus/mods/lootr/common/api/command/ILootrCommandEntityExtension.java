@@ -10,7 +10,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface ILootrCommandEntityExtension<T extends Entity> extends ILootrCommandExtension {
+public interface ILootrCommandEntityExtension<T extends Entity> extends ILootrNewCommandExtension {
   EntityType<T> getType();
 
   default T createEntity(Level level, BlockPos pos) {

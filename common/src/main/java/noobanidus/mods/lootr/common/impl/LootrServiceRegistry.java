@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -118,6 +119,23 @@ public class LootrServiceRegistry {
     }
 
     StringJoiner commandsTemp = new StringJoiner(" | ");
+
+    ServiceLoader<ILootrCommandExtension> loader15 = ServiceLoader.load(ILootrCommandExtension.class, classLoader);
+    for (ILootrCommandExtension extension : loader15) {
+      commandBlockExtensions.add(new ILootrCommandBlockExtension() {
+        @Override
+        public Block getBlock() {
+          return extension.getBlock();
+        }
+
+        @Override
+        public String getId() {
+          return extension.getId();
+        }
+      });
+      commandsTemp.add(extension.getId());
+      commandsTemp.add(extension.getId() + " <loot-table>");
+    }
 
     ServiceLoader<ILootrCommandBlockExtension> loader12 = ServiceLoader.load(ILootrCommandBlockExtension.class, classLoader);
     for (ILootrCommandBlockExtension extension : loader12) {
