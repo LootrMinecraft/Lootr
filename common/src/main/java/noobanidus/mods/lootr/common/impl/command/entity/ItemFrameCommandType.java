@@ -40,7 +40,7 @@ public class ItemFrameCommandType implements ILootrCommandEntityExtension<LootrI
   @Override
   public void processInternal(LootrItemFrame entity, @Nullable Entity creator, @NotNull ResourceKey<LootTable> lootTable, long seed) {
     Item potential = BuiltInRegistries.ITEM.getValue(lootTable.identifier());
-    if (potential != null) {
+    if (potential != Items.AIR) {
       entity.lootrSetItem(new ItemStack(potential));
     } else {
       ItemStack item = new ItemStack(BuiltInRegistries.ITEM.getRandom(entity.getRandom()).map(Holder::value)
