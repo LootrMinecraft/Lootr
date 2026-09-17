@@ -131,13 +131,7 @@ public class ClientHooks {
     Vec3 vec3 = player.getEyePosition();
     Vec3 vec31 = provider.getInfoVec();
 
-    if (vec31.distanceTo(vec3) > 128) {
-      return false;
-    }
-
-    var clipResult = mc.level.clip(new ClipContext(vec3, vec31, ClipContext.Block.VISUAL, ClipContext.Fluid.NONE, player));
-
-    return clipResult.getType() != HitResult.Type.MISS;
+    return !(vec31.distanceTo(vec3) > 128);
   }
 
   public static void performUnopenedParticles(ILootrInfoProvider provider) {
