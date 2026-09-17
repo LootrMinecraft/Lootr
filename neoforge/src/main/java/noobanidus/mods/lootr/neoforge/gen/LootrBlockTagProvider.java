@@ -30,7 +30,8 @@ public class LootrBlockTagProvider extends BlockTagsProvider {
     tag(Tags.Blocks.CHESTS_WOODEN).add(LootrConstants.LootrBlockIds.CHEST);
     tag(Tags.Blocks.CHESTS_TRAPPED).add(LootrConstants.LootrBlockIds.TRAPPED_CHEST);
     tag(Tags.Blocks.BARRELS).add(LootrConstants.LootrBlockIds.BARREL);
-    tag(LootrTags.Blocks.NON_BLOCKING); //.add(Blocks.SPAWNER);
+    //noinspection unchecked
+    tag(LootrTags.Blocks.NON_BLOCKING).addTags(LootrTags.Blocks.SANDS, LootrTags.Blocks.GRAVELS); //.add(Blocks.SPAWNER);
 
     tag(LootrTags.Blocks.BARRELS).add(LootrConstants.LootrBlockIds.BARREL);
     tag(LootrTags.Blocks.CHESTS).add(LootrConstants.LootrBlockIds.CHEST);
