@@ -10,8 +10,8 @@ import noobanidus.mods.lootr.common.api.particle.ParticleColorOption;
 import noobanidus.mods.lootr.fabric.mixin.accessor.AccessorMixinSimpleParticleType;
 
 public class ModParticles {
-  public static final ParticleType<ParticleColorOption> UNOPENED_PARTICLE = ParticleColorOption.create(true);
-  public static final SimpleParticleType REFRESH_PARTICLE = AccessorMixinSimpleParticleType.lootr$invokeConstructor(true);
+  public static final ParticleType<ParticleColorOption> UNOPENED_PARTICLE = ParticleColorOption.create(false);
+  public static final SimpleParticleType REFRESH_PARTICLE = AccessorMixinSimpleParticleType.lootr$invokeConstructor(false);
 
   public static void register() {
     Registry.register(BuiltInRegistries.PARTICLE_TYPE, LootrConstants.UNOPENED_PARTICLE, UNOPENED_PARTICLE);
