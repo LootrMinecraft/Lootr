@@ -8,6 +8,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -38,8 +39,13 @@ public class ItemFrameCommandType implements ILootrCommandEntityExtension<LootrI
 
   @Override
   public void processInternal(LootrItemFrame entity, @Nullable Entity creator, @NotNull ResourceKey<LootTable> lootTable, long seed) {
-    ItemStack item = new ItemStack(BuiltInRegistries.ITEM.getRandom(entity.getRandom()).map(Holder::value)
-        .orElse(Items.CHEST));
-    entity.lootrSetItem(item);
+    Item potential = BuiltInRegistries.ITEM.getValue(lootTable.identifier());
+    if (potential != null) {
+      entity.lootrSetItem(new ItemStack(potential));
+    } else {
+      ItemStack item = new ItemStack(BuiltInRegistries.ITEM.getRandom(entity.getRandom()).map(Holder::value)
+          .orElse(Items.CHEST));
+      entity.lootrSetItem(item);
+    }
   }
 }
