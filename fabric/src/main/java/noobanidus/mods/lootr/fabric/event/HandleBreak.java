@@ -1,11 +1,12 @@
 package noobanidus.mods.lootr.fabric.event;
 
-import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -22,51 +23,51 @@ public class HandleBreak {
       return true;
     }
 
-    if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity lbe) {
-      if (!lbe.hasLootTable() && !lbe.isInfoReferenceInventory()) {
-        return true;
-      }
+    if (!(LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity lbe)) {
+      return true;
     }
-
-    if (LootrAPI.isFakePlayer(player) && LootrAPI.isFakePlayerBreakEnabled() || LootrAPI.isBreakEnabled()) {
+    if (!lbe.hasLootTable() && !lbe.isInfoReferenceInventory()) {
+      return true;
+    }
+    if (LootrAPI.canDestroyOrBreak(player)) {
       return true;
     }
 
-    if ((player instanceof FakePlayer && LootrAPI.isFakePlayerBreakEnabled() || LootrAPI.isBreakEnabled())) {
-      return true;
+    boolean dumped = false;
+    if (LootrAPI.breakToDropLoot() && !player.isShiftKeyDown()) {
+      LootrAPI.dumpPlayerLoot(lbe, (ServerPlayer) player, (ServerLevel) world);
+      dumped = true;
     }
+
     if (LootrAPI.isBreakDisabled()) {
       if (player.getAbilities().instabuild) {
         if (!player.isShiftKeyDown()) {
-          player.displayClientMessage(Component.translatable("lootr.message.cannot_break_sneak")
-              .setStyle(getChatStyle()), false);
+          if (!dumped) {
+            player.displayClientMessage(Component.translatable("lootr.message.cannot_break_sneak")
+                .setStyle(getChatStyle()), false);
+          }
           return false;
         }
       } else {
-        player.displayClientMessage(Component.translatable("lootr.message.cannot_break")
-            .setStyle(getChatStyle()), false);
+        if (!dumped) {
+          player.displayClientMessage(Component.translatable("lootr.message.cannot_break")
+              .setStyle(getChatStyle()), false);
+        }
         return false;
       }
     } else {
       if (!player.isShiftKeyDown()) {
-        player.displayClientMessage(Component.translatable("lootr.message.should_sneak")
-            .setStyle(getChatStyle()), false);
-        player.displayClientMessage(Component.translatable("lootr.message.should_sneak2")
-            .setStyle(getChatStyle()), false);
+        if (!dumped) {
+          player.displayClientMessage(Component.translatable("lootr.message.should_sneak")
+              .setStyle(getChatStyle()), false);
+          player.displayClientMessage(Component.translatable("lootr.message.should_sneak2")
+              .setStyle(getChatStyle()), false);
+        }
         return false;
       }
     }
 
     return true;
-  }
-
-  public static void afterBlockBreak(Level world, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity) {
-    if (state.is(LootrTags.Blocks.CONTAINERS)) {
-      blockEntity.setChanged();
-      if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity lbe) {
-        lbe.updatePacketViaForce(blockEntity);
-      }
-    }
   }
 
   public static Style getChatStyle() {

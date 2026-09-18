@@ -291,6 +291,7 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
     public boolean blast_immune = false;
     public boolean trapped_custom = false;
     public boolean should_drop_player_loot = false;
+    public boolean break_to_drop_loot = false;
     public boolean brushables_self_support = false;
     public boolean item_frames_self_support = false;
   }

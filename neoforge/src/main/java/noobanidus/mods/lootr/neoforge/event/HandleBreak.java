@@ -1,6 +1,8 @@
 package noobanidus.mods.lootr.neoforge.event;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -29,26 +31,37 @@ public class HandleBreak {
       if (LootrAPI.canDestroyOrBreak(player)) {
         return;
       }
+      boolean dumped = false;
+      if (LootrAPI.breakToDropLoot() && !player.isShiftKeyDown()) {
+        LootrAPI.dumpPlayerLoot(lbe, (ServerPlayer) player, (ServerLevel) event.getLevel());
+        dumped = true;
+      }
       if (LootrAPI.isBreakDisabled()) {
         if (player.getAbilities().instabuild) {
           if (!player.isShiftKeyDown()) {
             event.setCanceled(true);
-            player.displayClientMessage(Component.translatable("lootr.message.cannot_break_sneak")
-                .setStyle(LootrAPI.getChatStyle()), false);
+            if (!dumped) {
+              player.displayClientMessage(Component.translatable("lootr.message.cannot_break_sneak")
+                  .setStyle(LootrAPI.getChatStyle()), false);
+            }
           }
         } else {
           event.setCanceled(true);
-          player.displayClientMessage(Component.translatable("lootr.message.cannot_break")
-              .setStyle(LootrAPI.getChatStyle()), false);
+          if (!dumped) {
+            player.displayClientMessage(Component.translatable("lootr.message.cannot_break")
+                .setStyle(LootrAPI.getChatStyle()), false);
+          }
         }
       } else {
         if (!event.getPlayer().isShiftKeyDown()) {
           event.setCanceled(true);
-          event.getPlayer().displayClientMessage(Component.translatable("lootr.message.should_sneak")
-              .setStyle(LootrAPI.getChatStyle()), false);
-          event.getPlayer()
-              .displayClientMessage(Component.translatable("lootr.message.should_sneak2")
-                  .setStyle(LootrAPI.getChatStyle()), false);
+          if (!dumped) {
+            event.getPlayer().displayClientMessage(Component.translatable("lootr.message.should_sneak")
+                .setStyle(LootrAPI.getChatStyle()), false);
+            event.getPlayer()
+                .displayClientMessage(Component.translatable("lootr.message.should_sneak2")
+                    .setStyle(LootrAPI.getChatStyle()), false);
+          }
         }
       }
     }

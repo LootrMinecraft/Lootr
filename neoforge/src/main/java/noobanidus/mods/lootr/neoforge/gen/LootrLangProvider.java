@@ -40,7 +40,6 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.message.cannot_insert", "Items cannot be inserted into Item Frames with Loot.");
 
 
-
     add(LootrRegistry.getChestBlock(), "Loot Chest");
     add(LootrRegistry.getTrappedChestBlock(), "Loot Chest");
     add(LootrRegistry.getBarrelBlock(), "Loot Barrel");
@@ -121,6 +120,7 @@ public class LootrLangProvider extends LanguageProvider {
     var blast_resistant = "Blast Resistance";
     var blast_immune = "Blast Immunity";
     var should_drop_player_loot = "Broken Containers Drop Player's Loot";
+    var break_to_drop_loot = "Break To Drop Loot";
     var trapped_custom = "Custom Inventories Are Trapped";
     var lists = "Lists";
     var dimension_whitelist = "Dimension Whitelist";
@@ -184,6 +184,7 @@ public class LootrLangProvider extends LanguageProvider {
     add("text.autoconfig.lootr.option.breaking.blast_immune", blast_immune);
     add("text.autoconfig.lootr.option.breaking.trapped_custom", trapped_custom);
     add("text.autoconfig.lootr.option.breaking.should_drop_player_loot", should_drop_player_loot);
+    add("text.autoconfig.lootr.option.breaking.break_to_drop_loot", break_to_drop_loot);
     add("text.autoconfig.lootr.option.breaking.brushables_self_support", brushables);
     add("text.autoconfig.lootr.option.breaking.item_frames_self_support", supported);
     add("text.autoconfig.lootr.option.lists", lists);
@@ -252,6 +253,7 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.configuration.blast_resistant", blast_resistant);
     add("lootr.configuration.blast_immune", blast_immune);
     add("lootr.configuration.should_drop_player_loot", should_drop_player_loot);
+    add("lootr.configuration.break_to_drop_loot", break_to_drop_loot);
     add("lootr.configuration.power_comparators", power_comparators);
     add("lootr.configuration.trapped_custom", trapped_custom);
     add("lootr.configuration.disable_notifications", disable_notifications);

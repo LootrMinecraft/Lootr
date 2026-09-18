@@ -74,6 +74,7 @@ public class ConfigManager extends ConfigManagerBase {
   public static final ModConfigSpec.BooleanValue BLAST_RESISTANT;
   public static final ModConfigSpec.BooleanValue BLAST_IMMUNE;
   public static final ModConfigSpec.BooleanValue SHOULD_DROP_PLAYER_LOOT;
+  public static final ModConfigSpec.BooleanValue BREAK_TO_DROP_LOOT;
   public static final ModConfigSpec.IntValue NOTIFICATION_DELAY;
   public static final ModConfigSpec.BooleanValue DISABLE_NOTIFICATIONS;
   public static final ModConfigSpec.BooleanValue DISABLE_MESSAGE_STYLES;
@@ -170,6 +171,8 @@ public class ConfigManager extends ConfigManagerBase {
         .define("item_frames_self_support", false);
     SHOULD_DROP_PLAYER_LOOT = COMMON_BUILDER.comment("lootr chests will drop the contents of the player-specific inventory (generated when not generated) when broken")
         .define("should_drop_player_loot", false);
+    BREAK_TO_DROP_LOOT = COMMON_BUILDER.comment("breaking a lootr chest (while not sneaking) will drop a player's loot but not destroy the block, simply marking it as opened")
+            .define("break_to_drop_loot", false);
     COMMON_BUILDER.pop();
     COMMON_BUILDER.push("power").comment("configuration options for comparators and redstone power");
     POWER_COMPARATORS = COMMON_BUILDER.comment("when true, comparators on Lootr containers will give an output of 1; when false, they will give an output of 0")

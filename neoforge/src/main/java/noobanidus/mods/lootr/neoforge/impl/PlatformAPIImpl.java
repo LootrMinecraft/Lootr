@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.neoforge.impl;
 
+import net.minecraft.core.GlobalPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.LockCode;
@@ -15,6 +16,7 @@ import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.impl.DefaultPlatformAPIImpl;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinBaseContainerBlockEntity;
 import noobanidus.mods.lootr.neoforge.network.toClient.*;
+import noobanidus.mods.lootr.neoforge.network.toServer.PacketRequestUpdate;
 
 @SuppressWarnings("deprecation")
 public class PlatformAPIImpl extends DefaultPlatformAPIImpl implements IPlatformAPI {
@@ -95,5 +97,10 @@ public class PlatformAPIImpl extends DefaultPlatformAPIImpl implements IPlatform
   public void performPotBreak(ILootrBlockEntity blockEntity, ServerPlayer player) {
     PacketDistributor.sendToPlayersTrackingChunk((ServerLevel) blockEntity.getInfoLevel(), new ChunkPos(blockEntity.asBlockEntity()
         .getBlockPos()), new PacketPerformBreakEffect(player.getId(), blockEntity.asBlockEntity().getBlockPos()));
+  }
+
+  @Override
+  public void performRequestSync(GlobalPos pos) {
+    PacketDistributor.sendToServer(new PacketRequestUpdate(pos));
   }
 }

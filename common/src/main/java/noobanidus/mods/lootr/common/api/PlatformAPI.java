@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.common.api;
 
+import net.minecraft.core.GlobalPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.vehicle.AbstractMinecartContainer;
@@ -101,5 +102,9 @@ public class PlatformAPI {
 
   public static boolean shouldDoInitialSave() {
     return INSTANCE.shouldDoInitialSave();
+  }
+
+  public static void performRequestSync (GlobalPos pos) {
+    INSTANCE.performRequestSync(pos);
   }
 }

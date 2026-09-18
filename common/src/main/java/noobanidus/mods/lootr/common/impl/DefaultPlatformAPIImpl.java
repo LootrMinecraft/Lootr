@@ -32,14 +32,5 @@ public abstract class DefaultPlatformAPIImpl implements IPlatformAPI {
   @Override
   public boolean shouldDoInitialSave() {
     return false;
-/*
-    SaveMode mode = LootrAPI.getFileSaveMode();
-    if (mode == SaveMode.ALWAYS) {
-      return true;
-    } else if (mode == SaveMode.SMART) {
-      return !doesServerNeedLessFiles;
-    } else {
-      return false;
-    }*/
   }
 }

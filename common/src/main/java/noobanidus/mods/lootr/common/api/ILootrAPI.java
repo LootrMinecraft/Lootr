@@ -283,9 +283,15 @@ public interface ILootrAPI {
 
   void handleProviderSneak(@Nullable ILootrInfoProvider provider, ServerPlayer player);
 
-  void handleProviderOpen(@Nullable ILootrInfoProvider provider, ServerPlayer player);
+  default void handleProviderOpen(@Nullable ILootrInfoProvider provider, ServerPlayer player) {
+    handleProviderOpen(provider, player, null);
+  }
 
-  void handleProviderOpen(@Nullable ILootrInfoProvider provider, ServerPlayer player, MenuBuilder menuBuilder);
+  default void handleProviderOpen(@Nullable ILootrInfoProvider provider, ServerPlayer player, MenuBuilder menuBuilder) {
+    handleProviderOpen(provider, player, menuBuilder, false);
+  }
+
+  void handleProviderOpen(@Nullable ILootrInfoProvider provider, ServerPlayer player, MenuBuilder menuBuilder, boolean hideMenu);
 
   void handleProviderTick(@Nullable ILootrInfoProvider provider);
 
@@ -345,6 +351,10 @@ public interface ILootrAPI {
   }
 
   int getTickDelay();
+
+  boolean breakToDropLoot();
+
+  void dumpPlayerLoot(ILootrInfoProvider provider, ServerPlayer player, ServerLevel level);
 }
 
 

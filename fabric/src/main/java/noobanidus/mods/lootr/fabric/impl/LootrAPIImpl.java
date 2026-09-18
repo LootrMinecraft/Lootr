@@ -394,6 +394,11 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   }
 
   @Override
+  public boolean breakToDropLoot() {
+    return ConfigManager.get().breaking.break_to_drop_loot;
+  }
+
+  @Override
   public Component getInvalidTableComponent(ResourceKey<LootTable> lootTable) {
     return Component.translatable("lootr.message.invalid_table", lootTable.location()
             .getNamespace(), lootTable.toString())

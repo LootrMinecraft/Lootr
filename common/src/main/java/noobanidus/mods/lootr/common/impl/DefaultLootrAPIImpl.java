@@ -63,17 +63,14 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  public final void handleProviderOpen(@Nullable ILootrInfoProvider provider, ServerPlayer player) {
-    handleProviderOpen(provider, player, null);
-  }
-
-  @Override
-  public final void handleProviderOpen(@Nullable ILootrInfoProvider provider, ServerPlayer player, @Nullable MenuBuilder menuBuilder) {
+  public final void handleProviderOpen(@Nullable ILootrInfoProvider provider, ServerPlayer player, @Nullable MenuBuilder menuBuilder, boolean hideMenu) {
     if (provider == null) {
       return;
     }
     if (player.isSpectator()) {
-      player.openMenu(null);
+      if (!hideMenu) {
+        player.openMenu(null);
+      }
       return;
     }
     if (provider.getInfoLevel() == null || provider.getInfoLevel().isClientSide()) {
@@ -142,7 +139,9 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
     if (shouldUpdate) {
       provider.performUpdate(player);
     }
-    player.openMenu(menuProvider);
+    if (!hideMenu) {
+      player.openMenu(menuProvider);
+    }
     PiglinAi.angerNearbyPiglins(player, true);
   }
 
@@ -385,7 +384,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
 
   @Override
   public void playerDestroyed(Level level, Player player, BlockPos pos, @Nullable BlockEntity blockEntity) {
-    if (!shouldDropPlayerLoot() || (level.isClientSide() || blockEntity == null)) {
+    if (!LootrAPI.shouldDropPlayerLoot() || (level.isClientSide() || blockEntity == null)) {
       return;
     }
 
@@ -569,5 +568,18 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
     var tag = server.registryAccess().registryOrThrow(Registries.STRUCTURE)
         .getTag(LootrTags.Structure.DECAY_STRUCTURES);
     return tag.isPresent();
+  }
+
+  @Override
+  public void dumpPlayerLoot(ILootrInfoProvider provider, ServerPlayer player, ServerLevel level) {
+    handleProviderOpen(provider, player, null, true);
+    ILootrInventory inventory = getInventory(provider, player, provider.getDefaultFiller(), null);
+    provider.setHasBeenOpened(true);
+    if (inventory != null) {
+      Containers.dropContents(level, player.blockPosition(), inventory);
+      inventory.clearContent();
+      inventory.setChanged();
+    }
+    provider.performUpdate(player);
   }
 }

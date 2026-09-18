@@ -370,6 +370,10 @@ public class LootrAPI {
     return INSTANCE.shouldDropPlayerLoot();
   }
 
+  public static boolean breakToDropLoot () {
+    return INSTANCE.breakToDropLoot();
+  }
+
   public static boolean shouldPerformDecayWhileTicking() {
     return INSTANCE.shouldPerformDecayWhileTicking();
   }
@@ -616,6 +620,10 @@ public class LootrAPI {
 
   public static long getGameTime() {
     return INSTANCE.getGameTime();
+  }
+
+  public static void dumpPlayerLoot (ILootrInfoProvider provider, ServerPlayer player, ServerLevel level) {
+    INSTANCE.dumpPlayerLoot(provider, player, level);
   }
 
   private static Container closingContainer = null;

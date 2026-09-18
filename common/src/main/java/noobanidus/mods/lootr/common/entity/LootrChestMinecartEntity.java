@@ -7,6 +7,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.InteractionHand;
@@ -98,25 +99,36 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
       if (LootrAPI.canDestroyOrBreak(player)) {
         return false;
       }
+      boolean dumped = false;
+      if (LootrAPI.breakToDropLoot() && !player.isShiftKeyDown()) {
+        LootrAPI.dumpPlayerLoot(this, (ServerPlayer) player, (ServerLevel) level());
+        dumped = true;
+      }
       if (LootrAPI.isBreakDisabled()) {
         if (player.getAbilities().instabuild) {
           if (!player.isShiftKeyDown()) {
-            player.displayClientMessage(Component.translatable("lootr.message.cannot_break_sneak")
-                .setStyle(LootrAPI.getChatStyle()), false);
+            if (!dumped) {
+              player.displayClientMessage(Component.translatable("lootr.message.cannot_break_sneak")
+                  .setStyle(LootrAPI.getChatStyle()), false);
+            }
             return true;
           } else {
             return false;
           }
         } else {
-          player.displayClientMessage(Component.translatable("lootr.message.cannot_break")
-              .setStyle(LootrAPI.getChatStyle()), false);
+          if (!dumped) {
+            player.displayClientMessage(Component.translatable("lootr.message.cannot_break")
+                .setStyle(LootrAPI.getChatStyle()), false);
+          }
           return true;
         }
       } else if (!source.getEntity().isShiftKeyDown()) {
-        ((Player) source.getEntity()).displayClientMessage(Component.translatable("lootr.message.cart_should_sneak")
-            .setStyle(LootrAPI.getChatStyle()), false);
-        ((Player) source.getEntity()).displayClientMessage(Component.translatable("lootr.message.cart_should_sneak2")
-            .setStyle(LootrAPI.getChatStyle()), false);
+        if (!dumped) {
+          ((Player) source.getEntity()).displayClientMessage(Component.translatable("lootr.message.cart_should_sneak")
+              .setStyle(LootrAPI.getChatStyle()), false);
+          ((Player) source.getEntity()).displayClientMessage(Component.translatable("lootr.message.cart_should_sneak2")
+              .setStyle(LootrAPI.getChatStyle()), false);
+        }
         return true;
       } else //noinspection RedundantIfStatement
         if (source.getEntity().isShiftKeyDown()) {
