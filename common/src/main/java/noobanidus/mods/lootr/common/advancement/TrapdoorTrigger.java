@@ -1,8 +1,8 @@
 package noobanidus.mods.lootr.common.advancement;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.advancements.Criterion;
-import net.minecraft.advancements.criterion.SimpleCriterionTrigger;
+import net.minecraft.advancements.triggers.Criterion;
+import net.minecraft.advancements.triggers.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
 import noobanidus.mods.lootr.common.api.interfaces.advancement.ITrapdoorTrigger;
 import noobanidus.mods.lootr.common.api.interfaces.advancement.ITrigger;
