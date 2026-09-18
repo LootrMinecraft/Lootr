@@ -1,7 +1,6 @@
 package noobanidus.mods.lootr.common.api.interfaces.lootr;
 
 import net.minecraft.core.particles.ParticleType;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.stats.Stat;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.decoration.ItemFrame;
@@ -13,6 +12,7 @@ import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import noobanidus.mods.lootr.common.api.interfaces.advancement.IAdvancementTrigger;
 import noobanidus.mods.lootr.common.api.interfaces.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.interfaces.advancement.ILootedStatTrigger;
+import noobanidus.mods.lootr.common.api.interfaces.advancement.ITrapdoorTrigger;
 import noobanidus.mods.lootr.common.api.particle.ParticleColorOption;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -117,4 +117,6 @@ public interface ILootrRegistry {
   IContainerTrigger getOxidizedCopperChestTrigger();
 
   IContainerTrigger getTrappedChestTrigger();
+
+  ITrapdoorTrigger getTrapdoorTrigger ();
 }

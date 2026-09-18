@@ -43,3 +43,4 @@ common/src/generated/resources/.cache/*
 datapacks/*/.cache/
 datapacks/*/*.zip
 datapacks/*.zip
+/common/src/generated/resources/.cache/

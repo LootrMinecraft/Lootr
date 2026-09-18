@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import noobanidus.mods.lootr.common.api.interfaces.advancement.IAdvancementTrigger;
 import noobanidus.mods.lootr.common.api.interfaces.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.interfaces.advancement.ILootedStatTrigger;
+import noobanidus.mods.lootr.common.api.interfaces.advancement.ITrapdoorTrigger;
 import noobanidus.mods.lootr.common.api.interfaces.lootr.ILootrRegistry;
 import noobanidus.mods.lootr.common.api.particle.ParticleColorOption;
 
@@ -223,5 +224,9 @@ public final class LootrRegistry {
 
   public static ParticleType<ParticleColorOption> getUnopenedParticleType () {
     return INSTANCE.getUnopenedParticleType ();
+  }
+
+  public static ITrapdoorTrigger getTrapdoorTrigger () {
+    return INSTANCE.getTrapdoorTrigger();
   }
 }

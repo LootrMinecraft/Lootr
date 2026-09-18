@@ -1,5 +1,6 @@
-// 26.2	2026-09-17T11:56:16.9861801	Lootr Block Tags
+// 26.1.2	2026-09-17T11:51:25.282234	Lootr Block Tags
 3984b90c39340cf09d31ab752666bdd9cf7b084b data/c/tags/block/barrels.json
+ff54964f3e7e90937cdcd1dff2b4cb0b566f21e1 data/c/tags/block/chests.json
 50fa4ccbeb389b29feaf73ab0660125770eb1253 data/c/tags/block/chests/trapped.json
 31a2e7bede76b226943a3e0bc0be630d999ed0c5 data/c/tags/block/chests/wooden.json
 5b3398434681ecf3177b5af6a65b4305cdc15e58 data/ftbchunks/tags/block/interact_whitelist.json
@@ -10,16 +11,16 @@ fe6cf034f70caab0e5779b83cc0771fe934f077a data/lootr/tags/block/convert/barrels.j
 35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/lootr/tags/block/convert/blacklist.json
 6bcb9b7fbaaef83c29aadda70eaea647e2ff9517 data/lootr/tags/block/convert/blocks.json
 b221fc80e595e4526894509c077c52e4e553aec7 data/lootr/tags/block/convert/chests.json
-38d505001082632aec421a9e20ed2dfa19540a16 data/lootr/tags/block/convert/copper_chests.json
+4a59a2f233f082fbf7b784aea4356fc534de5846 data/lootr/tags/block/convert/copper_chests.json
 6737d0d82bdf89b87efc41c190fa4f0c05e5ee0e data/lootr/tags/block/convert/custom_eligible.json
-eed0fa2f78bf6cb4ffa83a933c84cfbd3781ab86 data/lootr/tags/block/convert/exposed_copper_chests.json
+341b887879a208bb1e064608bc2b9e9c8b63f421 data/lootr/tags/block/convert/exposed_copper_chests.json
 08d8a7bb2484130183dd598579a74ecaebb93ca2 data/lootr/tags/block/convert/gravels.json
-f1d5ab4bef26c93d4b2d36e55651915328c850e6 data/lootr/tags/block/convert/oxidized_copper_chests.json
+5621e13ea1418528b83f2096a205df73b68b9fa5 data/lootr/tags/block/convert/oxidized_copper_chests.json
 7699438faed283162c2aa7521e770dc9acd6ad4d data/lootr/tags/block/convert/pots.json
 2423e4dc6c6bc7901f7d4fca00e61aaaec181aff data/lootr/tags/block/convert/sands.json
 3ae9f87200eda9255e9f974c3c16e48dd11322e1 data/lootr/tags/block/convert/shulkers.json
 52015e498cd31c44d25b4b48018ac24461ecbc91 data/lootr/tags/block/convert/trapped_chests.json
-32b0e502f308ad7766b524dc0887f92e06c3bb32 data/lootr/tags/block/convert/weathered_copper_chests.json
+8cc268998569928b577d18a67c17cc04a8493534 data/lootr/tags/block/convert/weathered_copper_chests.json
 c999aa5f89547c3c95f09cd91eb0a46475db12e0 data/lootr/tags/block/copper_chests.json
 35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/lootr/tags/block/enable_break.json
 536a8959cc674ff0f664ba88b85e2192c8705d9b data/lootr/tags/block/exposed_copper_chests.json
@@ -44,9 +45,9 @@ da84b1dfe7604bc969da3fe5825ff5404957bfa2 data/lootr/tags/block/prevent_break/tra
 31c7c8d3dc8b16564da09b7ea98ddf0c69bef6fa data/lootr/tags/block/shulkers.json
 50fa4ccbeb389b29feaf73ab0660125770eb1253 data/lootr/tags/block/trapped_chests.json
 caf0e971353b03d781ed19984a03095c37944be8 data/lootr/tags/block/weathered_copper_chests.json
-8a862260088ede7e14277048f1c70a0e677fe7bb data/minecraft/tags/block/guarded_by_piglins.json
+4c1f53715f998f85e2e9ddd8cb93a700e8674ae1 data/minecraft/tags/block/guarded_by_piglins.json
 8a862260088ede7e14277048f1c70a0e677fe7bb data/minecraft/tags/block/mineable/axe.json
-0ad2d2ab4ee9842e00deb9a28c6839531d674a43 data/minecraft/tags/block/mineable/pickaxe.json
-11a3e33481455b649675c20dd7a692a5c836e5f8 data/minecraft/tags/block/mineable/shovel.json
+fa97df45d4acaa1f2c81d8aeffd91b0c03550a7c data/minecraft/tags/block/mineable/pickaxe.json
+012db6451f140d46599f000868a882fcc5ed3df3 data/minecraft/tags/block/mineable/shovel.json
 8e95bbeb950c8586fb981d1d56e2c4bc7cf6d73b data/minecraft/tags/block/sand.json
 31c7c8d3dc8b16564da09b7ea98ddf0c69bef6fa data/minecraft/tags/block/shulker_boxes.json

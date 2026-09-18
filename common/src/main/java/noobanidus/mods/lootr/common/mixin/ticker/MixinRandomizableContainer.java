@@ -41,6 +41,7 @@ public interface MixinRandomizableContainer {
     original.call(instance, table);
     if (table != null && instance.getLevel() != null && !instance.getLevel()
         .isClientSide() && instance instanceof BlockEntity blockEntity && !(instance instanceof ILootrBlockEntity) && !(LootrAPI.wrapBlockEntity(blockEntity) instanceof ILootrBlockEntity)) {
+      LootrAPI.closeContainers(blockEntity);
       BlockEntityTicker.addEntity(blockEntity, blockEntity.getLevel(), ChunkPos.containing(blockEntity.getBlockPos()));
     }
   }
@@ -50,6 +51,7 @@ public interface MixinRandomizableContainer {
   default void lootr$unpackLootTable(Player player, CallbackInfo ci) {
     if (this instanceof BlockEntity blockEntity) {
       if (BlockEntityTicker.isValidEntityFull(blockEntity)) {
+        LootrAPI.closeContainers(blockEntity);
         BlockEntityTicker.addEntity(blockEntity, blockEntity.getLevel(), ChunkPos.containing(blockEntity.getBlockPos()));
         ci.cancel();
       }
