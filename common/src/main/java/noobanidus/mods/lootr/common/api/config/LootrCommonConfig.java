@@ -57,6 +57,11 @@ public class LootrCommonConfig {
     @ConfigEntry(id = "perform_piecewise_check", translation = "lootr.configuration.perform_piecewise_check")
     @Comment(value = LootrConfigStrings.PERFORM_PIECEWISE_CHECK_DESC, translation = "lootr.configuration.perform_piecewise_check.desc")
     public static boolean performPiecewiseCheck = true;
+
+    @ConfigEntry(id="tick_delay", translation="lootr.configuration.tick_delay")
+    @Comment(value=LootrConfigStrings.TICK_DELAY_DESC, translation="lootr.configuration.tick_delay.desc")
+    @ConfigOption.Range(min = 0, max = Integer.MAX_VALUE)
+    public static int tickDelay = 20;
   }
 
   @Category("Restrictions")

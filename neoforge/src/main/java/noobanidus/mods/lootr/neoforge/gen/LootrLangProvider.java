@@ -132,6 +132,8 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.configuration.check_world_border.desc", LootrConfigStrings.CHECK_WORLD_BORDER_DESC);
     add("lootr.configuration.perform_piecewise_check", LootrConfigStrings.PERFORM_PIECEWISE_CHECK);
     add("lootr.configuration.perform_piecewise_check.desc", LootrConfigStrings.PERFORM_PIECEWISE_CHECK_DESC);
+    add("lootr.configuration.tick_delay", LootrConfigStrings.TICK_DELAY);
+    add("lootr.configuration.tick_delay.desc", LootrConfigStrings.TICK_DELAY_DESC);
 
     add("lootr.configuration.restrictions", LootrConfigStrings.RESTRICTIONS_TITLE);
     add("lootr.configuration.restrictions.desc", LootrConfigStrings.RESTRICTIONS_DESC);

@@ -49,6 +49,8 @@ public final class LootrConfigStrings {
   public static final String CHECK_WORLD_BORDER_DESC = "If true, containers that exist outside of the world border will be ignored and not considered for conversion. [default: true]";
   public static final String PERFORM_PIECEWISE_CHECK = "Perform Piecewise Check";
   public static final String PERFORM_PIECEWISE_CHECK_DESC = "If true, features that check structures, such as refresh or decay structure tags, will check each piece of a structure to determine if the container is located in that structure. [default: true]";
+  public static final String TICK_DELAY = "Default Tick Delay";
+  public static final String TICK_DELAY_DESC = "The default delay between ticks. The higher this value, the slower it is for containers to recognise that they have refreshed or decayed while ticking. A random value from 0 to 20 is added to this by each block entity. [default: 20]";
 
   // Restrictions
   public static final String RESTRICTIONS_TITLE = "Restrictions";

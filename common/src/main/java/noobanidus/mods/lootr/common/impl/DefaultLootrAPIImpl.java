@@ -396,6 +396,11 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
+  public int getTickDelay() {
+    return LootrCommonConfig.Conversion.tickDelay;
+  }
+
+  @Override
   public int getDecayValue() {
     return LootrCommonConfig.Decay.decayValue;
   }

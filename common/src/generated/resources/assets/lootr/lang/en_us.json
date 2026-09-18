@@ -170,6 +170,8 @@
   "lootr.configuration.start_decay_while_ticking.desc": "If true, containers that are eligible to decay and have previously been opened by another player, will start decaying during the world tick. [default: false]",
   "lootr.configuration.start_refresh_while_ticking": "Start Refresh While Ticking",
   "lootr.configuration.start_refresh_while_ticking.desc": "If true, containers that are eligible to refresh and have previously been opened by another player, will start refreshing during the world tick. [default: true]",
+  "lootr.configuration.tick_delay": "Default Tick Delay",
+  "lootr.configuration.tick_delay.desc": "The default delay between ticks. The higher this value, the slower it is for containers to recognise that they have refreshed or decayed while ticking. A random value from 0 to 20 is added to this by each block entity. [default: 20]",
   "lootr.configuration.title": "Server",
   "lootr.configuration.use_problematic_loot_tables": "Use Problematic Loot Tables",
   "lootr.configuration.use_problematic_loot_tables.desc": "Use the default list of 'problematic' loot tables when constructing the Loot Table Blacklist. [default: true]",
