@@ -1,6 +1,5 @@
 package noobanidus.mods.lootr.common.api.helper;
 
-import com.google.common.base.Suppliers;
 import com.google.common.collect.Sets;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.core.HolderLookup;
@@ -43,7 +42,10 @@ public class SimpleLootrInstance {
 
   public SimpleLootrInstance(Supplier<Set<UUID>> visualOpenersSupplier, int size) {
     this.items = NonNullList.withSize(size, ItemStack.EMPTY);
-    this.visualOpenersSupplier = Suppliers.memoize(visualOpenersSupplier::get);
+    // Note for future me: don't memoize this, that defeats the purpose.
+    // The whole point is to get the *live* visual openers rather than
+    // a potentially stale copy.
+    this.visualOpenersSupplier = visualOpenersSupplier;
   }
 
   @NotNull
