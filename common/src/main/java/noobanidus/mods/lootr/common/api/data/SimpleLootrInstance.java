@@ -39,7 +39,10 @@ public class SimpleLootrInstance {
 
   public SimpleLootrInstance(Supplier<Set<UUID>> visualOpenersSupplier, int size) {
     this.emptyItemList = NonNullList.withSize(size, ItemStack.EMPTY);
-    this.visualOpenersSupplier = Suppliers.memoize(visualOpenersSupplier::get);
+    // Note for future me: don't memoize this, that defeats the purpose.
+    // The whole point is to get the *live* visual openers rather than
+    // a potentially stale copy.
+    this.visualOpenersSupplier = visualOpenersSupplier;
   }
 
   @Deprecated
