@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.Blocks;
 import noobanidus.mods.lootr.common.advancement.AdvancementTrigger;
 import noobanidus.mods.lootr.common.advancement.ContainerTrigger;
 import noobanidus.mods.lootr.common.advancement.LootedStatTrigger;
+import noobanidus.mods.lootr.common.advancement.TrapdoorTrigger;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrRegistry;
 import org.jspecify.annotations.NonNull;
@@ -24,7 +25,7 @@ public class LootrAdvancementGenerator implements AdvancementSubProvider {
   @Override
   public void generate(HolderLookup.@NonNull Provider arg, @NonNull Consumer<AdvancementHolder> consumer) {
     AdvancementHolder lootrRoot = Advancement.Builder.advancement()
-        .display(Blocks.CHEST, Component.translatable("lootr.advancements.root.title"), Component.translatable("lootr.advancements.root.description"), Identifier.parse("minecraft:block/dark_oak_log"), AdvancementType.TASK, false, false, false)
+        .display(Blocks.CHEST, Component.translatable("lootr.advancements.root.title"), Component.translatable("lootr.advancements.root.description"), Identifier.parse("lootr:block/gold_planks"), AdvancementType.TASK, false, false, false)
         .addCriterion("always_true", PlayerTrigger.TriggerInstance.tick()).save(consumer, LootrAPI.rl("root"));
     AdvancementHolder one_barrel = Advancement.Builder.advancement().parent(lootrRoot)
         .display(LootrRegistry.getBarrelBlock(), Component.translatable("lootr.advancements.1barrel.title"), Component.translatable("lootr.advancements.1barrel.description"), null, AdvancementType.TASK, true, true, false)
@@ -113,5 +114,6 @@ public class LootrAdvancementGenerator implements AdvancementSubProvider {
         .addCriterion("weathered_chest", AdvancementTrigger.completed(weathered_chest.id()))
         .addCriterion("exposed_chest", AdvancementTrigger.completed(exposed_chest.id()))
         .addCriterion("oxidized_chest", AdvancementTrigger.completed(oxidized_chest.id())).save(consumer, LootrAPI.rl("all_copper"));
+    var escape_hatch = Advancement.Builder.advancement().parent(lootrRoot).display(Items.IRON_TRAPDOOR, Component.translatable("lootr.advancements.emergency_escape_hatch.title"), Component.translatable("lootr.advancements.emergency_escape_hatch.description"), null, AdvancementType.CHALLENGE, true, true, true).addCriterion("trapdoor_triggered", TrapdoorTrigger.trapdoor(LootrRegistry.getTrapdoorTrigger())).save(consumer, LootrAPI.rl("emergency_escape_hatch"));
   }
 }

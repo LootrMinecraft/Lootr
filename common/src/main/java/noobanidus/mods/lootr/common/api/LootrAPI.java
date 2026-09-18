@@ -542,6 +542,7 @@ public final class LootrAPI {
       if (user instanceof ServerPlayer player) {
         player.closeContainer();
         player.sendOverlayMessage(Component.translatable("lootr.message.emergency_conversion"));
+        LootrRegistry.getTrapdoorTrigger().trigger(player);
       }
     }
 

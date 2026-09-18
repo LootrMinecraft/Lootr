@@ -7,6 +7,7 @@ import net.minecraft.resources.Identifier;
 import noobanidus.mods.lootr.common.advancement.AdvancementTrigger;
 import noobanidus.mods.lootr.common.advancement.ContainerTrigger;
 import noobanidus.mods.lootr.common.advancement.LootedStatTrigger;
+import noobanidus.mods.lootr.common.advancement.TrapdoorTrigger;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 
 public class ModAdvancements {
@@ -25,6 +26,7 @@ public class ModAdvancements {
   public static final Identifier EXPOSED_COPPER_CHEST_LOCATION = LootrAPI.rl("exposed_copper_chest");
   public static final Identifier WEATHERED_COPPER_CHEST_LOCATION = LootrAPI.rl("weathered_copper_chest");
   public static final Identifier OXIDIZED_COPPER_CHEST_LOCATION = LootrAPI.rl("oxidized_copper_chest");
+  public static final Identifier EMERGENCY_ESCAPE_HATCH_LOCATION = LootrAPI.rl("emergency_escape_hatch");
   public static ContainerTrigger CHEST = null;
   public static ContainerTrigger TRAPPED_CHEST = null;
   public static ContainerTrigger COPPER_CHEST = null;
@@ -40,6 +42,7 @@ public class ModAdvancements {
   public static LootedStatTrigger SCORE = null;
   public static AdvancementTrigger ADVANCEMENT = null;
   public static ContainerTrigger ITEM_FRAME = null;
+  public static TrapdoorTrigger ESCAPE_HATCH = null;
 
   public static void registerAdvancements() {
     ADVANCEMENT = Registry.register(BuiltInRegistries.TRIGGER_TYPES, ADVANCEMENT_LOCATION, new AdvancementTrigger());
@@ -57,5 +60,6 @@ public class ModAdvancements {
     EXPOSED_COPPER_CHEST = Registry.register(BuiltInRegistries.TRIGGER_TYPES, EXPOSED_COPPER_CHEST_LOCATION, new ContainerTrigger());
     WEATHERED_COPPER_CHEST = Registry.register(BuiltInRegistries.TRIGGER_TYPES, WEATHERED_COPPER_CHEST_LOCATION, new ContainerTrigger());
     OXIDIZED_COPPER_CHEST = Registry.register(BuiltInRegistries.TRIGGER_TYPES, OXIDIZED_COPPER_CHEST_LOCATION, new ContainerTrigger());
+    ESCAPE_HATCH = Registry.register(BuiltInRegistries.TRIGGER_TYPES, EMERGENCY_ESCAPE_HATCH_LOCATION, new TrapdoorTrigger());
   }
 }

@@ -8,6 +8,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import noobanidus.mods.lootr.common.advancement.AdvancementTrigger;
 import noobanidus.mods.lootr.common.advancement.ContainerTrigger;
 import noobanidus.mods.lootr.common.advancement.LootedStatTrigger;
+import noobanidus.mods.lootr.common.advancement.TrapdoorTrigger;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 
 public class ModAdvancements {
@@ -29,6 +30,7 @@ public class ModAdvancements {
   public static final DeferredHolder<CriterionTrigger<?>, ContainerTrigger> WEATHERED_COPPER_CHEST = REGISTER.register("weathered_copper_chest", ContainerTrigger::new);
   public static final DeferredHolder<CriterionTrigger<?>, ContainerTrigger> OXIDIZED_COPPER_CHEST = REGISTER.register("oxidized_copper_chest", ContainerTrigger::new);
   public static final DeferredHolder<CriterionTrigger<?>, ContainerTrigger> TRAPPED_CHEST = REGISTER.register("trapped_chest", ContainerTrigger::new);
+  public static final DeferredHolder<CriterionTrigger<?>, TrapdoorTrigger> ESCAPE_HATCH = REGISTER.register("emergency_escape_hatch", TrapdoorTrigger::new);
 
   static {
     REGISTER.addAlias(LootrAPI.rl("weatherd_copper_chest"), LootrAPI.rl("weathered_copper_chest"));

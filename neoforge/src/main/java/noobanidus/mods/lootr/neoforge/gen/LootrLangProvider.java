@@ -93,6 +93,8 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.advancements.oxidized_copper_chest.description", "Open your first Lootr oxidized copper chest!");
     add("lootr.advancements.trapped_chest.title", "Surprise!");
     add("lootr.advancements.trapped_chest.description", "Open your first Lootr trapped chest!");
+    add("lootr.advancements.emergency_escape_hatch.title", "Emergency Escape Hatch!");
+    add("lootr.advancements.emergency_escape_hatch.description", "Trigger Lootr's emergency conversion contingency on an eligible chest!");
 
     add("itemGroup.lootr", "Lootr");
     add("itemGroup.lootr.lootr", "Lootr");
