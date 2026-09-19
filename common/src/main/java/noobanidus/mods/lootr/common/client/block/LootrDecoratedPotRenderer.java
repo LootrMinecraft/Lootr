@@ -108,7 +108,7 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
       return;
     }
 
-    boolean opened = decoratedPotBlockEntity.hasClientOpened(player.getUUID());
+    boolean opened = decoratedPotBlockEntity.hasClientOpened(player);
 
     poseStack.pushPose();
     Direction direction = decoratedPotBlockEntity.getDirection();

@@ -267,6 +267,7 @@ public class CommandLootr {
         return 0;
       }
       GameProfile profile = opt_profile.get();
+      // TODO: Handle teams
       c.getSource()
           .sendSuccess(() -> Component.literal(LootrAPI.clearPlayerLoot(profile.getId()) ? "Cleared stored inventories for " + playerName : "No stored inventories for " + playerName + " to clear"), true);
       return 1;
@@ -539,7 +540,7 @@ public class CommandLootr {
             if (e instanceof Player player) {
               String name = player.getScoreboardName();
               c.getSource()
-                  .sendSuccess(() -> Component.literal(DataStorage.clearInventories(player.getUUID()) ? "Cleared stored inventories for " + name : "No stored inventories for " + name + " to clear"), true);
+                  .sendSuccess(() -> Component.literal(DataStorage.clearInventories(LootrAPI.resolvePlayerTeam(player)) ? "Cleared stored inventories for " + name : "No stored inventories for " + name + " to clear"), true);
             }
           }
 

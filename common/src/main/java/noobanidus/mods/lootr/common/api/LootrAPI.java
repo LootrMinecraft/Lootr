@@ -45,6 +45,7 @@ import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinShulkerBoxMenu;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
@@ -71,6 +72,8 @@ public class LootrAPI {
   public static final TicketType<Unit> LOOTR_ENTITY_TICK_TICKET = TicketType.create("lootr_entity_tick_ticket", (unit1, unit2) -> 0, 300);
   public static final List<ResourceLocation> PROBLEMATIC_CHESTS = Arrays.asList(LootrAPI.rl("twilightforest", "structures/stronghold_boss"), LootrAPI.rl("atum", "chests/pharaoh"));
   public static final int DEFAULT_PARTICLE_COLOR = 0xfad64a;
+  public static final ResourceLocation DEFAULT_TEAM_RESOLVER = LootrAPI.rl("default");
+  public static final ResourceLocation MINECRAFT_TEAM_RESOLVER = ResourceLocation.withDefaultNamespace("vanilla_default");
 
   public static ILootrAPI INSTANCE = null;
   public static boolean shouldDiscardIdAndOpeners;
@@ -624,6 +627,19 @@ public class LootrAPI {
 
   public static void dumpPlayerLoot (ILootrInfoProvider provider, ServerPlayer player, ServerLevel level) {
     INSTANCE.dumpPlayerLoot(provider, player, level);
+  }
+
+  public static boolean isTeamLoot () {
+    return INSTANCE.isTeamLoot();
+  }
+
+  @NotNull
+  public static ResourceLocation getPinnedTeamResolver () {
+    return INSTANCE.getPinnedTeamResolver();
+  }
+
+  public static UUID resolvePlayerTeam (Player player) {
+    return INSTANCE.resolvePlayerTeam(player);
   }
 
   private static Container closingContainer = null;

@@ -81,6 +81,8 @@ public class ConfigManager extends ConfigManagerBase {
   public static final ModConfigSpec.BooleanValue TRAPPED_CUSTOM;
   public static final ModConfigSpec.BooleanValue SHOULD_WARN_NO_LOOT_TABLE_AT_GENERATION;
   public static final ModConfigSpec.IntValue TICK_DELAY;
+  public static final ModConfigSpec.BooleanValue TEAM_LOOT;
+  public static final ModConfigSpec.ConfigValue<String> PINNED_TEAM_RESOLVER;
   // Client-only
   public static final ModConfigSpec.BooleanValue VANILLA_TEXTURES;
   public static final ModConfigSpec.BooleanValue NEW_TEXTURES;
@@ -103,6 +105,7 @@ public class ConfigManager extends ConfigManagerBase {
   private static Set<ResourceKey<Level>> REFRESH_DIMS = null;
   private static Set<ResourceKey<LootTable>> LOOT_BLACKLIST = null;
   private static Set<String> LOOT_MODIDS = null;
+  private static ResourceLocation PINNED_TEAM_RESOLVER_ID = null;
 
   static {
     COMMON_BUILDER.push("conversion").comment("configuration options for the conversion of chests");
@@ -132,6 +135,10 @@ public class ConfigManager extends ConfigManagerBase {
     PERFORM_PIECEWISE_CHECK = COMMON_BUILDER.comment("checks structure pieces as well as structure starts when determining if a structure contains a position, more accurate but may cause lag (default true)")
         .define("perform_piecewise_check", true);
     TICK_DELAY = COMMON_BUILDER.comment("the default delay between ticks. the higher this value, the slower it takes for containers to determine they should refresh, decay, or start refreshing or decaying").defineInRange("tick_delay", 20, 0, Integer.MAX_VALUE);
+    COMMON_BUILDER.pop();
+    COMMON_BUILDER.push("team");
+    TEAM_LOOT = COMMON_BUILDER.comment("if true, instead of providing individual loot per player, loot will be assigned based on teams. by default, the entity's scoreboard team will be used. if the player is not in a team, their own uuid will be used instead. [default: false]").define("team_loot", false);
+    PINNED_TEAM_RESOLVER = COMMON_BUILDER.comment("the team resolver to use. by default, this is the standard minecraft scoreboard system. anyone not assigned to a scoreboard team will instead be considered in a team of just themselves. this value only needs to be set when using multiple team-based add-ons that provide teams with the same priority and you wish to specify which one you want to use. if blank or empty or the team resolver cannot be found, it will default to 'lootr:default' [default: blank]").define("pinned_team_resolver", "");
     COMMON_BUILDER.pop();
     COMMON_BUILDER.push("whitelist")
         .comment("configuration for specific whitelisting and blacklisting of dimensions, loot tables and modids");
@@ -259,6 +266,7 @@ public class ConfigManager extends ConfigManagerBase {
       REFRESH_DIMS = null;
       REFRESH_MODS = null;
       REFRESH_TABLES = null;
+      PINNED_TEAM_RESOLVER_ID = null;
     } else if (event.getConfig().getType() == ModConfig.Type.CLIENT) {
       LootrAPI.refreshSections();
     }
@@ -420,6 +428,17 @@ public class ConfigManager extends ConfigManagerBase {
   public static boolean shouldNotify(int remaining) {
     int delay = NOTIFICATION_DELAY.get();
     return !DISABLE_NOTIFICATIONS.get() && (delay == -1 || remaining <= delay);
+  }
+
+  public static ResourceLocation getPinnedTeamResolver () {
+    if (PINNED_TEAM_RESOLVER_ID == null) {
+      PINNED_TEAM_RESOLVER_ID = ResourceLocation.tryParse(PINNED_TEAM_RESOLVER.get());
+      if (PINNED_TEAM_RESOLVER_ID == null) {
+        PINNED_TEAM_RESOLVER_ID = LootrAPI.DEFAULT_TEAM_RESOLVER;
+      }
+    }
+
+    return PINNED_TEAM_RESOLVER_ID;
   }
 
   public static boolean isVanillaTextures() {

@@ -2,6 +2,7 @@ package noobanidus.mods.lootr.common.api;
 
 import net.minecraft.world.entity.player.Player;
 import noobanidus.mods.lootr.common.api.annotation.ClientOnly;
+import noobanidus.mods.lootr.common.client.ClientHooks;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,19 +39,29 @@ public interface IClientOpeners extends IOpeners {
     if (!context.hasPlayer()) {
       return false;
     }
-    assert context.player() != null;
     return hasClientOpened(context.player());
   }
 
   default boolean hasClientOpened (Player player) {
-    return hasClientOpened(player.getUUID());
-  }
-
-  default boolean hasClientOpened (UUID uuid) {
     if (isClientOpened()) {
       return true;
     }
-    Set<UUID> clientOpeners = getClientOpeners();
-    return clientOpeners != null && !clientOpeners.isEmpty() && clientOpeners.contains(uuid);
+
+    UUID id = LootrAPI.resolvePlayerTeam(player);
+
+    var clientOpeners = getClientOpeners();
+
+    return clientOpeners != null && !clientOpeners.isEmpty() && clientOpeners.contains(id);
+  }
+
+  @Deprecated(forRemoval = true)
+  default boolean hasClientOpened (UUID uuid) {
+    PlayerContext context = ClientHooks.getPlayerContext();
+    if (!context.hasPlayer()) {
+      LootrAPI.LOG.error("Called `hasClientOpened` with a uuid outside of the client context. Was looking for uuid '{}'.", uuid, new Exception());
+      return false;
+    }
+
+    return hasClientOpened(context.player());
   }
 }

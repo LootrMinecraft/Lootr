@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -33,6 +34,7 @@ import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
 import noobanidus.mods.lootr.common.api.processor.ILootrBlockEntityProcessor;
 import noobanidus.mods.lootr.common.api.processor.ILootrEntityProcessor;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -64,7 +66,7 @@ public interface ILootrAPI {
 
   // Clears player loot for all containers
   default boolean clearPlayerLoot(ServerPlayer entity) {
-    return clearPlayerLoot(entity.getUUID());
+    return clearPlayerLoot(LootrAPI.resolvePlayerTeam(entity));
   }
 
   boolean clearPlayerLoot(UUID id);
@@ -355,6 +357,13 @@ public interface ILootrAPI {
   boolean breakToDropLoot();
 
   void dumpPlayerLoot(ILootrInfoProvider provider, ServerPlayer player, ServerLevel level);
+
+  boolean isTeamLoot();
+
+  @NotNull
+  ResourceLocation getPinnedTeamResolver();
+
+  UUID resolvePlayerTeam(Player player);
 }
 
 

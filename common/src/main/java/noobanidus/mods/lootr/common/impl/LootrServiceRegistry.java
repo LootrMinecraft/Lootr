@@ -1,17 +1,16 @@
 package noobanidus.mods.lootr.common.impl;
 
+import com.google.common.collect.Streams;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import noobanidus.mods.lootr.common.api.ILootrAPI;
-import noobanidus.mods.lootr.common.api.ILootrBlockEntityConverter;
-import noobanidus.mods.lootr.common.api.ILootrEntityConverter;
-import noobanidus.mods.lootr.common.api.ILootrType;
+import noobanidus.mods.lootr.common.api.*;
 import noobanidus.mods.lootr.common.api.adapter.AdapterMap;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
@@ -27,6 +26,8 @@ import noobanidus.mods.lootr.common.api.processor.ILootrBlockEntityProcessor;
 import noobanidus.mods.lootr.common.api.processor.ILootrEntityProcessor;
 import noobanidus.mods.lootr.common.api.replacement.BlockReplacementMap;
 import noobanidus.mods.lootr.common.api.replacement.ILootrBlockReplacementProvider;
+import noobanidus.mods.lootr.common.api.team.ITeamResolver;
+import noobanidus.mods.lootr.common.impl.team.MinecraftDefaultTeamResolver;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,6 +53,8 @@ public class LootrServiceRegistry {
   private final List<ILootrFabricModelProvider> fabricModelProviders = new ObjectArrayList<>();
   private final List<ILootrCommandBlockExtension> commandBlockExtensions = new ObjectArrayList<>();
   private final List<ILootrCommandEntityExtension<?>> commandEntityExtensions = new ObjectArrayList<>();
+  private final Map<ResourceLocation, ITeamResolver> teamResolvers = new HashMap<>();
+  private List<ResourceLocation> sortedTeamKeys = new ArrayList<>();
 
   private final String commands;
 
@@ -157,6 +160,20 @@ public class LootrServiceRegistry {
     for (ILootrItemFrameAdapter<?> adapter : loader13) {
       itemFrameAdapterMap.register(adapter);
     }
+
+    Streams.stream(ServiceLoader.load(ITeamResolver.class, classLoader).iterator())
+        .sorted(Comparator.comparingInt(ITeamResolver::priority).reversed()).toList().forEach(resolver ->
+            {
+              teamResolvers.put(resolver.resolverId(), resolver);
+              sortedTeamKeys.add(resolver.resolverId());
+            }
+        );
+  }
+
+  private record Resolver(ResourceLocation id, int priority) {
+    Resolver(ITeamResolver resolver) {
+      this(resolver.resolverId(), resolver.priority());
+    }
   }
 
   public static LootrServiceRegistry getInstance() {
@@ -237,8 +254,8 @@ public class LootrServiceRegistry {
   }
 
   @Nullable
-  static <T>ILootrItemFrameAdapter<T> getItemFrameAdapter (T type) {
-    return (ILootrItemFrameAdapter<T>)  getInstance().itemFrameAdapterMap.getAdapter(type);
+  static <T> ILootrItemFrameAdapter<T> getItemFrameAdapter(T type) {
+    return (ILootrItemFrameAdapter<T>) getInstance().itemFrameAdapterMap.getAdapter(type);
   }
 
   @Nullable
@@ -257,12 +274,45 @@ public class LootrServiceRegistry {
   }
 
   @ApiStatus.Internal
-  public static List<ILootrCommandEntityExtension<?>> getCommandEntityExtensions () {
+  public static List<ILootrCommandEntityExtension<?>> getCommandEntityExtensions() {
     return getInstance().commandEntityExtensions;
   }
 
   @ApiStatus.Internal
   public static String getCommandExtensionsString() {
     return getInstance().commands;
+  }
+
+  private static ITeamResolver cachedTeamResolver = null;
+
+  @ApiStatus.Internal
+  public static ITeamResolver getTeamResolver() {
+    if (cachedTeamResolver == null) {
+      ResourceLocation pinnedResolver = LootrAPI.getPinnedTeamResolver();
+      var resolvers = getInstance().teamResolvers;
+      ITeamResolver potential = resolvers.get(pinnedResolver);
+      if (potential != null) {
+        cachedTeamResolver = potential;
+      } else {
+        LootrAPI.LOG.error("Unable to find pinned resolver: '{}'!", pinnedResolver);
+
+        var sortedKeys = getInstance().sortedTeamKeys;
+
+        if (sortedKeys.isEmpty()) {
+          cachedTeamResolver = MinecraftDefaultTeamResolver.getOrCreateInstance();
+          LootrAPI.LOG.error("Team resolvers are empty! Creating an emergency Minecraft Default Team Resolver.");
+        } else {
+          var first = sortedKeys.getFirst();
+          potential = resolvers.get(first);
+          if (potential == null) {
+            LootrAPI.LOG.error("Team resolver '{}' not found in the map, even though it is the first key! Creating an emergency Minecraft Default Team Resolver.", first);
+            cachedTeamResolver = MinecraftDefaultTeamResolver.getOrCreateInstance();
+          } else {
+            cachedTeamResolver = potential;
+          }
+        }
+      }
+    }
+    return cachedTeamResolver;
   }
 }

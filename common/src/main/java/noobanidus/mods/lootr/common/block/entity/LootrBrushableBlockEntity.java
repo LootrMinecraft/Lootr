@@ -288,6 +288,7 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
 
     Player player = this.getBrushingPlayer();
     if (player != null) {
+      // TODO: Player teams?
       compoundTag.putUUID("brushing_player", player.getUUID());
       if (this.item.isEmpty()) {
         this.item = getItem(player);

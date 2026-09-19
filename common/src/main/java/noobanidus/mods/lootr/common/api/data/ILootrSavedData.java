@@ -10,10 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
-import noobanidus.mods.lootr.common.api.ILootrType;
-import noobanidus.mods.lootr.common.api.IMarkChanged;
-import noobanidus.mods.lootr.common.api.IOpeners;
-import noobanidus.mods.lootr.common.api.IRedirect;
+import noobanidus.mods.lootr.common.api.*;
 import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,13 +30,13 @@ public interface ILootrSavedData extends IRedirect<ILootrInfo>, ILootrInfo, IOpe
   void refresh();
 
   default boolean clearInventories(ServerPlayer player) {
-    return clearInventories(player.getUUID());
+    return clearInventories(LootrAPI.resolvePlayerTeam(player));
   }
 
   boolean clearInventories(UUID id);
 
   default ILootrInventory getInventory(ServerPlayer player) {
-    return getInventory(player.getUUID());
+    return getInventory(LootrAPI.resolvePlayerTeam(player));
   }
 
   default ILootrInventory getOrCreateInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler) {

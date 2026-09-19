@@ -16,6 +16,6 @@ public class MixinLootrBarrelBlockEntity implements RenderDataBlockEntity {
       return null;
     }
 
-    return ((LootrBarrelBlockEntity) (Object)this).hasClientOpened(player.getUUID());
+    return ((LootrBarrelBlockEntity) (Object)this).hasClientOpened(player);
   }
 }

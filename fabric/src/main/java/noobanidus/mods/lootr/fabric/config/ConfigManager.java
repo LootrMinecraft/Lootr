@@ -17,6 +17,8 @@ import noobanidus.mods.lootr.common.api.config.SaveMode;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.config.ConfigManagerBase;
 import noobanidus.mods.lootr.common.impl.LootrServiceRegistry;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -35,6 +37,9 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
   private static Set<String> REFRESH_MODS = null;
   @ConfigEntry.Gui.Excluded
   private static Set<ResourceKey<LootTable>> REFRESH_TABLES = null;
+
+  @Nullable
+  private static ResourceLocation PINNED_TEAM_RESOLVER = null;
 
   @ConfigEntry.Gui.Excluded
   private static Set<ResourceKey<Level>> DIM_WHITELIST = null;
@@ -71,6 +76,8 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
   public Notifications notifications = new Notifications();
   @ConfigEntry.Gui.CollapsibleObject
   public Client client = new Client();
+  @ConfigEntry.Gui.CollapsibleObject
+  public Team team = new Team();
 
   public static void reset() {
     LootrServiceRegistry.clearReplacements();
@@ -86,6 +93,7 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
     REFRESH_DIMS = null;
     REFRESH_MODS = null;
     REFRESH_TABLES = null;
+    PINNED_TEAM_RESOLVER = null;
     LootrAPI.refreshSections();
   }
 
@@ -187,8 +195,21 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
     return REFRESH_MODS;
   }
 
+  @NotNull
+  public static ResourceLocation getPinnedTeamResolver() {
+    if (PINNED_TEAM_RESOLVER == null) {
+      PINNED_TEAM_RESOLVER = ResourceLocation.tryParse(get().team.pinned_team_resolver);
+      if (PINNED_TEAM_RESOLVER == null) {
+        PINNED_TEAM_RESOLVER = LootrAPI.DEFAULT_TEAM_RESOLVER;
+      }
+    }
+
+    return PINNED_TEAM_RESOLVER;
+  }
+
   public static boolean isDimensionBlocked(ResourceKey<Level> key) {
-    if (!getDimensionModidWhitelist().isEmpty() && !getDimensionModidWhitelist().contains(key.location().getNamespace()) || getDimensionModidBlacklist().contains(key.location().getNamespace())) {
+    if (!getDimensionModidWhitelist().isEmpty() && !getDimensionModidWhitelist().contains(key.location()
+        .getNamespace()) || getDimensionModidBlacklist().contains(key.location().getNamespace())) {
       return true;
     }
 
@@ -215,7 +236,7 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
         return true;
       }
     }
-    if (LootrAPI.isTaggedStructurePresent((ServerLevel)tile.getInfoLevel(), new ChunkPos(tile.getInfoPos()), LootrTags.Structure.DECAY_STRUCTURES, tile.getInfoPos())) {
+    if (LootrAPI.isTaggedStructurePresent((ServerLevel) tile.getInfoLevel(), new ChunkPos(tile.getInfoPos()), LootrTags.Structure.DECAY_STRUCTURES, tile.getInfoPos())) {
       return true;
     }
     return isDimensionDecaying(tile.getInfoDimension());
@@ -233,7 +254,7 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
         return true;
       }
     }
-    if (LootrAPI.isTaggedStructurePresent((ServerLevel)tile.getInfoLevel(), new ChunkPos(tile.getInfoPos()), LootrTags.Structure.REFRESH_STRUCTURES, tile.getInfoPos())) {
+    if (LootrAPI.isTaggedStructurePresent((ServerLevel) tile.getInfoLevel(), new ChunkPos(tile.getInfoPos()), LootrTags.Structure.REFRESH_STRUCTURES, tile.getInfoPos())) {
       return true;
     }
     return isDimensionRefreshing(tile.getInfoDimension());
@@ -246,7 +267,7 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
   }
 
   // TODO: Why isn't this being used?
-  public static boolean shouldPerformPiecewiseCheck () {
+  public static boolean shouldPerformPiecewiseCheck() {
     return get().conversion.perform_piecewise_check;
   }
 
@@ -254,7 +275,7 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
     return get().client.vanilla_textures;
   }
 
-  public static boolean isNewTextures () {
+  public static boolean isNewTextures() {
     return get().client.new_textures;
   }
 
@@ -340,5 +361,10 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
     public boolean vanilla_textures = false;
     public boolean new_textures = true;
     public boolean unopened_particles = true;
+  }
+
+  public static class Team {
+    public boolean team_loot = false;
+    public String pinned_team_resolver = "";
   }
 }

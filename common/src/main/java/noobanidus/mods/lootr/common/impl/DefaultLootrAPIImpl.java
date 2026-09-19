@@ -37,6 +37,7 @@ import noobanidus.mods.lootr.common.api.filter.ILootrFilter;
 import noobanidus.mods.lootr.common.api.processor.ILootrBlockEntityProcessor;
 import noobanidus.mods.lootr.common.api.processor.ILootrEntityProcessor;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.common.api.team.ITeamResolver;
 import noobanidus.mods.lootr.common.client.ClientHooks;
 import noobanidus.mods.lootr.common.data.DataStorage;
 import noobanidus.mods.lootr.common.integration.sherdsapi.SherdsIntegration;
@@ -208,6 +209,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
     }
   }
 
+  // TODO: Player teams
   @Override
   public final Set<UUID> getPlayerIds() {
     MinecraftServer server = getServer();
@@ -581,5 +583,15 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
       inventory.setChanged();
     }
     provider.performUpdate(player);
+  }
+
+  @Override
+  public UUID resolvePlayerTeam(Player player) {
+    if (!LootrAPI.isTeamLoot()) {
+      return player.getUUID();
+    }
+
+    ITeamResolver resolver = LootrServiceRegistry.getTeamResolver();
+    return resolver.resolvePlayer(player);
   }
 }

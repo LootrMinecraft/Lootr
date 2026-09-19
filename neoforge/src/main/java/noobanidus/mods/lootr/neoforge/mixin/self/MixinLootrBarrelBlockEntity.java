@@ -15,7 +15,7 @@ public abstract class MixinLootrBarrelBlockEntity implements IBlockEntityExtensi
   public ModelData getModelData() {
     ILootrInfoProvider provider = (ILootrInfoProvider) this;
     Player player = ClientHooks.getPlayer();
-    if (player == null || !provider.hasClientOpened(player.getUUID())) {
+    if (player == null || !provider.hasClientOpened(player)) {
       return ModelDataConstants.CLOSED_MODEL_DATA;
     } else {
       return ModelDataConstants.OPENED_MODEL_DATA;

@@ -104,6 +104,7 @@ public class PlatformAPIImpl extends DefaultPlatformAPIImpl implements IPlatform
 
   @Override
   public void performRequestSync(GlobalPos pos) {
+    // TODO: Check if this is safe
     var context = ClientHooks.getPlayerContext();
     if (context.hasPlayer()) {
       ClientPlayNetworking.send(new PacketRequestUpdate(pos));

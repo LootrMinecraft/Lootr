@@ -214,7 +214,7 @@ public class DataStorage {
 
   @ApiStatus.Internal
   public static boolean clearInventories(Player player) {
-    return clearInventories(player.getUUID());
+    return clearInventories(LootrAPI.resolvePlayerTeam(player));
   }
 
   public static Set<String> getAllLootrFiles() {

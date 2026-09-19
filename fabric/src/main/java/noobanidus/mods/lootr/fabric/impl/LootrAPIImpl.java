@@ -7,6 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -21,6 +22,7 @@ import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.impl.DefaultLootrAPIImpl;
 import noobanidus.mods.lootr.fabric.config.ConfigManager;
 import noobanidus.mods.lootr.fabric.event.LootrEventsInit;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
@@ -396,6 +398,16 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   @Override
   public boolean breakToDropLoot() {
     return ConfigManager.get().breaking.break_to_drop_loot;
+  }
+
+  @Override
+  public boolean isTeamLoot() {
+    return ConfigManager.get().team.team_loot;
+  }
+
+  @Override
+  public @NotNull ResourceLocation getPinnedTeamResolver() {
+    return ConfigManager.getPinnedTeamResolver();
   }
 
   @Override

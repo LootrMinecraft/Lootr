@@ -36,7 +36,7 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootrBlo
       return LootrAPI.isOldTextures() ? OLD_MATERIAL2 : MATERIAL2;
     }
     boolean trapped = Objects.requireNonNull(blockEntity.getType().builtInRegistryHolder()).is(LootrTags.BlockEntity.TRAPPED);
-    if (blockEntity.hasClientOpened(Minecraft.getInstance().player.getUUID())) {
+    if (blockEntity.hasClientOpened(Minecraft.getInstance().player)) {
       if (LootrAPI.isOldTextures()) {
         return trapped ? OLD_MATERIAL4 : OLD_MATERIAL2;
       }
