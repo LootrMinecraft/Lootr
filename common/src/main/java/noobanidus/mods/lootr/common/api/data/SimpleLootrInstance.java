@@ -180,7 +180,8 @@ public class SimpleLootrInstance {
       Set<UUID> currentOpeners = visualOpenersSupplier.get();
       if (currentOpeners != null) {
         ListTag list = new ListTag();
-        for (UUID opener : Sets.intersection(currentOpeners, LootrAPI.getPlayerIds())) {
+        Set<UUID> toCheck = LootrAPI.isTeamLoot() ? currentOpeners : Sets.intersection(currentOpeners, LootrAPI.getPlayerIds());
+        for (UUID opener : toCheck) {
           list.add(NbtUtils.createUUID(opener));
         }
         if (!list.isEmpty()) {
