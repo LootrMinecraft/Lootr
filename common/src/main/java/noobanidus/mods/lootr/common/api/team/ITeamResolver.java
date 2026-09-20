@@ -6,7 +6,9 @@ import net.minecraft.world.entity.player.Player;
 import java.util.UUID;
 
 public interface ITeamResolver {
-  UUID resolvePlayer(Player player);
+  UUID resolveServerPlayer(Player player);
+
+  UUID resolveClientPlayer(Player player);
 
   ResourceLocation resolverId();
 

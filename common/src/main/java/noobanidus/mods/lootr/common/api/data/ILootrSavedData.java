@@ -30,13 +30,13 @@ public interface ILootrSavedData extends IRedirect<ILootrInfo>, ILootrInfo, IOpe
   void refresh();
 
   default boolean clearInventories(ServerPlayer player) {
-    return clearInventories(LootrAPI.resolvePlayerTeam(player));
+    return clearInventories(LootrAPI.resolveServerPlayerTeam(player));
   }
 
   boolean clearInventories(UUID id);
 
   default ILootrInventory getInventory(ServerPlayer player) {
-    return getInventory(LootrAPI.resolvePlayerTeam(player));
+    return getInventory(LootrAPI.resolveServerPlayerTeam(player));
   }
 
   default ILootrInventory getOrCreateInventory(ILootrInfoProvider provider, ServerPlayer player, LootFiller filler) {

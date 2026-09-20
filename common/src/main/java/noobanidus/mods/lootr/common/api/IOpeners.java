@@ -93,28 +93,28 @@ public interface IOpeners extends IMarkChanged {
 
   @Deprecated
   default boolean hasOpened(Player player) {
-    return hasServerOpened(LootrAPI.resolvePlayerTeam(player));
+    return hasServerOpened(LootrAPI.resolveServerPlayerTeam(player));
   }
 
   // So technically we have 3 types of openers. This is only for the
   // looted stat counting. So use `hasLootAvailable` instead.
   default boolean hasServerOpened (Player player) {
-    return hasServerOpened(LootrAPI.resolvePlayerTeam(player));
+    return hasServerOpened(LootrAPI.resolveServerPlayerTeam(player));
   }
 
   default boolean addActualOpener(Player player) {
-    return addActualOpener(LootrAPI.resolvePlayerTeam(player));
+    return addActualOpener(LootrAPI.resolveServerPlayerTeam(player));
   }
 
   default boolean addVisualOpener (Player player) {
-    return addVisualOpener(LootrAPI.resolvePlayerTeam(player));
+    return addVisualOpener(LootrAPI.resolveServerPlayerTeam(player));
   }
 
   default boolean hasVisualOpened(Player player) {
-    return hasVisualOpened(LootrAPI.resolvePlayerTeam(player));
+    return hasVisualOpened(LootrAPI.resolveServerPlayerTeam(player));
   }
 
   default boolean removeVisualOpener (Player player) {
-    return removeVisualOpener(LootrAPI.resolvePlayerTeam(player));
+    return removeVisualOpener(LootrAPI.resolveServerPlayerTeam(player));
   }
 }

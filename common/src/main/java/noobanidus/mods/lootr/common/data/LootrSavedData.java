@@ -160,7 +160,7 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
       if (!LootrAPI.isFakePlayer(player)) {
         filler.unpackLootTable(provider, player, result);
       }
-      inventories.put(LootrAPI.resolvePlayerTeam(player), result);
+      inventories.put(LootrAPI.resolveServerPlayerTeam(player), result);
       hasBeenOpened = true;
       setDirty();
       return result;

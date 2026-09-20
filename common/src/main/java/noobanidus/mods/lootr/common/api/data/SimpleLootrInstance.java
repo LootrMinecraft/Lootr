@@ -179,6 +179,7 @@ public class SimpleLootrInstance {
     if (!isClientSide) {
       Set<UUID> currentOpeners = visualOpenersSupplier.get();
       if (currentOpeners != null) {
+        // TODO: Convert this to getPlayerAndTeamIds
         ListTag list = new ListTag();
         Set<UUID> toCheck = LootrAPI.isTeamLoot() ? currentOpeners : Sets.intersection(currentOpeners, LootrAPI.getPlayerIds());
         for (UUID opener : toCheck) {

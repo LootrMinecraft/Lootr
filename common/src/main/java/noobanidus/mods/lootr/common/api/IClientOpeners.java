@@ -47,7 +47,7 @@ public interface IClientOpeners extends IOpeners {
       return true;
     }
 
-    UUID id = LootrAPI.resolvePlayerTeam(player);
+    UUID id = LootrAPI.resolveClientPlayerTeam(player);
 
     var clientOpeners = getClientOpeners();
 

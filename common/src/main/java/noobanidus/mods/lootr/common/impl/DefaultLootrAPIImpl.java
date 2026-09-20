@@ -586,12 +586,22 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  public UUID resolvePlayerTeam(Player player) {
+  public UUID resolveServerPlayerTeam(Player player) {
     if (!LootrAPI.isTeamLoot()) {
       return player.getUUID();
     }
 
     ITeamResolver resolver = LootrServiceRegistry.getTeamResolver();
-    return resolver.resolvePlayer(player);
+    return resolver.resolveServerPlayer(player);
+  }
+
+  @Override
+  public UUID resolveClientPlayerTeam(Player player) {
+    if (!LootrAPI.isTeamLoot()) {
+      return player.getUUID();
+    }
+
+    ITeamResolver resolver = LootrServiceRegistry.getTeamResolver();
+    return resolver.resolveClientPlayer(player);
   }
 }

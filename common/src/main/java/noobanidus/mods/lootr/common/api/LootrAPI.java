@@ -226,11 +226,11 @@ public class LootrAPI {
     return INSTANCE.isDecaying(provider);
   }
 
-  public static boolean isAnythingDecaying () {
+  public static boolean isAnythingDecaying() {
     return INSTANCE.isAnythingDecaying();
   }
 
-  public static boolean isAnythingRefreshing () {
+  public static boolean isAnythingRefreshing() {
     return INSTANCE.isAnythingRefreshing();
   }
 
@@ -373,7 +373,7 @@ public class LootrAPI {
     return INSTANCE.shouldDropPlayerLoot();
   }
 
-  public static boolean breakToDropLoot () {
+  public static boolean breakToDropLoot() {
     return INSTANCE.breakToDropLoot();
   }
 
@@ -393,7 +393,7 @@ public class LootrAPI {
     return INSTANCE.shouldStartRefreshWhileTicking();
   }
 
-  public static int getTickDelay () {
+  public static int getTickDelay() {
     return INSTANCE.getTickDelay();
   }
 
@@ -625,21 +625,25 @@ public class LootrAPI {
     return INSTANCE.getGameTime();
   }
 
-  public static void dumpPlayerLoot (ILootrInfoProvider provider, ServerPlayer player, ServerLevel level) {
+  public static void dumpPlayerLoot(ILootrInfoProvider provider, ServerPlayer player, ServerLevel level) {
     INSTANCE.dumpPlayerLoot(provider, player, level);
   }
 
-  public static boolean isTeamLoot () {
+  public static boolean isTeamLoot() {
     return INSTANCE.isTeamLoot();
   }
 
   @NotNull
-  public static ResourceLocation getPinnedTeamResolver () {
+  public static ResourceLocation getPinnedTeamResolver() {
     return INSTANCE.getPinnedTeamResolver();
   }
 
-  public static UUID resolvePlayerTeam (Player player) {
-    return INSTANCE.resolvePlayerTeam(player);
+  public static UUID resolveServerPlayerTeam(Player player) {
+    return INSTANCE.resolveServerPlayerTeam(player);
+  }
+
+  public static UUID resolveClientPlayerTeam(Player player) {
+    return INSTANCE.resolveClientPlayerTeam(player);
   }
 
   private static Container closingContainer = null;

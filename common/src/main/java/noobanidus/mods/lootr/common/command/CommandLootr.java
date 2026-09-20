@@ -15,7 +15,6 @@ import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.DimensionArgument;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.ResourceKeyArgument;
-import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.commands.arguments.coordinates.Vec3Argument;
 import net.minecraft.commands.synchronization.SuggestionProviders;
@@ -540,7 +539,7 @@ public class CommandLootr {
             if (e instanceof Player player) {
               String name = player.getScoreboardName();
               c.getSource()
-                  .sendSuccess(() -> Component.literal(DataStorage.clearInventories(LootrAPI.resolvePlayerTeam(player)) ? "Cleared stored inventories for " + name : "No stored inventories for " + name + " to clear"), true);
+                  .sendSuccess(() -> Component.literal(DataStorage.clearInventories(LootrAPI.resolveServerPlayerTeam(player)) ? "Cleared stored inventories for " + name : "No stored inventories for " + name + " to clear"), true);
             }
           }
 

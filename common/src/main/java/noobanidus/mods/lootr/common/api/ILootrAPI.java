@@ -66,7 +66,7 @@ public interface ILootrAPI {
 
   // Clears player loot for all containers
   default boolean clearPlayerLoot(ServerPlayer entity) {
-    return clearPlayerLoot(LootrAPI.resolvePlayerTeam(entity));
+    return clearPlayerLoot(LootrAPI.resolveServerPlayerTeam(entity));
   }
 
   boolean clearPlayerLoot(UUID id);
@@ -363,7 +363,9 @@ public interface ILootrAPI {
   @NotNull
   ResourceLocation getPinnedTeamResolver();
 
-  UUID resolvePlayerTeam(Player player);
+  UUID resolveServerPlayerTeam(Player player);
+
+  UUID resolveClientPlayerTeam(Player player);
 }
 
 

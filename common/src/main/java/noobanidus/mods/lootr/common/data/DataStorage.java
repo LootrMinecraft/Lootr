@@ -2,7 +2,6 @@ package noobanidus.mods.lootr.common.data;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtIo;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
@@ -214,7 +213,7 @@ public class DataStorage {
 
   @ApiStatus.Internal
   public static boolean clearInventories(Player player) {
-    return clearInventories(LootrAPI.resolvePlayerTeam(player));
+    return clearInventories(LootrAPI.resolveServerPlayerTeam(player));
   }
 
   public static Set<String> getAllLootrFiles() {
