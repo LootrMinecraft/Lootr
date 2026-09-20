@@ -48,10 +48,9 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * This is the standard access to the platform-specific implementations of ILootrAPI.
@@ -70,7 +69,8 @@ public class LootrAPI {
   public static final ResourceKey<LootTable> ITEM_FRAME_EMPTY = ResourceKey.create(Registries.LOOT_TABLE, LootrAPI.rl("entity/item_frame_empty"));
   @Deprecated
   public static final TicketType<Unit> LOOTR_ENTITY_TICK_TICKET = TicketType.create("lootr_entity_tick_ticket", (unit1, unit2) -> 0, 300);
-  public static final List<ResourceLocation> PROBLEMATIC_CHESTS = Arrays.asList(LootrAPI.rl("twilightforest", "structures/stronghold_boss"), LootrAPI.rl("atum", "chests/pharaoh"));
+  public static final Set<ResourceKey<LootTable>> PROBLEMATIC_LOOT_TABLES = Stream.of(LootrAPI.rl("twilightforest", "structures/stronghold_boss"), LootrAPI.rl("atum", "chests/pharaoh"))
+      .map(o -> ResourceKey.create(Registries.LOOT_TABLE, o)).collect(Collectors.toSet());
   public static final int DEFAULT_PARTICLE_COLOR = 0xfad64a;
   public static final ResourceLocation DEFAULT_TEAM_RESOLVER = LootrAPI.rl("default");
   public static final ResourceLocation MINECRAFT_TEAM_RESOLVER = ResourceLocation.withDefaultNamespace("vanilla_default");
@@ -685,5 +685,9 @@ public class LootrAPI {
     }
 
     closingContainer = null;
+  }
+
+  public static Set<ResourceKey<LootTable>> gatherProblematicLootTables() {
+    return INSTANCE.gatherProblematicLootTables();
   }
 }

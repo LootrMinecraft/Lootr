@@ -366,6 +366,8 @@ public interface ILootrAPI {
   UUID resolveServerPlayerTeam(Player player);
 
   UUID resolveClientPlayerTeam(Player player);
+
+  Set<ResourceKey<LootTable>> gatherProblematicLootTables ();
 }
 
 

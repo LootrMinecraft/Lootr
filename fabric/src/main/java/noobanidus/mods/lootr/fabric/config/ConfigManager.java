@@ -20,15 +20,11 @@ import noobanidus.mods.lootr.common.impl.LootrServiceRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
 @Config(name = LootrAPI.MODID)
 public class ConfigManager extends ConfigManagerBase implements ConfigData {
-  @ConfigEntry.Gui.Excluded
-  private static final List<ResourceLocation> PROBLEMATIC_CHESTS = Arrays.asList(ResourceLocation.fromNamespaceAndPath("atum", "chests/pharaoh"), ResourceLocation.fromNamespaceAndPath("twilightforest", "structures/stronghold_boss"));
-
   @ConfigEntry.Gui.Excluded
   private static Set<String> DECAY_MODS = null;
   @ConfigEntry.Gui.Excluded
@@ -39,6 +35,7 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
   private static Set<ResourceKey<LootTable>> REFRESH_TABLES = null;
 
   @Nullable
+  @ConfigEntry.Gui.Excluded
   private static ResourceLocation PINNED_TEAM_RESOLVER = null;
 
   @ConfigEntry.Gui.Excluded
@@ -55,6 +52,8 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
   private static Set<ResourceKey<Level>> REFRESH_DIMS = null;
   @ConfigEntry.Gui.Excluded
   private static Set<ResourceKey<LootTable>> LOOT_BLACKLIST = null;
+  @ConfigEntry.Gui.Excluded
+  private static Set<ResourceKey<LootTable>> LOOT_TABLE_FORCED_WHITELIST = null;
   @ConfigEntry.Gui.Excluded
   private static Set<String> LOOT_MODIDS = null;
 
@@ -86,6 +85,7 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
     DIM_WHITELIST = null;
     DIM_BLACKLIST = null;
     LOOT_BLACKLIST = null;
+    LOOT_TABLE_FORCED_WHITELIST = null;
     DECAY_MODS = null;
     DECAY_TABLES = null;
     DECAY_DIMS = null;
@@ -143,11 +143,20 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
     return REFRESH_DIMS;
   }
 
+
+  public static Set<ResourceKey<LootTable>> getLootTableForcedWhitelist() {
+    if (LOOT_TABLE_FORCED_WHITELIST == null) {
+      LOOT_TABLE_FORCED_WHITELIST = validateResourceKeyList(get().lists.loot_table_forced_whitelist, "loot_table_forced_whitelist", o -> ResourceKey.create(Registries.LOOT_TABLE, o));
+    }
+    return LOOT_TABLE_FORCED_WHITELIST;
+  }
+
   public static Set<ResourceKey<LootTable>> getLootBlacklist() {
     if (LOOT_BLACKLIST == null) {
       LOOT_BLACKLIST = validateResourceKeyList(get().lists.loot_table_blacklist, "loot_blacklist", o -> ResourceKey.create(Registries.LOOT_TABLE, o));
       // Fixes for #79 and #74
-      PROBLEMATIC_CHESTS.forEach(o -> LOOT_BLACKLIST.add(ResourceKey.create(Registries.LOOT_TABLE, o)));
+      LOOT_BLACKLIST.addAll(LootrAPI.gatherProblematicLootTables());
+      LOOT_BLACKLIST.removeAll(getLootTableForcedWhitelist());
     }
     return LOOT_BLACKLIST;
   }
@@ -326,6 +335,7 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
     public List<String> loot_modid_blacklist = List.of();
     public List<String> modid_dimension_whitelist = List.of();
     public List<String> modid_dimension_blacklist = List.of();
+    public List<String> loot_table_forced_whitelist = List.of();
   }
 
   public static class Decay {

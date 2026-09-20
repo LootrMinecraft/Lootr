@@ -7,6 +7,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -24,6 +25,7 @@ import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.world.level.block.entity.PotDecorations;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.*;
+import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.*;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
@@ -595,5 +597,10 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
 
     ITeamResolver resolver = LootrServiceRegistry.getTeamResolver();
     return resolver.resolveClientPlayer(player);
+  }
+
+  @Override
+  public Set<ResourceKey<LootTable>> gatherProblematicLootTables() {
+    return LootrServiceRegistry.gatherProblematicLootTables();
   }
 }

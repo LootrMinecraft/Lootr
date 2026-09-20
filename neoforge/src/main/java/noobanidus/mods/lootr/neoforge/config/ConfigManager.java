@@ -20,6 +20,7 @@ import noobanidus.mods.lootr.common.config.ConfigManagerBase;
 import noobanidus.mods.lootr.common.impl.LootrServiceRegistry;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -49,10 +50,10 @@ public class ConfigManager extends ConfigManagerBase {
   public static final ModConfigSpec.ConfigValue<List<? extends String>> DIMENSION_WHITELIST;
   public static final ModConfigSpec.ConfigValue<List<? extends String>> DIMENSION_BLACKLIST;
   public static final ModConfigSpec.ConfigValue<List<? extends String>> LOOT_TABLE_BLACKLIST;
-  public static final ModConfigSpec.ConfigValue<List<? extends String>> PROBLEMATIC_LOOT_TABLES;
   public static final ModConfigSpec.ConfigValue<List<? extends String>> LOOT_MODID_BLACKLIST;
   public static final ModConfigSpec.ConfigValue<List<? extends String>> MODID_DIMENSION_WHITELIST;
   public static final ModConfigSpec.ConfigValue<List<? extends String>> MODID_DIMENSION_BLACKLIST;
+  public static final ModConfigSpec.ConfigValue<List<? extends String>> LOOT_TABLE_FORCED_WHITELIST;
   // Decay
   public static final ModConfigSpec.IntValue DECAY_VALUE;
   public static final ModConfigSpec.BooleanValue DECAY_ALL;
@@ -104,6 +105,7 @@ public class ConfigManager extends ConfigManagerBase {
   private static Set<ResourceKey<Level>> DECAY_DIMS = null;
   private static Set<ResourceKey<Level>> REFRESH_DIMS = null;
   private static Set<ResourceKey<LootTable>> LOOT_BLACKLIST = null;
+  private static Set<ResourceKey<LootTable>> LOOT_FORCED_WHITELIST = null;
   private static Set<String> LOOT_MODIDS = null;
   private static ResourceLocation PINNED_TEAM_RESOLVER_ID = null;
 
@@ -155,11 +157,9 @@ public class ConfigManager extends ConfigManagerBase {
         .defineList("modid_dimension_whitelist", empty, () -> "", modidValidator);
     LOOT_TABLE_BLACKLIST = COMMON_BUILDER.comment("list of loot tables which shouldn't be converted (in the format of [\"modid:loot_table\", \"othermodid:other_loot_table\"])")
         .defineList("loot_table_blacklist", empty, () -> "", validator);
+    LOOT_TABLE_FORCED_WHITELIST = COMMON_BUILDER.comment("list of loot tables which will forcefully be converted even if they are included in the loot table blacklist or the problematic loot tables (format: see loot_table_blacklist)").defineList("loot_table_forced_whitelist", empty, () -> "", validator);
     LOOT_MODID_BLACKLIST = COMMON_BUILDER.comment("list of modids whose loot tables shouldn't be converted (in the format of [\"modid\", \"other_modid\"])")
         .defineList("loot_modid_blacklist", empty, () -> "", modidValidator);
-    PROBLEMATIC_LOOT_TABLES = COMMON_BUILDER.comment("list of loot tables whose conversion causes problems (in the same format as `loot_table_blacklist`)")
-        .defineList("problematic_loot_tables", LootrAPI.PROBLEMATIC_CHESTS.stream().map(ResourceLocation::toString)
-            .toList(), () -> "", validator);
     COMMON_BUILDER.pop();
     COMMON_BUILDER.push("breaking").comment("configuration options for breaking containers");
     DISABLE_BREAK = COMMON_BUILDER.comment("prevent the destruction of Lootr chests except while sneaking in creative mode")
@@ -259,6 +259,7 @@ public class ConfigManager extends ConfigManagerBase {
       DIM_WHITELIST = null;
       DIM_BLACKLIST = null;
       LOOT_BLACKLIST = null;
+      LOOT_FORCED_WHITELIST = null;
       DECAY_MODS = null;
       DECAY_TABLES = null;
       DECAY_DIMS = null;
@@ -314,15 +315,20 @@ public class ConfigManager extends ConfigManagerBase {
     return REFRESH_DIMS;
   }
 
-  private static Set<ResourceKey<LootTable>> getProblematicChests() {
-    return validateResourceKeyList(PROBLEMATIC_LOOT_TABLES.get(), "problematic_loot_tables", o -> ResourceKey.create(Registries.LOOT_TABLE, o));
+  public static Set<ResourceKey<LootTable>> getLootForcedWhitelist () {
+    if (LOOT_FORCED_WHITELIST == null) {
+      LOOT_FORCED_WHITELIST = validateResourceKeyList(LOOT_TABLE_FORCED_WHITELIST.get(), "loot_table_forced_whitelist", o -> ResourceKey.create(Registries.LOOT_TABLE, o));
+    }
+
+    return LOOT_FORCED_WHITELIST;
   }
 
   public static Set<ResourceKey<LootTable>> getLootBlacklist() {
     if (LOOT_BLACKLIST == null) {
       LOOT_BLACKLIST = validateResourceKeyList(LOOT_TABLE_BLACKLIST.get(), "loot_table_blacklist", o -> ResourceKey.create(Registries.LOOT_TABLE, o));
       // Fixes for #79 and #74
-      LOOT_BLACKLIST.addAll(getProblematicChests());
+      LOOT_BLACKLIST.addAll(LootrAPI.gatherProblematicLootTables());
+      LOOT_BLACKLIST.removeAll(getLootForcedWhitelist());
     }
     return LOOT_BLACKLIST;
   }
