@@ -87,6 +87,7 @@
   "lootr.configuration.perform_decay_while_ticking": "刻更新时执行衰减",
   "lootr.configuration.perform_piecewise_check": "执行分段检查",
   "lootr.configuration.perform_refresh_while_ticking": "刻更新时执行刷新",
+  "lootr.configuration.pinned_team_resolver": "Pinned Team Resolver",
   "lootr.configuration.power": "红石信号",
   "lootr.configuration.power_comparators": "比较器输出信号",
   "lootr.configuration.problematic_loot_tables": "出错的战利品表",
@@ -104,6 +105,7 @@
   "lootr.configuration.skip_logging_no_loot_table_at_generation": "在生成时跳过无战利品表的方块实体日志",
   "lootr.configuration.start_decay_while_ticking": "刻更新时开始衰减",
   "lootr.configuration.start_refresh_while_ticking": "刻更新时开始刷新",
+  "lootr.configuration.team_loot": "Enable Shared Team Inventories",
   "lootr.configuration.textures": "客户端纹理",
   "lootr.configuration.trapped_custom": "自定义物品栏为陷阱",
   "lootr.configuration.vanilla_textures": "原版纹理",
@@ -223,5 +225,8 @@
   "text.autoconfig.lootr.option.refresh.start_tick_refresh": "刻更新时开始刷新",
   "text.autoconfig.lootr.option.seed": "种子",
   "text.autoconfig.lootr.option.seed.randomize_seed": "随机种子",
+  "text.autoconfig.lootr.option.team": "Shared Team Inventories",
+  "text.autoconfig.lootr.option.team.pinned_team_resolver": "Pinned Team Resolver",
+  "text.autoconfig.lootr.option.team.team_loot": "Enable Shared Team Inventories",
   "text.autoconfig.lootr.title": "Lootr"
 }
