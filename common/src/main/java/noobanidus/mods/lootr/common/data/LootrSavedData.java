@@ -9,6 +9,7 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.saveddata.SavedData;
 import noobanidus.mods.lootr.common.api.LootrAPI;
@@ -93,8 +94,8 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
   }
 
   @Override
-  public boolean addVisualOpener(UUID uuid) {
-    boolean result = ILootrSavedData.super.addVisualOpener(uuid);
+  public boolean addVisualOpener(Player player) {
+    boolean result = ILootrSavedData.super.addVisualOpener(player);
     if (result) {
       setDirty();
     }
@@ -102,8 +103,8 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
   }
 
   @Override
-  public boolean removeVisualOpener(UUID uuid) {
-    boolean result = ILootrSavedData.super.removeVisualOpener(uuid);
+  public boolean removeVisualOpener(Player player) {
+    boolean result = ILootrSavedData.super.removeVisualOpener(player);
     if (result) {
       setDirty();
     }
@@ -111,8 +112,8 @@ public class LootrSavedData extends SavedData implements ILootrSavedData {
   }
 
   @Override
-  public boolean addActualOpener(UUID uuid) {
-    boolean result = ILootrSavedData.super.addActualOpener(uuid);
+  public boolean addActualOpener(Player player) {
+    boolean result = ILootrSavedData.super.addActualOpener(player);
     if (result) {
       setDirty();
     }

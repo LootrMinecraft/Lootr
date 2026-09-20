@@ -160,6 +160,9 @@ public class LootrLangProvider extends LanguageProvider {
     var skip_logging = "Skip Logging LootTable-less Block Entities during Generation";
     var brushables = "Lootr Brushable Blocks Don't Fall";
     var supported = "Lootr Item Frames Don't Break";
+    var teams = "Shared Team Inventories";
+    var enable_teams = "Enable Shared Team Inventories";
+    var pinned_resolver = "Pinned Team Resolver";
     add("text.autoconfig.lootr.option.debug", debug);
     add("text.autoconfig.lootr.option.debug.report_invalid_tables", report_invalid_tables);
     add("text.autoconfig.lootr.option.seed", seed);
@@ -223,6 +226,9 @@ public class LootrLangProvider extends LanguageProvider {
     add("text.autoconfig.lootr.option.refresh.start_tick_refresh", start_tick_refresh);
     add("text.autoconfig.lootr.option.conversion.rename_container_block_entities", rename_container_block_entities);
     add("text.autoconfig.lootr.option.conversion.perform_piecewise_check", perform_piecewise_check);
+    add("text.autoconfig.lootr.option.team", teams);
+    add("text.autoconfig.lootr.option.team.team_loot", enable_teams);
+    add("text.autoconfig.lootr.option.team.pinned_team_resolver", pinned_resolver);
     add("lootr.configuration.conversion", conversion);
     add("lootr.configuration.refresh", refresh);
     add("lootr.configuration.breaking", breaking);
@@ -284,6 +290,8 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.configuration.convert_elytras_to_item_frames", elytra_frame);
     add("lootr.configuration.brushables_self_support", brushables);
     add("lootr.configuration.item_frames_self_support", supported);
+    add("lootr.configuration.team_loot", enable_teams);
+    add("lootr.configuration.pinned_team_resolver", pinned_resolver);
 
     // Tags
     add(LootrTags.Blocks.CONVERT_BARRELS, "Blocks that Convert to Lootr Barrels");

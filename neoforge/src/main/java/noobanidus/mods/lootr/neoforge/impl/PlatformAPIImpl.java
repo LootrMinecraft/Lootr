@@ -4,6 +4,7 @@ import net.minecraft.core.GlobalPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.LockCode;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.AbstractMinecartContainer;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
@@ -102,5 +103,11 @@ public class PlatformAPIImpl extends DefaultPlatformAPIImpl implements IPlatform
   @Override
   public void performRequestSync(GlobalPos pos) {
     PacketDistributor.sendToServer(new PacketRequestUpdate(pos));
+  }
+
+  @Override
+  public void syncAfterTeamChange(Player player) {
+    var data = getSyncData(player);
+    PacketDistributor.sendToPlayer((ServerPlayer) player, new PacketAreaEntitySync(data.getFirst(), data.getSecond()));
   }
 }

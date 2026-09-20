@@ -309,7 +309,7 @@ public class DataStorage {
             //noinspection deprecation
             if (lootrSavedData.isEntity()) {
               Entity entity = level.getEntity(lootrSavedData.getInfoUUID());
-              if (entity instanceof ILootrEntity cart) {
+              if (LootrAPI.resolveEntity(entity) instanceof ILootrEntity cart) {
                 provider = cart;
               }
             } else {

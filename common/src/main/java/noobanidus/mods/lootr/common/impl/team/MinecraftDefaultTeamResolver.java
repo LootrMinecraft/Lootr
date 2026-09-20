@@ -7,6 +7,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.scores.PlayerTeam;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.team.ITeamResolver;
+import org.jetbrains.annotations.NotNull;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
@@ -67,12 +68,12 @@ public class MinecraftDefaultTeamResolver implements ITeamResolver {
   }
 
   @Override
-  public UUID resolveClientPlayer(Player player) {
+  public @NotNull UUID resolveClientPlayer(Player player) {
     return resolvePlayer(player);
   }
 
   @Override
-  public UUID resolveServerPlayer(Player player) {
+  public @NotNull UUID resolveServerPlayer(Player player) {
     return resolvePlayer(player);
   }
 

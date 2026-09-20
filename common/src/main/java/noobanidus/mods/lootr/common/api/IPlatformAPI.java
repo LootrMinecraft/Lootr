@@ -4,9 +4,11 @@ import net.minecraft.core.GlobalPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.AbstractMinecartContainer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.scores.PlayerTeam;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
@@ -93,4 +95,11 @@ public interface IPlatformAPI {
   boolean shouldDoInitialSave ();
 
   void performRequestSync(GlobalPos pos);
+
+  void syncAfterTeamChange(Player player);
+
+  void syncAfterTeamChange(PlayerTeam playerTeam);
+
+  void syncAfterTeamChange(String username);
+
 }

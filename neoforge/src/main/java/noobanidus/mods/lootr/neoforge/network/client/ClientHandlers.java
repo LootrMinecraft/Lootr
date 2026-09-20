@@ -10,6 +10,7 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.client.ClientHooks;
+import noobanidus.mods.lootr.neoforge.network.toClient.PacketAreaEntitySync;
 
 
 public class ClientHandlers {
@@ -83,6 +84,29 @@ public class ClientHandlers {
     Player player = Minecraft.getInstance().player;
     if (player != null) {
       ClientHooks.clearCache(player.blockPosition());
+    }
+  }
+
+  public static void handleAreaSync(PacketAreaEntitySync packetAreaEntitySync) {
+    Player player = Minecraft.getInstance().player;
+    if (player == null) {
+      return;
+    }
+
+    Level level = Minecraft.getInstance().level;;
+    if (level == null) {
+      return;
+    }
+
+    for (int open : packetAreaEntitySync.opened()) {
+      if (level.getEntity(open) instanceof ILootrEntity entity) {
+        entity.setClientOpened(true);
+      }
+    }
+    for (int closed : packetAreaEntitySync.closed()) {
+      if (level.getEntity(closed) instanceof ILootrEntity entity) {
+        entity.setClientOpened(false);
+      }
     }
   }
 }

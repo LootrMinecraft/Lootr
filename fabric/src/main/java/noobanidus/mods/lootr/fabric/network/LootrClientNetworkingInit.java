@@ -1,8 +1,11 @@
 package noobanidus.mods.lootr.fabric.network;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
@@ -12,6 +15,34 @@ import noobanidus.mods.lootr.fabric.network.to_client.*;
 
 public class LootrClientNetworkingInit {
   public static void register() {
+    ClientPlayNetworking.registerGlobalReceiver(PacketAreaEntitySync.TYPE,
+        (payload, context) -> {
+          context.client().execute(() -> {
+
+            Player player = Minecraft.getInstance().player;
+            if (player == null) {
+              return;
+            }
+
+            Level level = Minecraft.getInstance().level;
+            ;
+            if (level == null) {
+              return;
+            }
+
+            for (int open : payload.opened()) {
+              if (level.getEntity(open) instanceof ILootrEntity entity) {
+                entity.setClientOpened(true);
+              }
+            }
+            for (int closed : payload.closed()) {
+              if (level.getEntity(closed) instanceof ILootrEntity entity) {
+                entity.setClientOpened(false);
+              }
+            }
+          });
+        });
+
     ClientPlayNetworking.registerGlobalReceiver(PacketCloseCart.TYPE, (payload, context) -> {
       int entityId = payload.entityId();
       context.client().execute(() -> {

@@ -3,8 +3,10 @@ package noobanidus.mods.lootr.common.api;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.AbstractMinecartContainer;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.scores.PlayerTeam;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
@@ -106,5 +108,17 @@ public class PlatformAPI {
 
   public static void performRequestSync (GlobalPos pos) {
     INSTANCE.performRequestSync(pos);
+  }
+
+  public static void syncAfterTeamChange (Player player) {
+    INSTANCE.syncAfterTeamChange(player);
+  }
+
+  public static void syncAfterTeamChange(PlayerTeam playerTeam) {
+    INSTANCE.syncAfterTeamChange(playerTeam);
+  }
+
+  public static void syncAfterTeamChange(String username) {
+    INSTANCE.syncAfterTeamChange(username);
   }
 }
