@@ -28,6 +28,8 @@ public class LootrConstants {
   public static final ResourceLocation LOOTR_INVENTORY = LootrAPI.rl("lootr_inventory");
   public static final ResourceLocation LOOTR_CART = LootrAPI.rl("lootr_cart");
 
+  public static final ResourceLocation ACTUAL_LOOTR_CART = LootrAPI.rl("lootr_minecart");
+
   // Into these
   public static final ResourceLocation CHEST = LootrAPI.rl("chest");
   public static final ResourceLocation TRAPPED_CHEST = LootrAPI.rl("trapped_chest");

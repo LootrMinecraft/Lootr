@@ -1,12 +1,5 @@
 {
   "values": [
-    {
-      "id": "#lootr:lootr_minecart",
-      "required": false
-    },
-    {
-      "id": "#lootr:lootr_cart",
-      "required": false
-    }
+    "lootr:lootr_minecart"
   ]
 }
