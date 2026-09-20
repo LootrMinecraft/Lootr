@@ -432,7 +432,10 @@ public class ConfigManager extends ConfigManagerBase {
 
   public static ResourceLocation getPinnedTeamResolver () {
     if (PINNED_TEAM_RESOLVER_ID == null) {
-      PINNED_TEAM_RESOLVER_ID = ResourceLocation.tryParse(PINNED_TEAM_RESOLVER.get());
+      String team = PINNED_TEAM_RESOLVER.get();
+      if (!team.isEmpty()) {
+        PINNED_TEAM_RESOLVER_ID = ResourceLocation.tryParse(PINNED_TEAM_RESOLVER.get());
+      }
       if (PINNED_TEAM_RESOLVER_ID == null) {
         PINNED_TEAM_RESOLVER_ID = LootrAPI.DEFAULT_TEAM_RESOLVER;
       }
