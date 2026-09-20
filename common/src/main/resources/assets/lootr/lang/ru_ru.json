@@ -87,6 +87,7 @@
   "lootr.configuration.perform_decay_while_ticking": "Выполнять разложение при такте",
   "lootr.configuration.perform_piecewise_check": "Выполнять кусочную проверку",
   "lootr.configuration.perform_refresh_while_ticking": "Выполнять обновление при такте",
+  "lootr.configuration.pinned_team_resolver": "Pinned Team Resolver",
   "lootr.configuration.power": "Сигнал редстоуна",
   "lootr.configuration.power_comparators": "Питание компараторов",
   "lootr.configuration.problematic_loot_tables": "Проблемные таблицы добычи",
@@ -104,6 +105,7 @@
   "lootr.configuration.skip_logging_no_loot_table_at_generation": "Пропускать регистрирование блочных сущностей без таблиц добычи во время генерации",
   "lootr.configuration.start_decay_while_ticking": "Начинать разложение при такте",
   "lootr.configuration.start_refresh_while_ticking": "Начинать обновление при такте",
+  "lootr.configuration.team_loot": "Enable Shared Team Inventories",
   "lootr.configuration.textures": "Клиентские текстуры",
   "lootr.configuration.trapped_custom": "Пользовательские инвентари с ловушкой",
   "lootr.configuration.vanilla_textures": "Ванильные текстуры",
@@ -223,5 +225,8 @@
   "text.autoconfig.lootr.option.refresh.start_tick_refresh": "Начинать обновление при такте",
   "text.autoconfig.lootr.option.seed": "Ключ генератора",
   "text.autoconfig.lootr.option.seed.randomize_seed": "Случайный ключ генератора",
+  "text.autoconfig.lootr.option.team": "Shared Team Inventories",
+  "text.autoconfig.lootr.option.team.pinned_team_resolver": "Pinned Team Resolver",
+  "text.autoconfig.lootr.option.team.team_loot": "Enable Shared Team Inventories",
   "text.autoconfig.lootr.title": "Добытчик"
 }
