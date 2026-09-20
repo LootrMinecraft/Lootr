@@ -127,7 +127,6 @@ public final class BlockEntityTicker {
       return false;
     }
 
-    // TODO: This is checked twice in theory but it might be faster to check it here
     if (!LootrAPI.isWorldBorderSafe(level, pos)) {
       return false;
     }

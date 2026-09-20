@@ -10,7 +10,6 @@ import noobanidus.mods.lootr.common.api.ILootrType;
 import noobanidus.mods.lootr.common.api.data.ILootrInfo;
 import org.jetbrains.annotations.Nullable;
 
-// TODO: I'm not sure if this is the correct solution
 @AutoService(ILootrType.class)
 public class SimpleLootrType implements ILootrType {
   @Override

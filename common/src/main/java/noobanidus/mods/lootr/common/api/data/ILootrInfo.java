@@ -218,7 +218,6 @@ public interface ILootrInfo {
     return getDefaultLevel();
   }
 
-  // TODO: WTF?????
   @Nullable
   default Level getDefaultLevel() {
     MinecraftServer server = LootrAPI.getServer();
@@ -342,7 +341,7 @@ public interface ILootrInfo {
       LootrAPI.LOG.error("Couldn't determine LootrType when loading LootrInfo from tag, guessing chest: {}", tag);
       type = BuiltInLootrTypes.CHEST;
     }
-    return new BaseLootrInfo(null, null, type, uuid, ILootrInfo.generateInfoKey(uuid), pos, name, dimension, size, /* TODO: This makes me uncomfortable, as it's being stored in two places, technically. */ reference, table, seed);
+    return new BaseLootrInfo(null, null, type, uuid, ILootrInfo.generateInfoKey(uuid), pos, name, dimension, size, reference, table, seed);
   }
 
   @Deprecated

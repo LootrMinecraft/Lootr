@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MinecraftDefaultTeamResolver implements ITeamResolver {
   private boolean cacheInitialized = false;
 
-  // TODO: Uncertain if this needs to be current or not
+  // TODO: Uncertain if this needs to be concurrent or not
   private final Map<String, UUID> teamCache = new ConcurrentHashMap<>();
 
   private static MinecraftDefaultTeamResolver instance = null;

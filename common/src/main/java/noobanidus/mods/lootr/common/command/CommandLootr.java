@@ -735,8 +735,6 @@ public class CommandLootr {
 
   public static boolean convertToCustom(BlockPos pos, ServerLevel level, Consumer<String> c, HolderLookup.Provider provider) {
 
-    // TODO: Abstract this out to reuse for custom-map and custom-area.
-
     BlockEntity blockEntity = level.getBlockEntity(pos);
     if (LootrAPI.resolveBlockEntity(blockEntity) instanceof ILootrBlockEntity) {
       c.accept("The block at " + pos + " is already a Lootr container.");

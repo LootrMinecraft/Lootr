@@ -124,7 +124,6 @@ public record RandomizableContainerBlockEntityLootrInfoProvider(
 
   @Override
   public void markDataChanged() {
-    // TODO: Ensure this is never called on the client
     ILootrSavedData data = LootrAPI.getData(this);
     if (data != null) {
       data.markChanged();

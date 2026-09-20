@@ -84,7 +84,6 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
 
   private static final Map<ResourceLocation, Material> cachedMaterials = new HashMap<>();
 
-  // TODO: How does this handle custom pot patterns?
   private static Material getSideMaterial(ItemStack item) {
     if (!item.isEmpty()) {
       ResourceLocation customSide = SherdsIntegration.getCustomSideTexture(item);

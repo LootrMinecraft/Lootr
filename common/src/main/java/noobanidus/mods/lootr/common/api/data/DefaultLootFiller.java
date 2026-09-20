@@ -65,7 +65,6 @@ public class DefaultLootFiller implements LootFiller {
           .withParameter(LootContextParams.ORIGIN, provider.getInfoVec())
           .withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
 
-      // TODO: Was the super call necessary?
       fill(provider, player, lootTable, loottable, inventory, builder.create(LootContextParamSets.CHEST), seed);
     }
   }

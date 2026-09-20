@@ -15,13 +15,11 @@ public class BuiltInLootrTypes {
   public static final String TYPE_SAND = LootrConstants.SUSPICIOUS_SAND.toString();
   public static final String TYPE_GRAVEL = LootrConstants.SUSPICIOUS_GRAVEL.toString();
   public static final String TYPE_ITEM_FRAME = LootrConstants.ITEM_FRAME.toString();
-  // TODO: Not sure about the name of this
   public static final String TYPE_SIMPLE = LootrConstants.SIMPLE.toString();
 
   public static ILootrType CHEST;
   public static ILootrType TRAPPED_CHEST;
   public static ILootrType BARREL;
-  // TODO: Rename
   public static ILootrType SHULKER;
   public static ILootrType INVENTORY;
   public static ILootrType MINECART;

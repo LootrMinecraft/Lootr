@@ -467,7 +467,6 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
 
   @Override
   public boolean isPhysicallyOpen() {
-    // TODO: This should be more complex
     return this.getBlockState().getValue(BlockStateProperties.DUSTED) > 0;
   }
 

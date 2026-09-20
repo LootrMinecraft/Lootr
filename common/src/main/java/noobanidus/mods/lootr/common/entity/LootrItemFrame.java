@@ -149,7 +149,6 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   public boolean hurt(DamageSource source, float amount) {
     boolean skipMessage = false;
 
-    // TODO: This could cause issues in the future
     ServerPlayer player = null;
     if (source.getEntity() instanceof ServerPlayer player1) {
       player = player1;
