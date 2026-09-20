@@ -87,6 +87,7 @@
   "lootr.configuration.perform_decay_while_ticking": "틱 시간이 흐르는 동안 부식 진행",
   "lootr.configuration.perform_piecewise_check": "각 구조물에서 확인 작업 수행",
   "lootr.configuration.perform_refresh_while_ticking": "틱 시간이 흐르는 동안 새로고침 수행",
+  "lootr.configuration.pinned_team_resolver": "Pinned Team Resolver",
   "lootr.configuration.power": "레드스톤 파워",
   "lootr.configuration.power_comparators": "파워 비교기",
   "lootr.configuration.problematic_loot_tables": "Problematic Loot Tables",
@@ -104,6 +105,7 @@
   "lootr.configuration.skip_logging_no_loot_table_at_generation": "Skip Logging LootTable-less Block Entities during Generation",
   "lootr.configuration.start_decay_while_ticking": "틱 시간이 흐르는 동안 부식 시작",
   "lootr.configuration.start_refresh_while_ticking": "틱 시간이 흐르는 동안 새로고침 시작",
+  "lootr.configuration.team_loot": "Enable Shared Team Inventories",
   "lootr.configuration.textures": "클라이언트 텍스쳐",
   "lootr.configuration.trapped_custom": "커스텀 인벤토리가 덫상자로써 동작",
   "lootr.configuration.vanilla_textures": "바닐라 텍스쳐",
@@ -223,5 +225,8 @@
   "text.autoconfig.lootr.option.refresh.start_tick_refresh": "틱 시간이 흐르는 동안 새로고침 시작",
   "text.autoconfig.lootr.option.seed": "시드",
   "text.autoconfig.lootr.option.seed.randomize_seed": "시드 랜덤화",
+  "text.autoconfig.lootr.option.team": "Shared Team Inventories",
+  "text.autoconfig.lootr.option.team.pinned_team_resolver": "Pinned Team Resolver",
+  "text.autoconfig.lootr.option.team.team_loot": "Enable Shared Team Inventories",
   "text.autoconfig.lootr.title": "Lootr"
 }
