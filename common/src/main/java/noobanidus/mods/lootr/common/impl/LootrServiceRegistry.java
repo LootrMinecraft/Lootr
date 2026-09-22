@@ -168,6 +168,7 @@ public class LootrServiceRegistry {
     Streams.stream(ServiceLoader.load(ITeamResolver.class, classLoader).iterator())
         .sorted(Comparator.comparingInt(ITeamResolver::priority).reversed()).toList().forEach(resolver ->
             {
+              resolver.init();
               teamResolvers.put(resolver.resolverId(), resolver);
               sortedTeamKeys.add(resolver.resolverId());
             }
@@ -175,12 +176,6 @@ public class LootrServiceRegistry {
 
     problematicProcessors.addAll(Streams.stream(ServiceLoader.load(IProblematicLootTableProcessor.class, classLoader))
         .sorted(Comparator.comparingInt(IProblematicLootTableProcessor::priority).reversed()).toList());
-  }
-
-  private record Resolver(ResourceLocation id, int priority) {
-    Resolver(ITeamResolver resolver) {
-      this(resolver.resolverId(), resolver.priority());
-    }
   }
 
   public static LootrServiceRegistry getInstance() {
