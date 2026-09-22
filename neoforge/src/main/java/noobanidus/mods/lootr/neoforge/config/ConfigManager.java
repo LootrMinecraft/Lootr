@@ -15,12 +15,12 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.config.SaveMode;
+import noobanidus.mods.lootr.common.api.config.SyncedConfig;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.config.ConfigManagerBase;
 import noobanidus.mods.lootr.common.impl.LootrServiceRegistry;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -436,7 +436,7 @@ public class ConfigManager extends ConfigManagerBase {
     return !DISABLE_NOTIFICATIONS.get() && (delay == -1 || remaining <= delay);
   }
 
-  public static ResourceLocation getPinnedTeamResolver () {
+  public static ResourceLocation getPinnedTeamResolverInternal() {
     if (PINNED_TEAM_RESOLVER_ID == null) {
       String team = PINNED_TEAM_RESOLVER.get();
       if (!team.isEmpty()) {
@@ -450,6 +450,10 @@ public class ConfigManager extends ConfigManagerBase {
     return PINNED_TEAM_RESOLVER_ID;
   }
 
+  public static ResourceLocation getPinnedTeamResolver () {
+    return getPinnedTeamResolverInternal();
+  }
+
   public static boolean isVanillaTextures() {
     return VANILLA_TEXTURES.get();
   }
@@ -460,5 +464,15 @@ public class ConfigManager extends ConfigManagerBase {
 
   public static boolean shouldPerformPiecewiseCheck() {
     return PERFORM_PIECEWISE_CHECK.get();
+  }
+
+  public static SyncedConfig getSyncedConfig () {
+    return new SyncedConfig(
+        BYPASS_SPAWN_PROTECTION.get(),
+        DISABLE_BREAK.get(),
+        ENABLE_BREAK.get(),
+        TEAM_LOOT.get(),
+        getPinnedTeamResolverInternal()
+    );
   }
 }

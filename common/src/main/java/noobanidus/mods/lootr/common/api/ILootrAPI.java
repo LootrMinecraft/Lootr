@@ -24,6 +24,7 @@ import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
 import noobanidus.mods.lootr.common.api.client.ClientTextureType;
 import noobanidus.mods.lootr.common.api.config.SaveMode;
+import noobanidus.mods.lootr.common.api.config.SyncedConfig;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.ILootrSavedData;
 import noobanidus.mods.lootr.common.api.data.LootFiller;
@@ -368,6 +369,9 @@ public interface ILootrAPI {
   UUID resolveClientPlayerTeam(Player player);
 
   Set<ResourceKey<LootTable>> gatherProblematicLootTables ();
+
+  @Nullable
+  SyncedConfig getSyncedConfig ();
 }
 
 

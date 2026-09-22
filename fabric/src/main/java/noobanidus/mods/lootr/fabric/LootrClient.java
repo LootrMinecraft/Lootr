@@ -5,6 +5,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
@@ -12,6 +14,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.client.block.LootrBrushableBlockRenderer;
 import noobanidus.mods.lootr.common.client.block.LootrDecoratedPotRenderer;
 import noobanidus.mods.lootr.common.client.entity.LootrItemFrameRenderer;
@@ -65,5 +68,9 @@ public class LootrClient implements ClientModInitializer {
     EntityModelLayerRegistry.registerModelLayer(LootrDecoratedPotRenderer.OPEN_POT_LAYER, LootrDecoratedPotRenderer::createBodyLayer);
 
     ParticleFactoryRegistry.getInstance().register(ModParticles.UNOPENED_PARTCLE, UnopenedParticle.Provider::new);
+
+    ClientPlayConnectionEvents.DISCONNECT.register((phase, minecraft) -> {
+      LootrAPI.SYNCED_CONFIG = null;
+    });
   }
 }

@@ -14,6 +14,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.config.SaveMode;
+import noobanidus.mods.lootr.common.api.config.SyncedConfig;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.config.ConfigManagerBase;
 import noobanidus.mods.lootr.common.impl.LootrServiceRegistry;
@@ -204,8 +205,12 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
     return REFRESH_MODS;
   }
 
-  @NotNull
   public static ResourceLocation getPinnedTeamResolver() {
+    return getPinnedTeamResolverInternal();
+  }
+
+  @NotNull
+  public static ResourceLocation getPinnedTeamResolverInternal() {
     if (PINNED_TEAM_RESOLVER == null) {
       String team = get().team.pinned_team_resolver;
       if (!team.isEmpty()) {
@@ -288,6 +293,20 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
 
   public static boolean isNewTextures() {
     return get().client.new_textures;
+  }
+
+  public static SyncedConfig getConfigForSync () {
+    return get().configSync();
+  }
+
+  private SyncedConfig configSync () {
+    return new SyncedConfig(
+        conversion.bypass_spawn_protection,
+        breaking.disable_break,
+        breaking.enable_break,
+        team.team_loot,
+        getPinnedTeamResolverInternal()
+    );
   }
 
   public static class Debug {

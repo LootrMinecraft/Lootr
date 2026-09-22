@@ -32,6 +32,7 @@ import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
 import noobanidus.mods.lootr.common.api.client.ClientTextureType;
 import noobanidus.mods.lootr.common.api.config.SaveMode;
+import noobanidus.mods.lootr.common.api.config.SyncedConfig;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.ILootrSavedData;
 import noobanidus.mods.lootr.common.api.data.LootFiller;
@@ -77,6 +78,7 @@ public class LootrAPI {
 
   public static ILootrAPI INSTANCE = null;
   public static boolean shouldDiscardIdAndOpeners;
+  public static @Nullable SyncedConfig SYNCED_CONFIG;
 
   public static boolean isReady() {
     return INSTANCE != null;
@@ -689,5 +691,9 @@ public class LootrAPI {
 
   public static Set<ResourceKey<LootTable>> gatherProblematicLootTables() {
     return INSTANCE.gatherProblematicLootTables();
+  }
+
+  public static SyncedConfig getSyncedConfig () {
+    return INSTANCE.getSyncedConfig();
   }
 }

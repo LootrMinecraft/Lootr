@@ -1,10 +1,14 @@
 package noobanidus.mods.lootr.fabric.event;
 
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.fabric.impl.resource.loader.ResourceManagerHelperImpl;
@@ -13,11 +17,14 @@ import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.block.entity.BlockEntityTicker;
 import noobanidus.mods.lootr.common.chunk.LoadedChunks;
 import noobanidus.mods.lootr.common.command.CommandLootr;
 import noobanidus.mods.lootr.common.data.DataStorage;
+import noobanidus.mods.lootr.fabric.config.ConfigManager;
+import noobanidus.mods.lootr.fabric.network.to_client.PacketSyncConfig;
 
 public class LootrEventsInit {
   public static MinecraftServer serverInstance;
@@ -42,6 +49,12 @@ public class LootrEventsInit {
 
     CommandRegistrationCallback.EVENT.register((dispatcher, reg, env) -> {
       CommandLootr.register(dispatcher);
+    });
+
+    ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
+      if (server.isDedicatedServer()) {
+        ServerPlayNetworking.send(handler.player, new PacketSyncConfig(ConfigManager.getConfigForSync()));
+      }
     });
 
     ModContainer container = FabricLoader.getInstance().getModContainer(LootrAPI.MODID).orElseThrow();

@@ -30,6 +30,7 @@ public class Lootr implements ModInitializer {
     PayloadTypeRegistry.playS2C().register(PacketRefreshSection.TYPE, PacketRefreshSection.STREAM_CODEC);
     PayloadTypeRegistry.playS2C().register(PacketPerformBreakEffect.TYPE, PacketPerformBreakEffect.STREAM_CODEC);
     PayloadTypeRegistry.playC2S().register(PacketRequestUpdate.TYPE, PacketRequestUpdate.STREAM_CODEC);
+    PayloadTypeRegistry.playC2S().register(PacketSyncConfig.TYPE, PacketSyncConfig.STREAM_CODEC);
 
     LootrNetworkingInit.register();
 

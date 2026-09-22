@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.common.impl;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
@@ -7,6 +8,8 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -18,8 +21,10 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.world.level.block.entity.PotDecorations;
@@ -29,6 +34,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.*;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
+import noobanidus.mods.lootr.common.api.config.SyncedConfig;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.ILootrSavedData;
 import noobanidus.mods.lootr.common.api.data.LootFiller;
@@ -602,5 +608,74 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   @Override
   public Set<ResourceKey<LootTable>> gatherProblematicLootTables() {
     return LootrServiceRegistry.gatherProblematicLootTables();
+  }
+
+  @Override
+  @Nullable
+  public SyncedConfig getSyncedConfig () {
+    return LootrAPI.SYNCED_CONFIG;
+  }
+
+  @Override
+  public Style getInvalidStyle() {
+    return !isMessageStylesEnabled() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED))
+        .withBold(true);
+  }
+
+  @Override
+  public Style getDecayStyle() {
+    return !isMessageStylesEnabled() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED))
+        .withBold(true);
+  }
+
+  @Override
+  public Style getRefreshStyle() {
+    return !isMessageStylesEnabled() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE))
+        .withBold(true);
+  }
+
+  @Override
+  public Style getChatStyle() {
+    return !isMessageStylesEnabled() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA));
+  }
+
+  @Override
+  public boolean canDestroyOrBreak(Player player) {
+    return (isFakePlayer(player) && isFakePlayerBreakEnabled() || isBreakEnabled());
+  }
+
+  @Override
+  public Component getInvalidTableComponent(ResourceKey<LootTable> lootTable) {
+    return Component.translatable("lootr.message.invalid_table", lootTable.location()
+            .getNamespace(), lootTable.toString())
+        .setStyle(isMessageStylesEnabled() ? Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED))
+            .withBold(true) : Style.EMPTY);
+  }
+
+  @Override
+  public float getExplosionResistance(Block block, float defaultResistance) {
+    if (isBlastImmune()) {
+      return Float.MAX_VALUE;
+    } else if (isBlastResistant()) {
+      return 16.0f;
+    } else {
+      return defaultResistance;
+    }
+  }
+
+  @Override
+  public float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos position, float defaultProgress) {
+    if (isBreakDisabled()) {
+      return 0f;
+    }
+    return defaultProgress;
+  }
+
+  @Override
+  public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos, int defaultSignal) {
+    if (shouldPowerComparators()) {
+      return 1;
+    }
+    return defaultSignal;
   }
 }

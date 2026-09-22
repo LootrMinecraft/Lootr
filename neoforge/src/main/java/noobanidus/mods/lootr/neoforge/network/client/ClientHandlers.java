@@ -7,6 +7,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.config.SyncedConfig;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.client.ClientHooks;
@@ -108,5 +109,9 @@ public class ClientHandlers {
         entity.setClientOpened(false);
       }
     }
+  }
+
+  public static void handleConfigSync(SyncedConfig config) {
+    LootrAPI.SYNCED_CONFIG = config;
   }
 }

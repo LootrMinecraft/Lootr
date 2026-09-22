@@ -290,6 +290,7 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.configuration.convert_elytras_to_item_frames", elytra_frame);
     add("lootr.configuration.brushables_self_support", brushables);
     add("lootr.configuration.item_frames_self_support", supported);
+    add("lootr.configuration.team", teams);
     add("lootr.configuration.team_loot", enable_teams);
     add("lootr.configuration.pinned_team_resolver", pinned_resolver);
 

@@ -1,29 +1,20 @@
 package noobanidus.mods.lootr.neoforge.impl;
 
-import net.minecraft.ChatFormatting;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
-import noobanidus.mods.lootr.common.api.ILootrAPI;
 import noobanidus.mods.lootr.common.api.client.ClientTextureType;
 import noobanidus.mods.lootr.common.api.config.SaveMode;
+import noobanidus.mods.lootr.common.api.config.SyncedConfig;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.impl.DefaultLootrAPIImpl;
 import noobanidus.mods.lootr.neoforge.config.ConfigManager;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
@@ -56,17 +47,6 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   }
 
   @Override
-  public float getExplosionResistance(Block block, float defaultResistance) {
-    if (ConfigManager.BLAST_IMMUNE.get()) {
-      return Float.MAX_VALUE;
-    } else if (ConfigManager.BLAST_RESISTANT.get()) {
-      return 16.0f;
-    } else {
-      return defaultResistance;
-    }
-  }
-
-  @Override
   public boolean isBlastResistant() {
     return ConfigManager.BLAST_RESISTANT.get();
   }
@@ -74,22 +54,6 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   @Override
   public boolean isBlastImmune() {
     return ConfigManager.BLAST_IMMUNE.get();
-  }
-
-  @Override
-  public float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos position, float defaultProgress) {
-    if (ConfigManager.DISABLE_BREAK.get()) {
-      return 0f;
-    }
-    return defaultProgress;
-  }
-
-  @Override
-  public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos, int defaultSignal) {
-    if (ConfigManager.POWER_COMPARATORS.get()) {
-      return 1;
-    }
-    return defaultSignal;
   }
 
   @Override
@@ -286,38 +250,13 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   }
 
   @Override
-  public Style getInvalidStyle() {
-    return ConfigManager.DISABLE_MESSAGE_STYLES.get() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true);
-  }
-
-  @Override
-  public Style getDecayStyle() {
-    return ConfigManager.DISABLE_MESSAGE_STYLES.get() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withBold(true);
-  }
-
-  @Override
-  public Style getRefreshStyle() {
-    return ConfigManager.DISABLE_MESSAGE_STYLES.get() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withBold(true);
-  }
-
-  @Override
-  public Style getChatStyle() {
-    return ConfigManager.DISABLE_MESSAGE_STYLES.get() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA));
-  }
-
-  @Override
-  public boolean canDestroyOrBreak(Player player) {
-    return (isFakePlayer(player) && ConfigManager.ENABLE_FAKE_PLAYER_BREAK.get()) || ConfigManager.ENABLE_BREAK.get();
-  }
-
-  @Override
   public boolean isBreakDisabled() {
-    return ConfigManager.DISABLE_BREAK.get();
+    return SyncedConfig.getDisableBreak(ConfigManager.DISABLE_BREAK.get());
   }
 
   @Override
   public boolean isBreakEnabled() {
-    return ConfigManager.ENABLE_BREAK.get();
+    return SyncedConfig.getEnableBreak(ConfigManager.ENABLE_BREAK.get());
   }
 
   @Override
@@ -402,16 +341,11 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
 
   @Override
   public boolean isTeamLoot() {
-    return ConfigManager.TEAM_LOOT.get();
+    return SyncedConfig.getTeamLootEnabled(ConfigManager.TEAM_LOOT.get());
   }
 
   @Override
-  public @NotNull ResourceLocation getPinnedTeamResolver() {
-    return ConfigManager.getPinnedTeamResolver();
-  }
-
-  @Override
-  public Component getInvalidTableComponent(ResourceKey<LootTable> lootTable) {
-    return Component.translatable("lootr.message.invalid_table", lootTable.location().getNamespace(), lootTable.toString()).setStyle(ConfigManager.DISABLE_MESSAGE_STYLES.get() ? Style.EMPTY : Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED)).withBold(true));
+  public ResourceLocation getPinnedTeamResolver() {
+    return SyncedConfig.getPinnedResolver(ConfigManager.getPinnedTeamResolver());
   }
 }
