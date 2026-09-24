@@ -105,6 +105,7 @@
   "lootr.configuration.skip_logging_no_loot_table_at_generation": "Skip Logging LootTable-less Block Entities during Generation",
   "lootr.configuration.start_decay_while_ticking": "틱 시간이 흐르는 동안 부식 시작",
   "lootr.configuration.start_refresh_while_ticking": "틱 시간이 흐르는 동안 새로고침 시작",
+  "lootr.configuration.team": "Shared Team Inventories",
   "lootr.configuration.team_loot": "Enable Shared Team Inventories",
   "lootr.configuration.textures": "클라이언트 텍스쳐",
   "lootr.configuration.trapped_custom": "커스텀 인벤토리가 덫상자로써 동작",
