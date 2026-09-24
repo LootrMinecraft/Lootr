@@ -22,6 +22,7 @@ public class Lootr implements ModInitializer {
     LootrRegistry.INSTANCE = new LootrRegistryImpl();
     PlatformAPI.INSTANCE = new PlatformAPIImpl();
 
+    PayloadTypeRegistry.playS2C().register(PacketContainerStatus.TYPE, PacketContainerStatus.STREAM_CODEC);
     PayloadTypeRegistry.playS2C().register(PacketOpenCart.TYPE, PacketOpenCart.STREAM_CODEC);
     PayloadTypeRegistry.playS2C().register(PacketCloseCart.TYPE, PacketCloseCart.STREAM_CODEC);
     PayloadTypeRegistry.playS2C().register(PacketAreaEntitySync.TYPE, PacketAreaEntitySync.STREAM_CODEC);
@@ -30,7 +31,7 @@ public class Lootr implements ModInitializer {
     PayloadTypeRegistry.playS2C().register(PacketRefreshSection.TYPE, PacketRefreshSection.STREAM_CODEC);
     PayloadTypeRegistry.playS2C().register(PacketPerformBreakEffect.TYPE, PacketPerformBreakEffect.STREAM_CODEC);
     PayloadTypeRegistry.playC2S().register(PacketRequestUpdate.TYPE, PacketRequestUpdate.STREAM_CODEC);
-    PayloadTypeRegistry.playC2S().register(PacketSyncConfig.TYPE, PacketSyncConfig.STREAM_CODEC);
+    PayloadTypeRegistry.playS2C().register(PacketSyncConfig.TYPE, PacketSyncConfig.STREAM_CODEC);
 
     LootrNetworkingInit.register();
 
