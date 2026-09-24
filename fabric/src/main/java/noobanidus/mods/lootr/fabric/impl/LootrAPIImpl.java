@@ -357,4 +357,9 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   public boolean shouldDisplayDecayParticles() {
     return ConfigManager.get().client.decay_particles;
   }
+
+  @Override
+  public boolean shouldDisplayToasts() {
+    return ConfigManager.get().client.display_toasts;
+  }
 }

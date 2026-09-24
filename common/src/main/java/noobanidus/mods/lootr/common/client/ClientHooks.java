@@ -1,11 +1,13 @@
 package noobanidus.mods.lootr.common.client;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.toasts.AdvancementToast;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -16,10 +18,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.PlayerContext;
+import noobanidus.mods.lootr.common.api.client.ContainerStatus;
 import noobanidus.mods.lootr.common.api.client.FrustumExtension;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
+import noobanidus.mods.lootr.common.client.gui.components.toasts.LootrToast;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinBlock;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinLevelRenderer;
 import noobanidus.mods.lootr.common.particle.ParticleColorOption;
@@ -200,6 +204,42 @@ public class ClientHooks {
           double xOff = bounded(random, provider.getParticleXBounds());
           double zOff = bounded(random, provider.getParticleZBounds());
           level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, blockstate), vec3.x + xOff, vec3.y + provider.getParticleYOffset(), vec3.z + zOff, 0, 0, 0);
+        }
+      }
+    }
+  }
+
+  public static void handleContainerStatus(ContainerStatus status, ContainerStatus.Type statusType, int remaining) {
+    Minecraft mc = Minecraft.getInstance();
+    if (mc.player == null) {
+      return;
+    }
+    if (LootrAPI.shouldDisplayToasts()) {
+      mc.getToasts().addToast(new LootrToast(status, ContainerStatus.getMessage(status, statusType, remaining)));
+    } else {
+      if (statusType == ContainerStatus.Type.COMPLETE) {
+        if (status == ContainerStatus.REFRESH) {
+          mc.player.displayClientMessage(Component.translatable("lootr.message.refreshed")
+              .setStyle(LootrAPI.getRefreshStyle()), true);
+        } else {
+          mc.player.displayClientMessage(Component.translatable("lootr.message.decayed")
+              .setStyle(LootrAPI.getDecayStyle()), true);
+        }
+      } else if (statusType == ContainerStatus.Type.ONGOING) {
+        if (status == ContainerStatus.REFRESH) {
+          mc.player.displayClientMessage(Component.translatable("lootr.message.refresh_in", remaining)
+              .setStyle(LootrAPI.getRefreshStyle()), true);
+        } else {
+          mc.player.displayClientMessage(Component.translatable("lootr.message.decay_in", remaining)
+              .setStyle(LootrAPI.getDecayStyle()), true);
+        }
+      } else {
+        if (status == ContainerStatus.REFRESH) {
+          mc.player.displayClientMessage(Component.translatable("lootr.message.refresh_start", remaining)
+              .setStyle(LootrAPI.getRefreshStyle()), true);
+        } else {
+          mc.player.displayClientMessage(Component.translatable("lootr.message.decay_start", remaining)
+              .setStyle(LootrAPI.getDecayStyle()), true);
         }
       }
     }

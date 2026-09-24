@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import noobanidus.mods.lootr.common.api.DataToCopy;
 import noobanidus.mods.lootr.common.api.IPlatformAPI;
+import noobanidus.mods.lootr.common.api.client.ContainerStatus;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.client.ClientHooks;
@@ -115,5 +116,10 @@ public class PlatformAPIImpl extends DefaultPlatformAPIImpl implements IPlatform
   public void syncAfterTeamChange(Player player) {
     var data = getSyncData(player);
     ServerPlayNetworking.send((ServerPlayer) player, new PacketAreaEntitySync(data.getFirst(), data.getSecond()));
+  }
+
+  @Override
+  public void alertContainerStatus(ServerPlayer player, ContainerStatus status, ContainerStatus.Type type, int remainingDuration) {
+    ServerPlayNetworking.send(player, new PacketContainerStatus(status, type, remainingDuration));
   }
 }

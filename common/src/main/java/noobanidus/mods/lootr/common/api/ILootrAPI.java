@@ -376,6 +376,8 @@ public interface ILootrAPI {
   boolean shouldDisplayRefreshParticles();
 
   boolean shouldDisplayDecayParticles();
+
+  boolean shouldDisplayToasts();
 }
 
 

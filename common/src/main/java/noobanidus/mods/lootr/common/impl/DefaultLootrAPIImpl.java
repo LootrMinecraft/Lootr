@@ -34,6 +34,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.*;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
+import noobanidus.mods.lootr.common.api.client.ContainerStatus;
 import noobanidus.mods.lootr.common.api.config.SyncedConfig;
 import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.ILootrSavedData;
@@ -91,20 +92,19 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
     }
     if (LootrAPI.isDecayed(provider) && provider.canDecay()) {
       provider.performDecay();
-      player.displayClientMessage(Component.translatable("lootr.message.decayed")
-          .setStyle(LootrAPI.getDecayStyle()), true);
+      PlatformAPI.alertContainerStatus(player, ContainerStatus.DECAY, ContainerStatus.Type.COMPLETE, -1);
+
       return;
     } else {
       if (provider.canDecay()) {
         int decayValue = LootrAPI.getRemainingDecayValue(provider);
         if (decayValue > 0 && LootrAPI.shouldNotify(decayValue)) {
-          player.displayClientMessage(Component.translatable("lootr.message.decay_in", decayValue / 20)
-              .setStyle(LootrAPI.getDecayStyle()), true);
+          PlatformAPI.alertContainerStatus(player, ContainerStatus.DECAY, ContainerStatus.Type.ONGOING, decayValue / 20);
+
         } else if (decayValue == -1) {
           if (LootrAPI.isDecaying(provider)) {
             LootrAPI.setDecaying(provider);
-            player.displayClientMessage(Component.translatable("lootr.message.decay_start", LootrAPI.getDecayValue() / 20)
-                .setStyle(LootrAPI.getDecayStyle()), true);
+            PlatformAPI.alertContainerStatus(player, ContainerStatus.DECAY, ContainerStatus.Type.START, LootrAPI.getDecayValue() / 20);
           }
         }
       }
@@ -114,20 +114,18 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
     if (LootrAPI.isRefreshed(provider) && provider.canRefresh()) {
       provider.performRefresh();
       provider.performClose();
-      player.displayClientMessage(Component.translatable("lootr.message.refreshed")
-          .setStyle(LootrAPI.getRefreshStyle()), true);
+      PlatformAPI.alertContainerStatus(player, ContainerStatus.REFRESH, ContainerStatus.Type.COMPLETE, -1);
+
       shouldUpdate = true;
     }
     if (provider.canRefresh()) {
       int refreshValue = LootrAPI.getRemainingRefreshValue(provider);
       if (refreshValue > 0 && LootrAPI.shouldNotify(refreshValue)) {
-        player.displayClientMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20)
-            .setStyle(LootrAPI.getRefreshStyle()), true);
+        PlatformAPI.alertContainerStatus(player, ContainerStatus.REFRESH, ContainerStatus.Type.ONGOING, refreshValue / 20);
       } else if (refreshValue == -1) {
         if (LootrAPI.isRefreshing(provider)) {
           LootrAPI.setRefreshing(provider);
-          player.displayClientMessage(Component.translatable("lootr.message.refresh_start", LootrAPI.getRefreshValue() / 20)
-              .setStyle(LootrAPI.getRefreshStyle()), true);
+          PlatformAPI.alertContainerStatus(player, ContainerStatus.REFRESH, ContainerStatus.Type.START, LootrAPI.getRefreshValue() / 20);
         }
       }
     }
@@ -623,7 +621,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
 
   @Override
   @Nullable
-  public SyncedConfig getSyncedConfig () {
+  public SyncedConfig getSyncedConfig() {
     return LootrAPI.SYNCED_CONFIG;
   }
 

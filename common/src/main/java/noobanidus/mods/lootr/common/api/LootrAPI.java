@@ -705,4 +705,8 @@ public class LootrAPI {
   public static SyncedConfig getSyncedConfig () {
     return INSTANCE.getSyncedConfig();
   }
+
+  public static boolean shouldDisplayToasts () {
+    return INSTANCE.shouldDisplayToasts();
+  }
 }

@@ -9,6 +9,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.scores.PlayerTeam;
 import noobanidus.mods.lootr.common.api.adapter.ILootrDataAdapter;
 import noobanidus.mods.lootr.common.api.adapter.ILootrItemFrameAdapter;
+import noobanidus.mods.lootr.common.api.client.ContainerStatus;
+import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrCart;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
@@ -120,5 +122,9 @@ public class PlatformAPI {
 
   public static void syncAfterTeamChange(String username) {
     INSTANCE.syncAfterTeamChange(username);
+  }
+
+  public static void alertContainerStatus (ServerPlayer player, ContainerStatus status, ContainerStatus.Type type, int remainingDuration) {
+    INSTANCE.alertContainerStatus(player, status, type, remainingDuration);
   }
 }

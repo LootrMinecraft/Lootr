@@ -294,12 +294,15 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.configuration.team_loot", enable_teams);
     add("lootr.configuration.pinned_team_resolver", pinned_resolver);
 
-    add("lootr.toast.decay.start", "Container now decaying!");
-    add("lootr.toast.decay.ongoing", "Container is decaying!");
-    add("lootr.toast.decay.message", "Will completely decay in %s seconds.");
-    add("lootr.toast.refresh.start", "Container now refreshing!");
-    add("lootr.toast.refresh.ongoing", "Container is refreshing!");
-    add("lootr.toast.refresh.message", "Will refresh contents in %s seconds.");
+    add("lootr.toast.decay.start", "Container decaying!");
+    add("lootr.toast.decay.ongoing", "Container decaying!");
+    add("lootr.toast.decay.complete", "Container decayed!");
+    add("lootr.toast.decay.message", "%s seconds remaining.");
+    add("lootr.toast.refresh.start", "Container refreshing!");
+    add("lootr.toast.refresh.ongoing", "Container refreshing!");
+    add("lootr.toast.refresh.complete", "Container refreshed!");
+    add("lootr.toast.refresh.message", "%s seconds to new items.");
+    add("lootr.toast.refresh.complete_message", "New items available!");
 
     // Tags
     add(LootrTags.Blocks.CONVERT_BARRELS, "Blocks that Convert to Lootr Barrels");

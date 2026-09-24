@@ -90,6 +90,7 @@ public class ConfigManager extends ConfigManagerBase {
   public static final ModConfigSpec.BooleanValue UNOPENED_PARTICLES;
   public static final ModConfigSpec.BooleanValue REFRESH_PARTICLES;
   public static final ModConfigSpec.BooleanValue DECAY_PARTICLES;
+  public static final ModConfigSpec.BooleanValue TOASTS;
   private static final ModConfigSpec.Builder COMMON_BUILDER = new ModConfigSpec.Builder();
   private static final ModConfigSpec.Builder CLIENT_BUILDER = new ModConfigSpec.Builder();
   public static ModConfigSpec COMMON_CONFIG;
@@ -241,6 +242,7 @@ public class ConfigManager extends ConfigManagerBase {
     UNOPENED_PARTICLES = CLIENT_BUILDER.comment("set to true to enable 'unopened particles' to spawn from containers that the player has not yet opened").define("unopened_particles", true);
     REFRESH_PARTICLES = CLIENT_BUILDER.comment("set to true to enable 'refresh particles' to spawn from containers that the player has previously opened which are set to refresh").define("refresh_particles", true);
     DECAY_PARTICLES = CLIENT_BUILDER.comment("set to true to enable 'decay particles' to spawn from containers that are going to decay").define("decay_particles", true);
+    TOASTS = CLIENT_BUILDER.comment("set to true to enable toast notifications of decay and refresh, obeying message notification settings; set to false to instead use on-screen message").define("toasts", true);
     CLIENT_BUILDER.pop();
     CLIENT_CONFIG = CLIENT_BUILDER.build();
   }

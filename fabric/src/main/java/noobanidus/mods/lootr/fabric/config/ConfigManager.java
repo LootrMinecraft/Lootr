@@ -394,6 +394,7 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
     public boolean unopened_particles = true;
     public boolean refresh_particles = true;
     public boolean decay_particles = true;
+    public boolean display_toasts = true;
   }
 
   public static class Team {
