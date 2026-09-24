@@ -105,6 +105,7 @@
   "lootr.configuration.skip_logging_no_loot_table_at_generation": "在生成时跳过无战利品表的方块实体日志",
   "lootr.configuration.start_decay_while_ticking": "刻更新时开始衰减",
   "lootr.configuration.start_refresh_while_ticking": "刻更新时开始刷新",
+  "lootr.configuration.team": "Shared Team Inventories",
   "lootr.configuration.team_loot": "Enable Shared Team Inventories",
   "lootr.configuration.textures": "客户端纹理",
   "lootr.configuration.trapped_custom": "自定义物品栏为陷阱",
