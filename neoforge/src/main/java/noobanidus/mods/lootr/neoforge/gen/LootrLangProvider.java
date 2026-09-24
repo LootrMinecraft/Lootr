@@ -294,6 +294,13 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.configuration.team_loot", enable_teams);
     add("lootr.configuration.pinned_team_resolver", pinned_resolver);
 
+    add("lootr.toast.decay.start", "Container now decaying!");
+    add("lootr.toast.decay.ongoing", "Container is decaying!");
+    add("lootr.toast.decay.message", "Will completely decay in %s seconds.");
+    add("lootr.toast.refresh.start", "Container now refreshing!");
+    add("lootr.toast.refresh.ongoing", "Container is refreshing!");
+    add("lootr.toast.refresh.message", "Will refresh contents in %s seconds.");
+
     // Tags
     add(LootrTags.Blocks.CONVERT_BARRELS, "Blocks that Convert to Lootr Barrels");
     add(LootrTags.Blocks.CONVERT_CHESTS, "Blocks that Convert to Lootr Chests");
