@@ -105,6 +105,7 @@
   "lootr.configuration.skip_logging_no_loot_table_at_generation": "Pular o Registro de Entidades de Bloco Sem Tabela de Saque Durante a Geração",
   "lootr.configuration.start_decay_while_ticking": "Iniciar Decomposição Durante o Tick",
   "lootr.configuration.start_refresh_while_ticking": "Iniciar Atualização Durante o Tick",
+  "lootr.configuration.team": "Shared Team Inventories",
   "lootr.configuration.team_loot": "Enable Shared Team Inventories",
   "lootr.configuration.textures": "Texturas do Cliente",
   "lootr.configuration.trapped_custom": "Inventários Personalizados São Presos",
