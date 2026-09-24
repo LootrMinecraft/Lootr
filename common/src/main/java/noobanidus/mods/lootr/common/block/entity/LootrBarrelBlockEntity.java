@@ -214,6 +214,26 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   }
 
   @Override
+  public void setClientRefreshing(boolean value) {
+    this.simpleLootrInstance.setClientRefreshing(value);
+  }
+
+  @Override
+  public void setClientDecaying(boolean value) {
+    this.simpleLootrInstance.setClientDecaying(value);
+  }
+
+  @Override
+  public boolean isClientRefreshing() {
+    return this.simpleLootrInstance.isClientRefreshing();
+  }
+
+  @Override
+  public boolean isClientDecaying() {
+    return this.simpleLootrInstance.isClientDecaying();
+  }
+
+  @Override
   @NotNull
   public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
     CompoundTag result = super.getUpdateTag(provider);

@@ -164,6 +164,7 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
       data.clearOpeners();
       NewTickingData.getRefreshData().clearTicking(LootrAPI.getServer(), this.getInfoUUID());
       setHasBeenOpened(false);
+      setClientRefreshing(false);
       markChanged();
     }
   }
@@ -214,4 +215,19 @@ public interface ILootrInfoProvider extends ILootrInfo, IClientOpeners {
   default int getRandomOffset () {
     return 0;
   }
+
+  default void setClientRefreshing (boolean value) {
+  }
+
+  default void setClientDecaying (boolean value) {
+  }
+
+  default boolean isClientRefreshing () {
+    return false;
+  }
+
+  default boolean isClientDecaying () {
+    return false;
+  }
+
 }

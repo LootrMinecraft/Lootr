@@ -5,11 +5,13 @@ import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -30,13 +32,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
-import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
-import noobanidus.mods.lootr.common.api.ILootrEntityConverter;
-import noobanidus.mods.lootr.common.api.ILootrType;
-import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.*;
 import noobanidus.mods.lootr.common.api.advancement.IContainerTrigger;
 import noobanidus.mods.lootr.common.api.data.ILootrInfo;
 import noobanidus.mods.lootr.common.api.data.LootrBlockType;
+import noobanidus.mods.lootr.common.api.data.SimpleLootrEntityInstance;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.api.registry.LootrRegistry;
 import org.jetbrains.annotations.NotNull;
@@ -47,14 +47,10 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class LootrChestMinecartEntity extends AbstractMinecartContainer implements ILootrEntity {
+
   private static BlockState cartNormal = null;
   // This can actually just be a null
-  private final Set<UUID> clientOpeners = new ObjectLinkedOpenHashSet<>();
-  // TODO: This isn't synchronized properly
-  private boolean hasBeenOpened = false;
-  // This is only ever set via packet
-  private boolean opened = false;
-  private String cachedId;
+  private final SimpleLootrEntityInstance instance = new SimpleLootrEntityInstance(this, this::getVisualOpeners, 1);
 
   public LootrChestMinecartEntity(EntityType<LootrChestMinecartEntity> type, Level world) {
     super(type, world);
@@ -75,17 +71,17 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
 
   @Override
   public @Nullable Set<UUID> getClientOpeners() {
-    return clientOpeners;
+    return instance.getClientOpeners();
   }
 
   @Override
   public boolean isClientOpened() {
-    return opened;
+    return instance.isClientOpened();
   }
 
   @Override
   public void setClientOpened(boolean opened) {
-    this.opened = opened;
+    instance.setClientOpened(opened);
   }
 
   // TODO: Abstract this out into SimpleLootrEntity
@@ -205,8 +201,8 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   @Override
   public void startOpen(Player player) {
     if (!player.isSpectator()) {
-      if (!hasBeenOpened) {
-        hasBeenOpened = true;
+      if (!hasBeenOpened()) {
+        setHasBeenOpened(true);
         markChanged();
       }
       performOpen((ServerPlayer) player);
@@ -297,15 +293,12 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
 
   @Override
   public String getInfoKey() {
-    if (cachedId == null) {
-      cachedId = ILootrInfo.generateInfoKey(getInfoUUID());
-    }
-    return cachedId;
+    return instance.getInfoKey();
   }
 
   @Override
   public boolean hasBeenOpened() {
-    return hasBeenOpened;
+    return instance.hasBeenOpened();
   }
 
   @Override
@@ -350,7 +343,7 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
 
   @Override
   public void setHasBeenOpened(boolean value) {
-    hasBeenOpened = value;
+    instance.setHasBeenOpened(value);
   }
 
   @Override
@@ -371,6 +364,38 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   @Override
   public void setLootTableInternal(ResourceKey<LootTable> lootTable, long seed) {
     setLootTable(lootTable, seed);
+  }
+
+  @Override
+  public void setClientRefreshing(boolean value) {
+    this.instance.setClientRefreshing(value);
+  }
+
+  @Override
+  public void setClientDecaying(boolean value) {
+    this.instance.setClientDecaying(value);
+  }
+
+  @Override
+  public boolean isClientRefreshing() {
+    return this.instance.isClientRefreshing();
+  }
+
+  @Override
+  public boolean isClientDecaying() {
+    return this.instance.isClientDecaying();
+  }
+
+  @Override
+  public void addAdditionalSaveData(CompoundTag compound) {
+    super.addAdditionalSaveData(compound);
+    this.instance.saveAdditional(compound, level().registryAccess(), level().isClientSide());
+  }
+
+  @Override
+  public void readAdditionalSaveData(CompoundTag compound) {
+    super.readAdditionalSaveData(compound);
+    this.instance.loadAdditional(compound, level().registryAccess());
   }
 
   @AutoService(ILootrEntityConverter.class)

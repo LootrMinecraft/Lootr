@@ -567,6 +567,25 @@ public class LootrBrushableBlockEntity extends BlockEntity implements ILootrBloc
     level.addFreshEntity(fallingBlockEntity);
   }
 
+  @Override
+  public void setClientRefreshing(boolean value) {
+    this.simpleLootrInstance.setClientRefreshing(value);
+  }
+
+  @Override
+  public void setClientDecaying(boolean value) {
+    this.simpleLootrInstance.setClientDecaying(value);
+  }
+
+  @Override
+  public boolean isClientRefreshing() {
+    return this.simpleLootrInstance.isClientRefreshing();
+  }
+
+  @Override
+  public boolean isClientDecaying() {
+    return this.simpleLootrInstance.isClientDecaying();
+  }
 
   @AutoService(ILootrBlockEntityConverter.class)
   public static class DefaultBlockEntityConverter implements ILootrBlockEntityConverter<LootrBrushableBlockEntity> {

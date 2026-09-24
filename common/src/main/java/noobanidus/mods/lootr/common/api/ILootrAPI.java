@@ -372,6 +372,10 @@ public interface ILootrAPI {
 
   @Nullable
   SyncedConfig getSyncedConfig ();
+
+  boolean shouldDisplayRefreshParticles();
+
+  boolean shouldDisplayDecayParticles();
 }
 
 

@@ -348,4 +348,14 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
   public ResourceLocation getPinnedTeamResolver() {
     return SyncedConfig.getPinnedResolver(ConfigManager.getPinnedTeamResolver());
   }
+
+  @Override
+  public boolean shouldDisplayRefreshParticles() {
+    return ConfigManager.REFRESH_PARTICLES.get();
+  }
+
+  @Override
+  public boolean shouldDisplayDecayParticles() {
+    return ConfigManager.DECAY_PARTICLES.get();
+  }
 }

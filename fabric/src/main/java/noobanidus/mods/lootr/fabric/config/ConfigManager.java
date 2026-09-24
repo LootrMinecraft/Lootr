@@ -392,6 +392,8 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
     public boolean vanilla_textures = false;
     public boolean new_textures = true;
     public boolean unopened_particles = true;
+    public boolean refresh_particles = true;
+    public boolean decay_particles = true;
   }
 
   public static class Team {

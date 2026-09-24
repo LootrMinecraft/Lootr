@@ -430,6 +430,26 @@ public class LootrDecoratedPotBlockEntity extends BlockEntity implements Randomi
     return lootrInstance.getRandomOffset();
   }
 
+  @Override
+  public void setClientRefreshing(boolean value) {
+    this.lootrInstance.setClientRefreshing(value);
+  }
+
+  @Override
+  public void setClientDecaying(boolean value) {
+    this.lootrInstance.setClientDecaying(value);
+  }
+
+  @Override
+  public boolean isClientRefreshing() {
+    return this.lootrInstance.isClientRefreshing();
+  }
+
+  @Override
+  public boolean isClientDecaying() {
+    return this.lootrInstance.isClientDecaying();
+  }
+
   @AutoService(ILootrBlockEntityConverter.class)
   public static class DefaultBlockEntityConverter implements ILootrBlockEntityConverter<LootrDecoratedPotBlockEntity> {
     @Override

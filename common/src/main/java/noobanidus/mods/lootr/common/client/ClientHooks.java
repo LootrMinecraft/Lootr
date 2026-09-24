@@ -4,15 +4,16 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
+import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.animal.sniffer.Sniffer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.PlayerContext;
 import noobanidus.mods.lootr.common.api.client.FrustumExtension;
@@ -27,7 +28,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class ClientHooks {
   @NotNull
-  public static PlayerContext getPlayerContext () {
+  public static PlayerContext getPlayerContext() {
     return new PlayerContext(getPlayer());
   }
 
@@ -98,25 +99,25 @@ public class ClientHooks {
   }
 
   @Nullable
-  private static Frustum getFrustum () {
-    Minecraft mc= Minecraft.getInstance();
-    Frustum frustum1 = ((AccessorMixinLevelRenderer)mc.levelRenderer).lootr$getCapturedFrustum();
+  private static Frustum getFrustum() {
+    Minecraft mc = Minecraft.getInstance();
+    Frustum frustum1 = ((AccessorMixinLevelRenderer) mc.levelRenderer).lootr$getCapturedFrustum();
     if (frustum1 != null) {
       return frustum1;
     }
-    return ((AccessorMixinLevelRenderer)mc.levelRenderer).lootr$getCullingFrustum();
+    return ((AccessorMixinLevelRenderer) mc.levelRenderer).lootr$getCullingFrustum();
   }
 
-  public static boolean testFrustumContainsPoint (Vec3 position) {
+  public static boolean testFrustumContainsPoint(Vec3 position) {
     Frustum frustum = getFrustum();
     if (frustum == null) {
       return false;
     }
 
-    return ((FrustumExtension)frustum).lootr$isVisible(position);
+    return ((FrustumExtension) frustum).lootr$isVisible(position);
   }
 
-  private static boolean hasLineOfSightOfBlock (ILootrInfoProvider provider) {
+  private static boolean hasLineOfSightOfBlock(ILootrInfoProvider provider) {
     Minecraft mc = Minecraft.getInstance();
     if (mc.player == null || mc.level == null) {
       return false;
@@ -136,26 +137,52 @@ public class ClientHooks {
 
   public static void performUnopenedParticles(ILootrInfoProvider provider) {
     PlayerContext context = getPlayerContext();
-    if (context.hasPlayer()) {
-      Level level = Minecraft.getInstance().level;
-      if (level != null && !provider.hasClientOpened(context)) {
-        RandomSource random = Minecraft.getInstance().level.getRandom();
-        if (random.nextInt(3) == 0) {
-          if (hasLineOfSightOfBlock(provider)) {
-            double xOff = bounded(random, provider.getParticleXBounds());
-            double zOff = bounded(random, provider.getParticleZBounds());
-            Vec3 pos = provider.getParticleCenter();
-            int color = provider.getParticleColor(context);
-            level.addParticle(
-                new ParticleColorOption(LootrRegistry.getUnopenedParticleType(), color, color, false),
-                pos.x + xOff,
-                pos.y + provider.getParticleYOffset() + random.nextDouble() * 0.02,
-                pos.z + zOff,
-                0,
-                random.nextDouble() * 0.02,
-                0
-            );
-          }
+    Level level = Minecraft.getInstance().level;
+    if (context.hasPlayer() && level != null && !provider.hasClientOpened(context)) {
+      RandomSource random = Minecraft.getInstance().level.getRandom();
+      if (random.nextInt(3) == 0) {
+        if (hasLineOfSightOfBlock(provider)) {
+          double xOff = bounded(random, provider.getParticleXBounds());
+          double zOff = bounded(random, provider.getParticleZBounds());
+          Vec3 pos = provider.getParticleCenter();
+          int color = provider.getParticleColor(context);
+          level.addParticle(
+              new ParticleColorOption(LootrRegistry.getUnopenedParticleType(), color, color, false),
+              pos.x + xOff,
+              pos.y + provider.getParticleYOffset() + random.nextDouble() * 0.02,
+              pos.z + zOff,
+              0,
+              random.nextDouble() * 0.02,
+              0
+          );
+        }
+      }
+    }
+  }
+
+  public static void performRefreshParticles(ILootrInfoProvider provider) {
+    PlayerContext context = getPlayerContext();
+    Level level = Minecraft.getInstance().level;
+    if (context.hasPlayer() && level != null && provider.hasClientOpened(context) && provider.isClientRefreshing()) {
+
+    }
+  }
+
+  public static void performDecayParticles(ILootrInfoProvider provider) {
+    PlayerContext context = getPlayerContext();
+    Level level = Minecraft.getInstance().level;
+    Vec3 vec3 = provider.getParticleCenter();
+    if (!(provider instanceof BlockEntity be)) {
+      return;
+    }
+    BlockState blockstate = be.getBlockState();
+    if (context.hasPlayer() && level != null && provider.isClientDecaying()) {
+      RandomSource random = Minecraft.getInstance().level.getRandom();
+      if (random.nextInt(3) == 0) {
+        if (hasLineOfSightOfBlock(provider)) {
+          double xOff = bounded(random, provider.getParticleXBounds());
+          double zOff = bounded(random, provider.getParticleZBounds());
+          level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, blockstate), vec3.x + xOff, vec3.y + provider.getParticleYOffset(), vec3.z + zOff, 0, 0, 0);
         }
       }
     }

@@ -237,6 +237,7 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   public void addAdditionalSaveData(CompoundTag compound) {
     super.addAdditionalSaveData(compound);
     compound.put(NBTConstants.CUSTOM_INVENTORY, ContainerHelper.saveAllItems(new CompoundTag(), this.inventory, level().registryAccess()));
+    this.instance.saveAdditional(compound, level().registryAccess(), level().isClientSide());
   }
 
   @Override
@@ -244,6 +245,7 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
     super.readAdditionalSaveData(compound);
     ContainerHelper.loadAllItems(compound.getCompound(NBTConstants.CUSTOM_INVENTORY), this.inventory, level().registryAccess());
     this.setItemInternal(this.inventory.getFirst());
+    this.instance.loadAdditional(compound, level().registryAccess());
   }
 
   private void setItemInternal(ItemStack stack) {

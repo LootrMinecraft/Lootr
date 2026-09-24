@@ -30,6 +30,8 @@ public class SimpleLootrInstance {
   protected boolean hasBeenOpened = false;
   protected String cachedId;
   protected boolean clientOpened = false;
+  protected boolean clientRefreshing = false;
+  protected boolean clientDecaying = false;
   protected boolean savingToItem = false;
   protected int randomOffset = -1;
 
@@ -81,6 +83,22 @@ public class SimpleLootrInstance {
 
   public void setClientOpened(boolean opened) {
     this.clientOpened = opened;
+  }
+
+  public boolean isClientRefreshing () {
+    return clientRefreshing;
+  }
+
+  public void setClientRefreshing (boolean value) {
+    this.clientRefreshing = value;
+  }
+
+  public boolean isClientDecaying () {
+    return clientDecaying;
+  }
+
+  public void setClientDecaying (boolean value) {
+    this.clientDecaying = value;
   }
 
   public @NotNull UUID getInfoUUID() {
@@ -149,6 +167,13 @@ public class SimpleLootrInstance {
       this.customInventory = NonNullList.withSize(size, ItemStack.EMPTY);
       ContainerHelper.loadAllItems(compound.getCompound(NBTConstants.CUSTOM_INVENTORY), customInventory, provder);
     }
+
+    if (compound.contains(NBTConstants.CLIENT_DECAYING)) {
+      this.clientDecaying = compound.getBoolean(NBTConstants.CLIENT_DECAYING);
+    }
+    if (compound.contains(NBTConstants.CLIENT_REFRESHING)) {
+      this.clientRefreshing = compound.getBoolean(NBTConstants.CLIENT_REFRESHING);
+    }
   }
 
   public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider, boolean isClientSide) {
@@ -172,6 +197,9 @@ public class SimpleLootrInstance {
       compound.put(NBTConstants.CUSTOM_INVENTORY, itemTag);
       compound.putInt(NBTConstants.CUSTOM_SIZE, customInventory.size());
     }
+
+    compound.putBoolean(NBTConstants.CLIENT_REFRESHING, clientRefreshing);
+    compound.putBoolean(NBTConstants.CLIENT_DECAYING, clientDecaying);
   }
 
   public void fillUpdateTag(CompoundTag result, HolderLookup.Provider provider, boolean isClientSide) {

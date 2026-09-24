@@ -208,12 +208,19 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
     if (provider.getInfoLevel() == null || !provider.getInfoLevel().isClientSide()) {
       return;
     }
-
+    var type = provider.getInfoNewType();
     if (LootrAPI.shouldDisplayUnopenedParticles()) {
-      var type = provider.getInfoNewType();
       if (type != null && type.displaysUnopenedParticle()) {
         ClientHooks.performUnopenedParticles(provider);
       }
+    }
+
+    if (LootrAPI.shouldDisplayRefreshParticles() && type != null && type.canRefresh() && provider.isClientRefreshing()) {
+      ClientHooks.performRefreshParticles(provider);
+    }
+
+    if (LootrAPI.shouldDisplayDecayParticles() && type != null && type.canDecay() && provider.isClientDecaying()) {
+      ClientHooks.performDecayParticles(provider);
     }
   }
 
@@ -296,6 +303,9 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   @Override
   public final void setDecaying(ILootrInfoProvider provider) {
     DataStorage.setDecaying(provider);
+    provider.setClientDecaying(true);
+    provider.markChanged();
+    provider.performUpdate();
   }
 
   @Override
@@ -316,6 +326,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   @Override
   public final void setRefreshing(ILootrInfoProvider provider) {
     DataStorage.setRefreshing(provider);
+    provider.setClientRefreshing(true);
   }
 
   @Override

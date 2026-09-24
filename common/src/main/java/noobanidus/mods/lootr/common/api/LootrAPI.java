@@ -73,6 +73,7 @@ public class LootrAPI {
   public static final Set<ResourceKey<LootTable>> PROBLEMATIC_LOOT_TABLES = Stream.of(LootrAPI.rl("twilightforest", "structures/stronghold_boss"), LootrAPI.rl("atum", "chests/pharaoh"))
       .map(o -> ResourceKey.create(Registries.LOOT_TABLE, o)).collect(Collectors.toSet());
   public static final int DEFAULT_PARTICLE_COLOR = 0xfad64a;
+  public static final int DEFAULT_REFRESH_PARTICLE_COLOR = 0x17d45c;
   public static final ResourceLocation DEFAULT_TEAM_RESOLVER = LootrAPI.rl("default");
   public static final ResourceLocation MINECRAFT_TEAM_RESOLVER = ResourceLocation.withDefaultNamespace("vanilla_default");
 
@@ -621,6 +622,14 @@ public class LootrAPI {
 
   public static boolean shouldDisplayUnopenedParticles() {
     return INSTANCE.shouldDisplayUnopenedParticles();
+  }
+
+  public static boolean shouldDisplayRefreshParticles () {
+    return INSTANCE.shouldDisplayRefreshParticles();
+  }
+
+  public static boolean shouldDisplayDecayParticles () {
+    return INSTANCE.shouldDisplayDecayParticles();
   }
 
   public static long getGameTime() {
