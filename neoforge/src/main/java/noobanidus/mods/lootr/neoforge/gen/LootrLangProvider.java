@@ -143,7 +143,7 @@ public class LootrLangProvider extends LanguageProvider {
     var refresh_loot_tables = "Refresh Loot Tables";
     var refresh_dimensions = "Refresh Dimensions";
     var notifications = "Notifications";
-    var notification_delay = "Delay";
+    var notification_delay = "Notification Delay";
     var disable_notifications = "Disable Notifications";
     var disable_message_styles = "Disable Style And Formatting In Notifications";
     var client = "Client";
