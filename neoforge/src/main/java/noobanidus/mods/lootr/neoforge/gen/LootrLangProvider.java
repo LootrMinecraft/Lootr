@@ -301,7 +301,7 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.toast.refresh.start", "Container refreshing!");
     add("lootr.toast.refresh.ongoing", "Container refreshing!");
     add("lootr.toast.refresh.complete", "Container refreshed!");
-    add("lootr.toast.refresh.message", "%s seconds to new items.");
+    add("lootr.toast.refresh.message", "%s seconds remaining.");
     add("lootr.toast.refresh.complete_message", "New items available!");
 
     // Tags

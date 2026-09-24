@@ -132,7 +132,7 @@
   "lootr.toast.decay.start": "Container decaying!",
   "lootr.toast.refresh.complete": "Container refreshed!",
   "lootr.toast.refresh.complete_message": "New items available!",
-  "lootr.toast.refresh.message": "%s seconds to new items.",
+  "lootr.toast.refresh.message": "%s seconds remaining.",
   "lootr.toast.refresh.ongoing": "Container refreshing!",
   "lootr.toast.refresh.start": "Container refreshing!",
   "stat.lootr.looted_stat": "Containers and entities looted",
