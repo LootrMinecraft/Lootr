@@ -14,5 +14,6 @@ public class LootrParticleProvider extends ParticleDescriptionProvider {
   @Override
   protected void addDescriptions() {
     this.sprite(ModParticles.UNOPENED_PARTICLE.get(), ResourceLocation.withDefaultNamespace("glitter_0"));
+    this.sprite(ModParticles.REFRESH_PARTICLE.get(), ResourceLocation.withDefaultNamespace("glitter_0"));
   }
 }

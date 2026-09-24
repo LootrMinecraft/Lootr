@@ -229,6 +229,11 @@ public class LootrRegistryImpl implements ILootrRegistry {
   }
 
   @Override
+  public ParticleType<ParticleColorOption> getRefreshParticleType() {
+    return ModParticles.REFRESH_PARTICLE.get();
+  }
+
+  @Override
   public IContainerTrigger getTrappedTrigger() {
     return ModAdvancements.TRAPPED_CHEST.get();
   }

@@ -195,6 +195,10 @@ public class LootrRegistry {
     return INSTANCE.getUnopenedParticleType ();
   }
 
+  public static ParticleType<ParticleColorOption> getRefreshParticleType () {
+    return INSTANCE.getRefreshParticleType();
+  }
+
   public static ITrapdoorTrigger getTrapdoorTrigger () {
     return INSTANCE.getTrapdoorTrigger();
   }

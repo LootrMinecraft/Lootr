@@ -106,4 +106,6 @@ public interface ILootrRegistry {
   IContainerTrigger getTrappedTrigger();
 
   ITrapdoorTrigger getTrapdoorTrigger ();
+
+  ParticleType<ParticleColorOption> getRefreshParticleType();
 }

@@ -18,6 +18,7 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.client.block.LootrBrushableBlockRenderer;
 import noobanidus.mods.lootr.common.client.block.LootrDecoratedPotRenderer;
 import noobanidus.mods.lootr.common.client.entity.LootrItemFrameRenderer;
+import noobanidus.mods.lootr.common.client.particle.RefreshParticle;
 import noobanidus.mods.lootr.common.client.particle.UnopenedParticle;
 import noobanidus.mods.lootr.fabric.client.block.BarrelModelLoader;
 import noobanidus.mods.lootr.fabric.client.block.CustomModelLoader;
@@ -68,6 +69,7 @@ public class LootrClient implements ClientModInitializer {
     EntityModelLayerRegistry.registerModelLayer(LootrDecoratedPotRenderer.OPEN_POT_LAYER, LootrDecoratedPotRenderer::createBodyLayer);
 
     ParticleFactoryRegistry.getInstance().register(ModParticles.UNOPENED_PARTCLE, UnopenedParticle.Provider::new);
+    ParticleFactoryRegistry.getInstance().register(ModParticles.REFRESH_PARTICLE, RefreshParticle.Provider::new);
 
     ClientPlayConnectionEvents.DISCONNECT.register((phase, minecraft) -> {
       LootrAPI.SYNCED_CONFIG = null;
