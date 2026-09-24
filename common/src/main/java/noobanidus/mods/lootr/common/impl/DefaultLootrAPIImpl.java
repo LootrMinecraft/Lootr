@@ -98,7 +98,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
     } else {
       if (provider.canDecay()) {
         int decayValue = LootrAPI.getRemainingDecayValue(provider);
-        if (decayValue > 0 && LootrAPI.shouldNotify(decayValue)) {
+        if (decayValue > 0/* && LootrAPI.shouldNotify(decayValue)*/) {
           PlatformAPI.alertContainerStatus(player, ContainerStatus.DECAY, ContainerStatus.Type.ONGOING, decayValue / 20);
 
         } else if (decayValue == -1) {
@@ -120,7 +120,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
     }
     if (provider.canRefresh()) {
       int refreshValue = LootrAPI.getRemainingRefreshValue(provider);
-      if (refreshValue > 0 && LootrAPI.shouldNotify(refreshValue)) {
+      if (refreshValue > 0/* && LootrAPI.shouldNotify(refreshValue)*/) {
         PlatformAPI.alertContainerStatus(player, ContainerStatus.REFRESH, ContainerStatus.Type.ONGOING, refreshValue / 20);
       } else if (refreshValue == -1) {
         if (LootrAPI.isRefreshing(provider)) {

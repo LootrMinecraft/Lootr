@@ -163,6 +163,11 @@ public class LootrLangProvider extends LanguageProvider {
     var teams = "Shared Team Inventories";
     var enable_teams = "Enable Shared Team Inventories";
     var pinned_resolver = "Pinned Team Resolver";
+    var display_toasts = "Toast Notifications";
+    var particles = "Particle Options";
+    var decay_particles = "Decay Particles";
+    var refresh_particles = "Refresh Particles";
+    var unopened_particles = "Unopened Particles";
     add("text.autoconfig.lootr.option.debug", debug);
     add("text.autoconfig.lootr.option.debug.report_invalid_tables", report_invalid_tables);
     add("text.autoconfig.lootr.option.seed", seed);
@@ -211,13 +216,17 @@ public class LootrLangProvider extends LanguageProvider {
     add("text.autoconfig.lootr.option.refresh.refresh_loot_tables", refresh_loot_tables);
     add("text.autoconfig.lootr.option.refresh.refresh_dimensions", refresh_dimensions);
     add("text.autoconfig.lootr.option.notifications", notifications);
-    add("text.autoconfig.lootr.option.notifications.notification_delay", notification_delay);
-    add("text.autoconfig.lootr.option.notifications.disable_notifications", disable_notifications);
+    add("text.autoconfig.lootr.option.client.notification_delay", notification_delay);
+    add("text.autoconfig.lootr.option.client.disable_notifications", disable_notifications);
     add("text.autoconfig.lootr.option.notifications.disable_message_styles", disable_message_styles);
     add("text.autoconfig.lootr.option.client", client);
     add("text.autoconfig.lootr.option.client.vanilla_textures", vanilla_textures);
     add("text.autoconfig.lootr.option.client.old_textures", old_textures);
     add("text.autoconfig.lootr.option.client.new_textures", new_textures);
+    add("text.autoconfig.lootr.option.client.display_toasts", display_toasts);
+    add("text.autoconfig.lootr.option.client.unopened_particles", unopened_particles);
+    add("text.autoconfig.lootr.option.client.refresh_particles", refresh_particles);
+    add("text.autoconfig.lootr.option.client.decay_particles", decay_particles);
     add("text.autoconfig.lootr.option.debug.report_unresolved_tables", report_unresolved_tables);
     add("text.autoconfig.lootr.option.conversion.convert_mineshafts", convert_mineshafts);
     add("text.autoconfig.lootr.option.decay.perform_tick_decay", perform_tick_decay);
@@ -293,6 +302,11 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.configuration.team", teams);
     add("lootr.configuration.team_loot", enable_teams);
     add("lootr.configuration.pinned_team_resolver", pinned_resolver);
+    add("lootr.configuration.notifications.display_toasts", display_toasts);
+    add("lootr.configuration.particles", particles);
+    add("lootr.configuration.particles.unopened_particles", unopened_particles);
+    add("lootr.configuration.particles.refresh_particles", refresh_particles);
+    add("lootr.configuration.particles.decay_particles", decay_particles);
 
     add("lootr.toast.decay.start", "Container decaying!");
     add("lootr.toast.decay.ongoing", "Container decaying!");

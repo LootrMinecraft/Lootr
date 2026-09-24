@@ -76,8 +76,6 @@ public class ConfigManager extends ConfigManagerBase {
   public static final ModConfigSpec.BooleanValue BLAST_IMMUNE;
   public static final ModConfigSpec.BooleanValue SHOULD_DROP_PLAYER_LOOT;
   public static final ModConfigSpec.BooleanValue BREAK_TO_DROP_LOOT;
-  public static final ModConfigSpec.IntValue NOTIFICATION_DELAY;
-  public static final ModConfigSpec.BooleanValue DISABLE_NOTIFICATIONS;
   public static final ModConfigSpec.BooleanValue DISABLE_MESSAGE_STYLES;
   public static final ModConfigSpec.BooleanValue TRAPPED_CUSTOM;
   public static final ModConfigSpec.BooleanValue SHOULD_WARN_NO_LOOT_TABLE_AT_GENERATION;
@@ -91,6 +89,8 @@ public class ConfigManager extends ConfigManagerBase {
   public static final ModConfigSpec.BooleanValue REFRESH_PARTICLES;
   public static final ModConfigSpec.BooleanValue DECAY_PARTICLES;
   public static final ModConfigSpec.BooleanValue TOASTS;
+  public static final ModConfigSpec.BooleanValue DISABLE_NOTIFICATIONS;
+  public static final ModConfigSpec.IntValue NOTIFICATION_DELAY;
   private static final ModConfigSpec.Builder COMMON_BUILDER = new ModConfigSpec.Builder();
   private static final ModConfigSpec.Builder CLIENT_BUILDER = new ModConfigSpec.Builder();
   public static ModConfigSpec COMMON_CONFIG;
@@ -191,10 +191,6 @@ public class ConfigManager extends ConfigManagerBase {
         .define("trapped_custom", false);
     COMMON_BUILDER.pop();
     COMMON_BUILDER.push("notifications").comment("configuration options for notifications");
-    DISABLE_NOTIFICATIONS = COMMON_BUILDER.comment("prevent notifications of decaying or refreshed chests")
-        .define("disable_notifications", false);
-    NOTIFICATION_DELAY = COMMON_BUILDER.comment("maximum time (in ticks) remaining on a chest before a notification for refreshing or decaying is sent to a player (default 30 seconds, -1 for no delay)")
-        .defineInRange("notification_delay", 30 * 20, -1, Integer.MAX_VALUE);
     DISABLE_MESSAGE_STYLES = COMMON_BUILDER.comment("disables styling of breaking, decaying and refreshing messages sent to players")
         .define("disable_message_styles", false);
     COMMON_BUILDER.pop();
@@ -242,7 +238,13 @@ public class ConfigManager extends ConfigManagerBase {
     UNOPENED_PARTICLES = CLIENT_BUILDER.comment("set to true to enable 'unopened particles' to spawn from containers that the player has not yet opened").define("unopened_particles", true);
     REFRESH_PARTICLES = CLIENT_BUILDER.comment("set to true to enable 'refresh particles' to spawn from containers that the player has previously opened which are set to refresh").define("refresh_particles", true);
     DECAY_PARTICLES = CLIENT_BUILDER.comment("set to true to enable 'decay particles' to spawn from containers that are going to decay").define("decay_particles", true);
-    TOASTS = CLIENT_BUILDER.comment("set to true to enable toast notifications of decay and refresh, obeying message notification settings; set to false to instead use on-screen message").define("toasts", true);
+    CLIENT_BUILDER.pop();
+    CLIENT_BUILDER.push("notifications").comment("configuration options for notifications");
+    TOASTS = CLIENT_BUILDER.comment("set to true to enable toast notifications of decay and refresh, obeying message notification settings; set to false to instead use on-screen message").define("display_toasts", true);
+    DISABLE_NOTIFICATIONS = CLIENT_BUILDER.comment("prevent notifications of decaying or refreshed chests")
+        .define("disable_notifications", false);
+    NOTIFICATION_DELAY = CLIENT_BUILDER.comment("maximum time (in ticks) remaining on a chest before a notification for refreshing or decaying is sent to a player (default 30 seconds, -1 for no delay)")
+        .defineInRange("notification_delay", 30 * 20, -1, Integer.MAX_VALUE);
     CLIENT_BUILDER.pop();
     CLIENT_CONFIG = CLIENT_BUILDER.build();
   }

@@ -214,6 +214,9 @@ public class ClientHooks {
     if (mc.player == null) {
       return;
     }
+    if (!LootrAPI.shouldNotify(remaining * 20)) {
+      return;
+    }
     if (LootrAPI.shouldDisplayToasts()) {
       mc.getToasts().addToast(new LootrToast(status, ContainerStatus.getMessage(status, statusType, remaining)));
     } else {

@@ -279,8 +279,8 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
 
 
   public static boolean shouldNotify(int remaining) {
-    int delay = get().notifications.notification_delay;
-    return !get().notifications.disable_notifications && (delay == -1 || remaining <= delay);
+    int delay = get().client.notification_delay;
+    return !get().client.disable_notifications && (delay == -1 || remaining <= delay);
   }
 
   public static boolean shouldPerformPiecewiseCheck() {
@@ -383,8 +383,6 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
   }
 
   public static class Notifications {
-    public int notification_delay = 30 * 20;
-    public boolean disable_notifications = false;
     public boolean disable_message_styles = false;
   }
 
@@ -395,6 +393,8 @@ public class ConfigManager extends ConfigManagerBase implements ConfigData {
     public boolean refresh_particles = true;
     public boolean decay_particles = true;
     public boolean display_toasts = true;
+    public int notification_delay = 30 * 20;
+    public boolean disable_notifications = false;
   }
 
   public static class Team {

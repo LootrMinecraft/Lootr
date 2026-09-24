@@ -67,12 +67,12 @@ public class LootrAPIImpl extends DefaultLootrAPIImpl {
 
   @Override
   public int getNotificationDelay() {
-    return ConfigManager.get().notifications.notification_delay;
+    return ConfigManager.get().client.notification_delay;
   }
 
   @Override
   public boolean isNotificationsEnabled() {
-    return !ConfigManager.get().notifications.disable_notifications;
+    return !ConfigManager.get().client.disable_notifications;
   }
 
   @Override
