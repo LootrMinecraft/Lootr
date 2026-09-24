@@ -302,11 +302,11 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.configuration.team", teams);
     add("lootr.configuration.team_loot", enable_teams);
     add("lootr.configuration.pinned_team_resolver", pinned_resolver);
-    add("lootr.configuration.notifications.display_toasts", display_toasts);
+    add("lootr.configuration.display_toasts", display_toasts);
     add("lootr.configuration.particles", particles);
-    add("lootr.configuration.particles.unopened_particles", unopened_particles);
-    add("lootr.configuration.particles.refresh_particles", refresh_particles);
-    add("lootr.configuration.particles.decay_particles", decay_particles);
+    add("lootr.configuration.unopened_particles", unopened_particles);
+    add("lootr.configuration.refresh_particles", refresh_particles);
+    add("lootr.configuration.decay_particles", decay_particles);
 
     add("lootr.toast.decay.start", "Container decaying!");
     add("lootr.toast.decay.ongoing", "Container decaying!");
