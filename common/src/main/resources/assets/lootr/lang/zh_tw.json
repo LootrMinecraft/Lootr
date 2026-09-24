@@ -105,6 +105,7 @@
   "lootr.configuration.skip_logging_no_loot_table_at_generation": "Skip Logging LootTable-less Block Entities during Generation",
   "lootr.configuration.start_decay_while_ticking": "計時期間開始腐朽",
   "lootr.configuration.start_refresh_while_ticking": "計時期間開始重新整理",
+  "lootr.configuration.team": "Shared Team Inventories",
   "lootr.configuration.team_loot": "Enable Shared Team Inventories",
   "lootr.configuration.textures": "用戶端紋理",
   "lootr.configuration.trapped_custom": "自訂物品欄是陷阱",
