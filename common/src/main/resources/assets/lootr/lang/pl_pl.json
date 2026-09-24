@@ -105,6 +105,7 @@
   "lootr.configuration.skip_logging_no_loot_table_at_generation": "Pomijaj logowanie encji blokowych bez tabeli łupów podczas generowania",
   "lootr.configuration.start_decay_while_ticking": "Start Decay While Ticking",
   "lootr.configuration.start_refresh_while_ticking": "Start Refresh While Ticking",
+  "lootr.configuration.team": "Shared Team Inventories",
   "lootr.configuration.team_loot": "Enable Shared Team Inventories",
   "lootr.configuration.textures": "Client Textures",
   "lootr.configuration.trapped_custom": "Custom Inventories Are Trapped",
