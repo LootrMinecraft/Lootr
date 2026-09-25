@@ -36,6 +36,7 @@ public class PacketHandler {
     registrar.play(PacketRefreshSection.TYPE, PacketRefreshSection.STREAM_CODEC);
     registrar.play(PacketPerformBreakEffect.TYPE, PacketPerformBreakEffect.STREAM_CODEC);
     registrar.play(PacketAreaEntitySync.TYPE, PacketAreaEntitySync.STREAM_CODEC);
+    registrar.play(PacketSyncConfig.TYPE, PacketSyncConfig.STREAM_CODEC);
   }
 
   protected record PacketRegistrar(PayloadRegistrar registrar, boolean toServer) {

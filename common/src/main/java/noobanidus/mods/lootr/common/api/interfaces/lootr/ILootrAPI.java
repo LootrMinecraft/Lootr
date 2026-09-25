@@ -34,6 +34,7 @@ import noobanidus.mods.lootr.common.api.LootrRegistry;
 import noobanidus.mods.lootr.common.api.config.BreakMode;
 import noobanidus.mods.lootr.common.api.config.ResistanceMode;
 import noobanidus.mods.lootr.common.api.config.SaveMode;
+import noobanidus.mods.lootr.common.api.config.SyncedConfig;
 import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
 import noobanidus.mods.lootr.common.api.data.ILootrInventoryStore;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
@@ -604,6 +605,8 @@ public interface ILootrAPI {
   }
 
   Set<ResourceKey<LootTable>> gatherProblematicLootTables();
+
+  SyncedConfig getSyncedConfig();
 }
 
 

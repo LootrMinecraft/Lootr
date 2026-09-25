@@ -227,7 +227,7 @@ public class LootrConfig {
     return validatedList;
   }
 
-  public static Identifier getPinnedTeamResolver () {
+  public static Identifier getPinnedTeamResolver() {
     if (PINNED_RESOLVER == null) {
       String resolver = LootrCommonConfig.Team.pinnedTeamResolver;
       if (!resolver.isEmpty()) {
@@ -239,5 +239,9 @@ public class LootrConfig {
     }
 
     return PINNED_RESOLVER;
+  }
+
+  public static SyncedConfig getConfigForSync() {
+    return new SyncedConfig(LootrCommonConfig.Breaking.breakMode, LootrCommonConfig.Team.teamLoot, getPinnedTeamResolver());
   }
 }

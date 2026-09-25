@@ -15,6 +15,13 @@ import noobanidus.mods.lootr.fabric.network.to_client.*;
 
 public class LootrClientNetworkingInit {
   public static void register() {
+    ClientPlayNetworking.registerGlobalReceiver(PacketSyncConfig.TYPE,
+        (payload, context) -> {
+          context.client().execute(() -> {
+            LootrAPI.SYNCED_CONFIG = payload.config();
+          });
+        });
+
     ClientPlayNetworking.registerGlobalReceiver(PacketAreaEntitySync.TYPE, (payload, context) -> {
       context.client().execute(() -> {
 
