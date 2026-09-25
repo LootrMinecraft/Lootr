@@ -7,8 +7,8 @@ import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -29,19 +29,19 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.config.BreakMode;
 import noobanidus.mods.lootr.common.api.config.ResistanceMode;
-import noobanidus.mods.lootr.common.api.interfaces.accessor.ILootrDataAccessor;
-import noobanidus.mods.lootr.common.api.interfaces.accessor.ILootrItemFrameAccessor;
 import noobanidus.mods.lootr.common.api.config.SaveMode;
 import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
 import noobanidus.mods.lootr.common.api.data.ILootrInventoryStore;
-import noobanidus.mods.lootr.common.api.filler.ILootFiller;
-import noobanidus.mods.lootr.common.api.interfaces.lootr.ILootrAPI;
-import noobanidus.mods.lootr.common.api.interfaces.container.IMenuBuilder;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
-import noobanidus.mods.lootr.common.api.interfaces.inventory.ILootrInventory;
-import noobanidus.mods.lootr.common.api.interfaces.filter.ILootrFilter;
+import noobanidus.mods.lootr.common.api.filler.ILootFiller;
 import noobanidus.mods.lootr.common.api.integration.decorated.PotDecorationsAdapter;
+import noobanidus.mods.lootr.common.api.interfaces.accessor.ILootrDataAccessor;
+import noobanidus.mods.lootr.common.api.interfaces.accessor.ILootrItemFrameAccessor;
+import noobanidus.mods.lootr.common.api.interfaces.container.IMenuBuilder;
+import noobanidus.mods.lootr.common.api.interfaces.filter.ILootrFilter;
+import noobanidus.mods.lootr.common.api.interfaces.inventory.ILootrInventory;
+import noobanidus.mods.lootr.common.api.interfaces.lootr.ILootrAPI;
 import noobanidus.mods.lootr.common.api.interfaces.processor.ILootrBlockEntityProcessor;
 import noobanidus.mods.lootr.common.api.interfaces.processor.ILootrEntityProcessor;
 import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
@@ -50,7 +50,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
-import java.util.*;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * This is the standard access to the platform-specific implementations of ILootrAPI.
@@ -67,7 +71,8 @@ public final class LootrAPI {
   public static final ResourceKey<LootTable> ELYTRA_CHEST = ResourceKey.create(Registries.LOOT_TABLE, LootrAPI.rl("chests/elytra"));
   public static final ResourceKey<LootTable> TROPHY_REWARD = ResourceKey.create(Registries.LOOT_TABLE, LootrAPI.rl("reward/trophy"));
   public static final ResourceKey<LootTable> ITEM_FRAME_EMPTY = ResourceKey.create(Registries.LOOT_TABLE, LootrAPI.rl("entity/item_frame_empty"));
-  public static final List<String> PROBLEMATIC_CHESTS = new ArrayList<>(List.of("twilightforest:structures/stronghold_boss", "atum:chests/pharaoh"));
+  public static final Set<ResourceKey<LootTable>> PROBLEMATIC_LOOT_TABLES = Stream.of(LootrAPI.rl("twilightforest", "structures/stronghold_boss"), LootrAPI.rl("atum", "chests/pharaoh"))
+      .map(o -> ResourceKey.create(Registries.LOOT_TABLE, o)).collect(Collectors.toSet());
   public static final List<Identifier> ALL_LOOTR_FILES = IntStreams.rangeClosed(256).boxed().map(o -> {
     var str = Integer.toHexString(o);
     return LootrAPI.rl(str.charAt(0) + "/" + str);
@@ -99,7 +104,7 @@ public final class LootrAPI {
   }
 
   @Nullable
-  public static Player getPlayer (UUID id) {
+  public static Player getPlayer(UUID id) {
     return INSTANCE.getPlayer(id);
   }
 
@@ -204,11 +209,11 @@ public final class LootrAPI {
     return INSTANCE.getDecayModIds();
   }
 
-  public static boolean isAnythingDecaying () {
+  public static boolean isAnythingDecaying() {
     return INSTANCE.isAnythingDecaying();
   }
 
-  public static boolean isAnythingRefreshing () {
+  public static boolean isAnythingRefreshing() {
     return INSTANCE.isAnythingRefreshing();
   }
 
@@ -220,7 +225,7 @@ public final class LootrAPI {
     return INSTANCE.getDecayLootTables();
   }
 
-  public static boolean isDimensionDecaying (ResourceKey<Level> dimension) {
+  public static boolean isDimensionDecaying(ResourceKey<Level> dimension) {
     return INSTANCE.isDimensionDecaying(dimension);
   }
 
@@ -428,7 +433,7 @@ public final class LootrAPI {
     INSTANCE.refreshSections();
   }
 
-  public static void refreshServices () {
+  public static void refreshServices() {
     INSTANCE.refreshServices();
   }
 
@@ -516,21 +521,21 @@ public final class LootrAPI {
     return INSTANCE.getDecorationsAdapter(container);
   }
 
-  public static SaveMode getFileSaveMode () {
+  public static SaveMode getFileSaveMode() {
     return INSTANCE.getFileSaveMode();
   }
 
-  public static boolean shouldDisplayUnopenedParticles () {
+  public static boolean shouldDisplayUnopenedParticles() {
     return INSTANCE.shouldDisplayUnopenedParticles();
   }
 
-  public static long getGameTime () {
+  public static long getGameTime() {
     return INSTANCE.getGameTime();
   }
 
   private static Container closingContainer;
 
-  public static void closeContainers (BlockEntity blockEntity) {
+  public static void closeContainers(BlockEntity blockEntity) {
     if (!(blockEntity instanceof Container container)) {
       return;
     }
@@ -556,7 +561,7 @@ public final class LootrAPI {
     return INSTANCE.getBlastResistanceMode();
   }
 
-  public static BreakMode getBreakMode () {
+  public static BreakMode getBreakMode() {
     return INSTANCE.getBreakMode();
   }
 
@@ -564,31 +569,35 @@ public final class LootrAPI {
     return INSTANCE.isDimensionRefreshing(dataDimension);
   }
 
-  public static int getTickDelay () {
+  public static int getTickDelay() {
     return INSTANCE.getTickDelay();
   }
 
-  public static UUID resolveServerPlayerTeam (Player player) {
+  public static UUID resolveServerPlayerTeam(Player player) {
     return INSTANCE.resolveServerPlayerTeam(player);
   }
 
-  public static UUID resolveClientPlayerTeam (Player player) {
+  public static UUID resolveClientPlayerTeam(Player player) {
     return INSTANCE.resolveClientPlayerTeam(player);
   }
 
-  public static boolean isTeamLoot () {
+  public static boolean isTeamLoot() {
     return INSTANCE.isTeamLoot();
   }
 
-  public static Identifier getPinnedTeamResolver () {
+  public static Identifier getPinnedTeamResolver() {
     return INSTANCE.getPinnedTeamResolver();
   }
 
-  public static boolean breakToDropLoot () {
+  public static boolean breakToDropLoot() {
     return INSTANCE.breakToDropLoot();
   }
 
-  public static void dumpPlayerLoot (ILootrContainerInstance instance, ServerPlayer player, ServerLevel level) {
+  public static void dumpPlayerLoot(ILootrContainerInstance instance, ServerPlayer player, ServerLevel level) {
     INSTANCE.dumpPlayerLoot(instance, player, level);
+  }
+
+  public static Set<ResourceKey<LootTable>> gatherProblematicLootTables() {
+    return INSTANCE.gatherProblematicLootTables();
   }
 }

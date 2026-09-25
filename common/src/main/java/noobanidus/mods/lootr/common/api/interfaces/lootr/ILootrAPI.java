@@ -602,6 +602,8 @@ public interface ILootrAPI {
     }
     instance.performUpdate(player);
   }
+
+  Set<ResourceKey<LootTable>> gatherProblematicLootTables();
 }
 
 

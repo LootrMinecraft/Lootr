@@ -1,13 +1,11 @@
 package noobanidus.mods.lootr.neoforge.gen;
 
-import com.teamresourceful.resourcefulconfig.api.annotations.Comment;
-import com.teamresourceful.resourcefulconfig.api.annotations.ConfigEntry;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.LootrRegistry;
 import noobanidus.mods.lootr.common.api.LootrTags;
 import noobanidus.mods.lootr.common.api.config.LootrConfigStrings;
-import noobanidus.mods.lootr.common.api.LootrRegistry;
 
 public class LootrLangProvider extends LanguageProvider {
   public LootrLangProvider(PackOutput output) {
@@ -152,6 +150,8 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.configuration.loot_table_blacklist", LootrConfigStrings.LOOT_TABLE_BLACKLIST);
     add("lootr.configuration.loot_table_blacklist.desc", LootrConfigStrings.LOOT_TABLE_BLACKLIST_DESC);
     add("lootr.configuration.loot_table_modid_blacklist", LootrConfigStrings.LOOT_TABLE_MODID_BLACKLIST);
+    add("lootr.configuration.loot_table_force_whitelist", LootrConfigStrings.LOOT_TABLE_FORCE_WHITELIST);
+    add("lootr.configuration.loot_table_force_whitelist.desc", LootrConfigStrings.LOOT_TABLE_FORCE_WHITELIST_DESC);
     add("lootr.configuration.loot_table_modid_blacklist.desc", LootrConfigStrings.LOOT_TABLE_MODID_BLACKLIST_DESC);
     add("lootr.configuration.use_problematic_loot_tables", LootrConfigStrings.USE_PROBLEMATIC_LOOT_TABLES);
     add("lootr.configuration.use_problematic_loot_tables.desc", LootrConfigStrings.USE_PROBLEMATIC_LOOT_TABLES_DESC);
