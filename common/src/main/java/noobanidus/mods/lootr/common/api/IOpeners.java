@@ -95,33 +95,6 @@ public interface IOpeners extends IMarkChanged {
     return !openers.isEmpty() && openers.contains(uuid);
   }
 
-  @Deprecated
-  default boolean hasOpened(UUID uuid) {
-    return hasServerOpened(uuid);
-  }
-
-  // So technically we have 3 types of openers. This is only for the
-  // looted stat counting. So use `hasLootAvailable` instead.
-  @Deprecated(forRemoval = true)
-  default boolean hasServerOpened(UUID uuid) {
-    return hasServerOpened(uuid);
-  }
-
-  @Deprecated(forRemoval = true)
-  default boolean addActualOpener(UUID uuid) {
-    return addActualOpener(uuid);
-  }
-
-  @Deprecated(forRemoval = true)
-  default boolean addVisualOpener(UUID uuid) {
-    return addVisualOpener(uuid);
-  }
-
-  @Deprecated(forRemoval = true)
-  default boolean hasVisualOpened(UUID uuid) {
-    return hasVisualOpened(uuid);
-  }
-
   default boolean removeVisualOpener(UUID uuid) {
     Set<UUID> openers = getVisualOpeners();
     if (openers == null) {
@@ -131,6 +104,33 @@ public interface IOpeners extends IMarkChanged {
       markChanged();
       return true;
     }
+    return false;
+  }
+
+  @Deprecated(forRemoval = true)
+  default boolean hasOpened(UUID uuid) {
+    return false;
+  }
+
+  // So technically we have 3 types of openers. This is only for the
+  // looted stat counting. So use `hasLootAvailable` instead.
+  @Deprecated(forRemoval = true)
+  default boolean hasServerOpened(UUID uuid) {
+    return false;
+  }
+
+  @Deprecated(forRemoval = true)
+  default boolean addActualOpener(UUID uuid) {
+    return false;
+  }
+
+  @Deprecated(forRemoval = true)
+  default boolean addVisualOpener(UUID uuid) {
+    return false;
+  }
+
+  @Deprecated(forRemoval = true)
+  default boolean hasVisualOpened(UUID uuid) {
     return false;
   }
 }
