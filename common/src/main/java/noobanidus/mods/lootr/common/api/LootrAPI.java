@@ -30,6 +30,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.config.BreakMode;
 import noobanidus.mods.lootr.common.api.config.ResistanceMode;
 import noobanidus.mods.lootr.common.api.config.SaveMode;
+import noobanidus.mods.lootr.common.api.config.SyncedConfig;
 import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
 import noobanidus.mods.lootr.common.api.data.ILootrInventoryStore;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
@@ -77,6 +78,7 @@ public final class LootrAPI {
     var str = Integer.toHexString(o);
     return LootrAPI.rl(str.charAt(0) + "/" + str);
   }).toList();
+  public static SyncedConfig SYNCED_CONFIG = null;
 
   public static final BoundingBox DESERT_PYRAMID_ADDITIONAL = new BoundingBox(-5, -30, -5, 5, 4, 4);
   public static final int DEFAULT_PARTICLE_COLOR = 0xfad64a;
@@ -599,5 +601,9 @@ public final class LootrAPI {
 
   public static Set<ResourceKey<LootTable>> gatherProblematicLootTables() {
     return INSTANCE.gatherProblematicLootTables();
+  }
+
+  public static SyncedConfig getSyncedConfig () {
+    return INSTANCE.getSyncedConfig ();
   }
 }

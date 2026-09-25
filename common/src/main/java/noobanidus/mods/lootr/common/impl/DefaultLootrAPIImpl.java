@@ -190,7 +190,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
 
   @Override
   public BreakMode getBreakMode() {
-    return LootrCommonConfig.Breaking.breakMode;
+    return SyncedConfig.getBreakMode(LootrCommonConfig.Breaking.breakMode);
   }
 
   @Override
@@ -604,12 +604,12 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
 
   @Override
   public boolean isTeamLoot() {
-    return LootrCommonConfig.Team.teamLoot;
+    return SyncedConfig.getTeamLootEnabled(LootrCommonConfig.Team.teamLoot);
   }
 
   @Override
   public @NotNull Identifier getPinnedTeamResolver() {
-    return LootrConfig.getPinnedTeamResolver();
+    return SyncedConfig.getPinnedResolver(LootrConfig.getPinnedTeamResolver());
   }
 
   @Override
@@ -620,5 +620,10 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   @Override
   public Set<ResourceKey<LootTable>> gatherProblematicLootTables() {
     return LootrServiceRegistry.gatherProblematicLootTables();
+  }
+
+  @Override
+  public SyncedConfig getSyncedConfig() {
+    return LootrAPI.SYNCED_CONFIG;
   }
 }

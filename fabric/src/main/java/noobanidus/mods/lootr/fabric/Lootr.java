@@ -36,6 +36,7 @@ public class Lootr implements ModInitializer {
     toClient.register(PacketRefreshSection.TYPE, PacketRefreshSection.STREAM_CODEC);
     toClient.register(PacketPerformBreakEffect.TYPE, PacketPerformBreakEffect.STREAM_CODEC);
     toClient.register(PacketAreaEntitySync.TYPE, PacketAreaEntitySync.STREAM_CODEC);
+    toClient.register(PacketSyncConfig.TYPE, PacketSyncConfig.STREAM_CODEC);
 
     var toServer = PayloadTypeRegistry.serverboundPlay();
     toServer.register(PacketRequestUpdate.TYPE, PacketRequestUpdate.STREAM_CODEC);
