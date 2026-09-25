@@ -7,6 +7,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -27,6 +30,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -48,9 +53,12 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class LootrChestMinecartEntity extends AbstractMinecartContainer implements ILootrEntity {
 
+
+  private static final EntityDataAccessor<Boolean> DECAYING = SynchedEntityData.defineId(LootrChestMinecartEntity.class, EntityDataSerializers.BOOLEAN);
+  private static final EntityDataAccessor<Boolean> REFRESHING = SynchedEntityData.defineId(LootrChestMinecartEntity.class, EntityDataSerializers.BOOLEAN);
   private static BlockState cartNormal = null;
   // This can actually just be a null
-  private final SimpleLootrEntityInstance instance = new SimpleLootrEntityInstance(this, this::getVisualOpeners, 1);
+  private final SimpleLootrEntityInstance instance = new SimpleLootrEntityInstance(this, this::getVisualOpeners, 1, REFRESHING, DECAYING);
 
   public LootrChestMinecartEntity(EntityType<LootrChestMinecartEntity> type, Level world) {
     super(type, world);
@@ -58,6 +66,13 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
 
   public LootrChestMinecartEntity(Level worldIn, double x, double y, double z) {
     super(LootrRegistry.getMinecart(), x, y, z, worldIn);
+  }
+
+  @Override
+  protected void defineSynchedData(SynchedEntityData.Builder builder) {
+    super.defineSynchedData(builder);
+    builder.define(REFRESHING, false);
+    builder.define(DECAYING, false);
   }
 
   @Override
@@ -369,11 +384,13 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   @Override
   public void setClientRefreshing(boolean value) {
     this.instance.setClientRefreshing(value);
+    this.setChanged();
   }
 
   @Override
   public void setClientDecaying(boolean value) {
     this.instance.setClientDecaying(value);
+    this.setChanged();
   }
 
   @Override

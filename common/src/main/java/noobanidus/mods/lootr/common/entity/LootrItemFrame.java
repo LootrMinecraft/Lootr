@@ -6,6 +6,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
@@ -43,8 +46,11 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class LootrItemFrame extends ItemFrame implements ILootrEntity {
+  private static final EntityDataAccessor<Boolean> DECAYING = SynchedEntityData.defineId(LootrItemFrame.class, EntityDataSerializers.BOOLEAN);
+  private static final EntityDataAccessor<Boolean> REFRESHING = SynchedEntityData.defineId(LootrItemFrame.class, EntityDataSerializers.BOOLEAN);
+
   private final NonNullList<ItemStack> inventory = NonNullList.withSize(1, ItemStack.EMPTY);
-  private final SimpleLootrEntityInstance instance = new SimpleLootrEntityInstance(this, this::getVisualOpeners, 1);
+  private final SimpleLootrEntityInstance instance = new SimpleLootrEntityInstance(this, this::getVisualOpeners, 1, REFRESHING, DECAYING);
 
   public LootrItemFrame(EntityType<? extends ItemFrame> entityType, Level level) {
     super(entityType, level);
@@ -52,6 +58,13 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
 
   public LootrItemFrame(Level level, BlockPos pos, Direction facingDirection) {
     super(LootrRegistry.getItemFrame(), level, pos, facingDirection);
+  }
+
+  @Override
+  protected void defineSynchedData(SynchedEntityData.Builder builder) {
+    super.defineSynchedData(builder);
+    builder.define(REFRESHING, false);
+    builder.define(DECAYING, false);
   }
 
   public void lootrSetItem(ItemStack stack) {

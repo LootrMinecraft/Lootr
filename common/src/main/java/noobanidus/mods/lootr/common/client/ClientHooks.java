@@ -193,10 +193,12 @@ public class ClientHooks {
     PlayerContext context = getPlayerContext();
     Level level = Minecraft.getInstance().level;
     Vec3 vec3 = provider.getParticleCenter();
-    if (!(provider instanceof BlockEntity be)) {
-      return;
+    BlockState blockstate;
+    if (provider instanceof BlockEntity be) {
+      blockstate = be.getBlockState();
+    } else {
+      blockstate = LootrRegistry.getChestBlock().defaultBlockState();
     }
-    BlockState blockstate = be.getBlockState();
     if (context.hasPlayer() && level != null && provider.isClientDecaying()) {
       RandomSource random = Minecraft.getInstance().level.getRandom();
       if (random.nextInt(3) == 0) {
