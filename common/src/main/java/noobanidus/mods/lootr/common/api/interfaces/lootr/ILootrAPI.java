@@ -15,7 +15,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.filefix.fixes.ResourcePackLocationFileFix;
 import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.Entity;
@@ -306,11 +305,17 @@ public interface ILootrAPI {
   }
 
   default void handleInstanceOpen(@Nullable ILootrContainerInstance instance, ServerPlayer player, @Nullable IMenuBuilder menuBuilder) {
+    handleInstanceOpen(instance, player, menuBuilder, false);
+  }
+
+  default void handleInstanceOpen(@Nullable ILootrContainerInstance instance, ServerPlayer player, @Nullable IMenuBuilder menuBuilder, boolean hideMenu) {
     if (instance == null) {
       return;
     }
     if (player.isSpectator()) {
-      player.openMenu(null);
+      if (!hideMenu) {
+        player.openMenu(null);
+      }
       return;
     }
     if (instance.getDataLevel() == null || instance.getDataLevel().isClientSide()) {
@@ -393,7 +398,9 @@ public interface ILootrAPI {
     if (shouldUpdate) {
       instance.performUpdate(player);
     }
-    player.openMenu(menuProvider);
+    if (!hideMenu) {
+      player.openMenu(menuProvider);
+    }
     PiglinAi.angerNearbyPiglins(player.level(), player, true);
   }
 
@@ -582,6 +589,19 @@ public interface ILootrAPI {
 
   @NotNull Identifier getPinnedTeamResolver();
 
+  boolean breakToDropLoot();
+
+  default void dumpPlayerLoot(ILootrContainerInstance instance, ServerPlayer player, ServerLevel level) {
+    handleInstanceOpen(instance, player, null, true);
+    ILootrInventory inventory = getInventory(instance, player, instance.getDefaultFiller(), null);
+    instance.setHasBeenOpened(true);
+    if (inventory != null) {
+      Containers.dropContents(level, player.blockPosition(), inventory);
+      inventory.clearContent();
+      inventory.setChanged();
+    }
+    instance.performUpdate(player);
+  }
 }
 
 

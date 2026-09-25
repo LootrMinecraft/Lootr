@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.neoforge.network.client;
+package noobanidus.mods.lootr.neoforge.network.to_client;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -9,9 +9,9 @@ import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.neoforge.network.ILootrNeoForgePacket;
 import org.jspecify.annotations.NonNull;
 
-public record PacketCloseCart(int entityId) implements ILootrNeoForgePacket {
-  public static final CustomPacketPayload.Type<PacketCloseCart> TYPE = new CustomPacketPayload.Type<>(LootrAPI.rl("close_cart"));
-  public static final StreamCodec<ByteBuf, PacketCloseCart> STREAM_CODEC = StreamCodec.composite(ByteBufCodecs.VAR_INT, PacketCloseCart::entityId, PacketCloseCart::new);
+public record PacketOpenCart(int entityId) implements ILootrNeoForgePacket {
+  public static final CustomPacketPayload.Type<PacketOpenCart> TYPE = new CustomPacketPayload.Type<>(LootrAPI.rl("open_cart"));
+  public static final StreamCodec<ByteBuf, PacketOpenCart> STREAM_CODEC = StreamCodec.composite(ByteBufCodecs.VAR_INT, PacketOpenCart::entityId, PacketOpenCart::new);
 
   @Override
   public @NonNull Type<? extends CustomPacketPayload> type() {
@@ -20,6 +20,6 @@ public record PacketCloseCart(int entityId) implements ILootrNeoForgePacket {
 
   @Override
   public void handle(IPayloadContext context) {
-    ClientHandlers.handleCloseCart(this.entityId);
+    ClientHandlers.handleOpenCart(this.entityId);
   }
 }

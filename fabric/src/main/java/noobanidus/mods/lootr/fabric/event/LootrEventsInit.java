@@ -39,8 +39,6 @@ public class LootrEventsInit {
 
     PlayerBlockBreakEvents.BEFORE.register(HandleBreak::beforeBlockBreak);
 
-    PlayerBlockBreakEvents.CANCELED.register(HandleBreak::afterBlockBreak);
-
     CommandRegistrationCallback.EVENT.register((dispatcher, reg, env) -> {
       CommandLootr.register(dispatcher);
     });

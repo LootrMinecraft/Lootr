@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.common.api.interfaces.lootr;
 
+import net.minecraft.core.GlobalPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -67,4 +68,6 @@ public interface IPlatformAPI {
   void syncAfterTeamChange (PlayerTeam playerTeam);
 
   void syncAfterTeamChange (String username);
+
+  void performRequestSync(GlobalPos pos);
 }

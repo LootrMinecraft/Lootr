@@ -75,6 +75,8 @@
   "lootr.configuration.blast_resistance.desc": "Determines how Lootr containers react to explosions. 'NONE' uses the default blast resistance. 'RESISTANT' makes containers blast resistant, while 'IMMUNE' makes them blast immune. [default: DEFAULT]",
   "lootr.configuration.break_mode": "Break Mode",
   "lootr.configuration.break_mode.desc": "Determines how containers react to being 'broken'. 'DEFAULT' will display the usual message and prevent breaking if the player is not sneaking. 'NEVER' prevents containers from being broken, while 'ALWAYS' allows containers to be broken regardless of sneaking. [default: DEFAULT]",
+  "lootr.configuration.break_to_drop_loot": "Break To Drop Loot",
+  "lootr.configuration.break_to_drop_loot.desc": "If true, breaking a container will mark it as opened and drop the player's loot, if broken while sneaking. [default: false]",
   "lootr.configuration.breaking": "Breaking",
   "lootr.configuration.breaking.desc": "Configuration options relating to the breaking of Lootr containers.",
   "lootr.configuration.brushables_self_support": "Brushable Blocks Don't Fall",

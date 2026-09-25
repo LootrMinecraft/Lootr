@@ -37,7 +37,8 @@
     "client.MixinBlockStateDefinitions",
     "particle_spawning.MixinFrustum$TestPoint",
     "accessor.AccessorMixinDecoratedPotRenderer",
-    "client.MixinBlockStateDefinitions"
+    "client.MixinBlockStateDefinitions",
+    "sync.MixinClientLevel"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,5 +1,6 @@
 package noobanidus.mods.lootr.neoforge.impl;
 
+import net.minecraft.core.GlobalPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.LockCode;
@@ -7,6 +8,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.network.PacketDistributor;
 import noobanidus.mods.lootr.common.api.data.DataToCopy;
 import noobanidus.mods.lootr.common.api.interfaces.lootr.IPlatformAPI;
@@ -14,7 +16,8 @@ import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.impl.DefaultPlatformAPIImpl;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinBaseContainerBlockEntity;
-import noobanidus.mods.lootr.neoforge.network.client.*;
+import noobanidus.mods.lootr.neoforge.network.to_client.*;
+import noobanidus.mods.lootr.neoforge.network.to_server.PacketRequestUpdate;
 
 @SuppressWarnings("deprecation")
 public class PlatformAPIImpl extends DefaultPlatformAPIImpl implements IPlatformAPI {
@@ -92,6 +95,12 @@ public class PlatformAPIImpl extends DefaultPlatformAPIImpl implements IPlatform
 
   @Override
   public void syncAfterTeamChange(Player player) {
+    var data = getSyncData(player);
+    PacketDistributor.sendToPlayer((ServerPlayer) player, new PacketAreaEntitySync(data.getFirst(), data.getSecond()));
+  }
 
+  @Override
+  public void performRequestSync(GlobalPos pos) {
+    ClientPacketDistributor.sendToServer(new PacketRequestUpdate(pos));
   }
 }

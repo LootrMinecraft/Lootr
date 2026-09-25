@@ -15,7 +15,8 @@ import java.util.List;
         LootrCommonConfig.Notifications.class,
         LootrCommonConfig.Interaction.class,
         LootrCommonConfig.Decay.class,
-        LootrCommonConfig.Refresh.class
+        LootrCommonConfig.Refresh.class,
+        LootrCommonConfig.Team.class
     })
 @ConfigInfo(title = LootrConfigStrings.COMMON_TITLE, titleTranslation = "lootr.configuration.title", description = LootrConfigStrings.COMMON_DESC, descriptionTranslation = "lootr.configuration.desc")
 public class LootrCommonConfig {
@@ -130,6 +131,10 @@ public class LootrCommonConfig {
     @ConfigEntry(id = "should_drop_player_loot", translation = "lootr.configuration.should_drop_player_loot")
     @Comment(value = LootrConfigStrings.SHOULD_DROP_PLAYER_LOOT_DESC, translation = "lootr.configuration.should_drop_player_loot.desc")
     public static boolean shouldDropPlayerLoot = false;
+
+    @ConfigEntry(id="break_to_drop_loot", translation="lootr.configuration.break_to_drop_loot")
+    @Comment(value=LootrConfigStrings.BREAK_TO_DROP_LOOT_DESC, translation="lootr.configuration.break_to_drop_loot.desc")
+    public static boolean breakToDropLoot = false;
   }
 
   @Category("Redstone")

@@ -170,6 +170,8 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.configuration.item_frames_self_support.desc", LootrConfigStrings.ITEM_FRAMES_SELF_SUPPORT_DESC);
     add("lootr.configuration.should_drop_player_loot", LootrConfigStrings.SHOULD_DROP_PLAYER_LOOT);
     add("lootr.configuration.should_drop_player_loot.desc", LootrConfigStrings.SHOULD_DROP_PLAYER_LOOT_DESC);
+    add("lootr.configuration.break_to_drop_loot", LootrConfigStrings.BREAK_TO_DROP_LOOT);
+    add("lootr.configuration.break_to_drop_loot.desc", LootrConfigStrings.BREAK_TO_DROP_LOOT_DESC);
 
     add("lootr.configuration.redstone", LootrConfigStrings.REDSTONE_TITLE);
     add("lootr.configuration.redstone.desc", LootrConfigStrings.REDSTONE_DESC);
@@ -233,7 +235,7 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.configuration.team", LootrConfigStrings.TEAM_TITLE);
     add("lootr.configuration.team.desc", LootrConfigStrings.TEAM_DESC);
     add("lootr.configuration.team_loot", LootrConfigStrings.TEAM_LOOT);
-    add("lootr.configuration.team_lootr.desc", LootrConfigStrings.TEAM_LOOT_DESC);
+    add("lootr.configuration.team_loot.desc", LootrConfigStrings.TEAM_LOOT_DESC);
     add("lootr.configuration.pinned_team_resolver", LootrConfigStrings.PINNED_TEAM_RESOLVER);
     add("lootr.configuration.pinned_team_resolver.desc", LootrConfigStrings.PINNED_TEAM_RESOLVER_DESC);
 

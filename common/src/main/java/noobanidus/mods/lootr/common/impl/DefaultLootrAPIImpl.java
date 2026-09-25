@@ -611,4 +611,9 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   public @NotNull Identifier getPinnedTeamResolver() {
     return LootrConfig.getPinnedTeamResolver();
   }
+
+  @Override
+  public boolean breakToDropLoot() {
+    return LootrCommonConfig.Breaking.breakToDropLoot;
+  }
 }
