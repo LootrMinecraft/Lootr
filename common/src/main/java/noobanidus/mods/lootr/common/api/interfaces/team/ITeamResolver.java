@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.common.api.interfaces.processor;
+package noobanidus.mods.lootr.common.api.interfaces.team;
 
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
@@ -26,5 +26,9 @@ public interface ITeamResolver {
 
   default int priority() {
     return 0;
+  }
+
+  default void init () {
+
   }
 }

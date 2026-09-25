@@ -40,7 +40,7 @@ import noobanidus.mods.lootr.common.api.interfaces.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.interfaces.lootr.ILootrAPI;
 import noobanidus.mods.lootr.common.api.interfaces.processor.ILootrBlockEntityProcessor;
 import noobanidus.mods.lootr.common.api.interfaces.processor.ILootrEntityProcessor;
-import noobanidus.mods.lootr.common.api.interfaces.processor.ITeamResolver;
+import noobanidus.mods.lootr.common.api.interfaces.team.ITeamResolver;
 import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
 import noobanidus.mods.lootr.common.client.ClientHooks;
 import noobanidus.mods.lootr.common.data.DataStorage;

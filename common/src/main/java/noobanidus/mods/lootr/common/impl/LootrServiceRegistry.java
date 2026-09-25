@@ -27,7 +27,7 @@ import noobanidus.mods.lootr.common.api.interfaces.integration.IProblematicLootT
 import noobanidus.mods.lootr.common.api.interfaces.lootr.ILootrAPI;
 import noobanidus.mods.lootr.common.api.interfaces.processor.ILootrBlockEntityProcessor;
 import noobanidus.mods.lootr.common.api.interfaces.processor.ILootrEntityProcessor;
-import noobanidus.mods.lootr.common.api.interfaces.processor.ITeamResolver;
+import noobanidus.mods.lootr.common.api.interfaces.team.ITeamResolver;
 import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
 import noobanidus.mods.lootr.common.api.interfaces.wrapper.ILootrBlockEntityWrapper;
 import noobanidus.mods.lootr.common.api.interfaces.wrapper.ILootrEntityWrapper;
@@ -146,6 +146,7 @@ public class LootrServiceRegistry {
     Streams.stream(ServiceLoader.load(ITeamResolver.class, classLoader).iterator())
         .sorted(Comparator.comparingInt(ITeamResolver::priority).reversed()).toList().forEach(resolver ->
             {
+              resolver.init();
               teamResolvers.put(resolver.resolverId(), resolver);
               sortedTeamKeys.add(resolver.resolverId());
             }

@@ -6,7 +6,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.scores.PlayerTeam;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.interfaces.processor.ITeamResolver;
+import noobanidus.mods.lootr.common.api.interfaces.team.ITeamResolver;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.charset.StandardCharsets;
