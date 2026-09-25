@@ -5,6 +5,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.syncher.*;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -29,6 +31,8 @@ import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.vault.VaultBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
@@ -49,8 +53,10 @@ import java.util.Set;
 import java.util.UUID;
 
 public class LootrChestMinecartEntity extends AbstractMinecartContainer implements ILootrEntity {
+  private static final EntityDataAccessor<Boolean> REFRESHING = SynchedEntityData.defineId(LootrChestMinecartEntity.class, EntityDataSerializers.BOOLEAN);
+  private static final EntityDataAccessor<Boolean> DECAYING = SynchedEntityData.defineId(LootrChestMinecartEntity.class, EntityDataSerializers.BOOLEAN);
   private static BlockState cartNormal = null;
-  private final SimpleLootrEntityInstance instance = new SimpleLootrEntityInstance(this, this::getVisualOpeners, 27);
+  private final SimpleLootrEntityInstance instance = new SimpleLootrEntityInstance(this, this::getVisualOpeners, 27, REFRESHING, DECAYING);
 
   public LootrChestMinecartEntity(EntityType<LootrChestMinecartEntity> type, Level world) {
     super(type, world);
@@ -59,6 +65,13 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   public LootrChestMinecartEntity(Level worldIn, double x, double y, double z) {
     super(LootrRegistry.getMinecart(), worldIn);
     setInitialPos(x, y, z);
+  }
+
+  @Override
+  protected void defineSynchedData(SynchedEntityData.Builder entityData) {
+    super.defineSynchedData(entityData);
+    entityData.define(REFRESHING, false);
+    entityData.define(DECAYING, false);
   }
 
   @Override
@@ -365,6 +378,40 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
   @Override
   public int getRandomOffset() {
     return instance.getRandomOffset();
+  }
+
+  @Override
+  public void setClientRefreshing(boolean value) {
+    this.instance.setClientRefreshing(value);
+    this.setChanged();
+  }
+
+  @Override
+  public void setClientDecaying(boolean value) {
+    this.instance.setClientDecaying(value);
+    this.setChanged();
+  }
+
+  @Override
+  public boolean isClientRefreshing() {
+    return this.instance.isClientRefreshing();
+  }
+
+  @Override
+  public boolean isClientDecaying() {
+    return this.instance.isClientDecaying();
+  }
+
+  @Override
+  protected void addAdditionalSaveData(ValueOutput output) {
+    super.addAdditionalSaveData(output);
+    this.instance.saveAdditional(output, level().isClientSide());
+  }
+
+  @Override
+  protected void readAdditionalSaveData(ValueInput input) {
+    super.readAdditionalSaveData(input);
+    this.instance.loadAdditional(input);
   }
 
   @AutoService(ILootrEntityWrapper.class)

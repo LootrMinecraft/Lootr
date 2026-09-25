@@ -1,41 +1,51 @@
 package noobanidus.mods.lootr.common.client.particle;
 
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.ParticleProvider;
-import net.minecraft.client.particle.SingleQuadParticle;
-import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.particle.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import org.jspecify.annotations.NonNull;
+import noobanidus.mods.lootr.common.api.particle.ParticleColorOption;
 import org.jspecify.annotations.Nullable;
 
 public class RefreshParticle extends SingleQuadParticle {
+  private final double startX, startZ;
+  private static final float RADIUS = 0.3f;
+  private static final float ANGULAR_SPEED = 0.1f;
+  private final float angleOffset;
 
-  private final float driftX;
-  private final float driftZ;
+  public RefreshParticle(ClientLevel level, ParticleColorOption type, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, TextureAtlasSprite textureAtlasSprite) {
+    super(level, x, y, z, xSpeed, ySpeed, zSpeed, textureAtlasSprite);
+    this.startX = x;
+    this.startZ = z;
+    this.angleOffset = this.random.nextFloat() * Mth.TWO_PI;
 
-  public RefreshParticle(ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, TextureAtlasSprite sprite, RandomSource random) {
-    super(level, x, y, z, xSpeed, ySpeed, zSpeed, sprite);
-    this.lifetime = 30;
+    this.lifetime = 60;
     this.alpha = 0.8f;
-    this.xd = xSpeed;
+    this.xd = 0;
     this.yd = ySpeed;
-    this.zd = zSpeed;
+    this.zd = 0;
     this.hasPhysics = false;
     this.quadSize = 0.12f;
     this.friction = 1f;
-    int c1 = 0xfad64a;
+
+    int c1 = type.color1();
     this.rCol = ((c1 >> 16) & 0xFF) / 255.0f;
     this.gCol = ((c1 >> 8) & 0xFF) / 255.0f;
     this.bCol = ((c1) & 0xFF) / 255.0f;
 
-    // Random arc direction — small seed that grows over time in tick()
-    float angle = random.nextFloat() * (float) (Math.PI * 2);
-    float radius = 0.008f + random.nextFloat() * 0.012f; // controls arc width
-    this.driftX = (float) Math.cos(angle) * radius;
-    this.driftZ = (float) Math.sin(angle) * radius;
+    updateSpiralPosition();
+    this.xo = this.x;
+    this.zo = this.z;
+  }
+
+  private void updateSpiralPosition() {
+    float angle = this.angleOffset + this.age * ANGULAR_SPEED;
+    this.setPos(
+        this.startX + Mth.cos(angle) * RADIUS,
+        this.y,
+        this.startZ + Mth.sin(angle) * RADIUS
+    );
   }
 
   @Override
@@ -47,25 +57,22 @@ public class RefreshParticle extends SingleQuadParticle {
   public void tick() {
     super.tick();
     if (!this.removed) {
-      // Age ratio from 0→1; use it to accelerate the outward drift (ease-in curve)
       float f = (float) this.age / (float) this.lifetime;
-      this.xd += driftX * f;
-      this.zd += driftZ * f;
-
-      float fade = f * f;
-      this.alpha = Math.max(0, 0.8f - fade);
+      f *= f;
+      this.alpha = Math.max(0, 0.8f - f);
+      updateSpiralPosition();
     }
   }
 
   @Override
-  protected @NonNull Layer getLayer() {
+  protected Layer getLayer() {
     return Layer.TRANSLUCENT;
   }
 
-  public record Provider(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
+  public record Provider(SpriteSet spriteSet) implements ParticleProvider<ParticleColorOption> {
     @Override
-    public @Nullable Particle createParticle(SimpleParticleType particleType, @NonNull ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, @NonNull RandomSource random) {
-      return new RefreshParticle(level, x, y, z, 0, ySpeed, 0, spriteSet.get(random), random);
+    public Particle createParticle(ParticleColorOption type, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, RandomSource random) {
+      return new RefreshParticle(level, type, x, y, z, xSpeed, ySpeed, zSpeed, spriteSet.get(random));
     }
   }
 }

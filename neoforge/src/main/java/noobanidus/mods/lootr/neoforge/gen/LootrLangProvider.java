@@ -107,6 +107,10 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.config.particles.description", LootrConfigStrings.PARTICLES_DESC);
     add("lootr.config.particles.unopened_particles", LootrConfigStrings.UNOPENED_PARTICLES);
     add("lootr.config.particles.unopened_particles.desc", LootrConfigStrings.UNOPENED_PARTICLES_DESC);
+    add("lootr.config.particles.refresh_particles", LootrConfigStrings.REFRESH_PARTICLES);
+    add("lootr.config.particles.refresh_particles.desc", LootrConfigStrings.REFRESH_PARTICLES_DESC);
+    add("lootr.config.particles.decay_particles", LootrConfigStrings.DECAY_PARTICLES);
+    add("lootr.config.particles.decay_particles.desc", LootrConfigStrings.DECAY_PARTICLES_DESC);
 
     add("lootr.config.textures.title", LootrConfigStrings.TEXTURES_TITLE);
     add("lootr.config.textures.description", LootrConfigStrings.TEXTURES_DESC);

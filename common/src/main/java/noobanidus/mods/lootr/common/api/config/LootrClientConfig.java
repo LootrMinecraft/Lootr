@@ -15,6 +15,14 @@ public class LootrClientConfig {
     @ConfigEntry(id = "unopened_particles", translation = "lootr.config.particles.unopened_particles")
     @Comment(value = LootrConfigStrings.UNOPENED_PARTICLES_DESC, translation = "lootr.config.particles.unopened_particles.desc")
     public static boolean showUnopenedParticles = true;
+
+    @ConfigEntry(id = "refresh_particles", translation = "lootr.config.particles.refresh_particles")
+    @Comment(value = LootrConfigStrings.REFRESH_PARTICLES_DESC, translation = "lootr.config.particles.refresh_particles.desc")
+    public static boolean showRefreshParticles = true;
+
+    @ConfigEntry(id = "decay_particles", translation = "lootr.config.particles.decay_particles")
+    @Comment(value = LootrConfigStrings.DECAY_PARTICLES_DESC, translation = "lootr.config.particles.decay_particles.desc")
+    public static boolean showDecayParticles = true;
   }
 
   @Category("Textures")

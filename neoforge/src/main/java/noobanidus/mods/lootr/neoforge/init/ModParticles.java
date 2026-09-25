@@ -14,6 +14,7 @@ public class ModParticles {
   private static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(Registries.PARTICLE_TYPE, LootrAPI.MODID);
 
   public static final DeferredHolder<ParticleType<?>, ParticleType<ParticleColorOption>> UNOPENED_PARTICLE = PARTICLES.register(LootrConstants.UNOPENED_PARTICLE.getPath(), () -> ParticleColorOption.create(false));
+  public static final DeferredHolder<ParticleType<?>, ParticleType<ParticleColorOption>> REFRESH_PARTICLE = PARTICLES.register(LootrConstants.REFRESH_PARTICLE.getPath(), () -> ParticleColorOption.create(false));
 
   public static void register (IEventBus bus) {
     PARTICLES.register(bus);

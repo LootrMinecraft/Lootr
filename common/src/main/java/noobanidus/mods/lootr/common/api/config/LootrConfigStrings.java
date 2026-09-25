@@ -18,6 +18,11 @@ public final class LootrConfigStrings {
   public static final String UNOPENED_PARTICLES = "Display Particles from Unopened Containers";
   public static final String UNOPENED_PARTICLES_DESC = "In addition to a visual difference, containers that are not marked as 'opened' by the current player generate particles. [default: true]";
 
+  public static final String REFRESH_PARTICLES = "Display Particles for Refreshing Containers";
+  public static final String REFRESH_PARTICLES_DESC = "Containers that are actively refreshing will display particles to indicate this. [default: true]";
+  public static final String DECAY_PARTICLES = "Display Particles for Decaying Containers";
+  public static final String DECAY_PARTICLES_DESC = "Containers that are actively decaying will display particles to indicate this. [default: true]";
+
   // Textures
   public static final String TEXTURES_TITLE = "Texture";
   public static final String TEXTURES_DESC = "Configuration options for the textures of containers";

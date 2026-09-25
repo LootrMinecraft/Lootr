@@ -626,4 +626,14 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   public SyncedConfig getSyncedConfig() {
     return LootrAPI.SYNCED_CONFIG;
   }
+
+  @Override
+  public boolean shouldDisplayRefreshParticles() {
+    return LootrClientConfig.Particles.showRefreshParticles;
+  }
+
+  @Override
+  public boolean shouldDisplayDecayParticles() {
+    return LootrClientConfig.Particles.showDecayParticles;
+  }
 }

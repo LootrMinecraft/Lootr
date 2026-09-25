@@ -275,4 +275,9 @@ public class LootrRegistryImpl implements ILootrRegistry {
   public ITrapdoorTrigger getTrapdoorTrigger() {
     return ModAdvancements.ESCAPE_HATCH.get();
   }
+
+  @Override
+  public ParticleType<ParticleColorOption> getRefreshParticleType() {
+    return ModParticles.REFRESH_PARTICLE.get();
+  }
 }

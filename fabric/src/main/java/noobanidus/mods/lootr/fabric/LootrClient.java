@@ -67,5 +67,4 @@ public class LootrClient implements ClientModInitializer {
       LootrAPI.SYNCED_CONFIG = null;
     });
   }
-  ITeamResolver
 }

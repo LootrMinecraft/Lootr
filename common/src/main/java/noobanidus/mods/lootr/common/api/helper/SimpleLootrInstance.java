@@ -9,7 +9,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.ItemStackWithSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -39,6 +38,8 @@ public class SimpleLootrInstance {
   protected boolean providesOwnUuid = false;
 
   protected int randomOffset = -1;
+  protected boolean isClientRefreshing = false;
+  protected boolean isClientDecaying = false;
 
   public SimpleLootrInstance(Supplier<Set<UUID>> visualOpenersSupplier, int size) {
     this.items = NonNullList.withSize(size, ItemStack.EMPTY);
@@ -58,7 +59,7 @@ public class SimpleLootrInstance {
     setReferenceInventory(customInventory);
   }
 
-  public void setReferenceInventory (@Nullable NonNullList<ItemStack> customInventory) {
+  public void setReferenceInventory(@Nullable NonNullList<ItemStack> customInventory) {
     if (customInventory == null) {
       this.customInventory = null;
     } else {
@@ -116,7 +117,7 @@ public class SimpleLootrInstance {
     this.hasBeenOpened = true;
   }
 
-  public void setHasBeenOpened (boolean value) {
+  public void setHasBeenOpened(boolean value) {
     this.hasBeenOpened = value;
   }
 
@@ -140,6 +141,8 @@ public class SimpleLootrInstance {
       }
       loadAllItems(input, this.customInventory, NBTConstants.CUSTOM_INVENTORY);
     }
+    this.isClientDecaying = input.getBooleanOr(NBTConstants.CLIENT_DECAYING, false);
+    this.isClientRefreshing = input.getBooleanOr(NBTConstants.CLIENT_REFRESHING, false);
   }
 
   public void saveAdditional(ValueOutput output, boolean isClientSide) {
@@ -158,6 +161,8 @@ public class SimpleLootrInstance {
     } else {
       output.putBoolean(NBTConstants.IS_CUSTOM_INVENTORY, false);
     }
+    output.putBoolean(NBTConstants.CLIENT_DECAYING, isClientDecaying);
+    output.putBoolean(NBTConstants.CLIENT_REFRESHING, isClientRefreshing);
   }
 
   public CompoundTag fillUpdateTag(HolderLookup.Provider provider, boolean isClientSide, BlockEntity parent) {
@@ -183,11 +188,27 @@ public class SimpleLootrInstance {
 
   private static final RandomSource random = RandomSource.createThreadLocalInstance();
 
-  public int getRandomOffset () {
+  public int getRandomOffset() {
     if (randomOffset == -1) {
       this.randomOffset = random.nextInt(20);
     }
     return this.randomOffset;
+  }
+
+  public void setClientRefreshing(boolean value) {
+    this.isClientRefreshing = value;
+  }
+
+  public void setClientDecaying(boolean value) {
+    this.isClientDecaying = value;
+  }
+
+  public boolean isClientRefreshing() {
+    return isClientRefreshing;
+  }
+
+  public boolean isClientDecaying() {
+    return isClientDecaying;
   }
 
   public static void saveAllItems(ValueOutput output, NonNullList<ItemStack> itemStacks, String key) {

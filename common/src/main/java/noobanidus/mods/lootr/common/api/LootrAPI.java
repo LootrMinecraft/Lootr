@@ -82,6 +82,7 @@ public final class LootrAPI {
 
   public static final BoundingBox DESERT_PYRAMID_ADDITIONAL = new BoundingBox(-5, -30, -5, 5, 4, 4);
   public static final int DEFAULT_PARTICLE_COLOR = 0xfad64a;
+  public static final int DEFAULT_REFRESH_PARTICLE_COLOR = 0x17d45c;
 
   public static Identifier DEFAULT_TEAM_RESOLVER = LootrAPI.rl("default");
   public static Identifier MINECRAFT_TEAM_RESOLVER = Identifier.fromNamespaceAndPath("minecraft", "vanilla_default");
@@ -605,5 +606,13 @@ public final class LootrAPI {
 
   public static SyncedConfig getSyncedConfig () {
     return INSTANCE.getSyncedConfig ();
+  }
+
+  public static boolean shouldDisplayRefreshParticles () {
+    return INSTANCE.shouldDisplayRefreshParticles();
+  }
+
+  public static boolean shouldDisplayDecayParticles () {
+    return INSTANCE.shouldDisplayDecayParticles();
   }
 }

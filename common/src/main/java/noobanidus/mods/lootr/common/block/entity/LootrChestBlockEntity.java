@@ -298,6 +298,26 @@ public class LootrChestBlockEntity extends ChestBlockEntity implements ILootrBlo
     };
   }
 
+  @Override
+  public boolean isClientDecaying() {
+    return simpleLootrInstance.isClientDecaying();
+  }
+
+  @Override
+  public boolean isClientRefreshing() {
+    return simpleLootrInstance.isClientRefreshing();
+  }
+
+  @Override
+  public void setClientDecaying(boolean value) {
+    simpleLootrInstance.setClientDecaying(value);
+  }
+
+  @Override
+  public void setClientRefreshing(boolean value) {
+    simpleLootrInstance.setClientRefreshing(value);
+  }
+
   public static int getOpenCount(BlockGetter pLevel, @NonNull BlockPos pPos) {
     BlockState blockstate = pLevel.getBlockState(pPos);
     if (blockstate.hasBlockEntity()) {

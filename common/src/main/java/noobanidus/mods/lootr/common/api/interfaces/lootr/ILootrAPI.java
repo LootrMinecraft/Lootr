@@ -348,6 +348,7 @@ public interface ILootrAPI {
         } else if (decayValue == -1) {
           if (LootrAPI.shouldBeginDecaying(instance)) {
             store.beginDecay();
+            instance.setClientDecaying(true);
             player.sendOverlayMessage(Component.translatable("lootr.message.decay_start", LootrAPI.getDecayValue() / 20)
                 .setStyle(style));
           }
@@ -362,6 +363,7 @@ public interface ILootrAPI {
     if (instance.canRefresh()) {
       if (store.isRefreshed()) {
         store.performRefresh();
+        instance.setClientRefreshing(false);
         instance.setHasBeenOpened(false);
         instance.performClose();
         player.sendOverlayMessage(Component.translatable("lootr.message.refreshed")
@@ -375,6 +377,7 @@ public interface ILootrAPI {
       } else if (refreshValue == -1) {
         if (LootrAPI.shouldBeginRefreshing(instance)) {
           store.beginRefresh();
+          instance.setClientRefreshing(true);
           player.sendOverlayMessage(Component.translatable("lootr.message.refresh_start", LootrAPI.getRefreshValue() / 20)
               .setStyle(style));
         }
@@ -429,6 +432,8 @@ public interface ILootrAPI {
           if (decayValue == -1) {
             if (LootrAPI.shouldBeginDecaying(instance)) {
               store.beginDecay();
+              instance.setClientDecaying(true);
+              instance.performUpdate();
             }
           }
         }
@@ -436,6 +441,7 @@ public interface ILootrAPI {
       if (LootrAPI.isAnythingRefreshing() && instance.canRefresh() && instance.hasBeenOpened() && (LootrAPI.shouldPerformRefreshWhileTicking() || LootrAPI.shouldStartRefreshWhileTicking())) {
         if (LootrAPI.shouldPerformRefreshWhileTicking() && store.isRefreshed()) {
           store.performRefresh();
+          instance.setClientRefreshing(false);
           instance.setHasBeenOpened(false);
           instance.performClose();
           instance.performUpdate();
@@ -444,6 +450,8 @@ public interface ILootrAPI {
           if (refreshValue == -1) {
             if (LootrAPI.shouldBeginRefreshing(instance)) {
               store.beginRefresh();
+              instance.setClientRefreshing(true);
+              instance.performUpdate();
             }
           }
         }
@@ -460,11 +468,20 @@ public interface ILootrAPI {
       return;
     }
 
+    var type = instance.getDataType();
+
     if (LootrAPI.shouldDisplayUnopenedParticles()) {
-      var type = instance.getDataType();
       if (type.displaysUnopenedParticle()) {
         ClientHooks.performUnopenedParticles(instance);
       }
+    }
+
+    if (LootrAPI.shouldDisplayRefreshParticles() && type.canRefresh() && instance.isClientRefreshing()) {
+      ClientHooks.performRefreshParticles(instance);
+    }
+
+    if (LootrAPI.shouldDisplayDecayParticles() && type.canDecay() && instance.isClientDecaying()) {
+      ClientHooks.performDecayParticles(instance);
     }
   }
 
@@ -607,6 +624,11 @@ public interface ILootrAPI {
   Set<ResourceKey<LootTable>> gatherProblematicLootTables();
 
   SyncedConfig getSyncedConfig();
+
+  boolean shouldDisplayRefreshParticles();
+
+  boolean shouldDisplayDecayParticles();
+
 }
 
 
