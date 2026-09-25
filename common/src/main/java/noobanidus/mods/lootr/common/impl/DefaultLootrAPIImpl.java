@@ -6,11 +6,13 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -38,11 +40,13 @@ import noobanidus.mods.lootr.common.api.interfaces.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.interfaces.lootr.ILootrAPI;
 import noobanidus.mods.lootr.common.api.interfaces.processor.ILootrBlockEntityProcessor;
 import noobanidus.mods.lootr.common.api.interfaces.processor.ILootrEntityProcessor;
+import noobanidus.mods.lootr.common.api.interfaces.processor.ITeamResolver;
 import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
 import noobanidus.mods.lootr.common.client.ClientHooks;
 import noobanidus.mods.lootr.common.data.DataStorage;
 import noobanidus.mods.lootr.common.integration.create.CreateIntegration;
 import noobanidus.mods.lootr.common.integration.sherdsapi.SherdsIntegration;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -576,5 +580,35 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
     var tag = server.registryAccess().lookupOrThrow(Registries.STRUCTURE)
         .get(LootrTags.Structure.DECAY_STRUCTURES);
     return tag.isPresent();
+  }
+
+  @Override
+  public UUID resolveServerPlayerTeam(Player player) {
+    if (!LootrAPI.isTeamLoot()) {
+      return player.getUUID();
+    }
+
+    ITeamResolver resolver = LootrServiceRegistry.getTeamResolver();
+    return resolver.resolveServerPlayer(player);
+  }
+
+  @Override
+  public UUID resolveClientPlayerTeam(Player player) {
+    if (!LootrAPI.isTeamLoot()) {
+      return player.getUUID();
+    }
+
+    ITeamResolver resolver = LootrServiceRegistry.getTeamResolver();
+    return resolver.resolveClientPlayer(player);
+  }
+
+  @Override
+  public boolean isTeamLoot() {
+    return LootrCommonConfig.Team.teamLoot;
+  }
+
+  @Override
+  public @NotNull Identifier getPinnedTeamResolver() {
+    return LootrConfig.getPinnedTeamResolver();
   }
 }

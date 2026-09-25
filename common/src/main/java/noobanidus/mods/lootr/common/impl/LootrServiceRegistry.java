@@ -1,12 +1,15 @@
 package noobanidus.mods.lootr.common.impl;
 
+import com.google.common.collect.Streams;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.interfaces.command.ILootrCommandEntityExtension;
 import noobanidus.mods.lootr.common.api.interfaces.lootr.ILootrAPI;
 import noobanidus.mods.lootr.common.api.AccessorMap;
@@ -21,9 +24,11 @@ import noobanidus.mods.lootr.common.api.interfaces.processor.ILootrBlockEntityPr
 import noobanidus.mods.lootr.common.api.interfaces.processor.ILootrEntityProcessor;
 import noobanidus.mods.lootr.common.api.conversion.BlockConversionMap;
 import noobanidus.mods.lootr.common.api.conversion.ILootrBlockConversionProvider;
+import noobanidus.mods.lootr.common.api.interfaces.processor.ITeamResolver;
 import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
 import noobanidus.mods.lootr.common.api.interfaces.wrapper.ILootrBlockEntityWrapper;
 import noobanidus.mods.lootr.common.api.interfaces.wrapper.ILootrEntityWrapper;
+import noobanidus.mods.lootr.common.impl.team.MinecraftDefaultTeamResolver;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,6 +53,8 @@ public class LootrServiceRegistry {
   // Only used on Fabric
   private final List<ILootrCommandBlockExtension> commandBlockExtensions = new ObjectArrayList<>();
   private final List<ILootrCommandEntityExtension<?>> commandEntityExtensions = new ObjectArrayList<>();
+  private final Map<Identifier, ITeamResolver> teamResolvers = new HashMap<>();
+  private List<Identifier> sortedTeamKeys = new ArrayList<>();
 
   private final String commands;
 
@@ -131,6 +138,14 @@ public class LootrServiceRegistry {
     for (ILootrItemFrameAccessor<?> adapter : loader13) {
       itemFrameAccessorMap.register(adapter);
     }
+
+    Streams.stream(ServiceLoader.load(ITeamResolver.class, classLoader).iterator())
+        .sorted(Comparator.comparingInt(ITeamResolver::priority).reversed()).toList().forEach(resolver ->
+            {
+              teamResolvers.put(resolver.resolverId(), resolver);
+              sortedTeamKeys.add(resolver.resolverId());
+            }
+        );
   }
 
   public static LootrServiceRegistry getInstance() {
@@ -232,5 +247,38 @@ public class LootrServiceRegistry {
   @ApiStatus.Internal
   public static String getCommandExtensionsString() {
     return getInstance().commands;
+  }
+
+  private static ITeamResolver cachedTeamResolver = null;
+
+  @ApiStatus.Internal
+  public static ITeamResolver getTeamResolver() {
+    if (cachedTeamResolver == null) {
+      Identifier pinnedResolver = LootrAPI.getPinnedTeamResolver();
+      var resolvers = getInstance().teamResolvers;
+      ITeamResolver potential = resolvers.get(pinnedResolver);
+      if (potential != null) {
+        cachedTeamResolver = potential;
+      } else {
+        LootrAPI.LOG.error("Unable to find pinned resolver: '{}'!", pinnedResolver);
+
+        var sortedKeys = getInstance().sortedTeamKeys;
+
+        if (sortedKeys.isEmpty()) {
+          cachedTeamResolver = MinecraftDefaultTeamResolver.getOrCreateInstance();
+          LootrAPI.LOG.error("Team resolvers are empty! Creating an emergency Minecraft Default Team Resolver.");
+        } else {
+          var first = sortedKeys.getFirst();
+          potential = resolvers.get(first);
+          if (potential == null) {
+            LootrAPI.LOG.error("Team resolver '{}' not found in the map, even though it is the first key! Creating an emergency Minecraft Default Team Resolver.", first);
+            cachedTeamResolver = MinecraftDefaultTeamResolver.getOrCreateInstance();
+          } else {
+            cachedTeamResolver = potential;
+          }
+        }
+      }
+    }
+    return cachedTeamResolver;
   }
 }

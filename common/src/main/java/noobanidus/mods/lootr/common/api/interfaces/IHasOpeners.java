@@ -1,7 +1,9 @@
 package noobanidus.mods.lootr.common.api.interfaces;
 
 import net.minecraft.world.entity.player.Player;
+import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.interfaces.annotation.ServerOnly;
+import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
@@ -15,13 +17,13 @@ public interface IHasOpeners extends IMarkChanged {
   @Nullable
   Set<UUID> getActualOpeners();
 
-  default boolean addOpener (Player player) {
+  default boolean addOpener(Player player) {
     boolean result1 = addVisualOpener(player);
     boolean result2 = addActualOpener(player);
     return result1 || result2;
   }
 
-  default boolean clearOpeners () {
+  default boolean clearOpeners() {
     Set<UUID> openers = getVisualOpeners();
     if (openers == null) {
       return false;
@@ -34,11 +36,13 @@ public interface IHasOpeners extends IMarkChanged {
     return false;
   }
 
-  default boolean addVisualOpener (UUID uuid) {
+  default boolean addVisualOpener(Player player) {
     Set<UUID> openers = getVisualOpeners();
     if (openers == null) {
       return false;
     }
+
+    UUID uuid = LootrAPI.resolveServerPlayerTeam(player);
     if (openers.add(uuid)) {
       markInstanceChanged();
       return true;
@@ -46,19 +50,26 @@ public interface IHasOpeners extends IMarkChanged {
     return false;
   }
 
-  default boolean hasVisualOpened(UUID uuid) {
+  default boolean hasVisualOpened(Player player) {
     Set<UUID> openers = getVisualOpeners();
     if (openers == null) {
       return false;
     }
+
+    UUID uuid = LootrAPI.resolveServerPlayerTeam(player);
     return !openers.isEmpty() && openers.contains(uuid);
   }
 
-  default boolean removeVisualOpener (UUID uuid) {
+  default boolean removeVisualOpener(Player player) {
+    return removeVisualOpener(LootrAPI.resolveServerPlayerTeam(player));
+  }
+
+  default boolean removeVisualOpener(UUID uuid) {
     Set<UUID> openers = getVisualOpeners();
     if (openers == null) {
       return false;
     }
+
     if (openers.remove(uuid)) {
       markInstanceChanged();
       return true;
@@ -66,11 +77,14 @@ public interface IHasOpeners extends IMarkChanged {
     return false;
   }
 
-  default boolean addActualOpener(UUID uuid) {
+
+  default boolean addActualOpener(Player player) {
     Set<UUID> openers = getActualOpeners();
     if (openers == null) {
       return false;
     }
+
+    UUID uuid = LootrAPI.resolveServerPlayerTeam(player);
     if (openers.add(uuid)) {
       markInstanceChanged();
       return true;
@@ -78,33 +92,34 @@ public interface IHasOpeners extends IMarkChanged {
     return false;
   }
 
-  default boolean hasServerOpened (UUID uuid) {
+  @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+  default boolean hasServerOpened(Player player) {
     Set<UUID> openers = getActualOpeners();
     if (openers == null) {
       return false;
     }
+    UUID uuid = LootrAPI.resolveServerPlayerTeam(player);
     return !openers.isEmpty() && openers.contains(uuid);
   }
 
-  // So technically we have 3 types of openers. This is only for the
-  // looted stat counting. So use `hasLootAvailable` instead.
-  default boolean hasServerOpened (Player player) {
-    return hasServerOpened(player.getUUID());
+
+  @Deprecated(forRemoval = true)
+  default boolean hasServerOpened(UUID uuid) {
+    throw new NotImplementedException("hasServerOpened must be called with a player; do not use `uuid` variant.");
   }
 
-  default boolean addActualOpener(Player player) {
-    return addActualOpener(player.getUUID());
+  @Deprecated(forRemoval = true)
+  default boolean addActualOpener(UUID uuid) {
+    throw new NotImplementedException("addActualOpener must be called with a player; do not use `uuid` variant.");
   }
 
-  default boolean addVisualOpener (Player player) {
-    return addVisualOpener(player.getUUID());
+  @Deprecated(forRemoval = true)
+  default boolean addVisualOpener(UUID uuid) {
+    throw new NotImplementedException("addVisualOpener must be called with a player; do not use `uuid` variant.");
   }
 
-  default boolean hasVisualOpened(Player player) {
-    return hasVisualOpened(player.getUUID());
-  }
-
-  default boolean removeVisualOpener (Player player) {
-    return removeVisualOpener(player.getUUID());
+  @Deprecated(forRemoval = true)
+  default boolean hasVisualOpened(UUID uuid) {
+    throw new NotImplementedException("hasVisualOpened must be called with a player; do not use `uuid` variant.");
   }
 }

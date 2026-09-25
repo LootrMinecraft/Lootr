@@ -1,6 +1,7 @@
 package noobanidus.mods.lootr.common.api.data;
 
 import net.minecraft.server.level.ServerPlayer;
+import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.filler.ILootFiller;
 import noobanidus.mods.lootr.common.api.interfaces.IMarkChanged;
 import noobanidus.mods.lootr.common.api.interfaces.IHasOpeners;
@@ -33,7 +34,7 @@ public interface ILootrInventoryStore extends IHasOpeners, IMarkChanged {
   void performRefresh();
 
   default boolean clearInventories(ServerPlayer player) {
-    return clearInventories(player.getUUID());
+    return clearInventories(LootrAPI.resolveServerPlayerTeam(player));
   }
 
   boolean clearInventories(UUID id);
@@ -41,7 +42,7 @@ public interface ILootrInventoryStore extends IHasOpeners, IMarkChanged {
   ILootrData getData ();
 
   default ILootrInventory getInventory(ServerPlayer player) {
-    return getInventory(player.getUUID());
+    return getInventory(LootrAPI.resolveServerPlayerTeam(player));
   }
 
   default ILootrInventory getOrCreateInventory(ILootrContainerInstance instance, ServerPlayer player, ILootFiller filler) {

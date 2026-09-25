@@ -16,6 +16,6 @@ public class MixinLootrBrushableBlockEntity implements RenderDataBlockEntity {
       return null;
     }
 
-    return ((LootrBrushableBlockEntity) (Object) this).hasClientOpened(player.getUUID());
+    return ((LootrBrushableBlockEntity) (Object) this).hasClientOpened(player);
   }
 }

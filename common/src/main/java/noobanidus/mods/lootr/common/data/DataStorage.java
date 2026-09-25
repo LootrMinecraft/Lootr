@@ -79,7 +79,7 @@ public final class DataStorage {
 
   @ApiStatus.Internal
   public static boolean clearInventories(Player player) {
-    return clearInventories(player.getUUID());
+    return clearInventories(LootrAPI.resolveServerPlayerTeam(player));
   }
 
   @ApiStatus.Internal

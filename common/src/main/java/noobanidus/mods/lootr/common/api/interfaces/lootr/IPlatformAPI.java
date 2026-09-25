@@ -3,9 +3,11 @@ package noobanidus.mods.lootr.common.api.interfaces.lootr;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.minecart.AbstractMinecartContainer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.scores.PlayerTeam;
 import noobanidus.mods.lootr.common.api.interfaces.accessor.ILootrDataAccessor;
 import noobanidus.mods.lootr.common.api.interfaces.accessor.ILootrItemFrameAccessor;
 import noobanidus.mods.lootr.common.api.data.DataToCopy;
@@ -59,4 +61,10 @@ public interface IPlatformAPI {
   void performPotBreak(ILootrBlockEntity lootrDecoratedPotBlockEntity, ServerPlayer player);
 
   boolean shouldDoInitialSave();
+
+  void syncAfterTeamChange (Player player);
+
+  void syncAfterTeamChange (PlayerTeam playerTeam);
+
+  void syncAfterTeamChange (String username);
 }

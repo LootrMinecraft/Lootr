@@ -27,6 +27,7 @@
     "poi.MixinPoiTypes",
     "spawn.MixinServerGamePacketListenerImpl",
     "structure_saving.MixinStructureTemplate",
+    "team.MixinScoreboard",
     "ticker.MixinBrushableBlockEntity",
     "ticker.MixinLevelChunk",
     "ticker.MixinRandomizableContainer",

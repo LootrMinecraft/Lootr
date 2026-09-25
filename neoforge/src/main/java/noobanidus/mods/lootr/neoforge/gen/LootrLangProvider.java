@@ -1,5 +1,7 @@
 package noobanidus.mods.lootr.neoforge.gen;
 
+import com.teamresourceful.resourcefulconfig.api.annotations.Comment;
+import com.teamresourceful.resourcefulconfig.api.annotations.ConfigEntry;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import noobanidus.mods.lootr.common.api.LootrAPI;
@@ -227,6 +229,13 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.configuration.start_refresh_while_ticking.desc", LootrConfigStrings.START_REFRESH_WHILE_TICKING_DESC);
     add("lootr.configuration.refresh_all", LootrConfigStrings.REFRESH_ALL);
     add("lootr.configuration.refresh_all.desc", LootrConfigStrings.REFRESH_ALL_DESC);
+
+    add("lootr.configuration.team", LootrConfigStrings.TEAM_TITLE);
+    add("lootr.configuration.team.desc", LootrConfigStrings.TEAM_DESC);
+    add("lootr.configuration.team_loot", LootrConfigStrings.TEAM_LOOT);
+    add("lootr.configuration.team_lootr.desc", LootrConfigStrings.TEAM_LOOT_DESC);
+    add("lootr.configuration.pinned_team_resolver", LootrConfigStrings.PINNED_TEAM_RESOLVER);
+    add("lootr.configuration.pinned_team_resolver.desc", LootrConfigStrings.PINNED_TEAM_RESOLVER_DESC);
 
     // Tags
     add(LootrTags.Blocks.CONVERT_BARRELS, "Blocks that Convert to Lootr Barrels");
