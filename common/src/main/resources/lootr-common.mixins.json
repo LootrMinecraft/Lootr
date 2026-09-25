@@ -34,6 +34,7 @@
     "ticker.MixinStructureTemplate"
   ],
   "client": [
+    "accessor.AccessorMixinLevelRenderer",
     "client.MixinBlockStateDefinitions",
     "particle_spawning.MixinFrustum$TestPoint",
     "sync.MixinClientLevel"
