@@ -1,4 +1,4 @@
-package noobanidus.mods.lootr.neoforge.network.client;
+package noobanidus.mods.lootr.neoforge.network.to_client;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;

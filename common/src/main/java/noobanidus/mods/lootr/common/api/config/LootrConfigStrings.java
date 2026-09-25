@@ -85,6 +85,8 @@ public final class LootrConfigStrings {
   public static final String ITEM_FRAMES_SELF_SUPPORT_DESC = "If true, Lootr's item frames do not break when their supporting blocks are broken. [default: false]";
   public static final String SHOULD_DROP_PLAYER_LOOT = "Broken Containers Drop Player's Loot";
   public static final String SHOULD_DROP_PLAYER_LOOT_DESC = "If true, when a container is broken by a player, the contents of that player's inventory (if not generated, it will be generated) for the container will also be dropped on the ground. [default: false]";
+  public static final String BREAK_TO_DROP_LOOT = "Break To Drop Loot";
+  public static final String BREAK_TO_DROP_LOOT_DESC = "If true, breaking a container will mark it as opened and drop the player's loot, if broken while sneaking. [default: false]";
 
   // Redstone
   public static final String REDSTONE_TITLE = "Redstone";

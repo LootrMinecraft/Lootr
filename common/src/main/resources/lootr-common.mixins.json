@@ -35,7 +35,8 @@
   ],
   "client": [
     "client.MixinBlockStateDefinitions",
-    "particle_spawning.MixinFrustum$TestPoint"
+    "particle_spawning.MixinFrustum$TestPoint",
+    "sync.MixinClientLevel"
   ],
   "injectors": {
     "defaultRequire": 1

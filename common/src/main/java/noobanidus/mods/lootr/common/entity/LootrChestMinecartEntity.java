@@ -26,6 +26,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.entity.vault.VaultBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -107,25 +108,36 @@ public class LootrChestMinecartEntity extends AbstractMinecartContainer implemen
       if (LootrAPI.canDestroyOrBreak(player)) {
         return false;
       }
+      boolean dumped = false;
+      if (LootrAPI.breakToDropLoot() && !player.isShiftKeyDown()) {
+        LootrAPI.dumpPlayerLoot(this, (ServerPlayer) player, (ServerLevel) level());
+        dumped = true;
+      }
       if (LootrAPI.isBreakDisabled()) {
         if (player.getAbilities().instabuild) {
           if (!player.isShiftKeyDown()) {
-            player.sendSystemMessage(Component.translatable("lootr.message.cannot_break_sneak")
-                .setStyle(LootrAPI.getChatStyle()));
+            if (!dumped) {
+              player.sendSystemMessage(Component.translatable("lootr.message.cannot_break_sneak")
+                  .setStyle(LootrAPI.getChatStyle()));
+            }
             return true;
           } else {
             return false;
           }
         } else {
-          player.sendSystemMessage(Component.translatable("lootr.message.cannot_break")
-              .setStyle(LootrAPI.getChatStyle()));
+          if (!dumped) {
+            player.sendSystemMessage(Component.translatable("lootr.message.cannot_break")
+                .setStyle(LootrAPI.getChatStyle()));
+          }
           return true;
         }
       } else if (!source.getEntity().isShiftKeyDown()) {
-        ((Player) source.getEntity()).sendSystemMessage(Component.translatable("lootr.message.cart_should_sneak")
-            .setStyle(LootrAPI.getChatStyle()));
-        ((Player) source.getEntity()).sendSystemMessage(Component.translatable("lootr.message.cart_should_sneak2")
-            .setStyle(LootrAPI.getChatStyle()));
+        if (!dumped) {
+          ((Player) source.getEntity()).sendSystemMessage(Component.translatable("lootr.message.cart_should_sneak")
+              .setStyle(LootrAPI.getChatStyle()));
+          ((Player) source.getEntity()).sendSystemMessage(Component.translatable("lootr.message.cart_should_sneak2")
+              .setStyle(LootrAPI.getChatStyle()));
+        }
         return true;
       } else //noinspection RedundantIfStatement
         if (source.getEntity().isShiftKeyDown()) {

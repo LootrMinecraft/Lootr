@@ -1,6 +1,8 @@
 package noobanidus.mods.lootr.fabric.impl;
 
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -13,9 +15,11 @@ import noobanidus.mods.lootr.common.api.data.DataToCopy;
 import noobanidus.mods.lootr.common.api.interfaces.lootr.IPlatformAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
+import noobanidus.mods.lootr.common.client.ClientHooks;
 import noobanidus.mods.lootr.common.impl.DefaultPlatformAPIImpl;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinBaseContainerBlockEntity;
 import noobanidus.mods.lootr.fabric.network.to_client.*;
+import noobanidus.mods.lootr.fabric.network.to_server.PacketRequestUpdate;
 
 public class PlatformAPIImpl extends DefaultPlatformAPIImpl implements IPlatformAPI {
   @Override
@@ -103,5 +107,13 @@ public class PlatformAPIImpl extends DefaultPlatformAPIImpl implements IPlatform
   public void syncAfterTeamChange(Player player) {
     var data = getSyncData(player);
     ServerPlayNetworking.send((ServerPlayer) player, new PacketAreaEntitySync(data.getFirst(), data.getSecond()));
+  }
+
+  @Override
+  public void performRequestSync(GlobalPos pos) {
+    var context = ClientHooks.getPlayerContext();
+    if (context.hasPlayer()) {
+      ClientPlayNetworking.send(new PacketRequestUpdate(pos));
+    }
   }
 }

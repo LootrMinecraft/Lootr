@@ -583,4 +583,12 @@ public final class LootrAPI {
   public static Identifier getPinnedTeamResolver () {
     return INSTANCE.getPinnedTeamResolver();
   }
+
+  public static boolean breakToDropLoot () {
+    return INSTANCE.breakToDropLoot();
+  }
+
+  public static void dumpPlayerLoot (ILootrContainerInstance instance, ServerPlayer player, ServerLevel level) {
+    INSTANCE.dumpPlayerLoot(instance, player, level);
+  }
 }

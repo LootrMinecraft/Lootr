@@ -8,7 +8,8 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.neoforge.network.client.*;
+import noobanidus.mods.lootr.neoforge.network.to_client.*;
+import noobanidus.mods.lootr.neoforge.network.to_server.PacketRequestUpdate;
 
 /* Shamelessly crib from Mekanism until it works
  * Original source: https://github.com/mekanism/Mekanism/blob/1.21.x/src/main/java/mekanism/common/network/BasePacketHandler.java
@@ -24,6 +25,7 @@ public class PacketHandler {
   }
 
   protected static void registerClientToServer(PacketRegistrar registrar) {
+    registrar.play(PacketRequestUpdate.TYPE, PacketRequestUpdate.STREAM_CODEC);
   }
 
   protected static void registerServerToClient(PacketRegistrar registrar) {
