@@ -1,6 +1,8 @@
 package noobanidus.mods.lootr.neoforge.network.to_client;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.chunk.SectionRenderDispatcher;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -11,6 +13,7 @@ import noobanidus.mods.lootr.common.api.config.SyncedConfig;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.client.ClientHooks;
+import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinLevelRenderer;
 
 
 public class ClientHandlers {
@@ -88,12 +91,13 @@ public class ClientHandlers {
   }
 
   public static void handleAreaSync(PacketAreaEntitySync packetAreaEntitySync) {
-    Player player = Minecraft.getInstance().player;
+    Minecraft mc = Minecraft.getInstance();
+    Player player = mc.player;
     if (player == null) {
       return;
     }
 
-    Level level = Minecraft.getInstance().level;
+    Level level = mc.level;
     ;
     if (level == null) {
       return;
@@ -107,6 +111,24 @@ public class ClientHandlers {
     for (int closed : packetAreaEntitySync.closed()) {
       if (level.getEntity(closed) instanceof ILootrEntity entity) {
         entity.setClientOpened(false);
+      }
+    }
+
+    LevelRenderer lr = mc.levelRenderer;
+
+    for (BlockEntity be : mc.level.getGloballyRenderedBlockEntities()) {
+      if (be instanceof ILootrBlockEntity ibe) {
+        ibe.setClientOpened(false);
+        be.requestModelDataUpdate();
+      }
+    }
+
+    for (SectionRenderDispatcher.RenderSection section : (((AccessorMixinLevelRenderer) lr).lootr$getVisibleSections())) {
+      for (BlockEntity be : section.getSectionMesh().getRenderableBlockEntities()) {
+        if (be instanceof ILootrBlockEntity ibe) {
+          ibe.setClientOpened(false);
+          be.requestModelDataUpdate();
+        }
       }
     }
   }
