@@ -248,4 +248,16 @@ public class LootrCommonConfig {
     @Comment(value = LootrConfigStrings.REFRESH_ALL_DESC, translation = "lootr.configuration.refresh_all.desc")
     public static boolean refreshAll = false;
   }
+
+  @Category("Team")
+  @ConfigInfo(title = LootrConfigStrings.TEAM_TITLE, titleTranslation = "lootr.configuration.team", description = LootrConfigStrings.TEAM_DESC, descriptionTranslation = "lootr.configuration.team.desc")
+  public static class Team {
+    @ConfigEntry(id = "team_loot", translation = "lootr.configuration.team_loot")
+    @Comment(value = LootrConfigStrings.TEAM_LOOT_DESC, translation = "lootr.configuration.team_loot.desc")
+    public static boolean teamLoot = false;
+
+    @ConfigEntry(id="pinned_team_resolver", translation="lootr.configuration.pinned_team_resolver")
+    @Comment(value=LootrConfigStrings.PINNED_TEAM_RESOLVER_DESC, translation = "lootr.configuration.pinned_team_resolver.desc")
+    public static String pinnedTeamResolver = "";
+  }
 }

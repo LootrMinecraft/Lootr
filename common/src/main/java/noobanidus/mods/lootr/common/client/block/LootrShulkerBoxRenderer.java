@@ -56,7 +56,7 @@ public class LootrShulkerBoxRenderer implements BlockEntityRenderer<LootrShulker
     state.direction = blockEntity.getBlockState().getValueOrElse(ShulkerBoxBlock.FACING, Direction.UP);
     state.vanilla = LootrAPI.isVanillaTextures();
     state.classic = false;
-    state.visuallyOpen = Minecraft.getInstance().player != null && blockEntity.hasClientOpened(Minecraft.getInstance().player.getUUID());
+    state.visuallyOpen = Minecraft.getInstance().player != null && blockEntity.hasClientOpened(Minecraft.getInstance().player);
   }
 
   protected SpriteId getSpriteId(LootrShulkerBoxRenderState state) {

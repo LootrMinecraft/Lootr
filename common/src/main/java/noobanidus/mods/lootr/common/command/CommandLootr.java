@@ -473,7 +473,7 @@ public class CommandLootr {
             if (e instanceof Player player) {
               String name = player.getScoreboardName();
               c.getSource()
-                  .sendSuccess(() -> Component.literal(DataStorage.clearInventories(player.getUUID()) ? "Cleared stored inventories for " + name : "No stored inventories for " + name + " to clear"), true);
+                  .sendSuccess(() -> Component.literal(DataStorage.clearInventories(player) ? "Cleared stored inventories for " + name : "No stored inventories for " + name + " to clear"), true);
             }
           }
 

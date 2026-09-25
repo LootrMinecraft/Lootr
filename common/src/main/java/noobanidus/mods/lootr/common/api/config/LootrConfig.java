@@ -38,6 +38,7 @@ public class LootrConfig {
   private static List<String> LAST_MODID_DIM_BLACKLIST = null;
   private static List<String> LAST_LOOT_BLACKLIST = null;
   private static List<String> LAST_LOOT_MODIDS = null;
+  private static Identifier PINNED_RESOLVER = null;
 
   // TODO: This is fine but it should be split into client/etc observables
   public static void reset() {
@@ -53,6 +54,7 @@ public class LootrConfig {
     REFRESH_DIMS = null;
     REFRESH_MODS = null;
     REFRESH_TABLES = null;
+    PINNED_RESOLVER = null;
     LootrAPI.refreshSections();
     LootrAPI.refreshServices();
   }
@@ -216,5 +218,19 @@ public class LootrConfig {
       }
     }
     return validatedList;
+  }
+
+  public static Identifier getPinnedTeamResolver () {
+    if (PINNED_RESOLVER == null) {
+      String resolver = LootrCommonConfig.Team.pinnedTeamResolver;
+      if (!resolver.isEmpty()) {
+        PINNED_RESOLVER = Identifier.tryParse(resolver);
+      }
+      if (PINNED_RESOLVER == null) {
+        PINNED_RESOLVER = LootrAPI.DEFAULT_TEAM_RESOLVER;
+      }
+    }
+
+    return PINNED_RESOLVER;
   }
 }

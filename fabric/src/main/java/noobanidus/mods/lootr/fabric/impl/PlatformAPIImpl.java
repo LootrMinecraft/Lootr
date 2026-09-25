@@ -5,6 +5,7 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.LockCode;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -96,5 +97,11 @@ public class PlatformAPIImpl extends DefaultPlatformAPIImpl implements IPlatform
       Packet<?> packet = ServerPlayNetworking.createClientboundPacket(new PacketPerformBreakEffect(player.getId(), blockEntity.asBlockEntity().getBlockPos()));
       serverLevel.getChunkSource().chunkMap.getPlayers(ChunkPos.containing(blockEntity.asBlockEntity().getBlockPos()), false).forEach(splayer -> splayer.connection.send(packet));
     }
+  }
+
+  @Override
+  public void syncAfterTeamChange(Player player) {
+    var data = getSyncData(player);
+    ServerPlayNetworking.send((ServerPlayer) player, new PacketAreaEntitySync(data.getFirst(), data.getSecond()));
   }
 }

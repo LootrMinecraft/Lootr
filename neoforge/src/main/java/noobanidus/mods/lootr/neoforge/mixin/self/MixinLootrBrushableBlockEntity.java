@@ -16,7 +16,7 @@ public abstract class MixinLootrBrushableBlockEntity implements IBlockEntityExte
   public @NonNull ModelData getModelData() {
     ILootrContainerInstance provider = (ILootrContainerInstance) this;
     Player player = ClientHooks.getPlayer();
-    if (player == null || !provider.hasClientOpened(player.getUUID())) {
+    if (player == null || !provider.hasClientOpened(player)) {
       return ModelDataConstants.CLOSED_MODEL_DATA;
     } else {
       return ModelDataConstants.OPENED_MODEL_DATA;

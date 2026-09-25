@@ -9,11 +9,13 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.filefix.fixes.ResourcePackLocationFileFix;
 import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.Entity;
@@ -49,6 +51,7 @@ import noobanidus.mods.lootr.common.api.interfaces.processor.ILootrEntityProcess
 import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
 import noobanidus.mods.lootr.common.client.ClientHooks;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
@@ -96,7 +99,7 @@ public interface ILootrAPI {
 
   // Clears player loot for all containers
   default boolean clearPlayerLoot(ServerPlayer entity) {
-    return clearPlayerLoot(entity.getUUID());
+    return clearPlayerLoot(LootrAPI.resolveServerPlayerTeam(entity));
   }
 
   boolean clearPlayerLoot(UUID id);
@@ -570,6 +573,15 @@ public interface ILootrAPI {
     }
     return server.getTickCount();
   }
+
+  UUID resolveServerPlayerTeam(Player player);
+
+  UUID resolveClientPlayerTeam(Player player);
+
+  boolean isTeamLoot();
+
+  @NotNull Identifier getPinnedTeamResolver();
+
 }
 
 

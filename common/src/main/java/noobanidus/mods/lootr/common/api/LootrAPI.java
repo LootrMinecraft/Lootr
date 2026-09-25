@@ -76,6 +76,9 @@ public final class LootrAPI {
   public static final BoundingBox DESERT_PYRAMID_ADDITIONAL = new BoundingBox(-5, -30, -5, 5, 4, 4);
   public static final int DEFAULT_PARTICLE_COLOR = 0xfad64a;
 
+  public static Identifier DEFAULT_TEAM_RESOLVER = LootrAPI.rl("default");
+  public static Identifier MINECRAFT_TEAM_RESOLVER = Identifier.fromNamespaceAndPath("minecraft", "vanilla_default");
+
   public static ILootrAPI INSTANCE = null;
   public static boolean shouldDiscardIdAndOpeners;
 
@@ -553,5 +556,21 @@ public final class LootrAPI {
 
   public static int getTickDelay () {
     return INSTANCE.getTickDelay();
+  }
+
+  public static UUID resolveServerPlayerTeam (Player player) {
+    return INSTANCE.resolveServerPlayerTeam(player);
+  }
+
+  public static UUID resolveClientPlayerTeam (Player player) {
+    return INSTANCE.resolveClientPlayerTeam(player);
+  }
+
+  public static boolean isTeamLoot () {
+    return INSTANCE.isTeamLoot();
+  }
+
+  public static Identifier getPinnedTeamResolver () {
+    return INSTANCE.getPinnedTeamResolver();
   }
 }

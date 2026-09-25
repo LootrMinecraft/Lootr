@@ -105,7 +105,7 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootrBlo
     renderState.chestType = LootrChestType.fromState(blockEntity.getBlockState());
     renderState.vanilla = LootrAPI.isVanillaTextures();
     renderState.classic = false;
-    renderState.visuallyOpen = Minecraft.getInstance().player != null && blockEntity.hasClientOpened(Minecraft.getInstance().player.getUUID());
+    renderState.visuallyOpen = Minecraft.getInstance().player != null && blockEntity.hasClientOpened(Minecraft.getInstance().player);
     renderState.facing = blockstate.getValue(ChestBlock.FACING);
   }
 

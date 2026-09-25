@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
 import noobanidus.mods.lootr.common.api.data.ILootrData;
@@ -81,8 +82,8 @@ public class LootrInventoryStore implements ILootrInventoryStore {
   }
 
   @Override
-  public boolean addVisualOpener(UUID uuid) {
-    boolean result = ILootrInventoryStore.super.addVisualOpener(uuid);
+  public boolean addVisualOpener(Player player) {
+    boolean result = ILootrInventoryStore.super.addVisualOpener(player);
     if (result) {
       markInstanceChanged();
     }
@@ -90,8 +91,8 @@ public class LootrInventoryStore implements ILootrInventoryStore {
   }
 
   @Override
-  public boolean removeVisualOpener(UUID uuid) {
-    boolean result = ILootrInventoryStore.super.removeVisualOpener(uuid);
+  public boolean removeVisualOpener(Player player) {
+    boolean result = ILootrInventoryStore.super.removeVisualOpener(player);
     if (result) {
       markInstanceChanged();
     }
@@ -99,21 +100,12 @@ public class LootrInventoryStore implements ILootrInventoryStore {
   }
 
   @Override
-  public boolean addActualOpener(UUID uuid) {
-    boolean result = ILootrInventoryStore.super.addActualOpener(uuid);
+  public boolean addActualOpener(Player player) {
+    boolean result = ILootrInventoryStore.super.addActualOpener(player);
     if (result) {
       markInstanceChanged();
     }
     return result;
-  }
-
-  private void removeOpener(UUID uuid) {
-    Set<UUID> visualOpeners = getVisualOpeners();
-    if (visualOpeners != null) {
-      if (visualOpeners.remove(uuid)) {
-        markInstanceChanged();
-      }
-    }
   }
 
   @Override
@@ -154,7 +146,7 @@ public class LootrInventoryStore implements ILootrInventoryStore {
       if (!LootrAPI.isFakePlayer(player)) {
         filler.unpackLootTable(provider, player, result);
       }
-      inventories.put(player.getUUID(), result);
+      inventories.put(LootrAPI.resolveServerPlayerTeam(player), result);
       hasInventories = true;
       markInstanceChanged();
       return result;
@@ -283,7 +275,7 @@ public class LootrInventoryStore implements ILootrInventoryStore {
   @Override
   public boolean clearInventories(UUID id) {
     if (inventories.remove(id) != null) {
-      removeOpener(id);
+      removeVisualOpener(id);
       markInstanceChanged();
       return true;
     }

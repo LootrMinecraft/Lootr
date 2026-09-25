@@ -167,8 +167,8 @@ public class SimpleLootrInstance {
 
       saveAdditional(output, isClientSide);
       if (!isClientSide) {
-        Set<UUID> currentOpeners = Sets.intersection(visualOpenersSupplier.get(), LootrAPI.getPlayerIds());
-        output.store(NBTConstants.OPENERS, UUIDUtil.CODEC_SET, currentOpeners);
+        Set<UUID> currentOpeners = visualOpenersSupplier.get();
+        output.store(NBTConstants.OPENERS, UUIDUtil.CODEC_SET, LootrAPI.isTeamLoot() ? currentOpeners : Sets.intersection(currentOpeners, LootrAPI.getPlayerIds()));
       } else {
         LootrAPI.LOG.error("Tried to fillUpdateTag on the client side for SimpleLootrInstance: {}", this);
       }

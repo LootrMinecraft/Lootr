@@ -149,4 +149,11 @@ public final class LootrConfigStrings {
   public static final String START_REFRESH_WHILE_TICKING_DESC = "If true, containers that are eligible to refresh and have previously been opened by another player, will start refreshing during the world tick. [default: true]";
   public static final String REFRESH_ALL = "Refresh All Containers";
   public static final String REFRESH_ALL_DESC = "If true, all containers will refresh after being opened for the first time. [default: false]";
+
+  public static final String TEAM_TITLE = "Team Loot";
+  public static final String TEAM_DESC = "Configuration options for instanced team loot instead of instanced player loot.";
+  public static final String TEAM_LOOT = "Enable Team Loot";
+  public static final String TEAM_LOOT_DESC = "If true, containers will create one inventory for each player's team, rather than for each player [default: false]";
+  public static final String PINNED_TEAM_RESOLVER = "Pinned Team Resolver";
+  public static final String PINNED_TEAM_RESOLVER_DESC = "If blank, this will resolve to `lootr:default`, which will use the highest priority resolver. If you have multiple resolvers installed with the same priority, you can use this to specifically select the one you want to use. [default: blank]";
 }
