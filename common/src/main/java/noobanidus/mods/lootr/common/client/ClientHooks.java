@@ -12,28 +12,24 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.LootrRegistry;
 import noobanidus.mods.lootr.common.api.PlayerContext;
 import noobanidus.mods.lootr.common.api.client.ContainerStatus;
 import noobanidus.mods.lootr.common.api.client.FrustumExtension;
 import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
-import noobanidus.mods.lootr.common.api.LootrRegistry;
-import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.api.particle.ParticleColorOption;
 import noobanidus.mods.lootr.common.client.gui.components.toasts.LootrToast;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinBlock;
 import org.jetbrains.annotations.Nullable;
 
 public class ClientHooks {
-  public static PlayerContext getPlayerContext () {
+  public static PlayerContext getPlayerContext() {
     return new PlayerContext(getPlayer());
   }
 
@@ -103,9 +99,9 @@ public class ClientHooks {
     return min + random.nextDouble() * (max - min);
   }
 
-  private static Frustum getFrustum () {
-    Minecraft mc= Minecraft.getInstance();
-    Camera camera =  mc.gameRenderer.getMainCamera();
+  private static Frustum getFrustum() {
+    Minecraft mc = Minecraft.getInstance();
+    Camera camera = mc.gameRenderer.getMainCamera();
     Frustum frustum1 = camera.getCapturedFrustum();
     if (frustum1 != null) {
       return frustum1;
@@ -113,12 +109,12 @@ public class ClientHooks {
     return camera.getCullFrustum();
   }
 
-  public static boolean testFrustumContainsPoint (Vec3 position) {
+  public static boolean testFrustumContainsPoint(Vec3 position) {
     Frustum frustum = getFrustum();
-    return ((FrustumExtension)frustum).lootr$isVisible(position);
+    return ((FrustumExtension) frustum).lootr$isVisible(position);
   }
 
-  private static boolean hasLineOfSightOfBlock (ILootrContainerInstance provider) {
+  private static boolean hasLineOfSightOfBlock(ILootrContainerInstance provider) {
     Minecraft mc = Minecraft.getInstance();
     if (mc.player == null || mc.level == null) {
       return false;
@@ -215,8 +211,12 @@ public class ClientHooks {
     if (mc.player == null) {
       return;
     }
+    if (!LootrAPI.shouldNotify(remaining * 20)) {
+      return;
+    }
     if (LootrAPI.shouldDisplayToasts()) {
-      mc.getToastManager().addToast(new LootrToast(mc.font, status, ContainerStatus.getMessage(status, statusType, remaining)));
+      mc.getToastManager()
+          .addToast(new LootrToast(mc.font, status, ContainerStatus.getMessage(status, statusType, remaining)));
     } else {
       if (statusType == ContainerStatus.Type.COMPLETE) {
         if (status == ContainerStatus.REFRESH) {
