@@ -2,6 +2,7 @@ package noobanidus.mods.lootr.common.client;
 
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.toasts.AdvancementToast;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
@@ -215,7 +216,7 @@ public class ClientHooks {
       return;
     }
     if (LootrAPI.shouldDisplayToasts()) {
-      mc.getToastManager()
+      mc.gui.toastManager()
           .addToast(new LootrToast(mc.font, status, ContainerStatus.getMessage(status, statusType, remaining)));
     } else {
       if (statusType == ContainerStatus.Type.COMPLETE) {
