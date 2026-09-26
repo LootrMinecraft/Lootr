@@ -32,4 +32,21 @@ public class LootrClientConfig {
     @Comment(value = LootrConfigStrings.VANILLA_TEXTURES_DESC, translation = "lootr.config.textures.vanilla_textures.desc")
     public static boolean useVanillaTextures = false;
   }
+
+  @Category("Notifications")
+  @ConfigInfo(title = LootrConfigStrings.NOTIFICATIONS_TITLE, titleTranslation = "lootr.config.textures.title", description = LootrConfigStrings.NOTIFICATIONS_CLIENT_DESC, descriptionTranslation = "lootr.config.textures.description")
+  public static class Notifications {
+    @ConfigEntry(id = "display_toast", translation = "lootr.config.notifications.display_toasts")
+    @Comment(value = LootrConfigStrings.DISPLAY_TOASTS_DESC, translation = "lootr.config.notifications.display_toasts.desc")
+    public static boolean displayToasts = true;
+
+    @ConfigEntry(id = "disable_notifications", translation = "lootr.configuration.disable_notifications")
+    @Comment(value = LootrConfigStrings.DISABLE_NOTIFICATIONS_DESC, translation = "lootr.configuration.disable_notifications.desc")
+    public static boolean disableNotifications = false;
+
+    @ConfigEntry(id = "maximum_notification_delay", translation = "lootr.configuration.maximum_notification_delay")
+    @Comment(value = LootrConfigStrings.MAXIMUM_NOTIFICATION_DELAY_DESC, translation = "lootr.configuration.maximum_notification_delay.desc")
+    @ConfigOption.Range(min = -1, max = Integer.MAX_VALUE)
+    public static int maximumNotificationDelay = 30 * 20;
+  }
 }

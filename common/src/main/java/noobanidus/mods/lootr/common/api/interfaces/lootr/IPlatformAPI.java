@@ -9,6 +9,7 @@ import net.minecraft.world.entity.vehicle.minecart.AbstractMinecartContainer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.scores.PlayerTeam;
+import noobanidus.mods.lootr.common.api.client.ContainerStatus;
 import noobanidus.mods.lootr.common.api.interfaces.accessor.ILootrDataAccessor;
 import noobanidus.mods.lootr.common.api.interfaces.accessor.ILootrItemFrameAccessor;
 import noobanidus.mods.lootr.common.api.data.DataToCopy;
@@ -70,4 +71,6 @@ public interface IPlatformAPI {
   void syncAfterTeamChange (String username);
 
   void performRequestSync(GlobalPos pos);
+
+  void alertContainerStatus(ServerPlayer player, ContainerStatus status, ContainerStatus.Type type, int remainingDuration);
 }

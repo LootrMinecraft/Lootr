@@ -207,12 +207,12 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
 
   @Override
   public int getNotificationDelay() {
-    return LootrCommonConfig.Notifications.maximumNotificationDelay;
+    return LootrClientConfig.Notifications.maximumNotificationDelay;
   }
 
   @Override
   public boolean isNotificationsEnabled() {
-    return !LootrCommonConfig.Notifications.disableNotifications;
+    return !LootrClientConfig.Notifications.disableNotifications;
   }
 
   @Override
@@ -635,5 +635,10 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   @Override
   public boolean shouldDisplayDecayParticles() {
     return LootrClientConfig.Particles.showDecayParticles;
+  }
+
+  @Override
+  public boolean shouldDisplayToasts() {
+    return LootrClientConfig.Notifications.displayToasts;
   }
 }

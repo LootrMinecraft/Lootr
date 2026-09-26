@@ -18,6 +18,13 @@ import noobanidus.mods.lootr.fabric.network.to_client.*;
 
 public class LootrClientNetworkingInit {
   public static void register() {
+    ClientPlayNetworking.registerGlobalReceiver(PacketContainerStatus.TYPE,
+        (payload, context) -> {
+          context.client().execute(() -> {
+            ClientHooks.handleContainerStatus(payload.status(), payload.statusType(), payload.remaining());
+          });
+        });
+
     ClientPlayNetworking.registerGlobalReceiver(PacketSyncConfig.TYPE,
         (payload, context) -> {
           context.client().execute(() -> {

@@ -11,6 +11,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import noobanidus.mods.lootr.common.api.client.ContainerStatus;
 import noobanidus.mods.lootr.common.api.data.DataToCopy;
 import noobanidus.mods.lootr.common.api.interfaces.lootr.IPlatformAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
@@ -115,5 +116,10 @@ public class PlatformAPIImpl extends DefaultPlatformAPIImpl implements IPlatform
     if (context.hasPlayer()) {
       ClientPlayNetworking.send(new PacketRequestUpdate(pos));
     }
+  }
+
+  @Override
+  public void alertContainerStatus(ServerPlayer player, ContainerStatus status, ContainerStatus.Type type, int remainingDuration) {
+    ServerPlayNetworking.send(player, new PacketContainerStatus(status, type, remainingDuration));
   }
 }
