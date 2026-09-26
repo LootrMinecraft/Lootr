@@ -122,7 +122,7 @@ public class ClientHooks {
 
     Player player = mc.player;
 
-    if (!testFrustumContainsPoint(provider.getParticleCenter()))){
+    if (!testFrustumContainsPoint(provider.getParticleCenter())) {
       return false;
     }
 
