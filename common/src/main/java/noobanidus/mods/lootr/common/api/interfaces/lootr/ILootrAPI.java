@@ -31,6 +31,9 @@ import net.minecraft.world.level.levelgen.structure.*;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrRegistry;
+import noobanidus.mods.lootr.common.api.PlatformAPI;
+import noobanidus.mods.lootr.common.api.PlayerContext;
+import noobanidus.mods.lootr.common.api.client.ContainerStatus;
 import noobanidus.mods.lootr.common.api.config.BreakMode;
 import noobanidus.mods.lootr.common.api.config.ResistanceMode;
 import noobanidus.mods.lootr.common.api.config.SaveMode;
@@ -337,20 +340,17 @@ public interface ILootrAPI {
     if (instance.canDecay()) {
       if (store.isDecayed()) {
         instance.performDecay();
-        player.sendOverlayMessage(Component.translatable("lootr.message.decayed")
-            .setStyle(style));
+        PlatformAPI.alertContainerStatus(player, ContainerStatus.DECAY, ContainerStatus.Type.COMPLETE, -1);
         return;
       } else {
         int decayValue = store.remainingDecayTime();
         if (decayValue > 0 && LootrAPI.shouldNotify(decayValue)) {
-          player.sendOverlayMessage(Component.translatable("lootr.message.decay_in", decayValue / 20)
-              .setStyle(style));
+          PlatformAPI.alertContainerStatus(player, ContainerStatus.DECAY, ContainerStatus.Type.ONGOING, decayValue / 20);
         } else if (decayValue == -1) {
           if (LootrAPI.shouldBeginDecaying(instance)) {
             store.beginDecay();
             instance.setClientDecaying(true);
-            player.sendOverlayMessage(Component.translatable("lootr.message.decay_start", LootrAPI.getDecayValue() / 20)
-                .setStyle(style));
+            PlatformAPI.alertContainerStatus(player, ContainerStatus.DECAY, ContainerStatus.Type.START, LootrAPI.getDecayValue() / 20);
           }
         }
       }
@@ -366,20 +366,17 @@ public interface ILootrAPI {
         instance.setClientRefreshing(false);
         instance.setHasBeenOpened(false);
         instance.performClose();
-        player.sendOverlayMessage(Component.translatable("lootr.message.refreshed")
-            .setStyle(style));
+        PlatformAPI.alertContainerStatus(player, ContainerStatus.REFRESH, ContainerStatus.Type.COMPLETE, -1);
         shouldUpdate = true;
       }
       int refreshValue = store.remainingRefreshTime();
       if (refreshValue > 0 && LootrAPI.shouldNotify(refreshValue)) {
-        player.sendOverlayMessage(Component.translatable("lootr.message.refresh_in", refreshValue / 20)
-            .setStyle(style));
+        PlatformAPI.alertContainerStatus(player, ContainerStatus.REFRESH, ContainerStatus.Type.ONGOING, refreshValue / 20);
       } else if (refreshValue == -1) {
         if (LootrAPI.shouldBeginRefreshing(instance)) {
           store.beginRefresh();
           instance.setClientRefreshing(true);
-          player.sendOverlayMessage(Component.translatable("lootr.message.refresh_start", LootrAPI.getRefreshValue() / 20)
-              .setStyle(style));
+          PlatformAPI.alertContainerStatus(player, ContainerStatus.REFRESH, ContainerStatus.Type.START, LootrAPI.getRefreshValue() / 20);
         }
       }
     }
@@ -476,7 +473,9 @@ public interface ILootrAPI {
       }
     }
 
-    if (LootrAPI.shouldDisplayRefreshParticles() && type.canRefresh() && instance.isClientRefreshing()) {
+    PlayerContext context = ClientHooks.getPlayerContext();
+
+    if (LootrAPI.shouldDisplayRefreshParticles() && type.canRefresh() && instance.isClientRefreshing() && instance.hasVisualOpened(context.player())) {
       ClientHooks.performRefreshParticles(instance);
     }
 
@@ -629,6 +628,7 @@ public interface ILootrAPI {
 
   boolean shouldDisplayDecayParticles();
 
+  boolean shouldDisplayToasts();
 }
 
 

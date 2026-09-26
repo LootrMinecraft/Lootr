@@ -157,15 +157,6 @@ public class LootrCommonConfig {
     @Comment(value = LootrConfigStrings.REPORT_UNRESOLVED_TABLES_DESC, translation = "lootr.configuration.report_unresolved_tables.desc")
     public static boolean reportUnresolvedTables = true;
 
-    @ConfigEntry(id = "disable_notifications", translation = "lootr.configuration.disable_notifications")
-    @Comment(value = LootrConfigStrings.DISABLE_NOTIFICATIONS_DESC, translation = "lootr.configuration.disable_notifications.desc")
-    public static boolean disableNotifications = false;
-
-    @ConfigEntry(id = "maximum_notification_delay", translation = "lootr.configuration.maximum_notification_delay")
-    @Comment(value = LootrConfigStrings.MAXIMUM_NOTIFICATION_DELAY_DESC, translation = "lootr.configuration.maximum_notification_delay.desc")
-    @ConfigOption.Range(min = -1, max = Integer.MAX_VALUE)
-    public static int maximumNotificationDelay = 30 * 20;
-
     @ConfigEntry(id = "disable_message_styles", translation = "lootr.configuration.disable_message_styles")
     @Comment(value = LootrConfigStrings.DISABLE_MESSAGE_STYLES_DESC, translation = "lootr.configuration.disable_message_styles.desc")
     public static boolean disableMessageStyles = false;

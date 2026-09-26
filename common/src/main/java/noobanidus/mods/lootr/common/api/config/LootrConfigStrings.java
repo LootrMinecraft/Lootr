@@ -107,6 +107,7 @@ public final class LootrConfigStrings {
   // Notifications
   public static final String NOTIFICATIONS_TITLE = "Notification";
   public static final String NOTIFICATIONS_DESC = "Configuration options related to notifications that are sent to players.";
+  public static final String NOTIFICATIONS_CLIENT_DESC = "Configuration options related to notifications when received on the client.";
   public static final String REPORT_UNRESOLVED_TABLES = "Report Unresolved Loot Tables to Players";
   public static final String REPORT_UNRESOLVED_TABLES_DESC = "If true, when opening a container with an unresolved loot tables (loot tables that resolve to empty), a message will be sent to the player opening to indicate the issue. [default: true]";
   public static final String DISABLE_NOTIFICATIONS = "Disable Ticking Notifications";
@@ -115,6 +116,8 @@ public final class LootrConfigStrings {
   public static final String MAXIMUM_NOTIFICATION_DELAY_DESC = "If the remaining duration of a ticking container (such as one refreshing or decaying) in ticks is more than this value, notifications will not be sent to the player. [default: 30 * 20 (30 seconds), -1 disables the limit and will always send notifications.]";
   public static final String DISABLE_MESSAGE_STYLES = "Disable Style And Formatting In Ticking Notifications";
   public static final String DISABLE_MESSAGE_STYLES_DESC = "If true, the style and formatting of messages related to ticking (such as decay or refresh) will be removed. [default: false]";
+  public static final String DISPLAY_TOASTS = "Display Toasts";
+  public static final String DISPLAY_TOASTS_DESC = "If true, toasts will be used to notify players of refresh and decay messages, otherwise they will be sent as status bar messages. [default: true]";
 
   // Interaction
   public static final String INTERACTION_TITLE = "Interaction";

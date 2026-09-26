@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.network.PacketDistributor;
+import noobanidus.mods.lootr.common.api.client.ContainerStatus;
 import noobanidus.mods.lootr.common.api.data.DataToCopy;
 import noobanidus.mods.lootr.common.api.interfaces.lootr.IPlatformAPI;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
@@ -102,5 +103,10 @@ public class PlatformAPIImpl extends DefaultPlatformAPIImpl implements IPlatform
   @Override
   public void performRequestSync(GlobalPos pos) {
     ClientPacketDistributor.sendToServer(new PacketRequestUpdate(pos));
+  }
+
+  @Override
+  public void alertContainerStatus(ServerPlayer player, ContainerStatus status, ContainerStatus.Type type, int remainingDuration) {
+    PacketDistributor.sendToPlayer(player, new PacketContainerStatus(status, type, remainingDuration));
   }
 }

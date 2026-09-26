@@ -6,6 +6,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.scores.PlayerTeam;
+import noobanidus.mods.lootr.common.api.client.ContainerStatus;
 import noobanidus.mods.lootr.common.api.data.DataToCopy;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
@@ -95,5 +96,9 @@ public final class PlatformAPI {
 
   public static void performRequestSync (GlobalPos pos) {
     INSTANCE.performRequestSync(pos);
+  }
+
+  public static void alertContainerStatus (ServerPlayer player, ContainerStatus status, ContainerStatus.Type type, int remainingDuration) {
+    INSTANCE.alertContainerStatus(player, status, type, remainingDuration);
   }
 }

@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -20,12 +21,14 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.PlayerContext;
+import noobanidus.mods.lootr.common.api.client.ContainerStatus;
 import noobanidus.mods.lootr.common.api.client.FrustumExtension;
 import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.LootrRegistry;
 import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.api.particle.ParticleColorOption;
+import noobanidus.mods.lootr.common.client.gui.components.toasts.LootrToast;
 import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinBlock;
 import org.jetbrains.annotations.Nullable;
 
@@ -207,4 +210,39 @@ public class ClientHooks {
     }
   }
 
+  public static void handleContainerStatus(ContainerStatus status, ContainerStatus.Type statusType, int remaining) {
+    Minecraft mc = Minecraft.getInstance();
+    if (mc.player == null) {
+      return;
+    }
+    if (LootrAPI.shouldDisplayToasts()) {
+      mc.getToastManager().addToast(new LootrToast(mc.font, status, ContainerStatus.getMessage(status, statusType, remaining)));
+    } else {
+      if (statusType == ContainerStatus.Type.COMPLETE) {
+        if (status == ContainerStatus.REFRESH) {
+          mc.player.sendOverlayMessage(Component.translatable("lootr.message.refreshed")
+              .setStyle(LootrAPI.getRefreshStyle()));
+        } else {
+          mc.player.sendOverlayMessage(Component.translatable("lootr.message.decayed")
+              .setStyle(LootrAPI.getDecayStyle()));
+        }
+      } else if (statusType == ContainerStatus.Type.ONGOING) {
+        if (status == ContainerStatus.REFRESH) {
+          mc.player.sendOverlayMessage(Component.translatable("lootr.message.refresh_in", remaining)
+              .setStyle(LootrAPI.getRefreshStyle()));
+        } else {
+          mc.player.sendOverlayMessage(Component.translatable("lootr.message.decay_in", remaining)
+              .setStyle(LootrAPI.getDecayStyle()));
+        }
+      } else {
+        if (status == ContainerStatus.REFRESH) {
+          mc.player.sendOverlayMessage(Component.translatable("lootr.message.refresh_start", remaining)
+              .setStyle(LootrAPI.getRefreshStyle()));
+        } else {
+          mc.player.sendOverlayMessage(Component.translatable("lootr.message.decay_start", remaining)
+              .setStyle(LootrAPI.getDecayStyle()));
+        }
+      }
+    }
+  }
 }

@@ -615,4 +615,8 @@ public final class LootrAPI {
   public static boolean shouldDisplayDecayParticles () {
     return INSTANCE.shouldDisplayDecayParticles();
   }
+
+  public static boolean shouldDisplayToasts () {
+    return INSTANCE.shouldDisplayToasts();
+  }
 }
