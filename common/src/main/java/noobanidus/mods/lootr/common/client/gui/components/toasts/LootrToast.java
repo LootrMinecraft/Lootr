@@ -55,7 +55,7 @@ public class LootrToast implements Toast {
   @Override
   public void extractRenderState(GuiGraphicsExtractor graphics, Font font, long fullyVisibleForMs) {
     int height = this.height();
-    graphics.blitSprite(RenderPipelines.GUI_TEXT, BACKGROUND_SPRITE, 0, 0, this.width(), height);
+    graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND_SPRITE, 0, 0, this.width(), height);
     this.toast.extractRenderState(graphics, 6, 6);
     int textHeight = this.lines.size() * 11;
     int textTop = 7 + (this.contentHeight() - textHeight) / 2;
@@ -76,7 +76,7 @@ public class LootrToast implements Toast {
     }
 
     public void extractRenderState(GuiGraphicsExtractor graphics, int x, int y) {
-      graphics.blitSprite(RenderPipelines.GUI_TEXT, this.sprite, x, y, 20, 20);
+      graphics.blitSprite(RenderPipelines.GUI_TEXTURED, this.sprite, x, y, 20, 20);
     }
   }
 }
