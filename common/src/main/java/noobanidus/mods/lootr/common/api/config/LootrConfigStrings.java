@@ -65,6 +65,9 @@ public final class LootrConfigStrings {
   public static final String MODID_DIMENSION_BLACKLIST_DESC = "List of dimension paths in which Lootr containers will not be converted. [For example, the dimension `twilightforest:twilight_forest` has the 'path' `twilightforest`; the dimension `minecraft:the_nether` has the 'path' `minecraft`.]";
   public static final String LOOT_TABLE_BLACKLIST = "Loot Table Blacklist";
   public static final String LOOT_TABLE_BLACKLIST_DESC = "List of loot tables that, if matching that of a container, will prevent that container from being converted into a Lootr container.";
+  public static final String LOOT_TABLE_FORCE_WHITELIST = "Loot Table Forced Whitelist";
+  public static final String LOOT_TABLE_FORCE_WHITELIST_DESC = "List of loot tables which should be forcefully removed from the blacklist, regardless of whether or not other mods or add-ons add them to the list.";
+
   public static final String LOOT_TABLE_MODID_BLACKLIST = "Loot Table Mod Id Blacklist";
   public static final String LOOT_TABLE_MODID_BLACKLIST_DESC = "List of loot table paths that, if matching that of a container, will prevent that container from being converted into a Lootr container. [For example, the loot table `minecraft:chests/simple_dungeon` has the 'path' `minecraft`.]";
   public static final String USE_PROBLEMATIC_LOOT_TABLES = "Use Problematic Loot Tables";

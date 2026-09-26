@@ -24,6 +24,7 @@ public class LootrConfig {
   private static Set<ResourceKey<Level>> DECAY_DIMS = null;
   private static Set<ResourceKey<Level>> REFRESH_DIMS = null;
   private static Set<ResourceKey<LootTable>> LOOT_BLACKLIST = null;
+  private static Set<ResourceKey<LootTable>> LOOT_TABLE_FORCED_WHITELIST = null;
   private static Set<String> LOOT_MODIDS = null;
 
   private static List<String> LAST_DECAY_DIMS = null;
@@ -51,6 +52,7 @@ public class LootrConfig {
     DECAY_TABLES = null;
     DECAY_DIMS = null;
     LOOT_MODIDS = null;
+    LOOT_TABLE_FORCED_WHITELIST = null;
     REFRESH_DIMS = null;
     REFRESH_MODS = null;
     REFRESH_TABLES = null;
@@ -117,13 +119,18 @@ public class LootrConfig {
     return REFRESH_DIMS;
   }
 
+  public static Set<ResourceKey<LootTable>> getLootTableForcedWhitelist() {
+    if (LOOT_TABLE_FORCED_WHITELIST == null) {
+      LOOT_TABLE_FORCED_WHITELIST = validateResourceKeyList(LootrCommonConfig.Restrictions.lootTableForceWhitelist, "loot_table_force_whitelist", o -> ResourceKey.create(Registries.LOOT_TABLE, o));
+    }
+    return LOOT_TABLE_FORCED_WHITELIST;
+  }
+
   public static Set<ResourceKey<LootTable>> getLootTableBlacklist() {
-    if (LOOT_BLACKLIST == null || !LootrCommonConfig.Restrictions.lootTableBlacklist.equals(LAST_LOOT_BLACKLIST)) {
-      LAST_LOOT_BLACKLIST = new ArrayList<>(LootrCommonConfig.Restrictions.lootTableBlacklist);
-      if (LootrCommonConfig.Restrictions.useProblematicLootTables) {
-        LAST_LOOT_BLACKLIST.addAll(LootrAPI.PROBLEMATIC_CHESTS);
-      }
+    if (LOOT_BLACKLIST == null) {
       LOOT_BLACKLIST = validateResourceKeyList(LootrCommonConfig.Restrictions.lootTableBlacklist, "loot_blacklist", o -> ResourceKey.create(Registries.LOOT_TABLE, o));
+      LOOT_BLACKLIST.addAll(LootrAPI.gatherProblematicLootTables());
+      LOOT_BLACKLIST.removeAll(getLootTableForcedWhitelist());
     }
     return LOOT_BLACKLIST;
   }

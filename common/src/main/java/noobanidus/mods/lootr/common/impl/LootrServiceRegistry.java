@@ -4,26 +4,29 @@ import com.google.common.collect.Streams;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.interfaces.command.ILootrCommandEntityExtension;
-import noobanidus.mods.lootr.common.api.interfaces.lootr.ILootrAPI;
+import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.AccessorMap;
+import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.conversion.BlockConversionMap;
+import noobanidus.mods.lootr.common.api.conversion.ILootrBlockConversionProvider;
+import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
+import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
 import noobanidus.mods.lootr.common.api.interfaces.accessor.ILootrDataAccessor;
 import noobanidus.mods.lootr.common.api.interfaces.accessor.ILootrItemFrameAccessor;
 import noobanidus.mods.lootr.common.api.interfaces.command.ILootrCommandBlockExtension;
-import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
-import noobanidus.mods.lootr.common.api.data.entity.ILootrEntity;
+import noobanidus.mods.lootr.common.api.interfaces.command.ILootrCommandEntityExtension;
 import noobanidus.mods.lootr.common.api.interfaces.filter.ILootrFilter;
 import noobanidus.mods.lootr.common.api.interfaces.filter.ILootrFilterProvider;
+import noobanidus.mods.lootr.common.api.interfaces.integration.IProblematicLootTableProcessor;
+import noobanidus.mods.lootr.common.api.interfaces.lootr.ILootrAPI;
 import noobanidus.mods.lootr.common.api.interfaces.processor.ILootrBlockEntityProcessor;
 import noobanidus.mods.lootr.common.api.interfaces.processor.ILootrEntityProcessor;
-import noobanidus.mods.lootr.common.api.conversion.BlockConversionMap;
-import noobanidus.mods.lootr.common.api.conversion.ILootrBlockConversionProvider;
 import noobanidus.mods.lootr.common.api.interfaces.processor.ITeamResolver;
 import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
 import noobanidus.mods.lootr.common.api.interfaces.wrapper.ILootrBlockEntityWrapper;
@@ -54,7 +57,8 @@ public class LootrServiceRegistry {
   private final List<ILootrCommandBlockExtension> commandBlockExtensions = new ObjectArrayList<>();
   private final List<ILootrCommandEntityExtension<?>> commandEntityExtensions = new ObjectArrayList<>();
   private final Map<Identifier, ITeamResolver> teamResolvers = new HashMap<>();
-  private List<Identifier> sortedTeamKeys = new ArrayList<>();
+  private final List<Identifier> sortedTeamKeys = new ArrayList<>();
+  private final List<IProblematicLootTableProcessor> problematicProcessors = new ArrayList<>();
 
   private final String commands;
 
@@ -146,6 +150,9 @@ public class LootrServiceRegistry {
               sortedTeamKeys.add(resolver.resolverId());
             }
         );
+
+    problematicProcessors.addAll(Streams.stream(ServiceLoader.load(IProblematicLootTableProcessor.class, classLoader))
+        .sorted(Comparator.comparingInt(IProblematicLootTableProcessor::priority).reversed()).toList());
   }
 
   public static LootrServiceRegistry getInstance() {
@@ -240,7 +247,7 @@ public class LootrServiceRegistry {
   }
 
   @ApiStatus.Internal
-  public static List<ILootrCommandEntityExtension<?>> getCommandEntityExtensions () {
+  public static List<ILootrCommandEntityExtension<?>> getCommandEntityExtensions() {
     return getInstance().commandEntityExtensions;
   }
 
@@ -260,7 +267,9 @@ public class LootrServiceRegistry {
       if (potential != null) {
         cachedTeamResolver = potential;
       } else {
-        LootrAPI.LOG.error("Unable to find pinned resolver: '{}'!", pinnedResolver);
+        if (!pinnedResolver.equals(LootrAPI.DEFAULT_TEAM_RESOLVER)) {
+          LootrAPI.LOG.error("Unable to find pinned resolver: '{}'!", pinnedResolver);
+        }
 
         var sortedKeys = getInstance().sortedTeamKeys;
 
@@ -280,5 +289,18 @@ public class LootrServiceRegistry {
       }
     }
     return cachedTeamResolver;
+  }
+
+  public static Set<ResourceKey<LootTable>> gatherProblematicLootTables() {
+    Set<ResourceKey<LootTable>> problematicTables = new HashSet<>();
+    for (IProblematicLootTableProcessor processor : getInstance().problematicProcessors) {
+      problematicTables.addAll(processor.gatherProblematicChests());
+    }
+
+    for (IProblematicLootTableProcessor processor : getInstance().problematicProcessors) {
+      problematicTables = processor.processProblematicChests(problematicTables);
+    }
+
+    return problematicTables;
   }
 }

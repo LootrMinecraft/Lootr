@@ -616,4 +616,9 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   public boolean breakToDropLoot() {
     return LootrCommonConfig.Breaking.breakToDropLoot;
   }
+
+  @Override
+  public Set<ResourceKey<LootTable>> gatherProblematicLootTables() {
+    return LootrServiceRegistry.gatherProblematicLootTables();
+  }
 }

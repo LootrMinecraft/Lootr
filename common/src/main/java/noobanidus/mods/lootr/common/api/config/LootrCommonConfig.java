@@ -98,9 +98,10 @@ public class LootrCommonConfig {
     @ConfigOption.Regex(value = "^" + Identifier.ALLOWED_NAMESPACE_CHARACTERS + "+$")
     public static final List<String> lootTableModidBlacklist = new ArrayList<>();
 
-    @ConfigEntry(id = "use_problematic_loot_tables", translation = "lootr.configuration.use_problematic_loot_tables")
-    @Comment(value = LootrConfigStrings.USE_PROBLEMATIC_LOOT_TABLES, translation = "lootr.configuration.use_problematic_loot_tables.desc")
-    public static boolean useProblematicLootTables = true;
+    @ConfigEntry(id = "loot_table_force_whitelist", translation = "lootr.configuration.loot_table_force_whitelist")
+    @Comment(value = LootrConfigStrings.LOOT_TABLE_FORCE_WHITELIST_DESC, translation = "lootr.configuration.loot_table_force_whitelist.desc")
+    @ConfigOption.Regex(value = IDENTIFIER_REGEX)
+    public static final List<String> lootTableForceWhitelist = new ArrayList<>();
   }
 
   @Category("Breaking")
