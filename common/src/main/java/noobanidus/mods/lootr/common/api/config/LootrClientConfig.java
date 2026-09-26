@@ -1,10 +1,12 @@
 package noobanidus.mods.lootr.common.api.config;
 
 import com.teamresourceful.resourcefulconfig.api.annotations.*;
+import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
 
 @Config(value = "lootr-client", categories = {
     LootrClientConfig.Particles.class,
-    LootrClientConfig.Textures.class
+    LootrClientConfig.Textures.class,
+    LootrClientConfig.Notifications.class
 })
 @ConfigInfo(title = LootrConfigStrings.CLIENT_TITLE, titleTranslation = "lootr.config.client.title", description = LootrConfigStrings.CLIENT_DESC, descriptionTranslation = "lootr.config.client.desc")
 public class LootrClientConfig {
