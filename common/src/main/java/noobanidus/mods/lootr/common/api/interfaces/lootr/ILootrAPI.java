@@ -344,7 +344,7 @@ public interface ILootrAPI {
         return;
       } else {
         int decayValue = store.remainingDecayTime();
-        if (decayValue > 0 && LootrAPI.shouldNotify(decayValue)) {
+        if (decayValue > 0) {
           PlatformAPI.alertContainerStatus(player, ContainerStatus.DECAY, ContainerStatus.Type.ONGOING, decayValue / 20);
         } else if (decayValue == -1) {
           if (LootrAPI.shouldBeginDecaying(instance)) {
@@ -370,7 +370,7 @@ public interface ILootrAPI {
         shouldUpdate = true;
       }
       int refreshValue = store.remainingRefreshTime();
-      if (refreshValue > 0 && LootrAPI.shouldNotify(refreshValue)) {
+      if (refreshValue > 0) {
         PlatformAPI.alertContainerStatus(player, ContainerStatus.REFRESH, ContainerStatus.Type.ONGOING, refreshValue / 20);
       } else if (refreshValue == -1) {
         if (LootrAPI.shouldBeginRefreshing(instance)) {
