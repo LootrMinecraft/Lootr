@@ -35,10 +35,10 @@ public class LootrClientConfig {
   }
 
   @Category("Notifications")
-  @ConfigInfo(title = LootrConfigStrings.NOTIFICATIONS_TITLE, titleTranslation = "lootr.config.textures.title", description = LootrConfigStrings.NOTIFICATIONS_CLIENT_DESC, descriptionTranslation = "lootr.config.textures.description")
+  @ConfigInfo(title = LootrConfigStrings.NOTIFICATIONS_TITLE, titleTranslation = "lootr.configuration.client_notifications", description = LootrConfigStrings.NOTIFICATIONS_CLIENT_DESC, descriptionTranslation = "lootr.configuration.client_notifications.desc")
   public static class Notifications {
-    @ConfigEntry(id = "display_toast", translation = "lootr.config.notifications.display_toasts")
-    @Comment(value = LootrConfigStrings.DISPLAY_TOASTS_DESC, translation = "lootr.config.notifications.display_toasts.desc")
+    @ConfigEntry(id = "display_toast", translation = "lootr.configuration.notifications.display_toasts")
+    @Comment(value = LootrConfigStrings.DISPLAY_TOASTS_DESC, translation = "lootr.configuration.notifications.display_toasts.desc")
     public static boolean displayToasts = true;
 
     @ConfigEntry(id = "disable_notifications", translation = "lootr.configuration.disable_notifications")

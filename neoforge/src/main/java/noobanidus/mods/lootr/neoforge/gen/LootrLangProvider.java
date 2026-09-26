@@ -185,7 +185,11 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.configuration.custom_trapped.desc", LootrConfigStrings.CUSTOM_TRAPPED_DESC);
 
     add("lootr.configuration.notifications", LootrConfigStrings.NOTIFICATIONS_TITLE);
+    add("lootr.configuration.client_notifications", LootrConfigStrings.NOTIFICATIONS_TITLE);
     add("lootr.configuration.notifications.desc", LootrConfigStrings.NOTIFICATIONS_DESC);
+    add("lootr.configuration.client_notifications.desc", LootrConfigStrings.NOTIFICATIONS_CLIENT_DESC);
+    add("lootr.configuration.notifications.display_toasts", LootrConfigStrings.DISPLAY_TOASTS);
+    add("lootr.configuration.notifications.display_toasts.desc", LootrConfigStrings.DISPLAY_TOASTS_DESC);
     add("lootr.configuration.report_unresolved_tables", LootrConfigStrings.REPORT_UNRESOLVED_TABLES);
     add("lootr.configuration.report_unresolved_tables.desc", LootrConfigStrings.REPORT_UNRESOLVED_TABLES_DESC);
     add("lootr.configuration.disable_notifications", LootrConfigStrings.DISABLE_NOTIFICATIONS);
