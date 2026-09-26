@@ -2,7 +2,7 @@ package noobanidus.mods.lootr.common.command;
 
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.yggdrasil.response.NameAndId;
+import com.mojang.authlib.services.response.NameAndId;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;

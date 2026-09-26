@@ -135,7 +135,7 @@ public class LootrChestBlock extends ChestBlock {
   }
 
   @Override
-  public void playerDestroy(@NonNull Level level, @NonNull Player player, @NonNull BlockPos blockPos, @NonNull BlockState blockState, @Nullable BlockEntity blockEntity, @NonNull ItemStack itemStack) {
+  public void playerDestroy(@NonNull ServerLevel level, @NonNull ServerPlayer player, @NonNull BlockPos blockPos, @NonNull BlockState blockState, @Nullable BlockEntity blockEntity, @NonNull ItemStack itemStack) {
     super.playerDestroy(level, player, blockPos, blockState, blockEntity, itemStack);
     LootrAPI.playerDestroyed(level, player, blockPos, blockEntity);
   }

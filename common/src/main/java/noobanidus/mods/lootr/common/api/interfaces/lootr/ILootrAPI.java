@@ -491,7 +491,7 @@ public interface ILootrAPI {
   default boolean isTaggedStructurePresent(ServerLevel level, ChunkPos chunkPos, TagKey<Structure> tag, BlockPos pos) {
     Registry<Structure> registry = level.registryAccess().lookupOrThrow(Registries.STRUCTURE);
     List<StructureStart> starts = level.structureManager()
-        .startsForStructure(chunkPos, o -> registry.get(registry.getId(o)).map(b -> b.is(tag)).orElse(false));
+        .startsForStructure(chunkPos.x(), chunkPos.z(), o -> registry.get(registry.getId(o)).map(b -> b.is(tag)).orElse(false));
     for (StructureStart start : starts) {
       BoundingBox extended = start.getBoundingBox().inflatedBy(8);
       if (extended.isInside(pos)) {

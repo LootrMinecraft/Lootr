@@ -18,7 +18,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 @EventBusSubscriber(modid = LootrAPI.MODID)
@@ -38,7 +37,8 @@ public class LootrCompatDataGenerators {
       return;
     }*/
     PackOutput output = event.getGenerator().getPackOutput();
-    CompletableFuture<HolderLookup.Provider> provider = event.getLookupProvider();
+    CompletableFuture<HolderLookup.Provider> reloadableProvider = event.getReloadableLookupProvider();
+    CompletableFuture<HolderLookup.Provider> worldProvider = event.getWorldLookupProvider();
 
     Path root = output.getOutputFolder().getParent().getParent().getParent().getParent();
 
@@ -46,10 +46,10 @@ public class LootrCompatDataGenerators {
 
     // Data pack generation
     var generator = makeGenerator(datapacks.resolve("betterend"), Component.literal("Lootr Compatibility for BetterEnd"));
-    generator.addProvider(true, new LootrCompatBlockTagProvider("betterend", List.of("mossy_glowshroom_barrel","end_lotus_barrel","pythadendron_barrel", "lacugrove_barrel", "dragon_tree_barrel", "tenanea_barrel", "helix_tree_barrel", "umbrella_tree_barrel", "jellyshroom_barrel", "lucernia_barrel"), List.of("mossy_glowshroom_chest","end_lotus_chest","pythadendron_chest", "lacugrove_chest", "dragon_tree_chest", "tenanea_chest", "helix_tree_chest", "umbrella_tree_chest", "jellyshroom_chest", "lucernia_chest"), null, null, generator, provider));
+    generator.addProvider(true, new LootrCompatBlockTagProvider("betterend", List.of("mossy_glowshroom_barrel","end_lotus_barrel","pythadendron_barrel", "lacugrove_barrel", "dragon_tree_barrel", "tenanea_barrel", "helix_tree_barrel", "umbrella_tree_barrel", "jellyshroom_barrel", "lucernia_barrel"), List.of("mossy_glowshroom_chest","end_lotus_chest","pythadendron_chest", "lacugrove_chest", "dragon_tree_chest", "tenanea_chest", "helix_tree_chest", "umbrella_tree_chest", "jellyshroom_chest", "lucernia_chest"), null, null, generator, worldProvider));
 
     generator = makeGenerator(datapacks.resolve("betternether"), Component.literal("Lootr Compatibility for BetterNether"));
-    generator.addProvider(true, new LootrCompatBlockTagProvider("betternether", List.of("nether_reed_barrel", "stalagnate_barrel", "willow_barrel", "wart_barrel", "warped_barrel", "crimson_barrel", "rubeus_barrel", "mushroom_fir_barrel", "nether_mushroom_barrel", "anchor_tree_barrel", "nether_sakura_barrel"), List.of("nether_reed_chest", "stalagnate_chest", "willow_chest", "wart_chest", "warped_chest", "crimson_chest", "rubeus_chest", "mushroom_fir_chest", "nether_mushroom_chest", "anchor_tree_chest", "nether_sakura_chest"), null, null, generator, provider));
+    generator.addProvider(true, new LootrCompatBlockTagProvider("betternether", List.of("nether_reed_barrel", "stalagnate_barrel", "willow_barrel", "wart_barrel", "warped_barrel", "crimson_barrel", "rubeus_barrel", "mushroom_fir_barrel", "nether_mushroom_barrel", "anchor_tree_barrel", "nether_sakura_barrel"), List.of("nether_reed_chest", "stalagnate_chest", "willow_chest", "wart_chest", "warped_chest", "crimson_chest", "rubeus_chest", "mushroom_fir_chest", "nether_mushroom_chest", "anchor_tree_chest", "nether_sakura_chest"), null, null, generator, worldProvider));
 
     try {
       for (DataGenerator toRun : generators) {

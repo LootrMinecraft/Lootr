@@ -55,8 +55,8 @@ public class LootrItemFrameRenderer extends EntityRenderer<LootrItemFrame, Lootr
       yRot = 180.0F;
     }
 
-    poseStack.mulPose(Axis.XP.rotationDegrees(xRot));
-    poseStack.mulPose(Axis.YP.rotationDegrees(yRot));
+    poseStack.rotateDegrees(Axis.XP, xRot);
+    poseStack.rotateDegrees(Axis.YP, yRot);
     if (!state.frameModel.isEmpty()) {
       poseStack.pushPose();
       poseStack.translate(-0.5F, -0.5F, -0.5F);
@@ -71,7 +71,7 @@ public class LootrItemFrameRenderer extends EntityRenderer<LootrItemFrame, Lootr
     }
 
     if (!state.item.isEmpty() && !state.visuallyOpen) {
-      poseStack.mulPose(Axis.ZP.rotationDegrees(state.rotation * 360.0F / 8.0F));
+      poseStack.rotateDegrees(Axis.ZP, state.rotation * 360.0F / 8.0F);
       int lightVal = this.getLightCoords(state.isGlowFrame, 15728880, state.lightCoords);
       poseStack.scale(0.5F, 0.5F, 0.5F);
       state.item.submit(poseStack, submitNodeCollector, lightVal, OverlayTexture.NO_OVERLAY, state.outlineColor);

@@ -56,14 +56,15 @@ public class LootrBrushableBlockRenderer implements BlockEntityRenderer<LootrBru
 
   @Override
   public void submit(LootrBrushableBlockRenderState renderState, @NonNull PoseStack poseStack, @NonNull SubmitNodeCollector nodeCollector, @NonNull CameraRenderState cameraRenderState) {
+
     if (renderState.dustProgress > 0 && renderState.hitDirection != null && !renderState.itemState.isEmpty() && renderState.thisPlayerBrushing) {
       poseStack.pushPose();
       poseStack.translate(0.0F, 0.5F, 0.0F);
       float[] afloat = this.translations(renderState.hitDirection, renderState.dustProgress);
       poseStack.translate(afloat[0], afloat[1], afloat[2]);
-      poseStack.mulPose(Axis.YP.rotationDegrees(75.0F));
+      poseStack.rotateDegrees(Axis.YP, 75.0F);
       boolean flag = renderState.hitDirection == Direction.EAST || renderState.hitDirection == Direction.WEST;
-      poseStack.mulPose(Axis.YP.rotationDegrees((flag ? 90 : 0) + 11));
+      poseStack.rotateDegrees(Axis.YP, (flag ? 90 : 0) + 11);
       poseStack.scale(0.5F, 0.5F, 0.5F);
       renderState.itemState.submit(poseStack, nodeCollector, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
       poseStack.popPose();

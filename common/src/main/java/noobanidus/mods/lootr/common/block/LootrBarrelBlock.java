@@ -88,8 +88,9 @@ public class LootrBarrelBlock extends BarrelBlock {
     return LootrAPI.getAnalogOutputSignal(pBlockState, pLevel, pPos, 0, direction);
   }
 
+
   @Override
-  public void playerDestroy(@NonNull Level level, @NonNull Player player, @NonNull BlockPos blockPos, @NonNull BlockState blockState, @Nullable BlockEntity blockEntity, @NonNull ItemStack itemStack) {
+  public void playerDestroy(@NonNull ServerLevel level, @NonNull ServerPlayer player, @NonNull BlockPos blockPos, @NonNull BlockState blockState, @Nullable BlockEntity blockEntity, @NonNull ItemStack itemStack) {
     super.playerDestroy(level, player, blockPos, blockState, blockEntity, itemStack);
     LootrAPI.playerDestroyed(level, player, blockPos, blockEntity);
   }

@@ -33,7 +33,10 @@ public record LootCount(List<Operation> operations) implements LootItemCondition
 
   @Override
   public boolean test(LootContext lootContext) {
-    Vec3 incomingPos = lootContext.getParameter(LootContextParams.ORIGIN);
+    Vec3 incomingPos = lootContext.getOptional(LootContextParams.ORIGIN);
+    if (incomingPos == null) {
+      return false;
+    }
     BlockPos position = new BlockPos((int) incomingPos.x, (int) incomingPos.y, (int) incomingPos.z);
     BlockEntity blockEntity = lootContext.getLevel().getBlockEntity(position);
     ILootrBlockEntity ibe = LootrAPI.wrapBlockEntity(blockEntity);

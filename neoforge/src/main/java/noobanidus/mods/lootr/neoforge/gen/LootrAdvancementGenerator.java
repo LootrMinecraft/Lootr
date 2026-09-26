@@ -5,115 +5,122 @@ import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.AdvancementType;
 import net.minecraft.advancements.triggers.PlayerTrigger;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.advancements.AdvancementSubProvider;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Blocks;
 import noobanidus.mods.lootr.common.advancement.AdvancementTrigger;
 import noobanidus.mods.lootr.common.advancement.ContainerTrigger;
 import noobanidus.mods.lootr.common.advancement.LootedStatTrigger;
 import noobanidus.mods.lootr.common.advancement.TrapdoorTrigger;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrRegistry;
-import org.jspecify.annotations.NonNull;
 
-import java.util.function.Consumer;
+public class LootrAdvancementGenerator extends AdvancementSubProvider {
+  protected LootrAdvancementGenerator(BootstrapContext<Advancement> output) {
+    super(output);
+  }
 
-public class LootrAdvancementGenerator implements AdvancementSubProvider {
   @Override
-  public void generate(HolderLookup.@NonNull Provider arg, @NonNull Consumer<AdvancementHolder> consumer) {
+  public void generate() {
+    BootstrapContext<Advancement> consumer = this.output;
     AdvancementHolder lootrRoot = Advancement.Builder.advancement()
-        .display(Blocks.CHEST, Component.translatable("lootr.advancements.root.title"), Component.translatable("lootr.advancements.root.description"), Identifier.parse("lootr:block/gold_planks"), AdvancementType.TASK, false, false, false)
+        .rootDisplay(Items.CHEST, Component.translatable("lootr.advancements.root.title"), Component.translatable("lootr.advancements.root.description"), LootrAPI.rl("block/gold_planks"), AdvancementType.TASK, false, false, false)
         .addCriterion("always_true", PlayerTrigger.TriggerInstance.tick()).save(consumer, LootrAPI.rl("root"));
     AdvancementHolder one_barrel = Advancement.Builder.advancement().parent(lootrRoot)
-        .display(LootrRegistry.getBarrelBlock(), Component.translatable("lootr.advancements.1barrel.title"), Component.translatable("lootr.advancements.1barrel.description"), null, AdvancementType.TASK, true, true, false)
+        .display(LootrRegistry.getBarrelItem(), Component.translatable("lootr.advancements.1barrel.title"), Component.translatable("lootr.advancements.1barrel.description"), AdvancementType.TASK, true, true, false)
         .addCriterion("opened_barrel", ContainerTrigger.looted(LootrRegistry.getBarrelTrigger()))
         .save(consumer, LootrAPI.rl("1barrel"));
     // 1cart
     AdvancementHolder one_cart = Advancement.Builder.advancement().parent(lootrRoot)
-        .display(Items.CHEST_MINECART, Component.translatable("lootr.advancements.1cart.title"), Component.translatable("lootr.advancements.1cart.description"), null, AdvancementType.TASK, true, true, false)
+        .display(Items.CHEST_MINECART, Component.translatable("lootr.advancements.1cart.title"), Component.translatable("lootr.advancements.1cart.description"), AdvancementType.TASK, true, true, false)
         .addCriterion("opened_cart", ContainerTrigger.looted(LootrRegistry.getCartTrigger()))
         .save(consumer, LootrAPI.rl("1cart"));
     // 1chest
     AdvancementHolder one_chest = Advancement.Builder.advancement().parent(lootrRoot)
-        .display(LootrRegistry.getChestBlock(), Component.translatable("lootr.advancements.1chest.title"), Component.translatable("lootr.advancements.1chest.description"), null, AdvancementType.TASK, true, true, false)
+        .display(LootrRegistry.getChestItem(), Component.translatable("lootr.advancements.1chest.title"), Component.translatable("lootr.advancements.1chest.description"), AdvancementType.TASK, true, true, false)
         .addCriterion("opened_chest", ContainerTrigger.looted(LootrRegistry.getChestTrigger()))
         .save(consumer, LootrAPI.rl("1chest"));
     // 1shulker
     AdvancementHolder one_shulker = Advancement.Builder.advancement().parent(lootrRoot)
-        .display(LootrRegistry.getShulkerBoxBlock(), Component.translatable("lootr.advancements.1shulker.title"), Component.translatable("lootr.advancements.1shulker.description"), null, AdvancementType.TASK, true, true, false)
+        .display(LootrRegistry.getShulkerBoxItem(), Component.translatable("lootr.advancements.1shulker.title"), Component.translatable("lootr.advancements.1shulker.description"), AdvancementType.TASK, true, true, false)
         .addCriterion("opened_shulker", ContainerTrigger.looted(LootrRegistry.getShulkerTrigger()))
         .save(consumer, LootrAPI.rl("1shulker"));
     // all gravels
     AdvancementHolder brush = Advancement.Builder.advancement().parent(lootrRoot)
-        .display(LootrRegistry.getSuspiciousGravelBlock(), Component.translatable("lootr.advancements.all_gravel.title"), Component.translatable("lootr.advancements.all_gravel.description"), null, AdvancementType.TASK, true, true, false)
+        .display(LootrRegistry.getSuspiciousGravelItem(), Component.translatable("lootr.advancements.all_gravel.title"), Component.translatable("lootr.advancements.all_gravel.description"), AdvancementType.TASK, true, true, false)
         .addCriterion("brushed_gravel", ContainerTrigger.looted(LootrRegistry.getGravelTrigger()))
         .addCriterion("brushed_sand", ContainerTrigger.looted(LootrRegistry.getSandTrigger()))
         .save(consumer, LootrAPI.rl("all_gravel"));
     // a pot
     AdvancementHolder pot = Advancement.Builder.advancement().parent(lootrRoot)
-        .display(LootrRegistry.getDecoratedPotBlock(), Component.translatable("lootr.advancements.a_pot.title"), Component.translatable("lootr.advancements.a_pot.description"), null, AdvancementType.TASK, true, true, false)
+        .display(LootrRegistry.getDecoratedPotItem(), Component.translatable("lootr.advancements.a_pot.title"), Component.translatable("lootr.advancements.a_pot.description"), AdvancementType.TASK, true, true, false)
         .addCriterion("pot_opened", ContainerTrigger.looted(LootrRegistry.getPotTrigger()))
         .save(consumer, LootrAPI.rl("pot_opened"));
     AdvancementHolder archaeologist = Advancement.Builder.advancement().parent(pot)
-        .display(Items.BRUSH, Component.translatable("lootr.advancements.archaeologist.title"), Component.translatable("lootr.advancements.archaeologist.description"), null, AdvancementType.CHALLENGE, true, true, false)
+        .display(Items.BRUSH, Component.translatable("lootr.advancements.archaeologist.title"), Component.translatable("lootr.advancements.archaeologist.description"), AdvancementType.CHALLENGE, true, true, false)
         .addCriterion("got_brush", AdvancementTrigger.completed(brush.id()))
         .addCriterion("got_pot", AdvancementTrigger.completed(pot.id())).save(consumer, LootrAPI.rl("archaeologist"));
     // item frame
     AdvancementHolder item_frame = Advancement.Builder.advancement().parent(lootrRoot)
-        .display(Items.ITEM_FRAME, Component.translatable("lootr.advancements.1frame.title"), Component.translatable("lootr.advancements.1frame.description"), null, AdvancementType.TASK, true, true, false)
+        .display(Items.ITEM_FRAME, Component.translatable("lootr.advancements.1frame.title"), Component.translatable("lootr.advancements.1frame.description"), AdvancementType.TASK, true, true, false)
         .addCriterion("looted_frame", ContainerTrigger.looted(LootrRegistry.getItemFrameTrigger()))
         .save(consumer, LootrAPI.rl("1frame"));
     // 10loot
     AdvancementHolder ten_loot = Advancement.Builder.advancement().parent(one_chest)
-        .display(Blocks.GOLD_BLOCK, Component.translatable("lootr.advancements.10loot.title"), Component.translatable("lootr.advancements.10loot.description"), null, AdvancementType.TASK, true, true, false)
+        .display(Items.GOLD_BLOCK, Component.translatable("lootr.advancements.10loot.title"), Component.translatable("lootr.advancements.10loot.description"), AdvancementType.TASK, true, true, false)
         .addCriterion("opened_10", LootedStatTrigger.looted(10)).save(consumer, LootrAPI.rl("10loot"));
     // 25loot
     AdvancementHolder twentyfive_loot = Advancement.Builder.advancement().parent(ten_loot)
-        .display(Blocks.EMERALD_BLOCK, Component.translatable("lootr.advancements.25loot.title"), Component.translatable("lootr.advancements.25loot.description"), null, AdvancementType.TASK, true, true, false)
+        .display(Items.EMERALD_BLOCK, Component.translatable("lootr.advancements.25loot.title"), Component.translatable("lootr.advancements.25loot.description"), AdvancementType.TASK, true, true, false)
         .addCriterion("opened_25", LootedStatTrigger.looted(25)).save(consumer, LootrAPI.rl("25loot"));
     // 50loot
     AdvancementHolder fifty_loot = Advancement.Builder.advancement().parent(twentyfive_loot)
-        .display(Blocks.DIAMOND_BLOCK, Component.translatable("lootr.advancements.50loot.title"), Component.translatable("lootr.advancements.50loot.description"), null, AdvancementType.TASK, true, true, false)
+        .display(Items.DIAMOND_BLOCK, Component.translatable("lootr.advancements.50loot.title"), Component.translatable("lootr.advancements.50loot.description"), AdvancementType.TASK, true, true, false)
         .addCriterion("opened_50", LootedStatTrigger.looted(50)).save(consumer, LootrAPI.rl("50loot"));
+    var reward = output.lookup(Registries.LOOT_TABLE).get(LootrAPI.TROPHY_REWARD).orElseThrow();
     // 100loot
     Advancement.Builder.advancement().parent(fifty_loot)
-        .display(Blocks.NETHERITE_BLOCK, Component.translatable("lootr.advancements.100loot.title"), Component.translatable("lootr.advancements.100loot.description"), null, AdvancementType.CHALLENGE, true, true, false)
+        .display(Items.NETHERITE_BLOCK, Component.translatable("lootr.advancements.100loot.title"), Component.translatable("lootr.advancements.100loot.description"), AdvancementType.CHALLENGE, true, true, false)
         .addCriterion("opened_100", LootedStatTrigger.looted(100))
-        .rewards(AdvancementRewards.Builder.loot(LootrAPI.TROPHY_REWARD)).save(consumer, LootrAPI.rl("100loot"));
+        .rewards(AdvancementRewards.Builder.loot(reward)).save(consumer, LootrAPI.rl("100loot"));
     Advancement.Builder.advancement().parent(one_chest)
-        .display(Items.ENCHANTED_GOLDEN_APPLE, Component.translatable("lootr.advancements.social.title"), Component.translatable("lootr.advancements.social.description"), null, AdvancementType.CHALLENGE, true, true, true)
+        .display(Items.ENCHANTED_GOLDEN_APPLE, Component.translatable("lootr.advancements.social.title"), Component.translatable("lootr.advancements.social.description"), AdvancementType.CHALLENGE, true, true, true)
         .addCriterion("opened_chest", AdvancementTrigger.completed(one_chest.id()))
         .addCriterion("opened_barrel", AdvancementTrigger.completed(one_barrel.id()))
         .addCriterion("opened_cart", AdvancementTrigger.completed(one_cart.id()))./*addCriterion("opened_shulker", AdvancementTrigger.completed(one_shulker.id())).*/save(consumer, LootrAPI.rl("social"));
     var copper_chest = Advancement.Builder.advancement().parent(one_chest)
-        .display(LootrRegistry.getCopperChestItem(), Component.translatable("lootr.advancements.copper_chest.title"), Component.translatable("lootr.advancements.copper_chest.description"), null, AdvancementType.TASK, true, true, false)
+        .display(LootrRegistry.getCopperChestItem(), Component.translatable("lootr.advancements.copper_chest.title"), Component.translatable("lootr.advancements.copper_chest.description"), AdvancementType.TASK, true, true, false)
         .addCriterion("copper_opened", ContainerTrigger.looted(LootrRegistry.getCopperChestTrigger()))
         .save(consumer, LootrAPI.rl("copper_chest"));
     var exposed_chest = Advancement.Builder.advancement().parent(copper_chest)
-        .display(LootrRegistry.getExposedCopperChestItem(), Component.translatable("lootr.advancements.exposed_copper_chest.title"), Component.translatable("lootr.advancements.exposed_copper_chest.description"), null, AdvancementType.TASK, true, true, false)
+        .display(LootrRegistry.getExposedCopperChestItem(), Component.translatable("lootr.advancements.exposed_copper_chest.title"), Component.translatable("lootr.advancements.exposed_copper_chest.description"), AdvancementType.TASK, true, true, false)
         .addCriterion("exposed_copper_opened", ContainerTrigger.looted(LootrRegistry.getExposedCopperChestTrigger()))
         .save(consumer, LootrAPI.rl("exposed_copper_chest"));
     var weathered_chest = Advancement.Builder.advancement().parent(exposed_chest)
-        .display(LootrRegistry.getWeatheredCopperChestItem(), Component.translatable("lootr.advancements.weathered_copper_chest.title"), Component.translatable("lootr.advancements.weathered_copper_chest.description"), null, AdvancementType.TASK, true, true, false)
+        .display(LootrRegistry.getWeatheredCopperChestItem(), Component.translatable("lootr.advancements.weathered_copper_chest.title"), Component.translatable("lootr.advancements.weathered_copper_chest.description"), AdvancementType.TASK, true, true, false)
         .addCriterion("weathered_copper_opened", ContainerTrigger.looted(LootrRegistry.getWeatheredCopperChestTrigger()))
         .save(consumer, LootrAPI.rl("weathered_copper_chest"));
     var oxidized_chest = Advancement.Builder.advancement().parent(weathered_chest)
-        .display(LootrRegistry.getOxidizedCopperChestItem(), Component.translatable("lootr.advancements.oxidized_copper_chest.title"), Component.translatable("lootr.advancements.oxidized_copper_chest.description"), null, AdvancementType.TASK, true, true, false)
+        .display(LootrRegistry.getOxidizedCopperChestItem(), Component.translatable("lootr.advancements.oxidized_copper_chest.title"), Component.translatable("lootr.advancements.oxidized_copper_chest.description"), AdvancementType.TASK, true, true, false)
         .addCriterion("oxidized_copper_opened", ContainerTrigger.looted(LootrRegistry.getOxidizedCopperChestTrigger()))
         .save(consumer, LootrAPI.rl("oxidized_copper_chest"));
     var trapped_chest = Advancement.Builder.advancement().parent(one_chest)
-        .display(Items.TNT, Component.translatable("lootr.advancements.trapped_chest.title"), Component.translatable("lootr.advancements.trapped_chest.description"), null, AdvancementType.TASK, true, true, true)
+        .display(Items.TNT, Component.translatable("lootr.advancements.trapped_chest.title"), Component.translatable("lootr.advancements.trapped_chest.description"), AdvancementType.TASK, true, true, true)
         .addCriterion("trapped_opened", ContainerTrigger.looted(LootrRegistry.getTrappedChestTrigger()))
         .save(consumer, LootrAPI.rl("trapped_chest"));
     Advancement.Builder.advancement().parent(oxidized_chest)
-        .display(Items.LIGHTNING_ROD.waxed().unaffected(), Component.translatable("lootr.advancements.all_copper.title"), Component.translatable("lootr.advancements.all_copper.description"), null, AdvancementType.CHALLENGE, true, true, true)
+        .display(Items.LIGHTNING_ROD.waxed()
+            .unaffected(), Component.translatable("lootr.advancements.all_copper.title"), Component.translatable("lootr.advancements.all_copper.description"), AdvancementType.CHALLENGE, true, true, true)
         .addCriterion("copper_chest", AdvancementTrigger.completed(copper_chest.id()))
         .addCriterion("weathered_chest", AdvancementTrigger.completed(weathered_chest.id()))
         .addCriterion("exposed_chest", AdvancementTrigger.completed(exposed_chest.id()))
-        .addCriterion("oxidized_chest", AdvancementTrigger.completed(oxidized_chest.id())).save(consumer, LootrAPI.rl("all_copper"));
-    var escape_hatch = Advancement.Builder.advancement().parent(lootrRoot).display(Items.IRON_TRAPDOOR, Component.translatable("lootr.advancements.emergency_escape_hatch.title"), Component.translatable("lootr.advancements.emergency_escape_hatch.description"), null, AdvancementType.CHALLENGE, true, true, true).addCriterion("trapdoor_triggered", TrapdoorTrigger.trapdoor(LootrRegistry.getTrapdoorTrigger())).save(consumer, LootrAPI.rl("emergency_escape_hatch"));
+        .addCriterion("oxidized_chest", AdvancementTrigger.completed(oxidized_chest.id()))
+        .save(consumer, LootrAPI.rl("all_copper"));
+    var escape_hatch = Advancement.Builder.advancement().parent(lootrRoot)
+        .display(Items.IRON_TRAPDOOR, Component.translatable("lootr.advancements.emergency_escape_hatch.title"), Component.translatable("lootr.advancements.emergency_escape_hatch.description"), AdvancementType.CHALLENGE, true, true, true)
+        .addCriterion("trapdoor_triggered", TrapdoorTrigger.trapdoor(LootrRegistry.getTrapdoorTrigger()))
+        .save(consumer, LootrAPI.rl("emergency_escape_hatch"));
   }
 }

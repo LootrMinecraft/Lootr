@@ -2,11 +2,12 @@ package noobanidus.mods.lootr.common.advancement;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.advancements.predicates.ContextAwarePredicate;
 import net.minecraft.advancements.triggers.Criterion;
 import net.minecraft.advancements.triggers.SimpleCriterionTrigger;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import noobanidus.mods.lootr.common.api.interfaces.advancement.IAdvancementTrigger;
 import noobanidus.mods.lootr.common.api.LootrRegistry;
 import org.jspecify.annotations.NonNull;
@@ -29,9 +30,9 @@ public class AdvancementTrigger extends SimpleCriterionTrigger<AdvancementTrigge
        TriggerInstance(Optional.empty(), Optional.of(advancementId)));
   }
 
-  public record TriggerInstance(Optional<ContextAwarePredicate> player,
+  public record TriggerInstance(Optional<Holder<LootItemCondition>> player,
                                 Optional<Identifier> advancement) implements SimpleCriterionTrigger.SimpleInstance {
-    public static final Codec<AdvancementTrigger.TriggerInstance> CODEC = RecordCodecBuilder.create(codec -> codec.group(ContextAwarePredicate.CODEC.optionalFieldOf("player").forGetter(TriggerInstance::player), Identifier.CODEC.optionalFieldOf("advancement").forGetter(TriggerInstance::advancement)).apply(codec, AdvancementTrigger.TriggerInstance::new));
+    public static final Codec<AdvancementTrigger.TriggerInstance> CODEC = RecordCodecBuilder.create(codec -> codec.group(LootItemCondition.CODEC.optionalFieldOf("player").forGetter(TriggerInstance::player), Identifier.CODEC.optionalFieldOf("advancement").forGetter(TriggerInstance::advancement)).apply(codec, AdvancementTrigger.TriggerInstance::new));
 
     public boolean test(Identifier advancementId) {
       return this.advancement.isEmpty() || this.advancement.get().equals(advancementId);

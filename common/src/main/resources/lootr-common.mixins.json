@@ -4,7 +4,6 @@
   "compatibilityLevel": "JAVA_25",
   "mixins": [
     "accessor.AccessorMixinBaseContainerBlockEntity",
-    "accessor.AccessorMixinBlock",
     "accessor.AccessorMixinBrushableBlockEntity",
     "accessor.AccessorMixinChunkMap",
     "accessor.AccessorMixinFallingBlockEntity",

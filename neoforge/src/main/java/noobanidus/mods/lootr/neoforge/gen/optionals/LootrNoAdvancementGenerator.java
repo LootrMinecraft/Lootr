@@ -7,16 +7,20 @@ import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.advancements.triggers.ImpossibleTrigger;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.RegistrySetBuilder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.advancements.AdvancementProvider;
 import net.minecraft.data.advancements.AdvancementSubProvider;
 import net.minecraft.data.metadata.PackMetadataGenerator;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import org.jspecify.annotations.NonNull;
@@ -26,6 +30,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
@@ -43,7 +48,7 @@ public class LootrNoAdvancementGenerator {
   @SubscribeEvent
   public static void gatherData(GatherDataEvent.Client event) {
     PackOutput output = event.getGenerator().getPackOutput();
-    CompletableFuture<HolderLookup.Provider> provider = event.getLookupProvider();
+    CompletableFuture<HolderLookup.Provider> provider = event.getReloadableLookupProvider();
 
     Path root = output.getOutputFolder().getParent().getParent().getParent().getParent();
 
@@ -51,7 +56,7 @@ public class LootrNoAdvancementGenerator {
 
     // Data pack generation
     var generator = makeGenerator(datapacks.resolve("lootr_no_advancements"), Component.literal("Disable Lootr Advancements"));
-    generator.addProvider(true, new AdvancementProvider(generator.getPackOutput(), provider, List.of(new LootrAdvancementGenerator())));
+    generator.addProvider(true, DatapackBuiltinEntriesProvider.forReloadableLayer(generator.getPackOutput(), "Lootr No Advancements", event.getWorldLookupProvider(), event.getReloadableLookupProvider(), new RegistrySetBuilder().add(Registries.ADVANCEMENT, new AdvancementProvider(List.of(LootrAdvancementGenerator::new))), Set.of("lootr")));
 
     generator = makeGenerator(datapacks.resolve("lootr_no_suspicious_blocks"), Component.literal("Disable Lootr Suspicious Sand and Gravel"));
     generator.addProvider(true, new LootrNoSuspiciousGenerator.LootrBlockTagProvider(generator.getPackOutput(), provider));
@@ -66,39 +71,43 @@ public class LootrNoAdvancementGenerator {
     }
   }
 
-  public static class LootrAdvancementGenerator implements AdvancementSubProvider {
+  public static class LootrAdvancementGenerator extends AdvancementSubProvider {
+    protected LootrAdvancementGenerator(BootstrapContext<Advancement> output) {
+      super(output);
+    }
+
     @Override
-    public void generate(HolderLookup.@NonNull Provider arg, @NonNull Consumer<AdvancementHolder> consumer) {
+    public void generate() {
       var impossible = CriteriaTriggers.IMPOSSIBLE.createCriterion(new ImpossibleTrigger.TriggerInstance());
 
       AdvancementHolder lootrRoot = Advancement.Builder.advancement().addCriterion("impossible", impossible)
-          .save(consumer, LootrAPI.rl("root"));
+          .save(output, LootrAPI.rl("root"));
       AdvancementHolder one_barrel = Advancement.Builder.advancement().addCriterion("impossible", impossible)
-          .save(consumer, LootrAPI.rl("1barrel"));
+          .save(output, LootrAPI.rl("1barrel"));
       AdvancementHolder one_cart = Advancement.Builder.advancement().addCriterion("impossible", impossible)
-          .save(consumer, LootrAPI.rl("1cart"));
+          .save(output, LootrAPI.rl("1cart"));
       AdvancementHolder one_chest = Advancement.Builder.advancement().addCriterion("impossible", impossible)
-          .save(consumer, LootrAPI.rl("1chest"));
+          .save(output, LootrAPI.rl("1chest"));
       AdvancementHolder one_shulker = Advancement.Builder.advancement().addCriterion("impossible", impossible)
-          .save(consumer, LootrAPI.rl("1shulker"));
+          .save(output, LootrAPI.rl("1shulker"));
       AdvancementHolder brush = Advancement.Builder.advancement().addCriterion("impossible", impossible)
-          .save(consumer, LootrAPI.rl("all_gravel"));
+          .save(output, LootrAPI.rl("all_gravel"));
       AdvancementHolder pot = Advancement.Builder.advancement().addCriterion("impossible", impossible)
-          .save(consumer, LootrAPI.rl("pot_opened"));
+          .save(output, LootrAPI.rl("pot_opened"));
       AdvancementHolder archaeologist = Advancement.Builder.advancement().addCriterion("impossible", impossible)
-          .save(consumer, LootrAPI.rl("archaeologist"));
+          .save(output, LootrAPI.rl("archaeologist"));
       AdvancementHolder item_frame = Advancement.Builder.advancement().addCriterion("impossible", impossible)
-          .save(consumer, LootrAPI.rl("1frame"));
+          .save(output, LootrAPI.rl("1frame"));
       AdvancementHolder ten_loot = Advancement.Builder.advancement().addCriterion("impossible", impossible)
-          .save(consumer, LootrAPI.rl("10loot"));
+          .save(output, LootrAPI.rl("10loot"));
       AdvancementHolder twentyfive_loot = Advancement.Builder.advancement().addCriterion("impossible", impossible)
-          .save(consumer, LootrAPI.rl("25loot"));
+          .save(output, LootrAPI.rl("25loot"));
       AdvancementHolder fifty_loot = Advancement.Builder.advancement().addCriterion("impossible", impossible)
-          .save(consumer, LootrAPI.rl("50loot"));
+          .save(output, LootrAPI.rl("50loot"));
       Advancement.Builder.advancement().parent(fifty_loot).addCriterion("impossible", impossible)
-          .save(consumer, LootrAPI.rl("100loot"));
+          .save(output, LootrAPI.rl("100loot"));
       Advancement.Builder.advancement().parent(one_chest).addCriterion("impossible", impossible)
-          .save(consumer, LootrAPI.rl("social"));
+          .save(output, LootrAPI.rl("social"));
     }
   }
 }

@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.phys.AABB;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 
 public final class LootrConstants {
@@ -22,6 +23,7 @@ public final class LootrConstants {
     }
     return false;
   };
+  private static final BlockBehaviour.StateArgumentPredicate<AABB> posArgumentPredicate = (state, level, pos, a) -> posPredicate.test(state, level, pos);
 
   public static final Identifier SHERDSAPI_POT_DECORATIONS = Identifier.fromNamespaceAndPath("sherdsapi", "stack_pot_decorations");
   public static final Identifier SHERDSAPI_SHERD_PATTERN = Identifier.fromNamespaceAndPath("sherdsapi", "sherd_pattern");
@@ -110,8 +112,8 @@ public final class LootrConstants {
     public static final BlockBehaviour.Properties TROPHY = BlockBehaviour.Properties.of().strength(15f)
         .sound(SoundType.METAL).noOcclusion().lightLevel((o) -> 15).setId(LootrBlockIds.TROPHY);
     public static final BlockBehaviour.Properties SHULKER_BOX = BlockBehaviour.Properties.of().strength(2.5f)
-        .dynamicShape().noOcclusion().forceSolidOn().pushReaction(PushReaction.DESTROY).isSuffocating(posPredicate)
-        .isViewBlocking(posPredicate).setId(LootrBlockIds.SHULKER_BOX);
+        .dynamicShape().noOcclusion().forceSolidOn().pushReaction(PushReaction.POPPED).isSuffocating(posPredicate)
+        .isViewBlocking(posArgumentPredicate).setId(LootrBlockIds.SHULKER_BOX);
     public static final BlockBehaviour.Properties SUSPICIOUS_SAND = BlockBehaviour.Properties.ofFullCopy(Blocks.SUSPICIOUS_SAND)
         .strength(2.5f).setId(LootrBlockIds.SUSPICIOUS_SAND);
     public static final BlockBehaviour.Properties SUSPICIOUS_GRAVEL = BlockBehaviour.Properties.ofFullCopy(Blocks.SUSPICIOUS_GRAVEL)

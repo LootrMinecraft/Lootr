@@ -126,7 +126,7 @@ public class LootrShulkerBoxBlockEntity extends RandomizableContainerBlockEntity
       AABB aabb = Shulker.getProgressDeltaAabb(1.0F, direction, this.progressOld, this.progress, Vec3.atBottomCenterOf(pPos));
       List<Entity> list = pLevel.getEntities(null, aabb);
       for (Entity entity : list) {
-        if (entity.getPistonPushReaction() != PushReaction.IGNORE) {
+        if (entity.getPistonPushReaction() != PushReaction.IGNORE_ENTITY) {
           entity.move(
               MoverType.SHULKER_BOX,
               new Vec3(

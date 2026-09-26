@@ -2,12 +2,14 @@ package noobanidus.mods.lootr.common.client.block;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.*;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.DecoratedPotRenderer;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
@@ -17,11 +19,13 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.sprite.SpriteGetter;
 import net.minecraft.client.resources.model.sprite.SpriteId;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
@@ -61,6 +65,8 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
   private final ModelPart open;
   private final ModelPart sherds;
 
+  private final DecoratedPotRenderer renderer;
+
   public LootrDecoratedPotRenderer(BlockEntityRendererProvider.Context context) {
     this(context.entityModelSet(), context.sprites());
   }
@@ -83,6 +89,8 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
     ModelPart modelPart3 = context.bakeLayer(OPEN_POT_LAYER);
     this.open = modelPart3.getChild("open");
     this.sherds = modelPart3.getChild("sherds");
+    this.renderer = (DecoratedPotRenderer) (Object) Minecraft.getInstance().levelRenderer.blockEntityRenderDispatcher()
+        .getRenderer(new DecoratedPotBlockEntity(BlockPos.ZERO, Blocks.DECORATED_POT.defaultBlockState()));
   }
 
   public static LayerDefinition createBodyLayer() {
@@ -108,19 +116,24 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
     return LayerDefinition.create(meshdefinition, 64, 32);
   }
 
-  private static final Map<Identifier, SpriteId> cachedSpriteIds = new HashMap<>();
+  private final Map<Identifier, DecoratedPotRenderer.SideSprite> cachedSpriteIds = new HashMap<>();
+  private DecoratedPotRenderer.@Nullable SideSprite blankSide;
 
-  private static SpriteId getSideSpriteId(ItemStack item) {
+  private DecoratedPotRenderer.SideSprite getSideSpriteId(ItemStack item) {
     if (!item.isEmpty()) {
       Identifier customSide = SherdsIntegration.getCustomSideTexture(item);
       if (customSide != null) {
-        return cachedSpriteIds.computeIfAbsent(customSide, rl -> new SpriteId(DECORATED_POT_SHEET, rl.withPrefix("entity/decorated_pot/")));
+        return cachedSpriteIds.computeIfAbsent(customSide, rl -> DecoratedPotRenderer.SideSprite.create(this.materials, new SpriteId(DECORATED_POT_SHEET, rl.withPrefix("entity/decorated_pot/"))));
       } else {
-        return AccessorMixinDecoratedPotRenderer.lootr$getSideSprite(Optional.of(item.getItem()));
+        return ((AccessorMixinDecoratedPotRenderer) renderer).lootr$getSideSprite(Optional.of(item));
       }
     }
 
-    return Sheets.DECORATED_POT_SIDE;
+    if (this.blankSide == null) {
+      this.blankSide = DecoratedPotRenderer.SideSprite.create(this.materials, Sheets.DECORATED_POT_SIDE);
+    }
+
+    return this.blankSide;
   }
 
   @Override
@@ -151,7 +164,7 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
     poseStack.pushPose();
     Direction direction = renderState.direction;
     poseStack.translate(0.5, 0.0, 0.5);
-    poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - direction.toYRot()));
+    poseStack.rotateDegrees(Axis.YP, 180.0F - direction.toYRot());
     if (!renderState.visuallyOpen) {
       poseStack.translate(-0.5, 0.0, -0.5);
       if (renderState.wobbleProgress >= 0.0F && renderState.wobbleProgress <= 1.0F) {
@@ -182,59 +195,55 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
     if (visuallyOpen) {
       poseStack.scale(1.0f, -1.0f, -1.0f);
       RenderType renderType = DECORATED_POT_OPENED.renderType(RenderTypes::entitySolid);
-      nodeCollector.submitModelPart(this.open, poseStack, renderType, packedLight, packedOverlay, textureatlassprite2, -1, null, outlineColor);
-      nodeCollector.submitModelPart(this.sherds, poseStack, renderType, packedLight, packedOverlay, textureatlassprite2, -1, null, outlineColor);
+      nodeCollector.submitModelPart(this.open, poseStack, renderType, packedLight, packedOverlay, textureatlassprite2, -1, outlineColor);
+      nodeCollector.submitModelPart(this.sherds, poseStack, renderType, packedLight, packedOverlay, textureatlassprite2, -1, outlineColor);
     } else {
       RenderType rendertype = DECORATED_POT.renderType(RenderTypes::entitySolid);
-      nodeCollector.submitModelPart(this.neck, poseStack, rendertype, packedLight, packedOverlay, textureatlassprite, -1, null, outlineColor);
-      nodeCollector.submitModelPart(this.top, poseStack, rendertype, packedLight, packedOverlay, textureatlassprite, -1, null, outlineColor);
-      nodeCollector.submitModelPart(this.bottom, poseStack, rendertype, packedLight, packedOverlay, textureatlassprite, -1, null, outlineColor);
-      SpriteId material = getSideSpriteId(decorations.front());
+      nodeCollector.submitModelPart(this.neck, poseStack, rendertype, packedLight, packedOverlay, textureatlassprite, -1, outlineColor);
+      nodeCollector.submitModelPart(this.top, poseStack, rendertype, packedLight, packedOverlay, textureatlassprite, -1, outlineColor);
+      nodeCollector.submitModelPart(this.bottom, poseStack, rendertype, packedLight, packedOverlay, textureatlassprite, -1, outlineColor);
+      DecoratedPotRenderer.SideSprite material = getSideSpriteId(decorations.front());
       nodeCollector.submitModelPart(
           this.frontSide,
           poseStack,
-          material.renderType(RenderTypes::entitySolid),
+          material.renderType(),
           packedLight,
           packedOverlay,
-          this.materials.get(material),
+          material.sprite(),
           -1,
-          null,
           outlineColor
       );
-      SpriteId material1 = getSideSpriteId(decorations.back());
+      DecoratedPotRenderer.SideSprite material1 = getSideSpriteId(decorations.back());
       nodeCollector.submitModelPart(
           this.backSide,
           poseStack,
-          material1.renderType(RenderTypes::entitySolid),
+          material1.renderType(),
           packedLight,
           packedOverlay,
-          this.materials.get(material1),
+          material1.sprite(),
           -1,
-          null,
           outlineColor
       );
-      SpriteId material2 = getSideSpriteId(decorations.left());
+      DecoratedPotRenderer.SideSprite material2 = getSideSpriteId(decorations.left());
       nodeCollector.submitModelPart(
           this.leftSide,
           poseStack,
-          material2.renderType(RenderTypes::entitySolid),
+          material2.renderType(),
           packedLight,
           packedOverlay,
-          this.materials.get(material2),
+          material2.sprite(),
           -1,
-          null,
           outlineColor
       );
-      SpriteId material3 = getSideSpriteId(decorations.right());
+      DecoratedPotRenderer.SideSprite material3 = getSideSpriteId(decorations.right());
       nodeCollector.submitModelPart(
           this.rightSide,
           poseStack,
-          material3.renderType(RenderTypes::entitySolid),
+          material3.renderType(),
           packedLight,
           packedOverlay,
-          this.materials.get(material3),
+          material3.sprite(),
           -1,
-          null,
           outlineColor
       );
     }

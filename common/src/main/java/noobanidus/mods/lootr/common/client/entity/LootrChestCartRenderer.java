@@ -40,20 +40,16 @@ public class LootrChestCartRenderer<T extends LootrChestMinecartEntity> extends 
     f = 1.0F - f;
     f = 1.0F - f * f * f;
     SpriteId material = LootrChestBlockRenderer.getMaterial(LootrChestType.NORMAL, renderState.open);
-    RenderType rendertype = material.renderType(this.chestModel::renderType);
-    TextureAtlasSprite textureatlassprite = this.materials.get(material);
     nodeCollector.submitModel(
         this.chestModel,
         f,
         poseStack,
-        rendertype,
         renderState.lightCoords,
         OverlayTexture.NO_OVERLAY,
         -1,
-        textureatlassprite,
-        0,
-        null
-    );
+        material,
+        this.materials,
+        0);
     poseStack.popPose();
   }
 

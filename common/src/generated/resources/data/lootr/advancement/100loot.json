@@ -26,9 +26,7 @@
     ]
   ],
   "rewards": {
-    "loot": [
-      "lootr:reward/trophy"
-    ]
+    "loot": "lootr:reward/trophy"
   },
   "sends_telemetry_event": true
 }

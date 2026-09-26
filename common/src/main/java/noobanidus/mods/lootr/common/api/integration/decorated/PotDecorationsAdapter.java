@@ -5,6 +5,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.PotDecorations;
 
@@ -27,10 +28,10 @@ public record PotDecorationsAdapter(ItemStack back, ItemStack left, ItemStack ri
   }
 
   public PotDecorationsAdapter(PotDecorations decorations) {
-    this(decorations.back().map(ItemStack::new).orElse(ItemStack.EMPTY),
-        decorations.left().map(ItemStack::new).orElse(ItemStack.EMPTY),
-        decorations.right().map(ItemStack::new).orElse(ItemStack.EMPTY),
-        decorations.front().map(ItemStack::new).orElse(ItemStack.EMPTY));
+    this(decorations.back().map(ItemStackTemplate::create).orElse(ItemStack.EMPTY),
+        decorations.left().map(ItemStackTemplate::create).orElse(ItemStack.EMPTY),
+        decorations.right().map(ItemStackTemplate::create).orElse(ItemStack.EMPTY),
+        decorations.front().map(ItemStackTemplate::create).orElse(ItemStack.EMPTY));
   }
 
   public PotDecorationsAdapter(List<ItemStack> itemStacks) {

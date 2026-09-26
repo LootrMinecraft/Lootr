@@ -49,9 +49,11 @@ public class LootrDataPackGenerators {
   public static void onGatherData(GatherDataEvent.Client event) {
     event.getGenerator().addProvider(
         true,
-        (DataProvider.Factory<DatapackBuiltinEntriesProvider>) output -> new DatapackBuiltinEntriesProvider(
+        (DataProvider.Factory<DatapackBuiltinEntriesProvider>) output -> DatapackBuiltinEntriesProvider.forReloadableLayer(
             event.getGenerator().getPackOutput(),
-            event.getLookupProvider(),
+            "Lootr Stuff",
+            event.getWorldLookupProvider(),
+            event.getReloadableLookupProvider(),
             new RegistrySetBuilder()
                 .add(Registries.TEMPLATE_POOL, bootstrap -> {
                   HolderGetter<StructureTemplatePool> getter = bootstrap.lookup(Registries.TEMPLATE_POOL);

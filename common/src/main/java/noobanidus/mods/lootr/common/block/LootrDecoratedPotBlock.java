@@ -62,7 +62,7 @@ public class LootrDecoratedPotBlock extends DecoratedPotBlock {
 
   @Override
   public @NonNull BlockState playerWillDestroy(@NonNull Level level, @NonNull BlockPos blockPos, @NonNull BlockState blockState, @NonNull Player player) {
-    this.spawnDestroyParticles(level, player, blockPos, blockState);
+    this.spawnDestroyParticles(level, blockPos, blockState);
     if (blockState.is(BlockTags.GUARDED_BY_PIGLINS) && level instanceof ServerLevel sLevel) {
       PiglinAi.angerNearbyPiglins(sLevel, player, false);
     }

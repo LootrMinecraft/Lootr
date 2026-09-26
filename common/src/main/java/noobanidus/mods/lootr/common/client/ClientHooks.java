@@ -26,7 +26,6 @@ import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 import noobanidus.mods.lootr.common.api.particle.ParticleColorOption;
 import noobanidus.mods.lootr.common.client.gui.components.toasts.LootrToast;
-import noobanidus.mods.lootr.common.mixin.accessor.AccessorMixinBlock;
 import org.jetbrains.annotations.Nullable;
 
 public class ClientHooks {
@@ -69,7 +68,7 @@ public class ClientHooks {
     double offset = 1.2;
     if (player == mc.player) {
       BlockState state = mc.level.getBlockState(pos);
-      ((AccessorMixinBlock) state.getBlock()).lootr$spawnDestroyParticles(mc.level, player, pos, state);
+      state.getBlock().spawnDestroyByEntityParticles(mc.level, player, pos, state);
       mc.level.playSound(null, pos, SoundEvents.DECORATED_POT_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
     } else {
       if (mc.level.getBlockEntity(pos) instanceof ILootrBlockEntity ibe) {

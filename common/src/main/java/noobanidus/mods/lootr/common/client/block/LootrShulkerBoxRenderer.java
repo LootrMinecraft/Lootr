@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.ShulkerBoxRenderer;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
@@ -85,14 +86,17 @@ public class LootrShulkerBoxRenderer implements BlockEntityRenderer<LootrShulker
   public void submit(PoseStack poseStack, SubmitNodeCollector nodeCollector, int packedLight, int packedOverlay, Direction direction, float progress, @Nullable ModelFeatureRenderer.CrumblingOverlay crumblingOverlay, SpriteId material, int outlineColor) {
     poseStack.pushPose();
     this.prepareModel(poseStack, direction, progress);
-    nodeCollector.submitModel(this.model, progress, poseStack, material.renderType(this.model::renderType), packedLight, packedOverlay, -1, this.materials.get(material), outlineColor, crumblingOverlay);
+    nodeCollector.submitModel(this.model, progress, poseStack, packedLight, packedOverlay, -1, material, this.materials, outlineColor);
+    if (crumblingOverlay != null) {
+      nodeCollector.order(1).submitCrumblingOverlay(this.model, progress, poseStack, material.renderType(this.model::renderType), packedLight, packedOverlay, -1, crumblingOverlay);
+    }
     poseStack.popPose();
   }
 
   private void prepareModel(PoseStack poseStack, Direction direction, float progress) {
     poseStack.translate(0.5F, 0.5F, 0.5F);
     poseStack.scale(0.9995F, 0.9995F, 0.9995F);
-    poseStack.mulPose(direction.getRotation());
+    poseStack.mulPose(ShulkerBoxRenderer.modelTransform(direction));
     poseStack.scale(1.0F, -1.0F, -1.0F);
     poseStack.translate(0.0F, -1.0F, 0.0F);
     this.model.setupAnim(progress);

@@ -117,20 +117,10 @@ public class LootrChestBlockRenderer<T extends LootrChestBlockEntity & ILootrBlo
     open = 1.0f - open;
     open = 1.0f - open * open * open;
     SpriteId material = getMaterial(renderState);
-    RenderType rendertype = material.renderType(this.singleModel::renderType);
-    TextureAtlasSprite textureatlassprite = this.materials.get(material);
-    nodeCollector.submitModel(
-        this.singleModel,
-        open,
-        poseStack,
-        rendertype,
-        renderState.lightCoords,
-        OverlayTexture.NO_OVERLAY,
-        -1,
-        textureatlassprite,
-        0,
-        renderState.breakProgress
-    );
+    nodeCollector.submitModel(this.singleModel, open, poseStack, renderState.lightCoords, OverlayTexture.NO_OVERLAY, -1, material, this.materials, 0);
+    if (renderState.breakProgress != null) {
+      nodeCollector.order(1).submitCrumblingOverlay(this.singleModel, open, poseStack, material.renderType(this.singleModel.renderType()), renderState.lightCoords, OverlayTexture.NO_OVERLAY, -1, renderState.breakProgress);
+    }
     poseStack.popPose();
   }
 }

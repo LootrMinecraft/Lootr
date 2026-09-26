@@ -2,11 +2,12 @@ package noobanidus.mods.lootr.common.advancement;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.advancements.predicates.ContextAwarePredicate;
 import net.minecraft.advancements.predicates.MinMaxBounds;
 import net.minecraft.advancements.triggers.Criterion;
 import net.minecraft.advancements.triggers.SimpleCriterionTrigger;
+import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import noobanidus.mods.lootr.common.api.interfaces.advancement.ILootedStatTrigger;
 import noobanidus.mods.lootr.common.api.LootrRegistry;
 import org.jspecify.annotations.NonNull;
@@ -28,9 +29,9 @@ public class LootedStatTrigger extends SimpleCriterionTrigger<LootedStatTrigger.
     return ((LootedStatTrigger) LootrRegistry.getStatTrigger().getTrigger()).createCriterion(new TriggerInstance(Optional.empty(), MinMaxBounds.Ints.exactly(count)));
   }
 
-  public record TriggerInstance(Optional<ContextAwarePredicate> player,
+  public record TriggerInstance(Optional<Holder<LootItemCondition>> player,
                                 MinMaxBounds.Ints score) implements SimpleCriterionTrigger.SimpleInstance {
-    public static final Codec<TriggerInstance> CODEC = RecordCodecBuilder.create(codec -> codec.group(ContextAwarePredicate.CODEC.optionalFieldOf("player").forGetter(LootedStatTrigger.TriggerInstance::player), MinMaxBounds.Ints.CODEC.optionalFieldOf("score", MinMaxBounds.Ints.ANY).forGetter(LootedStatTrigger.TriggerInstance::score)).apply(codec, LootedStatTrigger.TriggerInstance::new));
+    public static final Codec<TriggerInstance> CODEC = RecordCodecBuilder.create(codec -> codec.group(LootItemCondition.CODEC.optionalFieldOf("player").forGetter(LootedStatTrigger.TriggerInstance::player), MinMaxBounds.Ints.CODEC.optionalFieldOf("score", MinMaxBounds.Ints.ANY).forGetter(LootedStatTrigger.TriggerInstance::score)).apply(codec, LootedStatTrigger.TriggerInstance::new));
 
     public boolean test(ServerPlayer player) {
       return this.score.matches(player.getStats().getValue(LootrRegistry.getLootedStat()));
