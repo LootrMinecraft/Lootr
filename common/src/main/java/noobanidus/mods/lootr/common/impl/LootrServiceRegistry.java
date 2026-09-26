@@ -303,4 +303,8 @@ public class LootrServiceRegistry {
 
     return problematicTables;
   }
+
+  public static void clearTeamResolverCache() {
+    cachedTeamResolver = null;
+  }
 }

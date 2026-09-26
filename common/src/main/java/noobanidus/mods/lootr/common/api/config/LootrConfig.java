@@ -37,7 +37,6 @@ public class LootrConfig {
   private static List<String> LAST_MODID_DIM_WHITELIST = null;
   private static List<String> LAST_DIM_BLACKLIST = null;
   private static List<String> LAST_MODID_DIM_BLACKLIST = null;
-  private static List<String> LAST_LOOT_BLACKLIST = null;
   private static List<String> LAST_LOOT_MODIDS = null;
   private static Identifier PINNED_RESOLVER = null;
 

@@ -65,6 +65,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   @Override
   public void refreshServices() {
     LootrServiceRegistry.clearBlockConverters();
+    LootrServiceRegistry.clearTeamResolverCache();
   }
 
   @Override
