@@ -33,15 +33,14 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootTable;
 import noobanidus.mods.lootr.common.api.BuiltInLootrTypes;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.NBTConstants;
-import noobanidus.mods.lootr.common.api.interfaces.wrapper.ILootrBlockEntityWrapper;
-import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
-import noobanidus.mods.lootr.common.api.interfaces.advancement.IContainerTrigger;
-import noobanidus.mods.lootr.common.api.helper.SimpleLootrInstance;
-import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
-import noobanidus.mods.lootr.common.api.interfaces.inventory.ILootrInventory;
 import noobanidus.mods.lootr.common.api.LootrRegistry;
-import noobanidus.mods.lootr.common.block.LootrBarrelBlock;
+import noobanidus.mods.lootr.common.api.NBTConstants;
+import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
+import noobanidus.mods.lootr.common.api.helper.SimpleLootrInstance;
+import noobanidus.mods.lootr.common.api.interfaces.advancement.IContainerTrigger;
+import noobanidus.mods.lootr.common.api.interfaces.inventory.ILootrInventory;
+import noobanidus.mods.lootr.common.api.interfaces.type.ILootrType;
+import noobanidus.mods.lootr.common.api.interfaces.wrapper.ILootrBlockEntityWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
@@ -194,7 +193,8 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
     double d0 = (double) this.worldPosition.getX() + 0.5D + (double) vec3i.getX() / 2.0D;
     double d1 = (double) this.worldPosition.getY() + 0.5D + (double) vec3i.getY() / 2.0D;
     double d2 = (double) this.worldPosition.getZ() + 0.5D + (double) vec3i.getZ() / 2.0D;
-    this.level.playSound(null, d0, d1, d2, pSound, SoundSource.BLOCKS, 0.5F, this.level.getRandom().nextFloat() * 0.1F + 0.9F);
+    this.level.playSound(null, d0, d1, d2, pSound, SoundSource.BLOCKS, 0.5F, this.level.getRandom()
+        .nextFloat() * 0.1F + 0.9F);
   }
 
   @Override
@@ -310,6 +310,26 @@ public class LootrBarrelBlockEntity extends RandomizableContainerBlockEntity imp
   @Override
   public @Nullable SimpleLootrInstance getInstance() {
     return simpleLootrInstance;
+  }
+
+  @Override
+  public boolean isClientDecaying() {
+    return simpleLootrInstance.isClientDecaying();
+  }
+
+  @Override
+  public boolean isClientRefreshing() {
+    return simpleLootrInstance.isClientRefreshing();
+  }
+
+  @Override
+  public void setClientDecaying(boolean value) {
+    simpleLootrInstance.setClientDecaying(value);
+  }
+
+  @Override
+  public void setClientRefreshing(boolean value) {
+    simpleLootrInstance.setClientRefreshing(value);
   }
 
   @AutoService(ILootrBlockEntityWrapper.class)

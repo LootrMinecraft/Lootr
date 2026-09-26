@@ -5,6 +5,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializer;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -50,8 +55,10 @@ import java.util.Set;
 import java.util.UUID;
 
 public class LootrItemFrame extends ItemFrame implements ILootrEntity {
+  private static final EntityDataAccessor<Boolean> REFRESHING = SynchedEntityData.defineId(LootrItemFrame.class, EntityDataSerializers.BOOLEAN);
+  private static final EntityDataAccessor<Boolean> DECAYING = SynchedEntityData.defineId(LootrItemFrame.class, EntityDataSerializers.BOOLEAN);
   private final NonNullList<ItemStack> inventory = NonNullList.withSize(1, ItemStack.EMPTY);
-  private final SimpleLootrEntityInstance instance = new SimpleLootrEntityInstance(this, this::getVisualOpeners, 1);
+  private final SimpleLootrEntityInstance instance = new SimpleLootrEntityInstance(this, this::getVisualOpeners, 1, REFRESHING, DECAYING);
 
   public LootrItemFrame(EntityType<? extends ItemFrame> entityType, Level level) {
     super(entityType, level);
@@ -59,6 +66,13 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
 
   public LootrItemFrame(Level level, BlockPos pos, Direction facingDirection) {
     super(LootrRegistry.getItemFrame(), level, pos, facingDirection);
+  }
+
+  @Override
+  protected void defineSynchedData(SynchedEntityData.Builder entityData) {
+    super.defineSynchedData(entityData);
+    entityData.define(REFRESHING, false);
+    entityData.define(DECAYING, false);
   }
 
   public void lootrSetItem(ItemStack stack) {
@@ -262,6 +276,7 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
   public void addAdditionalSaveData(@NonNull ValueOutput output) {
     super.addAdditionalSaveData(output);
     ContainerHelper.saveAllItems(output, this.inventory, true);
+    this.instance.saveAdditional(output, level().isClientSide());
   }
 
   @Override
@@ -269,6 +284,7 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
     super.readAdditionalSaveData(input);
     ContainerHelper.loadAllItems(input, this.inventory);
     this.setItemInternal(this.inventory.getFirst());
+    this.instance.loadAdditional(input);
   }
 
   private void setItemInternal(ItemStack stack) {
@@ -458,6 +474,27 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
         return new double[]{-0.1, -0.05};
       }
     }
+  }
+
+
+  @Override
+  public void setClientRefreshing(boolean value) {
+    this.instance.setClientRefreshing(value);
+  }
+
+  @Override
+  public void setClientDecaying(boolean value) {
+    this.instance.setClientDecaying(value);
+  }
+
+  @Override
+  public boolean isClientRefreshing() {
+    return this.instance.isClientRefreshing();
+  }
+
+  @Override
+  public boolean isClientDecaying() {
+    return this.instance.isClientDecaying();
   }
 
   @Override

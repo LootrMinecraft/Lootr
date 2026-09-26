@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
+import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -12,10 +13,12 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.PlayerContext;
 import noobanidus.mods.lootr.common.api.client.FrustumExtension;
 import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
@@ -156,4 +159,52 @@ public class ClientHooks {
       }
     }
   }
+
+  public static void performRefreshParticles(ILootrContainerInstance provider) {
+    PlayerContext context = getPlayerContext();
+    Level level = Minecraft.getInstance().level;
+    if (context.hasPlayer() && level != null && provider.hasClientOpened(context.player()) && provider.isClientRefreshing()) {
+      RandomSource random = Minecraft.getInstance().level.getRandom();
+      if (random.nextInt(3) == 0) {
+        if (hasLineOfSightOfBlock(provider)) {
+          double xOff = bounded(random, provider.getParticleXBounds());
+          double zOff = bounded(random, provider.getParticleZBounds());
+          Vec3 pos = provider.getParticleCenter();
+          int color = LootrAPI.DEFAULT_REFRESH_PARTICLE_COLOR;
+          level.addParticle(
+              new ParticleColorOption(LootrRegistry.getRefreshParticleType(), color, color, false),
+              pos.x + xOff,
+              pos.y + provider.getParticleYOffset() + random.nextDouble() * 0.02,
+              pos.z + zOff,
+              0,
+              random.nextDouble() * 0.02,
+              0
+          );
+        }
+      }
+    }
+  }
+
+  public static void performDecayParticles(ILootrContainerInstance provider) {
+    PlayerContext context = getPlayerContext();
+    Level level = Minecraft.getInstance().level;
+    Vec3 vec3 = provider.getParticleCenter();
+    BlockState blockstate;
+    if (provider instanceof BlockEntity be) {
+      blockstate = be.getBlockState();
+    } else {
+      blockstate = LootrRegistry.getChestBlock().defaultBlockState();
+    }
+    if (context.hasPlayer() && level != null && provider.isClientDecaying()) {
+      RandomSource random = Minecraft.getInstance().level.getRandom();
+      if (random.nextInt(3) == 0) {
+        if (hasLineOfSightOfBlock(provider)) {
+          double xOff = bounded(random, provider.getParticleXBounds());
+          double zOff = bounded(random, provider.getParticleZBounds());
+          level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, blockstate), vec3.x + xOff, vec3.y + provider.getParticleYOffset(), vec3.z + zOff, 0, 0, 0);
+        }
+      }
+    }
+  }
+
 }

@@ -225,4 +225,18 @@ public interface ILootrContainerInstance extends ILootrData, IClientHasOpeners {
   }
 
   int getRandomOffset ();
+
+  default void setClientRefreshing (boolean value) {
+
+  }
+  default void setClientDecaying (boolean value) {
+  }
+
+  default boolean isClientRefreshing () {
+    return false;
+  }
+
+  default boolean isClientDecaying () {
+    return false;
+  }
 }

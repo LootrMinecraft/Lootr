@@ -385,6 +385,26 @@ public class LootrShulkerBoxBlockEntity extends RandomizableContainerBlockEntity
     return 1.1;
   }
 
+  @Override
+  public boolean isClientDecaying() {
+    return simpleLootrInstance.isClientDecaying();
+  }
+
+  @Override
+  public boolean isClientRefreshing() {
+    return simpleLootrInstance.isClientRefreshing();
+  }
+
+  @Override
+  public void setClientDecaying(boolean value) {
+    simpleLootrInstance.setClientDecaying(value);
+  }
+
+  @Override
+  public void setClientRefreshing(boolean value) {
+    simpleLootrInstance.setClientRefreshing(value);
+  }
+
   private static void doNeighborUpdates(Level pLevel, BlockPos pPos, BlockState pState) {
     pState.updateNeighbourShapes(pLevel, pPos, 3);
     pLevel.updateNeighborsAt(pPos, pState.getBlock());

@@ -229,4 +229,8 @@ public final class LootrRegistry {
   public static ITrapdoorTrigger getTrapdoorTrigger () {
     return INSTANCE.getTrapdoorTrigger();
   }
+
+  public static ParticleType<ParticleColorOption> getRefreshParticleType () {
+    return INSTANCE.getRefreshParticleType();
+  }
 }

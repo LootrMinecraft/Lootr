@@ -20,6 +20,7 @@ import noobanidus.mods.lootr.common.client.block.LootrShulkerBoxRenderer;
 import noobanidus.mods.lootr.common.client.entity.LootrBlockStateDefinitions;
 import noobanidus.mods.lootr.common.client.entity.LootrChestCartRenderer;
 import noobanidus.mods.lootr.common.client.entity.LootrItemFrameRenderer;
+import noobanidus.mods.lootr.common.client.particle.RefreshParticle;
 import noobanidus.mods.lootr.common.client.particle.UnopenedParticle;
 import noobanidus.mods.lootr.common.client.select.SelectConfigType;
 import noobanidus.mods.lootr.common.client.special.LootrChestSpecialRenderer;
@@ -76,6 +77,7 @@ public class ClientSetup {
   @SubscribeEvent
   public static void registerParticles(RegisterParticleProvidersEvent event) {
     event.registerSpriteSet(ModParticles.UNOPENED_PARTICLE.get(), UnopenedParticle.Provider::new);
+    event.registerSpriteSet(ModParticles.REFRESH_PARTICLE.get(), RefreshParticle.Provider::new);
   }
 
   @SubscribeEvent
