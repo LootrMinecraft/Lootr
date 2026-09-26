@@ -335,8 +335,6 @@ public interface ILootrAPI {
       return;
     }
 
-    var style = LootrAPI.getDecayStyle();
-
     if (instance.canDecay()) {
       if (store.isDecayed()) {
         instance.performDecay();
@@ -350,13 +348,12 @@ public interface ILootrAPI {
           if (LootrAPI.shouldBeginDecaying(instance)) {
             store.beginDecay();
             instance.setClientDecaying(true);
+            instance.performUpdate();
             PlatformAPI.alertContainerStatus(player, ContainerStatus.DECAY, ContainerStatus.Type.START, LootrAPI.getDecayValue() / 20);
           }
         }
       }
     }
-
-    style = LootrAPI.getRefreshStyle();
 
     instance.performTrigger(player);
     boolean shouldUpdate = false;
@@ -376,6 +373,7 @@ public interface ILootrAPI {
         if (LootrAPI.shouldBeginRefreshing(instance)) {
           store.beginRefresh();
           instance.setClientRefreshing(true);
+          shouldUpdate = true;
           PlatformAPI.alertContainerStatus(player, ContainerStatus.REFRESH, ContainerStatus.Type.START, LootrAPI.getRefreshValue() / 20);
         }
       }
