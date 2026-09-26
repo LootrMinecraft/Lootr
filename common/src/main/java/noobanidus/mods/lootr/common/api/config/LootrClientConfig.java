@@ -1,7 +1,6 @@
 package noobanidus.mods.lootr.common.api.config;
 
 import com.teamresourceful.resourcefulconfig.api.annotations.*;
-import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
 
 @Config(value = "lootr-client", categories = {
     LootrClientConfig.Particles.class,

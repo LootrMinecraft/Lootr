@@ -203,7 +203,7 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   @DefaultCandidate
   public boolean shouldNotify(int remaining) {
     int delay = LootrAPI.getNotificationDelay();
-    return !LootrAPI.isNotificationsEnabled() && (delay == -1 || remaining <= delay);
+    return LootrAPI.isNotificationsEnabled() && (delay == -1 || remaining <= delay);
   }
 
   @Override
