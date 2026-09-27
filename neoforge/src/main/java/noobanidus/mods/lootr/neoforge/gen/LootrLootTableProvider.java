@@ -87,7 +87,7 @@ public class LootrLootTableProvider {
           LootTable.lootTable()
               .withPool(
                   LootPool.lootPool()
-                      .setRolls(ContextIntProviders.exactly(10))
+                      .setRolls(ContextIntProviders.exactly(1))
                       .add(LootItem.lootTableItem(LootrRegistry.getTrophyBlock())
                           .apply(SetItemCountFunction.setCount(ContextIntProviders.exactly(1))))));
       consumer.accept(

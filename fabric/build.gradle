@@ -44,7 +44,7 @@ dependencies {
     implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:${rootProject.mixin_extras_version}"))
     implementation("io.github.llamalad7:mixinextras-fabric:${rootProject.mixin_extras_version}")
 
-    include(implementation "com.teamresourceful.resourcefulconfig:resourcefulconfig-fabric-26.2:${rootProject.resourceful_config_version}")
+    include(implementation "com.teamresourceful.resourcefulconfig:resourcefulconfig-fabric-26.3:${rootProject.resourceful_config_version}")
 }
 
 publishMods {

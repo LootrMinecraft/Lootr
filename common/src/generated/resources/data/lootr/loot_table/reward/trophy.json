@@ -12,7 +12,7 @@
           "name": "lootr:trophy"
         }
       ],
-      "rolls": 10
+      "rolls": 1
     }
   ],
   "random_sequence": "lootr:reward/trophy"

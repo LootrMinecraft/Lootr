@@ -11,8 +11,8 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(StructureTemplate.class)
 public class MixinStructureTemplate {
-  @WrapOperation(method = "fillFromWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/entity/BlockEntity;saveWithId(Lnet/minecraft/world/level/storage/ValueOutput;)V"))
-  private void LootrInjectStructureSavingStart(BlockEntity instance, ValueOutput output, Operation<Void> original) {
+  @WrapOperation(method = "lambda$fillFromWorld$1", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/entity/BlockEntity;saveWithId(Lnet/minecraft/world/level/storage/ValueOutput;)V"))
+  private static void LootrInjectStructureSavingStart(BlockEntity instance, ValueOutput output, Operation<Void> original) {
     LootrAPI.shouldDiscardIdAndOpeners = true;
     original.call(instance, output);
     LootrAPI.shouldDiscardIdAndOpeners = false;

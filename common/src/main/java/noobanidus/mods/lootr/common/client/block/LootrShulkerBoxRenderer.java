@@ -94,11 +94,7 @@ public class LootrShulkerBoxRenderer implements BlockEntityRenderer<LootrShulker
   }
 
   private void prepareModel(PoseStack poseStack, Direction direction, float progress) {
-    poseStack.translate(0.5F, 0.5F, 0.5F);
-    poseStack.scale(0.9995F, 0.9995F, 0.9995F);
     poseStack.mulPose(ShulkerBoxRenderer.modelTransform(direction));
-    poseStack.scale(1.0F, -1.0F, -1.0F);
-    poseStack.translate(0.0F, -1.0F, 0.0F);
     this.model.setupAnim(progress);
   }
 

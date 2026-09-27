@@ -27,6 +27,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
+import net.minecraft.world.level.block.entity.PotDecorations;
 import net.minecraft.world.phys.Vec3;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.LootrConstants;
@@ -65,7 +66,7 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
   private final ModelPart open;
   private final ModelPart sherds;
 
-  private final DecoratedPotRenderer renderer;
+  private DecoratedPotRenderer renderer = null;
 
   public LootrDecoratedPotRenderer(BlockEntityRendererProvider.Context context) {
     this(context.entityModelSet(), context.sprites());
@@ -89,8 +90,14 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
     ModelPart modelPart3 = context.bakeLayer(OPEN_POT_LAYER);
     this.open = modelPart3.getChild("open");
     this.sherds = modelPart3.getChild("sherds");
-    this.renderer = (DecoratedPotRenderer) (Object) Minecraft.getInstance().levelRenderer.blockEntityRenderDispatcher()
-        .getRenderer(new DecoratedPotBlockEntity(BlockPos.ZERO, Blocks.DECORATED_POT.defaultBlockState()));
+  }
+
+  private DecoratedPotRenderer getRenderer () {
+    if (renderer == null) {
+      this.renderer = (DecoratedPotRenderer) (Object) Minecraft.getInstance().levelRenderer.blockEntityRenderDispatcher()
+          .getRenderer(new DecoratedPotBlockEntity(BlockPos.ZERO, Blocks.DECORATED_POT.defaultBlockState()));
+    }
+    return renderer;
   }
 
   public static LayerDefinition createBodyLayer() {
@@ -125,7 +132,7 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
       if (customSide != null) {
         return cachedSpriteIds.computeIfAbsent(customSide, rl -> DecoratedPotRenderer.SideSprite.create(this.materials, new SpriteId(DECORATED_POT_SHEET, rl.withPrefix("entity/decorated_pot/"))));
       } else {
-        return ((AccessorMixinDecoratedPotRenderer) renderer).lootr$getSideSprite(Optional.of(item));
+        return ((AccessorMixinDecoratedPotRenderer) getRenderer()).lootr$getSideSprite(Optional.of(item));
       }
     }
 
@@ -144,7 +151,7 @@ public class LootrDecoratedPotRenderer implements BlockEntityRenderer<LootrDecor
   @Override
   public void extractRenderState(LootrDecoratedPotBlockEntity blockEntity, LootrDecoratedPotBlockRenderState renderState, float partialTick, @NonNull Vec3 cameraPosition, ModelFeatureRenderer.@Nullable CrumblingOverlay breakProgress) {
     BlockEntityRenderer.super.extractRenderState(blockEntity, renderState, partialTick, cameraPosition, breakProgress);
-    renderState.decorations = null;
+    renderState.decorations = PotDecorations.EMPTY;
     renderState.potDecorations = blockEntity.getDecorations();
     renderState.direction = blockEntity.getDirection();
     DecoratedPotBlockEntity.WobbleStyle decoratedpotblockentity$wobblestyle = blockEntity.lastWobbleStyle;
