@@ -89,6 +89,8 @@ public class LootrBlockTagProvider extends BlockTagsProvider {
     tag(LootrTags.Blocks.INTERACT_WHITELIST_BLOCKS).addTags(LootrTags.Blocks.BARRELS, LootrTags.Blocks.CHESTS, LootrTags.Blocks.TRAPPED_CHESTS, LootrTags.Blocks.SHULKERS, LootrTags.Blocks.SANDS, LootrTags.Blocks.GRAVELS, LootrTags.Blocks.POTS);
 
     tag(LootrTags.Blocks.INTERACT_WHITELIST).addTag(LootrTags.Blocks.INTERACT_WHITELIST_BLOCKS);
+
+    tag(LootrTags.Blocks.CATS_CAN_BLOCK).addTags(LootrTags.Blocks.CHESTS, LootrTags.Blocks.COPPER_CHESTS, LootrTags.Blocks.WEATHERED_COPPER_CHESTS, LootrTags.Blocks.OXIDIZED_COPPER_CHESTS, LootrTags.Blocks.EXPOSED_COPPER_CHESTS, LootrTags.Blocks.TRAPPED_CHESTS);
   }
 
   @Override

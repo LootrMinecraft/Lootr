@@ -1,0 +1,10 @@
+{
+  "values": [
+    "#lootr:chests",
+    "#lootr:copper_chests",
+    "#lootr:weathered_copper_chests",
+    "#lootr:oxidized_copper_chests",
+    "#lootr:exposed_copper_chests",
+    "#lootr:trapped_chests"
+  ]
+}
