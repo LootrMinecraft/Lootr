@@ -189,7 +189,7 @@
   "lootr.configuration.team": "Командная добыча",
   "lootr.configuration.team.desc": "Параметры настройки для получения добычи всей командой вместо получения добычи каждым игроком по отдельности.",
   "lootr.configuration.team_loot": "Включить командную добычу",
-  "lootr.configuration.team_loot.desc": "If true, containers will create one inventory for each player's team, rather than for each player [default: false]",
+  "lootr.configuration.team_loot.desc": "Если включено, отдельные инвентари будут создаваться для каждой команды игроков, а не для каждого отдельного игрока. [По умолчанию: false]",
   "lootr.configuration.tick_delay": "Задерджка такта по умолчанию",
   "lootr.configuration.tick_delay.desc": "Задержка между тактами по умолчанию. Чем выше это значение, тем медленнее контейнеры распознают обновление или разложение во время такта. К этому значению добавляется случайное значение от 0 до 20 для каждого блока. [По умолчанию: 20]",
   "lootr.configuration.title": "Сервер",
