@@ -39,6 +39,16 @@ public class HandleResourcePacks {
           false,
           Pack.Position.TOP
       );
+
+      event.addPackFinders(
+              LootrAPI.rl("datapacks/lootr_no_decorated_pots"),
+              PackType.SERVER_DATA,
+              Component.literal("Disable Lootr Converting Decorated Pots"),
+              PackSource.FEATURE,
+              false,
+              Pack.Position.TOP
+      );
+
     }
   }
 }

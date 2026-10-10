@@ -21,7 +21,7 @@ public class TagChecker {
 
     if (server != null) {
       var packs = server.getWorldData().getDataConfiguration().dataPacks().getEnabled();
-      packEnabled = packs.contains("lootr:lootr_no_suspicious_blocks") || packs.contains("mod/lootr:datapacks/lootr_no_advancements");
+      packEnabled = packs.contains("lootr:lootr_no_suspicious_blocks") || packs.contains("mod/lootr:datapacks/lootr_no_advancements") ||  packs.contains("lootr:lootr_no_decorated_pots");
     } else {
       // If there's no server this is being fired on the client thread and we don't care about the tags here
       return;
@@ -92,6 +92,18 @@ public class TagChecker {
     }, () -> {
       if (!packEnabled) {
         LootrAPI.LOG.error("[Lootr Tag Error] Block tag `lootr:convert/gravels` is missing. This may prevent any block from being converted to a Lootr equivalent. If this is intentional, you may ignore this message.");
+        standardError();
+      }
+    });
+
+    BuiltInRegistries.BLOCK.getTag(LootrTags.Blocks.CONVERT_POTS).ifPresentOrElse(tag -> {
+      if (tag.size() == 0 && !packEnabled) {
+        LootrAPI.LOG.error("[Lootr Tag Error] Block tag `lootr:convert/pots` is empty. This may prevent any block from being converted to a Lootr equivalent. If this is intentional, you may ignore this message.");
+        standardError();
+      }
+    }, () -> {
+      if (!packEnabled) {
+        LootrAPI.LOG.error("[Lootr Tag Error] Block tag `lootr:convert/pots` is missing. This may prevent any block from being converted to a Lootr equivalent. If this is intentional, you may ignore this message.");
         standardError();
       }
     });
