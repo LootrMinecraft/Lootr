@@ -68,6 +68,7 @@ tasks.named("processResources") {
     from("../datapacks") {
         include("lootr_no_advancements/**")
         include("lootr_no_suspicious_blocks/**")
+        include("lootr_no_decorated_pots/**")
         exclude(".cache/**")
     }
 }
