@@ -132,7 +132,7 @@ public class TagChecker {
       }
     });
 
-    BuiltInRegistries.BLOCK.getTag(LootrTags.Blocks.CONVERT_POTS).ifPresentOrElse(tag -> {
+    BuiltInRegistries.BLOCK.get(LootrTags.Blocks.CONVERT_POTS).ifPresentOrElse(tag -> {
       if (tag.size() == 0 && !packEnabled) {
         LootrAPI.LOG.error("[Lootr Tag Error] Block tag `lootr:convert/pots` is empty. This may prevent any block from being converted to a Lootr equivalent. If this is intentional, you may ignore this message.");
         standardError();

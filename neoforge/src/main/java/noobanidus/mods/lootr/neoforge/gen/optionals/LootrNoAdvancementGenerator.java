@@ -57,7 +57,7 @@ public class LootrNoAdvancementGenerator {
     generator.addProvider(true, new LootrNoSuspiciousGenerator.LootrBlockTagProvider(generator.getPackOutput(), provider));
 
     generator = makeGenerator(datapacks.resolve("lootr_no_decorated_pots"), Component.literal("Disable Lootr Decorated Pots"));
-    generator.addProvider(event.includeServer(), new LootrNoDecoratedPotGenerator.LootrBlockTagProvider(generator.getPackOutput(), provider, helper));
+    generator.addProvider(true, new LootrNoDecoratedPotGenerator.LootrBlockTagProvider(generator.getPackOutput(), provider));
 
     try {
       for (DataGenerator toRun : generators) {

@@ -1,6 +1,10 @@
 {
   "pack": {
     "description": "Disable Lootr Decorated Pots",
-    "pack_format": 48
+    "max_format": 101,
+    "min_format": [
+      101,
+      1
+    ]
   }
 }
