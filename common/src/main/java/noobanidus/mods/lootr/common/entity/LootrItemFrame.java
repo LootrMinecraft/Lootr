@@ -115,24 +115,27 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
 
   @Override
   public boolean hurtServer(@NonNull ServerLevel serverLevel, @NonNull DamageSource source, float amount) {
-    boolean skipMessage = false;
-
-    // TODO: This could be an issue in the future as this is called with "simulation" amounts of 0.0
     ServerPlayer player = null;
     if (source.getEntity() instanceof ServerPlayer player1) {
       player = player1;
     } else if (source.getDirectEntity() instanceof ServerPlayer player2) {
       player = player2;
     }
-    if (player != null) {
-      if (this.actuallyDropItem(player)) {
-        skipMessage = true;
-      }
-    }
 
-    if (!skipMessage) {
-      maybeMessagePlayer(source);
-    }
+    // amount 0 is used for player melee probes. Do not drop or warn on those
+    // Snowballs also deal 0, but have a distinct direct entity, so they still work
+    Entity direct = source.getDirectEntity();
+    boolean playerMeleeProbe = amount <= 0.0f
+        && source.getEntity() instanceof Player
+        && (direct == null || direct == source.getEntity());
+    if (playerMeleeProbe)
+      return !this.isInvulnerableTo(source);
+
+    // Like vanilla. Taking the loot item is the whole hit. Do not send the destroy warning
+    if (player != null && this.actuallyDropItem(player))
+      return true;
+
+    maybeMessagePlayer(source);
 
     if (this.isInvulnerableTo(source)) {
       return false;
