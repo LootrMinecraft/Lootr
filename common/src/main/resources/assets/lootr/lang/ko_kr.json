@@ -189,7 +189,7 @@
   "lootr.configuration.team": "팀 노획물",
   "lootr.configuration.team.desc": "Configuration options for instanced team loot instead of instanced player loot.",
   "lootr.configuration.team_loot": "팀 노획물 활성화",
-  "lootr.configuration.team_loot.desc": "true일 경우, 용기은 플레이어 개개인이 아닌 각 플레이어의 팀별로 하나의 보관함을 생성하게 됩니다 [기본값: false]",
+  "lootr.configuration.team_loot.desc": "true일 경우, 용기는 플레이어 개개인이 아닌 각 플레이어의 팀별로 하나의 보관함을 생성하게 됩니다 [기본값: false]",
   "lootr.configuration.tick_delay": "Default Tick Delay",
   "lootr.configuration.tick_delay.desc": "The default delay between ticks. The higher this value, the slower it is for containers to recognise that they have refreshed or decayed while ticking. A random value from 0 to 20 is added to this by each block entity. [default: 20]",
   "lootr.configuration.title": "서버",
