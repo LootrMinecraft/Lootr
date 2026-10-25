@@ -125,15 +125,15 @@ public class LootrItemFrame extends ItemFrame implements ILootrEntity {
     // amount 0 is used for player melee probes. Do not drop or warn on those
     // Snowballs also deal 0, but have a distinct direct entity, so they still work
     Entity direct = source.getDirectEntity();
-    boolean playerMeleeProbe = amount <= 0.0f
-        && source.getEntity() instanceof Player
-        && (direct == null || direct == source.getEntity());
-    if (playerMeleeProbe)
+    boolean playerMeleeProbe = amount <= 0.0f && player != null && (direct == null || direct == player);
+    if (playerMeleeProbe) {
       return !this.isInvulnerableTo(source);
+    }
 
     // Like vanilla. Taking the loot item is the whole hit. Do not send the destroy warning
-    if (player != null && this.actuallyDropItem(player))
+    if (player != null && this.actuallyDropItem(player)) {
       return true;
+    }
 
     maybeMessagePlayer(source);
 
