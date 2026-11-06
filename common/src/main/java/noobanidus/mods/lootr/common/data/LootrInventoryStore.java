@@ -82,6 +82,16 @@ public class LootrInventoryStore implements ILootrInventoryStore {
     markInstanceChanged();
   }
 
+  void importLegacyTimers(long legacyDecayTime, long legacyRefreshTime) {
+    if (legacyDecayTime != -1 && decayTime == -1) {
+      this.decayTime = legacyDecayTime;
+    }
+    if (legacyRefreshTime != -1 && refreshTime == -1) {
+      this.refreshTime = legacyRefreshTime;
+    }
+    markInstanceChanged();
+  }
+
   @Override
   public ILootrData getData() {
     return info;

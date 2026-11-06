@@ -64,6 +64,9 @@ final class LegacyDataMigrator {
       return false;
     }
 
+    // Timers live in separate files, so they are imported regardless of whether the container file still exists.
+    migrateTimers(server, store, data.getDataId());
+
     Path file = getLegacyFile(server, data.getDataId());
     if (!Files.isRegularFile(file)) {
       return false;
@@ -135,6 +138,58 @@ final class LegacyDataMigrator {
     } catch (IOException | RuntimeException e) {
       LootrAPI.LOG.error("Failed to migrate legacy Lootr data from {}; the file has been left in place.", file, e);
       return false;
+    }
+  }
+
+  private static void migrateTimers(MinecraftServer server, LootrInventoryStore store, UUID id) {
+    try {
+      long decay = readTimer(server, "decay", "Lootr-DecayData", id);
+      long refresh = readTimer(server, "refresh", "Lootr-RefreshData", id);
+      if (decay != -1 || refresh != -1) {
+        store.importLegacyTimers(decay, refresh);
+        LootrAPI.LOG.info("Migrated legacy Lootr timers for container {} (decay: {}, refresh: {}).", id, decay, refresh);
+      }
+    } catch (RuntimeException e) {
+      LootrAPI.LOG.error("Failed to migrate legacy Lootr timers for container {}.", id, e);
+    }
+  }
+
+  /**
+   * @return the absolute game time at which the timer completes, or -1 if there is none.
+   */
+  private static long readTimer(MinecraftServer server, String type, String flatName, UUID id) {
+    Path base = server.getWorldPath(LevelResource.ROOT).resolve("data").resolve("lootr");
+    // 1.21.1 (later builds) and 1.21.11: sectioned files holding an absolute game time.
+    Path sectioned = base.resolve("ticking").resolve(type).resolve(id.toString().substring(0, 2) + ".dat");
+    long value = findTimerEntry(sectioned, id);
+    if (value >= 0) {
+      return value;
+    }
+    // 1.21.1 (older builds) and 1.21.5 to 1.21.10: one flat file holding the ticks remaining.
+    value = findTimerEntry(base.resolve(flatName + ".dat"), id);
+    if (value >= 0) {
+      return LootrAPI.getGameTime() + value;
+    }
+    return -1;
+  }
+
+  private static long findTimerEntry(Path file, UUID id) {
+    if (!Files.isRegularFile(file)) {
+      return -1;
+    }
+    try {
+      Tag data = NbtIo.readCompressed(file, NbtAccounter.unlimitedHeap()).get("data");
+      // 1.21.5+ writes the list directly; 1.21.1 wraps it in "result".
+      ListTag entries = data instanceof ListTag list ? list : data instanceof CompoundTag compound ? compound.getListOrEmpty("result") : new ListTag();
+      for (CompoundTag entry : entries.compoundStream().toList()) {
+        if (id.equals(readUuid(entry.get("id")))) {
+          return entry.getLongOr("value", -1L);
+        }
+      }
+      return -1;
+    } catch (IOException e) {
+      LootrAPI.LOG.error("Failed to read legacy Lootr timer file {}.", file, e);
+      return -1;
     }
   }
 
