@@ -122,16 +122,12 @@ final class LegacyDataMigrator {
         throw new IllegalStateException("Read " + inventories.size() + " of " + expected + " player inventories");
       }
 
-      Set<UUID> actualOpeners = new HashSet<>();
-      for (Tag opener : tag.getListOrEmpty("actualOpeners")) {
-        UUID uuid = readUuid(opener);
-        if (uuid != null) {
-          actualOpeners.add(uuid);
-        }
-      }
+      Set<UUID> actualOpeners = readUuidSet(tag, "actualOpeners");
+      // Visual openers are what the client uses to show a container as "already opened" for a player.
+      Set<UUID> visualOpeners = readUuidSet(tag, "openers");
 
       boolean hasBeenOpened = tag.getBooleanOr("hasBeenOpened", false) || !inventories.isEmpty();
-      store.importLegacy(inventories, actualOpeners, hasBeenOpened);
+      store.importLegacy(inventories, visualOpeners, actualOpeners, hasBeenOpened);
 
       Files.move(file, file.resolveSibling(file.getFileName() + MIGRATED_SUFFIX), StandardCopyOption.REPLACE_EXISTING);
       LootrAPI.LOG.info("Migrated legacy Lootr data for container {} ({} inventories).", data.getDataId(), inventories.size());
@@ -147,6 +143,17 @@ final class LegacyDataMigrator {
       return null;
     }
     return UUIDUtil.CODEC.parse(NbtOps.INSTANCE, tag).result().orElse(null);
+  }
+
+  private static Set<UUID> readUuidSet(CompoundTag tag, String key) {
+    Set<UUID> result = new HashSet<>();
+    for (Tag entry : tag.getListOrEmpty(key)) {
+      UUID uuid = readUuid(entry);
+      if (uuid != null) {
+        result.add(uuid);
+      }
+    }
+    return result;
   }
 
   private static UUID parseUuid(String value) {

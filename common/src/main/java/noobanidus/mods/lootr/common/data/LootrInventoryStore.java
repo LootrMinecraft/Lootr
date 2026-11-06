@@ -71,11 +71,12 @@ public class LootrInventoryStore implements ILootrInventoryStore {
     this.refreshTime = refreshTime;
   }
 
-  void importLegacy(Map<UUID, LootrInventory> legacyInventories, Set<UUID> legacyActualOpeners, boolean legacyHasBeenOpened) {
+  void importLegacy(Map<UUID, LootrInventory> legacyInventories, Set<UUID> legacyVisualOpeners, Set<UUID> legacyActualOpeners, boolean legacyHasBeenOpened) {
     legacyInventories.forEach((id, inventory) -> {
       inventory.setLootrSavedData(this);
       this.inventories.put(id, inventory);
     });
+    this.openers.addAll(legacyVisualOpeners);
     this.actualOpeners.addAll(legacyActualOpeners);
     this.hasInventories = this.hasInventories || legacyHasBeenOpened;
     markInstanceChanged();
