@@ -22,6 +22,12 @@ public class ModEntities {
       .clientTrackingRange(10)
       .updateInterval(Integer.MAX_VALUE).build(LootrConstants.LootrEntityIds.ITEM_FRAME_ENTITY));
 
+  static {
+    for (var pair : LootrConstants.LegacyIdentifiers.ENTITIES) {
+      REGISTER.addAlias(pair[0], pair[1]);
+    }
+  }
+
   public static void register(IEventBus bus) {
     REGISTER.register(bus);
   }

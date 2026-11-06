@@ -52,6 +52,26 @@ public final class LootrConstants {
     public static final Identifier OXIDIZED_COPPER_CHEST = LootrAPI.rl("oxidized_copper_chest");
   }
 
+  /**
+   * Pre-26 identifiers, mapped to their current equivalents. Registered as registry aliases
+   * so worlds saved before the rename keep loading their blocks, block entities, items and entities.
+   * Each pair is {old, current}.
+   */
+  public static class LegacyIdentifiers {
+    // Blocks, block entity types and items
+    public static final Identifier[][] CONTAINERS = {
+        {LootrAPI.rl("lootr_chest"), Identifiers.CHEST},
+        {LootrAPI.rl("lootr_trapped_chest"), Identifiers.TRAPPED_CHEST},
+        {LootrAPI.rl("lootr_barrel"), Identifiers.BARREL},
+        {LootrAPI.rl("lootr_shulker"), Identifiers.SHULKER_BOX}
+    };
+    // Entity types
+    public static final Identifier[][] ENTITIES = {
+        {LootrAPI.rl("lootr_cart"), Identifiers.MINECART_WITH_CHEST},
+        {LootrAPI.rl("lootr_minecart"), Identifiers.MINECART_WITH_CHEST}
+    };
+  }
+
   public static class LootrBlockEntityIds {
     public static final ResourceKey<BlockEntityType<?>> CHEST = ResourceKey.create(Registries.BLOCK_ENTITY_TYPE, Identifiers.CHEST);
     public static final ResourceKey<BlockEntityType<?>> TRAPPED_CHEST = ResourceKey.create(Registries.BLOCK_ENTITY_TYPE, Identifiers.TRAPPED_CHEST);

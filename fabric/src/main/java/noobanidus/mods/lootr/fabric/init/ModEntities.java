@@ -19,5 +19,9 @@ public class ModEntities {
         .eyeHeight(0.0F)
         .clientTrackingRange(10)
         .updateInterval(Integer.MAX_VALUE).build(LootrConstants.LootrEntityIds.ITEM_FRAME_ENTITY));
+
+    for (var pair : LootrConstants.LegacyIdentifiers.ENTITIES) {
+      BuiltInRegistries.ENTITY_TYPE.addAlias(pair[0], pair[1]);
+    }
   }
 }

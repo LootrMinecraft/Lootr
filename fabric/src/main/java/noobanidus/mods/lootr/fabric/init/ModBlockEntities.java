@@ -16,6 +16,10 @@ public class ModBlockEntities {
     Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrConstants.Identifiers.BARREL, BARREL);
     Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrConstants.Identifiers.BRUSHABLE_BLOCK, BRUSHABLE_BLOCK);
     Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrConstants.Identifiers.DECORATED_POT, DECORATED_POT);
+
+    for (var pair : LootrConstants.LegacyIdentifiers.CONTAINERS) {
+      BuiltInRegistries.BLOCK_ENTITY_TYPE.addAlias(pair[0], pair[1]);
+    }
   }
 
   public static final BlockEntityType<LootrChestBlockEntity> CHEST = FabricBlockEntityTypeBuilder.create(LootrChestBlockEntity::new, LootrRegistry.getChestBlock(), LootrRegistry.getCopperChestBlock(), LootrRegistry.getWeatheredCopperChestBlock(), LootrRegistry.getExposedCopperChestBlock(), LootrRegistry.getOxidizedCopperChestBlock())
