@@ -39,11 +39,17 @@ public class Section extends SavedData implements ILootrSection {
       throw new IllegalArgumentException("Data with id " + data.getDataIdentifier() + " cannot be stored in section with id " + this.identifier);
     }
     LootrInventoryStore store = this.data.get(data.getDataId());
+    boolean created = false;
     if (store == null) {
       store = new LootrInventoryStore(data);
       this.data.put(data.getDataId(), store);
+      created = true;
     }
     store.setSection(this);
+    if (created) {
+      // Pull in any pre-26 data file for this container, if one exists.
+      LegacyDataMigrator.migrate(store, data);
+    }
     store.update(data);
     return store;
   }
