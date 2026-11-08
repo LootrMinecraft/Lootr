@@ -65,6 +65,7 @@ import noobanidus.mods.lootr.common.block.LootrChestBlock;
 import noobanidus.mods.lootr.common.block.LootrShulkerBoxBlock;
 import noobanidus.mods.lootr.common.block.entity.BlockEntityTicker;
 import noobanidus.mods.lootr.common.data.DataStorage;
+import noobanidus.mods.lootr.common.data.LegacyMigrationRunner;
 import noobanidus.mods.lootr.common.data.LootrInventory;
 import noobanidus.mods.lootr.common.data.LootrInventoryStore;
 import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
@@ -231,6 +232,17 @@ public class CommandLootr {
           .sendSuccess(() -> Component.literal(LootrAPI.clearPlayerLoot(profile.id()) ? "Cleared stored inventories for " + playerName : "No stored inventories for " + playerName + " to clear"), true);
       return 1;
     })));
+    builder.then(Commands.literal("migrate").executes(c -> {
+      // Normally the migration runs automatically on server start. This exists for servers that have disable_ticks set
+      // in the configuration, where the automatic pass is skipped.
+      if (!LootrAPI.isTicksDisabled()) {
+        c.getSource().sendFailure(Component.literal("Lootr migrates legacy data automatically on server start. This command is only available while 'disable_ticks' is enabled in the configuration."));
+        return 0;
+      }
+      LegacyMigrationRunner.Result result = LegacyMigrationRunner.run(c.getSource().getServer(), true);
+      c.getSource().sendSuccess(() -> Component.literal("Lootr migration: " + result.found() + " files found, " + result.migrated() + " migrated, " + result.skipped() + " already present, " + result.failed() + " failed."), true);
+      return result.complete() ? 1 : 0;
+    }));
     builder.then(Commands.literal("open_as").executes(c -> {
       c.getSource().sendSuccess(() -> Component.literal("Must provide player name."), true);
       return 1;
