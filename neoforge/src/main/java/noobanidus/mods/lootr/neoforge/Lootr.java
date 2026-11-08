@@ -4,10 +4,12 @@ import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
+import noobanidus.mods.lootr.common.api.config.LegacyConfigImporter;
 import noobanidus.mods.lootr.common.api.config.LootrClientConfig;
 import noobanidus.mods.lootr.common.api.LootrRegistry;
 import noobanidus.mods.lootr.common.command.CommandLootr;
@@ -31,6 +33,7 @@ public class Lootr {
 
     LootrConfig.getConfigurator().register(LootrCommonConfig.class);
     LootrConfig.getConfigurator().register(LootrClientConfig.class);
+    LegacyConfigImporter.importIfNeeded(FMLPaths.CONFIGDIR.get());
 
     NeoForge.EVENT_BUS.addListener(this::onCommands);
     ModTabs.register(modBus);

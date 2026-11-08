@@ -119,7 +119,7 @@
   "lootr.configuration.dimension_whitelist": "Dimension Whitelist",
   "lootr.configuration.dimension_whitelist.desc": "List of dimensions in which Lootr containers will be converted.",
   "lootr.configuration.disable": "Disable Conversion (Deprecated)",
-  "lootr.configuration.disable.desc": "Deprecated: use 'disable_conversion'. If true, this behaves as if 'disable_conversion' were true. [default: false]",
+  "lootr.configuration.disable.desc": "Deprecated: use 'disable_conversion' and 'disable_ticks'. If true, this behaves as if both were true. [default: false]",
   "lootr.configuration.disable_conversion": "Disable Conversion",
   "lootr.configuration.disable_conversion.desc": "Prevents any conversion from taking place: vanilla containers, structures and minecarts are not turned into Lootr containers. Existing Lootr containers keep working. [default: false]",
   "lootr.configuration.disable_ticks": "Disable Ticks",

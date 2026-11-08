@@ -39,7 +39,7 @@ public final class LootrConfigStrings {
   public static final String CONVERSION_TITLE = "Conversion";
   public static final String CONVERSION_DESC = "Configuration options related to the conversion of Vanilla (or modded) containers into Lootr containers.";
   public static final String DISABLE = "Disable Conversion (Deprecated)";
-  public static final String DISABLE_DESC = "Deprecated: use 'disable_conversion'. If true, this behaves as if 'disable_conversion' were true. [default: false]";
+  public static final String DISABLE_DESC = "Deprecated: use 'disable_conversion' and 'disable_ticks'. If true, this behaves as if both were true. [default: false]";
   public static final String DISABLE_CONVERSION = "Disable Conversion";
   public static final String DISABLE_CONVERSION_DESC = "Prevents any conversion from taking place: vanilla containers, structures and minecarts are not turned into Lootr containers. Existing Lootr containers keep working. [default: false]";
   public static final String DISABLE_TICKS = "Disable Ticks";
