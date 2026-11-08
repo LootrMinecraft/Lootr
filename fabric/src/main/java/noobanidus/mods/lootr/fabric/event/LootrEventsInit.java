@@ -19,6 +19,7 @@ import noobanidus.mods.lootr.common.api.config.LootrConfig;
 import noobanidus.mods.lootr.common.block.entity.BlockEntityTicker;
 import noobanidus.mods.lootr.common.chunk.LoadedChunks;
 import noobanidus.mods.lootr.common.command.CommandLootr;
+import noobanidus.mods.lootr.common.data.LegacyMigrationRunner;
 import noobanidus.mods.lootr.fabric.network.to_client.PacketSyncConfig;
 
 public class LootrEventsInit {
@@ -29,6 +30,9 @@ public class LootrEventsInit {
       serverInstance = server;
       LoadedChunks.clear();
     });
+
+    // Saved data storage only exists once the levels are loaded, and no player can join before the first tick.
+    ServerLifecycleEvents.SERVER_STARTED.register(LegacyMigrationRunner::runOnStartup);
 
     ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
       serverInstance = null;

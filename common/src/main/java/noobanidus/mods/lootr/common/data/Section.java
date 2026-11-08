@@ -39,19 +39,32 @@ public class Section extends SavedData implements ILootrSection {
       throw new IllegalArgumentException("Data with id " + data.getDataIdentifier() + " cannot be stored in section with id " + this.identifier);
     }
     LootrInventoryStore store = this.data.get(data.getDataId());
-    boolean created = false;
     if (store == null) {
       store = new LootrInventoryStore(data);
       this.data.put(data.getDataId(), store);
-      created = true;
     }
     store.setSection(this);
-    if (created) {
-      // Pull in any pre-26 data file for this container, if one exists.
-      LegacyDataMigrator.migrate(store, data);
-    }
     store.update(data);
     return store;
+  }
+
+  /**
+   * Adds a fully built store to this section, unless one already exists for the same id.
+   *
+   * @return true if the store was added, false if existing data was kept.
+   */
+  boolean addStore(LootrInventoryStore store) {
+    UUID id = store.getData().getDataId();
+    if (!canContain(store.getData())) {
+      throw new IllegalArgumentException("Data with id " + store.getData().getDataIdentifier() + " cannot be stored in section with id " + this.identifier);
+    }
+    if (this.data.containsKey(id)) {
+      return false;
+    }
+    this.data.put(id, store);
+    store.setSection(this);
+    setDirty(true);
+    return true;
   }
 
   public Iterable<LootrInventoryStore> getStores() {

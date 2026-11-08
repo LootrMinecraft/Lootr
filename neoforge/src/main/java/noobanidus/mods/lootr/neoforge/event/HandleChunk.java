@@ -7,9 +7,11 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.level.ChunkEvent;
 import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.chunk.LoadedChunks;
+import noobanidus.mods.lootr.common.data.LegacyMigrationRunner;
 
 @EventBusSubscriber(modid = LootrAPI.MODID)
 public class HandleChunk {
@@ -34,6 +36,12 @@ public class HandleChunk {
   @SubscribeEvent
   public static void onServerStarted(ServerAboutToStartEvent event) {
     LoadedChunks.clear();
+  }
+
+  // Saved data storage only exists once the levels are loaded, and no player can join before the first tick.
+  @SubscribeEvent
+  public static void onServerStartedMigrate(ServerStartedEvent event) {
+    LegacyMigrationRunner.runOnStartup(event.getServer());
   }
 
   @SubscribeEvent

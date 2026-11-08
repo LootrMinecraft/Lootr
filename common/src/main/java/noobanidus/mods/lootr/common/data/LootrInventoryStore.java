@@ -58,7 +58,8 @@ public class LootrInventoryStore implements ILootrInventoryStore {
     }
   }
 
-  private LootrInventoryStore(boolean hasInventories, ILootrData info, Map<UUID, LootrInventory> map, Set<UUID> openers, Set<UUID> actualOpeners, long decayTime, long refreshTime) {
+  // Also used when constructing a store from converted pre-26 data (see LegacyDataMigrator).
+  LootrInventoryStore(boolean hasInventories, ILootrData info, Map<UUID, LootrInventory> map, Set<UUID> openers, Set<UUID> actualOpeners, long decayTime, long refreshTime) {
     this.hasInventories = hasInventories;
     this.info = info;
     this.inventories.putAll(map);
@@ -69,27 +70,6 @@ public class LootrInventoryStore implements ILootrInventoryStore {
     this.actualOpeners.addAll(actualOpeners);
     this.decayTime = decayTime;
     this.refreshTime = refreshTime;
-  }
-
-  void importLegacy(Map<UUID, LootrInventory> legacyInventories, Set<UUID> legacyVisualOpeners, Set<UUID> legacyActualOpeners, boolean legacyHasBeenOpened) {
-    legacyInventories.forEach((id, inventory) -> {
-      inventory.setLootrSavedData(this);
-      this.inventories.put(id, inventory);
-    });
-    this.openers.addAll(legacyVisualOpeners);
-    this.actualOpeners.addAll(legacyActualOpeners);
-    this.hasInventories = this.hasInventories || legacyHasBeenOpened;
-    markInstanceChanged();
-  }
-
-  void importLegacyTimers(long legacyDecayTime, long legacyRefreshTime) {
-    if (legacyDecayTime != -1 && decayTime == -1) {
-      this.decayTime = legacyDecayTime;
-    }
-    if (legacyRefreshTime != -1 && refreshTime == -1) {
-      this.refreshTime = legacyRefreshTime;
-    }
-    markInstanceChanged();
   }
 
   @Override

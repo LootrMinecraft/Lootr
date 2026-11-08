@@ -9,4 +9,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface AccessorMixinMinecraftServer {
   @Accessor("storageSource")
   LevelStorageSource.LevelStorageAccess Lootr$getStorageSource();
+
+  @Accessor("nextTickTimeNanos")
+  void Lootr$setNextTickTimeNanos(long nanos);
 }
