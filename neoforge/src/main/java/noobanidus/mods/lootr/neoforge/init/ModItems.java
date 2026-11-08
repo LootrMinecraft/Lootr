@@ -41,7 +41,7 @@ public class ModItems {
 
   static {
     for (var pair : LootrConstants.LegacyIdentifiers.CONTAINERS) {
-      REGISTER.addAlias(pair[0], pair[1]);
+      REGISTER.addAlias(pair.oldId(), pair.newId());
     }
   }
 

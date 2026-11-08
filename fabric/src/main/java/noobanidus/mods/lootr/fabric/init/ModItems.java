@@ -51,7 +51,7 @@ public class ModItems {
     Registry.register(BuiltInRegistries.ITEM, LootrConstants.Identifiers.WEATHERED_COPPER_CHEST, WEATHERED_COPPER_CHEST);
 
     for (var pair : LootrConstants.LegacyIdentifiers.CONTAINERS) {
-      BuiltInRegistries.ITEM.addAlias(pair[0], pair[1]);
+      BuiltInRegistries.ITEM.addAlias(pair.oldId(), pair.newId());
     }
   }
 }

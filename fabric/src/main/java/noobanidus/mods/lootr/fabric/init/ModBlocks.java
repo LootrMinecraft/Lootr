@@ -39,7 +39,7 @@ public class ModBlocks {
     Registry.register(BuiltInRegistries.BLOCK, LootrConstants.Identifiers.OXIDIZED_COPPER_CHEST, OXIDIZED_COPPER_CHEST);
 
     for (var pair : LootrConstants.LegacyIdentifiers.CONTAINERS) {
-      BuiltInRegistries.BLOCK.addAlias(pair[0], pair[1]);
+      BuiltInRegistries.BLOCK.addAlias(pair.oldId(), pair.newId());
     }
   }
 }

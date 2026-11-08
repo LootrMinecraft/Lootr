@@ -18,7 +18,7 @@ public class ModBlockEntities {
     Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrConstants.Identifiers.DECORATED_POT, DECORATED_POT);
 
     for (var pair : LootrConstants.LegacyIdentifiers.CONTAINERS) {
-      BuiltInRegistries.BLOCK_ENTITY_TYPE.addAlias(pair[0], pair[1]);
+      BuiltInRegistries.BLOCK_ENTITY_TYPE.addAlias(pair.oldId(), pair.newId());
     }
   }
 

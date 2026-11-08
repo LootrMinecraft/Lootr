@@ -24,7 +24,7 @@ public class ModEntities {
 
   static {
     for (var pair : LootrConstants.LegacyIdentifiers.ENTITIES) {
-      REGISTER.addAlias(pair[0], pair[1]);
+      REGISTER.addAlias(pair.oldId(), pair.newId());
     }
   }
 
