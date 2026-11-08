@@ -167,8 +167,20 @@ public final class LootrAPI {
     return INSTANCE.isNotificationsEnabled();
   }
 
+  public static boolean isConversionDisabled() {
+    return INSTANCE.isConversionDisabled();
+  }
+
+  public static boolean isTicksDisabled() {
+    return INSTANCE.isTicksDisabled();
+  }
+
+  /**
+   * @deprecated use {@link #isConversionDisabled()}.
+   */
+  @Deprecated
   public static boolean isDisabled() {
-    return INSTANCE.isDisabled();
+    return isConversionDisabled();
   }
 
   public static boolean isLootTableBlacklisted(ResourceKey<LootTable> table) {

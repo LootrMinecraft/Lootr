@@ -168,7 +168,23 @@ public interface ILootrAPI {
 
   boolean isVanillaTextures();
 
-  boolean isDisabled();
+  /**
+   * @return true if conversion of vanilla containers/structures is disabled (including via the deprecated `disable` option).
+   */
+  boolean isConversionDisabled();
+
+  /**
+   * @return true if decay/refresh processing is disabled.
+   */
+  boolean isTicksDisabled();
+
+  /**
+   * @deprecated use {@link #isConversionDisabled()}; this has only ever gated conversion.
+   */
+  @Deprecated
+  default boolean isDisabled() {
+    return isConversionDisabled();
+  }
 
   boolean isLootTableBlacklisted(ResourceKey<LootTable> table);
 
@@ -335,7 +351,7 @@ public interface ILootrAPI {
       return;
     }
 
-    if (instance.canDecay()) {
+    if (!LootrAPI.isTicksDisabled() && instance.canDecay()) {
       if (store.isDecayed()) {
         instance.performDecay();
         PlatformAPI.alertContainerStatus(player, ContainerStatus.DECAY, ContainerStatus.Type.COMPLETE, -1);
@@ -357,7 +373,7 @@ public interface ILootrAPI {
 
     instance.performTrigger(player);
     boolean shouldUpdate = false;
-    if (instance.canRefresh()) {
+    if (!LootrAPI.isTicksDisabled() && instance.canRefresh()) {
       if (store.isRefreshed()) {
         store.performRefresh();
         instance.setClientRefreshing(false);
@@ -404,7 +420,7 @@ public interface ILootrAPI {
   }
 
   default void handleInstanceTick(@Nullable ILootrContainerInstance instance) {
-    if (instance == null) {
+    if (instance == null || LootrAPI.isTicksDisabled()) {
       return;
     }
 

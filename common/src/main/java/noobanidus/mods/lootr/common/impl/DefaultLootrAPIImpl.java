@@ -227,8 +227,14 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  public boolean isDisabled() {
-    return LootrCommonConfig.Conversion.disable;
+  @SuppressWarnings("deprecation")
+  public boolean isConversionDisabled() {
+    return LootrCommonConfig.Conversion.disableConversion || LootrCommonConfig.Conversion.disable;
+  }
+
+  @Override
+  public boolean isTicksDisabled() {
+    return LootrCommonConfig.Conversion.disableTicks;
   }
 
   @Override

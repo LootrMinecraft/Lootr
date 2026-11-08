@@ -124,6 +124,10 @@ public class LootrLangProvider extends LanguageProvider {
     add("lootr.configuration.conversion.desc", LootrConfigStrings.CONVERSION_DESC);
     add("lootr.configuration.disable", LootrConfigStrings.DISABLE);
     add("lootr.configuration.disable.desc", LootrConfigStrings.DISABLE_DESC);
+    add("lootr.configuration.disable_conversion", LootrConfigStrings.DISABLE_CONVERSION);
+    add("lootr.configuration.disable_conversion.desc", LootrConfigStrings.DISABLE_CONVERSION_DESC);
+    add("lootr.configuration.disable_ticks", LootrConfigStrings.DISABLE_TICKS);
+    add("lootr.configuration.disable_ticks.desc", LootrConfigStrings.DISABLE_TICKS_DESC);
     add("lootr.configuration.save_mode", LootrConfigStrings.SAVE_MODE);
     add("lootr.configuration.save_mode.desc", LootrConfigStrings.SAVE_MODE_DESC);
     add("lootr.configuration.randomise_seed", LootrConfigStrings.RANDOMISE_SEED);

@@ -43,7 +43,7 @@ public final class BlockEntityTicker {
   }
 
   public static void addEntity(BlockEntity entity, Level level, ChunkPos chunkPos) {
-    if (LootrAPI.isDisabled()) {
+    if (LootrAPI.isConversionDisabled()) {
       return;
     }
     ResourceKey<Level> dimension = getServerDimensionIfValid(level);
@@ -95,7 +95,7 @@ public final class BlockEntityTicker {
 
   // As opposed to `isValidEntity`, this checks everything
   public static boolean isValidEntityFull(BlockEntity entity) {
-    if (LootrAPI.isDisabled()) {
+    if (LootrAPI.isConversionDisabled()) {
       return false;
     }
 
@@ -160,7 +160,7 @@ public final class BlockEntityTicker {
   }
 
   public static void onServerTick(MinecraftServer server) {
-    if (LootrAPI.isDisabled()) {
+    if (LootrAPI.isConversionDisabled()) {
       return;
     }
 

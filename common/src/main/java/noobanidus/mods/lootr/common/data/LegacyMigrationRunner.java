@@ -51,8 +51,8 @@ public final class LegacyMigrationRunner {
    * Called on server start. Does nothing if the flag file exists.
    */
   public static void runOnStartup(MinecraftServer server) {
-    if (LootrAPI.isDisabled()) {
-      // Lootr is disabled by configuration; `/lootr migrate` can be used later.
+    if (LootrAPI.isTicksDisabled()) {
+      // Ticks are disabled by configuration (the workflow for running the migration by hand); `/lootr migrate` can be used instead.
       return;
     }
     run(server, false);
