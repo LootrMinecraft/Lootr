@@ -28,7 +28,16 @@ public class LootrCommonConfig {
   public static class Conversion {
     @ConfigEntry(id = "disable", translation = "lootr.configuration.disable")
     @Comment(value = LootrConfigStrings.DISABLE_DESC, translation = "lootr.configuration.disable.desc")
+    @Deprecated
     public static boolean disable = false;
+
+    @ConfigEntry(id = "disable_conversion", translation = "lootr.configuration.disable_conversion")
+    @Comment(value = LootrConfigStrings.DISABLE_CONVERSION_DESC, translation = "lootr.configuration.disable_conversion.desc")
+    public static boolean disableConversion = false;
+
+    @ConfigEntry(id = "disable_ticks", translation = "lootr.configuration.disable_ticks")
+    @Comment(value = LootrConfigStrings.DISABLE_TICKS_DESC, translation = "lootr.configuration.disable_ticks.desc")
+    public static boolean disableTicks = false;
 
     @ConfigEntry(id = "save_mode", translation = "lootr.configuration.save_mode")
     @Comment(value = LootrConfigStrings.SAVE_MODE_DESC, translation = "lootr.configuration.save_mode.desc")

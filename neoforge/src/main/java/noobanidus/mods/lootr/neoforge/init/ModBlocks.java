@@ -29,6 +29,12 @@ public class ModBlocks {
 
   public static final DeferredHolder<Block, Block> TROPHY = REGISTER.register(LootrConstants.Identifiers.TROPHY.getPath(), () -> new TrophyBlock(LootrConstants.BlockProperties.TROPHY));
 
+  static {
+    for (var pair : LootrConstants.LegacyIdentifiers.CONTAINERS) {
+      REGISTER.addAlias(pair.oldId(), pair.newId());
+    }
+  }
+
   public static void register(IEventBus bus) {
     REGISTER.register(bus);
   }

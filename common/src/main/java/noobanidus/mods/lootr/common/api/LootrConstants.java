@@ -15,6 +15,8 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.AABB;
 import noobanidus.mods.lootr.common.api.data.blockentity.ILootrBlockEntity;
 
+import java.util.List;
+
 public final class LootrConstants {
   private static final BlockBehaviour.StatePredicate posPredicate = (state, level, pos) -> {
     BlockEntity blockentity = level.getBlockEntity(pos);
@@ -50,6 +52,31 @@ public final class LootrConstants {
     public static final Identifier EXPOSED_COPPER_CHEST = LootrAPI.rl("exposed_copper_chest");
     public static final Identifier WEATHERED_COPPER_CHEST = LootrAPI.rl("weathered_copper_chest");
     public static final Identifier OXIDIZED_COPPER_CHEST = LootrAPI.rl("oxidized_copper_chest");
+  }
+
+  /**
+   * A pre-26 identifier and the current identifier it maps to.
+   */
+  public record IdentifierPair(Identifier oldId, Identifier newId) {
+  }
+
+  /**
+   * Pre-26 identifiers, mapped to their current equivalents. Registered as registry aliases
+   * so worlds saved before the rename keep loading their blocks, block entity types, items and entities.
+   */
+  public static class LegacyIdentifiers {
+    // Blocks, block entity types and items
+    public static final List<IdentifierPair> CONTAINERS = List.of(
+        new IdentifierPair(LootrAPI.rl("lootr_chest"), Identifiers.CHEST),
+        new IdentifierPair(LootrAPI.rl("lootr_trapped_chest"), Identifiers.TRAPPED_CHEST),
+        new IdentifierPair(LootrAPI.rl("lootr_barrel"), Identifiers.BARREL),
+        new IdentifierPair(LootrAPI.rl("lootr_shulker"), Identifiers.SHULKER_BOX)
+    );
+    // Entity types
+    public static final List<IdentifierPair> ENTITIES = List.of(
+        new IdentifierPair(LootrAPI.rl("lootr_cart"), Identifiers.MINECART_WITH_CHEST),
+        new IdentifierPair(LootrAPI.rl("lootr_minecart"), Identifiers.MINECART_WITH_CHEST)
+    );
   }
 
   public static class LootrBlockEntityIds {

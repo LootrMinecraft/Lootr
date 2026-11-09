@@ -227,8 +227,16 @@ public abstract class DefaultLootrAPIImpl implements ILootrAPI {
   }
 
   @Override
-  public boolean isDisabled() {
-    return LootrCommonConfig.Conversion.disable;
+  @SuppressWarnings("deprecation")
+  public boolean isConversionDisabled() {
+    return LootrCommonConfig.Conversion.disableConversion || LootrCommonConfig.Conversion.disable;
+  }
+
+  @Override
+  @SuppressWarnings("deprecation")
+  public boolean isTicksDisabled() {
+    // The old `disable` option was Lootr's master switch, so configs carried over from before the split keep it.
+    return LootrCommonConfig.Conversion.disableTicks || LootrCommonConfig.Conversion.disable;
   }
 
   @Override

@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinPersistentEntitySectionManager {
   @Inject(method = "addEntity", at = @At("HEAD"), cancellable = true)
   private void LootrAddEntity(EntityAccess entityAccess, boolean bl, CallbackInfoReturnable<Boolean> cir) {
-    if (LootrAPI.isDisabled()) {
+    if (LootrAPI.isConversionDisabled()) {
       return;
     }
     if (!(entityAccess instanceof Entity entity)) {

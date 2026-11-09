@@ -13,6 +13,12 @@ import noobanidus.mods.lootr.common.block.entity.*;
 public class ModBlockEntities {
   private static final DeferredRegister<BlockEntityType<?>> REGISTER = DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, LootrAPI.MODID);
 
+  static {
+    for (var pair : LootrConstants.LegacyIdentifiers.CONTAINERS) {
+      REGISTER.addAlias(pair.oldId(), pair.newId());
+    }
+  }
+
   public static void register(IEventBus bus) {
     REGISTER.register(bus);
   }

@@ -1,9 +1,11 @@
 package noobanidus.mods.lootr.fabric;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import noobanidus.mods.lootr.common.api.LootrAPI;
 import noobanidus.mods.lootr.common.api.PlatformAPI;
+import noobanidus.mods.lootr.common.api.config.LegacyConfigImporter;
 import noobanidus.mods.lootr.common.api.config.LootrClientConfig;
 import noobanidus.mods.lootr.common.api.config.LootrCommonConfig;
 import noobanidus.mods.lootr.common.api.config.LootrConfig;
@@ -26,6 +28,7 @@ public class Lootr implements ModInitializer {
 
     LootrConfig.getConfigurator().register(LootrCommonConfig.class);
     LootrConfig.getConfigurator().register(LootrClientConfig.class);
+    LegacyConfigImporter.importIfNeeded(FabricLoader.getInstance().getConfigDir());
 
     var toClient = PayloadTypeRegistry.clientboundPlay();
 

@@ -38,8 +38,12 @@ public final class LootrConfigStrings {
   // Conversion
   public static final String CONVERSION_TITLE = "Conversion";
   public static final String CONVERSION_DESC = "Configuration options related to the conversion of Vanilla (or modded) containers into Lootr containers.";
-  public static final String DISABLE = "Disable Conversion";
-  public static final String DISABLE_DESC = "Prevents any conversion from taking place. [default: false]";
+  public static final String DISABLE = "Disable Conversion (Deprecated)";
+  public static final String DISABLE_DESC = "Deprecated: use 'disable_conversion' and 'disable_ticks'. If true, this behaves as if both were true. [default: false]";
+  public static final String DISABLE_CONVERSION = "Disable Conversion";
+  public static final String DISABLE_CONVERSION_DESC = "Prevents any conversion from taking place: vanilla containers, structures and minecarts are not turned into Lootr containers. Existing Lootr containers keep working. [default: false]";
+  public static final String DISABLE_TICKS = "Disable Ticks";
+  public static final String DISABLE_TICKS_DESC = "Stops Lootr's decay and refresh processing, both while ticking and when a container is opened, and skips the automatic migration of pre-26 data on server start (use '/lootr migrate' instead). [default: false]";
   public static final String SAVE_MODE = "Data Save Mode";
   public static final String SAVE_MODE_DESC = "Determines how aggressively Lootr generates data files. When specified to 'SMART', Lootr will check for Exaroton and other hosts and, if detected, use 'WHEN_OPENED', otherwise 'ALWAYS'. [default: SMART]";
   public static final String RANDOMISE_SEED = "Randomize Seed";

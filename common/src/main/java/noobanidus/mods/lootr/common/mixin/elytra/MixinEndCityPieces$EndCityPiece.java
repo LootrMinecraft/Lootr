@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinEndCityPieces$EndCityPiece {
   @Inject(method = "handleDataMarker", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/ServerLevelAccessor;addFreshEntity(Lnet/minecraft/world/entity/Entity;)Z"), cancellable = true, require = 0)
   private void LootrHandleDataMarker(String marker, BlockPos position, ServerLevelAccessor level, RandomSource random, BoundingBox boundingBox, CallbackInfo ci) {
-    if (LootrAPI.isDisabled()) {
+    if (LootrAPI.isConversionDisabled()) {
       return;
     }
     if (LootrAPI.shouldConvertElytrasToItemFrames()) {

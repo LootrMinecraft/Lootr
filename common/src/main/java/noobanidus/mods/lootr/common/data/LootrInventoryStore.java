@@ -58,7 +58,8 @@ public class LootrInventoryStore implements ILootrInventoryStore {
     }
   }
 
-  private LootrInventoryStore(boolean hasInventories, ILootrData info, Map<UUID, LootrInventory> map, Set<UUID> openers, Set<UUID> actualOpeners, long decayTime, long refreshTime) {
+  // Also used when constructing a store from converted pre-26 data (see LegacyDataMigrator).
+  LootrInventoryStore(boolean hasInventories, ILootrData info, Map<UUID, LootrInventory> map, Set<UUID> openers, Set<UUID> actualOpeners, long decayTime, long refreshTime) {
     this.hasInventories = hasInventories;
     this.info = info;
     this.inventories.putAll(map);

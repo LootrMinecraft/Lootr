@@ -25,7 +25,7 @@ public class HandleCart {
     if (!(event.getLevel() instanceof ServerLevel level) || level.isClientSide()) {
       return;
     }
-    if (LootrAPI.isDimensionBlocked(level.dimension()) || LootrAPI.isDisabled()) {
+    if (LootrAPI.isDimensionBlocked(level.dimension()) || LootrAPI.isConversionDisabled()) {
       return;
     }
     Entity entity = event.getEntity();

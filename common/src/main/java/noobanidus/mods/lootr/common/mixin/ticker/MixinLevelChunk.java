@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinLevelChunk {
   @Inject(method = "updateBlockEntityTicker", at = @At(value = "HEAD"))
   private void LootrUpdateBlockEntityTicker(BlockEntity entity, CallbackInfo cir) {
-    if (LootrAPI.isDisabled()) {
+    if (LootrAPI.isConversionDisabled()) {
       return;
     }
     LevelChunk level = (LevelChunk) (Object) this;
